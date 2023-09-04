@@ -76,5 +76,9 @@ std::string Tokenizer::peek_token() {
 }
 
 bool Tokenizer::is_curr_valid() {
-    return curr <= (int)input.size();
+    return curr >=0 and curr < (int)input.size();
+}
+
+int Tokenizer::get_curr() const {
+    return curr;
 }

@@ -13,6 +13,7 @@ public:
     std::string peek_token();
     std::string pop_token();
     bool is_curr_valid();
+    int get_curr() const;
 
 private:
     int curr;
