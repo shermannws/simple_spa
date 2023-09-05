@@ -2,6 +2,7 @@
 #define SPA_TOKENIZER_H
 
 #include <string>
+#include "Token.h"
 
 class Tokenizer {
 public:
@@ -10,8 +11,8 @@ public:
     int pop_char();
     std::string peek_string();
     std::string pop_string();
-    std::string peek_token();
-    std::string pop_token();
+    std::shared_ptr<Token> peek_token();
+    std::shared_ptr<Token> pop_token();
     bool is_curr_valid();
     int get_curr() const;
 
