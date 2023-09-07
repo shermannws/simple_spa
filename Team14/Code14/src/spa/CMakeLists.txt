@@ -50,13 +50,13 @@ add_library(spa ${srcs} ${headers}
     "src/PKB/PkbWriter.cpp"
     "src/PKB/PkbWriter.h"
     "src/PKB/PkbReader.cpp"
-
-    src/QPS/Tokenizer.cpp
-    src/QPS/Token.cpp
-    src/QPS/Entity.cpp
-    src/QPS/PQLParser.cpp
-    src/QPS/Query.cpp)
-
+     src/QPS/Tokenizer.cpp
+     src/QPS/Token.cpp
+     src/QPS/Entity.cpp
+     src/QPS/Query.cpp
+     src/QPS/PQLParser.cpp
+     src/QPS/SuchThatClause.cpp
+     src/QPS/Ref.cpp)
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

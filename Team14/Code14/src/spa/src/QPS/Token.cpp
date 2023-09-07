@@ -63,3 +63,8 @@ bool Token::isIdent() {
     std::regex pattern("[a-zA-Z][a-zA-Z0-9]*");
     return std::regex_match(rep, pattern);
 }
+
+bool Token::isInteger() {
+    std::regex pattern("^(0|[1-9]\\d*)$");
+    return std::regex_match(rep, pattern);
+}

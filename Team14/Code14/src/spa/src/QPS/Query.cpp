@@ -19,8 +19,16 @@ std::shared_ptr<Entity> Query::getEntity(const std::string& syn) {
     }
 }
 
-void Query::addSelect(const std::shared_ptr<Entity>& entity){
+void Query::addSelect(const std::shared_ptr<Entity>& entity) {
     selects.push_back(entity);
+}
+
+void Query::addSuchThatClause(SuchThatClause& clause) {
+    such_that_clauses.push_back(clause);
+}
+
+std::vector<SuchThatClause> Query::getSuchThat() {
+    return such_that_clauses;
 }
 
 void Query::addDeclaration(const std::shared_ptr<Entity>& entity){
