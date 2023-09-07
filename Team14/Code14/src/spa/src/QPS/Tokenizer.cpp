@@ -6,26 +6,26 @@
 std::vector<std::string> specials{"(",")",";",",","_","+","-","*","/","%"};
 std::vector<std::string> stars{"Follows", "Parent"};
 
-Tokenizer::Tokenizer(const std::string& input): curr(0) {
+Tokenizer::Tokenizer(const std::string& input) : curr(0) {
     this->input = input;
 }
 
-int Tokenizer::peek_char() {
-    if (!is_curr_valid()) {
+int Tokenizer::peekChar() {
+    if (!isCurrValid()) {
         throw std::runtime_error("No more char");
     }
 
     return input[curr];
 }
 
-int Tokenizer::pop_char() {
-    int res = peek_char();
+int Tokenizer::popChar() {
+    int res = peekChar();
     curr += 1;
     return res;
 }
 
-std::string Tokenizer::peek_string() {
-    if (!is_curr_valid()) {
+std::string Tokenizer::peekString() {
+    if (!isCurrValid()) {
         throw std::runtime_error("No more string");
     }
     std::string res;
@@ -33,44 +33,44 @@ std::string Tokenizer::peek_string() {
     return res;
 }
 
-std::string Tokenizer::pop_string() {
-    std::string res = peek_string();
+std::string Tokenizer::popString() {
+    std::string res = peekString();
     curr += 1;
     return res;
 }
 
 
-std::shared_ptr<Token> Tokenizer::pop_token() {
+std::shared_ptr<Token> Tokenizer::popToken() {
     std::string res;
 
-    if (!is_curr_valid()) {
+    if (!isCurrValid()) {
         throw std::runtime_error("No more token");
     }
 
     // skip if whitespace
-    while (isspace(peek_char())) {
-        pop_char();
+    while (isspace(peekChar())) {
+        popChar();
     }
 
     // one-character token
-    auto it = std::find(specials.begin(), specials.end(), peek_string());
+    auto it = std::find(specials.begin(), specials.end(), peekString());
     if (it != specials.end()) {
-        return std::make_shared<Token>(pop_string());
+        return std::make_shared<Token>(popString());
     }
 
-    if (isalnum(peek_char())) {
-        res += pop_string();
+    if (isalnum(peekChar())) {
+        res += popString();
 
         // note: Parent* and Follows* will turn into two tokens
-        while (is_curr_valid() && isalnum(peek_char())) {
-            res += pop_string();
+        while (isCurrValid() && isalnum(peekChar())) {
+            res += popString();
         }
 
-        if (is_curr_valid() && peek_string() == "*") {
-            std::string temp = peek_string();
+        if (isCurrValid() && peekString() == "*") {
+            std::string temp = peekString();
             auto it_star = std::find(stars.begin(), stars.end(), res);
             if (it_star != stars.end()) {
-                res += pop_string();
+                res += popString();
             }
         }
 
@@ -79,17 +79,17 @@ std::shared_ptr<Token> Tokenizer::pop_token() {
     throw std::runtime_error("Invalid token");
 }
 
-std::shared_ptr<Token> Tokenizer::peek_token() {
+std::shared_ptr<Token> Tokenizer::peekToken() {
     int tmp = curr;
-    std::shared_ptr<Token> res = pop_token();
+    std::shared_ptr<Token> res = popToken();
     curr = tmp;
     return res;
 }
 
-bool Tokenizer::is_curr_valid() {
+bool Tokenizer::isCurrValid() {
     return curr >=0 and curr < (int)input.size();
 }
 
-int Tokenizer::get_curr() const {
+int Tokenizer::getCurr() const {
     return curr;
 }

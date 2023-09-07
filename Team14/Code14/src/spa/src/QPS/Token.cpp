@@ -3,32 +3,31 @@
 #include <string>
 
 Token::Token(const std::string& input) {
-    // set type
     this->rep = input;
     if (rep == "(") {
-        this->type = TokenType::LParenthesis;
+        this->type = TokenType::LPARENTHESIS;
     } else if (rep == ")") {
-        this->type = TokenType::RParenthesis;
+        this->type = TokenType::RPARENTHESIS;
     } else if (rep == "+") {
-        this->type = TokenType::Plus;
+        this->type = TokenType::PLUS;
     } else if (rep == "-") {
-        this->type = TokenType::Minus;
+        this->type = TokenType::MINUS;
     } else if (rep == "*") {
-        this->type = TokenType::Asterisk;
+        this->type = TokenType::ASTERISK;
     } else if (rep == "/") {
-        this->type = TokenType::Slash;
+        this->type = TokenType::SLASH;
     } else if (rep == "%") {
-        this->type = TokenType::Percent;
+        this->type = TokenType::PERCENT;
     } else if (rep == ";") {
-        this->type = TokenType::Semicolon;
+        this->type = TokenType::SEMICOLON;
     } else if (rep == ",") {
-        this->type = TokenType::Comma;
+        this->type = TokenType::COMMA;
     } else if (rep == "\"") {
-        this->type = TokenType::Quote;
+        this->type = TokenType::QUOTE;
     } else if (rep == "_") {
-        this->type = TokenType::Underscore;
+        this->type = TokenType::UNDERSCORE;
     } else {
-        this->type = TokenType::Word;
+        this->type = TokenType::WORD;
     }
 }
 

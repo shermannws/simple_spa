@@ -5,30 +5,30 @@
 
 enum class TokenType {
     // brackets
-    LParenthesis,
-    RParenthesis,
+    LPARENTHESIS,
+    RPARENTHESIS,
 
     // operators
-    Plus,
-    Minus,
-    Asterisk,
-    Slash,
-    Percent,
+    PLUS,
+    MINUS,
+    ASTERISK,
+    SLASH,
+    PERCENT,
 
     // others
-    Semicolon,
-    Comma,
-    Quote,
-    Underscore,
+    SEMICOLON,
+    COMMA,
+    QUOTE,
+    UNDERSCORE,
 
     // alphanumeric letter(s)
-    Word,
+    WORD,
 
 };
 
 class Token {
 public:
-    Token(const std::string& rep);
+    explicit Token(const std::string& rep);
     std::string get_rep();
     TokenType get_type();
 private:
