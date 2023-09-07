@@ -11,36 +11,35 @@ TEST_CASE("Tokenizer Test") {
     Tokenizer tokenizer(input);
     REQUIRE(tokenizer.getCurr() == 0);
 
-    REQUIRE(tokenizer.peekToken()->get_rep() == "stmt");
-    REQUIRE(tokenizer.peekToken()->get_type() == TokenType::WORD);
+    REQUIRE(tokenizer.peekToken()->getRep() == "stmt");
+    REQUIRE(tokenizer.peekToken()->getType() == TokenType::WORD);
     REQUIRE(tokenizer.getCurr() == 0);
-    REQUIRE(tokenizer.popToken()->get_rep() == "stmt");
+    REQUIRE(tokenizer.popToken()->getRep() == "stmt");
 
     REQUIRE(tokenizer.getCurr() == 4);
 
     REQUIRE(tokenizer.peekChar() == 32); // space after stmt
-    REQUIRE(tokenizer.popToken()->get_rep() == "s");
+    REQUIRE(tokenizer.popToken()->getRep() == "s");
 
     REQUIRE(tokenizer.popChar() == 59); // pop ";" in int
     tokenizer.popString();
 
     REQUIRE(tokenizer.peekString() == "S");
     REQUIRE(tokenizer.peekString() == "S");
-    REQUIRE(tokenizer.popToken()->get_rep() == "Select");
-    REQUIRE(tokenizer.popToken()->get_rep() == "s");
-    REQUIRE_FALSE(tokenizer.peekToken()->get_rep() == "s");
+    REQUIRE(tokenizer.popToken()->getRep() == "Select");
+    REQUIRE(tokenizer.popToken()->getRep() == "s");
+    REQUIRE_FALSE(tokenizer.peekToken()->getRep() == "s");
 
-    REQUIRE(tokenizer.popToken()->get_rep() == "such");
-    REQUIRE(tokenizer.popToken()->get_rep() == "that");
+    REQUIRE(tokenizer.popToken()->getRep() == "such that");
 
-    REQUIRE(tokenizer.popToken()->get_rep() == "Follows*");
+    REQUIRE(tokenizer.popToken()->getRep() == "Follows*");
     std::shared_ptr<Token> t = tokenizer.popToken();
-    REQUIRE(t->get_rep() == "(");
-    REQUIRE(t->get_type() == TokenType::LPARENTHESIS);
-    REQUIRE(tokenizer.popToken()->get_rep() == "2");
-    REQUIRE(tokenizer.popToken()->get_rep() == ",");
-    REQUIRE(tokenizer.popToken()->get_rep() == "3");
-    REQUIRE(tokenizer.popToken()->get_rep() == ")");
+    REQUIRE(t->getRep() == "(");
+    REQUIRE(t->getType() == TokenType::LPARENTHESIS);
+    REQUIRE(tokenizer.popToken()->getRep() == "2");
+    REQUIRE(tokenizer.popToken()->getRep() == ",");
+    REQUIRE(tokenizer.popToken()->getRep() == "3");
+    REQUIRE(tokenizer.popToken()->getRep() == ")");
     REQUIRE(tokenizer.getCurr() == 40);
     REQUIRE_FALSE(tokenizer.isCurrValid());
 }

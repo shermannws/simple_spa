@@ -29,8 +29,8 @@ enum class TokenType {
 class Token {
 public:
     explicit Token(const std::string& rep);
-    std::string get_rep();
-    TokenType get_type();
+    std::string getRep();
+    TokenType getType();
 private:
     std::string rep;
     TokenType type;

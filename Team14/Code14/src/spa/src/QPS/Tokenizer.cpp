@@ -61,17 +61,23 @@ std::shared_ptr<Token> Tokenizer::popToken() {
     if (isalnum(peekChar())) {
         res += popString();
 
-        // note: Parent* and Follows* will turn into two tokens
         while (isCurrValid() && isalnum(peekChar())) {
             res += popString();
         }
 
+        // handle star abstraction as one token
         if (isCurrValid() && peekString() == "*") {
             std::string temp = peekString();
             auto it_star = std::find(stars.begin(), stars.end(), res);
             if (it_star != stars.end()) {
                 res += popString();
             }
+        }
+
+        // handle such that as one token
+        if (isCurrValid() && res == "such") {
+            std::shared_ptr<Token> that_expected = popToken();
+            res = "such that";
         }
 
         return std::make_shared<Token>(res);

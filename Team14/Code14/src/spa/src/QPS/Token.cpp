@@ -31,10 +31,10 @@ Token::Token(const std::string& input) {
     }
 }
 
-std::string Token::get_rep() {
+std::string Token::getRep() {
     return rep;
 }
 
-TokenType Token::get_type() {
+TokenType Token::getType() {
     return type;
 }
