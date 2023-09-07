@@ -3,11 +3,9 @@
 #include <string>
 using namespace std;
 
-class Variable {
-private:
-	string name;
+#include "Entity.h"
 
+class Variable : public Entity {
 public:
 	Variable(string name);
-	string getName();
 };

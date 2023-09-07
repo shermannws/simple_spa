@@ -3,11 +3,9 @@
 #include <string>
 using namespace std;
 
-class Procedure {
-private:
-	string name;
+#include "Entity.h"
 
+class Procedure : public Entity {
 public:
 	Procedure(string name);
-	string getName();
 };
