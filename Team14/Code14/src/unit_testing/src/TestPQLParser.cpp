@@ -2,6 +2,8 @@
 
 #include "catch.hpp"
 
+// TODO refactor unit tests using SECTION()
+
 TEST_CASE("single declaration, single Select") {
     std::string input = "stmt s; Select s;";
     PQLParser parser(input);
@@ -92,5 +94,4 @@ TEST_CASE("parse Tokenizer errors") {
         REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
     }
 }
-
 
