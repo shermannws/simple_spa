@@ -1,8 +1,8 @@
 file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
-add_library(spa ${srcs} ${headers})
 add_library(spa ${srcs} ${headers}
         src/SP/AST/Nodes/ASTNode.h
+        src/SP/AST/Visitors/DesignExtractorVisitor.h
         src/SP/AST/Nodes/ProgramNode.h
         src/SP/AST/Nodes/ProcedureNode.h
         src/SP/AST/Nodes/StatementNode.h
@@ -25,6 +25,9 @@ add_library(spa ${srcs} ${headers}
         src/SP/AST/Nodes/StatementListNode.cpp
         src/SP/AST/Nodes/ProcedureNode.cpp
         src/SP/AST/Nodes/ProgramNode.cpp
+        src/SP/AST/Visitors/EntityExtractorVisitor.h
+        src/SP/AST/Visitors/FollowsExtractorVisitor.h
+        src/SP/AST/Visitors/UsesExtractorVisitor.h
 )
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
