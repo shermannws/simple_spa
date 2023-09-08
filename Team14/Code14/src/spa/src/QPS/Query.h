@@ -1,23 +1,17 @@
-#ifndef SPA_QUERY_H
-#define SPA_QUERY_H
+#pragma once
 
 #include <vector>
 
 #include "Entity.h"
 
 class Query {
-public:
-    Query();
-
-    void add_declaration();
-    void add_such_that();
-    void add_pattern();
-
 private:
     std::vector<Entity> declarations;
 
+public:
+    Query();
+
+    void addDeclaration();
+    void addSuchThatClause();
+    void addPatternClause();
 };
-
-#endif //SPA_QUERY_H
-
-

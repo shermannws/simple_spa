@@ -39,12 +39,11 @@ std::string Tokenizer::popString() {
     return res;
 }
 
-
 std::shared_ptr<Token> Tokenizer::popToken() {
     std::string res;
 
     if (!isCurrValid()) {
-        throw std::runtime_error("No more token");
+        return std::make_shared<Token>("");
     }
 
     // skip if whitespace
@@ -75,9 +74,9 @@ std::shared_ptr<Token> Tokenizer::popToken() {
         }
 
         // handle such that as one token
-        if (isCurrValid() && res == "such") {
-            std::shared_ptr<Token> that_expected = popToken();
-            res = "such that";
+        if (isCurrValid() && res == "such" && peekToken()->getRep() == "that") {
+            res += " that";
+            popToken();
         }
 
         return std::make_shared<Token>(res);

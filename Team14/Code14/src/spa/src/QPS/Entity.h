@@ -1,10 +1,5 @@
-#ifndef SPA_ENTITY_H
-#define SPA_ENTITY_H
-
+#pragma once
 
 class Entity {
 
 };
-
-
-#endif //SPA_ENTITY_H
