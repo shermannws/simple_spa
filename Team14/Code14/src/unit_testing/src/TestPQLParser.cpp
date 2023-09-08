@@ -2,35 +2,93 @@
 
 #include "catch.hpp"
 
-TEST_CASE("Select Only Query") {
-    std::string input = "stmt s;\nSelect s; ";
+TEST_CASE("single declaration, single Select") {
+    std::string input = "stmt s; Select s;";
     PQLParser parser(input);
     Query query = parser.parse();
-    std::shared_ptr<Entity> expectedEntity = std::make_shared<Entity>(EntityType::STMT, "a");
+    Entity expectedEntity = Entity(EntityType::STMT, "s");
+    std::shared_ptr<Entity> declarationEntity = query.getEntity("s");
+    std::shared_ptr<Entity> selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
+    REQUIRE(query.getEntity("s"));
+    REQUIRE(*declarationEntity == expectedEntity);
+    REQUIRE(declarationEntity == selectEntity);
 }
 
-TEST_CASE("Missing Declaration Query") {
-    std::string input = "Select s; ";
+TEST_CASE("processDeclarations serial declaration") {
+    std::string input = "variable v,v1,v2; Select v;";
     PQLParser parser(input);
-    REQUIRE_THROWS_WITH(parser.parse(), "Missing declarations");
+    Query query = parser.parse();
+    auto declaration_map = query.getDeclarations();
+    std::shared_ptr<Entity> declarationEntity = query.getEntity("v");
+    std::shared_ptr<Entity> selectEntity = query.getSelect()[0];
+
+    REQUIRE(query.hasDeclarations());
+    REQUIRE(declaration_map.size()==3);
+    REQUIRE(query.getEntity("v"));
+    REQUIRE(query.getEntity("v1"));
+    REQUIRE(query.getEntity("v2"));
+    REQUIRE(declarationEntity == selectEntity);
 }
 
-TEST_CASE("Missing Select Query") {
-    std::string input = "assign a; unexpectedString ";
+TEST_CASE("processDeclarations multiple declaration") {
+    std::string input = "procedure p; stmt s; read re; print pr; assign a; \n call c; while w; if i; variable v; constant k; \n Select c;";
     PQLParser parser(input);
-    REQUIRE_THROWS_WITH(parser.parse(), "Expected Select clause but found ...");
+    Query query = parser.parse();
+    auto declaration_map = query.getDeclarations();
+    std::shared_ptr<Entity> declarationEntity = query.getEntity("c");
+    std::shared_ptr<Entity> selectEntity = query.getSelect()[0];
+
+    REQUIRE(query.hasDeclarations());
+    REQUIRE(declaration_map.size()==10);
+    REQUIRE(query.getEntity("p"));
+    REQUIRE(query.getEntity("s"));
+    REQUIRE(query.getEntity("re"));
+    REQUIRE(query.getEntity("pr"));
+    REQUIRE(query.getEntity("a"));
+    REQUIRE(query.getEntity("c"));
+    REQUIRE(query.getEntity("w"));
+    REQUIRE(query.getEntity("i"));
+    REQUIRE(query.getEntity("v"));
+    REQUIRE(query.getEntity("k"));
+    REQUIRE(declarationEntity == selectEntity);
 }
 
-TEST_CASE("No Query") {
-    std::string input = "stmt ";
-    PQLParser parser(input);
-    REQUIRE_THROWS_WITH(parser.parse(), "No more char");
+TEST_CASE("processDeclarations Errors") {
+    std::vector<std::pair<std::string, std::string>> testcases;
+    testcases.emplace_back("Select s; ", "Expected a declaration but found none");
+    testcases.emplace_back("assignment a; ", "Expected a declaration but found none");
+    testcases.emplace_back("assign a Select s; ", "Expected ; token but found ...");
+    testcases.emplace_back("assign a a1;", "Expected ; token but found ...");
+    testcases.emplace_back("assign a; print a;", "Trying to redeclare a synonym");
+
+    for (const auto& testcase : testcases) {
+        PQLParser parser(testcase.first);
+        REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+    }
 }
-TEST_CASE("No Query2") {
-    std::string input = "stmt";
-    PQLParser parser(input);
-    REQUIRE_THROWS_WITH(parser.parse(), "No more token");
+
+TEST_CASE("processSelect Errors") {
+    std::vector<std::pair<std::string, std::string>> testcases;
+    testcases.emplace_back("stmt s; where s", "Expected Select clause but found ...");
+    testcases.emplace_back("assign a; Select s", "Undeclared synonym in Select clause");
+
+    for (const auto& testcase : testcases) {
+        PQLParser parser(testcase.first);
+        REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+    }
 }
+
+TEST_CASE("parse Tokenizer errors") {
+    std::vector<std::pair<std::string, std::string>> testcases;
+    testcases.emplace_back("stmt", "No more token");
+    testcases.emplace_back("stmt ; ",  "No more char");
+
+    for (const auto& testcase : testcases) {
+        PQLParser parser(testcase.first);
+        REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+    }
+}
+
 

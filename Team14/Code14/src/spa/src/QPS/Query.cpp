@@ -23,7 +23,7 @@ void Query::addSelect(const std::shared_ptr<Entity>& entity){
 
 void Query::addDeclaration(const std::shared_ptr<Entity>& entity){
     if (declarations.find(entity->getSynonym()) != declarations.end()){
-        throw std::runtime_error("Trying to declare an declared synonym");
+        throw std::runtime_error("Trying to redeclare a synonym");
     }
     declarations.insert({entity->getSynonym(), entity});
 }

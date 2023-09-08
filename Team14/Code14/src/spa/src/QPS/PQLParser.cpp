@@ -60,7 +60,7 @@ void PQLParser::processDeclarations(Query& query) {
 
     // if no design entity return err
     if (!query.hasDeclarations()) {
-        throw std::runtime_error("Missing declarations");
+        throw std::runtime_error("Expected a declaration but found none");
     }
 }
 
