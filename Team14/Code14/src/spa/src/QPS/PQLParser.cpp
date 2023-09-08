@@ -41,12 +41,18 @@ void PQLParser::processDeclarations(Query& query) {
         }
 
         std::shared_ptr<Token> synonym = tokenizer->popToken();
+        if (!synonym->isIdent()) {
+            throw std::runtime_error("Invalid synonym ...");
+        }
         std::shared_ptr<Entity> newEntity = std::make_shared<Entity>(currentType, synonym->getRep());
         query.addDeclaration(newEntity);
 
         while(tokenizer->peekToken()->isToken(TokenType::COMMA)) {
             tokenizer->popToken(); //consume comma
             synonym = tokenizer->popToken();
+            if (!synonym->isIdent()) {
+                throw std::runtime_error("Invalid synonym ...");
+            }
             newEntity = std::make_shared<Entity>(currentType, synonym->getRep());
             query.addDeclaration(newEntity);
         }

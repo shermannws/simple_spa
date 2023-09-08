@@ -62,6 +62,8 @@ TEST_CASE("processDeclarations Errors") {
     testcases.emplace_back("assign a Select s; ", "Expected ; token but found ...");
     testcases.emplace_back("assign a a1;", "Expected ; token but found ...");
     testcases.emplace_back("assign a; print a;", "Trying to redeclare a synonym");
+    testcases.emplace_back("assign 1; Select 1;", "Invalid synonym ...");
+    testcases.emplace_back("assign -a ; Select -a;", "Invalid synonym ...");
 
     for (const auto& testcase : testcases) {
         PQLParser parser(testcase.first);

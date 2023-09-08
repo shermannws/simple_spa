@@ -37,6 +37,7 @@ public:
     bool isSuchThatToken();
     bool isPatternToken();
     bool isDesignEntity();
+    bool isIdent();
 private:
     std::string rep;
     TokenType type;

@@ -68,3 +68,8 @@ bool Token::isDesignEntity() {
     return false;
 }
 
+bool Token::isIdent() {
+    return std::all_of(rep.begin(), rep.end(), [](char const &c) {
+        return std::isalnum(c);
+    }) && type == TokenType::WORD && isalpha(rep[0]);
+}
