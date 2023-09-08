@@ -1,5 +1,4 @@
-#ifndef SPA_QUERY_H
-#define SPA_QUERY_H
+#pragma once
 
 #include <vector>
 
@@ -9,15 +8,18 @@ class Query {
 public:
     Query();
 
-    void add_declaration();
-    void add_such_that();
-    void add_pattern();
+    void addDeclaration(const std::shared_ptr<Entity>& entity);
+    void addSelect(const std::shared_ptr<Entity>& entity);
+    // void addSuchThat();
+    // void addPattern();
+    bool hasDeclarations();
+    std::shared_ptr<Entity> getEntity(const std::string& syn);
+    std::unordered_map<std::string, std::shared_ptr<Entity>> getDeclarations();
+    std::vector<std::shared_ptr<Entity>> getSelect();
 
 private:
-    std::vector<Entity> declarations;
-
+    std::unordered_map<std::string, std::shared_ptr<Entity>> declarations;
+    std::vector<std::shared_ptr<Entity>> select;
 };
-
-#endif //SPA_QUERY_H
 
 
