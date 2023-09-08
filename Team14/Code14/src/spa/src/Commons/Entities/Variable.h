@@ -8,4 +8,6 @@ using namespace std;
 class Variable : public Entity {
 public:
 	Variable(string name);
+
+    virtual bool isWildCard();
 };
