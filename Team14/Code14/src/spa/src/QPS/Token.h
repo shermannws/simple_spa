@@ -31,6 +31,12 @@ public:
     explicit Token(const std::string& rep);
     std::string getRep();
     TokenType getType();
+    bool isToken(const std::string& str);
+    bool isToken(TokenType ttype);
+    bool isSelectToken();
+    bool isSuchThatToken();
+    bool isPatternToken();
+    bool isDesignEntity();
 private:
     std::string rep;
     TokenType type;

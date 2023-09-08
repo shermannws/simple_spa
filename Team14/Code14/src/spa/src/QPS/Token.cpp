@@ -38,3 +38,33 @@ std::string Token::getRep() {
 TokenType Token::getType() {
     return type;
 }
+
+bool Token::isToken(const std::string& str) {
+    return rep == str && type == TokenType::WORD;
+}
+
+bool Token::isToken(TokenType ttype) {
+    return type == ttype;
+}
+
+bool Token::isSelectToken() {
+    return rep == "Select" && type==TokenType::WORD;
+}
+
+bool Token::isSuchThatToken() {
+    return rep == "such that" && type==TokenType::WORD;;
+}
+
+bool Token::isPatternToken() {
+    return rep == "pattern" && type==TokenType::WORD;
+}
+
+bool Token::isDesignEntity() {
+    if (type ==TokenType::WORD && (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" ||
+    rep == "assign" || rep == "call" || rep == "while" || rep == "if" || rep == "variable" || rep == "constant")
+    ) {
+        return true;
+    }
+    return false;
+}
+
