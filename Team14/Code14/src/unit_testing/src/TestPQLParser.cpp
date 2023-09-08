@@ -5,7 +5,7 @@
 // TODO refactor unit tests using SECTION()
 
 TEST_CASE("single declaration, single Select") {
-    std::string input = "stmt s; Select s;";
+    std::string input = "stmt s; Select s";
     PQLParser parser(input);
     Query query = parser.parse();
     Entity expectedEntity = Entity(EntityType::STMT, "s");
@@ -19,7 +19,7 @@ TEST_CASE("single declaration, single Select") {
 }
 
 TEST_CASE("processDeclarations serial declaration") {
-    std::string input = "variable v,v1,v2; Select v;";
+    std::string input = "variable v,v1,v2; Select v";
     PQLParser parser(input);
     Query query = parser.parse();
     auto declaration_map = query.getDeclarations();
@@ -35,7 +35,7 @@ TEST_CASE("processDeclarations serial declaration") {
 }
 
 TEST_CASE("processDeclarations multiple declaration") {
-    std::string input = "procedure p; stmt s; read re; print pr; assign a; \n call c; while w; if i; variable v; constant k; \n Select c;";
+    std::string input = "procedure p; stmt s; read re; print pr; assign a; \n call c; while w; if i; variable v; constant k; \n Select c";
     PQLParser parser(input);
     Query query = parser.parse();
     auto declaration_map = query.getDeclarations();
@@ -59,13 +59,13 @@ TEST_CASE("processDeclarations multiple declaration") {
 
 TEST_CASE("processDeclarations Errors") {
     std::vector<std::pair<std::string, std::string>> testcases;
-    testcases.emplace_back("Select s; ", "Expected a declaration but found none");
+    testcases.emplace_back("Select s ", "Expected a declaration but found none");
     testcases.emplace_back("assignment a; ", "Expected a declaration but found none");
-    testcases.emplace_back("assign a Select s; ", "Expected ; token but found ...");
+    testcases.emplace_back("assign a Select s", "Expected ; token but found ...");
     testcases.emplace_back("assign a a1;", "Expected ; token but found ...");
     testcases.emplace_back("assign a; print a;", "Trying to redeclare a synonym");
-    testcases.emplace_back("assign 1; Select 1;", "Invalid synonym ...");
-    testcases.emplace_back("assign -a ; Select -a;", "Invalid synonym ...");
+    testcases.emplace_back("assign 1; Select 1", "Invalid synonym ...");
+    testcases.emplace_back("assign -a ; Select -a", "Invalid synonym ...");
 
     for (const auto& testcase : testcases) {
         PQLParser parser(testcase.first);
