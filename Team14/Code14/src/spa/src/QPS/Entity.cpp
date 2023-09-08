@@ -7,6 +7,10 @@ Entity::Entity(EntityType type, const std::string& synonym) {
     this->synonym = synonym;
 }
 
+bool Entity::operator==(const Entity& other) const {
+    return (type == other.type) && (synonym == other.synonym);
+}
+
 std::string Entity::getSynonym() {
     return synonym;
 }

@@ -22,9 +22,9 @@ private:
     EntityType type;
 public:
     explicit Entity(EntityType type, const std::string &synonym);
+    bool operator==(const Entity& other) const;
     std::string getSynonym();
     EntityType getType();
-    //TODO toString() and eq(),neq() operator?
 };
 
 
