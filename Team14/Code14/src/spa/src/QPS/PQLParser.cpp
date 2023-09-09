@@ -120,7 +120,7 @@ void PQLParser::processSuchThatClause(Query& query) {
     } else if (abs_token->isToken("Follows*")){
         clause.setType(RelationshipType::FollowsStar);
     } else {
-        throw std::runtime_error("Token does not match any abstraction");
+        throw std::runtime_error("Invalid token, abstraction expected");
     }
 
     processSuchThatBody(query, clause);
@@ -164,6 +164,8 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
         if (left_root_type == RootType::Wildcard) {
             throw std::runtime_error("Invalid Uses LHS, wildcard found");
         }
+
+
         if (left_root_type == RootType::Synonym) {
             std::shared_ptr<Entity> entity = query.getEntity(left_ref.getRep());
             EntityType entity_type = entity->getType();
@@ -181,7 +183,6 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
             if (entity_type != EntityType::Variable) {
                 throw std::runtime_error("Invalid Uses RHS, non-variable found");
             }
-
         }
 
     } else if (type == RelationshipType::Follows) {
@@ -190,8 +191,8 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
             EntityType entity_type = entity->getType();
             if (entity_type != EntityType::Stmt && entity_type != EntityType::Assign
                 && entity_type != EntityType::Print && entity_type != EntityType::If
-                && entity_type != EntityType::While && entity_type != EntityType::Procedure
-                && entity_type != EntityType::Call && entity_type != EntityType::Read) {
+                && entity_type != EntityType::While && entity_type != EntityType::Call
+                && entity_type != EntityType::Read) {
                 throw std::runtime_error("Invalid Follows LHS, non-statement found");
             }
         }
@@ -201,8 +202,8 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
             EntityType entity_type = entity->getType();
             if (entity_type != EntityType::Stmt && entity_type != EntityType::Assign
                 && entity_type != EntityType::Print && entity_type != EntityType::If
-                && entity_type != EntityType::While && entity_type != EntityType::Procedure
-                && entity_type != EntityType::Call && entity_type != EntityType::Read) {
+                && entity_type != EntityType::While && entity_type != EntityType::Call
+                && entity_type != EntityType::Read) {
                 throw std::runtime_error("Invalid Follows RHS, non-statement found");
             }
         }
@@ -213,8 +214,8 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
             EntityType entity_type = entity->getType();
             if (entity_type != EntityType::Stmt && entity_type != EntityType::Assign
                 && entity_type != EntityType::Print && entity_type != EntityType::If
-                && entity_type != EntityType::While && entity_type != EntityType::Procedure
-                && entity_type != EntityType::Call && entity_type != EntityType::Read) {
+                && entity_type != EntityType::While && entity_type != EntityType::Call
+                && entity_type != EntityType::Read) {
                 throw std::runtime_error("Invalid Follows* LHS, non-statement found");
             }
         }
@@ -224,8 +225,8 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
             EntityType entity_type = entity->getType();
             if (entity_type != EntityType::Stmt && entity_type != EntityType::Assign
                 && entity_type != EntityType::Print && entity_type != EntityType::If
-                && entity_type != EntityType::While && entity_type != EntityType::Procedure
-                && entity_type != EntityType::Call && entity_type != EntityType::Read) {
+                && entity_type != EntityType::While && entity_type != EntityType::Call
+                && entity_type != EntityType::Read) {
                 throw std::runtime_error("Invalid Follows* RHS, non-statement found");
             }
         }
@@ -250,7 +251,7 @@ void PQLParser::processSuchThatLeft(Query &query, SuchThatClause &clause) {
         if (next->isIdent()) {
             std::shared_ptr<Entity> entity = query.getEntity(next->getRep());
             if (!entity) {
-                throw std::runtime_error("Invalid Uses LHS");
+                throw std::runtime_error("Invalid Uses LHS, undeclared synonym found");
             }
 
             if (entity->getType() == EntityType::Procedure) {
@@ -329,8 +330,9 @@ Ref PQLParser::extractEntRef() {
     std::shared_ptr<Token> curr = tokenizer->peekToken();
     if (curr->isToken(TokenType::Quote)) { // IDENTITY
         tokenizer->popToken();
-        std::shared_ptr<Token> syn = tokenizer->popToken();
+        std::shared_ptr<Token> syn = tokenizer->peekToken();
         expect(syn->isIdent(), "Identity invalid");
+        std::string right_quote = tokenizer->peekToken()->getRep();
         expect(tokenizer->peekToken()->isToken(TokenType::Quote), "No right quote");
 
         ref_string = "\"" + syn->getRep() + "\"";

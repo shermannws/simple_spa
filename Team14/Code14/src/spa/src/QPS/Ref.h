@@ -9,10 +9,10 @@ enum class RefType {
 };
 
 enum class RootType {
-    Integer,
-    Wildcard,
-    Synonym,
-    Ident,
+    Integer, // StmtRef
+    Wildcard, // StmtRef & EntRef
+    Synonym, // StmtRef & EntRef
+    Ident, // EntRef
     Invalid
 };
 

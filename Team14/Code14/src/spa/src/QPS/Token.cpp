@@ -42,6 +42,11 @@ TokenType Token::getType() {
     return type;
 }
 
+bool Token::isInteger() {
+    std::regex pattern("^(0|[1-9]\\d*)$");
+    return std::regex_match(rep, pattern);
+}
+
 bool Token::isToken(const std::string& str) {
     return rep == str && type == TokenType::Word;
 }
@@ -51,7 +56,7 @@ bool Token::isToken(TokenType ttype) {
 }
 
 bool Token::isDesignEntity() {
-    if (type ==TokenType::Word && (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" ||
+    if (type == TokenType::Word && (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" ||
     rep == "assign" || rep == "call" || rep == "while" || rep == "if" || rep == "variable" || rep == "constant")
     ) {
         return true;
@@ -61,10 +66,5 @@ bool Token::isDesignEntity() {
 
 bool Token::isIdent() {
     std::regex pattern("[a-zA-Z][a-zA-Z0-9]*");
-    return std::regex_match(rep, pattern);
-}
-
-bool Token::isInteger() {
-    std::regex pattern("^(0|[1-9]\\d*)$");
     return std::regex_match(rep, pattern);
 }
