@@ -13,6 +13,7 @@ private:
     void processSelectClause(Query& query);
     void processSuchThatClause(Query& query);
     void processPatternClause(Query& query);
+    bool isDesignEntity(std::shared_ptr<Token> token);
 
 public:
     explicit PQLParser(const std::string& str);

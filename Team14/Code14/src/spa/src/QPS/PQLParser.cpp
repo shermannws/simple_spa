@@ -40,7 +40,10 @@ void PQLParser::processDeclarations(Query& query) {
 
         std::shared_ptr<Token> synonym = tokenizer->popToken();
         if (!synonym->isIdent()) {
-            throw std::runtime_error("Invalid synonym ...");
+            if (synonym->isToken(TokenType::Empty)) {
+                throw std::runtime_error("Expected synonym but found none");
+            }
+            throw std::runtime_error("Invalid synonym '" + synonym->getRep() + "'");
         }
         std::shared_ptr<Entity> newEntity = std::make_shared<Entity>(currentType, synonym->getRep());
         query.addDeclaration(newEntity);
@@ -49,7 +52,10 @@ void PQLParser::processDeclarations(Query& query) {
             tokenizer->popToken(); //consume comma
             synonym = tokenizer->popToken();
             if (!synonym->isIdent()) {
-                throw std::runtime_error("Invalid synonym ...");
+                if (synonym->isToken(TokenType::Empty)) {
+                    throw std::runtime_error("Expected synonym but found none");
+                }
+                throw std::runtime_error("Invalid synonym '" + synonym->getRep() + "'");
             }
             newEntity = std::make_shared<Entity>(currentType, synonym->getRep());
             query.addDeclaration(newEntity);
@@ -58,7 +64,7 @@ void PQLParser::processDeclarations(Query& query) {
         // consume semicolon
         std::shared_ptr<Token> endToken = tokenizer->popToken();
         if (!endToken->isToken(TokenType::Semicolon)) {
-            throw std::runtime_error("Expected ; token but found ...");
+            throw std::runtime_error("Expected ; but found '" + endToken->getRep() + + "'");
         }
     }
 
@@ -71,9 +77,13 @@ void PQLParser::processDeclarations(Query& query) {
 void PQLParser::processSelectClause(Query& query) {
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken("Select")) {
-        throw std::runtime_error("Expected Select clause but found ...");
+        throw std::runtime_error("Expected Select clause but found '" + next->getRep() + "'");
     }
     next = tokenizer->popToken();
+
+    if (next->isToken(TokenType::Empty)) {
+        throw std::runtime_error("Expected synonym but found none");
+    }
 
     std::shared_ptr<Entity> entity = query.getEntity(next->getRep());
     if (!entity) {

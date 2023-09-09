@@ -61,13 +61,13 @@ TEST_CASE("processDeclarations Errors") {
     std::vector<std::pair<std::string, std::string>> testcases;
     testcases.emplace_back("Select s ", "Expected a declaration but found none");
     testcases.emplace_back("assignment a; ", "Expected a declaration but found none");
-    testcases.emplace_back("assign a Select s", "Expected ; token but found ...");
-    testcases.emplace_back("assign a a1;", "Expected ; token but found ...");
+    testcases.emplace_back("assign a Select s", "Expected ; but found 'Select'");
+    testcases.emplace_back("assign a a1;", "Expected ; but found 'a1'");
     testcases.emplace_back("assign a; print a;", "Trying to redeclare a synonym");
-    testcases.emplace_back("assign 1; Select 1", "Invalid synonym ...");
-    testcases.emplace_back("assign -a ; Select -a", "Invalid synonym ...");
-    testcases.emplace_back("stmt", "Invalid synonym ...");
-    testcases.emplace_back("stmt ; ",  "Invalid synonym ...");
+    testcases.emplace_back("assign 1; Select 1", "Invalid synonym '1'");
+    testcases.emplace_back("assign -a ; Select -a", "Invalid synonym '-'");
+    testcases.emplace_back("stmt", "Expected synonym but found none");
+    testcases.emplace_back("stmt ; ",  "Invalid synonym ';'");
 
     for (const auto& testcase : testcases) {
         PQLParser parser(testcase.first);
@@ -77,8 +77,9 @@ TEST_CASE("processDeclarations Errors") {
 
 TEST_CASE("processSelect Errors") {
     std::vector<std::pair<std::string, std::string>> testcases;
-    testcases.emplace_back("stmt s; where s", "Expected Select clause but found ...");
+    testcases.emplace_back("stmt s; where s", "Expected Select clause but found 'where'");
     testcases.emplace_back("assign a; Select s", "Undeclared synonym in Select clause");
+    testcases.emplace_back("assign a; Select", "Expected synonym but found none");
 
     for (const auto& testcase : testcases) {
         PQLParser parser(testcase.first);
