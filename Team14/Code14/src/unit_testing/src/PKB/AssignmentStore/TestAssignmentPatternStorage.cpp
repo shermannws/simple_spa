@@ -38,6 +38,6 @@ TEST_CASE("Test Assignment Pattern Storage and Retrieval") {
     shared_ptr<Variable> variableWild = make_shared<WildCard>(WildCard());
     shared_ptr<vector<shared_ptr<Statement>>> statementsAll = manager.getAssignStatements(variableWild, "2");
     REQUIRE(statementsAll->size() == 2);
-    REQUIRE(statementsAll->at(0) == statement2);
-    REQUIRE(statementsAll->at(1) == statement1);
+    REQUIRE(find(statementsAll->begin(), statementsAll->end(), statement1) != statementsAll->end());
+    REQUIRE(find(statementsAll->begin(), statementsAll->end(), statement2) != statementsAll->end());
 }
