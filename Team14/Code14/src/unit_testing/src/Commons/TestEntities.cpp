@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Commons/Entities/Constant.h"
 #include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Statement.h"
@@ -5,7 +7,7 @@
 #include "Commons/Entities/Entity.h"
 
 #include "catch.hpp"
-#include <iostream>
+
 using namespace std;
 
 TEST_CASE("Test Entity - Constant") {
@@ -77,17 +79,3 @@ TEST_CASE("Test Hash Function of Entities") {
 	REQUIRE(hashValue1 == hashValue2);
 	REQUIRE(hashValue1 != hashValue3);
 }
-
-//TEST_CASE("Test Hash Function of Entities11") {
-//	int mockValue = 1;
-//
-//	Constant c1 = Constant(mockValue);
-//	Constant c2 = Constant(1);
-//
-//	std::unique_ptr<Constant> ptr1 = std::make_unique<Constant>(c1);
-//	std::unique_ptr<Constant> ptr2 = std::make_unique<Constant>(c1);
-//
-//	cout << ptr1 << endl;
-//	cout << ptr2 << endl;
-//	REQUIRE(1 == 2);
-//}

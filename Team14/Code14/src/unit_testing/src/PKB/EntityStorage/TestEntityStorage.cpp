@@ -18,27 +18,21 @@ TEST_CASE("Test Entity Storage and Retrieval") {
 
 	EntityStorage store = EntityStorage();
 
-	//store.storeEntity(std::make_shared<Entity>(mockStatement));
+	store.storeEntity(std::make_shared<Entity>(mockStatement));
 	store.storeEntity(std::make_shared<Entity>(mockVariable));
-	//store.storeEntity(std::make_shared<Entity>(mockConstant));
-	//store.storeEntity(std::make_shared<Entity>(mockProcedure));
+	store.storeEntity(std::make_shared<Entity>(mockConstant));
+	store.storeEntity(std::make_shared<Entity>(mockProcedure));
 
-	//Entity* e1 = store.getEntity(std::make_shared<Entity>(Statement(1)));
-	//Entity* e2 = store.getEntity(std::make_shared<Entity>(Variable("x")));
-	//Entity* e3 = store.getEntity(std::make_shared<Entity>(Constant(2)));
-	//Entity* e4 = store.getEntity(std::make_shared<Entity>(Procedure("y")));
+	Entity* e1 = store.getEntity(std::make_shared<Entity>(Statement(1)));
+	Entity* e2 = store.getEntity(std::make_shared<Entity>(Variable("x")));
+	Entity* e3 = store.getEntity(std::make_shared<Entity>(Constant(2)));
+	Entity* e4 = store.getEntity(std::make_shared<Entity>(Procedure("y")));
 
-	//Entity* e5 = store.getEntity(std::make_shared<Entity>(Procedure("z")));
+	Entity* e5 = store.getEntity(std::make_shared<Entity>(Procedure("z")));
 
-	//cout << std::to_string(e1 == nullptr) << endl;
-	//cout << std::to_string(e2 == nullptr) << endl;
-	//cout << std::to_string(e3 == nullptr) << endl;
-	//cout << std::to_string(e4 == nullptr) << endl;
-	//cout << std::to_string(e5 == nullptr) << endl;
-
-	//REQUIRE(e5 == nullptr);
-	//REQUIRE(*e1 == mockStatement);
-	//REQUIRE(*e2 == mockVariable);
-	//REQUIRE(*e3 == mockConstant);
-	//REQUIRE(*e4 == mockProcedure);
+	REQUIRE(e5 == nullptr);
+	REQUIRE(*e1 == mockStatement);
+	REQUIRE(*e2 == mockVariable);
+	REQUIRE(*e3 == mockConstant);
+	REQUIRE(*e4 == mockProcedure);
 }
