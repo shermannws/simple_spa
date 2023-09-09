@@ -1,6 +1,7 @@
 #include "Token.h"
 
 #include <string>
+#include <regex>
 
 Token::Token(const std::string& input) {
     this->rep = input;
@@ -49,18 +50,6 @@ bool Token::isToken(TokenType ttype) {
     return type == ttype;
 }
 
-bool Token::isSelectToken() {
-    return rep == "Select" && type==TokenType::Word;
-}
-
-bool Token::isSuchThatToken() {
-    return rep == "such that" && type==TokenType::Word;;
-}
-
-bool Token::isPatternToken() {
-    return rep == "pattern" && type==TokenType::Word;
-}
-
 bool Token::isDesignEntity() {
     if (type ==TokenType::Word && (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" ||
     rep == "assign" || rep == "call" || rep == "while" || rep == "if" || rep == "variable" || rep == "constant")
@@ -71,7 +60,6 @@ bool Token::isDesignEntity() {
 }
 
 bool Token::isIdent() {
-    return std::all_of(rep.begin(), rep.end(), [](char const &c) {
-        return std::isalnum(c);
-    }) && type == TokenType::Word && isalpha(rep[0]);
+    std::regex pattern("[a-zA-Z][a-zA-Z0-9]*");
+    return std::regex_match(rep, pattern);
 }

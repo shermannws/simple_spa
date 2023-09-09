@@ -70,7 +70,7 @@ void PQLParser::processDeclarations(Query& query) {
 
 void PQLParser::processSelectClause(Query& query) {
     std::shared_ptr<Token> next = tokenizer->popToken();
-    if (!next->isSelectToken()) {
+    if (!next->isToken("Select")) {
         throw std::runtime_error("Expected Select clause but found ...");
     }
     next = tokenizer->popToken();

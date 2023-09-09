@@ -7,7 +7,7 @@
 class Query {
 private:
     std::unordered_map<std::string, std::shared_ptr<Entity>> declarations;
-    std::vector<std::shared_ptr<Entity>> select;
+    std::vector<std::shared_ptr<Entity>> selects;
 
 public:
     Query();

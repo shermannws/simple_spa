@@ -4,7 +4,7 @@
 
 Query::Query() {
     declarations = std::unordered_map<std::string, std::shared_ptr<Entity>>();
-    select = std::vector<std::shared_ptr<Entity>>();
+    selects = std::vector<std::shared_ptr<Entity>>();
 }
 
 std::shared_ptr<Entity> Query::getEntity(const std::string& syn) {
@@ -18,7 +18,7 @@ std::shared_ptr<Entity> Query::getEntity(const std::string& syn) {
 }
 
 void Query::addSelect(const std::shared_ptr<Entity>& entity){
-    select.push_back(entity);
+    selects.push_back(entity);
 }
 
 void Query::addDeclaration(const std::shared_ptr<Entity>& entity){
@@ -37,5 +37,5 @@ std::unordered_map<std::string, std::shared_ptr<Entity>> Query::getDeclarations(
 }
 
 std::vector<std::shared_ptr<Entity>> Query::getSelect() {
-    return select;
+    return selects;
 }
