@@ -6,6 +6,7 @@
 // TODO: CREATE A MORE COMPREHENSIVE TEST SUITE
 
 TEST_CASE("Tokenizer Test") {
+
     SECTION("Valid query") {
         Tokenizer tokenizer("stmt s;\nSelect s such that Follows*(2,3)");
         REQUIRE(tokenizer.getCurr() == 0);
@@ -69,6 +70,66 @@ TEST_CASE("Tokenizer Test") {
         REQUIRE_FALSE(tokenizer.popToken()->getRep() == "Follows*");
         REQUIRE_FALSE(tokenizer.popToken()->getType() == TokenType::Empty);
     }
+
+    SECTION("test trailing whitespaces") {
+        Tokenizer tokenizer(" \n Parent* \n     ");
+        REQUIRE(tokenizer.popToken()->getRep() == "Parent*");
+        REQUIRE(tokenizer.popToken()->getType() == TokenType::Empty);
+    }
+
+    SECTION("test specials") {
+        Tokenizer tokenizer("\"specials ();,_+-*/% \"");
+
+        std::shared_ptr<Token> t = tokenizer.popToken();
+        REQUIRE(t->getRep() == "\"");
+        REQUIRE(t->getType() == TokenType::Quote);
+
+        REQUIRE(tokenizer.popToken()->getRep() == "specials");
+
+        t = tokenizer.popToken();
+        REQUIRE(t->getRep() == "(");
+        REQUIRE(t->getType() == TokenType::Lparenthesis);
+
+        t = tokenizer.popToken();
+        REQUIRE(t->getRep() == ")");
+        REQUIRE(t->getType() == TokenType::Rparenthesis);
+
+        t = tokenizer.popToken();
+        REQUIRE(t->getRep() == ";");
+        REQUIRE(t->getType() == TokenType::Semicolon);
+
+        t = tokenizer.popToken();
+        REQUIRE(t->getRep() == ",");
+        REQUIRE(t->getType() == TokenType::Comma);
+
+        t = tokenizer.popToken();
+        REQUIRE(t->getRep() == "_");
+        REQUIRE(t->getType() == TokenType::Underscore);
+
+        t = tokenizer.popToken();
+        REQUIRE(t->getRep() == "+");
+        REQUIRE(t->getType() == TokenType::Plus);
+
+        t = tokenizer.popToken();
+        REQUIRE(t->getRep() == "-");
+        REQUIRE(t->getType() == TokenType::Minus);
+
+        t = tokenizer.popToken();
+        REQUIRE(t->getRep() == "*");
+        REQUIRE(t->getType() == TokenType::Asterisk);
+
+        t = tokenizer.popToken();
+        REQUIRE(t->getRep() == "/");
+        REQUIRE(t->getType() == TokenType::Slash);
+
+        t = tokenizer.popToken();
+        REQUIRE(t->getRep() == "%");
+        REQUIRE(t->getType() == TokenType::Percent);
+
+        REQUIRE(tokenizer.popToken()->getRep() == "\"");
+        REQUIRE(tokenizer.popToken()->getType() == TokenType::Empty);
+    }
+
 }
 
 
