@@ -2,10 +2,7 @@
 
 #include <string>
 
-Entity::Entity(EntityType type, const std::string& synonym) {
-    this->type = type;
-    this->synonym = synonym;
-}
+Entity::Entity(EntityType type, const std::string& synonym) : type(type), synonym(synonym) {}
 
 bool Entity::operator==(const Entity& other) const {
     return (type == other.type) && (synonym == other.synonym);

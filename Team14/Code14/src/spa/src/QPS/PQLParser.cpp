@@ -3,9 +3,7 @@
 
 #include <string>
 
-PQLParser::PQLParser(const std::string& str) {
-    this->tokenizer = std::make_shared<Tokenizer>(str);
-}
+PQLParser::PQLParser(const std::string& str) : tokenizer(std::make_shared<Tokenizer>(str)){}
 
 Query PQLParser::parse(){
     Query query = Query();
@@ -19,25 +17,25 @@ void PQLParser::processDeclarations(Query& query) {
         std::shared_ptr<Token> designEntity = tokenizer->popToken();
         EntityType currentType;
         if (designEntity->isToken("procedure")) {
-            currentType = EntityType::PROCEDURE;
+            currentType = EntityType::Procedure;
         } else if (designEntity->isToken("stmt")) {
-            currentType = EntityType::STMT;
+            currentType = EntityType::Stmt;
         } else if (designEntity->isToken("read")) {
-            currentType = EntityType::READ;
+            currentType = EntityType::Read;
         } else if (designEntity->isToken("print")) {
-            currentType = EntityType::PRINT;
+            currentType = EntityType::Print;
         } else if (designEntity->isToken("assign")) {
-            currentType = EntityType::ASSIGN;
+            currentType = EntityType::Assign;
         } else if (designEntity->isToken("call")) {
-            currentType = EntityType::CALL;
+            currentType = EntityType::Call;
         } else if (designEntity->isToken("while")) {
-            currentType = EntityType::WHILE;
+            currentType = EntityType::While;
         } else if (designEntity->isToken("if")) {
-            currentType = EntityType::IF;
+            currentType = EntityType::If;
         } else if (designEntity->isToken("variable")) {
-            currentType = EntityType::VARIABLE;
+            currentType = EntityType::Variable;
         } else if (designEntity->isToken("constant")) {
-            currentType = EntityType::CONSTANT;
+            currentType = EntityType::Constant;
         }
 
         std::shared_ptr<Token> synonym = tokenizer->popToken();
@@ -47,7 +45,7 @@ void PQLParser::processDeclarations(Query& query) {
         std::shared_ptr<Entity> newEntity = std::make_shared<Entity>(currentType, synonym->getRep());
         query.addDeclaration(newEntity);
 
-        while(tokenizer->peekToken()->isToken(TokenType::COMMA)) {
+        while(tokenizer->peekToken()->isToken(TokenType::Comma)) {
             tokenizer->popToken(); //consume comma
             synonym = tokenizer->popToken();
             if (!synonym->isIdent()) {
@@ -59,7 +57,7 @@ void PQLParser::processDeclarations(Query& query) {
 
         // consume semicolon
         std::shared_ptr<Token> endToken = tokenizer->popToken();
-        if (!endToken->isToken(TokenType::SEMICOLON)) {
+        if (!endToken->isToken(TokenType::Semicolon)) {
             throw std::runtime_error("Expected ; token but found ...");
         }
     }

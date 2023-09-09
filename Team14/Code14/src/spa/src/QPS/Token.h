@@ -4,26 +4,26 @@
 
 enum class TokenType {
     // brackets
-    LPARENTHESIS,
-    RPARENTHESIS,
+    Lparenthesis,
+    Rparenthesis,
 
     // operators
-    PLUS,
-    MINUS,
-    ASTERISK,
-    SLASH,
-    PERCENT,
+    Plus,
+    Minus,
+    Asterisk,
+    Slash,
+    Percent,
 
     // others
-    SEMICOLON,
-    COMMA,
-    QUOTE,
-    UNDERSCORE,
+    Semicolon,
+    Comma,
+    Quote,
+    Underscore,
 
     // alphanumeric letter(s)
-    WORD,
+    Word,
 
-    EMPTY,
+    Empty,
 
 };
 

@@ -8,7 +8,7 @@ TEST_CASE("single declaration, single Select") {
     std::string input = "stmt s; Select s";
     PQLParser parser(input);
     Query query = parser.parse();
-    Entity expectedEntity = Entity(EntityType::STMT, "s");
+    Entity expectedEntity = Entity(EntityType::Stmt, "s");
     std::shared_ptr<Entity> declarationEntity = query.getEntity("s");
     std::shared_ptr<Entity> selectEntity = query.getSelect()[0];
 

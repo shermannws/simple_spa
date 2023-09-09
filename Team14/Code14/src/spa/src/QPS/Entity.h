@@ -3,16 +3,16 @@
 #include <string>
 
 enum class EntityType {
-    PROCEDURE,
-    STMT,
-    READ,
-    PRINT,
-    ASSIGN,
-    CALL,
-    WHILE,
-    IF,
-    VARIABLE,
-    CONSTANT,
+    Procedure,
+    Stmt,
+    Read,
+    Print,
+    Assign,
+    Call,
+    While,
+    If,
+    Variable,
+    Constant,
 };
 
 class Entity {

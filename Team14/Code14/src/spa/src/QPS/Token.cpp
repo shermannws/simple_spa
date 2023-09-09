@@ -5,31 +5,31 @@
 Token::Token(const std::string& input) {
     this->rep = input;
     if (rep == "(") {
-        this->type = TokenType::LPARENTHESIS;
+        this->type = TokenType::Lparenthesis;
     } else if (rep == ")") {
-        this->type = TokenType::RPARENTHESIS;
+        this->type = TokenType::Rparenthesis;
     } else if (rep == "+") {
-        this->type = TokenType::PLUS;
+        this->type = TokenType::Plus;
     } else if (rep == "-") {
-        this->type = TokenType::MINUS;
+        this->type = TokenType::Minus;
     } else if (rep == "*") {
-        this->type = TokenType::ASTERISK;
+        this->type = TokenType::Asterisk;
     } else if (rep == "/") {
-        this->type = TokenType::SLASH;
+        this->type = TokenType::Slash;
     } else if (rep == "%") {
-        this->type = TokenType::PERCENT;
+        this->type = TokenType::Percent;
     } else if (rep == ";") {
-        this->type = TokenType::SEMICOLON;
+        this->type = TokenType::Semicolon;
     } else if (rep == ",") {
-        this->type = TokenType::COMMA;
+        this->type = TokenType::Comma;
     } else if (rep == "\"") {
-        this->type = TokenType::QUOTE;
+        this->type = TokenType::Quote;
     } else if (rep == "_") {
-        this->type = TokenType::UNDERSCORE;
+        this->type = TokenType::Underscore;
     } else if (!rep.empty()){
-        this->type = TokenType::WORD;
+        this->type = TokenType::Word;
     } else {
-        this->type = TokenType::EMPTY;
+        this->type = TokenType::Empty;
     }
 }
 
@@ -42,7 +42,7 @@ TokenType Token::getType() {
 }
 
 bool Token::isToken(const std::string& str) {
-    return rep == str && type == TokenType::WORD;
+    return rep == str && type == TokenType::Word;
 }
 
 bool Token::isToken(TokenType ttype) {
@@ -50,19 +50,19 @@ bool Token::isToken(TokenType ttype) {
 }
 
 bool Token::isSelectToken() {
-    return rep == "Select" && type==TokenType::WORD;
+    return rep == "Select" && type==TokenType::Word;
 }
 
 bool Token::isSuchThatToken() {
-    return rep == "such that" && type==TokenType::WORD;;
+    return rep == "such that" && type==TokenType::Word;;
 }
 
 bool Token::isPatternToken() {
-    return rep == "pattern" && type==TokenType::WORD;
+    return rep == "pattern" && type==TokenType::Word;
 }
 
 bool Token::isDesignEntity() {
-    if (type ==TokenType::WORD && (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" ||
+    if (type ==TokenType::Word && (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" ||
     rep == "assign" || rep == "call" || rep == "while" || rep == "if" || rep == "variable" || rep == "constant")
     ) {
         return true;
@@ -73,5 +73,5 @@ bool Token::isDesignEntity() {
 bool Token::isIdent() {
     return std::all_of(rep.begin(), rep.end(), [](char const &c) {
         return std::isalnum(c);
-    }) && type == TokenType::WORD && isalpha(rep[0]);
+    }) && type == TokenType::Word && isalpha(rep[0]);
 }
