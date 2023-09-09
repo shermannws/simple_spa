@@ -16,5 +16,5 @@ public:
 
     bool addAssignment(std::shared_ptr<Assignment> assignment);
 
-    std::shared_ptr<vector<shared_ptr<Statement>>> getAssignStatements(shared_ptr<Variable> variable, string pattern) const;
+    std::shared_ptr<std::vector<std::shared_ptr<Statement>>> getAssignStatements(std::shared_ptr<Variable> variable, std::string pattern) const;
 };

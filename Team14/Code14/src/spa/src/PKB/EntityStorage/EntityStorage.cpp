@@ -1,3 +1,5 @@
+#pragma once
+
 #include "EntityStorage.h"
 
 EntityStorage::EntityStorage() {}
