@@ -12,6 +12,9 @@ add_library(spa ${srcs} ${headers}
     "src/Commons/Entities/Entity.h"
     "src/Commons/Entities/Entity.cpp"
     "src/Commons/HashableKey.h"
+    "src/Commons/Entities/WildCard.h"
+    "src/Commons/Entities/WildCard.cpp"
+
     "src/PKB/Relationships/RelationshipType.h"
     "src/PKB/Relationships/Relationship.h"
     "src/PKB/Relationships/UsesRelationship.h"
@@ -35,27 +38,25 @@ add_library(spa ${srcs} ${headers}
     "src/PKB/EntityStorage/StatementStore.cpp"
     "src/PKB/EntityStorage/VariableStore.h"
     "src/PKB/EntityStorage/VariableStore.cpp"
-    
-    
     "src/PKB/AssignmentPatternStore/Assignment.h"
     "src/PKB/AssignmentPatternStore/Assignment.cpp"
     "src/PKB/AssignmentPatternStore/AssignmentPatternStore.h"
     "src/PKB/AssignmentPatternStore/AssignmentPatternStore.cpp"
     "src/PKB/AssignmentPatternStore/AssignmentManager.h"
     "src/PKB/AssignmentPatternStore/AssignmentManager.cpp"
-    "src/Commons/Entities/WildCard.h"
-    "src/Commons/Entities/WildCard.cpp"
     "src/PKB/Pkb.h"
     "src/PKB/Pkb.cpp"
     "src/PKB/PkbReader.h"
     "src/PKB/PkbWriter.cpp"
     "src/PKB/PkbWriter.h"
     "src/PKB/PkbReader.cpp"
+
     src/QPS/Tokenizer.cpp
     src/QPS/Token.cpp
     src/QPS/Entity.cpp
     src/QPS/PQLParser.cpp
     src/QPS/Query.cpp)
+
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

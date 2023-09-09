@@ -11,7 +11,7 @@ TEST_CASE("Tokenizer Test") {
         REQUIRE(tokenizer.getCurr() == 0);
 
         REQUIRE(tokenizer.peekToken()->getRep() == "stmt");
-        REQUIRE(tokenizer.peekToken()->getType() == TokenType::WORD);
+        REQUIRE(tokenizer.peekToken()->getType() == TokenType::Word);
         REQUIRE(tokenizer.getCurr() == 0);
         REQUIRE(tokenizer.popToken()->getRep() == "stmt");
 
@@ -34,13 +34,13 @@ TEST_CASE("Tokenizer Test") {
         REQUIRE(tokenizer.popToken()->getRep() == "Follows*");
         std::shared_ptr<Token> t = tokenizer.popToken();
         REQUIRE(t->getRep() == "(");
-        REQUIRE(t->getType() == TokenType::LPARENTHESIS);
+        REQUIRE(t->getType() == TokenType::Lparenthesis);
         REQUIRE(tokenizer.popToken()->getRep() == "2");
         REQUIRE(tokenizer.popToken()->getRep() == ",");
         REQUIRE(tokenizer.popToken()->getRep() == "3");
         REQUIRE(tokenizer.popToken()->getRep() == ")");
         REQUIRE(tokenizer.getCurr() == 40);
-        REQUIRE(tokenizer.popToken()->getType() == TokenType::EMPTY);
+        REQUIRE(tokenizer.popToken()->getType() == TokenType::Empty);
         REQUIRE_FALSE(tokenizer.isCurrValid());
     }
 
@@ -58,7 +58,7 @@ TEST_CASE("Tokenizer Test") {
         REQUIRE(tokenizer.popToken()->getRep() == ",");
         REQUIRE(tokenizer.popToken()->getRep() == "such");
         REQUIRE(tokenizer.popToken()->getRep() == ")");
-        REQUIRE(tokenizer.popToken()->getType() == TokenType::EMPTY);
+        REQUIRE(tokenizer.popToken()->getType() == TokenType::Empty);
     }
 
     SECTION("Invalid tokens") {
@@ -67,7 +67,7 @@ TEST_CASE("Tokenizer Test") {
         tokenizer.popToken();
         REQUIRE_FALSE(tokenizer.popToken()->getRep() == "follows*");
         REQUIRE_FALSE(tokenizer.popToken()->getRep() == "Follows*");
-        REQUIRE_FALSE(tokenizer.popToken()->getType() == TokenType::EMPTY);
+        REQUIRE_FALSE(tokenizer.popToken()->getType() == TokenType::Empty);
     }
 }
 

@@ -1,35 +1,36 @@
 #include "Token.h"
 
 #include <string>
+#include <regex>
 
 Token::Token(const std::string& input) {
     this->rep = input;
     if (rep == "(") {
-        this->type = TokenType::LPARENTHESIS;
+        this->type = TokenType::Lparenthesis;
     } else if (rep == ")") {
-        this->type = TokenType::RPARENTHESIS;
+        this->type = TokenType::Rparenthesis;
     } else if (rep == "+") {
-        this->type = TokenType::PLUS;
+        this->type = TokenType::Plus;
     } else if (rep == "-") {
-        this->type = TokenType::MINUS;
+        this->type = TokenType::Minus;
     } else if (rep == "*") {
-        this->type = TokenType::ASTERISK;
+        this->type = TokenType::Asterisk;
     } else if (rep == "/") {
-        this->type = TokenType::SLASH;
+        this->type = TokenType::Slash;
     } else if (rep == "%") {
-        this->type = TokenType::PERCENT;
+        this->type = TokenType::Percent;
     } else if (rep == ";") {
-        this->type = TokenType::SEMICOLON;
+        this->type = TokenType::Semicolon;
     } else if (rep == ",") {
-        this->type = TokenType::COMMA;
+        this->type = TokenType::Comma;
     } else if (rep == "\"") {
-        this->type = TokenType::QUOTE;
+        this->type = TokenType::Quote;
     } else if (rep == "_") {
-        this->type = TokenType::UNDERSCORE;
+        this->type = TokenType::Underscore;
     } else if (!rep.empty()){
-        this->type = TokenType::WORD;
+        this->type = TokenType::Word;
     } else {
-        this->type = TokenType::EMPTY;
+        this->type = TokenType::Empty;
     }
 }
 
@@ -39,4 +40,26 @@ std::string Token::getRep() {
 
 TokenType Token::getType() {
     return type;
+}
+
+bool Token::isToken(const std::string& str) {
+    return rep == str && type == TokenType::Word;
+}
+
+bool Token::isToken(TokenType ttype) {
+    return type == ttype;
+}
+
+bool Token::isDesignEntity() {
+    if (type ==TokenType::Word && (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" ||
+    rep == "assign" || rep == "call" || rep == "while" || rep == "if" || rep == "variable" || rep == "constant")
+    ) {
+        return true;
+    }
+    return false;
+}
+
+bool Token::isIdent() {
+    std::regex pattern("[a-zA-Z][a-zA-Z0-9]*");
+    return std::regex_match(rep, pattern);
 }

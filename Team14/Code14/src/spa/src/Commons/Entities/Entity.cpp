@@ -30,7 +30,7 @@ std::size_t std::hash<Entity>::operator()(const Entity& entity) const {
 }
 
 std::size_t std::hash<std::shared_ptr<Entity>>::operator()(const std::shared_ptr<Entity> entityPtr) const {
-    return std::hash<Entity>()(*entityPtr);
+    return std::hash<Entity>()(*entityPtr.get());
 }
 
 bool std::equal_to<std::shared_ptr<Entity>>::operator()(
