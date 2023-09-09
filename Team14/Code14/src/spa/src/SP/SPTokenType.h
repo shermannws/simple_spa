@@ -1,0 +1,13 @@
+#pragma once
+
+enum TokenType {
+    NAME,
+    INTEGER,
+    OPEN_ROUND_PARAN,
+    CLOSE_ROUND_PARAN,
+    OPEN_CURLY_PARAN,
+    CLOSE_CURLY_PARAN,
+    SEMICOLON,
+    EQUALS,
+    ARITHMETIC_OPERATOR
+};
