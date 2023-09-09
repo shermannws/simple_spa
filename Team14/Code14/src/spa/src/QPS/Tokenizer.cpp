@@ -8,7 +8,7 @@
 #include "Token.h"
 
 
-std::vector<std::string> specials{"(",")",";",",","_","+","-","*","/","%"};
+std::vector<std::string> specials{"(",")",";",",","_","+","-","*","/","%", "\""};
 std::vector<std::string> stars{"Follows", "Parent"};
 
 Tokenizer::Tokenizer(const std::string& input) : curr(0) {
@@ -52,8 +52,9 @@ std::shared_ptr<Token> Tokenizer::popToken() {
     }
 
     // skip if whitespace
-    while (isspace(peekChar())) {
+    if (isspace(peekChar())){
         popChar();
+        return popToken();
     }
 
     // one-character token
