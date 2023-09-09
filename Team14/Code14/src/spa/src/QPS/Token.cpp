@@ -26,8 +26,10 @@ Token::Token(const std::string& input) {
         this->type = TokenType::QUOTE;
     } else if (rep == "_") {
         this->type = TokenType::UNDERSCORE;
-    } else {
+    } else if (!rep.empty()){
         this->type = TokenType::WORD;
+    } else {
+        this->type = TokenType::EMPTY;
     }
 }
 

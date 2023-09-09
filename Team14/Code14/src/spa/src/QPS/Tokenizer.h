@@ -1,10 +1,13 @@
-#ifndef SPA_TOKENIZER_H
-#define SPA_TOKENIZER_H
+#pragma once
 
 #include <string>
 #include "Token.h"
 
 class Tokenizer {
+private:
+    int curr;
+    std::string input;
+
 public:
     explicit Tokenizer(const std::string& input);
     int peekChar();
@@ -15,11 +18,4 @@ public:
     std::shared_ptr<Token> popToken();
     bool isCurrValid();
     int getCurr() const;
-
-private:
-    int curr;
-    std::string input;
 };
-
-
-#endif //SPA_TOKENIZER_H

@@ -3,9 +3,9 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_
 add_library(spa ${srcs} ${headers}
         src/QPS/Tokenizer.cpp
         src/QPS/Token.cpp
-        src/QPS/PQLParser.cpp
+        src/QPS/Entity.cpp
         src/QPS/Query.cpp
-        src/QPS/Entity.cpp)
+        src/QPS/PQLParser.cpp)
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

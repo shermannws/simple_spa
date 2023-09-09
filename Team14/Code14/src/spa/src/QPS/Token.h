@@ -1,5 +1,4 @@
-#ifndef SPA_TOKEN_H
-#define SPA_TOKEN_H
+#pragma once
 
 #include <string>
 
@@ -24,9 +23,14 @@ enum class TokenType {
     // alphanumeric letter(s)
     WORD,
 
+    EMPTY,
+
 };
 
 class Token {
+private:
+    std::string rep;
+    TokenType type;
 public:
     explicit Token(const std::string& rep);
     std::string getRep();
@@ -38,10 +42,4 @@ public:
     bool isPatternToken();
     bool isDesignEntity();
     bool isIdent();
-private:
-    std::string rep;
-    TokenType type;
 };
-
-
-#endif //SPA_TOKEN_H

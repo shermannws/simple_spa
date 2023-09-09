@@ -1,5 +1,4 @@
-#ifndef SPA_ENTITY_H
-#define SPA_ENTITY_H
+#pragma once
 
 #include <string>
 
@@ -26,6 +25,3 @@ public:
     std::string getSynonym();
     EntityType getType();
 };
-
-
-#endif //SPA_ENTITY_H
