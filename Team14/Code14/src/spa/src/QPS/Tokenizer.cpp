@@ -1,7 +1,12 @@
+#pragma once
+
+#include <string>
+#include <vector>
+#include <stdexcept>
+
 #include "Tokenizer.h"
 #include "Token.h"
 
-#include <string>
 
 std::vector<std::string> specials{"(",")",";",",","_","+","-","*","/","%"};
 std::vector<std::string> stars{"Follows", "Parent"};
@@ -92,7 +97,7 @@ std::shared_ptr<Token> Tokenizer::peekToken() {
 }
 
 bool Tokenizer::isCurrValid() {
-    return curr >=0 and curr < (int)input.size();
+    return curr >=0 && curr < (int)input.size();
 }
 
 int Tokenizer::getCurr() const {
