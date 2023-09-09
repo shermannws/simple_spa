@@ -35,8 +35,8 @@ add_library(spa ${srcs} ${headers}
     "src/PKB/EntityStorage/StatementStore.cpp"
     "src/PKB/EntityStorage/VariableStore.h"
     "src/PKB/EntityStorage/VariableStore.cpp"
-    "src/PKB/EntityStorage/AssignmentStatementStore.h"
-    "src/PKB/EntityStorage/AssignmentStatementStore.cpp"
+    
+    
     "src/PKB/AssignmentPatternStore/Assignment.h"
     "src/PKB/AssignmentPatternStore/Assignment.cpp"
     "src/PKB/AssignmentPatternStore/AssignmentPatternStore.h"
@@ -45,6 +45,12 @@ add_library(spa ${srcs} ${headers}
     "src/PKB/AssignmentPatternStore/AssignmentManager.cpp"
     "src/Commons/Entities/WildCard.h"
     "src/Commons/Entities/WildCard.cpp"
+    "src/PKB/Pkb.h"
+    "src/PKB/Pkb.cpp"
+    "src/PKB/PkbReader.h"
+    "src/PKB/PkbWriter.cpp"
+    "src/PKB/PkbWriter.h"
+    "src/PKB/PkbReader.cpp"
     src/QPS/Tokenizer.cpp
     src/QPS/Token.cpp
     src/QPS/Entity.cpp
