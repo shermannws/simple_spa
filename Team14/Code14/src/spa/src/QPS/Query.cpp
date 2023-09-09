@@ -1,6 +1,8 @@
-#include "Query.h"
-
 #include <string>
+#include <memory>
+#include <stdexcept>
+
+#include "Query.h"
 
 Query::Query() {
     declarations = std::unordered_map<std::string, std::shared_ptr<Entity>>();

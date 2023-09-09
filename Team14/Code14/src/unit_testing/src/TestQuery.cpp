@@ -39,7 +39,7 @@ TEST_CASE("Query class tests") {
         query.addDeclaration(entity1);
         query.addDeclaration(entity2);
 
-        std::shared_ptr entity = query.getEntity("v");
+        std::shared_ptr<Entity> entity = query.getEntity("v");
 
         REQUIRE(entity == entity1);
         REQUIRE(query.getEntity("unknownSynonym") == nullptr);

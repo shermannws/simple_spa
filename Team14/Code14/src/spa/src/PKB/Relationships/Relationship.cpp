@@ -1,6 +1,8 @@
-#include "Relationship.h"
+#pragma once
+
 #include <stdexcept>
 
+#include "Relationship.h"
 
 Relationship::Relationship(const RelationshipType relationshipType,
     const std::shared_ptr<Entity> leftEntity,

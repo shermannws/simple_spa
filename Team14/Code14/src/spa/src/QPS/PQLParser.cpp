@@ -1,7 +1,7 @@
-#include "PQLParser.h"
-
-
 #include <string>
+#include <stdexcept>
+
+#include "PQLParser.h"
 
 PQLParser::PQLParser(const std::string& str) : tokenizer(std::make_shared<Tokenizer>(str)){}
 

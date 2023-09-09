@@ -1,6 +1,8 @@
-#include "Entity.h"
+#pragma once
+
 #include <stdexcept>
 
+#include "Entity.h"
 
 Entity::Entity(const std::shared_ptr<std::string> entityValue, bool isInt) {
     this->entityValue = entityValue;
@@ -28,7 +30,7 @@ std::size_t std::hash<Entity>::operator()(const Entity& entity) const {
 }
 
 std::size_t std::hash<std::shared_ptr<Entity>>::operator()(const std::shared_ptr<Entity> entityPtr) const {
-    return std::hash<Entity>()(*entityPtr);
+    return std::hash<Entity>()(*entityPtr.get());
 }
 
 bool std::equal_to<std::shared_ptr<Entity>>::operator()(

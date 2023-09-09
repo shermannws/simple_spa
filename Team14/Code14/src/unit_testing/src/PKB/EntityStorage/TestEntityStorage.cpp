@@ -1,12 +1,13 @@
-#include "PKB/EntityStorage/EntityStorage.h"
+#include <iostream>
 
+#include "PKB/EntityStorage/EntityStorage.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "Commons/Entities/Constant.h"
 #include "Commons/Entities/Procedure.h"
 
 #include "catch.hpp"
-#include <iostream>
+
 using namespace std;
 
 TEST_CASE("Test Entity Storage and Retrieval") {
