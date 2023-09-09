@@ -1,6 +1,8 @@
-#include "Entity.h"
+#pragma once
+
 #include <stdexcept>
 
+#include "Entity.h"
 
 Entity::Entity(const std::shared_ptr<std::string> entityValue, bool isInt) {
     this->entityValue = entityValue;

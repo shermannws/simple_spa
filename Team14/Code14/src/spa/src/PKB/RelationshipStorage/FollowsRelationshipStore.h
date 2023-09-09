@@ -1,3 +1,5 @@
+#pragma once
+
 #include "RelationshipStorage.h"
 
 class FollowsRelationshipStore : public RelationshipStorage {

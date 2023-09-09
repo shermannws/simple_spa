@@ -10,8 +10,8 @@ bool AssignmentManager::addAssignment(std::shared_ptr<Assignment> assignment) {
     return this->assignmentStore->addAssignment(assignment);
 }
 
-std::shared_ptr<vector<shared_ptr<Statement>>> AssignmentManager::getAssignStatements(std::shared_ptr<Variable> variable, string pattern) const {
-    std::shared_ptr<vector<shared_ptr<Statement>>> statements = std::make_shared<vector<shared_ptr<Statement>>>();
+std::shared_ptr<std::vector<std::shared_ptr<Statement>>> AssignmentManager::getAssignStatements(std::shared_ptr<Variable> variable, std::string pattern) const {
+    std::shared_ptr<std::vector<std::shared_ptr<Statement>>> statements = std::make_shared<std::vector<std::shared_ptr<Statement>>>();
     auto it = this->assignmentStore->getBeginIterator();
     auto end = this->assignmentStore->getEndIterator();
     while (it != end) {

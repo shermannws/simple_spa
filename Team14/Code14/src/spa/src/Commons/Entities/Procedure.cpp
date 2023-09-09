@@ -2,5 +2,5 @@
 
 #include "Procedure.h"
 
-Procedure::Procedure(string name)
+Procedure::Procedure(std::string name)
 	: Entity(std::make_shared<std::string>(name), false) {}

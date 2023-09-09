@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Variable.h"
 
 class WildCard : public Variable {
