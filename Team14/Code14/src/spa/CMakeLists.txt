@@ -28,6 +28,9 @@ add_library(spa ${srcs} ${headers}
         src/SP/AST/Visitors/EntityExtractorVisitor.h
         src/SP/AST/Visitors/FollowsExtractorVisitor.h
         src/SP/AST/Visitors/UsesExtractorVisitor.h
+        src/SP/AST/Visitors/EntityExtractorVisitor.cpp
+        src/SP/AST/Visitors/FollowsExtractorVisitor.cpp
+        src/SP/AST/Visitors/UsesExtractorVisitor.cpp
 )
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
