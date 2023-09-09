@@ -1,3 +1,5 @@
+#pragma once
+
 #include "PkbReader.h"
 
 PkbReader::PkbReader(

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "AssignmentPatternStore.h"
 
 AssignmentPatternStore::AssignmentPatternStore() = default;

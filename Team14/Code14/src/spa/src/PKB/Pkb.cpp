@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Pkb.h"
 
 Pkb::Pkb() {

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "PkbWriter.h"
 
 PkbWriter::PkbWriter(

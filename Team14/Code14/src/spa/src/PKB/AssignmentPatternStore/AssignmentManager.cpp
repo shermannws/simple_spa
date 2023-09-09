@@ -1,3 +1,5 @@
+#pragma once
+
 #include "AssignmentManager.h"
 
 AssignmentManager::AssignmentManager(std::shared_ptr<AssignmentPatternStore> assignmentStore) {
