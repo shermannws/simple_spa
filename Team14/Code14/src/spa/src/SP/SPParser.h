@@ -22,10 +22,7 @@
 
 class SPParser {
 private:
-//    // std::shared_ptr<ASTNode> : return type
-//    // (SPParser::*) : all functions are part of SPParser
-//    // (std::deque<SPToken>&) : function parameters
-//    std::unordered_map<std::string, std::shared_ptr<ASTNode>(SPParser::*)(std::deque<SPToken>&)> statementToParserMap;
+    int runningStatementNumber;
 
     // All methods below pass the deque by reference
     std::shared_ptr<ProcedureNode> parseProcedure(std::deque<SPToken>& tokens);

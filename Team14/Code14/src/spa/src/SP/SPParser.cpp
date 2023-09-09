@@ -1,14 +1,11 @@
 #include "SPParser.h"
 
-//SPParser::SPParser() {
-//    statementToParserMap["assign"] = &parseAssignStatement;
-//    statementToParserMap["read"];
-//    statementToParserMap["print"];
-//}
+SPParser::SPParser() {
+    runningStatementNumber = 1;
+}
 
 std::shared_ptr<ProgramNode> SPParser::parse(std::vector<SPToken> tokens) {
     std::deque<SPToken> tokensQueue(tokens.begin(), tokens.end());
-    int runningStatementNumber = 1;
     std::shared_ptr<ProgramNode> programNode = std::make_shared<ProgramNode>();
     while (!tokensQueue.empty()) {
         programNode->procedures.push_back(parseProcedure(tokensQueue));
@@ -36,16 +33,12 @@ std::shared_ptr<ProcedureNode> SPParser::parseProcedure(std::deque<SPToken>& tok
 
 std::shared_ptr<StatementListNode> SPParser::parseStatementList(std::deque<SPToken>& tokens) {
     std::shared_ptr<StatementListNode> statementListNode = std::make_shared<StatementListNode>();
-    assert(tokens.front().getType() == TokenType::NAME &&
-           (tokens.front().getValue() == "assign" ||
-           tokens.front().getValue() == "read" ||
-           tokens.front().getValue() == "print"));
     while (tokens.front().getType() != TokenType::CLOSE_CURLY_PARAN) {
         if (tokens.front().getValue() == "assign") {
             statementListNode->statements.push_back(parseAssignStatement(tokens));
-        } else if (tokens.front().getValue() == "read") {
+        } else if (tokens.front().getType() == TokenType::NAME && tokens.front().getValue() == "read") {
             statementListNode->statements.push_back(parseReadStatement(tokens));
-        } else if (tokens.front().getValue() == "print") {
+        } else if (tokens.front().getType() == TokenType::NAME && tokens.front().getValue() == "print") {
             statementListNode->statements.push_back(parsePrintStatement(tokens));
         }
     }
@@ -57,9 +50,36 @@ std::shared_ptr<AssignNode> SPParser::parseAssignStatement(std::deque<SPToken>& 
 }
 
 std::shared_ptr<ReadNode> SPParser::parseReadStatement(std::deque<SPToken>& tokens) {
-
+    assert(tokens.front().getType() == TokenType::NAME && tokens.front().getValue() == "read");
+    std::shared_ptr<ReadNode> readNode = std::make_shared<ReadNode>(runningStatementNumber);
+    runningStatementNumber++;
+    readNode->var = parseVariable(tokens);
+    return readNode;
 }
 
 std::shared_ptr<PrintNode> SPParser::parsePrintStatement(std::deque<SPToken>& tokens) {
+    assert(tokens.front().getType() == TokenType::NAME && tokens.front().getValue() == "print");
+    std::shared_ptr<PrintNode> printNode = std::make_shared<PrintNode>(runningStatementNumber);
+    runningStatementNumber++;
+    printNode->var = parseVariable(tokens);
+    return printNode;
+}
+
+std::shared_ptr<ExpressionNode> SPParser::parseExpression(std::deque<SPToken>& tokens) {
+
+}
+
+std::shared_ptr<ArithmeticExpressionNode> SPParser::parseArithmeticExpression(std::deque<SPToken>& tokens) {
+
+}
+
+std::shared_ptr<VariableNode> SPParser::parseVariable(std::deque<SPToken>& tokens) {
+    assert(tokens.front().getType() == TokenType::NAME);
+    std::shared_ptr<VariableNode> variableNode = std::make_shared<VariableNode>();
+
+
+}
+
+std::shared_ptr<ConstantNode> SPParser::parseConstant(std::deque<SPToken>& tokens) {
 
 }
