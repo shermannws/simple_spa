@@ -17,9 +17,8 @@ public:
     Query();
     void addDeclaration(const std::shared_ptr<Entity>& entity);
     void addSelect(const std::shared_ptr<Entity>& entity);
-
-    void addSuchThatClause(SuchThatClause& clause);
-    // void addPatternClause();
+    void addSuchThat(SuchThatClause& clause);
+    // void addPattern();
     bool hasDeclarations();
     std::shared_ptr<Entity> getEntity(const std::string& syn);
     std::unordered_map<std::string, std::shared_ptr<Entity>> getDeclarations();

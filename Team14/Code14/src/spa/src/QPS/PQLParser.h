@@ -17,9 +17,9 @@ private:
     Ref extractStmtRef();
     Ref extractEntRef();
     void processSuchThatBody(Query& query, SuchThatClause& clause);
-    void processSuchThatLeft(Query &query, SuchThatClause &clause);
-    void processSuchThatRight(Query &query, SuchThatClause &clause);
-    void validateSuchThatSemantics(Query &query, SuchThatClause &clause);
+    void processSuchThatLeft(Query &query, SuchThatClause& clause);
+    void processSuchThatRight(Query &query, SuchThatClause& clause);
+    void validateSuchThatSemantics(Query &query, SuchThatClause& clause);
 
 public:
     explicit PQLParser(const std::string& str);

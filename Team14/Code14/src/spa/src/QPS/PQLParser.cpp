@@ -124,10 +124,8 @@ void PQLParser::processSuchThatClause(Query& query) {
     }
 
     processSuchThatBody(query, clause);
-    query.addSuchThatClause(clause);
-
-    // TODO: semantic validation of such that clause
     validateSuchThatSemantics(query, clause);
+    query.addSuchThat(clause);
 
     // TODO: handle multiple "such that" and here recursively
 }
@@ -135,16 +133,14 @@ void PQLParser::processSuchThatClause(Query& query) {
 void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) {
     // TODO: check Uses (done) & modifies cannot be wildcard
     // TODO: check each entity is appropriate for the RelationshipType
-    // TODO: check synonyms are declared
+
     RelationshipType type = clause.getType();
     Ref left_ref = clause.getLeftRef();
-    RefType left_type = left_ref.getType();
     RootType left_root_type = left_ref.getRootType();
     Ref right_ref = clause.getRightRef();
-    RefType right_type = right_ref.getType();
     RootType right_root_type = right_ref.getRootType();
 
-    // check synonyms are declared
+    // check that synonyms are declared
     if (left_root_type == RootType::Synonym) {
         std::shared_ptr<Entity> entity = query.getEntity(left_ref.getRep());
         if (!entity) {
@@ -246,7 +242,6 @@ void PQLParser::processSuchThatLeft(Query &query, SuchThatClause &clause) {
     RelationshipType type = clause.getType();
     Ref ref;
     if (type == RelationshipType::Uses) {
-        // TODO: how to check IF STMT OR REF
         std::shared_ptr<Token> next = tokenizer->peekToken();
         if (next->isIdent()) {
             std::shared_ptr<Entity> entity = query.getEntity(next->getRep());
