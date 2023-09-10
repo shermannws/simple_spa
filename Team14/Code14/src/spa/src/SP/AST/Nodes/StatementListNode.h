@@ -6,8 +6,9 @@
 #include "StatementNode.h"
 
 class StatementListNode : public ASTNode {
-public:
+private:
     std::vector<std::shared_ptr<StatementNode>> statements;
-
+public:
+    explicit StatementListNode(std::vector<std::shared_ptr<StatementNode>> statements);
     void accept(DesignExtractorVisitor& visitor) override;
 };

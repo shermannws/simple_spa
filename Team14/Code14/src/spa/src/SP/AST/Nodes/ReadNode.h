@@ -6,10 +6,9 @@
 #include "VariableNode.h"
 
 class ReadNode : public StatementNode {
-public:
+private:
     std::shared_ptr<VariableNode> var;
-
-    explicit ReadNode(int statementNumber);
-
+public:
+    explicit ReadNode(int statementNumber, std::shared_ptr<VariableNode> var);
     void accept(DesignExtractorVisitor& visitor) override;
 };
