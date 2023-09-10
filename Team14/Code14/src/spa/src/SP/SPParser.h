@@ -31,7 +31,6 @@ private:
     std::shared_ptr<ReadNode> parseReadStatement(std::queue<SPToken>& tokens);
     std::shared_ptr<PrintNode> parsePrintStatement(std::queue<SPToken>& tokens);
     std::shared_ptr<ExpressionNode> parseExpression(std::queue<SPToken>& tokens);
-    std::shared_ptr<ArithmeticExpressionNode> parseArithmeticExpression(std::queue<SPToken>& tokens);
     std::shared_ptr<VariableNode> parseVariable(std::queue<SPToken>& tokens);
     std::shared_ptr<ConstantNode> parseConstant(std::queue<SPToken>& tokens);
 

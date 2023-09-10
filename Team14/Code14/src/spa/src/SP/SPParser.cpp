@@ -155,35 +155,32 @@ std::shared_ptr<ExpressionNode> SPParser::parseExpression(std::queue<SPToken>& t
     std::stack<std::shared_ptr<ExpressionNode>> expressionStack;
 
     while (!postfixTokens.empty()) {
-        SPToken nextToken = postfixTokens.front();
-        postfixTokens.pop();
-        if (nextToken.getType() == TokenType::ARITHMETIC_OPERATOR) {
+        if (postfixTokens.front().getType() == TokenType::ARITHMETIC_OPERATOR) {
             assert(expressionStack.size() >= 2); // need 2 expressions for arithmetic expressions
             auto newExpression = std::make_shared<ArithmeticExpressionNode>();
-//            newExpression->operatorType = ArithmeticOperatorType::DIVIDE;
+            newExpression->operatorType =
+                    ArithmeticExpressionNode::translateOperatorTypeString(postfixTokens.front().getValue());
             newExpression->leftExpression = expressionStack.top();
             expressionStack.pop();
             newExpression->rightExpression = expressionStack.top();
             expressionStack.pop();
+            expressionStack.push(newExpression);
+            postfixTokens.pop(); // consume token
+        } else if (postfixTokens.front().getType() == TokenType::INTEGER) {
+            expressionStack.push(parseConstant(postfixTokens)); // consumes token
         } else {
-            assert(nextToken.getType() == TokenType::NAME); // token must be variable/constant if not an operator
-            if (std::regex_match(nextToken.getValue(), std::regex("^[-]?[0-9]+$"))) {
-//                expressionStack.push(parseConstant(nextToken));
-            }
+            assert(postfixTokens.front().getType() == TokenType::NAME);
+            expressionStack.push(parseVariable(postfixTokens)); // consumes token
         }
     }
 
     assert(tokens.front().getType() == TokenType::SEMICOLON);
     tokens.pop(); // consume semicolon
 
-    // TODO: process token
+    assert(expressionStack.size() == 1);
+    return expressionStack.top();
 }
 
-
-
-std::shared_ptr<ArithmeticExpressionNode> SPParser::parseArithmeticExpression(std::queue<SPToken>& tokens) {
-
-}
 
 std::shared_ptr<VariableNode> SPParser::parseVariable(std::queue<SPToken>& tokens) {
     assert(tokens.front().getType() == TokenType::NAME);
