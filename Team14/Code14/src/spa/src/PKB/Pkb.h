@@ -8,6 +8,8 @@
 #include "PKB/EntityStorage/ProcedureStore.h"
 #include "PKB/EntityStorage/StatementStore.h"
 #include "PKB/EntityStorage/VariableStore.h"
+#include "PKB/EntityStorage/ReadStatementStore.h"
+#include "PKB/EntityStorage/PrintStatementStore.h"
 #include "PKB/RelationshipStorage/FollowsRelationshipStore.h"
 #include "PKB/RelationshipStorage/UsesRelationshipStore.h"
 #include "PKB/PkbReader.h"
@@ -24,6 +26,10 @@ private:
 
     std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore;
     std::shared_ptr<UsesRelationshipStore> usesRelationshipStore;
+
+    std::shared_ptr<ReadStatementStore> readStmtStore;
+    std::shared_ptr<PrintStatementStore> printStmtStore;
+
 public:
     Pkb();
 

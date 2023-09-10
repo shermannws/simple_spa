@@ -15,6 +15,9 @@ Pkb::Pkb() {
     this->variableStore = std::make_shared<VariableStore>(VariableStore());
     this->followsRelationshipStore = std::make_shared<FollowsRelationshipStore>(FollowsRelationshipStore());
     this->usesRelationshipStore = std::make_shared<UsesRelationshipStore>(UsesRelationshipStore());
+
+    this->readStmtStore = std::make_shared<ReadStatementStore>(ReadStatementStore());
+    this->printStmtStore = std::make_shared<PrintStatementStore>(PrintStatementStore());
 };
 
 std::shared_ptr<PkbReader> Pkb::createPkbReader() {
@@ -40,7 +43,9 @@ std::shared_ptr<PkbWriter> Pkb::createPkbWriter() {
                     this->statementStore,
                     this->variableStore,
                     this->followsRelationshipStore,
-                    this->usesRelationshipStore
+                    this->usesRelationshipStore,
+                    this->readStmtStore,
+                    this->printStmtStore
             )
     );
 };

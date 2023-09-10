@@ -50,6 +50,10 @@ add_library(spa ${srcs} ${headers}
     "src/PKB/PkbWriter.cpp"
     "src/PKB/PkbWriter.h"
     "src/PKB/PkbReader.cpp"
+    "src/PKB/EntityStorage/PrintStatementStore.h"
+    "src/PKB/EntityStorage/PrintStatementStore.cpp"
+    "src/PKB/EntityStorage/ReadStatementStore.h"
+    "src/PKB/EntityStorage/ReadStatementStore.cpp"
 
     src/QPS/Tokenizer.cpp
     src/QPS/Token.cpp
