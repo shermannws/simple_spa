@@ -7,8 +7,7 @@
 #include "PKB/EntityStorage/ProcedureStore.h"
 #include "PKB/EntityStorage/StatementStore.h"
 #include "PKB/EntityStorage/VariableStore.h"
-#include "PKB/RelationshipStorage/FollowsRelationshipStore.h"
-#include "PKB/RelationshipStorage/UsesRelationshipStore.h"
+#include "PKB/Managers/FollowsRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 
 class PkbReaderManager {
@@ -20,7 +19,7 @@ private:
     std::shared_ptr<StatementStore> statementStore;
     std::shared_ptr<VariableStore> variableStore;
 
-    std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore;
+    std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager;
     std::shared_ptr<UsesRelationshipManager> usesRelationshipManager;
 
     std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllEntities(const std::shared_ptr<EntityStorage>&) const;
@@ -32,7 +31,7 @@ public:
             std::shared_ptr<ProcedureStore> procedureStore,
             std::shared_ptr<StatementStore> statementStore,
             std::shared_ptr<VariableStore> variableStore,
-            std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore,
+            std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager
     );
 
@@ -49,5 +48,13 @@ public:
     std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> getAllAssignVariablePair() const;
 
     std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllAssignByVariable(std::shared_ptr<Variable> variable) const;
+
+    std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Statement>>>>> getAllFollowsStatementPair() const;
+
+    std::shared_ptr<Statement> getFollowsByStatement(std::shared_ptr<Statement> statement) const; // Returns statement followed by (ahead) given statement
+
+    std::shared_ptr<Statement> getFollowingStatement(std::shared_ptr<Statement> statement) const; // Returns statement following (behind) given statement
+
+    bool getIsFollows(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) const; // Returns true if statement1 follows statement2
 
 };
