@@ -10,5 +10,5 @@
 class Strategy {
 public:
     virtual ~Strategy() = default;
-    virtual void evaluateClause(Query& query, Result& result, std::shared_ptr<PkbReader> pkbReader) const = 0;
+    virtual Result evaluateClause(Query& query, std::shared_ptr<PkbReader> pkbReader) const = 0;
 };

@@ -8,7 +8,7 @@ void ClauseHandler::setStrategy(std::unique_ptr<Strategy> strategy) {
 
 void ClauseHandler::processResult(Query& query, Result& result) const {
     if (strategy) {
-        strategy->evaluateClause(query, result, pkbReader);
+        result = strategy->evaluateClause(query, pkbReader);
     } else {
         throw std::runtime_error("No strategy set for clause handler");
     }

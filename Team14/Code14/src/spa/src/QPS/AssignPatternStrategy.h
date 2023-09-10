@@ -4,5 +4,5 @@
 
 class AssignPatternStrategy : public Strategy {
 public:
-    void evaluateClause(Query& query, Result& result, std::shared_ptr<PkbReader> pkbReader) const override;
+    Result evaluateClause(Query& query, std::shared_ptr<PkbReader> pkbReader) const override;
 };
