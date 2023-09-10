@@ -1,8 +1,6 @@
 #include "Result.h"
 
-Result::Result() : type(ResultType::Invalid), boolResult(false) {
-    tuples = std::vector<std::unordered_map<std::string, std::shared_ptr<Entity>>>();
-}
+Result::Result() : type(ResultType::Invalid), boolResult(false) {}
 
 ResultType Result::getType() {
     return type;
@@ -19,10 +17,18 @@ bool Result::getBoolResult() {
     return boolResult;
 }
 
-void Result::setTuples(std::vector<std::unordered_map<std::string, std::shared_ptr<Entity>>>& ttuples) {
+void Result::setTuples(const std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> ttuples) {
     tuples = ttuples;
 }
 
-std::vector<std::unordered_map<std::string, std::shared_ptr<Entity>>> Result::getTuples() {
+std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> Result::getTuples() {
     return tuples;
+}
+
+std::unordered_map<std::string, int> Result::getSynIndices() {
+    return synIndices;
+}
+
+void Result::setSynIndices(std::unordered_map<std::string, int> &ssynIndices) {
+    synIndices = ssynIndices;
 }

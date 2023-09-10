@@ -17,12 +17,19 @@ TEST_CASE("Test formatResult") {
 
         std::shared_ptr<Statement> e1 = std::make_shared<Statement>(1);
         std::shared_ptr<Variable> e11 = std::make_shared<Variable>("my_variable");
-        std::unordered_map<std::string, std::shared_ptr<Entity>> map1 {{"a", e1}, {"x", e11}};
+        std::vector<std::shared_ptr<Entity>> v1 {e1, e11};
+
         std::shared_ptr<Statement> e2 = std::make_shared<Statement>(5);
         std::shared_ptr<Variable> e21 = std::make_shared<Variable>("another_variable");
-        std::unordered_map<std::string, std::shared_ptr<Entity>> map2 {{"a", e2}, {"x", e21}};
+        std::vector<std::shared_ptr<Entity>> v2 {e2, e21};
 
-        std::vector<std::unordered_map<std::string, std::shared_ptr<Entity>>> tuples {map1, map2};
+        std::unordered_map<std::string, int> map {{"a", 0}, {"x", 1}};
+        r.setSynIndices(map);
+
+        std::shared_ptr<std::vector<std::shared_ptr<Entity>>> ptr1 = std::make_shared<std::vector<std::shared_ptr<Entity>>>(v1);
+        std::shared_ptr<std::vector<std::shared_ptr<Entity>>> ptr2 = std::make_shared<std::vector<std::shared_ptr<Entity>>>(v2);
+
+        std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> tuples {ptr1, ptr2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator;
@@ -31,7 +38,7 @@ TEST_CASE("Test formatResult") {
         std::list<std::string> expected {"my_variable", "another_variable"};
         REQUIRE(formattedResults == expected);
     }
-
+    // TODO: CHANGE THIS
     SECTION("Follows query single tuple") {
         PQLParser parser("stmt s; Select s such that Follows(2,s)");
         Query query = parser.parse();
@@ -40,13 +47,19 @@ TEST_CASE("Test formatResult") {
         r.setType(type);
 
         std::shared_ptr<Statement> e1 = std::make_shared<Statement>(1);
-        std::shared_ptr<Statement> e11 = std::make_shared<Statement>(3);
-        std::unordered_map<std::string, std::shared_ptr<Entity>> map1 {{"s", e1}, {"r", e11}};
+        std::vector<std::shared_ptr<Entity>> v1 {e1};
 
         std::shared_ptr<Statement> e2 = std::make_shared<Statement>(2);
-        std::unordered_map<std::string, std::shared_ptr<Entity>> map2 {{"s", e2}};
+        std::vector<std::shared_ptr<Entity>> v2 {e2};
 
-        std::vector<std::unordered_map<std::string, std::shared_ptr<Entity>>> tuples {map1, map2};
+
+        std::unordered_map<std::string, int> map {{"s", 0}};
+        r.setSynIndices(map);
+
+        std::shared_ptr<std::vector<std::shared_ptr<Entity>>> ptr1 = std::make_shared<std::vector<std::shared_ptr<Entity>>>(v1);
+        std::shared_ptr<std::vector<std::shared_ptr<Entity>>> ptr2 = std::make_shared<std::vector<std::shared_ptr<Entity>>>(v2);
+
+        std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> tuples {ptr1, ptr2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator;
