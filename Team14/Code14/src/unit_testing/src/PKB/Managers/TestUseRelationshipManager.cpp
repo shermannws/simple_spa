@@ -31,10 +31,10 @@ TEST_CASE("Test Uses Relationship Retrieval") {
     usesRelationshipStore->storeRelationship(make_shared<UsesRelationship>(UsesRelationship(statement2, variableC)));
 
     // Results
-    auto pairY = make_shared<std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>(make_pair(statement1, variableY));
-    auto pairZ = make_shared<std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>(make_pair(statement1, variableZ));
-    auto pairB = make_shared<std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>(make_pair(statement2, variableB));
-    auto pairC = make_shared<std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>(make_pair(statement2, variableC));
+    auto pairY = make_shared<std::vector<std::shared_ptr<Entity>>>(std::vector<std::shared_ptr<Entity>>{statement1, variableY});
+    auto pairZ = make_shared<std::vector<std::shared_ptr<Entity>>>(std::vector<std::shared_ptr<Entity>>{statement1, variableZ});
+    auto pairB = make_shared<std::vector<std::shared_ptr<Entity>>>(std::vector<std::shared_ptr<Entity>>{statement2, variableB});
+    auto pairC = make_shared<std::vector<std::shared_ptr<Entity>>>(std::vector<std::shared_ptr<Entity>>{statement2, variableC});
 
     auto allAssignmentVariables = usesRelationshipManager->getAllAssignVariable();
     REQUIRE(allAssignmentVariables->size() == 4);
@@ -45,6 +45,5 @@ TEST_CASE("Test Uses Relationship Retrieval") {
 
     auto statement1Variables = usesRelationshipManager->getVariableAssignment(variableB);
     REQUIRE(statement1Variables->size() == 1);
-    REQUIRE(statement1Variables->at(0)->first == statement2);
-    REQUIRE(statement1Variables->at(0)->second == variableB);
+    REQUIRE(statement1Variables->at(0) == statement2);
 }

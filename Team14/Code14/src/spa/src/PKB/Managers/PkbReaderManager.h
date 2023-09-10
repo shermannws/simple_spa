@@ -46,8 +46,8 @@ public:
 
     std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllStatements() const;
 
-    std::shared_ptr<std::vector<std::shared_ptr<std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>>> getAllAssignVariablePair() const;
+    std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> getAllAssignVariablePair() const;
 
-    std::shared_ptr<std::vector<std::shared_ptr<std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>>> getAllAssignByVariable(std::shared_ptr<Variable> variable) const;
+    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllAssignByVariable(std::shared_ptr<Variable> variable) const;
 
 };

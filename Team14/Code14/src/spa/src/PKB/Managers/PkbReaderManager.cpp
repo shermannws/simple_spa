@@ -44,10 +44,10 @@ std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllSt
     return this->getAllEntities(this->statementStore);
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>>> PkbReaderManager::getAllAssignVariablePair() const {
+std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> PkbReaderManager::getAllAssignVariablePair() const {
     return this->usesRelationshipManager->getAllAssignVariable();
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>>> PkbReaderManager::getAllAssignByVariable(std::shared_ptr<Variable> variable) const {
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllAssignByVariable(std::shared_ptr<Variable> variable) const {
     return this->usesRelationshipManager->getVariableAssignment(variable);
 }
