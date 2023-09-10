@@ -12,7 +12,7 @@ public:
     std::shared_ptr<ExpressionNode> leftExpression;
     std::shared_ptr<ExpressionNode> rightExpression;
 
-    ArithmeticOperatorType translateOperatorTypeString(std::string operatorTypeString)
+    ArithmeticOperatorType translateOperatorTypeString(std::string operatorTypeString);
 
     void accept(DesignExtractorVisitor& visitor) override;
 };
