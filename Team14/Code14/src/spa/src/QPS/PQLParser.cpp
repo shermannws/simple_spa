@@ -140,21 +140,6 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
     Ref rightRef = clause.getRightRef();
     RootType rightRootType = rightRef.getRootType();
 
-//    // check that synonyms are declared
-//    if (leftRootType == RootType::Synonym) {
-//        std::shared_ptr<Entity> entity = query.getEntity(leftRef.getRep());
-//        if (!entity) {
-//            throw std::runtime_error("Invalid LHS, undeclared synonym found");
-//        }
-//    }
-//
-//    if (rightRootType == RootType::Synonym) {
-//        std::shared_ptr<Entity> entity = query.getEntity(rightRef.getRep());
-//        if (!entity) {
-//            throw std::runtime_error("Invalid RHS, undeclared synonym found");
-//        }
-//    }
-
     // check wildcard & entity type
     if (type == RelationshipType::Uses) {
         if (leftRootType == RootType::Wildcard) {
@@ -185,10 +170,7 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
         if (leftRootType == RootType::Synonym) {
             std::shared_ptr<Entity> entity = query.getEntity(leftRef.getRep());
             EntityType entityType = entity->getType();
-            if (entityType != EntityType::Stmt && entityType != EntityType::Assign
-                && entityType != EntityType::Print && entityType != EntityType::If
-                && entityType != EntityType::While && entityType != EntityType::Call
-                && entityType != EntityType::Read) {
+            if (!isOfStmtType(entityType)) {
                 throw std::runtime_error("Invalid Follows LHS, non-statement found");
             }
         }
@@ -196,10 +178,7 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
         if (rightRootType == RootType::Synonym) {
             std::shared_ptr<Entity> entity = query.getEntity(rightRef.getRep());
             EntityType entityType = entity->getType();
-            if (entityType != EntityType::Stmt && entityType != EntityType::Assign
-                && entityType != EntityType::Print && entityType != EntityType::If
-                && entityType != EntityType::While && entityType != EntityType::Call
-                && entityType != EntityType::Read) {
+            if (!isOfStmtType(entityType)) {
                 throw std::runtime_error("Invalid Follows RHS, non-statement found");
             }
         }
@@ -208,10 +187,7 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
         if (leftRootType == RootType::Synonym) {
             std::shared_ptr<Entity> entity = query.getEntity(leftRef.getRep());
             EntityType entityType = entity->getType();
-            if (entityType != EntityType::Stmt && entityType != EntityType::Assign
-                && entityType != EntityType::Print && entityType != EntityType::If
-                && entityType != EntityType::While && entityType != EntityType::Call
-                && entityType != EntityType::Read) {
+            if (!isOfStmtType(entityType)) {
                 throw std::runtime_error("Invalid Follows* LHS, non-statement found");
             }
         }
@@ -219,14 +195,18 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
         if (rightRootType == RootType::Synonym) {
             std::shared_ptr<Entity> entity = query.getEntity(leftRef.getRep());
             EntityType entityType = entity->getType();
-            if (entityType != EntityType::Stmt && entityType != EntityType::Assign
-                && entityType != EntityType::Print && entityType != EntityType::If
-                && entityType != EntityType::While && entityType != EntityType::Call
-                && entityType != EntityType::Read) {
+            if (!isOfStmtType(entityType)) {
                 throw std::runtime_error("Invalid Follows* RHS, non-statement found");
             }
         }
     }
+}
+
+bool PQLParser::isOfStmtType(EntityType entityType) {
+    return entityType == EntityType::Stmt || entityType == EntityType::Assign
+           || entityType == EntityType::Print || entityType == EntityType::If
+           || entityType == EntityType::While || entityType == EntityType::Call
+           || entityType == EntityType::Read;
 }
 
 void PQLParser::processSuchThatBody(Query& query, SuchThatClause& clause) {
