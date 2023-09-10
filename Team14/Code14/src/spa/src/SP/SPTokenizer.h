@@ -1,6 +1,4 @@
-//
-#ifndef SPA_SPTOKENIZER_H
-#define SPA_SPTOKENIZER_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -25,10 +23,5 @@ private:
 
     int peekChar();
     int popChar();
-    std::string peekString();
-    std::string popString();
     bool isCurrValid();
 };
-
-
-#endif //SPA_SPTOKENIZER_H

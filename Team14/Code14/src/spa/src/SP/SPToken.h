@@ -1,5 +1,4 @@
-#ifndef SPA_SPTOKEN_H
-#define SPA_SPTOKEN_H
+#pragma once
 
 #include <string>
 #include "SPTokenType.h"
@@ -16,5 +15,3 @@ public:
     TokenType getType();
     std::string getValue();
 };
-
-#endif //SPA_SPTOKEN_H
