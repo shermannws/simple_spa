@@ -10,7 +10,7 @@ Result PQLEvaluator::Evaluate(Query& query) {
     // just placeholder, if clause is AssignPatternType:
     clauseHandler->setStrategy(std::make_unique<AssignPatternStrategy>());
     Result result;
-    clauseHandler->processResult(query, result);
+    clauseHandler->executeQuery(query, result);
 
     return result;
 }

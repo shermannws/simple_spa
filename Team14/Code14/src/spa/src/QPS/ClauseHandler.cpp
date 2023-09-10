@@ -6,7 +6,7 @@ void ClauseHandler::setStrategy(std::unique_ptr<Strategy> strategy) {
     strategy = std::move(strategy);
 }
 
-void ClauseHandler::processResult(Query& query, Result& result) const {
+void ClauseHandler::executeQuery(Query& query, Result& result) const {
     if (strategy) {
         result = strategy->evaluateClause(query, pkbReader);
     } else {
