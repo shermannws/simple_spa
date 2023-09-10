@@ -15,3 +15,7 @@ std::unordered_set<std::shared_ptr<Assignment>>::iterator AssignmentPatternStore
 std::unordered_set<std::shared_ptr<Assignment>>::iterator AssignmentPatternStore::getEndIterator() {
     return this->assignmentStore.end();
 }
+
+bool AssignmentPatternStore::contains(std::shared_ptr<Statement> statement) const {
+    return this->assignmentStore.find(std::make_shared<Assignment>(statement)) != this->assignmentStore.end();
+}

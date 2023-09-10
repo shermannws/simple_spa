@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "PKB/AssignmentPatternStore/AssignmentManager.h"
+#include "PKB/Managers/AssignmentManager.h"
 #include "PKB/AssignmentPatternStore/AssignmentPatternStore.h"
 #include "PKB/EntityStorage/ConstantStore.h"
 #include "PKB/EntityStorage/ProcedureStore.h"
@@ -10,6 +10,8 @@
 #include "PKB/EntityStorage/VariableStore.h"
 #include "PKB/RelationshipStorage/FollowsRelationshipStore.h"
 #include "PKB/RelationshipStorage/UsesRelationshipStore.h"
+#include "PKB/Managers/UsesRelationshipManager.h"
+#include "PKB/Managers/PkbReaderManager.h"
 #include "PKB/PkbReader.h"
 #include "PKB/PkbWriter.h"
 
@@ -24,6 +26,8 @@ private:
 
     std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore;
     std::shared_ptr<UsesRelationshipStore> usesRelationshipStore;
+    std::shared_ptr<UsesRelationshipManager> usesRelationshipManager;
+    std::shared_ptr<PkbReaderManager> pkbReaderManager;
 public:
     Pkb();
 

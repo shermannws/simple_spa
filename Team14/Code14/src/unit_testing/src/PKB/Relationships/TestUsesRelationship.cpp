@@ -9,7 +9,7 @@
 using namespace std;
 
 TEST_CASE("Test UsesRelationship Constructor") {
-	Statement mockLeftEntity = Statement(1);
+	Statement mockLeftEntity = Statement(1, StatementType::Assign);
 	Variable mockRightEntity = Variable("x");
 
 	UsesRelationship uses = UsesRelationship(
@@ -21,14 +21,14 @@ TEST_CASE("Test UsesRelationship Constructor") {
 }
 
 TEST_CASE("Test UsesRelationship Inequality") {
-	Statement mockLeftEntity1 = Statement(1);
+	Statement mockLeftEntity1 = Statement(1, StatementType::Assign);
 	Variable mockRightEntity1 = Variable("x");
 
 	UsesRelationship uses1 = UsesRelationship(
 		std::make_shared<Statement>(mockLeftEntity1),
 		std::make_shared<Variable>(mockRightEntity1));
 
-	Statement mockLeftEntity2 = Statement(2);
+	Statement mockLeftEntity2 = Statement(2, StatementType::Assign);
 	Variable mockRightEntity2 = Variable("y");
 
 	UsesRelationship uses2 = UsesRelationship(
@@ -39,7 +39,7 @@ TEST_CASE("Test UsesRelationship Inequality") {
 }
 
 TEST_CASE("Test UsesRelationship Equality") {
-	Statement mockLeftEntity = Statement(1);
+	Statement mockLeftEntity = Statement(1, StatementType::Assign);
 	Variable mockRightEntity = Variable("x");
 
 	UsesRelationship uses = UsesRelationship(
@@ -51,7 +51,7 @@ TEST_CASE("Test UsesRelationship Equality") {
 		std::make_shared<Variable>(mockRightEntity));
 
 	UsesRelationship usesWithDiffSharedPtr = UsesRelationship(
-		std::make_shared<Statement>(Statement(1)),
+		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
 		std::make_shared<Variable>(Variable("x")));
 
 	REQUIRE(uses == usesWithSameSharedPtr);
@@ -59,7 +59,7 @@ TEST_CASE("Test UsesRelationship Equality") {
 }
 
 TEST_CASE("Test UsesRelationship Static Field") {
-	Statement mockLeftEntity = Statement(1);
+	Statement mockLeftEntity = Statement(1, StatementType::Assign);
 	Variable mockRightEntity = Variable("x");
 
 	UsesRelationship uses = UsesRelationship(
@@ -70,7 +70,7 @@ TEST_CASE("Test UsesRelationship Static Field") {
 }
 
 TEST_CASE("Test UsesRelationship Hash") {
-	Statement mockLeftEntity = Statement(1);
+	Statement mockLeftEntity = Statement(1, StatementType::Assign);
 	Variable mockRightEntity = Variable("x");
 
 	UsesRelationship uses = UsesRelationship(
@@ -78,7 +78,7 @@ TEST_CASE("Test UsesRelationship Hash") {
 		std::make_shared<Variable>(mockRightEntity));
 
 	UsesRelationship usesWithDiffPtr = UsesRelationship(
-		std::make_shared<Statement>(Statement(1)),
+		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
 		std::make_shared<Variable>(Variable("x")));
 
 	std::hash<Relationship> relationshipHasher;
@@ -89,7 +89,7 @@ TEST_CASE("Test UsesRelationship Hash") {
 }
 
 TEST_CASE("Test UsesRelationshipPtr Hasher") {
-	Statement mockLeftEntity = Statement(1);
+	Statement mockLeftEntity = Statement(1, StatementType::Assign);
 	Variable mockRightEntity = Variable("x");
 
 	UsesRelationship uses = UsesRelationship(
@@ -97,7 +97,7 @@ TEST_CASE("Test UsesRelationshipPtr Hasher") {
 		std::make_shared<Variable>(mockRightEntity));
 
 	UsesRelationship usesWithDiffPtr = UsesRelationship(
-		std::make_shared<Statement>(Statement(1)),
+		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
 		std::make_shared<Variable>(Variable("x")));
 
 	std::hash<std::shared_ptr<Relationship>> relationshipPtrHasher;
