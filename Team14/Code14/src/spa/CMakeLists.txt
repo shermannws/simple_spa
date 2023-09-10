@@ -61,6 +61,8 @@ add_library(spa ${srcs} ${headers}
     "src/QPS/ClauseHandler.cpp"
     "src/QPS/Strategy.h"
     "src/QPS/AssignPatternStrategy.cpp"
+    "src/QPS/Clause.cpp"
+    "src/QPS/Ref.h"
 )
 
 # this makes the headers accessible for other projects which uses spa lib
