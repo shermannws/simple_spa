@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <vector>
-#include <deque>
+#include <queue>
 #include <unordered_map>
 #include <functional>
 
@@ -24,16 +24,16 @@ class SPParser {
 private:
     int runningStatementNumber;
 
-    // All methods below pass the deque by reference
-    std::shared_ptr<ProcedureNode> parseProcedure(std::deque<SPToken>& tokens);
-    std::shared_ptr<StatementListNode> parseStatementList(std::deque<SPToken>& tokens);
-    std::shared_ptr<AssignNode> parseAssignStatement(std::deque<SPToken>& tokens);
-    std::shared_ptr<ReadNode> parseReadStatement(std::deque<SPToken>& tokens);
-    std::shared_ptr<PrintNode> parsePrintStatement(std::deque<SPToken>& tokens);
-    std::shared_ptr<ExpressionNode> parseExpression(std::deque<SPToken>& tokens);
-    std::shared_ptr<ArithmeticExpressionNode> parseArithmeticExpression(std::deque<SPToken>& tokens);
-    std::shared_ptr<VariableNode> parseVariable(std::deque<SPToken>& tokens);
-    std::shared_ptr<ConstantNode> parseConstant(std::deque<SPToken>& tokens);
+    // All methods below pass the queue by reference
+    std::shared_ptr<ProcedureNode> parseProcedure(std::queue<SPToken>& tokens);
+    std::shared_ptr<StatementListNode> parseStatementList(std::queue<SPToken>& tokens);
+    std::shared_ptr<AssignNode> parseAssignStatement(std::queue<SPToken>& tokens);
+    std::shared_ptr<ReadNode> parseReadStatement(std::queue<SPToken>& tokens);
+    std::shared_ptr<PrintNode> parsePrintStatement(std::queue<SPToken>& tokens);
+    std::shared_ptr<ExpressionNode> parseExpression(std::queue<SPToken>& tokens);
+    std::shared_ptr<ArithmeticExpressionNode> parseArithmeticExpression(std::queue<SPToken>& tokens);
+    std::shared_ptr<VariableNode> parseVariable(std::queue<SPToken>& tokens);
+    std::shared_ptr<ConstantNode> parseConstant(std::queue<SPToken>& tokens);
 
 public:
     SPParser();
