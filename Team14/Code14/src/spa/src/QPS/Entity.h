@@ -12,6 +12,7 @@ enum class EntityType {
     If,
     Variable,
     Constant,
+    Invalid
 };
 
 class Entity {

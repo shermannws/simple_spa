@@ -2,7 +2,7 @@
 #include "Ref.h"
 #include <string>
 
-Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid) {}
+Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid), entityType(EntityType::Invalid) {}
 
 void Ref::setRep(std::string& rrep) {
     rep = rrep;
@@ -26,4 +26,12 @@ void Ref::setRootType(RootType& rrootType) {
 
 RootType Ref::getRootType() {
     return rootType;
+}
+
+void Ref::setEntityType(EntityType& eentityType) {
+    entityType = eentityType;
+}
+
+EntityType Ref::getEntityType() {
+    return entityType;
 }
