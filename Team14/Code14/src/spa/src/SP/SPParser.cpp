@@ -4,8 +4,6 @@
 
 #include "SPParser.h"
 
-// TODO: Make all node class members private, use constructors to initialize class members
-
 SPParser::SPParser() {
     runningStatementNumber = 1;
 }
@@ -13,10 +11,11 @@ SPParser::SPParser() {
 std::shared_ptr<ProgramNode> SPParser::parse(std::vector<SPToken> tokens) {
     // std::queue is an adapter that wraps the underlying std::deque container
     std::queue<SPToken> tokensQueue(std::deque<SPToken>(tokens.begin(), tokens.end()));
-    std::shared_ptr<ProgramNode> programNode = std::make_shared<ProgramNode>();
+    std::vector<std::shared_ptr<ProcedureNode>> procedures;
     while (!tokensQueue.empty()) {
-        programNode->procedures.push_back(parseProcedure(tokensQueue));
+        procedures.push_back(parseProcedure(tokensQueue));
     }
+    std::shared_ptr<ProgramNode> programNode = std::make_shared<ProgramNode>(procedures);
     return programNode;
 }
 
@@ -25,46 +24,48 @@ std::shared_ptr<ProcedureNode> SPParser::parseProcedure(std::queue<SPToken>& tok
     tokens.pop(); // consume "procedure" keyword
 
     assert(tokens.front().getType() == TokenType::NAME);
-    std::shared_ptr<ProcedureNode> procedureNode = std::make_shared<ProcedureNode>();
-    procedureNode->procedureName = tokens.front().getValue();
+    std::string procedureName = tokens.front().getValue();
     tokens.pop();
 
     assert(tokens.front().getType() == TokenType::OPEN_CURLY_PARAN);
     tokens.pop(); // consume "{"
-    procedureNode->statementList = parseStatementList(tokens);
+    std::shared_ptr<StatementListNode> statementList = parseStatementList(tokens);
     assert(tokens.front().getType() == TokenType::CLOSE_CURLY_PARAN);
     tokens.pop(); // consume "}"
 
+    std::shared_ptr<ProcedureNode> procedureNode = std::make_shared<ProcedureNode>(procedureName, statementList);
     return procedureNode;
 }
 
 std::shared_ptr<StatementListNode> SPParser::parseStatementList(std::queue<SPToken>& tokens) {
-    std::shared_ptr<StatementListNode> statementListNode = std::make_shared<StatementListNode>();
+    std::vector<std::shared_ptr<StatementNode>> statements;
     while (tokens.front().getType() != TokenType::CLOSE_CURLY_PARAN) {
         if (tokens.front().getType() == TokenType::NAME && tokens.front().getValue() == "read") {
-            statementListNode->statements.push_back(parseReadStatement(tokens));
+            statements.push_back(parseReadStatement(tokens));
         } else if (tokens.front().getType() == TokenType::NAME && tokens.front().getValue() == "print") {
-            statementListNode->statements.push_back(parsePrintStatement(tokens));
+            statements.push_back(parsePrintStatement(tokens));
         } else { // assign is the only statementType not starting with a keyword
-            statementListNode->statements.push_back(parseAssignStatement(tokens));
+            statements.push_back(parseAssignStatement(tokens));
         }
     }
+    std::shared_ptr<StatementListNode> statementListNode = std::make_shared<StatementListNode>(statements);
     return statementListNode;
 }
 
 std::shared_ptr<AssignNode> SPParser::parseAssignStatement(std::queue<SPToken>& tokens) {
-    std::shared_ptr<AssignNode> assignNode = std::make_shared<AssignNode>(runningStatementNumber);
-    runningStatementNumber++;
     assert(tokens.front().getType() == TokenType::NAME);
-    assignNode->var = parseVariable(tokens);
+    std::shared_ptr<VariableNode> var = parseVariable(tokens);
 
     assert(tokens.front().getType() == TokenType::EQUALS);
     tokens.pop(); // consume equals symbol
 
-    assignNode->expression = parseExpression(tokens);
+    std::shared_ptr<ExpressionNode> expression = parseExpression(tokens);
 
     assert(tokens.front().getType() == TokenType::SEMICOLON);
     tokens.pop(); // consume semicolon
+
+    std::shared_ptr<AssignNode> assignNode = std::make_shared<AssignNode>(runningStatementNumber, var, expression);
+    runningStatementNumber++;
     return assignNode;
 }
 
@@ -72,12 +73,13 @@ std::shared_ptr<ReadNode> SPParser::parseReadStatement(std::queue<SPToken>& toke
     assert(tokens.front().getType() == TokenType::NAME && tokens.front().getValue() == "read");
     tokens.pop(); // consume "read" keyword
 
-    std::shared_ptr<ReadNode> readNode = std::make_shared<ReadNode>(runningStatementNumber);
-    runningStatementNumber++;
-    readNode->var = parseVariable(tokens);
+    std::shared_ptr<VariableNode> var = parseVariable(tokens);
 
     assert(tokens.front().getType() == TokenType::SEMICOLON);
     tokens.pop(); // consume semicolon
+
+    std::shared_ptr<ReadNode> readNode = std::make_shared<ReadNode>(runningStatementNumber, var);
+    runningStatementNumber++;
     return readNode;
 }
 
@@ -85,12 +87,13 @@ std::shared_ptr<PrintNode> SPParser::parsePrintStatement(std::queue<SPToken>& to
     assert(tokens.front().getType() == TokenType::NAME && tokens.front().getValue() == "print");
     tokens.pop(); // consume "print" keyword
 
-    std::shared_ptr<PrintNode> printNode = std::make_shared<PrintNode>(runningStatementNumber);
-    runningStatementNumber++;
-    printNode->var = parseVariable(tokens);
+    std::shared_ptr<VariableNode> var = parseVariable(tokens);
 
     assert(tokens.front().getType() == TokenType::SEMICOLON);
     tokens.pop(); // consume semicolon
+
+    std::shared_ptr<PrintNode> printNode = std::make_shared<PrintNode>(runningStatementNumber, var);
+    runningStatementNumber++;
     return printNode;
 }
 
@@ -160,13 +163,14 @@ std::shared_ptr<ExpressionNode> SPParser::parseExpression(std::queue<SPToken>& t
     while (!postfixTokens.empty()) {
         if (postfixTokens.front().getType() == TokenType::ARITHMETIC_OPERATOR) {
             assert(expressionStack.size() >= 2); // need 2 expressions for arithmetic expressions
-            auto newExpression = std::make_shared<ArithmeticExpressionNode>();
-            newExpression->operatorType =
+            ArithmeticOperatorType operatorType =
                     ArithmeticExpressionNode::translateOperatorTypeString(postfixTokens.front().getValue());
-            newExpression->leftExpression = expressionStack.top();
+            auto leftExpression = expressionStack.top();
             expressionStack.pop();
-            newExpression->rightExpression = expressionStack.top();
+            auto rightExpression = expressionStack.top();
             expressionStack.pop();
+            auto newExpression =
+                    std::make_shared<ArithmeticExpressionNode>(operatorType, leftExpression, rightExpression);
             expressionStack.push(newExpression);
             postfixTokens.pop(); // consume token
         } else if (postfixTokens.front().getType() == TokenType::INTEGER) {
