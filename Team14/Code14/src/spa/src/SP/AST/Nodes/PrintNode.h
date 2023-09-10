@@ -6,10 +6,9 @@
 #include "VariableNode.h"
 
 class PrintNode: public StatementNode {
-public:
+private:
     std::shared_ptr<VariableNode> var;
-
-    explicit PrintNode(int statementNumber);
-
+public:
+    explicit PrintNode(int statementNumber, std::shared_ptr<VariableNode> var);
     void accept(DesignExtractorVisitor& visitor) override;
 };

@@ -4,8 +4,8 @@
 
 // Interface for all statement node types
 class StatementNode : public ASTNode {
-public:
+protected:
     int statementNumber;
-
+public:
     explicit StatementNode(int statementNumber);
 };

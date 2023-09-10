@@ -5,5 +5,5 @@
 // Interface for all ASTNodes
 class ASTNode {
 public:
-    virtual void accept(DesignExtractorVisitor&) = 0;
+    virtual void accept(DesignExtractorVisitor& visitor) = 0;
 };

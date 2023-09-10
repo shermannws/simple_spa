@@ -7,11 +7,12 @@
 #include "ExpressionNode.h"
 
 class AssignNode : public StatementNode {
-public:
+private:
     std::shared_ptr<VariableNode> var;
     std::shared_ptr<ExpressionNode> expression;
-
-    explicit AssignNode(int statementNumber);
-
+public:
+    explicit AssignNode(int statementNumber,
+                        std::shared_ptr<VariableNode> var,
+                        std::shared_ptr<ExpressionNode> expression);
     void accept(DesignExtractorVisitor& visitor) override;
 };

@@ -3,11 +3,10 @@
 #include "ExpressionNode.h"
 
 class ConstantNode : public ExpressionNode {
-public:
+private:
     // TODO: Wrap int type in typedef (ConstValue)
     int value;
-
-    explicit ConstantNode(int);
-
+public:
+    explicit ConstantNode(int value);
     void accept(DesignExtractorVisitor& visitor) override;
 };

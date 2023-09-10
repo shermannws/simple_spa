@@ -5,10 +5,9 @@
 #include "ExpressionNode.h"
 
 class VariableNode : public ExpressionNode {
-public:
+private:
     std::string varName;
-
-    explicit VariableNode(std::string& varName);
-
+public:
+    explicit VariableNode(std::string varName);
     void accept(DesignExtractorVisitor& visitor) override;
 };

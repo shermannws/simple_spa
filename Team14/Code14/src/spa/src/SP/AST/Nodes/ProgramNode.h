@@ -6,8 +6,9 @@
 #include "ProcedureNode.h"
 
 class ProgramNode : public ASTNode {
-public:
+private:
     std::vector<std::shared_ptr<ProcedureNode>> procedures;
-
+public:
+    explicit ProgramNode(std::vector<std::shared_ptr<ProcedureNode>> procedures);
     void accept(DesignExtractorVisitor& visitor) override;
 };
