@@ -6,11 +6,12 @@ PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :pkbReader(pkbR
 Result PQLEvaluator::Evaluate(Query& query) {
 
     // TODO iterate through clauses, get Strategy Type from clause type
+    // example :
+    // clauseHandler->setStrategy(std::make_unique<AssignPatternStrategy>());
+    // Result result;
+    // clauseHandler->executeQuery(query, result);
 
-    clauseHandler->setStrategy(std::make_unique<AssignPatternStrategy>());
     Result result;
-    clauseHandler->executeQuery(query, result);
-
     return result;
 }
 
