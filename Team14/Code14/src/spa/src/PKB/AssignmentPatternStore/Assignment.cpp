@@ -12,12 +12,6 @@ Assignment::Assignment(
     this->expression = expression;
 }
 
-Assignment::Assignment(std::shared_ptr<Statement> statement) {
-    this->statement = statement;
-    this->variable = nullptr;
-    this->expression = nullptr;
-}
-
 std::shared_ptr<Statement> Assignment::getStatement() const {
     return statement;
 }

@@ -13,7 +13,6 @@ private:
     std::shared_ptr<std::string> expression;
 public:
     Assignment(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable, std::shared_ptr<std::string> expression);
-    Assignment(std::shared_ptr<Statement> statement);
     virtual ~Assignment() = default;
 
     std::shared_ptr<Statement> getStatement() const;
