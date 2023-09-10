@@ -12,26 +12,29 @@ Result PQLEvaluator::Evaluate(Query& query) {
     // clauseHandler->executeQuery(query, result);
 
    std::shared_ptr<QueryEntity> entity = query.getSelect()[0];
-   std::vector<Entity> results = getAll(entity);
-   // print results
+   std::shared_ptr<std::vector<std::shared_ptr<Entity>>> entities = getAll(entity);
+   // convert entities to Result obj
 
     Result result;
     return result;
 }
 
-std::vector<Entity> PQLEvaluator::getAll(std::shared_ptr<QueryEntity> queryEntity) {
-    if (queryEntity->getType() == EntityType::Procedure) {
-        return pkbReader->getAllProcedures();
-    } else if (queryEntity->getType() == EntityType::Stmt) {
-        return pkbReader->getAllStatements();
-    } else if (queryEntity->getType() == EntityType::Assign) {
-        return pkbReader->getAllAssign();
-    } else if (queryEntity->getType() == EntityType::Variable) {
-        return pkbReader->getAllVariables();
-    } else if (queryEntity->getType() == EntityType::Constant) {
-        return pkbReader->getAllConstants();
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PQLEvaluator::getAll(std::shared_ptr<QueryEntity> queryEntity) {
+    EntityType entityType = queryEntity->getType();
+    switch (entityType) {
+        case EntityType::Procedure:
+            return pkbReader->getAllProcedures();
+        case EntityType::Stmt:
+            return pkbReader->getAllStatements();
+        case EntityType::Assign:
+            return pkbReader->getAllAssign();
+        case EntityType::Variable:
+            return pkbReader->getAllVariables();
+        case EntityType::Constant:
+            return pkbReader->getAllConstants();
+        default:
+            throw std::runtime_error("Not supported entity type in query select clause");
     }
-
 }
 
 
