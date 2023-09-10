@@ -181,9 +181,6 @@ std::shared_ptr<ExpressionNode> SPParser::parseExpression(std::queue<SPToken>& t
         }
     }
 
-    assert(tokens.front().getType() == TokenType::SEMICOLON);
-    tokens.pop(); // consume semicolon
-
     assert(expressionStack.size() == 1);
     return expressionStack.top();
 }
@@ -200,7 +197,7 @@ std::shared_ptr<VariableNode> SPParser::parseVariable(std::queue<SPToken>& token
 std::shared_ptr<ConstantNode> SPParser::parseConstant(std::queue<SPToken>& tokens) {
     assert(tokens.front().getType() == TokenType::INTEGER);
     std::string stringValue = tokens.front().getValue();
-    assert(std::regex_match(stringValue, std::regex("^[-]?[0-9]+$")));
+    assert(std::regex_match(stringValue, std::regex("^[0-9]+$")));
     int value = std::stoi(stringValue);
     tokens.pop(); // consume integer constant
     std::shared_ptr<ConstantNode> constantNode = std::make_shared<ConstantNode>(value);
