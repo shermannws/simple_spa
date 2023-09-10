@@ -4,7 +4,7 @@
 
 #include "Query.h"
 #include "Tokenizer.h"
-#include "Entity.h"
+#include "QueryEntity.h"
 
 class PQLParser {
 private:

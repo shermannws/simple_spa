@@ -45,7 +45,7 @@ void PQLParser::processDeclarations(Query& query) {
             }
             throw std::runtime_error("Invalid synonym '" + synonym->getRep() + "'");
         }
-        std::shared_ptr<Entity> newEntity = std::make_shared<Entity>(currentType, synonym->getRep());
+        std::shared_ptr<QueryEntity> newEntity = std::make_shared<QueryEntity>(currentType, synonym->getRep());
         query.addDeclaration(newEntity);
 
         while(tokenizer->peekToken()->isToken(TokenType::Comma)) {
@@ -57,7 +57,7 @@ void PQLParser::processDeclarations(Query& query) {
                 }
                 throw std::runtime_error("Invalid synonym '" + synonym->getRep() + "'");
             }
-            newEntity = std::make_shared<Entity>(currentType, synonym->getRep());
+            newEntity = std::make_shared<QueryEntity>(currentType, synonym->getRep());
             query.addDeclaration(newEntity);
         }
 
@@ -85,7 +85,7 @@ void PQLParser::processSelectClause(Query& query) {
         throw std::runtime_error("Expected synonym but found none");
     }
 
-    std::shared_ptr<Entity> entity = query.getEntity(next->getRep());
+    std::shared_ptr<QueryEntity> entity = query.getEntity(next->getRep());
     if (!entity) {
         throw std::runtime_error("Undeclared synonym in Select clause");
     }

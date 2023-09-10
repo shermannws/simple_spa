@@ -53,7 +53,7 @@ add_library(spa ${srcs} ${headers}
 
     src/QPS/Tokenizer.cpp
     src/QPS/Token.cpp
-    src/QPS/Entity.cpp
+    src/QPS/QueryEntity.cpp
     src/QPS/PQLParser.cpp
     src/QPS/Query.cpp)
 

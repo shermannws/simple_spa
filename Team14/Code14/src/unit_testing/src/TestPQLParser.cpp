@@ -8,9 +8,9 @@ TEST_CASE("single declaration, single Select") {
     std::string input = "stmt s; Select s";
     PQLParser parser(input);
     Query query = parser.parse();
-    Entity expectedEntity = Entity(EntityType::Stmt, "s");
-    std::shared_ptr<Entity> declarationEntity = query.getEntity("s");
-    std::shared_ptr<Entity> selectEntity = query.getSelect()[0];
+    QueryEntity expectedEntity = QueryEntity(EntityType::Stmt, "s");
+    std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("s");
+    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(query.getEntity("s"));
@@ -23,8 +23,8 @@ TEST_CASE("processDeclarations serial declaration") {
     PQLParser parser(input);
     Query query = parser.parse();
     auto declaration_map = query.getDeclarations();
-    std::shared_ptr<Entity> declarationEntity = query.getEntity("v");
-    std::shared_ptr<Entity> selectEntity = query.getSelect()[0];
+    std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("v");
+    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(declaration_map.size()==3);
@@ -39,8 +39,8 @@ TEST_CASE("processDeclarations multiple declaration") {
     PQLParser parser(input);
     Query query = parser.parse();
     auto declaration_map = query.getDeclarations();
-    std::shared_ptr<Entity> declarationEntity = query.getEntity("c");
-    std::shared_ptr<Entity> selectEntity = query.getSelect()[0];
+    std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("c");
+    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(declaration_map.size()==10);
