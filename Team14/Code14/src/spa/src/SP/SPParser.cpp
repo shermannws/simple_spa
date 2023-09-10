@@ -4,11 +4,14 @@
 
 #include "SPParser.h"
 
+// TODO: Make all node class members private, use constructors to initialize class members
+
 SPParser::SPParser() {
     runningStatementNumber = 1;
 }
 
 std::shared_ptr<ProgramNode> SPParser::parse(std::vector<SPToken> tokens) {
+    // std::queue is an adapter that wraps the underlying std::deque container
     std::queue<SPToken> tokensQueue(std::deque<SPToken>(tokens.begin(), tokens.end()));
     std::shared_ptr<ProgramNode> programNode = std::make_shared<ProgramNode>();
     while (!tokensQueue.empty()) {
