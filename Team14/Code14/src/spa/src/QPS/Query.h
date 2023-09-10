@@ -11,7 +11,7 @@ class Query {
 private:
     std::unordered_map<std::string, std::shared_ptr<Entity>> declarations;
     std::vector<std::shared_ptr<Entity>> selects;
-    std::vector<SuchThatClause> such_that_clauses;
+    std::vector<SuchThatClause> suchThatClauses;
 
 public:
     Query();

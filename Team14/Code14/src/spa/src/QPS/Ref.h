@@ -21,14 +21,14 @@ class Ref {
 private:
     std::string rep;
     RefType type;
-    RootType root_type;
+    RootType refType;
 public:
     explicit Ref();
     std::string getRep();
     RefType getType();
     RootType getRootType();
     void setRep(std::string& rrep);
-    void setType(RefType& rref_type);
-    void setRootType(RootType& rroot_type);
+    void setType(RefType& rrefType);
+    void setRootType(RootType& rrootType);
 
 };

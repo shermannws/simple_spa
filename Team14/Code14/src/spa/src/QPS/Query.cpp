@@ -43,9 +43,9 @@ std::vector<std::shared_ptr<Entity>> Query::getSelect() {
 }
 
 void Query::addSuchThat(SuchThatClause& clause) {
-    such_that_clauses.push_back(clause);
+    suchThatClauses.push_back(clause);
 }
 
 std::vector<SuchThatClause> Query::getSuchThat() {
-    return such_that_clauses;
+    return suchThatClauses;
 }
