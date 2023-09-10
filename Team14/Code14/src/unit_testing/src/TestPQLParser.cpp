@@ -8,9 +8,9 @@ TEST_CASE("single declaration, single Select") {
     std::string input = "stmt s; Select s";
     PQLParser parser(input);
     Query query = parser.parse();
-    Entity expectedEntity = Entity(EntityType::Stmt, "s");
-    std::shared_ptr<Entity> declarationEntity = query.getEntity("s");
-    std::shared_ptr<Entity> selectEntity = query.getSelect()[0];
+    QueryEntity expectedEntity = QueryEntity(EntityType::Stmt, "s");
+    std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("s");
+    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(query.getEntity("s"));
@@ -23,8 +23,8 @@ TEST_CASE("processDeclarations serial declaration") {
     PQLParser parser(input);
     Query query = parser.parse();
     auto declaration_map = query.getDeclarations();
-    std::shared_ptr<Entity> declarationEntity = query.getEntity("v");
-    std::shared_ptr<Entity> selectEntity = query.getSelect()[0];
+    std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("v");
+    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(declaration_map.size()==3);
@@ -39,8 +39,8 @@ TEST_CASE("processDeclarations multiple declaration") {
     PQLParser parser(input);
     Query query = parser.parse();
     auto declaration_map = query.getDeclarations();
-    std::shared_ptr<Entity> declarationEntity = query.getEntity("c");
-    std::shared_ptr<Entity> selectEntity = query.getSelect()[0];
+    std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("c");
+    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(declaration_map.size()==10);
@@ -94,7 +94,7 @@ TEST_CASE("processSuchThatClause") {
         SuchThatClause clause = query.getSuchThat()[0];
         Ref leftRef = clause.getLeftRef();
         Ref rightRef = clause.getRightRef();
-        REQUIRE(clause.getType() == RelationshipType::Uses);
+        REQUIRE(clause.getType() == ClauseType::Uses);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Synonym);
         REQUIRE(leftRef.getEntityType() == EntityType::Assign);
@@ -111,7 +111,7 @@ TEST_CASE("processSuchThatClause") {
         SuchThatClause clause = query.getSuchThat()[0];
         Ref leftRef = clause.getLeftRef();
         Ref rightRef = clause.getRightRef();
-        REQUIRE(clause.getType() == RelationshipType::Uses);
+        REQUIRE(clause.getType() == ClauseType::Uses);
         REQUIRE(leftRef.getType() == RefType::EntRef);
         REQUIRE(leftRef.getRootType() == RootType::Ident);
         REQUIRE(leftRef.getEntityType() == EntityType::Invalid);
@@ -128,7 +128,7 @@ TEST_CASE("processSuchThatClause") {
         SuchThatClause clause = query.getSuchThat()[0];
         Ref leftRef = clause.getLeftRef();
         Ref rightRef = clause.getRightRef();
-        REQUIRE(clause.getType() == RelationshipType::Uses);
+        REQUIRE(clause.getType() == ClauseType::Uses);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Synonym);
         REQUIRE(leftRef.getEntityType() == EntityType::Assign);
@@ -145,7 +145,7 @@ TEST_CASE("processSuchThatClause") {
         SuchThatClause clause = query.getSuchThat()[0];
         Ref leftRef = clause.getLeftRef();
         Ref rightRef = clause.getRightRef();
-        REQUIRE(clause.getType() == RelationshipType::Follows);
+        REQUIRE(clause.getType() == ClauseType::Follows);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Synonym);
         REQUIRE(leftRef.getEntityType() == EntityType::Stmt);
@@ -162,7 +162,7 @@ TEST_CASE("processSuchThatClause") {
         SuchThatClause clause = query.getSuchThat()[0];
         Ref leftRef = clause.getLeftRef();
         Ref rightRef = clause.getRightRef();
-        REQUIRE(clause.getType() == RelationshipType::Follows);
+        REQUIRE(clause.getType() == ClauseType::Follows);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Integer);
         REQUIRE(leftRef.getEntityType() == EntityType::Invalid);
@@ -179,7 +179,7 @@ TEST_CASE("processSuchThatClause") {
         SuchThatClause clause = query.getSuchThat()[0];
         Ref leftRef = clause.getLeftRef();
         Ref rightRef = clause.getRightRef();
-        REQUIRE(clause.getType() == RelationshipType::FollowsStar);
+        REQUIRE(clause.getType() == ClauseType::FollowsStar);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Wildcard);
         REQUIRE(leftRef.getEntityType() == EntityType::Invalid);
@@ -196,7 +196,7 @@ TEST_CASE("processSuchThatClause") {
         SuchThatClause clause = query.getSuchThat()[0];
         Ref leftRef = clause.getLeftRef();
         Ref rightRef = clause.getRightRef();
-        REQUIRE(clause.getType() == RelationshipType::FollowsStar);
+        REQUIRE(clause.getType() == ClauseType::FollowsStar);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Wildcard);
         REQUIRE(leftRef.getEntityType() == EntityType::Invalid);

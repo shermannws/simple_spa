@@ -15,13 +15,13 @@ enum class EntityType {
     Invalid
 };
 
-class Entity {
+class QueryEntity {
 private:
     std::string synonym;
     EntityType type;
 public:
-    explicit Entity(EntityType type, const std::string &synonym);
-    bool operator==(const Entity& other) const;
+    explicit QueryEntity(EntityType type, const std::string &synonym);
+    bool operator==(const QueryEntity& other) const;
     std::string getSynonym();
     EntityType getType();
 };

@@ -56,7 +56,12 @@ add_library(spa ${srcs} ${headers}
      src/QPS/Query.cpp
      src/QPS/PQLParser.cpp
      src/QPS/SuchThatClause.cpp
-     src/QPS/Ref.cpp)
+     src/QPS/Ref.cpp
+        src/QPS/ClauseHandler.cpp
+        src/QPS/PQLEvaluator.cpp
+        src/QPS/Result.cpp
+        src/QPS/UsesSuchThatStrategy.cpp
+        src/QPS/FollowsSuchThatStrategy.cpp)
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

@@ -2,16 +2,16 @@
 
 #include <string>
 
-Entity::Entity(EntityType type, const std::string& synonym) : type(type), synonym(synonym) {}
+QueryEntity::QueryEntity(EntityType type, const std::string& synonym) : type(type), synonym(synonym) {}
 
-bool Entity::operator==(const Entity& other) const {
+bool QueryEntity::operator==(const QueryEntity& other) const {
     return (type == other.type) && (synonym == other.synonym);
 }
 
-std::string Entity::getSynonym() {
+std::string QueryEntity::getSynonym() {
     return synonym;
 }
 
-EntityType Entity::getType() {
+EntityType QueryEntity::getType() {
     return type;
 }

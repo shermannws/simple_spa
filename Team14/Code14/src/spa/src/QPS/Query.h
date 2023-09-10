@@ -9,19 +9,19 @@
 
 class Query {
 private:
-    std::unordered_map<std::string, std::shared_ptr<Entity>> declarations;
-    std::vector<std::shared_ptr<Entity>> selects;
+    std::unordered_map<std::string, std::shared_ptr<QueryEntity>> declarations;
+    std::vector<std::shared_ptr<QueryEntity>> selects;
     std::vector<SuchThatClause> suchThatClauses;
 
 public:
     Query();
-    void addDeclaration(const std::shared_ptr<Entity>& entity);
-    void addSelect(const std::shared_ptr<Entity>& entity);
+    void addDeclaration(const std::shared_ptr<QueryEntity>& entity);
+    void addSelect(const std::shared_ptr<QueryEntity>& entity);
     void addSuchThat(SuchThatClause& clause);
     // void addPattern();
     bool hasDeclarations();
-    std::shared_ptr<Entity> getEntity(const std::string& syn);
-    std::unordered_map<std::string, std::shared_ptr<Entity>> getDeclarations();
-    std::vector<std::shared_ptr<Entity>> getSelect();
+    std::shared_ptr<QueryEntity> getEntity(const std::string& syn);
+    std::unordered_map<std::string, std::shared_ptr<QueryEntity>> getDeclarations();
+    std::vector<std::shared_ptr<QueryEntity>> getSelect();
     std::vector<SuchThatClause> getSuchThat();
 };
