@@ -2,28 +2,28 @@
 #include "Ref.h"
 #include <string>
 
-Ref::Ref() : type(RefType::Invalid), refType(RootType::Invalid) {}
+Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid) {}
 
 void Ref::setRep(std::string& rrep) {
-    this->rep = rrep;
+    rep = rrep;
 }
 
 std::string Ref::getRep() {
-    return this->rep;
+    return rep;
 }
 
 void Ref::setType(RefType& rrefType) {
-    this->type = rrefType;
+    type = rrefType;
 }
 
 RefType Ref::getType() {
-    return this->type;
+    return type;
 }
 
 void Ref::setRootType(RootType& rrootType) {
-    this->refType = rrootType;
+    rootType = rrootType;
 }
 
 RootType Ref::getRootType() {
-    return this->refType;
+    return rootType;
 }

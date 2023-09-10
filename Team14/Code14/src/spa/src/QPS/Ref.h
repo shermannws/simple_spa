@@ -21,7 +21,7 @@ class Ref {
 private:
     std::string rep;
     RefType type;
-    RootType refType;
+    RootType rootType;
 public:
     explicit Ref();
     std::string getRep();
