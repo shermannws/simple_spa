@@ -13,4 +13,5 @@ private:
 public:
     explicit PQLEvaluator(std::shared_ptr<PkbReader> pkbReader);
     Result Evaluate(Query&);
+    std::vector<Entity> getAll(std::shared_ptr<QueryEntity> queryEntity);
 };
