@@ -10,11 +10,11 @@ add_executable(unit_testing ${srcs}
 	"src/PKB/TestPkb.cpp"
 	"src/main.cpp"
 	"src/TestAST.cpp"
-	"src/TestPQLParser.cpp"
-	"src/TestQuery.cpp"
-	"src/TestTokenizer.cpp"
-	"src/TestToken.cpp"
-        src/TestQueryEvaluator.cpp)
+	"src/QPS/TestPQLParser.cpp"
+	"src/QPS/TestQuery.cpp"
+	"src/QPS/TestTokenizer.cpp"
+	"src/QPS/TestToken.cpp"
+		src/QPS/TestPQLEvaluator.cpp)
 
 target_link_libraries(unit_testing spa)
 

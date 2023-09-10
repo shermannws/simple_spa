@@ -1,6 +1,6 @@
 #include "Result.h"
 
-Result::Result() : type(ResultType::Invalid), bool_result(false) {
+Result::Result() : type(ResultType::Invalid), boolResult(false) {
     tuples = std::vector<std::unordered_map<std::string, std::shared_ptr<Entity>>>();
 }
 
@@ -13,10 +13,10 @@ void Result::setType(ResultType& ttype) {
 }
 
 void Result::setBoolResult(bool result) {
-    bool_result = result;
+    boolResult = result;
 }
 bool Result::getBoolResult() {
-    return bool_result;
+    return boolResult;
 }
 
 void Result::setTuples(std::vector<std::unordered_map<std::string, std::shared_ptr<Entity>>>& ttuples) {

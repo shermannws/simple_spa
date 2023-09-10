@@ -14,7 +14,7 @@ enum class ResultType {
 class Result {
 private:
     ResultType type;
-    bool bool_result;
+    bool boolResult;
     std::vector<std::unordered_map<std::string, std::shared_ptr<Entity>>> tuples;
 
 public:
