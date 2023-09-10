@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity.h"
+#include "QueryEntity.h"
 #include "Ref.h"
 #include <string>
 

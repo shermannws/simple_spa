@@ -3,8 +3,8 @@
 #include "catch.hpp"
 
 TEST_CASE("Query class tests") {
-    std::shared_ptr<Entity> entity1 = std::make_shared<Entity>(EntityType::Variable, "v");
-    std::shared_ptr<Entity> entity2 = std::make_shared<Entity>(EntityType::Assign, "a");
+    std::shared_ptr<QueryEntity> entity1 = std::make_shared<QueryEntity>(EntityType::Variable, "v");
+    std::shared_ptr<QueryEntity> entity2 = std::make_shared<QueryEntity>(EntityType::Assign, "a");
     Query query;
 
     SECTION("Test addDeclaration getDeclarations") {
@@ -16,7 +16,7 @@ TEST_CASE("Query class tests") {
 
         REQUIRE(query.hasDeclarations() == true);
 
-        std::unordered_map<std::string, std::shared_ptr<Entity>> declarations = query.getDeclarations();
+        std::unordered_map<std::string, std::shared_ptr<QueryEntity>> declarations = query.getDeclarations();
         REQUIRE(declarations.size() == 2);
 
         REQUIRE(declarations["v"] == entity1);
@@ -28,7 +28,7 @@ TEST_CASE("Query class tests") {
         REQUIRE(query.getSelect().empty());
         query.addSelect(entity1);
 
-        std::vector<std::shared_ptr<Entity>> select = query.getSelect();
+        std::vector<std::shared_ptr<QueryEntity>> select = query.getSelect();
         REQUIRE(select.size() == 1);
         REQUIRE(select[0] == entity1);
 
@@ -39,7 +39,7 @@ TEST_CASE("Query class tests") {
         query.addDeclaration(entity1);
         query.addDeclaration(entity2);
 
-        std::shared_ptr<Entity> entity = query.getEntity("v");
+        std::shared_ptr<QueryEntity> entity = query.getEntity("v");
 
         REQUIRE(entity == entity1);
         REQUIRE(query.getEntity("unknownSynonym") == nullptr);
