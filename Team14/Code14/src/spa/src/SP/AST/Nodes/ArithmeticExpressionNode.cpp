@@ -13,11 +13,11 @@ ArithmeticExpressionNode::ArithmeticExpressionNode(ArithmeticOperatorType operat
 ArithmeticOperatorType ArithmeticExpressionNode::translateOperatorTypeString(std::string operatorTypeString) {
     std::unordered_map<std::string, ArithmeticOperatorType> operatorTypeMap = {
             // TODO: move raw operator strings to common enum
-            { "+", ArithmeticOperatorType::PLUS },
-            { "-", ArithmeticOperatorType::MINUS },
-            { "*", ArithmeticOperatorType::TIMES },
-            { "/", ArithmeticOperatorType::DIVIDE },
-            { "%", ArithmeticOperatorType::MODULO }
+            { "+", ArithmeticOperatorType::Plus },
+            { "-", ArithmeticOperatorType::Minus },
+            { "*", ArithmeticOperatorType::Times },
+            { "/", ArithmeticOperatorType::Divide },
+            { "%", ArithmeticOperatorType::Modulo }
     };
     assert(operatorTypeMap.find(operatorTypeString) != operatorTypeMap.end());
     return operatorTypeMap[operatorTypeString];

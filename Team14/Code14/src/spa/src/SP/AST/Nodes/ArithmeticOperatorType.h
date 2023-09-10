@@ -1,9 +1,9 @@
 #pragma once
 
 enum class ArithmeticOperatorType {
-    PLUS,
-    MINUS,
-    TIMES,
-    DIVIDE,
-    MODULO
+    Plus,
+    Minus,
+    Times,
+    Divide,
+    Modulo
 };
