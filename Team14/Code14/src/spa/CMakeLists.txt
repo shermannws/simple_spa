@@ -144,9 +144,17 @@ add_library(spa ${srcs} ${headers}
     src/SP/SyntacticValidator.h
     src/PKB/Managers/PkbWriterManager.h
     src/PKB/Managers/PkbWriterManager.cpp
+    src/SP/SPTokenizer.cpp
+    src/SP/SPTokenizer.h
+    src/SP/SPToken.cpp
+    src/SP/SPToken.h
+    src/SP/SPTokenType.h
+    src/QPS/Clause.cpp
+    src/QPS/PatternClause.cpp
     src/QPS/ClauseHandler.h
     src/QPS/ClauseHandler.cpp
-        src/QPS/Clause.cpp)
+    src/QPS/AssignPatternStrategy.cpp)
+
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

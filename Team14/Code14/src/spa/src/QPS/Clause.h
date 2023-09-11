@@ -8,7 +8,7 @@ enum class ClauseType {
     Uses,
     Follows,
     FollowsStar,
-    If,
+    Assign,
     Invalid
 };
 
@@ -28,4 +28,3 @@ public:
     void setFirstParam(Ref& ref);
     Ref getFirstParam();
 };
-

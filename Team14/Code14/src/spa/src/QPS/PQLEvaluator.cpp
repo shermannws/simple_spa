@@ -47,7 +47,7 @@ std::list<std::string> PQLEvaluator::formatResult(Query& query, Result& result) 
 
 Result PQLEvaluator::evaluate(Query& query) {
 
-    // TODO iterate through clauses, get Strategy Type from clause type
+    // if query is a such that query
     if (!query.getSuchThat().empty()) {
         if (query.getSuchThat()[0].getType() == ClauseType::Uses) {
             clauseHandler->setStrategy(std::make_shared<UsesSuchThatStrategy>(UsesSuchThatStrategy()));
@@ -63,10 +63,21 @@ Result PQLEvaluator::evaluate(Query& query) {
             return result;
         }
     }
-    // clauseHandler->setStrategy(std::make_unique<AssignPatternStrategy>());
-    // Result result;
-    // clauseHandler->executeClause(query, result);
 
+    // if query is an assign pattern query
+    if (!query.getPattern().empty()) {
+        clauseHandler->setStrategy(std::make_shared<AssignPatternStrategy>(AssignPatternStrategy()));
+        Result result;
+        clauseHandler-> executeClause(query.getPattern()[0], result);
+        if (result.getType() == ResultType::Tuples) {
+            return result;
+        }
+        if (result.getType() == ResultType::Boolean && !result.getBoolResult()) {
+            return result;
+        }
+    }
+
+    // else query is just select
     std::shared_ptr<QueryEntity> entity = query.getSelect()[0];
     std::shared_ptr<std::vector<std::shared_ptr<Entity>>> entities = getAll(entity);
 

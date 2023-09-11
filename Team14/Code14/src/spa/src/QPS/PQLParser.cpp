@@ -14,6 +14,7 @@ Query PQLParser::parse(){
     processDeclarations(query);
     processSelectClause(query);
     processSuchThatClause(query);
+    processPatternClause(query);
 
     expect(tokenizer->peekToken()->isToken(TokenType::Empty), "Invalid query syntax");
     return query;
@@ -128,6 +129,61 @@ void PQLParser::processSuchThatClause(Query& query) {
     query.addSuchThat(clause);
 
     // TODO: handle multiple "such that" and here recursively
+}
+
+void PQLParser::processPatternClause(Query& query) {
+    std::shared_ptr<Token> patternToken = tokenizer->peekToken();
+    try {
+        expect(patternToken->isToken("pattern"), "No pattern");
+    } catch (...) {
+        return;
+    }
+
+    std::shared_ptr<Token> patternSyn = tokenizer->popToken();
+    std::shared_ptr<QueryEntity> entity = query.getEntity(patternSyn->getRep());
+    if (!entity) {
+        throw std::runtime_error("Undeclared synonym in pattern clause");
+    } else if (entity->getType() != QueryEntityType::Assign) {
+        throw std::runtime_error("Unsupported pattern clause, expected an assignment");
+    }
+
+    std::shared_ptr<Token> next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Lparenthesis)) {
+        throw std::runtime_error("Expected Lparenthesis");
+    }
+
+    next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Underscore)) {
+        throw std::runtime_error("Expected wildcard as first arg");
+    }
+
+    next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Comma)) {
+        throw std::runtime_error("Expected comma ");
+    }
+
+    next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Underscore)) {
+        throw std::runtime_error("Expected wildcard as second arg");
+    }
+
+    Ref wildcard;
+    std::string rep = next->getRep();
+    RefType ent = RefType::EntRef;
+    RootType root = RootType::Wildcard;
+    wildcard.setRep(rep);
+    wildcard.setRootType(root);
+    wildcard.setType(ent);
+
+    next = tokenizer->popToken();
+    expect(next->isToken(TokenType::Rparenthesis), "Expected right parenthesis");
+
+    PatternClause clause;
+    clause.setType(ClauseType::Assign);
+    clause.setEntity(entity);
+    clause.setFirstParam(wildcard);
+    clause.setSecondParam(wildcard);
+    query.addPattern(clause);
 }
 
 void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) {

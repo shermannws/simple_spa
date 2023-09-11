@@ -5,6 +5,7 @@
 #include "Ref.h"
 #include <string>
 
+
 class SuchThatClause : public Clause {
 private:
     Ref secondParam;
