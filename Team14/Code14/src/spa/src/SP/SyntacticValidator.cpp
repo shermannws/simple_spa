@@ -1,7 +1,6 @@
 #include <stdexcept>
 #include <vector>
 #include <string>
-#include <iostream>
 
 #include "SyntacticValidator.h"
 
@@ -87,28 +86,16 @@ void SyntacticValidator::validateExpr() {
     SPToken currToken = peekToken();
     SPToken nextToken = peekNextToken();
 
-    // check if name, const or ()
-    //keep reading terms until reach ;
-//    while (nextToken.getType() != TokenType::SEMICOLON) {
-////        validateFactor();
-//    }
-
-    // continue checking, must end with ;
-    if (nextToken.getType() == TokenType::ARITHMETIC_OPERATOR) {
-        validateTerm();
-        validateArithmeticOperator(); //TODO: change to + or -
+    // Recursively check for the next valid term or arithmetic operator til reach end of exp
+    validateTerm();
+    if (peekNextToken().getType() != TokenType::SEMICOLON &&
+        peekToken().getType() == TokenType::ARITHMETIC_OPERATOR) {
+        validateArithmeticOperator();
         validateExpr();
-    } else if (currToken.getType() == TokenType::OPEN_ROUND_PARAN) {
-        validateOpenRoundParan();
-        validateExpr();
-        validateCloseRoundParan();
-    } else {
-        validateTerm();
     }
-
 }
 
-// TODO: CHECK REDUNDANCY
+// TODO: check necessity of this middle factor validation according to CGS
 //void SyntacticValidator::validateTerm() {
 //    SPToken currToken = peekToken();
 //    SPToken nextToken = peekNextToken();
@@ -133,7 +120,7 @@ void SyntacticValidator::validateTerm() {
         validateExpr();
         validateCloseRoundParan();
     } else {
-        throw SyntaxError("Syntax error: Invalid Factor");
+        throw SyntaxError("Syntax error: Invalid Term");
     }
 }
 
