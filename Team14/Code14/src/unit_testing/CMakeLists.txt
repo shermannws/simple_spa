@@ -16,7 +16,6 @@ add_executable(unit_testing ${srcs}
 	"src/QPS/TestToken.cpp"
   "src/TestSPTokenizer.cpp"
   "src/TestSPToken.cpp"
-	"src/TestToken.cpp"
   src/QPS/TestPQLEvaluator.cpp
 	src/SP/AST/Nodes/TestASTNodes.cpp
 	src/PKB/TestPkbReader.cpp
