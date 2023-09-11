@@ -115,11 +115,11 @@ TEST_CASE("processSuchThatClause") {
         REQUIRE(leftRef.getType() == RefType::EntRef);
         REQUIRE(leftRef.getRootType() == RootType::Ident);
         REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
-        REQUIRE(leftRef.getRep() == "\"main\"");
+        REQUIRE(leftRef.getRep() == "main");
         REQUIRE(rightRef.getType() == RefType::EntRef);
         REQUIRE(rightRef.getRootType() == RootType::Ident);
         REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
-        REQUIRE(rightRef.getRep() == "\"x\"");
+        REQUIRE(rightRef.getRep() == "x");
     }
 
     SECTION("Valid Uses query") {
@@ -136,7 +136,7 @@ TEST_CASE("processSuchThatClause") {
         REQUIRE(rightRef.getType() == RefType::EntRef);
         REQUIRE(rightRef.getRootType() == RootType::Ident);
         REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
-        REQUIRE(rightRef.getRep() == "\"x\"");
+        REQUIRE(rightRef.getRep() == "x");
     }
 
     SECTION("Valid Follows query") {
