@@ -45,9 +45,21 @@ Result PQLEvaluator::evaluate(Query& query) {
 
     std::shared_ptr<QueryEntity> entity = query.getSelect()[0];
     std::shared_ptr<std::vector<std::shared_ptr<Entity>>> entities = getAll(entity);
-    // convert entities to Result obj
 
-    Result result;
+    // set Result fields
+    Result result = Result();
+    std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> mappedEntities;
+    for (const auto& entityPtr : *entities) {
+        auto mappedEntity = std::make_shared<std::vector<std::shared_ptr<Entity>>>();
+        mappedEntity->push_back(entityPtr);
+        mappedEntities.push_back(mappedEntity);
+    }
+    result.setTuples(mappedEntities);
+    ResultType type = ResultType::Tuples;
+    result.setType(type);
+    std::unordered_map<std::string, int> map {{entity->getSynonym(), 0}};
+    result.setSynIndices(map);
+
     return result;
 }
 
