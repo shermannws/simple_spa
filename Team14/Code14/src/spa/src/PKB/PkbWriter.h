@@ -7,41 +7,19 @@
 #include "PKB/EntityStorage/ProcedureStore.h"
 #include "PKB/EntityStorage/StatementStore.h"
 #include "PKB/EntityStorage/VariableStore.h"
-#include "PKB/EntityStorage/ReadStatementStore.h"
-#include "PKB/EntityStorage/PrintStatementStore.h"
 #include "PKB/RelationshipStorage/FollowsRelationshipStore.h"
 #include "PKB/RelationshipStorage/UsesRelationshipStore.h"
 #include "../Commons/Entities/Constant.h"
 #include "../Commons/Entities/Procedure.h"
 #include "../Commons/Entities/Variable.h"
 #include "../Commons/Entities/Statement.h"
+#include "PKB/Managers/PkbWriterManager.h"
 
 class PkbWriter {
 private:
-    std::shared_ptr<AssignmentManager> assignmentManager;
-
-    std::shared_ptr<ConstantStore> constantStore;
-    std::shared_ptr<ProcedureStore> procedureStore;
-    std::shared_ptr<StatementStore> statementStore;
-    std::shared_ptr<VariableStore> variableStore;
-
-    std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore;
-    std::shared_ptr<UsesRelationshipStore> usesRelationshipStore;
-
-    std::shared_ptr<ReadStatementStore> readStmtStore;
-    std::shared_ptr<PrintStatementStore> printStmtStore;
+    std::shared_ptr<PkbWriterManager> writerManager;
 public:
-    PkbWriter(
-            std::shared_ptr<AssignmentManager> assignmentManager,
-            std::shared_ptr<ConstantStore> constantStore,
-            std::shared_ptr<ProcedureStore> procedureStore,
-            std::shared_ptr<StatementStore> statementStore,
-            std::shared_ptr<VariableStore> variableStore,
-            std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore,
-            std::shared_ptr<UsesRelationshipStore> usesRelationshipStore,
-            std::shared_ptr<ReadStatementStore> readStmtStore,
-            std::shared_ptr<PrintStatementStore> printStmtStore
-    );
+    PkbWriter(std::shared_ptr<PkbWriterManager> writerManager);
 
     void addConstant(std::shared_ptr<Constant> c);
     void addVariable(std::shared_ptr<Variable> v);

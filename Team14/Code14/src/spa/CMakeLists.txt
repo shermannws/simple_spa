@@ -94,7 +94,9 @@ add_library(spa ${srcs} ${headers}
     src/PKB/Managers/PkbReaderManager.h
     src/PKB/Managers/PkbReaderManager.cpp
     src/PKB/Managers/FollowsRelationshipManager.h
-    src/PKB/Managers/FollowsRelationshipManager.cpp)
+    src/PKB/Managers/FollowsRelationshipManager.cpp
+        src/PKB/Managers/PkbWriterManager.h
+        src/PKB/Managers/PkbWriterManager.cpp)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
