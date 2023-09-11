@@ -5,10 +5,10 @@
 #include <string>
 
 enum class ClauseType {
-    UsesSuchThat,
-    FollowsSuchThat,
-    FollowsStarSuchThat,
-    IfPattern,
+    Uses,
+    Follows,
+    FollowsStar,
+    Assign,
 };
 
 class Clause {

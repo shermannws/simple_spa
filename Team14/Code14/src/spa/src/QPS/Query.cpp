@@ -49,3 +49,11 @@ void Query::addSuchThat(SuchThatClause& clause) {
 std::vector<SuchThatClause> Query::getSuchThat() {
     return suchThatClauses;
 }
+
+void Query::addPattern(PatternClause& clause) {
+    patternClauses.push_back(clause);
+}
+
+std::vector<PatternClause> Query::getPattern() {
+    return patternClauses;
+}

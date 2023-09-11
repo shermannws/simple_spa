@@ -263,4 +263,37 @@ TEST_CASE("processSuchThatClause") {
             REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
         }
     }
+
+}
+
+TEST_CASE("processPatternClause") {
+    SECTION("Valid wildcard pattern") {
+        PQLParser parser("assign a; variable v;\nSelect a pattern a(_,_)");
+        Query query = parser.parse();
+
+        PatternClause actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause.getFirstParam();
+        Ref rightRef = actualClause.getSecondParam();
+        REQUIRE(actualClause.getType() == ClauseType::Assign);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::EntRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+
+    SECTION("Invalid pattern queries") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("assign a1; Select a1 pattern a(_,_)",
+                               "Undeclared synonym in pattern clause");
+        testcases.emplace_back("assign a1; variable v; Select a1 pattern a1 ( v,_)",
+                               "Expected wildcard as first arg");
+
+        for (const auto& testcase : testcases) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+        }
+    }
+
 }

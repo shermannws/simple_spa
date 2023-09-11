@@ -13,7 +13,7 @@ private:
     void processDeclarations(Query& query);
     void processSelectClause(Query& query);
     void processSuchThatClause(Query& query);
-//    void processPatternClause(Query& query);
+    void processPatternClause(Query& query);
     std::shared_ptr<Token> expect(bool isToken, const std::string& errorMsg);
     Ref extractStmtRef(Query& query);
     Ref extractEntRef(Query& query);
