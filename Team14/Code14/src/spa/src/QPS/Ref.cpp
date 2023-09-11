@@ -2,7 +2,7 @@
 #include "Ref.h"
 #include <string>
 
-Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid), entityType(EntityType::Invalid) {}
+Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid), entityType(QueryEntityType::Invalid) {}
 
 void Ref::setRep(std::string& rrep) {
     rep = rrep;
@@ -28,10 +28,10 @@ RootType Ref::getRootType() {
     return rootType;
 }
 
-void Ref::setEntityType(EntityType& eentityType) {
+void Ref::setEntityType(QueryEntityType& eentityType) {
     entityType = eentityType;
 }
 
-EntityType Ref::getEntityType() {
+QueryEntityType Ref::getEntityType() {
     return entityType;
 }

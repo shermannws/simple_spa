@@ -91,11 +91,13 @@ add_library(spa ${srcs} ${headers}
 
     src/QPS/Tokenizer.cpp
     src/QPS/Token.cpp
-    src/QPS/Entity.cpp
     src/QPS/Query.cpp
     src/QPS/PQLParser.cpp
     src/QPS/SuchThatClause.cpp
     src/QPS/Ref.cpp
+    src/QPS/Result.cpp
+    src/QPS/PQLEvaluator.cpp
+    src/QPS/QueryEntity.cpp
     src/Commons/Entities/EntityType.h
     src/PKB/Managers/UsesRelationshipManager.h
     src/PKB/Managers/UsesRelationshipManager.cpp
@@ -113,10 +115,14 @@ add_library(spa ${srcs} ${headers}
 
     src/PKB/Managers/PkbWriterManager.h
     src/PKB/Managers/PkbWriterManager.cpp
- "src/SP/SP.h" "src/SP/SP.cpp" "src/SP/AST/Traverser/Traverser.h" "src/SP/AST/Traverser/Traverser.cpp")
+
+    "src/SP/SP.h"
+    "src/SP/SP.cpp"
+    "src/SP/AST/Traverser/Traverser.h"
+    "src/SP/AST/Traverser/Traverser.cpp"
+
+)
 
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-
