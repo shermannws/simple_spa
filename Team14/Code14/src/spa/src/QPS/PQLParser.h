@@ -20,7 +20,7 @@ private:
     void processSuchThatLeft(Query &query, SuchThatClause& clause);
     void processSuchThatRight(Query &query, SuchThatClause& clause);
     void validateSuchThatSemantics(Query &query, SuchThatClause& clause);
-
+    bool isOfStmtType(QueryEntityType entityType);
 public:
     explicit PQLParser(const std::string& str);
     Query parse();

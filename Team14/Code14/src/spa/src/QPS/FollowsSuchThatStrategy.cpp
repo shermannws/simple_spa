@@ -1,5 +1,6 @@
 #include "FollowsSuchThatStrategy.h"
 #include "Commons/Entities/Statement.h"
+#include "Commons/Entities/StatementType.h"
 
 Result FollowsSuchThatStrategy::evaluateClause(Query& query, std::shared_ptr<PkbReader> pkbReader) const {
     // call pkbReader getter funcs
@@ -7,14 +8,13 @@ Result FollowsSuchThatStrategy::evaluateClause(Query& query, std::shared_ptr<Pkb
     SuchThatClause clause;
     Ref leftRef = clause.getLeftRef();
     RootType leftRootType = leftRef.getRootType();
-    EntityType leftEntityType = leftRef.getEntityType();
+    QueryEntityType leftEntityType = leftRef.getEntityType();
     Ref rightRef = clause.getRightRef();
     RootType rightRootType = rightRef.getRootType();
-    EntityType rightEntityType = rightRef.getEntityType();
+    QueryEntityType rightEntityType = rightRef.getEntityType();
     Result res;
     ResultType type;
-    std::vector<std::unordered_map<std::string, std::shared_ptr<Entity>>> tuples;
-    std::vector<Entity> entities;
+    std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> tuples;
 
     // LHS & RHS ARE STATEMENTS
     // stmts can be syn, _ or int
@@ -23,45 +23,50 @@ Result FollowsSuchThatStrategy::evaluateClause(Query& query, std::shared_ptr<Pkb
 
     // SYNONYMS
     if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym) { // Follows(s1,s2)
-        if (leftEntityType == EntityType::Stmt && rightEntityType == EntityType::Stmt) {
+        if (leftEntityType == QueryEntityType::Stmt && rightEntityType == QueryEntityType::Stmt) {
             std::string leftSyn = leftRef.getRep();
-            std::string rightSyn = leftRef.getRep();
-            std::unordered_map<std::string, std::shared_ptr<Entity>> tmp;
-            std::vector<std::vector<std::shared_ptr<Entity>>> data = pkbReader->getAllStatementFollows();
-            for (const auto& e : data)  {
-                tmp.insert({leftSyn, e[0]});
-                tmp.insert({rightSyn, e[1]});
-            }
-            tuples.push_back(tmp);
+            std::string rightSyn = rightRef.getRep();
+            tuples = *((*pkbReader).getAllFollowsStatementPair());
+
+            std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
+            res.setSynIndices(indices);
+
             type = ResultType::Tuples;
         }
     } if (leftRootType == RootType::Synonym && rightRootType == RootType::Integer) { // Follows(s,1)
-        if (leftEntityType == EntityType::Stmt) {
+        if (leftEntityType == QueryEntityType::Stmt) {
             std::string syn = leftRef.getRep();
-            std::unordered_map<std::string, std::shared_ptr<Entity>> tmp;
-            std::vector<std::shared_ptr<Entity>> data = pkbReader->getAllFollower(Statement(rightRef.getRep()));
-            for (const auto& e : data) {
-                tmp.insert({syn, e});
-            }
-            tuples.push_back(tmp);
+            std::shared_ptr<Statement> s = std::make_shared<Statement>(stoi(rightRef.getRep()), StatementType::Stmt);
+            std::vector<std::shared_ptr<Entity>> v {(*pkbReader).getFollowsByStatement(s)};
+            std::shared_ptr<std::vector<std::shared_ptr<Entity>>> data = std::make_shared<std::vector<std::shared_ptr<Entity>>>(v);
+            tuples.emplace_back(data);
+
+            std::unordered_map<std::string, int> indices {{syn, 0}};
+            res.setSynIndices(indices);
+
             type = ResultType::Tuples;
         }
 
     } if (leftRootType == RootType::Integer && rightRootType == RootType::Synonym) { // Follows(1,s)
-        if (rightEntityType == EntityType::Stmt) {
+        if (rightEntityType == QueryEntityType::Stmt) {
             std::string syn = rightRef.getRep();
-            std::unordered_map<std::string, std::shared_ptr<Entity>> tmp;
-            std::vector<std::shared_ptr<Entity>> data = pkbReader->getAllFollowedBy(Statement(leftRef.getRep()));
-            for (const auto& e : data) {
-                tmp.insert({syn, e});
-            }
-            tuples.push_back(tmp);
+            std::shared_ptr<Statement> s = std::make_shared<Statement>(stoi(leftRef.getRep()), StatementType::Stmt);
+            std::vector<std::shared_ptr<Entity>> v {(*pkbReader).getFollowingStatement(s)};
+            std::shared_ptr<std::vector<std::shared_ptr<Entity>>> data = std::make_shared<std::vector<std::shared_ptr<Entity>>>(v);
+            tuples.emplace_back(data);
+
+            std::unordered_map<std::string, int> indices {{syn, 0}};
+            res.setSynIndices(indices);
+
             type = ResultType::Tuples;
         }
 
     // INTEGERS
     } if (leftRootType == RootType::Integer && rightRootType == RootType::Integer) { // Follows(1,2)
-        res.setBoolResult(pkbReader->getFollows(Statement(leftRef.getRep()), Statement(rightRef.getRep())));
+        std::shared_ptr<Statement> s1 = std::make_shared<Statement>(stoi(leftRef.getRep()), StatementType::Stmt);
+        std::shared_ptr<Statement> s2 = std::make_shared<Statement>(stoi(rightRef.getRep()), StatementType::Stmt);
+        bool boolResult = (*pkbReader).getIsFollows(s1, s2);
+        res.setBoolResult(boolResult);
         type = ResultType::Boolean;
     }
 

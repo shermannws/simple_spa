@@ -2,9 +2,7 @@
 #include "Commons/Entities/Entity.h"
 
 Result UsesSuchThatStrategy::evaluateClause(Query& query, std::shared_ptr<PkbReader> pkbReader) const {
-    // call pkbReader getter funcs
-    // build result
-    SuchThatClause clause;
+    SuchThatClause clause = query.getSuchThat()[0];
     Ref leftRef = clause.getLeftRef();
     RefType leftType = leftRef.getType();
     RootType leftRootType = leftRef.getRootType();
@@ -12,8 +10,7 @@ Result UsesSuchThatStrategy::evaluateClause(Query& query, std::shared_ptr<PkbRea
     RootType rightRootType = rightRef.getRootType();
     Result res;
     ResultType type;
-    std::vector<std::unordered_map<std::string, std::shared_ptr<Entity>>> tuples;
-    std::vector<Entity> entities;
+    std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> tuples;
 
     // TODO: check leftType entRef
     // TODO: check EntityType
@@ -21,24 +18,24 @@ Result UsesSuchThatStrategy::evaluateClause(Query& query, std::shared_ptr<PkbRea
     if (leftType == RefType::StmtRef) {
         if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym) { // Uses(a,v)
             std::string leftSyn = leftRef.getRep();
-            std::string rightSyn = leftRef.getRep();
-            std::unordered_map<std::string, std::shared_ptr<Entity>> tmp;
-            std::vector<std::vector<std::shared_ptr<Entity>>> data = pkbReader->getAllAssignVariableUses();
-            for (const auto& e : data)  {
-                tmp.insert({leftSyn, e[0]});
-                tmp.insert({rightSyn, e[1]});
-            }
-            tuples.push_back(tmp);
+            std::string rightSyn = rightRef.getRep();
+            tuples = *((*pkbReader).getAllAssignVariablePair()); // TODO: to change to new method name with "Uses" inside
+
+            std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
+            res.setSynIndices(indices);
+
             type = ResultType::Tuples;
 
         } if (leftRootType == RootType::Synonym && rightRootType == RootType::Ident) { // Uses(a,"x")
             std::string syn = leftRef.getRep();
             std::unordered_map<std::string, std::shared_ptr<Entity>> tmp;
-            std::vector<std::shared_ptr<Entity>> data = pkbReader->getAllAssign(rightRef.getRep());
-            for (const auto& e : data) {
-                tmp.insert({syn, e});
-            }
-            tuples.push_back(tmp);
+            std::shared_ptr<Variable> v = std::make_shared<Variable>(rightRef.getRep());
+            std::shared_ptr<std::vector<std::shared_ptr<Entity>>> data = (*pkbReader).getAllAssignByVariable(v); // TODO: to change to new method name with "Uses" inside
+            tuples.emplace_back(data);
+
+            std::unordered_map<std::string, int> indices {{syn, 0}};
+            res.setSynIndices(indices);
+
             type = ResultType::Tuples;
 
         } if (leftRootType == RootType::Synonym && rightRootType == RootType::Wildcard) { // Uses(a,_)

@@ -24,16 +24,16 @@ private:
     std::string rep;
     RefType type;
     RootType rootType;
-    EntityType entityType;
+    QueryEntityType entityType;
 public:
     explicit Ref();
     std::string getRep();
     RefType getType();
     RootType getRootType();
-    EntityType getEntityType();
+    QueryEntityType getEntityType();
     void setRep(std::string& rrep);
     void setType(RefType& rrefType);
     void setRootType(RootType& rrootType);
-    void setEntityType(EntityType& eentityType);
+    void setEntityType(QueryEntityType& eentityType);
 
 };

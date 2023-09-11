@@ -5,6 +5,7 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "Commons/Entities/Entity.h"
+#include "Commons/Entities//EntityType.h"
 
 #include "catch.hpp"
 
@@ -16,6 +17,7 @@ TEST_CASE("Test Entity - Constant") {
 
 	REQUIRE(to_string(mockValue) == *c.getEntityValue());
 	REQUIRE(c.isEntityOfTypeInt() == true);
+    REQUIRE(c.getEntityType() == EntityType::Constant);
 }
 
 TEST_CASE("Test Entity - Procedure") {
@@ -24,14 +26,16 @@ TEST_CASE("Test Entity - Procedure") {
 
 	REQUIRE(mockName == *p.getEntityValue());
 	REQUIRE(p.isEntityOfTypeInt() == false);
+    REQUIRE(p.getEntityType() == EntityType::Procedure);
 }
 
 TEST_CASE("Test Entity - Statement") {
 	int mockLineNo = 1;
-	Statement s = Statement(mockLineNo);
+	Statement s = Statement(mockLineNo, StatementType::Assign);
 
 	REQUIRE(to_string(mockLineNo) == *s.getEntityValue());
 	REQUIRE(s.isEntityOfTypeInt() == true);
+    REQUIRE(s.getEntityType() == EntityType::Statement);
 }
 
 TEST_CASE("Test Entity - Variable") {
@@ -40,6 +44,7 @@ TEST_CASE("Test Entity - Variable") {
 
 	REQUIRE(mockName == *v.getEntityValue());
 	REQUIRE(v.isEntityOfTypeInt() == false);
+    REQUIRE(v.getEntityType() == EntityType::Variable);
 }
 
 TEST_CASE("Test Equality of Entities") {
@@ -55,8 +60,8 @@ TEST_CASE("Test Equality of Entities") {
 	Entity p2 = Procedure(mockName);
 	REQUIRE(p1 == p2);
 
-	Statement s1 = Statement(mockLineNo);
-	Entity s2 = Statement(mockLineNo);
+	Statement s1 = Statement(mockLineNo, StatementType::Assign);
+	Entity s2 = Statement(mockLineNo, StatementType::Assign);
 	REQUIRE(s1 == s2);
 
 	Variable v1 = Variable(mockName);

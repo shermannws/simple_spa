@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-enum class EntityType {
+enum class QueryEntityType {
     Procedure,
     Stmt,
     Read,
@@ -18,10 +18,10 @@ enum class EntityType {
 class QueryEntity {
 private:
     std::string synonym;
-    EntityType type;
+    QueryEntityType type;
 public:
-    explicit QueryEntity(EntityType type, const std::string &synonym);
+    explicit QueryEntity(QueryEntityType type, const std::string &synonym);
     bool operator==(const QueryEntity& other) const;
     std::string getSynonym();
-    EntityType getType();
+    QueryEntityType getType();
 };

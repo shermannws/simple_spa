@@ -23,15 +23,15 @@ Result PQLEvaluator::Evaluate(Query& query) {
 }
 
 std::vector<Entity> PQLEvaluator::getAll(std::shared_ptr<QueryEntity> queryEntity) {
-    if (queryEntity->getType() == EntityType::Procedure) {
+    if (queryEntity->getType() == QueryEntityType::Procedure) {
         return pkbReader->getAllProcedures();
-    } else if (queryEntity->getType() == EntityType::Stmt) {
+    } else if (queryEntity->getType() == QueryEntityType::Stmt) {
         return pkbReader->getAllStatements();
-    } else if (queryEntity->getType() == EntityType::Assign) {
+    } else if (queryEntity->getType() == QueryEntityType::Assign) {
         return pkbReader->getAllAssign();
-    } else if (queryEntity->getType() == EntityType::Variable) {
+    } else if (queryEntity->getType() == QueryEntityType::Variable) {
         return pkbReader->getAllVariables();
-    } else if (queryEntity->getType() == EntityType::Constant) {
+    } else if (queryEntity->getType() == QueryEntityType::Constant) {
         return pkbReader->getAllConstants();
     }
 }

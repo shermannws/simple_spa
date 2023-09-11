@@ -12,12 +12,12 @@ Relationship::Relationship(const RelationshipType relationshipType,
     this->rightEntity = rightEntity;
 }
 
-Entity* Relationship::getLeftEntity() const {
-    return this->leftEntity.get();
+std::shared_ptr<Entity> Relationship::getLeftEntity() const {
+    return this->leftEntity;
 }
 
-Entity* Relationship::getRightEntity() const {
-    return this->rightEntity.get();
+std::shared_ptr<Entity> Relationship::getRightEntity() const {
+    return this->rightEntity;
 }
 
 
