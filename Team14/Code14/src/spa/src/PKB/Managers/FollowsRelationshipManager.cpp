@@ -1,33 +1,37 @@
 #include "FollowsRelationshipManager.h"
 
-FollowsRelationshipManager::FollowsRelationshipManager(std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore) {
-    this->followsRelationshipStore = followsRelationshipStore;
+FollowsRelationshipManager::FollowsRelationshipManager() {
+    this->followsRelationshipStore = std::make_shared<FollowsRelationshipStore>(FollowsRelationshipStore());;
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Statement>>>>> FollowsRelationshipManager::getAllFollowsStatementPair() const {
-    auto followsStatementPair = std::make_shared<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Statement>>>>>();
+void FollowsRelationshipManager::storeFollowsRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) {
+    followsRelationshipStore->storeRelationship(std::make_shared<FollowsRelationship>(statement1, statement2));
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> FollowsRelationshipManager::getAllFollowsStatementPair() const {
+    auto followsStatementPair = std::make_shared<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>>();
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
-        auto followsStatementPairRow = std::make_shared<std::vector<std::shared_ptr<Statement>>>();
-        followsStatementPairRow->push_back(std::dynamic_pointer_cast<Statement>((*it)->getLeftEntity()));
-        followsStatementPairRow->push_back(std::dynamic_pointer_cast<Statement>((*it)->getRightEntity()));
+        auto followsStatementPairRow = std::make_shared<std::vector<std::shared_ptr<Entity>>>();
+        followsStatementPairRow->push_back((*it)->getLeftEntity());
+        followsStatementPairRow->push_back((*it)->getRightEntity());
         followsStatementPair->push_back(followsStatementPairRow);
     }
     return followsStatementPair;
 }
 
-std::shared_ptr<Statement> FollowsRelationshipManager::getFollowsByStatement(std::shared_ptr<Statement> statement) const {
+std::shared_ptr<Entity> FollowsRelationshipManager::getFollowsByStatement(std::shared_ptr<Statement> statement) const {
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
         if ((*it)->getRightEntity() == statement) {
-            return std::dynamic_pointer_cast<Statement>((*it)->getLeftEntity());
+            return (*it)->getLeftEntity();
         }
     }
     return nullptr;
 }
 
-std::shared_ptr<Statement> FollowsRelationshipManager::getFollowingStatement(std::shared_ptr<Statement> statement) const {
+std::shared_ptr<Entity> FollowsRelationshipManager::getFollowingStatement(std::shared_ptr<Statement> statement) const {
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
         if ((*it)->getLeftEntity() == statement) {
-            return std::dynamic_pointer_cast<Statement>((*it)->getRightEntity());
+            return (*it)->getRightEntity();
         }
     }
     return nullptr;

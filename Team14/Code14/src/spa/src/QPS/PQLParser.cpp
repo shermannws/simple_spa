@@ -114,11 +114,11 @@ void PQLParser::processSuchThatClause(Query& query) {
 
     SuchThatClause clause;
     if (absToken->isToken("Uses")) {
-        clause.setType(RelationshipType::Uses);
+        clause.setType(ClauseType::Uses);
     } else if (absToken->isToken("Follows")) {
-        clause.setType(RelationshipType::Follows);
+        clause.setType(ClauseType::Follows);
     } else if (absToken->isToken("Follows*")){
-        clause.setType(RelationshipType::FollowsStar);
+        clause.setType(ClauseType::FollowsStar);
     } else {
         throw std::runtime_error("Invalid token, abstraction expected");
     }
@@ -134,14 +134,14 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
     // TODO: check Uses (done) & modifies cannot be wildcard
     // TODO: check each entity is appropriate for the RelationshipType
 
-    RelationshipType type = clause.getType();
+    ClauseType type = clause.getType();
     Ref leftRef = clause.getLeftRef();
     RootType leftRootType = leftRef.getRootType();
     Ref rightRef = clause.getRightRef();
     RootType rightRootType = rightRef.getRootType();
 
     // check wildcard & entity type
-    if (type == RelationshipType::Uses) {
+    if (type == ClauseType::Uses) {
         if (leftRootType == RootType::Wildcard) {
             throw std::runtime_error("Invalid Uses LHS, wildcard found");
         }
@@ -165,7 +165,7 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
             }
         }
 
-    } else if (type == RelationshipType::Follows) {
+    } else if (type == ClauseType::Follows) {
         if (leftRootType == RootType::Synonym) {
             std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
             QueryEntityType entityType = entity->getType();
@@ -182,7 +182,7 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
             }
         }
 
-    } else if (type == RelationshipType::FollowsStar) {
+    } else if (type == ClauseType::FollowsStar) {
         if (leftRootType == RootType::Synonym) {
             std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
             QueryEntityType entityType = entity->getType();
@@ -218,12 +218,12 @@ void PQLParser::processSuchThatBody(Query& query, SuchThatClause& clause) {
 
 void PQLParser::processSuchThatLeft(Query &query, SuchThatClause &clause) {
     // TODO: handle more relationships
-    RelationshipType type = clause.getType();
+    ClauseType type = clause.getType();
     Ref ref;
 
     // validate if synonyms
 
-    if (type == RelationshipType::Uses) {
+    if (type == ClauseType::Uses) {
         std::shared_ptr<Token> next = tokenizer->peekToken();
         if (next->isIdent()) {
             std::shared_ptr<QueryEntity> entity = query.getEntity(next->getRep());
@@ -244,9 +244,9 @@ void PQLParser::processSuchThatLeft(Query &query, SuchThatClause &clause) {
                 ref = extractEntRef(query);
             }
         }
-    } else if (type == RelationshipType::Follows) {
+    } else if (type == ClauseType::Follows) {
         ref = extractStmtRef(query);
-    } else if (type == RelationshipType::FollowsStar) {
+    } else if (type == ClauseType::FollowsStar) {
         ref = extractStmtRef(query);
     } else {
         throw std::runtime_error("Invalid Relationship Type in left such that clause");
@@ -256,13 +256,13 @@ void PQLParser::processSuchThatLeft(Query &query, SuchThatClause &clause) {
 }
 
 void PQLParser::processSuchThatRight(Query &query, SuchThatClause &clause) {
-    RelationshipType type = clause.getType();
+    ClauseType type = clause.getType();
     Ref ref;
-    if (type == RelationshipType::Uses) {
+    if (type == ClauseType::Uses) {
         ref = extractEntRef(query);
-    } else if (type == RelationshipType::Follows) {
+    } else if (type == ClauseType::Follows) {
         ref = extractStmtRef(query);
-    } else if (type == RelationshipType::FollowsStar) {
+    } else if (type == ClauseType::FollowsStar) {
         ref = extractStmtRef(query);
     } else {
         throw std::runtime_error("Invalid Relationship Type in left such that clause");
