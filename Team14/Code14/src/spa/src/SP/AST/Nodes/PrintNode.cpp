@@ -18,8 +18,8 @@ StatementNodeType PrintNode::getStatementType() {
     return StatementNodeType::Print;
 }
 
-void PrintNode::accept(DesignExtractorVisitor& visitor) {
-    if (auto printVisitor = dynamic_cast<PrintNodeVisitor*>(&visitor)) {
+void PrintNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
+    if (auto printVisitor = std::dynamic_pointer_cast<PrintNodeVisitor>(visitor)) {
         std::shared_ptr<PrintNode> self(this);
         printVisitor->visitPrintNode(self);
     }

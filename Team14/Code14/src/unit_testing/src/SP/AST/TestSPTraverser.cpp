@@ -66,8 +66,8 @@ TEST_CASE("Test AST Traverser") {
 
     //Traverse the AST from root node
     Traverser traverser = Traverser(visitors);
-    //traverser.traverse(rootNode);
+    traverser.traverse(rootNode);
 
-    //REQUIRE(procedureStore->getEntity(std::make_shared<Procedure>("procedure")) == std::make_shared<Procedure>("procedure"));
+    REQUIRE(procedureStore->getEntity(std::make_shared<Procedure>("procedure")) == std::make_shared<Procedure>("procedure"));
     
 }

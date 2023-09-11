@@ -12,8 +12,8 @@ std::vector<std::shared_ptr<ASTNode>> VariableNode::getAllChildNodes() {
     return {};
 }
 
-void VariableNode::accept(DesignExtractorVisitor& visitor) {
-    if (auto variableVisitor = dynamic_cast<VariableNodeVisitor*>(&visitor)) {
+void VariableNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
+    if (auto variableVisitor = std::dynamic_pointer_cast<VariableNodeVisitor>(visitor)) {
         std::shared_ptr<VariableNode> self(this);
         variableVisitor->visitVariableNode(self);
     }

@@ -19,6 +19,6 @@ public:
     explicit ProcedureNode(std::string procedureName, std::shared_ptr<StatementListNode> statementList);
     std::string getProcedureName();
     std::shared_ptr<StatementListNode> getStatementList();
-    void accept(DesignExtractorVisitor& visitor) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

@@ -17,7 +17,7 @@ private:
 public:
     explicit ReadNode(int statementNumber, std::shared_ptr<VariableNode> var);
     std::shared_ptr<VariableNode> getVar();
-    void accept(DesignExtractorVisitor& visitor) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
     StatementNodeType getStatementType() override;
 };

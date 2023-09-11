@@ -39,8 +39,8 @@ std::vector<std::shared_ptr<ASTNode>> ArithmeticExpressionNode::getAllChildNodes
     return children;
 }
 
-void ArithmeticExpressionNode::accept(DesignExtractorVisitor& visitor) {
-    if (auto aenVisitor = dynamic_cast<ArithmeticExpressionNodeVisitor*>(&visitor)) {
+void ArithmeticExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
+    if (auto aenVisitor = std::dynamic_pointer_cast<ArithmeticExpressionNodeVisitor>(visitor)) {
         std::shared_ptr<ArithmeticExpressionNode> self(this);
         aenVisitor->visitArithmeticExpressionNode(self);
     }

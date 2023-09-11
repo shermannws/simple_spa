@@ -25,6 +25,6 @@ public:
     std::shared_ptr<ExpressionNode> getLeftExpression();
     std::shared_ptr<ExpressionNode> getRightExpression();
     static ArithmeticOperatorType translateOperatorTypeString(std::string operatorTypeString);
-    void accept(DesignExtractorVisitor& visitor) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

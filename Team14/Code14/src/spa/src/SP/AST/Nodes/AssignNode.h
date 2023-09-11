@@ -22,7 +22,7 @@ public:
                         std::shared_ptr<ExpressionNode> expression);
     std::shared_ptr<VariableNode> getVar();
     std::shared_ptr<ExpressionNode> getExpression();
-    void accept(DesignExtractorVisitor& visitor) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
     StatementNodeType getStatementType() override;
 };

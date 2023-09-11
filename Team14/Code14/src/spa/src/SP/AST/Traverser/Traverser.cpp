@@ -14,9 +14,12 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
 		//get from top of stack as the current node
 		std::shared_ptr<ASTNode> current = frontier.top();
 
+		//pop the current node that was being worked on in this loop
+		frontier.pop();
+
 		//current node to accept all the visitors and do its respective workr
 		for (std::shared_ptr<DesignExtractorVisitor> v : visitors) {
-			current->accept(*v.get()); //TODO: might have to refactor method `accept` to take in shared_ptr
+			current->accept(v); //TODO: might have to refactor method `accept` to take in shared_ptr
 		}
 
 		//add child of current node into the frontier
@@ -25,8 +28,5 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
 		for (auto it = childreOfCurrent.rbegin(); it != childreOfCurrent.rend(); it++) {
 			frontier.push(*it);
 		}
-
-		//pop the current node that was being worked on in this loop
-		frontier.pop();
 	}
 };
