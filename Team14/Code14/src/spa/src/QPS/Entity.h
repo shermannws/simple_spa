@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 
 enum class EntityType {
@@ -13,6 +12,7 @@ enum class EntityType {
     If,
     Variable,
     Constant,
+    Invalid
 };
 
 class Entity {

@@ -52,7 +52,7 @@ std::shared_ptr<Token> Tokenizer::popToken() {
     }
 
     // skip if whitespace
-    if (isspace(peekChar())){
+    if (isspace(peekChar())) {
         popChar();
         return popToken();
     }
