@@ -1,8 +1,8 @@
-#include "QueryEntity.h"
+#include "Entity.h"
 
 #include <string>
 
-QueryEntity::QueryEntity(QueryEntityType type, const std::string& synonym) : type(type), synonym(synonym) {}
+QueryEntity::QueryEntity(EntityType type, const std::string& synonym) : type(type), synonym(synonym) {}
 
 bool QueryEntity::operator==(const QueryEntity& other) const {
     return (type == other.type) && (synonym == other.synonym);
@@ -12,6 +12,6 @@ std::string QueryEntity::getSynonym() {
     return synonym;
 }
 
-QueryEntityType QueryEntity::getType() {
+EntityType QueryEntity::getType() {
     return type;
 }
