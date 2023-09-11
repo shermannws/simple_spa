@@ -2,28 +2,36 @@
 #include "Ref.h"
 #include <string>
 
-Ref::Ref() : type(RefType::Invalid), root_type(RootType::Invalid) {}
+Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid), entityType(QueryEntityType::Invalid) {}
 
 void Ref::setRep(std::string& rrep) {
-    this->rep = rrep;
+    rep = rrep;
 }
 
 std::string Ref::getRep() {
-    return this->rep;
+    return rep;
 }
 
-void Ref::setType(RefType& rref_type) {
-    this->type = rref_type;
+void Ref::setType(RefType& rrefType) {
+    type = rrefType;
 }
 
 RefType Ref::getType() {
-    return this->type;
+    return type;
 }
 
-void Ref::setRootType(RootType& rroot_type) {
-    this->root_type = rroot_type;
+void Ref::setRootType(RootType& rrootType) {
+    rootType = rrootType;
 }
 
 RootType Ref::getRootType() {
-    return this->root_type;
+    return rootType;
+}
+
+void Ref::setEntityType(QueryEntityType& eentityType) {
+    entityType = eentityType;
+}
+
+QueryEntityType Ref::getEntityType() {
+    return entityType;
 }

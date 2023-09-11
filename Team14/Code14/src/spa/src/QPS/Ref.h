@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "QueryEntity.h"
+
 enum class RefType {
     StmtRef,
     EntRef,
@@ -21,14 +23,17 @@ class Ref {
 private:
     std::string rep;
     RefType type;
-    RootType root_type;
+    RootType rootType;
+    QueryEntityType entityType;
 public:
     explicit Ref();
     std::string getRep();
     RefType getType();
     RootType getRootType();
+    QueryEntityType getEntityType();
     void setRep(std::string& rrep);
-    void setType(RefType& rref_type);
-    void setRootType(RootType& rroot_type);
+    void setType(RefType& rrefType);
+    void setRootType(RootType& rrootType);
+    void setEntityType(QueryEntityType& eentityType);
 
 };

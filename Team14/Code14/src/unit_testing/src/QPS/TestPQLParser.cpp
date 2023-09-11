@@ -8,7 +8,7 @@ TEST_CASE("single declaration, single Select") {
     std::string input = "stmt s; Select s";
     PQLParser parser(input);
     Query query = parser.parse();
-    QueryEntity expectedEntity = QueryEntity(EntityType::Stmt, "s");
+    QueryEntity expectedEntity = QueryEntity(QueryEntityType::Stmt, "s");
     std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("s");
     std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
 
@@ -92,105 +92,119 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("assign a; variable v;\nSelect a such that Uses(a, v)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref left_ref = clause.getLeftRef();
-        Ref right_ref = clause.getRightRef();
+        Ref leftRef = clause.getLeftRef();
+        Ref rightRef = clause.getRightRef();
         REQUIRE(clause.getType() == RelationshipType::Uses);
-        REQUIRE(left_ref.getType() == RefType::StmtRef);
-        REQUIRE(left_ref.getRootType() == RootType::Synonym);
-        REQUIRE(left_ref.getRep() == "a");
-        REQUIRE(right_ref.getType() == RefType::EntRef);
-        REQUIRE(right_ref.getRootType() == RootType::Synonym);
-        REQUIRE(right_ref.getRep() == "v");
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(leftRef.getRep() == "a");
+        REQUIRE(rightRef.getType() == RefType::EntRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Variable);
+        REQUIRE(rightRef.getRep() == "v");
     }
 
     SECTION("Valid Uses query") {
         PQLParser parser("assign a;\nSelect a such that Uses(\"main\",\"x\")"); // LHS is procedure
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref left_ref = clause.getLeftRef();
-        Ref right_ref = clause.getRightRef();
+        Ref leftRef = clause.getLeftRef();
+        Ref rightRef = clause.getRightRef();
         REQUIRE(clause.getType() == RelationshipType::Uses);
-        REQUIRE(left_ref.getType() == RefType::EntRef);
-        REQUIRE(left_ref.getRootType() == RootType::Ident);
-        REQUIRE(left_ref.getRep() == "\"main\"");
-        REQUIRE(right_ref.getType() == RefType::EntRef);
-        REQUIRE(right_ref.getRootType() == RootType::Ident);
-        REQUIRE(right_ref.getRep() == "\"x\"");
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Ident);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "\"main\"");
+        REQUIRE(rightRef.getType() == RefType::EntRef);
+        REQUIRE(rightRef.getRootType() == RootType::Ident);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "\"x\"");
     }
 
     SECTION("Valid Uses query") {
         PQLParser parser("assign x;\nSelect x such that Uses(x, \"x\")");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref left_ref = clause.getLeftRef();
-        Ref right_ref = clause.getRightRef();
+        Ref leftRef = clause.getLeftRef();
+        Ref rightRef = clause.getRightRef();
         REQUIRE(clause.getType() == RelationshipType::Uses);
-        REQUIRE(left_ref.getType() == RefType::StmtRef);
-        REQUIRE(left_ref.getRootType() == RootType::Synonym);
-        REQUIRE(left_ref.getRep() == "x");
-        REQUIRE(right_ref.getType() == RefType::EntRef);
-        REQUIRE(right_ref.getRootType() == RootType::Ident);
-        REQUIRE(right_ref.getRep() == "\"x\"");
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(leftRef.getRep() == "x");
+        REQUIRE(rightRef.getType() == RefType::EntRef);
+        REQUIRE(rightRef.getRootType() == RootType::Ident);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "\"x\"");
     }
 
     SECTION("Valid Follows query") {
         PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Follows (s1,s2)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref left_ref = clause.getLeftRef();
-        Ref right_ref = clause.getRightRef();
+        Ref leftRef = clause.getLeftRef();
+        Ref rightRef = clause.getRightRef();
         REQUIRE(clause.getType() == RelationshipType::Follows);
-        REQUIRE(left_ref.getType() == RefType::StmtRef);
-        REQUIRE(left_ref.getRootType() == RootType::Synonym);
-        REQUIRE(left_ref.getRep() == "s1");
-        REQUIRE(right_ref.getType() == RefType::StmtRef);
-        REQUIRE(right_ref.getRootType() == RootType::Synonym);
-        REQUIRE(right_ref.getRep() == "s2");
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Stmt);
+        REQUIRE(leftRef.getRep() == "s1");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Stmt);
+        REQUIRE(rightRef.getRep() == "s2");
     }
 
     SECTION("Valid Follows query") {
         PQLParser parser("stmt s1; assign x;\nSelect x such that Follows(3,x) ");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref left_ref = clause.getLeftRef();
-        Ref right_ref = clause.getRightRef();
+        Ref leftRef = clause.getLeftRef();
+        Ref rightRef = clause.getRightRef();
         REQUIRE(clause.getType() == RelationshipType::Follows);
-        REQUIRE(left_ref.getType() == RefType::StmtRef);
-        REQUIRE(left_ref.getRootType() == RootType::Integer);
-        REQUIRE(left_ref.getRep() == "3");
-        REQUIRE(right_ref.getType() == RefType::StmtRef);
-        REQUIRE(right_ref.getRootType() == RootType::Synonym);
-        REQUIRE(right_ref.getRep() == "x");
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "3");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(rightRef.getRep() == "x");
     }
 
     SECTION("Valid Follows* query") {
         PQLParser parser("stmt s1;\nSelect s1 such that Follows*(_, 1)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref left_ref = clause.getLeftRef();
-        Ref right_ref = clause.getRightRef();
+        Ref leftRef = clause.getLeftRef();
+        Ref rightRef = clause.getRightRef();
         REQUIRE(clause.getType() == RelationshipType::FollowsStar);
-        REQUIRE(left_ref.getType() == RefType::StmtRef);
-        REQUIRE(left_ref.getRootType() == RootType::Wildcard);
-        REQUIRE(left_ref.getRep() == "_");
-        REQUIRE(right_ref.getType() == RefType::StmtRef);
-        REQUIRE(right_ref.getRootType() == RootType::Integer);
-        REQUIRE(right_ref.getRep() == "1");
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "1");
     }
 
     SECTION("Valid Follows* query") {
         PQLParser parser("stmt x;\nSelect x such that Follows*(_,_)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref left_ref = clause.getLeftRef();
-        Ref right_ref = clause.getRightRef();
+        Ref leftRef = clause.getLeftRef();
+        Ref rightRef = clause.getRightRef();
         REQUIRE(clause.getType() == RelationshipType::FollowsStar);
-        REQUIRE(left_ref.getType() == RefType::StmtRef);
-        REQUIRE(left_ref.getRootType() == RootType::Wildcard);
-        REQUIRE(left_ref.getRep() == "_");
-        REQUIRE(right_ref.getType() == RefType::StmtRef);
-        REQUIRE(right_ref.getRootType() == RootType::Wildcard);
-        REQUIRE(right_ref.getRep() == "_");
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
     }
 
     SECTION("Invalid general queries") {
@@ -238,7 +252,7 @@ TEST_CASE("processSuchThatClause") {
         testcases.emplace_back("procedure a; call v;\nSelect v such that Follows(v, a)",
                                "Invalid Follows RHS, non-statement found");
         testcases.emplace_back("procedure a; call v;\nSelect v such that Follows(hello, a)",
-                               "Invalid LHS, undeclared synonym found");
+                               "Undeclared synonym found");
         testcases.emplace_back("procedure a; call v;\nSelect a such that Follows(\"hello\", v)",
                                "Invalid stmtRef");
         testcases.emplace_back("assign a; call v;\nSelect a such that Follows(a, \"world\")",

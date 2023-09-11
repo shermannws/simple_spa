@@ -13,8 +13,8 @@ enum class RelationshipType {
 class SuchThatClause {
 private:
     RelationshipType type;
-    Ref left_ref;
-    Ref right_ref;
+    Ref leftRef;
+    Ref rightRef;
 
 public:
     SuchThatClause();

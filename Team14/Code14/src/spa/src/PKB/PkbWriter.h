@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "PKB/AssignmentPatternStore/AssignmentManager.h"
+#include "PKB/Managers/AssignmentManager.h"
 #include "PKB/EntityStorage/ConstantStore.h"
 #include "PKB/EntityStorage/ProcedureStore.h"
 #include "PKB/EntityStorage/StatementStore.h"

@@ -3,8 +3,8 @@
 #include "catch.hpp"
 
 TEST_CASE("Query class tests") {
-    std::shared_ptr<QueryEntity> entity1 = std::make_shared<QueryEntity>(EntityType::Variable, "v");
-    std::shared_ptr<QueryEntity> entity2 = std::make_shared<QueryEntity>(EntityType::Assign, "a");
+    std::shared_ptr<QueryEntity> entity1 = std::make_shared<QueryEntity>(QueryEntityType::Variable, "v");
+    std::shared_ptr<QueryEntity> entity2 = std::make_shared<QueryEntity>(QueryEntityType::Assign, "a");
     Query query;
 
     SECTION("Test addDeclaration getDeclarations") {
