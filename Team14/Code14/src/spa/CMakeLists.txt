@@ -14,6 +14,19 @@ add_library(spa ${srcs} ${headers}
     "src/Commons/HashableKey.h"
     "src/Commons/Entities/WildCard.h"
     "src/Commons/Entities/WildCard.cpp"
+    "src/Commons/Entities/Statement.h"
+    "src/Commons/Entities/Statement.cpp"
+    "src/Commons/Entities/Procedure.h"
+    "src/Commons/Entities/Procedure.cpp"
+    "src/Commons/Entities/Constant.h"
+    "src/Commons/Entities/Constant.cpp"
+    "src/Commons/Entities/Variable.h"
+    "src/Commons/Entities/Variable.cpp"
+    "src/Commons/Entities/Entity.h"
+    "src/Commons/Entities/Entity.cpp"
+    "src/Commons/HashableKey.h"
+    "src/Commons/Entities/WildCard.h"
+    "src/Commons/Entities/WildCard.cpp"
 
     "src/PKB/Relationships/RelationshipType.h"
     "src/PKB/Relationships/Relationship.h"
@@ -85,10 +98,13 @@ add_library(spa ${srcs} ${headers}
     src/SP/AST/Visitors/EntityExtractorVisitor.cpp
     src/SP/AST/Visitors/FollowsExtractorVisitor.cpp
     src/SP/AST/Visitors/UsesExtractorVisitor.cpp
-
     src/SP/SPParser.h
     src/SP/SPParser.cpp
-
+    src/SP/SPTokenizer.cpp
+    src/SP/SPTokenizer.h
+    src/SP/SPToken.cpp
+    src/SP/SPToken.h
+    src/SP/SPTokenType.h
     src/QPS/Tokenizer.cpp
     src/QPS/Token.cpp
     src/QPS/Query.cpp
@@ -106,21 +122,25 @@ add_library(spa ${srcs} ${headers}
     src/PKB/Managers/PkbReaderManager.cpp
     src/PKB/Managers/FollowsRelationshipManager.h
     src/PKB/Managers/FollowsRelationshipManager.cpp
+    src/PKB/Managers/FollowsRelationshipManager.cpp
 
     src/SP/SPTokenizer.cpp
     src/SP/SPTokenizer.h
     src/SP/SPToken.cpp
     src/SP/SPToken.h
     src/SP/SPTokenType.h
-
     src/PKB/Managers/PkbWriterManager.h
     src/PKB/Managers/PkbWriterManager.cpp
+    src/SP/SPTokenizer.cpp
+    src/SP/SPTokenizer.h
+    src/SP/SPToken.cpp
+    src/SP/SPToken.h
+    src/SP/SPTokenType.h
 
     "src/SP/SP.h"
     "src/SP/SP.cpp"
     "src/SP/AST/Traverser/Traverser.h"
     "src/SP/AST/Traverser/Traverser.cpp"
-
 )
 
 

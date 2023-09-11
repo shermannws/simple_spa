@@ -124,6 +124,8 @@ std::queue<SPToken> infixToPostfix(std::queue<SPToken>& tokens) {
 
         if (nextToken.getType() == TokenType::NAME) {   // variable or constant
             outputQueue.push(nextToken);
+        } else if (nextToken.getType() == TokenType::INTEGER) {
+            outputQueue.push(nextToken);
         } else if (nextToken.getType() == TokenType::ARITHMETIC_OPERATOR) {
             while (!operatorStack.empty()
                    && operatorStack.top().getType() != TokenType::OPEN_ROUND_PARAN
