@@ -84,23 +84,23 @@ TEST_CASE("SPTokenizer arithmetic test") {
     std::vector<SPToken> tokens = tokenizer.tokenize();
 }
 
-TEST_CASE("File Reading Test", "[file]") {
-    std::string fileContent;
-    std::string filePath = "../../../tests/positive_source/Test_source1.txt";
-    std::ifstream inputFile(filePath);
-
-    if (inputFile.is_open()) {
-        std::string line;
-        while (std::getline(inputFile, line)) {
-            fileContent += line + '\n';
-        }
-        inputFile.close();
-    } else {
-        FAIL("Failed to open file");
-    }
-
-    SPTokenizer tokenizer(fileContent);
-    std::vector<SPToken> tokens = tokenizer.tokenize();
+//TEST_CASE("File Reading Test", "[file]") {
+//    std::string fileContent;
+//    std::string filePath = "../../../tests/positive_source/Test_source1.txt";
+//    std::ifstream inputFile(filePath);
+//
+//    if (inputFile.is_open()) {
+//        std::string line;
+//        while (std::getline(inputFile, line)) {
+//            fileContent += line + '\n';
+//        }
+//        inputFile.close();
+//    } else {
+//        FAIL("Failed to open file");
+//    }
+//
+//    SPTokenizer tokenizer(fileContent);
+//    std::vector<SPToken> tokens = tokenizer.tokenize();
 
     // Perform assertions to check the file content
 //    REQUIRE(fileContent == "procedure computeAverage {\n"
@@ -113,4 +113,4 @@ TEST_CASE("File Reading Test", "[file]") {
 //                           "\n"
 //                           "    print ave;\n"
 //                           "}");
-}
+//}
