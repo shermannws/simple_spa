@@ -3,6 +3,7 @@
 #include "Result.h"
 #include "Query.h"
 #include "Strategy.h"
+#include "AssignPatternStrategy.h"
 #include "./PKB/PkbReader.h"
 
 
@@ -12,10 +13,10 @@
  */
 class ClauseHandler {
 private:
-    std::unique_ptr<Strategy> strategy;
+    std::shared_ptr<Strategy> strategy;
     std::shared_ptr<PkbReader> pkbReader;
 public:
     explicit ClauseHandler(std::shared_ptr<PkbReader> pkbReader);
-    void setStrategy(std::unique_ptr<Strategy> strategy);
+    void setStrategy(std::shared_ptr<Strategy> strategy);
     void executeQuery(Query& query, Result& result) const;
 };

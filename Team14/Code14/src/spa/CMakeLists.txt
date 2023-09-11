@@ -14,6 +14,19 @@ add_library(spa ${srcs} ${headers}
     "src/Commons/HashableKey.h"
     "src/Commons/Entities/WildCard.h"
     "src/Commons/Entities/WildCard.cpp"
+    "src/Commons/Entities/Statement.h"
+    "src/Commons/Entities/Statement.cpp"
+    "src/Commons/Entities/Procedure.h"
+    "src/Commons/Entities/Procedure.cpp"
+    "src/Commons/Entities/Constant.h"
+    "src/Commons/Entities/Constant.cpp"
+    "src/Commons/Entities/Variable.h"
+    "src/Commons/Entities/Variable.cpp"
+    "src/Commons/Entities/Entity.h"
+    "src/Commons/Entities/Entity.cpp"
+    "src/Commons/HashableKey.h"
+    "src/Commons/Entities/WildCard.h"
+    "src/Commons/Entities/WildCard.cpp"
 
     "src/PKB/Relationships/RelationshipType.h"
     "src/PKB/Relationships/Relationship.h"
@@ -62,8 +75,12 @@ add_library(spa ${srcs} ${headers}
     src/QPS/UsesSuchThatStrategy.cpp
     src/QPS/FollowsSuchThatStrategy.cpp
     src/QPS/QueryEntity.cpp
+    src/SP/SPTokenizer.cpp
+    src/SP/SPTokenizer.h
+    src/SP/SPToken.cpp
+    src/SP/SPToken.h
+    src/SP/SPTokenType.h
     src/SP/AST/Nodes/ASTNode.h
-    src/SP/AST/Visitors/DesignExtractorVisitor.h
     src/SP/AST/Nodes/ProgramNode.h
     src/SP/AST/Nodes/ProcedureNode.h
     src/SP/AST/Nodes/StatementNode.h
@@ -86,12 +103,29 @@ add_library(spa ${srcs} ${headers}
     src/SP/AST/Nodes/StatementListNode.cpp
     src/SP/AST/Nodes/ProcedureNode.cpp
     src/SP/AST/Nodes/ProgramNode.cpp
+    src/SP/AST/Visitors/DesignExtractorVisitor.h
     src/SP/AST/Visitors/EntityExtractorVisitor.h
     src/SP/AST/Visitors/FollowsExtractorVisitor.h
     src/SP/AST/Visitors/UsesExtractorVisitor.h
     src/SP/AST/Visitors/EntityExtractorVisitor.cpp
     src/SP/AST/Visitors/FollowsExtractorVisitor.cpp
     src/SP/AST/Visitors/UsesExtractorVisitor.cpp
+    src/SP/SPParser.h
+    src/SP/SPParser.cpp
+    src/SP/SPTokenizer.cpp
+    src/SP/SPTokenizer.h
+    src/SP/SPToken.cpp
+    src/SP/SPToken.h
+    src/SP/SPTokenType.h
+    src/QPS/Tokenizer.cpp
+    src/QPS/Token.cpp
+    src/QPS/Query.cpp
+    src/QPS/PQLParser.cpp
+    src/QPS/SuchThatClause.cpp
+    src/QPS/Ref.cpp
+    src/QPS/Result.cpp
+    src/QPS/PQLEvaluator.cpp
+    src/QPS/QueryEntity.cpp
     src/Commons/Entities/EntityType.h
     src/PKB/Managers/UsesRelationshipManager.h
     src/PKB/Managers/UsesRelationshipManager.cpp
@@ -99,9 +133,16 @@ add_library(spa ${srcs} ${headers}
     src/PKB/Managers/PkbReaderManager.h
     src/PKB/Managers/PkbReaderManager.cpp
     src/PKB/Managers/FollowsRelationshipManager.h
-    src/PKB/Managers/FollowsRelationshipManager.cpp)
+    src/PKB/Managers/FollowsRelationshipManager.cpp
+    src/SP/SPTokenizer.cpp
+    src/SP/SPTokenizer.h
+    src/SP/SPToken.cpp
+    src/SP/SPToken.h
+    src/SP/SPTokenType.h
+    src/PKB/Managers/PkbWriterManager.h
+    src/PKB/Managers/PkbWriterManager.cpp
+    src/QPS/ClauseHandler.h
+    src/QPS/ClauseHandler.cpp)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-

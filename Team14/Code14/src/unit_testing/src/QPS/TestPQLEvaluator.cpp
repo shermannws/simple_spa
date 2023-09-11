@@ -5,7 +5,9 @@
 
 #include "catch.hpp"
 #include "Commons/Entities/Statement.h"
+#include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
+#include "PKB/PKB.h"
 
 TEST_CASE("Test formatResult") {
     SECTION("Uses query single tuple") {
@@ -15,11 +17,11 @@ TEST_CASE("Test formatResult") {
         Result r = Result();
         r.setType(type);
 
-        std::shared_ptr<Statement> e1 = std::make_shared<Statement>(1);
+        std::shared_ptr<Statement> e1 = std::make_shared<Statement>(1, StatementType::Assign);
         std::shared_ptr<Variable> e11 = std::make_shared<Variable>("my_variable");
         std::vector<std::shared_ptr<Entity>> v1 {e1, e11};
 
-        std::shared_ptr<Statement> e2 = std::make_shared<Statement>(5);
+        std::shared_ptr<Statement> e2 = std::make_shared<Statement>(5, StatementType::Stmt);
         std::shared_ptr<Variable> e21 = std::make_shared<Variable>("another_variable");
         std::vector<std::shared_ptr<Entity>> v2 {e2, e21};
 
@@ -32,7 +34,9 @@ TEST_CASE("Test formatResult") {
         std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> tuples {ptr1, ptr2};
         r.setTuples(tuples);
 
-        PQLEvaluator evaluator;
+        Pkb pkb = Pkb();
+        PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+
         std::list<std::string> formattedResults = evaluator.formatResult(query, r);
 
         std::list<std::string> expected {"my_variable", "another_variable"};
@@ -46,10 +50,10 @@ TEST_CASE("Test formatResult") {
         Result r = Result();
         r.setType(type);
 
-        std::shared_ptr<Statement> e1 = std::make_shared<Statement>(1);
+        std::shared_ptr<Statement> e1 = std::make_shared<Statement>(1, StatementType::Stmt);
         std::vector<std::shared_ptr<Entity>> v1 {e1};
 
-        std::shared_ptr<Statement> e2 = std::make_shared<Statement>(2);
+        std::shared_ptr<Statement> e2 = std::make_shared<Statement>(2, StatementType::Stmt);
         std::vector<std::shared_ptr<Entity>> v2 {e2};
 
 
@@ -62,7 +66,9 @@ TEST_CASE("Test formatResult") {
         std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> tuples {ptr1, ptr2};
         r.setTuples(tuples);
 
-        PQLEvaluator evaluator;
+        Pkb pkb = Pkb();
+        PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+
         std::list<std::string> formattedResults = evaluator.formatResult(query, r);
 
         std::list<std::string> expected {"1", "2"};

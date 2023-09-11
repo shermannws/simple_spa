@@ -2,7 +2,7 @@
 
 ClauseHandler::ClauseHandler(std::shared_ptr<PkbReader> pkbReader) : pkbReader(pkbReader) {}
 
-void ClauseHandler::setStrategy(std::unique_ptr<Strategy> strategy) {
+void ClauseHandler::setStrategy(std::shared_ptr<Strategy> strategy) {
     strategy = std::move(strategy);
 }
 

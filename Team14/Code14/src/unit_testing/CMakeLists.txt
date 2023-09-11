@@ -10,6 +10,8 @@ add_executable(unit_testing ${srcs}
 	"src/PKB/TestPkb.cpp"
 	"src/main.cpp"
 	"src/TestAST.cpp"
+	"src/TestSPTokenizer.cpp"
+	"src/TestSPToken.cpp"
 	"src/QPS/TestPQLParser.cpp"
 	"src/QPS/TestQuery.cpp"
 	"src/QPS/TestTokenizer.cpp"
@@ -18,7 +20,9 @@ add_executable(unit_testing ${srcs}
 	src/SP/AST/Nodes/TestASTNodes.cpp
 	src/PKB/TestPkbReader.cpp
 	src/PKB/Managers/TestUseRelationshipManager.cpp
-	src/PKB/Managers/TestFollowsRelationshipManager.cpp)
+	src/PKB/Managers/TestFollowsRelationshipManager.cpp
+	src/SP/AST/TestSPParser.cpp
+	src/PKB/TestPkbWriter.cpp)
 
 target_link_libraries(unit_testing spa)
 

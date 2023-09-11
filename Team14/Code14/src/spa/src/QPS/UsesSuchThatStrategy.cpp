@@ -19,7 +19,7 @@ Result UsesSuchThatStrategy::evaluateClause(Query& query, std::shared_ptr<PkbRea
         if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym) { // Uses(a,v)
             std::string leftSyn = leftRef.getRep();
             std::string rightSyn = rightRef.getRep();
-            tuples = *((*pkbReader).getAllAssignVariablePair()); // TODO: to change to new method name with "Uses" inside
+            tuples = *((*pkbReader).getAllUsesAssignVariablePair());
 
             std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
             res.setSynIndices(indices);
@@ -30,7 +30,7 @@ Result UsesSuchThatStrategy::evaluateClause(Query& query, std::shared_ptr<PkbRea
             std::string syn = leftRef.getRep();
             std::unordered_map<std::string, std::shared_ptr<Entity>> tmp;
             std::shared_ptr<Variable> v = std::make_shared<Variable>(rightRef.getRep());
-            std::shared_ptr<std::vector<std::shared_ptr<Entity>>> data = (*pkbReader).getAllAssignByVariable(v); // TODO: to change to new method name with "Uses" inside
+            std::shared_ptr<std::vector<std::shared_ptr<Entity>>> data = (*pkbReader).getAllUsesAssignByVariable(v); // TODO: to change to new method name with "Uses" inside
             tuples.emplace_back(data);
 
             std::unordered_map<std::string, int> indices {{syn, 0}};

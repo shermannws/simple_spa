@@ -7,18 +7,14 @@
 using namespace std;
 
 TEST_CASE("Test Follows Relationship Retrieval") {
-    shared_ptr<FollowsRelationshipStore> followsRelationshipStore = make_shared<FollowsRelationshipStore>(
-            FollowsRelationshipStore());
-
-    shared_ptr<FollowsRelationshipManager> followsRelationshipManager = make_shared<FollowsRelationshipManager>(
-            FollowsRelationshipManager(followsRelationshipStore));
+    shared_ptr<FollowsRelationshipManager> followsRelationshipManager = make_shared<FollowsRelationshipManager>();
 
     shared_ptr<Statement> statement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
     shared_ptr<Statement> statement2 = make_shared<Statement>(Statement(2, StatementType::Call));
     shared_ptr<Statement> statement3 = make_shared<Statement>(Statement(3, StatementType::Print));
 
-    followsRelationshipStore->storeRelationship(make_shared<FollowsRelationship>(FollowsRelationship(statement1, statement2)));
-    followsRelationshipStore->storeRelationship(make_shared<FollowsRelationship>(FollowsRelationship(statement2, statement3)));
+    followsRelationshipManager->storeFollowsRelationship(statement1, statement2);
+    followsRelationshipManager->storeFollowsRelationship(statement2, statement3);
 
     REQUIRE(followsRelationshipManager->getFollowsByStatement(statement1) == nullptr);
     REQUIRE(followsRelationshipManager->getFollowsByStatement(statement2) == statement1);
