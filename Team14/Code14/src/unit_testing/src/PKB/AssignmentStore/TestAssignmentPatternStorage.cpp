@@ -2,7 +2,7 @@
 
 #include "catch.hpp"
 #include "PKB/AssignmentPatternStore/AssignmentPatternStore.h"
-#include "PKB/AssignmentPatternStore/AssignmentManager.h"
+#include "PKB/Managers/AssignmentManager.h"
 #include "PKB/AssignmentPatternStore/Assignment.h"
 #include "Commons/Entities/WildCard.h"
 
@@ -13,12 +13,12 @@ TEST_CASE("Test Assignment Pattern Storage and Retrieval") {
 
     AssignmentManager manager = AssignmentManager(store);
 
-    shared_ptr<Statement> statement1 = make_shared<Statement>(Statement(1));
+    shared_ptr<Statement> statement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
     shared_ptr<Variable> variable1 = make_shared<Variable>(Variable("x"));
     shared_ptr<string> pattern1 = make_shared<string>("1");
     shared_ptr<Assignment> assignment1 = make_shared<Assignment>(Assignment(statement1, variable1, pattern1));
 
-    shared_ptr<Statement> statement2 = make_shared<Statement>(Statement(2));
+    shared_ptr<Statement> statement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
     shared_ptr<Variable> variable2 = make_shared<Variable>(Variable("y"));
     shared_ptr<string> pattern2 = make_shared<string>("2");
     shared_ptr<Assignment> assignment2 = make_shared<Assignment>(Assignment(statement2, variable2, pattern2));
