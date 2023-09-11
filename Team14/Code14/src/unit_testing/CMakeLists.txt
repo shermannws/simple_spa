@@ -13,6 +13,7 @@ add_executable(unit_testing ${srcs}
 	"src/TestPQLParser.cpp"
 	"src/TestQuery.cpp"
 	"src/TestTokenizer.cpp"
+		src/SP/AST/Nodes/TestASTNodes.cpp
 )
 
 target_link_libraries(unit_testing spa)
