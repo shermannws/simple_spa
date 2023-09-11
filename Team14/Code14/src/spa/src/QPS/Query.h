@@ -4,7 +4,7 @@
 #include <memory>
 #include <unordered_map>
 
-#include "Entity.h"
+#include "QueryEntity.h"
 #include "SuchThatClause.h"
 
 class Query {

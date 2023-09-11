@@ -140,27 +140,11 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
     Ref rightRef = clause.getRightRef();
     RootType rightRootType = rightRef.getRootType();
 
-//    // check that synonyms are declared
-//    if (leftRootType == RootType::Synonym) {
-//        std::shared_ptr<Entity> entity = query.getEntity(leftRef.getRep());
-//        if (!entity) {
-//            throw std::runtime_error("Invalid LHS, undeclared synonym found");
-//        }
-//    }
-//
-//    if (rightRootType == RootType::Synonym) {
-//        std::shared_ptr<Entity> entity = query.getEntity(rightRef.getRep());
-//        if (!entity) {
-//            throw std::runtime_error("Invalid RHS, undeclared synonym found");
-//        }
-//    }
-
     // check wildcard & entity type
     if (type == ClauseType::Uses) {
         if (leftRootType == RootType::Wildcard) {
             throw std::runtime_error("Invalid Uses LHS, wildcard found");
         }
-
 
         if (leftRootType == RootType::Synonym) {
             std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());

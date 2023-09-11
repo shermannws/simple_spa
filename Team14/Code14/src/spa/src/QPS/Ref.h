@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Entity.h"
+#include "QueryEntity.h"
 
 enum class RefType {
     StmtRef,
