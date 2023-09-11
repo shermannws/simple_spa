@@ -139,7 +139,8 @@ add_library(spa ${srcs} ${headers}
     src/QPS/Clause.cpp
     src/QPS/PatternClause.cpp
     src/QPS/ClauseHandler.h
-    src/QPS/ClauseHandler.cpp)
+    src/QPS/ClauseHandler.cpp
+    src/QPS/AssignPatternStrategy.cpp)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
