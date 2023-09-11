@@ -136,6 +136,8 @@ add_library(spa ${srcs} ${headers}
     src/SP/SPToken.cpp
     src/SP/SPToken.h
     src/SP/SPTokenType.h
+    src/QPS/Clause.cpp
+    src/QPS/PatternClause.cpp
     src/QPS/ClauseHandler.h
     src/QPS/ClauseHandler.cpp)
 

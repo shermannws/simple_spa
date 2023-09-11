@@ -1,14 +1,9 @@
 #pragma once
 
 #include "QueryEntity.h"
+#include "Clause.h"
 #include "Ref.h"
 #include <string>
-
-enum class ClauseType {
-    Uses,
-    Follows,
-    FollowsStar
-};
 
 class SuchThatClause {
 private:
