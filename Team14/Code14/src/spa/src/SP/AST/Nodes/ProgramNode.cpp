@@ -15,7 +15,6 @@ std::vector<std::shared_ptr<ASTNode>> ProgramNode::getAllChildNodes() {
 
 void ProgramNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
     if (auto programVisitor = std::dynamic_pointer_cast<ProgramNodeVisitor>(visitor)) {
-        std::shared_ptr<ProgramNode> self(this);
-        programVisitor->visitProgramNode(self);
+        programVisitor->visitProgramNode(this);
     }
 }

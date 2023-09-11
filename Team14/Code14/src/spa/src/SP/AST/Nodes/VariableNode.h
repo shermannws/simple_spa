@@ -7,7 +7,7 @@
 class VariableNode; // forward declaration
 class VariableNodeVisitor {
 public:
-    virtual void visitVariableNode(std::shared_ptr<VariableNode> node) const = 0;
+    virtual void visitVariableNode(VariableNode* node) const = 0;
 };
 
 class VariableNode : public ExpressionNode {

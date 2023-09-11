@@ -16,5 +16,5 @@ class FollowsExtractorVisitor : public DesignExtractorVisitor,
 public:
     FollowsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
-    void visitStatementListNode(std::shared_ptr<StatementListNode> node) const override;
+    void visitStatementListNode(StatementListNode* node) const override;
 };

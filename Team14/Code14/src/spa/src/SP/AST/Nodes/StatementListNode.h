@@ -8,7 +8,7 @@
 class StatementListNode; // forward declaration
 class StatementListNodeVisitor {
 public:
-    virtual void visitStatementListNode(std::shared_ptr<StatementListNode> node) const = 0;
+    virtual void visitStatementListNode(StatementListNode* node) const = 0;
 };
 
 class StatementListNode : public ASTNode {

@@ -17,7 +17,7 @@ class UsesExtractorVisitor : public DesignExtractorVisitor,
 public:
     UsesExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
-    void visitAssignNode(std::shared_ptr<AssignNode> node) const override;
+    void visitAssignNode(AssignNode* node) const override;
 
-    void visitPrintNode(std::shared_ptr<PrintNode> node) const override;
+    void visitPrintNode(PrintNode* node) const override;
 };

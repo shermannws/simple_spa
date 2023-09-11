@@ -9,7 +9,7 @@
 class AssignNode; // forward declaration
 class AssignNodeVisitor {
 public:
-    virtual void visitAssignNode(std::shared_ptr<AssignNode> node) const = 0;
+    virtual void visitAssignNode(AssignNode* node) const = 0;
 };
 
 class AssignNode : public StatementNode {

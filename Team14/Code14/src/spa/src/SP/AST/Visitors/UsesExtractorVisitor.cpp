@@ -9,13 +9,14 @@ UsesExtractorVisitor::UsesExtractorVisitor(std::shared_ptr<PkbWriter> writer) {
 	this->pkbWriter = writer;
 }
 
-void UsesExtractorVisitor::visitAssignNode(std::shared_ptr<AssignNode> node) const {
+void UsesExtractorVisitor::visitAssignNode(AssignNode* node) const {
 	std::shared_ptr<ExpressionNode> root = node->getExpression();
 	std::stack<std::shared_ptr<ASTNode>> frontier;
 	frontier.push(root);
 
 	while (!frontier.empty()) {
 		std::shared_ptr<ASTNode> current = frontier.top();
+		frontier.pop();
 
 		//main logic
 		VariableNode* ptr = dynamic_cast<VariableNode*>(current.get());
@@ -30,11 +31,10 @@ void UsesExtractorVisitor::visitAssignNode(std::shared_ptr<AssignNode> node) con
 			frontier.push(*it);
 		}
 
-		frontier.pop();
 	}
 }
 
-void UsesExtractorVisitor::visitPrintNode(std::shared_ptr<PrintNode> node) const {
+void UsesExtractorVisitor::visitPrintNode(PrintNode* node) const {
 	this->pkbWriter->addUsesRelalationship(
 		std::make_shared<Statement>(node->getStatementNumber(), StatementType::Print),
 		std::make_shared<Variable>(node->getVar()->getVarName())

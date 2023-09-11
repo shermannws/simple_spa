@@ -8,7 +8,7 @@
 class ProcedureNode; // forward declaration
 class ProcedureNodeVisitor {
 public:
-    virtual void visitProcedureNode(std::shared_ptr<ProcedureNode> node) const = 0;
+    virtual void visitProcedureNode(ProcedureNode* node) const = 0;
 };
 
 class ProcedureNode : public ASTNode {

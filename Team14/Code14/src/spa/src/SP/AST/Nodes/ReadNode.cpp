@@ -20,7 +20,6 @@ StatementNodeType ReadNode::getStatementType() {
 
 void ReadNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
     if (auto readVisitor = std::dynamic_pointer_cast<ReadNodeVisitor>(visitor)) {
-        std::shared_ptr<ReadNode> self(this);
-        readVisitor->visitReadNode(self);
+        readVisitor->visitReadNode(this);
     }
 }

@@ -14,7 +14,6 @@ std::vector<std::shared_ptr<ASTNode>> ConstantNode::getAllChildNodes() {
 
 void ConstantNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
     if (auto constantVisitor = std::dynamic_pointer_cast<ConstantNodeVisitor>(visitor)) {
-        std::shared_ptr<ConstantNode> self(this);
-        constantVisitor->visitConstantNode(self);
+        constantVisitor->visitConstantNode(this);
     }
 }

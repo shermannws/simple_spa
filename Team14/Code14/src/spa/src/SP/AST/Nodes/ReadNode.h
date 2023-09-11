@@ -8,7 +8,7 @@
 class ReadNode; // forward declaration
 class ReadNodeVisitor {
 public:
-    virtual void visitReadNode(std::shared_ptr<ReadNode> node) const = 0;
+    virtual void visitReadNode(ReadNode* node) const = 0;
 };
 
 class ReadNode : public StatementNode {

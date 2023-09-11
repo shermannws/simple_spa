@@ -1,5 +1,3 @@
-#pragma once
-
 #include "SP.h"
 #include "SPTokenizer.h"
 #include "SPParser.h"

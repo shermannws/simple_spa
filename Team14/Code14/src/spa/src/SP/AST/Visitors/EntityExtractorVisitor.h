@@ -24,21 +24,21 @@ class EntityExtractorVisitor : public DesignExtractorVisitor,
 public:
     EntityExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
-    void visitProgramNode(std::shared_ptr<ProgramNode> node) const override;
+    void visitProgramNode(ProgramNode* node) const override;
 
-    void visitProcedureNode(std::shared_ptr<ProcedureNode> node) const override;
+    void visitProcedureNode(ProcedureNode* node) const override;
 
-    void visitStatementListNode(std::shared_ptr<StatementListNode> node) const override;
+    void visitStatementListNode(StatementListNode* node) const override;
 
-    void visitAssignNode(std::shared_ptr<AssignNode> node) const override;
+    void visitAssignNode(AssignNode* node) const override;
 
-    void visitReadNode(std::shared_ptr<ReadNode> node) const override;
+    void visitReadNode(ReadNode* node) const override;
 
-    void visitPrintNode(std::shared_ptr<PrintNode> node) const override;
+    void visitPrintNode(PrintNode* node) const override;
 
-    void visitArithmeticExpressionNode(std::shared_ptr<ArithmeticExpressionNode> node) const override;
+    void visitArithmeticExpressionNode(ArithmeticExpressionNode* node) const override;
 
-    void visitVariableNode(std::shared_ptr<VariableNode> node) const override;
+    void visitVariableNode(VariableNode* node) const override;
 
-    void visitConstantNode(std::shared_ptr<ConstantNode> node) const override;
+    void visitConstantNode(ConstantNode* node) const override;
 };

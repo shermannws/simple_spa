@@ -28,7 +28,6 @@ StatementNodeType AssignNode::getStatementType() {
 
 void AssignNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
     if (auto assignVisitor = std::dynamic_pointer_cast<AssignNodeVisitor>(visitor)) {
-        std::shared_ptr<AssignNode> self(this);
-        assignVisitor->visitAssignNode(self);
+        assignVisitor->visitAssignNode(this);
     }
 }

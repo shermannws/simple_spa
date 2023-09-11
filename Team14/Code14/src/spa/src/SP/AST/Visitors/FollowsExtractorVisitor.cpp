@@ -25,7 +25,7 @@ StatementType getStamentTypeFromStatementNodeType(StatementNodeType type) {
 	}
 }
 
-void FollowsExtractorVisitor::visitStatementListNode(std::shared_ptr<StatementListNode> node) const {
+void FollowsExtractorVisitor::visitStatementListNode(StatementListNode* node) const {
 	auto stmts = node->getStatements();
 	for (auto it = stmts.begin(); it != stmts.end(); it++) {
 		for (auto it2 = it+1; it2 != stmts.end(); it2++) {

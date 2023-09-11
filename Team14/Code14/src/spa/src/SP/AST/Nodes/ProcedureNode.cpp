@@ -20,7 +20,6 @@ std::vector<std::shared_ptr<ASTNode>> ProcedureNode::getAllChildNodes() {
 
 void ProcedureNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
     if (auto procedureVisitor = std::dynamic_pointer_cast<ProcedureNodeVisitor>(visitor)) {
-        std::shared_ptr<ProcedureNode> self(this);
-        procedureVisitor->visitProcedureNode(self);
+        procedureVisitor->visitProcedureNode(this);
     }
 }

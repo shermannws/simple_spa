@@ -22,7 +22,7 @@ TEST_CASE("Test AST Traverser") {
             SPToken(TokenType::EQUALS, "="),
             SPToken(TokenType::NAME, "v"),
             SPToken(TokenType::ARITHMETIC_OPERATOR, "+"),
-            SPToken(TokenType::NAME, "x"),
+            SPToken(TokenType::INTEGER, "1"),
             SPToken(TokenType::ARITHMETIC_OPERATOR, "*"),
             SPToken(TokenType::NAME, "y"),
             SPToken(TokenType::ARITHMETIC_OPERATOR, "+"),
@@ -68,6 +68,5 @@ TEST_CASE("Test AST Traverser") {
     Traverser traverser = Traverser(visitors);
     traverser.traverse(rootNode);
 
-    REQUIRE(procedureStore->getEntity(std::make_shared<Procedure>("procedure")) == std::make_shared<Procedure>("procedure"));
-    
+    REQUIRE(*(procedureStore->getEntity(std::make_shared<Entity>(Procedure("doMath")))) == *(std::make_shared<Procedure>("doMath")));
 }

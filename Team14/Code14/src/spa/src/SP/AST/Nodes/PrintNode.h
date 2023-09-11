@@ -8,7 +8,7 @@
 class PrintNode; // forward declaration
 class PrintNodeVisitor {
 public:
-    virtual void visitPrintNode(std::shared_ptr<PrintNode> node) const = 0;
+    virtual void visitPrintNode(PrintNode* node) const = 0;
 };
 
 class PrintNode: public StatementNode {

@@ -5,7 +5,7 @@
 class ConstantNode; // forward declaration
 class ConstantNodeVisitor {
 public:
-    virtual void visitConstantNode(std::shared_ptr<ConstantNode> node) const = 0;
+    virtual void visitConstantNode(ConstantNode* node) const = 0;
 };
 
 class ConstantNode : public ExpressionNode {
