@@ -2,19 +2,20 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
 add_library(spa ${srcs} ${headers}
 
-    "src/Commons/Entities/Statement.h"
-    "src/Commons/Entities/Statement.cpp" 
-    "src/Commons/Entities/Procedure.h"
-    "src/Commons/Entities/Procedure.cpp"
-    "src/Commons/Entities/Constant.h"
-    "src/Commons/Entities/Constant.cpp"
-    "src/Commons/Entities/Variable.h"
-    "src/Commons/Entities/Variable.cpp"
-    "src/Commons/Entities/Entity.h"
-    "src/Commons/Entities/Entity.cpp"
-    "src/Commons/HashableKey.h"
-    "src/Commons/Entities/WildCard.h"
-    "src/Commons/Entities/WildCard.cpp"
+        "src/Commons/Entities/Statement.h"
+        "src/Commons/Entities/Statement.cpp"
+        "src/Commons/Entities/Procedure.h"
+        "src/Commons/Entities/Procedure.cpp"
+        "src/Commons/Entities/Constant.h"
+        "src/Commons/Entities/Constant.cpp"
+        "src/Commons/Entities/Variable.h"
+        "src/Commons/Entities/Variable.cpp"
+        "src/Commons/Entities/Entity.h"
+        "src/Commons/Entities/Entity.cpp"
+        "src/Commons/HashableKey.h"
+        "src/Commons/Entities/WildCard.h"
+        "src/Commons/Entities/WildCard.cpp"
+
 
     "src/PKB/Relationships/RelationshipType.h"
     "src/PKB/Relationships/Relationship.h"
@@ -105,9 +106,12 @@ add_library(spa ${srcs} ${headers}
     src/SP/SPToken.h
     src/SP/SPTokenType.h
         src/PKB/Managers/PkbWriterManager.h
-        src/PKB/Managers/PkbWriterManager.cpp)
+        src/PKB/Managers/PkbWriterManager.cpp
+        src/SP/SPTokenizer.cpp
+        src/SP/SPTokenizer.h
+        src/SP/SPToken.cpp
+        src/SP/SPToken.h
+        src/SP/SPTokenType.h)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-

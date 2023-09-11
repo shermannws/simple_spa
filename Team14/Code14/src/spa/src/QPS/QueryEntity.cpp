@@ -4,6 +4,7 @@
 
 QueryEntity::QueryEntity(QueryEntityType type, const std::string& synonym) : type(type), synonym(synonym) {}
 
+
 bool QueryEntity::operator==(const QueryEntity& other) const {
     return (type == other.type) && (synonym == other.synonym);
 }
@@ -11,6 +12,7 @@ bool QueryEntity::operator==(const QueryEntity& other) const {
 std::string QueryEntity::getSynonym() {
     return synonym;
 }
+
 
 QueryEntityType QueryEntity::getType() {
     return type;

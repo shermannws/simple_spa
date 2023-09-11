@@ -24,4 +24,5 @@ public:
     std::unordered_map<std::string, std::shared_ptr<QueryEntity>> getDeclarations();
     std::vector<std::shared_ptr<QueryEntity>> getSelect();
     std::vector<SuchThatClause> getSuchThat();
+
 };
