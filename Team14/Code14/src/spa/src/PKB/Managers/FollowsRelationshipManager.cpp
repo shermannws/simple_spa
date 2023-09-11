@@ -21,7 +21,7 @@ std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>
 
 std::shared_ptr<Entity> FollowsRelationshipManager::getFollowsByStatement(std::shared_ptr<Statement> statement) const {
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
-        if ((*it)->getRightEntity() == statement) {
+        if (*((*it)->getRightEntity()) == *statement) {
             return (*it)->getLeftEntity();
         }
     }
@@ -30,7 +30,7 @@ std::shared_ptr<Entity> FollowsRelationshipManager::getFollowsByStatement(std::s
 
 std::shared_ptr<Entity> FollowsRelationshipManager::getFollowingStatement(std::shared_ptr<Statement> statement) const {
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
-        if ((*it)->getLeftEntity() == statement) {
+        if (*((*it)->getLeftEntity()) == *statement) {
             return (*it)->getRightEntity();
         }
     }
@@ -39,7 +39,7 @@ std::shared_ptr<Entity> FollowsRelationshipManager::getFollowingStatement(std::s
 
 bool FollowsRelationshipManager::getIsFollows(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) const {
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
-        if ((*it)->getLeftEntity() == statement1 && (*it)->getRightEntity() == statement2) {
+        if (*((*it)->getLeftEntity()) == *statement1 && *((*it)->getRightEntity()) == *statement2) {
             return true;
         }
     }

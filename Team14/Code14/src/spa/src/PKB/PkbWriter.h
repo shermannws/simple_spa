@@ -30,5 +30,5 @@ public:
     void addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<std::string> rhs);
 
     void addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2);
-    void addUsesRelalationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v);
+    void addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v);
 };

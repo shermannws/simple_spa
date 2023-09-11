@@ -62,9 +62,9 @@ std::vector<SPToken> SPTokenizer::tokenize() {
     }
 
     // print statements for debugging
-    for (SPToken token : tokens) {
-        std::cout << "Token Value: " << token.getValue() << std::endl;
-    }
+//    for (SPToken token : tokens) {
+//        std::cout << "Token Value: " << token.getValue() << std::endl;
+//    }
 
     return this->tokens;
 }

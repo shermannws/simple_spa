@@ -1,6 +1,7 @@
 file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
 add_library(spa ${srcs} ${headers}
+
     "src/Commons/Entities/Statement.h"
     "src/Commons/Entities/Statement.cpp" 
     "src/Commons/Entities/Procedure.h"
@@ -63,6 +64,18 @@ add_library(spa ${srcs} ${headers}
     "src/PKB/PkbWriter.cpp"
     "src/PKB/PkbWriter.h"
     "src/PKB/PkbReader.cpp"
+    src/QPS/Tokenizer.cpp
+    src/QPS/Token.cpp
+    src/QPS/Query.cpp
+    src/QPS/PQLParser.cpp
+    src/QPS/SuchThatClause.cpp
+    src/QPS/Ref.cpp
+    src/QPS/ClauseHandler.cpp
+    src/QPS/PQLEvaluator.cpp
+    src/QPS/Result.cpp
+    src/QPS/UsesSuchThatStrategy.cpp
+    src/QPS/FollowsSuchThatStrategy.cpp
+    src/QPS/QueryEntity.cpp
     src/SP/SPTokenizer.cpp
     src/SP/SPTokenizer.h
     src/SP/SPToken.cpp
@@ -122,13 +135,13 @@ add_library(spa ${srcs} ${headers}
     src/PKB/Managers/PkbReaderManager.cpp
     src/PKB/Managers/FollowsRelationshipManager.h
     src/PKB/Managers/FollowsRelationshipManager.cpp
-    src/PKB/Managers/FollowsRelationshipManager.cpp
-
     src/SP/SPTokenizer.cpp
     src/SP/SPTokenizer.h
     src/SP/SPToken.cpp
     src/SP/SPToken.h
     src/SP/SPTokenType.h
+    src/SP/SyntacticValidator.cpp
+    src/SP/SyntacticValidator.h
     src/PKB/Managers/PkbWriterManager.h
     src/PKB/Managers/PkbWriterManager.cpp
     src/SP/SPTokenizer.cpp
@@ -136,13 +149,18 @@ add_library(spa ${srcs} ${headers}
     src/SP/SPToken.cpp
     src/SP/SPToken.h
     src/SP/SPTokenType.h
+    src/QPS/Clause.cpp
+    src/QPS/PatternClause.cpp
     src/QPS/ClauseHandler.h
     src/QPS/ClauseHandler.cpp
 
     "src/SP/SP.h"
     "src/SP/SP.cpp"
     "src/SP/AST/Traverser/Traverser.h"
-    "src/SP/AST/Traverser/Traverser.cpp")
+    "src/SP/AST/Traverser/Traverser.cpp"
+
+    src/QPS/AssignPatternStrategy.cpp)
+
 
 
 # this makes the headers accessible for other projects which uses spa lib

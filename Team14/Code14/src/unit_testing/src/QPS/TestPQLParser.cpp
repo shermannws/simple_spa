@@ -92,8 +92,8 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("assign a; variable v;\nSelect a such that Uses(a, v)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::Uses);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Synonym);
@@ -109,25 +109,25 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("assign a;\nSelect a such that Uses(\"main\",\"x\")"); // LHS is procedure
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::Uses);
         REQUIRE(leftRef.getType() == RefType::EntRef);
         REQUIRE(leftRef.getRootType() == RootType::Ident);
         REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
-        REQUIRE(leftRef.getRep() == "\"main\"");
+        REQUIRE(leftRef.getRep() == "main");
         REQUIRE(rightRef.getType() == RefType::EntRef);
         REQUIRE(rightRef.getRootType() == RootType::Ident);
         REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
-        REQUIRE(rightRef.getRep() == "\"x\"");
+        REQUIRE(rightRef.getRep() == "x");
     }
 
     SECTION("Valid Uses query") {
         PQLParser parser("assign x;\nSelect x such that Uses(x, \"x\")");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::Uses);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Synonym);
@@ -136,15 +136,15 @@ TEST_CASE("processSuchThatClause") {
         REQUIRE(rightRef.getType() == RefType::EntRef);
         REQUIRE(rightRef.getRootType() == RootType::Ident);
         REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
-        REQUIRE(rightRef.getRep() == "\"x\"");
+        REQUIRE(rightRef.getRep() == "x");
     }
 
     SECTION("Valid Follows query") {
         PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Follows (s1,s2)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::Follows);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Synonym);
@@ -160,8 +160,8 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("stmt s1; assign x;\nSelect x such that Follows(3,x) ");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::Follows);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Integer);
@@ -177,8 +177,8 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("stmt s1;\nSelect s1 such that Follows*(_, 1)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::FollowsStar);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Wildcard);
@@ -194,8 +194,8 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("stmt x;\nSelect x such that Follows*(_,_)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::FollowsStar);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Wildcard);
@@ -263,4 +263,37 @@ TEST_CASE("processSuchThatClause") {
             REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
         }
     }
+
+}
+
+TEST_CASE("processPatternClause") {
+    SECTION("Valid wildcard pattern") {
+        PQLParser parser("assign a; variable v;\nSelect a pattern a(_,_)");
+        Query query = parser.parse();
+
+        PatternClause actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause.getFirstParam();
+        Ref rightRef = actualClause.getSecondParam();
+        REQUIRE(actualClause.getType() == ClauseType::Assign);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::EntRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+
+    SECTION("Invalid pattern queries") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("assign a1; Select a1 pattern a(_,_)",
+                               "Undeclared synonym in pattern clause");
+        testcases.emplace_back("assign a1; variable v; Select a1 pattern a1 ( v,_)",
+                               "Expected wildcard as first arg");
+
+        for (const auto& testcase : testcases) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+        }
+    }
+
 }

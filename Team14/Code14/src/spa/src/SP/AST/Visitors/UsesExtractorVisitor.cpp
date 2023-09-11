@@ -21,7 +21,7 @@ void UsesExtractorVisitor::visitAssignNode(AssignNode* node) const {
 		//main logic
 		VariableNode* ptr = dynamic_cast<VariableNode*>(current.get());
 		if (ptr) {
-			this->pkbWriter->addUsesRelalationship(
+			this->pkbWriter->addUsesRelationship(
 				std::make_shared<Statement>(node->getStatementNumber(), StatementType::Assign),
 				std::make_shared<Variable>(ptr->getVarName()));
 		}
@@ -35,7 +35,7 @@ void UsesExtractorVisitor::visitAssignNode(AssignNode* node) const {
 }
 
 void UsesExtractorVisitor::visitPrintNode(PrintNode* node) const {
-	this->pkbWriter->addUsesRelalationship(
+	this->pkbWriter->addUsesRelationship(
 		std::make_shared<Statement>(node->getStatementNumber(), StatementType::Print),
 		std::make_shared<Variable>(node->getVar()->getVarName())
 	);

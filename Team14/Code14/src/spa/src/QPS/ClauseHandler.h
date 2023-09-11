@@ -18,5 +18,5 @@ private:
 public:
     explicit ClauseHandler(std::shared_ptr<PkbReader> pkbReader);
     void setStrategy(std::shared_ptr<Strategy> strategy);
-    void executeQuery(Query& query, Result& result) const;
+    void executeClause(Clause& clause, Result& result) const;
 };
