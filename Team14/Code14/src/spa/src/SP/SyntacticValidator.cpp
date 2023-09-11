@@ -1,38 +1,83 @@
+#include <stdexcept>
+#include <vector>
+#include <string>
+#include <iostream>
+
 #include "SyntacticValidator.h"
 
-SyntacticValidator::SyntacticValidator(const std::vector<SPToken> &tokens) : tokens(tokens), curr(0) {
-    this->tokens=tokens;
-}
+class SyntaxError : public std::runtime_error {
+public:
+    SyntaxError(const std::string& message) : std::runtime_error(message) {}
+};
 
+SyntacticValidator::SyntacticValidator(const std::vector<SPToken> &tokens) : tokens(tokens), curr(0) {}
+
+// main function
 std::vector<SPToken> SyntacticValidator::validate() {
-    while (isCurrValid()) {
 
-        SPToken token = peekToken();
-        TokenType ==
-    }
+        // Check for procedures
+        while (isCurrValid()) {
+            validateProcedure();
+        }
+    return tokens;
 }
 
 void SyntacticValidator::validateProcedure() {
     // validate 'procedure'
+    SPToken token = peekToken();
+    if (token.getType() == TokenType::NAME && token.getValue() == "procedure" ) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected 'procedure'");
+    }
+
+    // validate procedure CGS
     validateName();
     validateOpenCurlyParan();
     validateStmtLst();
     validateCloseCurlyParan();
 }
 
+void SyntacticValidator::validateStmtLst() {
+    while (isCurrValid()) {
+        SPToken token = peekToken();
+
+        if (token.getType() == TokenType::NAME) {
+            if (token.getValue() == "read") {
+                validateRead();
+            } else if (token.getValue() == "print") {
+                validatePrint();
+            } else {
+                validateAssign();
+            }
+        }  else if (token.getType() == TokenType::CLOSE_CURLY_PARAN) {
+            break;
+        } else {
+            throw SyntaxError("Syntax error: Expected TokenType NAME for statement");
+        }
+    }
+}
+
 void SyntacticValidator::validateRead() {
-    // validate 'read'
+    // 'read' terminal validated by validateStmtLst()
+    popToken();
+
+    // validate rest of read CGS
     validateName();
     validateSemicolon();
 }
 
 void SyntacticValidator::validatePrint() {
-    // validate 'print'
+    // 'print' terminal validated by validateStmtLst()
+    popToken();
+
+    // validate rest of print CGS
     validateName();
     validateSemicolon();
 }
 
 void SyntacticValidator::validateAssign() {
+    std::cout << "Validating expr: " << std::endl;
     validateName();
     validateEquals();
     validateExpr();
@@ -40,28 +85,131 @@ void SyntacticValidator::validateAssign() {
 }
 
 void SyntacticValidator::validateExpr() {
-    // expr '+' term
-    // expr '-' term
-    // OR -- either one must be valid, else throw error
-    // term
+    SPToken currToken = peekToken();
+    SPToken nextToken = peekNextToken();
+    std::cout << "Validating expr: " << std::endl;
+
+    if (nextToken.getType() == TokenType::ARITHMETIC_OPERATOR) {
+        validateExpr();
+        validateArithmeticOperator(); //TODO: change to + or -
+        validateTerm();
+    } else {
+        validateTerm();
+    }
 }
 
+
 void SyntacticValidator::validateTerm() {
-    // term '*' factor
-    // term '/' factor
-    // term '%' factor
-    // OR -- either one must be valid, else throw error
-    // factor
+    SPToken currToken = peekToken();
+    SPToken nextToken = peekNextToken();
+
+    if (nextToken.getType() == TokenType::ARITHMETIC_OPERATOR) {
+        validateExpr();
+        validateArithmeticOperator(); //TODO: change to * or / or %
+        validateFactor();
+    } else {
+        validateFactor();
+    }
 }
 
 void SyntacticValidator::validateFactor() {
-    // validateName()
-    // OR
-    // validateConst()
-    // OR -- either one must be valid, else throw error
-    // '(' expr ')'
+    SPToken currToken = peekToken();
+    if (currToken.getType() == TokenType::NAME) {
+        validateName();
+    } else if (currToken.getType() == TokenType::INTEGER) {
+        validateInteger();
+    } else if (currToken.getType() == TokenType::OPEN_ROUND_PARAN) {
+        validateOpenRoundParan();
+        validateExpr();
+        validateCloseRoundParan();
+    } else {
+        throw SyntaxError("Syntax error: Invalid Factor");
+    }
 }
 
+void SyntacticValidator::validateName() {
+    SPToken currToken = peekToken();
+    if (currToken.getType() == TokenType::NAME) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected TokenType NAME");
+    }
+}
+
+void SyntacticValidator::validateInteger() {
+    SPToken currToken = peekToken();
+    if (currToken.getType() == TokenType::INTEGER) {
+        if (currToken.getValue()[0] == '0') {
+            throw SyntaxError("Syntax error: INTEGER cannot start with 0");
+        }
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected TokenType INTEGER");
+    }
+}
+
+void SyntacticValidator::validateOpenRoundParan() {
+    SPToken currToken = peekToken();
+    if (currToken.getType() == TokenType::OPEN_ROUND_PARAN) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected TokenType OPEN_ROUND_PARAN");
+    }
+}
+
+void SyntacticValidator::validateCloseRoundParan() {
+    SPToken currToken = peekToken();
+    if (currToken.getType() == TokenType::CLOSE_ROUND_PARAN) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected TokenType CLOSE_ROUND_PARAN");
+    }
+}
+
+void SyntacticValidator::validateOpenCurlyParan() {
+    SPToken currToken = peekToken();
+    if (currToken.getType() == TokenType::OPEN_CURLY_PARAN) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected TokenType OPEN_CURLY_PARAN");
+    }
+}
+
+void SyntacticValidator::validateCloseCurlyParan() {
+    SPToken currToken = peekToken();
+    if (currToken.getType() == TokenType::CLOSE_CURLY_PARAN) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected TokenType CLOSE_CURLY_PARAN");
+    }
+}
+
+void SyntacticValidator::validateSemicolon() {
+    SPToken currToken = peekToken();
+    if (currToken.getType() == TokenType::SEMICOLON) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected TokenType SEMICOLON");
+    }
+}
+
+void SyntacticValidator::validateEquals() {
+    SPToken currToken = peekToken();
+    if (currToken.getType() == TokenType::EQUALS) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected TokenType EQUALS");
+    }
+}
+
+void SyntacticValidator::validateArithmeticOperator() {
+    SPToken currToken = peekToken();
+    if (currToken.getType() == TokenType::ARITHMETIC_OPERATOR) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected TokenType ARITHMETIC_OPERATOR");
+    }
+}
 
 bool SyntacticValidator::isCurrValid() {
     return curr >= 0 and curr < (int)tokens.size();
@@ -69,6 +217,10 @@ bool SyntacticValidator::isCurrValid() {
 
 SPToken SyntacticValidator::peekToken() {
     return tokens[curr];
+}
+
+SPToken SyntacticValidator::peekNextToken() {
+    return tokens[curr + 1];
 }
 
 SPToken SyntacticValidator::popToken() {

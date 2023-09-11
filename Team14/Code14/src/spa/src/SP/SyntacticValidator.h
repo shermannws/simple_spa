@@ -14,23 +14,29 @@ private:
     std::vector<SPToken> tokens;
 
     void validateProcedure();
-    void validateName(); // var_name or proc_name
-    void validateOpenCurlyParan();
+
     void validateStmtLst();
-    void validateCloseCurlyParan();
 
     void validateRead();
     void validatePrint();
-    void validateSemicolon();
-
     void validateAssign();
-    void validateEquals();
+
     void validateExpr();
+    void validateTerm();
+    void validateFactor();
 
-
-
+    void validateName(); // var_name or proc_name
+    void validateInteger();
+    void validateOpenRoundParan();
+    void validateCloseRoundParan();
+    void validateOpenCurlyParan();
+    void validateCloseCurlyParan();
+    void validateSemicolon();
+    void validateEquals();
+    void validateArithmeticOperator();
 
     SPToken peekToken();
+    SPToken peekNextToken();
     SPToken popToken();
     bool isCurrValid();
 };
