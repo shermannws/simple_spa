@@ -40,7 +40,7 @@ Result PQLEvaluator::evaluate(Query& query) {
     // example :
     // clauseHandler->setStrategy(std::make_unique<AssignPatternStrategy>());
     // Result result;
-    // clauseHandler->executeQuery(query, result);
+    // clauseHandler->executeClause(query, result);
 
     std::shared_ptr<QueryEntity> entity = query.getSelect()[0];
     std::shared_ptr<std::vector<std::shared_ptr<Entity>>> entities = getAll(entity);

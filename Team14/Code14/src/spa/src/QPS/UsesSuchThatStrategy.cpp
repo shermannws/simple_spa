@@ -1,12 +1,12 @@
 #include "UsesSuchThatStrategy.h"
 #include "Commons/Entities/Entity.h"
 
-Result UsesSuchThatStrategy::evaluateClause(Query& query, std::shared_ptr<PkbReader> pkbReader) const {
-    SuchThatClause clause = query.getSuchThat()[0];
-    Ref leftRef = clause.getLeftRef();
+Result UsesSuchThatStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbReader> pkbReader) const {
+    auto& suchThat = dynamic_cast<SuchThatClause&>(clause);
+    Ref leftRef = suchThat.getFirstParam();
     RefType leftType = leftRef.getType();
     RootType leftRootType = leftRef.getRootType();
-    Ref rightRef = clause.getRightRef();
+    Ref rightRef = suchThat.getSecondParam();
     RootType rightRootType = rightRef.getRootType();
     Result res;
     ResultType type;

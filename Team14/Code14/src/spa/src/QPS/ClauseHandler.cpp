@@ -6,9 +6,9 @@ void ClauseHandler::setStrategy(std::shared_ptr<Strategy> strategy) {
     strategy = std::move(strategy);
 }
 
-void ClauseHandler::executeQuery(Query& query, Result& result) const {
+void ClauseHandler::executeClause(Clause& clause, Result& result) const {
     if (strategy) {
-        result = strategy->evaluateClause(query, pkbReader);
+        result = strategy->evaluateClause(clause, pkbReader);
     } else {
         throw std::runtime_error("No strategy set for clause handler");
     }

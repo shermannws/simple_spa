@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Result.h"
-#include "Query.h"
+#include "Clause.h"
 #include "./PKB/PkbReader.h"
 
 /*
@@ -10,5 +10,5 @@
 class Strategy {
 public:
     virtual ~Strategy() = default;
-    virtual Result evaluateClause(Query& query, std::shared_ptr<PkbReader> pkbReader) const = 0;
+    virtual Result evaluateClause(Clause& clause, std::shared_ptr<PkbReader> pkbReader) const = 0;
 };

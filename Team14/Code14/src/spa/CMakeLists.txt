@@ -142,7 +142,8 @@ add_library(spa ${srcs} ${headers}
     src/PKB/Managers/PkbWriterManager.h
     src/PKB/Managers/PkbWriterManager.cpp
     src/QPS/ClauseHandler.h
-    src/QPS/ClauseHandler.cpp)
+    src/QPS/ClauseHandler.cpp
+        src/QPS/Clause.cpp)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

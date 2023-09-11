@@ -92,8 +92,8 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("assign a; variable v;\nSelect a such that Uses(a, v)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::Uses);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Synonym);
@@ -109,8 +109,8 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("assign a;\nSelect a such that Uses(\"main\",\"x\")"); // LHS is procedure
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::Uses);
         REQUIRE(leftRef.getType() == RefType::EntRef);
         REQUIRE(leftRef.getRootType() == RootType::Ident);
@@ -126,8 +126,8 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("assign x;\nSelect x such that Uses(x, \"x\")");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::Uses);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Synonym);
@@ -143,8 +143,8 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Follows (s1,s2)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::Follows);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Synonym);
@@ -160,8 +160,8 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("stmt s1; assign x;\nSelect x such that Follows(3,x) ");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::Follows);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Integer);
@@ -177,8 +177,8 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("stmt s1;\nSelect s1 such that Follows*(_, 1)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::FollowsStar);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Wildcard);
@@ -194,8 +194,8 @@ TEST_CASE("processSuchThatClause") {
         PQLParser parser("stmt x;\nSelect x such that Follows*(_,_)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
-        Ref leftRef = clause.getLeftRef();
-        Ref rightRef = clause.getRightRef();
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
         REQUIRE(clause.getType() == ClauseType::FollowsStar);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Wildcard);

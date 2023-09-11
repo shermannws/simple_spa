@@ -2,14 +2,12 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 
-Result FollowsSuchThatStrategy::evaluateClause(Query& query, std::shared_ptr<PkbReader> pkbReader) const {
-    // call pkbReader getter funcs
-    // build result
-    SuchThatClause clause;
-    Ref leftRef = clause.getLeftRef();
+Result FollowsSuchThatStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbReader> pkbReader) const {
+    auto& suchThat = dynamic_cast<SuchThatClause&>(clause);
+    Ref leftRef = suchThat.getFirstParam();
     RootType leftRootType = leftRef.getRootType();
     QueryEntityType leftEntityType = leftRef.getEntityType();
-    Ref rightRef = clause.getRightRef();
+    Ref rightRef = suchThat.getSecondParam();
     RootType rightRootType = rightRef.getRootType();
     QueryEntityType rightEntityType = rightRef.getEntityType();
     Result res;
@@ -73,6 +71,7 @@ Result FollowsSuchThatStrategy::evaluateClause(Query& query, std::shared_ptr<Pkb
     // TODO: WILDCARDS
     // WILDCARDS
 
-
+    res.setType(type);
+    res.setTuples(tuples);
     return res;
 }
