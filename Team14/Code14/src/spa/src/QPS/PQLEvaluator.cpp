@@ -70,15 +70,15 @@ std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PQLEvaluator::getAll(std::
     QueryEntityType entityType = queryEntity->getType();
     switch (entityType) {
         case QueryEntityType::Procedure:
-            //return pkbReader->getAllProcedures();
+            return pkbReader->getAllProcedures();
         case QueryEntityType::Stmt:
-            //return pkbReader->getAllStatements();
+            return pkbReader->getAllStatements();
         case QueryEntityType::Assign:
-            //return pkbReader->getAllAssign();
+            return pkbReader->getAllAssign();
         case QueryEntityType::Variable:
-            //return pkbReader->getAllVariables();
+            return pkbReader->getAllVariables();
         case QueryEntityType::Constant:
-            //return pkbReader->getAllConstants();
+            return pkbReader->getAllConstants();
         default:
             throw std::runtime_error("Not supported entity type in query select clause");
     }
