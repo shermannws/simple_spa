@@ -10,6 +10,18 @@ ArithmeticExpressionNode::ArithmeticExpressionNode(ArithmeticOperatorType operat
                                                    leftExpression(std::move(leftExpression)),
                                                    rightExpression(std::move(rightExpression)) {}
 
+ArithmeticOperatorType ArithmeticExpressionNode::getOperatorType() {
+    return operatorType;
+}
+
+std::shared_ptr<ExpressionNode> ArithmeticExpressionNode::getLeftExpression() {
+    return leftExpression;
+}
+
+std::shared_ptr<ExpressionNode> ArithmeticExpressionNode::getRightExpression() {
+    return rightExpression;
+}
+
 ArithmeticOperatorType ArithmeticExpressionNode::translateOperatorTypeString(std::string operatorTypeString) {
     std::unordered_map<std::string, ArithmeticOperatorType> operatorTypeMap = {
             // TODO: move raw operator strings to common enum

@@ -10,5 +10,6 @@ private:
     std::shared_ptr<VariableNode> var;
 public:
     explicit PrintNode(int statementNumber, std::shared_ptr<VariableNode> var);
+    std::shared_ptr<VariableNode> getVar();
     void accept(DesignExtractorVisitor& visitor) override;
 };

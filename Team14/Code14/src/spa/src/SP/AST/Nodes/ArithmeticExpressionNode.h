@@ -15,6 +15,9 @@ public:
     explicit ArithmeticExpressionNode(ArithmeticOperatorType operatorType,
                              std::shared_ptr<ExpressionNode> leftExpression,
                              std::shared_ptr<ExpressionNode> rightExpression);
+    ArithmeticOperatorType getOperatorType();
+    std::shared_ptr<ExpressionNode> getLeftExpression();
+    std::shared_ptr<ExpressionNode> getRightExpression();
     static ArithmeticOperatorType translateOperatorTypeString(std::string operatorTypeString);
     void accept(DesignExtractorVisitor& visitor) override;
 };
