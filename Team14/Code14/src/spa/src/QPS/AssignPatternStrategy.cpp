@@ -1,7 +1,7 @@
 #include "AssignPatternStrategy.h"
 
 Result AssignPatternStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbReader> pkbReader) const {
-    PatternClause patternClause; //TODO cast clause
+    PatternClause& patternClause = dynamic_cast<PatternClause&>(clause);
     Ref first = patternClause.getFirstParam();
     Ref second = patternClause.getSecondParam();
     Result result;

@@ -9,6 +9,7 @@ enum class ClauseType {
     Follows,
     FollowsStar,
     Assign,
+    Invalid
 };
 
 class Clause {
@@ -18,9 +19,12 @@ private:
 
 public:
     explicit Clause();
+    virtual ~Clause() = default;
+
     void setType(ClauseType type);
+
     ClauseType getType();
+
     void setFirstParam(Ref& ref);
     Ref getFirstParam();
 };
-
