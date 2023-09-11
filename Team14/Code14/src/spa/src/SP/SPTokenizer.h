@@ -1,6 +1,4 @@
-//
-#ifndef SPA_SPTOKENIZER_H
-#define SPA_SPTOKENIZER_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -9,23 +7,21 @@
 
 class SPTokenizer {
 public:
-    std::vector<SPToken> tokenize(const std::string& input);
+    SPTokenizer(const std::string& input);
+    std::vector<SPToken> tokenize();
 private:
     int curr;
     std::string input;
+    std::vector<SPToken> tokens;
 
-    SPToken tokenizeName(const std::string& input);
-    SPToken tokenizeInteger(const std::string& input);
-    SPToken tokenizeParantheses(char);
-    SPToken tokenizeSemicolon(char);
-    SPToken tokenizeEquals(char);
-    SPToken tokenizeArithmeticOperator(char);
+    void tokenizeName();
+    void tokenizeInteger();
+    void tokenizeParantheses();
+    void tokenizeSemicolon();
+    void tokenizeEquals();
+    void tokenizeArithmeticOperator();
 
     int peekChar();
     int popChar();
-    std::string peekString();
-    std::string popString();
+    bool isCurrValid();
 };
-
-
-#endif //SPA_SPTOKENIZER_H
