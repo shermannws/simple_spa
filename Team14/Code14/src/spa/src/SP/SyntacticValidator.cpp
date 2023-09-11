@@ -77,7 +77,6 @@ void SyntacticValidator::validatePrint() {
 }
 
 void SyntacticValidator::validateAssign() {
-    std::cout << "Validating expr: " << std::endl;
     validateName();
     validateEquals();
     validateExpr();
@@ -87,32 +86,43 @@ void SyntacticValidator::validateAssign() {
 void SyntacticValidator::validateExpr() {
     SPToken currToken = peekToken();
     SPToken nextToken = peekNextToken();
-    std::cout << "Validating expr: " << std::endl;
 
+    // check if name, const or ()
+    //keep reading terms until reach ;
+//    while (nextToken.getType() != TokenType::SEMICOLON) {
+////        validateFactor();
+//    }
+
+    // continue checking, must end with ;
     if (nextToken.getType() == TokenType::ARITHMETIC_OPERATOR) {
-        validateExpr();
-        validateArithmeticOperator(); //TODO: change to + or -
         validateTerm();
+        validateArithmeticOperator(); //TODO: change to + or -
+        validateExpr();
+    } else if (currToken.getType() == TokenType::OPEN_ROUND_PARAN) {
+        validateOpenRoundParan();
+        validateExpr();
+        validateCloseRoundParan();
     } else {
         validateTerm();
     }
+
 }
 
+// TODO: CHECK REDUNDANCY
+//void SyntacticValidator::validateTerm() {
+//    SPToken currToken = peekToken();
+//    SPToken nextToken = peekNextToken();
+//
+//    if (nextToken.getType() == TokenType::ARITHMETIC_OPERATOR) {
+//        validateFactor();
+//        validateArithmeticOperator(); //TODO: change to * or / or %
+//        validateTerm();
+//    } else {
+//        validateFactor();
+//    }
+//}
 
 void SyntacticValidator::validateTerm() {
-    SPToken currToken = peekToken();
-    SPToken nextToken = peekNextToken();
-
-    if (nextToken.getType() == TokenType::ARITHMETIC_OPERATOR) {
-        validateExpr();
-        validateArithmeticOperator(); //TODO: change to * or / or %
-        validateFactor();
-    } else {
-        validateFactor();
-    }
-}
-
-void SyntacticValidator::validateFactor() {
     SPToken currToken = peekToken();
     if (currToken.getType() == TokenType::NAME) {
         validateName();
