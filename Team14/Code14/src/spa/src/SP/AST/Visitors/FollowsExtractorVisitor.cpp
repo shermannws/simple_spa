@@ -1,21 +1,54 @@
 #include "FollowsExtractorVisitor.h"
+#include "Commons/Entities/StatementType.h"
+#include "Commons/Entities/Statement.h"
 
-// TODO: Implement relevant visit methods
+FollowsExtractorVisitor::FollowsExtractorVisitor(std::shared_ptr<PkbWriter> writer) {
+	this->pkbWriter = writer;
+}
 
-void FollowsExtractorVisitor::visitProgramNode() {}
+// Helper method to translate from AST StatementType into PKB StatementType
+StatementType getStamentTypeFromStatementNodeType(StatementNodeType type) {
+	switch (type) {
+	case StatementNodeType::Assign:
+		return StatementType::Assign;
+		break;
+	case StatementNodeType::Print:
+		return StatementType::Print;
+		break;
+	case StatementNodeType::Read:
+		return StatementType::Read;
+		break;
+		//TODO: handle all other statement types
+	default:
+		// should never enter here
+		return StatementType::Assign;// should never enter here
+	}
+}
 
-void FollowsExtractorVisitor::visitProcedureNode() {}
+void FollowsExtractorVisitor::visitStatementListNode(StatementListNode* node) const {
+	auto stmts = node->getStatements();
 
-void FollowsExtractorVisitor::visitStatementListNode() {}
+	for (auto it = stmts.begin(); it != stmts.end(); it++) {
+		if (it + 1 == stmts.end()) {
+			break;
+		}
+		StatementType s1Type = getStamentTypeFromStatementNodeType((*it).get()->getStatementType());
+		StatementType s2Type = getStamentTypeFromStatementNodeType((*(it+1)).get()->getStatementType());
+		this->pkbWriter->addFollowsRelationship(
+			std::make_shared<Statement>((*it).get()->getStatementNumber(), s1Type),
+			std::make_shared<Statement>((*(it + 1)).get()->getStatementNumber(), s2Type)
+		);
+	}
 
-void FollowsExtractorVisitor::visitAssignNode() {}
-
-void FollowsExtractorVisitor::visitReadNode() {}
-
-void FollowsExtractorVisitor::visitPrintNode() {}
-
-void FollowsExtractorVisitor::visitArithmeticExpressionNode() {}
-
-void FollowsExtractorVisitor::visitVariableNode() {}
-
-void FollowsExtractorVisitor::visitConstantNode() {}
+	////Below is for Follow(*)
+	//for (auto it = stmts.begin(); it != stmts.end(); it++) {
+	//	for (auto it2 = it+1; it2 != stmts.end(); it2++) {
+	//		StatementType s1Type = getStamentTypeFromStatementNodeType((*it).get()->getStatementType());
+	//		StatementType s2Type = getStamentTypeFromStatementNodeType((*it2).get()->getStatementType());
+	//		this->pkbWriter->addFollowsRelationship(
+	//			std::make_shared<Statement>((*it).get()->getStatementNumber(), s1Type),
+	//			std::make_shared<Statement>((*it2).get()->getStatementNumber(), s2Type)
+	//		);
+	//	}
+	//}
+}

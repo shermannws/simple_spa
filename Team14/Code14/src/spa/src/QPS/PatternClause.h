@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Clause.h"
 
 class PatternClause :  public Clause {

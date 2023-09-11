@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "ClauseHandler.h"
 
 ClauseHandler::ClauseHandler(std::shared_ptr<PkbReader> pkbReader) : pkbReader(pkbReader) {}

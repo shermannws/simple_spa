@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "AssignPatternStrategy.h"
 
 Result AssignPatternStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbReader> pkbReader) const {

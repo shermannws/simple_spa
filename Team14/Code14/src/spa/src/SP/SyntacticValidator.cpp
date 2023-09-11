@@ -209,7 +209,7 @@ void SyntacticValidator::validateArithmeticOperator() {
 }
 
 bool SyntacticValidator::isCurrValid() {
-    return curr >= 0 and curr < (int)tokens.size();
+    return curr >= 0 && curr < (int)tokens.size();
 }
 
 SPToken SyntacticValidator::peekToken() {

@@ -9,6 +9,13 @@ std::vector<std::shared_ptr<StatementNode>> StatementListNode::getStatements() {
     return statements;
 }
 
-void StatementListNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitStatementListNode();
+std::vector<std::shared_ptr<ASTNode>> StatementListNode::getAllChildNodes() {
+    std::vector<std::shared_ptr<ASTNode>> children(statements.begin(), statements.end());
+    return children;
+}
+
+void StatementListNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
+    if (auto statementListVisitor = std::dynamic_pointer_cast<StatementListNodeVisitor>(visitor)) {
+        statementListVisitor->visitStatementListNode(this);
+    }
 }

@@ -1,24 +1,23 @@
 #pragma once
 
 #include "DesignExtractorVisitor.h"
+#include "../../AST/Nodes/ProgramNode.h"
+#include "../../AST/Nodes/ProcedureNode.h"
+#include "../../AST/Nodes/StatementListNode.h"
+#include "../../AST/Nodes/AssignNode.h"
+#include "../../AST/Nodes/ReadNode.h"
+#include "../../AST/Nodes/PrintNode.h"
+#include "../../AST/Nodes/ArithmeticExpressionNode.h"
+#include "../../AST/Nodes/VariableNode.h"
+#include "../../AST/Nodes/ConstantNode.h"
 
-class UsesExtractorVisitor : public DesignExtractorVisitor {
+class UsesExtractorVisitor : public DesignExtractorVisitor,
+    public AssignNodeVisitor,
+    public PrintNodeVisitor {
 public:
-    void visitProgramNode() override;
+    UsesExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
-    void visitProcedureNode() override;
+    void visitAssignNode(AssignNode* node) const override;
 
-    void visitStatementListNode() override;
-
-    void visitAssignNode() override;
-
-    void visitReadNode() override;
-
-    void visitPrintNode() override;
-
-    void visitArithmeticExpressionNode() override;
-
-    void visitVariableNode() override;
-
-    void visitConstantNode() override;
+    void visitPrintNode(PrintNode* node) const override;
 };

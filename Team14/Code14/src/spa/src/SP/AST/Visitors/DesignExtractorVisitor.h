@@ -1,15 +1,13 @@
 #pragma once
+#include <PKB/PkbWriter.h>
 
 // interface for all design extractors
 class DesignExtractorVisitor {
+protected:
+    std::shared_ptr<PkbWriter> pkbWriter;
+
 public:
-    virtual void visitProgramNode() = 0;
-    virtual void visitProcedureNode() = 0;
-    virtual void visitStatementListNode() = 0;
-    virtual void visitAssignNode() = 0;
-    virtual void visitReadNode() = 0;
-    virtual void visitPrintNode() = 0;
-    virtual void visitArithmeticExpressionNode() = 0;
-    virtual void visitVariableNode() = 0;
-    virtual void visitConstantNode() = 0;
+    // Added to allow this class to be used in dynamic_cast expression
+    // Made pure to prevent instantiation of this class
+    virtual ~DesignExtractorVisitor() = default;
 };

@@ -27,7 +27,7 @@ std::vector<SPToken> SPTokenizer::tokenize() {
             tokenizeName();
         }
 
-        if (isnumber(currChar)) {
+        if (isdigit(currChar)) {
             tokenizeInteger();
         }
 
@@ -103,7 +103,7 @@ void SPTokenizer::tokenizeInteger() {
 
     while(isCurrValid()) {
         // if number, add to token. else break
-        if (isnumber(peekChar())) {
+        if (isdigit(peekChar())) {
             tokenValue.push_back(popChar());
         } else {
             break;

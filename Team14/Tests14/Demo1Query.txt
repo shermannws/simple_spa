@@ -1,0 +1,10 @@
+1 - comment
+variable v;
+Select v
+num1, num2, num3, sum, ave
+5000
+2 - comment
+assign a;
+Select a such that Uses(a, "num1")
+4
+5000

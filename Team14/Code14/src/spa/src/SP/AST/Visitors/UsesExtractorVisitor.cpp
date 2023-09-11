@@ -1,21 +1,42 @@
+#include <stack>
+
 #include "UsesExtractorVisitor.h"
+#include "Commons/Entities/StatementType.h"
+#include "Commons/Entities/Statement.h"
+#include "Commons/Entities/Variable.h"
 
-// TODO: Implement relevant visit methods
+UsesExtractorVisitor::UsesExtractorVisitor(std::shared_ptr<PkbWriter> writer) {
+	this->pkbWriter = writer;
+}
 
-void UsesExtractorVisitor::visitProgramNode() {}
+void UsesExtractorVisitor::visitAssignNode(AssignNode* node) const {
+	std::shared_ptr<ExpressionNode> root = node->getExpression();
+	std::stack<std::shared_ptr<ASTNode>> frontier;
+	frontier.push(root);
 
-void UsesExtractorVisitor::visitProcedureNode() {}
+	while (!frontier.empty()) {
+		std::shared_ptr<ASTNode> current = frontier.top();
+		frontier.pop();
 
-void UsesExtractorVisitor::visitStatementListNode() {}
+		//main logic
+		VariableNode* ptr = dynamic_cast<VariableNode*>(current.get());
+		if (ptr) {
+			this->pkbWriter->addUsesRelationship(
+				std::make_shared<Statement>(node->getStatementNumber(), StatementType::Assign),
+				std::make_shared<Variable>(ptr->getVarName()));
+		}
 
-void UsesExtractorVisitor::visitAssignNode() {}
+		std::vector<std::shared_ptr<ASTNode>> childreOfCurrent = current->getAllChildNodes();
+		for (auto it = childreOfCurrent.rbegin(); it != childreOfCurrent.rend(); it++) {
+			frontier.push(*it);
+		}
 
-void UsesExtractorVisitor::visitReadNode() {}
+	}
+}
 
-void UsesExtractorVisitor::visitPrintNode() {}
-
-void UsesExtractorVisitor::visitArithmeticExpressionNode() {}
-
-void UsesExtractorVisitor::visitVariableNode() {}
-
-void UsesExtractorVisitor::visitConstantNode() {}
+void UsesExtractorVisitor::visitPrintNode(PrintNode* node) const {
+	this->pkbWriter->addUsesRelationship(
+		std::make_shared<Statement>(node->getStatementNumber(), StatementType::Print),
+		std::make_shared<Variable>(node->getVar()->getVarName())
+	);
+}

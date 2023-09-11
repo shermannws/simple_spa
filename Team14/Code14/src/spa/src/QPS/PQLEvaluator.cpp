@@ -1,10 +1,11 @@
+#include <numeric>
+#include <stdexcept>
+#include <unordered_set>
+
 #include "PQLEvaluator.h"
 #include "QueryEntity.h"
 #include "UsesSuchThatStrategy.h"
 #include "FollowsSuchThatStrategy.h"
-
-#include <numeric>
-#include <unordered_set>
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :pkbReader(pkbReader),clauseHandler(std::make_shared<ClauseHandler>(pkbReader)){}
 
