@@ -6,5 +6,6 @@ enum class StatementType {
     If,
     Print,
     Read,
+    Stmt,
     While,
 };
