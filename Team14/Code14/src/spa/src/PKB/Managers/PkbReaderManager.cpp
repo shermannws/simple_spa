@@ -24,7 +24,7 @@ std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllEn
     return store->getAllEntities();
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<Statement>>> PkbReaderManager::getAllAssign() const {
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllAssign() const {
     return this->assignmentManager->getAllAssignStatements();
 }
 
@@ -44,23 +44,23 @@ std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllSt
     return this->getAllEntities(this->statementStore);
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> PkbReaderManager::getAllAssignVariablePair() const {
+std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> PkbReaderManager::getAllUsesAssignVariablePair() const {
     return this->usesRelationshipManager->getAllAssignVariable();
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllAssignByVariable(std::shared_ptr<Variable> variable) const {
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllUsesAssignByVariable(std::shared_ptr<Variable> variable) const {
     return this->usesRelationshipManager->getVariableAssignment(variable);
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Statement>>>>> PkbReaderManager::getAllFollowsStatementPair() const {
+std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> PkbReaderManager::getAllFollowsStatementPair() const {
     return this->followsRelationshipManager->getAllFollowsStatementPair();
 }
 
-std::shared_ptr<Statement> PkbReaderManager::getFollowsByStatement(std::shared_ptr<Statement> statement) const {
+std::shared_ptr<Entity> PkbReaderManager::getFollowsByStatement(std::shared_ptr<Statement> statement) const {
     return this->followsRelationshipManager->getFollowsByStatement(statement);
 }
 
-std::shared_ptr<Statement> PkbReaderManager::getFollowingStatement(std::shared_ptr<Statement> statement) const {
+std::shared_ptr<Entity> PkbReaderManager::getFollowingStatement(std::shared_ptr<Statement> statement) const {
     return this->followsRelationshipManager->getFollowingStatement(statement);
 }
 

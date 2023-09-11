@@ -10,25 +10,25 @@ private:
 public:
     PkbReader(std::shared_ptr<PkbReaderManager> readerManager);
 
-    auto getAllAssign() const;
+    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllAssign() const;
 
-    auto getAllVariables() const;
+    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllVariables() const;
 
-    auto getAllConstants() const;
+    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllConstants() const;
 
-    auto getAllProcedures() const;
+    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllProcedures() const;
 
-    auto getAllStatements() const;
+    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllStatements() const;
 
-    auto getAllAssignVariablePair() const;
+    std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> getAllUsesAssignVariablePair() const;
 
-    auto getAllAssignByVariable(std::shared_ptr<Variable> variable) const;
+    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllUsesAssignByVariable(std::shared_ptr<Variable> variable) const;
 
-    auto getAllFollowsStatementPair() const;
+    std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> getAllFollowsStatementPair() const;
 
-    auto getFollowsByStatement(std::shared_ptr<Statement> statement) const; // Returns statement followed by (ahead) given statement
+    std::shared_ptr<Entity> getFollowsByStatement(std::shared_ptr<Statement> statement) const; // Returns statement followed by (ahead) given statement
 
-    auto getFollowingStatement(std::shared_ptr<Statement> statement) const; // Returns statement following (behind) given statement
+    std::shared_ptr<Entity> getFollowingStatement(std::shared_ptr<Statement> statement) const; // Returns statement following (behind) given statement
 
-    auto getIsFollows(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) const; // Returns true if statement1 follows statement2
+    bool getIsFollows(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) const; // Returns true if statement1 follows statement2
 };
