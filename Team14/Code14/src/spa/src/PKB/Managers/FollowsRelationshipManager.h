@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "PKB/RelationshipStorage/FollowsRelationshipStore.h"
 #include "Commons/Entities/Statement.h"
