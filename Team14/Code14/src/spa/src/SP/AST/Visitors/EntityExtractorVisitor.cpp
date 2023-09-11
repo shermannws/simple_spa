@@ -27,11 +27,11 @@ void EntityExtractorVisitor::visitAssignNode(std::shared_ptr<AssignNode> node) c
 }
 
 void EntityExtractorVisitor::visitReadNode(std::shared_ptr<ReadNode> node) const {
-	this->pkbWriter->addReadStatement(std::make_shared<Statement>(node->getStatementNumber()));
+	this->pkbWriter->addReadStatement(std::make_shared<Statement>(node->getStatementNumber(), StatementType::Read));
 }
 
 void EntityExtractorVisitor::visitPrintNode(std::shared_ptr<PrintNode> node) const {
-	this->pkbWriter->addPrintStatement(std::make_shared<Statement>(node->getStatementNumber()));
+	this->pkbWriter->addPrintStatement(std::make_shared<Statement>(node->getStatementNumber(), StatementType::Print));
 }
 
 void EntityExtractorVisitor::visitArithmeticExpressionNode(std::shared_ptr<ArithmeticExpressionNode> node) const {}

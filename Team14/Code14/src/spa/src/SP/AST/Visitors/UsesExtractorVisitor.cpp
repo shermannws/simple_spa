@@ -37,6 +37,6 @@ void UsesExtractorVisitor::visitAssignNode(std::shared_ptr<AssignNode> node) con
 void UsesExtractorVisitor::visitPrintNode(std::shared_ptr<PrintNode> node) const {
 	this->pkbWriter->addUsesRelalationship(
 		std::make_shared<Statement>(node->getStatementNumber(), StatementType::Print),
-		std::make_shared<Variable>(node->getVar())
+		std::make_shared<Variable>(node->getVar()->getVarName())
 	);
 }
