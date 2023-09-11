@@ -30,7 +30,8 @@ add_executable(unit_testing ${srcs}
 	src/PKB/TestPkbReader.cpp
 	src/PKB/TestPkbReader.cpp
 	src/QPS/TestToken.cpp
-	src/PKB/TestPkbWriter.cpp)
+	src/PKB/TestPkbWriter.cpp
+		src/IntegrationTesting/TestPkbQps.cpp)
 
 target_link_libraries(unit_testing spa)
 
