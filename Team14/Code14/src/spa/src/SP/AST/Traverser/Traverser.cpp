@@ -16,7 +16,7 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
 
 		//current node to accept all the visitors and do its respective workr
 		for (std::shared_ptr<DesignExtractorVisitor> v : visitors) {
-			current->accept(*v); //TODO: might have to refactor method `accept` to take in shared_ptr
+			current->accept(*v.get()); //TODO: might have to refactor method `accept` to take in shared_ptr
 		}
 
 		//add child of current node into the frontier

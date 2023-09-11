@@ -2,6 +2,13 @@
 
 #include "ASTNode.h"
 
+enum class StatementNodeType {
+    Assign,
+    Read,
+    Print
+};
+
+
 // Interface for all statement node types
 class StatementNode : public ASTNode {
 protected:
@@ -9,4 +16,5 @@ protected:
 public:
     explicit StatementNode(int statementNumber);
     int getStatementNumber();
+    virtual StatementNodeType getStatementType() = 0;
 };

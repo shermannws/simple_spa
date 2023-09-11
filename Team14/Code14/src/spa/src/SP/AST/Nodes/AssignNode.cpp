@@ -25,3 +25,7 @@ std::vector<std::shared_ptr<ASTNode>> AssignNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children { var, expression };
     return children;
 }
+
+StatementNodeType AssignNode::getStatementType() {
+    return StatementNodeType::Assign;
+}

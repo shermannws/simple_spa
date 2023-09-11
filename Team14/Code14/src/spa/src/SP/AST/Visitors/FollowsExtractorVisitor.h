@@ -4,6 +4,8 @@
 
 class FollowsExtractorVisitor : public DesignExtractorVisitor {
 public:
+    FollowsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
+
     void visitProgramNode(std::shared_ptr<ProgramNode> node) override;
 
     void visitProcedureNode(std::shared_ptr<ProcedureNode> node) override;

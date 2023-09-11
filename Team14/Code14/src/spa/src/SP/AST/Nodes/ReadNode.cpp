@@ -17,3 +17,7 @@ std::vector<std::shared_ptr<ASTNode>> ReadNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children { var };
     return children;
 }
+
+StatementNodeType ReadNode::getStatementType() {
+    return StatementNodeType::Read;
+}

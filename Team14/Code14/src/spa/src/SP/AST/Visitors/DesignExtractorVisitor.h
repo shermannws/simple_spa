@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "PKB/PkbWriter.h"
 #include "../../AST/Nodes/ProgramNode.h"
 #include "../../AST/Nodes/ProcedureNode.h"
 #include "../../AST/Nodes/StatementListNode.h"
@@ -14,6 +15,9 @@
 
 // interface for all design extractors
 class DesignExtractorVisitor {
+protected:
+    std::shared_ptr<PkbWriter> pkbWriter;
+
 public:
     virtual void visitProgramNode(std::shared_ptr<ProgramNode> node) = 0;
     virtual void visitProcedureNode(std::shared_ptr<ProcedureNode> node) = 0;
