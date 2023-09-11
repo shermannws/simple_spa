@@ -10,5 +10,10 @@ std::vector<std::shared_ptr<StatementNode>> StatementListNode::getStatements() {
 }
 
 void StatementListNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitStatementListNode();
+    visitor.visitStatementListNode(std::make_shared<StatementListNode>(this));
+}
+
+std::vector<std::shared_ptr<ASTNode>> StatementListNode::getAllChildNodes() {
+    std::vector<std::shared_ptr<ASTNode>> children(statements.begin(), statements.end());
+    return children;
 }

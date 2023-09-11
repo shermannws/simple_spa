@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <memory>
+#include <vector>
 
 #include "../Visitors/DesignExtractorVisitor.h"
 
@@ -9,4 +10,5 @@
 class ASTNode {
 public:
     virtual void accept(DesignExtractorVisitor& visitor) = 0;
+    virtual std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() = 0;
 };

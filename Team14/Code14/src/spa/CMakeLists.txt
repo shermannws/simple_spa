@@ -110,7 +110,10 @@ add_library(spa ${srcs} ${headers}
     src/SP/SPToken.cpp
     src/SP/SPToken.h
     src/SP/SPTokenType.h
-)
+
+    src/PKB/Managers/PkbWriterManager.h
+    src/PKB/Managers/PkbWriterManager.cpp
+ "src/SP/SP.h" "src/SP/SP.cpp" "src/SP/AST/Traverser/Traverser.h" "src/SP/AST/Traverser/Traverser.cpp")
 
 
 # this makes the headers accessible for other projects which uses spa lib

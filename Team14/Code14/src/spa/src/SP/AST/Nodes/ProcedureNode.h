@@ -14,4 +14,5 @@ public:
     std::string getProcedureName();
     std::shared_ptr<StatementListNode> getStatementList();
     void accept(DesignExtractorVisitor& visitor) override;
+    std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

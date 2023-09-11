@@ -9,9 +9,7 @@
 using namespace std;
 
 TEST_CASE("Test Assignment Pattern Storage and Retrieval") {
-    shared_ptr<AssignmentPatternStore> store =  make_shared<AssignmentPatternStore>(AssignmentPatternStore());
-
-    AssignmentManager manager = AssignmentManager(store);
+    AssignmentManager manager = AssignmentManager();
 
     shared_ptr<Statement> statement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
     shared_ptr<Variable> variable1 = make_shared<Variable>(Variable("x"));

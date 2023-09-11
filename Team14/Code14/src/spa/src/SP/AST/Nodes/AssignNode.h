@@ -17,4 +17,5 @@ public:
     std::shared_ptr<VariableNode> getVar();
     std::shared_ptr<ExpressionNode> getExpression();
     void accept(DesignExtractorVisitor& visitor) override;
+    std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

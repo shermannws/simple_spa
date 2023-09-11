@@ -12,4 +12,5 @@ public:
     explicit StatementListNode(std::vector<std::shared_ptr<StatementNode>> statements);
     std::vector<std::shared_ptr<StatementNode>> getStatements();
     void accept(DesignExtractorVisitor& visitor) override;
+    std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

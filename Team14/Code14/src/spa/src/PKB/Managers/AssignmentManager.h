@@ -12,7 +12,7 @@ class AssignmentManager {
 private:
     std::shared_ptr<AssignmentPatternStore> assignmentStore;
 public:
-    AssignmentManager(std::shared_ptr<AssignmentPatternStore> assignmentStore);
+    AssignmentManager();
 
     bool addAssignment(std::shared_ptr<Assignment> assignment);
 

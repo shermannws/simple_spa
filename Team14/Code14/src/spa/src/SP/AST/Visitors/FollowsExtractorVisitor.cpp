@@ -2,20 +2,20 @@
 
 // TODO: Implement relevant visit methods
 
-void FollowsExtractorVisitor::visitProgramNode() {}
+void FollowsExtractorVisitor::visitProgramNode(std::shared_ptr<ProgramNode> node) {}
 
-void FollowsExtractorVisitor::visitProcedureNode() {}
+void FollowsExtractorVisitor::visitProcedureNode(std::shared_ptr<ProcedureNode> node) {}
 
-void FollowsExtractorVisitor::visitStatementListNode() {}
+void FollowsExtractorVisitor::visitStatementListNode(std::shared_ptr<StatementListNode> node) {}
 
-void FollowsExtractorVisitor::visitAssignNode() {}
+void FollowsExtractorVisitor::visitAssignNode(std::shared_ptr<AssignNode> node) {}
 
-void FollowsExtractorVisitor::visitReadNode() {}
+void FollowsExtractorVisitor::visitReadNode(std::shared_ptr<ReadNode> node) {}
 
-void FollowsExtractorVisitor::visitPrintNode() {}
+void FollowsExtractorVisitor::visitPrintNode(std::shared_ptr<PrintNode> node) {}
 
-void FollowsExtractorVisitor::visitArithmeticExpressionNode() {}
+void FollowsExtractorVisitor::visitArithmeticExpressionNode(std::shared_ptr<ArithmeticExpressionNode> node) {}
 
-void FollowsExtractorVisitor::visitVariableNode() {}
+void FollowsExtractorVisitor::visitVariableNode(std::shared_ptr<VariableNode> node) {}
 
-void FollowsExtractorVisitor::visitConstantNode() {}
+void FollowsExtractorVisitor::visitConstantNode(std::shared_ptr<ConstantNode> node) {}

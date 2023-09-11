@@ -2,8 +2,12 @@
 
 #include "UsesRelationshipManager.h"
 
-UsesRelationshipManager::UsesRelationshipManager(std::shared_ptr<UsesRelationshipStore> usesRelationshipStore) {
-    this->usesRelationshipStore = usesRelationshipStore;
+UsesRelationshipManager::UsesRelationshipManager() {
+    this->usesRelationshipStore = std::make_shared<UsesRelationshipStore>(UsesRelationshipStore());;
+}
+
+void UsesRelationshipManager::storeUsesRelationship(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable) {
+    this->usesRelationshipStore->storeRelationship(std::make_shared<UsesRelationship>(UsesRelationship(statement, variable)));
 }
 
 std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> UsesRelationshipManager::getAllAssignVariable() const {

@@ -14,5 +14,10 @@ std::shared_ptr<StatementListNode> ProcedureNode::getStatementList() {
 }
 
 void ProcedureNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitProcedureNode();
+    visitor.visitProcedureNode(std::make_shared<ProcedureNode>(this));
+}
+
+std::vector<std::shared_ptr<ASTNode>> ProcedureNode::getAllChildNodes() {
+    std::vector<std::shared_ptr<ASTNode>> children { statementList };
+    return children;
 }

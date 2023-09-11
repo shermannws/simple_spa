@@ -36,5 +36,10 @@ ArithmeticOperatorType ArithmeticExpressionNode::translateOperatorTypeString(std
 }
 
 void ArithmeticExpressionNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitArithmeticExpressionNode();
+    visitor.visitArithmeticExpressionNode(std::make_shared<ArithmeticExpressionNode>(this));
+}
+
+std::vector<std::shared_ptr<ASTNode>> ArithmeticExpressionNode::getAllChildNodes() {
+    std::vector<std::shared_ptr<ASTNode>> children { leftExpression, rightExpression };
+    return children;
 }

@@ -9,5 +9,10 @@ std::vector<std::shared_ptr<ProcedureNode>> ProgramNode::getProcedures() {
 }
 
 void ProgramNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitProgramNode();
+    visitor.visitProgramNode(std::make_shared<ProgramNode>(this));
+}
+
+std::vector<std::shared_ptr<ASTNode>> ProgramNode::getAllChildNodes() {
+    std::vector<std::shared_ptr<ASTNode>> children(procedures.begin(), procedures.end());
+    return children;
 }

@@ -9,5 +9,9 @@ std::string VariableNode::getVarName() {
 }
 
 void VariableNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitVariableNode();
+    visitor.visitVariableNode(std::make_shared<VariableNode>(this));
+}
+
+std::vector<std::shared_ptr<ASTNode>> VariableNode::getAllChildNodes() {
+    return {};
 }

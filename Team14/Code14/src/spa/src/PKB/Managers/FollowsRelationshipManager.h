@@ -5,12 +5,15 @@
 
 #include "PKB/RelationshipStorage/FollowsRelationshipStore.h"
 #include "Commons/Entities/Statement.h"
+#include "PKB/Relationships/FollowsRelationship.h"
 
 class FollowsRelationshipManager {
 private:
     std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore;
 public:
-    FollowsRelationshipManager(std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore);
+    FollowsRelationshipManager();
+
+    void storeFollowsRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2);
 
     std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Statement>>>>> getAllFollowsStatementPair() const;
 
