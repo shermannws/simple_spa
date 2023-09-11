@@ -3,7 +3,7 @@
 ClauseHandler::ClauseHandler(std::shared_ptr<PkbReader> pkbReader) : pkbReader(pkbReader) {}
 
 void ClauseHandler::setStrategy(std::shared_ptr<Strategy> strategy) {
-    strategy = std::move(strategy);
+    this->strategy = std::move(strategy);
 }
 
 void ClauseHandler::executeClause(Clause& clause, Result& result) const {

@@ -9,6 +9,7 @@
  */
 class Strategy {
 public:
+    Strategy() = default;
     virtual ~Strategy() = default;
     virtual Result evaluateClause(Clause& clause, std::shared_ptr<PkbReader> pkbReader) const = 0;
 };

@@ -24,7 +24,8 @@ add_executable(unit_testing ${srcs}
 	src/SP/AST/TestSPParser.cpp
 	src/QPS/TestToken.cpp
 	src/PKB/TestPkbWriter.cpp
-	src/IntegrationTesting/TestPkbQps.cpp)
+	src/IntegrationTesting/TestPkbQps.cpp
+		src/IntegrationTesting/TestPkbQps.cpp)
 
 target_link_libraries(unit_testing spa)
 

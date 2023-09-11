@@ -162,151 +162,153 @@ TEST_CASE("Test integration of PKB with QPS - Get all Assign - No Assign") {
 //    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 //}
 
-//TEST_CASE("Test integration of PKB with QPS - Follows (1, s)") {
-//    Pkb pkb = Pkb();
-//    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-//
-//    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
-//    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
-//    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
-//
-//    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
-//    pkbWriter->addFollowsRelationship(assignStatement2, assignStatement3);
-//
-//    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-//
-//    PQLParser parser1("stmt s; Select s such that Follows (1, s)");
-//    Query queryObj1 = parser1.parse();
-//    Result resultObj1 = evaluator.evaluate(queryObj1);
-//    auto results1 = evaluator.formatResult(queryObj1, resultObj1);
-//
-//    PQLParser parser2("stmt s; Select s such that Follows (2, s)");
-//    Query queryObj2 = parser2.parse();
-//    Result resultObj2 = evaluator.evaluate(queryObj2);
-//    auto results2 = evaluator.formatResult(queryObj2, resultObj2);
-//
-//    PQLParser parser3("stmt s; Select s such that Follows (3, s)");
-//    Query queryObj3 = parser3.parse();
-//    Result resultObj3 = evaluator.evaluate(queryObj3);
-//    auto results3 = evaluator.formatResult(queryObj3, resultObj3);
-//
-//    REQUIRE(results1.size() == 1);
-//    REQUIRE(*(results1.begin()) == "2");
-//
-//    REQUIRE(results2.size() == 1);
-//    REQUIRE(*(results2.begin()) == "3");
-//
-//    REQUIRE(results3.size() == 0);
-//    REQUIRE(results3.begin() == results3.end());
-//}
-//
-//TEST_CASE("Test integration of PKB with QPS - Follows (s, 1)") {
-//    Pkb pkb = Pkb();
-//    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-//
-//    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
-//    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
-//    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
-//
-//    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
-//    pkbWriter->addFollowsRelationship(assignStatement2, assignStatement3);
-//
-//    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-//
-//    PQLParser parser1("stmt s; Select s such that Follows (s, 1)");
-//    Query queryObj1 = parser1.parse();
-//    Result resultObj1 = evaluator.evaluate(queryObj1);
-//    auto results1 = evaluator.formatResult(queryObj1, resultObj1);
-//
-//    PQLParser parser2("stmt s; Select s such that Follows (s, 2)");
-//    Query queryObj2 = parser2.parse();
-//    Result resultObj2 = evaluator.evaluate(queryObj2);
-//    auto results2 = evaluator.formatResult(queryObj2, resultObj2);
-//
-//    PQLParser parser3("stmt s; Select s such that Follows (s, 3)");
-//    Query queryObj3 = parser3.parse();
-//    Result resultObj3 = evaluator.evaluate(queryObj3);
-//    auto results3 = evaluator.formatResult(queryObj3, resultObj3);
-//
-//    REQUIRE(results1.size() == 0);
-//    REQUIRE(results1.begin() == results1.end());
-//
-//    REQUIRE(results2.size() == 1);
-//    REQUIRE(*(results2.begin()) == "1");
-//
-//    REQUIRE(results3.size() == 1);
-//    REQUIRE(*(results3.begin()) == "2");
-//}
-//
-//TEST_CASE("Test integration of PKB with QPS - Follows (1, 2)") {
-//    Pkb pkb = Pkb();
-//    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-//
-//    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
-//    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
-//
-//    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
-//
-//    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-//
-//    PQLParser parser1("stmt s; Select s such that Follows (1, 2)");
-//    Query queryObj1 = parser1.parse();
-//    Result resultObj1 = evaluator.evaluate(queryObj1);
-//    auto results1 = evaluator.formatResult(queryObj1, resultObj1);
-//
-//    PQLParser parser2("stmt s; Select s such that Follows (2, 1)");
-//    Query queryObj2 = parser2.parse();
-//    Result resultObj2 = evaluator.evaluate(queryObj2);
-//    auto results2 = evaluator.formatResult(queryObj2, resultObj2);
-//
-//    REQUIRE(results1.size() == 2);
-//    REQUIRE(find(results1.begin(), results1.end(), "1") != results1.end());
-//    REQUIRE(find(results1.begin(), results1.end(), "2") != results1.end());
-//
-//    REQUIRE(results2.size() == 0);
-//}
-//
-//TEST_CASE("Test integration of PKB with QPS - Uses (a, 'x')") {
-//    Pkb pkb = Pkb();
-//    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-//
-//    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
-//    shared_ptr<Variable> variableX = make_shared<Variable>(Variable("x"));
-//    shared_ptr<Variable> variableY = make_shared<Variable>(Variable("y"));
-//    shared_ptr<Variable> variableZ = make_shared<Variable>(Variable("z"));
-//    shared_ptr<string> expression1 = make_shared<string>("y + z");
-//
-//    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
-//    shared_ptr<Variable> variableA = make_shared<Variable>(Variable("a"));
-//    shared_ptr<Variable> variableB = make_shared<Variable>(Variable("b"));
-//    shared_ptr<string> expression2 = make_shared<string>("b * y");
-//
-//    pkbWriter->addUsesRelationship(assignStatement1, variableY);
-//    pkbWriter->addUsesRelationship(assignStatement1, variableZ);
-//    pkbWriter->addUsesRelationship(assignStatement2, variableB);
-//    pkbWriter->addUsesRelationship(assignStatement2, variableY);
-//
-//    PQLParser parser1("assign a; Select a such that Uses (a, 'x')");
-//    Query queryObj1 = parser1.parse();
-//    Result resultObj1 = evaluator.evaluate(queryObj1);
-//    auto results1 = evaluator.formatResult(queryObj1, resultObj1);
-//
-//    PQLParser parser2("assign a; Select a such that Follows (a, 'y')");
-//    Query queryObj2 = parser2.parse();
-//    Result resultObj2 = evaluator.evaluate(queryObj2);
-//    auto results2 = evaluator.formatResult(queryObj2, resultObj2);
-//
-//    PQLParser parser3("assign a; Select a such that Follows (a, 'b')");
-//    Query queryObj3 = parser3.parse();
-//    Result resultObj3 = evaluator.evaluate(queryObj3);
-//    auto results3 = evaluator.formatResult(queryObj3, resultObj3);
-//
-//    REQUIRE(results1.size() == 0);
-//
-//    REQUIRE(results2.size() == 2);
-//    REQUIRE(find(results2.begin(), results2.end(), "1") != results.end());
-//    REQUIRE(find(results2.begin(), results2.end(), "2") != results.end());
-//
-//    REQUIRE(results3.size() == 1);
-//    REQUIRE(find(results3.begin(), results3.end(), "1") != results.end());
-//}
+TEST_CASE("Test integration of PKB with QPS - Follows (1, s)") {
+    Pkb pkb = Pkb();
+    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
+
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Stmt));
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Stmt));
+    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Stmt));
+
+    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
+    pkbWriter->addFollowsRelationship(assignStatement2, assignStatement3);
+
+    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+
+    PQLParser parser1("stmt s; Select s such that Follows (1, s)");
+    Query queryObj1 = parser1.parse();
+    Result resultObj1 = evaluator.evaluate(queryObj1);
+    auto results1 = evaluator.formatResult(queryObj1, resultObj1);
+
+    PQLParser parser2("stmt s; Select s such that Follows (2, s)");
+    Query queryObj2 = parser2.parse();
+    Result resultObj2 = evaluator.evaluate(queryObj2);
+    auto results2 = evaluator.formatResult(queryObj2, resultObj2);
+
+    PQLParser parser3("stmt s; Select s such that Follows (3, s)");
+    Query queryObj3 = parser3.parse();
+    Result resultObj3 = evaluator.evaluate(queryObj3);
+    auto results3 = evaluator.formatResult(queryObj3, resultObj3);
+
+    REQUIRE(results1.size() == 1);
+    REQUIRE(*(results1.begin()) == "2");
+
+    REQUIRE(results2.size() == 1);
+    REQUIRE(*(results2.begin()) == "3");
+
+    REQUIRE(results3.size() == 0);
+    REQUIRE(results3.begin() == results3.end());
+}
+
+TEST_CASE("Test integration of PKB with QPS - Follows (s, 1)") {
+    Pkb pkb = Pkb();
+    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
+
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
+    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
+
+    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
+    pkbWriter->addFollowsRelationship(assignStatement2, assignStatement3);
+
+    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+
+    PQLParser parser1("stmt s; Select s such that Follows (s, 1)");
+    Query queryObj1 = parser1.parse();
+    Result resultObj1 = evaluator.evaluate(queryObj1);
+    auto results1 = evaluator.formatResult(queryObj1, resultObj1);
+
+    PQLParser parser2("stmt s; Select s such that Follows (s, 2)");
+    Query queryObj2 = parser2.parse();
+    Result resultObj2 = evaluator.evaluate(queryObj2);
+    auto results2 = evaluator.formatResult(queryObj2, resultObj2);
+
+    PQLParser parser3("stmt s; Select s such that Follows (s, 3)");
+    Query queryObj3 = parser3.parse();
+    Result resultObj3 = evaluator.evaluate(queryObj3);
+    auto results3 = evaluator.formatResult(queryObj3, resultObj3);
+
+    REQUIRE(results1.empty());
+    REQUIRE(results1.begin() == results1.end());
+
+    REQUIRE(results2.size() == 1);
+    REQUIRE(*(results2.begin()) == "1");
+
+    REQUIRE(results3.size() == 1);
+    REQUIRE(*(results3.begin()) == "2");
+}
+
+TEST_CASE("Test integration of PKB with QPS - Follows (1, 2)") {
+    Pkb pkb = Pkb();
+    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
+
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
+
+    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
+
+    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+
+    PQLParser parser1("stmt s; Select s such that Follows (1, 2)");
+    Query queryObj1 = parser1.parse();
+    Result resultObj1 = evaluator.evaluate(queryObj1);
+    auto results1 = evaluator.formatResult(queryObj1, resultObj1);
+
+    PQLParser parser2("stmt s; Select s such that Follows (2, 1)");
+    Query queryObj2 = parser2.parse();
+    Result resultObj2 = evaluator.evaluate(queryObj2);
+    auto results2 = evaluator.formatResult(queryObj2, resultObj2);
+
+    REQUIRE(results1.size() == 2);
+    REQUIRE(find(results1.begin(), results1.end(), "1") != results1.end());
+    REQUIRE(find(results1.begin(), results1.end(), "2") != results1.end());
+
+    REQUIRE(results2.empty());
+}
+
+TEST_CASE("Test integration of PKB with QPS - Uses (a, 'x')") {
+    Pkb pkb = Pkb();
+    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
+
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Variable> variableX = make_shared<Variable>(Variable("x"));
+    shared_ptr<Variable> variableY = make_shared<Variable>(Variable("y"));
+    shared_ptr<Variable> variableZ = make_shared<Variable>(Variable("z"));
+    shared_ptr<string> expression1 = make_shared<string>("y + z");
+
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
+    shared_ptr<Variable> variableA = make_shared<Variable>(Variable("a"));
+    shared_ptr<Variable> variableB = make_shared<Variable>(Variable("b"));
+    shared_ptr<string> expression2 = make_shared<string>("b * y");
+
+    pkbWriter->addUsesRelationship(assignStatement1, variableY);
+    pkbWriter->addUsesRelationship(assignStatement1, variableZ);
+    pkbWriter->addUsesRelationship(assignStatement2, variableB);
+    pkbWriter->addUsesRelationship(assignStatement2, variableY);
+
+    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+
+    PQLParser parser1("assign a; Select a such that Uses (a, \"x\")");
+    Query queryObj1 = parser1.parse();
+    Result resultObj1 = evaluator.evaluate(queryObj1);
+    auto results1 = evaluator.formatResult(queryObj1, resultObj1);
+
+    PQLParser parser2("assign a; Select a such that Follows (a, \"y\")");
+    Query queryObj2 = parser2.parse();
+    Result resultObj2 = evaluator.evaluate(queryObj2);
+    auto results2 = evaluator.formatResult(queryObj2, resultObj2);
+
+    PQLParser parser3("assign a; Select a such that Follows (a, \"b\")");
+    Query queryObj3 = parser3.parse();
+    Result resultObj3 = evaluator.evaluate(queryObj3);
+    auto results3 = evaluator.formatResult(queryObj3, resultObj3);
+
+    REQUIRE(results1.empty());
+
+    REQUIRE(results2.size() == 2);
+    REQUIRE(find(results2.begin(), results2.end(), "1") != results2.end());
+    REQUIRE(find(results2.begin(), results2.end(), "2") != results2.end());
+
+    REQUIRE(results3.size() == 1);
+    REQUIRE(find(results3.begin(), results3.end(), "1") != results3.end());
+}

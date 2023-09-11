@@ -1,5 +1,7 @@
 #include "PQLEvaluator.h"
 #include "QueryEntity.h"
+#include "UsesSuchThatStrategy.h"
+#include "FollowsSuchThatStrategy.h"
 
 #include <numeric>
 
@@ -9,10 +11,14 @@ std::list<std::string> PQLEvaluator::formatResult(Query& query, Result& result) 
     std::vector<std::shared_ptr<QueryEntity>> selects = query.getSelect();
     std::list<std::string> results;
     // TODO: add formatter for ResultType::Boolean
+    // TODO: remove duplicates
 
     if (result.getType() == ResultType::Tuples) {
         for (auto & tuple_ptr : result.getTuples()) { // tuple_ptr is std::shared_ptr<std::vector<std::shared_ptr<Entity>>>
             std::vector<std::string> tmp;
+            if (tuple_ptr->empty()) {
+                continue;
+            }
             for (auto & entity : selects) {
                 std::string syn = entity->getSynonym();
                 std::unordered_map<std::string, int> indicesMap = result.getSynIndices();
@@ -37,7 +43,16 @@ std::list<std::string> PQLEvaluator::formatResult(Query& query, Result& result) 
 Result PQLEvaluator::evaluate(Query& query) {
 
     // TODO iterate through clauses, get Strategy Type from clause type
-    // example :
+    if (!query.getSuchThat().empty()) {
+        if (query.getSuchThat()[0].getType() == ClauseType::Uses) {
+            clauseHandler->setStrategy(std::make_shared<UsesSuchThatStrategy>(UsesSuchThatStrategy()));
+        } else if (query.getSuchThat()[0].getType() == ClauseType::Follows) {
+            clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
+        }
+        Result result;
+        clauseHandler->executeClause(query.getSuchThat()[0], result);
+        return result;
+    }
     // clauseHandler->setStrategy(std::make_unique<AssignPatternStrategy>());
     // Result result;
     // clauseHandler->executeClause(query, result);
