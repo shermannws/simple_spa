@@ -10,7 +10,7 @@ add_executable(unit_testing ${srcs}
 	"src/PKB/TestPkb.cpp"
 	"src/main.cpp"
 	"src/TestAST.cpp"
-	"src/TestSPTokenizer.cpp"CMakeLists.txt
+	"src/TestSPTokenizer.cpp"
 	"src/TestSPToken.cpp"
 	"src/QPS/TestPQLParser.cpp"
 	"src/QPS/TestQuery.cpp"
