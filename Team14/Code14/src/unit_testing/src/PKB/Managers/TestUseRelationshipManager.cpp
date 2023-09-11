@@ -8,9 +8,7 @@
 using namespace std;
 
 TEST_CASE("Test Uses Relationship Retrieval") {
-    shared_ptr<UsesRelationshipStore> usesRelationshipStore =  make_shared<UsesRelationshipStore>(UsesRelationshipStore());
-
-    shared_ptr<UsesRelationshipManager> usesRelationshipManager = make_shared<UsesRelationshipManager>(UsesRelationshipManager(usesRelationshipStore));
+    shared_ptr<UsesRelationshipManager> usesRelationshipManager = make_shared<UsesRelationshipManager>();
 
     // Test x = y + z
     shared_ptr<Statement> statement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
@@ -18,8 +16,8 @@ TEST_CASE("Test Uses Relationship Retrieval") {
     shared_ptr<Variable> variableY = make_shared<Variable>(Variable("y"));
     shared_ptr<Variable> variableZ = make_shared<Variable>(Variable("z"));
 
-    usesRelationshipStore->storeRelationship(make_shared<UsesRelationship>(UsesRelationship(statement1, variableY)));
-    usesRelationshipStore->storeRelationship(make_shared<UsesRelationship>(UsesRelationship(statement1, variableZ)));
+    usesRelationshipManager->storeUsesRelationship(statement1, variableY);
+    usesRelationshipManager->storeUsesRelationship(statement1, variableZ);
 
     // Test a = b + c
     shared_ptr<Statement> statement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
@@ -27,8 +25,8 @@ TEST_CASE("Test Uses Relationship Retrieval") {
     shared_ptr<Variable> variableB = make_shared<Variable>(Variable("b"));
     shared_ptr<Variable> variableC = make_shared<Variable>(Variable("c"));
 
-    usesRelationshipStore->storeRelationship(make_shared<UsesRelationship>(UsesRelationship(statement2, variableB)));
-    usesRelationshipStore->storeRelationship(make_shared<UsesRelationship>(UsesRelationship(statement2, variableC)));
+    usesRelationshipManager->storeUsesRelationship(statement2, variableB);
+    usesRelationshipManager->storeUsesRelationship(statement2, variableC);
 
     // Results
     auto pairY = make_shared<std::vector<std::shared_ptr<Entity>>>(std::vector<std::shared_ptr<Entity>>{statement1, variableY});

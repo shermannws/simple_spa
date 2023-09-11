@@ -1,7 +1,11 @@
 #include "FollowsRelationshipManager.h"
 
-FollowsRelationshipManager::FollowsRelationshipManager(std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore) {
-    this->followsRelationshipStore = followsRelationshipStore;
+FollowsRelationshipManager::FollowsRelationshipManager() {
+    this->followsRelationshipStore = std::make_shared<FollowsRelationshipStore>(FollowsRelationshipStore());;
+}
+
+void FollowsRelationshipManager::storeFollowsRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) {
+    followsRelationshipStore->storeRelationship(std::make_shared<FollowsRelationship>(statement1, statement2));
 }
 
 std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> FollowsRelationshipManager::getAllFollowsStatementPair() const {
