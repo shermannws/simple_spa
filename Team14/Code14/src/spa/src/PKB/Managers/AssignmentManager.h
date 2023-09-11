@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include "AssignmentPatternStore.h"
+#include "PKB/AssignmentPatternStore/AssignmentPatternStore.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 
@@ -16,5 +16,9 @@ public:
 
     bool addAssignment(std::shared_ptr<Assignment> assignment);
 
+    std::shared_ptr<std::vector<std::shared_ptr<Statement>>> getAllAssignStatements() const;
+
     std::shared_ptr<std::vector<std::shared_ptr<Statement>>> getAssignStatements(std::shared_ptr<Variable> variable, std::string pattern) const;
+
+    bool contains(std::shared_ptr<Statement> statement) const;
 };
