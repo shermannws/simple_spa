@@ -8,7 +8,7 @@ PkbReaderManager::PkbReaderManager(
         std::shared_ptr<ProcedureStore> procedureStore,
         std::shared_ptr<StatementStore> statementStore,
         std::shared_ptr<VariableStore> variableStore,
-        std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore,
+        std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
         std::shared_ptr<UsesRelationshipManager> usesRelationshipManager
 ) {
     this->assignmentManager = assignmentManager;
@@ -16,7 +16,7 @@ PkbReaderManager::PkbReaderManager(
     this->procedureStore = procedureStore;
     this->statementStore = statementStore;
     this->variableStore = variableStore;
-    this->followsRelationshipStore = followsRelationshipStore;
+    this->followsRelationshipManager = followsRelationshipManager;
     this->usesRelationshipManager = usesRelationshipManager;
 };
 
@@ -50,4 +50,20 @@ std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>
 
 std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllAssignByVariable(std::shared_ptr<Variable> variable) const {
     return this->usesRelationshipManager->getVariableAssignment(variable);
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Statement>>>>> PkbReaderManager::getAllFollowsStatementPair() const {
+    return this->followsRelationshipManager->getAllFollowsStatementPair();
+}
+
+std::shared_ptr<Statement> PkbReaderManager::getFollowsByStatement(std::shared_ptr<Statement> statement) const {
+    return this->followsRelationshipManager->getFollowsByStatement(statement);
+}
+
+std::shared_ptr<Statement> PkbReaderManager::getFollowingStatement(std::shared_ptr<Statement> statement) const {
+    return this->followsRelationshipManager->getFollowingStatement(statement);
+}
+
+bool PkbReaderManager::getIsFollows(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) const {
+    return this->followsRelationshipManager->getIsFollows(statement1, statement2);
 }

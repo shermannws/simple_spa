@@ -36,6 +36,18 @@ auto PkbReader::getAllAssignByVariable(std::shared_ptr<Variable> variable) const
     return this->readerManager->getAllAssignByVariable(variable);
 }
 
-//auto PkbReader::getUsesAssignVariables() const {
-//    return this->usesRelationshipStore->getUsesAssignVariables();
-//}
+auto PkbReader::getAllFollowsStatementPair() const {
+    return this->readerManager->getAllFollowsStatementPair();
+}
+
+auto PkbReader::getFollowsByStatement(std::shared_ptr<Statement> statement) const {
+    return this->readerManager->getFollowsByStatement(statement);
+}
+
+auto PkbReader::getFollowingStatement(std::shared_ptr<Statement> statement) const {
+    return this->readerManager->getFollowingStatement(statement);
+}
+
+auto PkbReader::getIsFollows(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) const {
+    return this->readerManager->getIsFollows(statement1, statement2);
+}

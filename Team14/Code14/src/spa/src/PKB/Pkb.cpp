@@ -3,6 +3,7 @@
 #include "Pkb.h"
 
 Pkb::Pkb() {
+    //TODO: Migrate Writer to Managers and shift initialisation of stores into Managers
     std::shared_ptr<AssignmentPatternStore> assignmentPatternStore = std::make_shared<AssignmentPatternStore>(AssignmentPatternStore());
     this->assignmentManager = std::make_shared<AssignmentManager>(
             AssignmentManager(
@@ -14,6 +15,7 @@ Pkb::Pkb() {
     this->statementStore = std::make_shared<StatementStore>(StatementStore());
     this->variableStore = std::make_shared<VariableStore>(VariableStore());
     this->followsRelationshipStore = std::make_shared<FollowsRelationshipStore>(FollowsRelationshipStore());
+    this->followsRelationshipManager = std::make_shared<FollowsRelationshipManager>(FollowsRelationshipManager(this->followsRelationshipStore));
     this->usesRelationshipStore = std::make_shared<UsesRelationshipStore>(UsesRelationshipStore());
     this->usesRelationshipManager = std::make_shared<UsesRelationshipManager>(UsesRelationshipManager(this->usesRelationshipStore));
     this->pkbReaderManager = std::make_shared<PkbReaderManager>(
@@ -23,7 +25,7 @@ Pkb::Pkb() {
                     this->procedureStore,
                     this->statementStore,
                     this->variableStore,
-                    this->followsRelationshipStore,
+                    this->followsRelationshipManager,
                     this->usesRelationshipManager
             )
     );
