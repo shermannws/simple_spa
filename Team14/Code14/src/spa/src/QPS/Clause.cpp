@@ -11,7 +11,7 @@ ClauseType Clause::getType() {
 }
 
 void Clause::setFirstParam(Ref& ref) {
-    this->firstParam = ref;
+    firstParam = ref;
 }
 
 Ref Clause::getFirstParam() {
