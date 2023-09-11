@@ -17,7 +17,12 @@ add_executable(unit_testing ${srcs}
 	src/SP/AST/Nodes/TestASTNodes.cpp
 	src/PKB/TestPkbReader.cpp
 	src/PKB/Managers/TestUseRelationshipManager.cpp
-	src/PKB/Managers/TestFollowsRelationshipManager.cpp)
+	src/PKB/Managers/TestFollowsRelationshipManager.cpp
+
+	"src/TestSPTokenizer.cpp"
+	"src/TestSPToken.cpp"
+)
+
 
 target_link_libraries(unit_testing spa)
 
