@@ -41,3 +41,11 @@ std::unordered_map<std::string, std::shared_ptr<QueryEntity>> Query::getDeclarat
 std::vector<std::shared_ptr<QueryEntity>> Query::getSelect() {
     return selects;
 }
+
+void Query::addSuchThat(SuchThatClause& clause) {
+    suchThatClauses.push_back(clause);
+}
+
+std::vector<SuchThatClause> Query::getSuchThat() {
+    return suchThatClauses;
+}
