@@ -83,22 +83,21 @@ TEST_CASE("Test AST Traverser") {
 
     REQUIRE(*(constantStore->getEntity(std::make_shared<Entity>(Constant(1)))) == *(std::make_shared<Constant>(1)));
 
-    //auto usesV = *(usesRelationshipManager->getVariableAssignment(std::make_shared<Variable>("v")));
-    ////std::cout << "HI" << find(usesV->begin(), usesV->end(), std::make_shared<Statement>(1, StatementType::Assign)) - usesV->begin() << std::endl;
-    ////std::cout << "HI" << usesV->end() - usesV->begin() << std::endl;
-    ////std::cout << usesV.end() - usesV.begin() << std::endl;
-    //REQUIRE(usesV.size() == 1);
-    //REQUIRE(*(usesV.at(0)) == Statement(1, StatementType::Assign));
+    auto usesV = *(usesRelationshipManager->getVariableAssignment(std::make_shared<Variable>("v")));
+    REQUIRE(usesV.size() == 1);
+    REQUIRE(*(usesV.at(0)) == Statement(1, StatementType::Assign));
 
-    ////REQUIRE(find(usesV->begin(), usesV->end(), std::make_shared<Statement>(1, StatementType::Assign)) != usesV->end());
-    //
+    auto usesY = *(usesRelationshipManager->getVariableAssignment(std::make_shared<Variable>("y")));
+    REQUIRE(usesY.size() == 1);
+    REQUIRE(*(usesY.at(0)) == Statement(1, StatementType::Assign));
 
-    //
-    //auto usesVarName = usesRelationshipManager->getVariableAssignment(std::make_shared<Variable>(varName));
-    //REQUIRE(find(usesVarName->begin(), usesVarName->end(), std::make_shared<Statement>(3, StatementType::Print)) != usesVarName->end());
+    auto followsRS = followsRelationshipManager->getFollowingStatement(std::make_shared<Statement>(Statement(1, StatementType::Assign)));
+    REQUIRE(*followsRS == Statement(2, StatementType::Read));
 
-    //REQUIRE( == *(std::make_shared<Statement>(3, StatementType::Print)));
-    //y
-    //z
-    //t
+    auto followsRS2 = followsRelationshipManager->getFollowingStatement(std::make_shared<Statement>(Statement(2, StatementType::Read)));
+    REQUIRE(*followsRS2 == Statement(3, StatementType::Print));
+
+    auto usesVarName = *(usesRelationshipManager->getVariableAssignment(std::make_shared<Variable>(varName)));
+    REQUIRE(usesVarName.size() == 1);
+    //REQUIRE(*(usesVarName.at(0)) == Statement(3, StatementType::Print));
 }
