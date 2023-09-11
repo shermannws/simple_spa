@@ -7,6 +7,7 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
+#include "PKB/PKB.h"
 
 TEST_CASE("Test formatResult") {
     SECTION("Uses query single tuple") {
@@ -33,7 +34,9 @@ TEST_CASE("Test formatResult") {
         std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> tuples {ptr1, ptr2};
         r.setTuples(tuples);
 
-        PQLEvaluator evaluator;
+        Pkb pkb = Pkb();
+        PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+
         std::list<std::string> formattedResults = evaluator.formatResult(query, r);
 
         std::list<std::string> expected {"my_variable", "another_variable"};
@@ -63,7 +66,9 @@ TEST_CASE("Test formatResult") {
         std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> tuples {ptr1, ptr2};
         r.setTuples(tuples);
 
-        PQLEvaluator evaluator;
+        Pkb pkb = Pkb();
+        PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+
         std::list<std::string> formattedResults = evaluator.formatResult(query, r);
 
         std::list<std::string> expected {"1", "2"};

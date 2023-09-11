@@ -3,8 +3,8 @@
 
 #include <numeric>
 
-PQLEvaluator::PQLEvaluator() {}
-// PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :pkbReader(pkbReader),clauseHandler(std::make_shared<ClauseHandler>(pkbReader)){}
+// PQLEvaluator::PQLEvaluator() {}
+PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :pkbReader(pkbReader),clauseHandler(std::make_shared<ClauseHandler>(pkbReader)){}
 
 std::list<std::string> PQLEvaluator::formatResult(Query& query, Result& result) {
     std::vector<std::shared_ptr<QueryEntity>> selects = query.getSelect();
