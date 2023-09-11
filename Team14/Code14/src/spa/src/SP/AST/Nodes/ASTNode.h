@@ -1,5 +1,8 @@
 #pragma once
 
+#include <assert.h>
+#include <memory>
+
 #include "../Visitors/DesignExtractorVisitor.h"
 
 // Interface for all ASTNodes
