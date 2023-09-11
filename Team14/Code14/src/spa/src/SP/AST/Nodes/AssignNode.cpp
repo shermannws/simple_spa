@@ -9,6 +9,14 @@ AssignNode::AssignNode(int statementNumber,
                        var(std::move(var)),
                        expression(std::move(expression)) {}
 
+std::shared_ptr<VariableNode> AssignNode::getVar() {
+    return var;
+}
+
+std::shared_ptr<ExpressionNode> AssignNode::getExpression() {
+    return expression;
+}
+
 void AssignNode::accept(DesignExtractorVisitor& visitor) {
     visitor.visitAssignNode();
 }

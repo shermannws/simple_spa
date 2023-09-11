@@ -8,5 +8,6 @@ private:
     int value;
 public:
     explicit ConstantNode(int value);
+    int getValue();
     void accept(DesignExtractorVisitor& visitor) override;
 };

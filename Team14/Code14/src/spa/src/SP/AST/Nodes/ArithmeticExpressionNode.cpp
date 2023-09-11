@@ -10,14 +10,26 @@ ArithmeticExpressionNode::ArithmeticExpressionNode(ArithmeticOperatorType operat
                                                    leftExpression(std::move(leftExpression)),
                                                    rightExpression(std::move(rightExpression)) {}
 
+ArithmeticOperatorType ArithmeticExpressionNode::getOperatorType() {
+    return operatorType;
+}
+
+std::shared_ptr<ExpressionNode> ArithmeticExpressionNode::getLeftExpression() {
+    return leftExpression;
+}
+
+std::shared_ptr<ExpressionNode> ArithmeticExpressionNode::getRightExpression() {
+    return rightExpression;
+}
+
 ArithmeticOperatorType ArithmeticExpressionNode::translateOperatorTypeString(std::string operatorTypeString) {
     std::unordered_map<std::string, ArithmeticOperatorType> operatorTypeMap = {
             // TODO: move raw operator strings to common enum
-            { "+", ArithmeticOperatorType::PLUS },
-            { "-", ArithmeticOperatorType::MINUS },
-            { "*", ArithmeticOperatorType::TIMES },
-            { "/", ArithmeticOperatorType::DIVIDE },
-            { "%", ArithmeticOperatorType::MODULO }
+            { "+", ArithmeticOperatorType::Plus },
+            { "-", ArithmeticOperatorType::Minus },
+            { "*", ArithmeticOperatorType::Times },
+            { "/", ArithmeticOperatorType::Divide },
+            { "%", ArithmeticOperatorType::Modulo }
     };
     assert(operatorTypeMap.find(operatorTypeString) != operatorTypeMap.end());
     return operatorTypeMap[operatorTypeString];

@@ -3,19 +3,51 @@
 #include "PkbReader.h"
 
 PkbReader::PkbReader(
-        std::shared_ptr<AssignmentManager> assignmentManager,
-        std::shared_ptr<ConstantStore> constantStore,
-        std::shared_ptr<ProcedureStore> procedureStore,
-        std::shared_ptr<StatementStore> statementStore,
-        std::shared_ptr<VariableStore> variableStore,
-        std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore,
-        std::shared_ptr<UsesRelationshipStore> usesRelationshipStore
+        std::shared_ptr<PkbReaderManager> readerManager
 ) {
-    this->assignmentManager = assignmentManager;
-    this->constantStore = constantStore;
-    this->procedureStore = procedureStore;
-    this->statementStore = statementStore;
-    this->variableStore = variableStore;
-    this->followsRelationshipStore = followsRelationshipStore;
-    this->usesRelationshipStore = usesRelationshipStore;
-};
+    this->readerManager = readerManager;
+}
+
+auto PkbReader::getAllAssign() const {
+    return this->readerManager->getAllAssign();
+}
+
+auto PkbReader::getAllVariables() const {
+    return this->readerManager->getAllVariables();
+}
+
+auto PkbReader::getAllConstants() const {
+    return this->readerManager->getAllConstants();
+}
+
+auto PkbReader::getAllProcedures() const {
+    return this->readerManager->getAllProcedures();
+}
+
+auto PkbReader::getAllStatements() const {
+    return this->readerManager->getAllStatements();
+}
+
+auto PkbReader::getAllAssignVariablePair() const {
+    return this->readerManager->getAllAssignVariablePair();
+}
+
+auto PkbReader::getAllAssignByVariable(std::shared_ptr<Variable> variable) const {
+    return this->readerManager->getAllAssignByVariable(variable);
+}
+
+auto PkbReader::getAllFollowsStatementPair() const {
+    return this->readerManager->getAllFollowsStatementPair();
+}
+
+auto PkbReader::getFollowsByStatement(std::shared_ptr<Statement> statement) const {
+    return this->readerManager->getFollowsByStatement(statement);
+}
+
+auto PkbReader::getFollowingStatement(std::shared_ptr<Statement> statement) const {
+    return this->readerManager->getFollowingStatement(statement);
+}
+
+auto PkbReader::getIsFollows(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) const {
+    return this->readerManager->getIsFollows(statement1, statement2);
+}

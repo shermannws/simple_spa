@@ -8,4 +8,5 @@ protected:
     int statementNumber;
 public:
     explicit StatementNode(int statementNumber);
+    int getStatementNumber();
 };

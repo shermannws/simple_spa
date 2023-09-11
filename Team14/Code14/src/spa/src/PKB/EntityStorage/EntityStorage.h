@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_set>
+#include <vector>
 #include <memory>
 
 #include "../../Commons/Entities/Entity.h"
@@ -18,6 +19,8 @@ public:
 
     void storeEntity(std::shared_ptr<Entity> entity);
 
-    Entity* getEntity(std::shared_ptr<Entity> entity) const;
+    std::shared_ptr<Entity> getEntity(std::shared_ptr<Entity> entity) const;
+
+    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllEntities() const;
 };
 
