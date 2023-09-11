@@ -83,11 +83,13 @@ add_library(spa ${srcs} ${headers}
     src/SP/AST/Visitors/UsesExtractorVisitor.cpp
     src/QPS/Tokenizer.cpp
     src/QPS/Token.cpp
-    src/QPS/Entity.cpp
     src/QPS/Query.cpp
     src/QPS/PQLParser.cpp
     src/QPS/SuchThatClause.cpp
     src/QPS/Ref.cpp
+    src/QPS/Result.cpp
+    src/QPS/PQLEvaluator.cpp
+    src/QPS/QueryEntity.cpp
     src/Commons/Entities/EntityType.h
     src/PKB/Managers/UsesRelationshipManager.h
     src/PKB/Managers/UsesRelationshipManager.cpp
