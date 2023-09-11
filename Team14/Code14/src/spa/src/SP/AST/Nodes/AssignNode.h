@@ -6,6 +6,12 @@
 #include "VariableNode.h"
 #include "ExpressionNode.h"
 
+class AssignNode; // forward declaration
+class AssignNodeVisitor {
+public:
+    virtual void visitAssignNode(std::shared_ptr<AssignNode> node) const = 0;
+};
+
 class AssignNode : public StatementNode {
 private:
     std::shared_ptr<VariableNode> var;

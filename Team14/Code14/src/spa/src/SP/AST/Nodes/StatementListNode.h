@@ -5,6 +5,12 @@
 #include "ASTNode.h"
 #include "StatementNode.h"
 
+class StatementListNode; // forward declaration
+class StatementListNodeVisitor {
+public:
+    virtual void visitStatementListNode(std::shared_ptr<StatementListNode> node) const = 0;
+};
+
 class StatementListNode : public ASTNode {
 private:
     std::vector<std::shared_ptr<StatementNode>> statements;

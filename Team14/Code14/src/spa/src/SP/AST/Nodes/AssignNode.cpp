@@ -17,10 +17,6 @@ std::shared_ptr<ExpressionNode> AssignNode::getExpression() {
     return expression;
 }
 
-void AssignNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitAssignNode(std::make_shared<AssignNode>(this));
-}
-
 std::vector<std::shared_ptr<ASTNode>> AssignNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children { var, expression };
     return children;
@@ -28,4 +24,11 @@ std::vector<std::shared_ptr<ASTNode>> AssignNode::getAllChildNodes() {
 
 StatementNodeType AssignNode::getStatementType() {
     return StatementNodeType::Assign;
+}
+
+void AssignNode::accept(DesignExtractorVisitor& visitor) {
+    if (auto assignVisitor = dynamic_cast<AssignNodeVisitor*>(&visitor)) {
+        std::shared_ptr<AssignNode> self(this);
+        assignVisitor->visitAssignNode(self);
+    }
 }

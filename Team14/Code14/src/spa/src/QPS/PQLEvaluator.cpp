@@ -1,7 +1,8 @@
+#include <numeric>
+#include <stdexcept>
+
 #include "PQLEvaluator.h"
 #include "QueryEntity.h"
-
-#include <numeric>
 
 // PQLEvaluator::PQLEvaluator() {}
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :pkbReader(pkbReader),clauseHandler(std::make_shared<ClauseHandler>(pkbReader)){}

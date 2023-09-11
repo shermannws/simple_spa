@@ -13,11 +13,14 @@ std::shared_ptr<StatementListNode> ProcedureNode::getStatementList() {
     return statementList;
 }
 
-void ProcedureNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitProcedureNode(std::make_shared<ProcedureNode>(this));
-}
-
 std::vector<std::shared_ptr<ASTNode>> ProcedureNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children { statementList };
     return children;
+}
+
+void ProcedureNode::accept(DesignExtractorVisitor& visitor) {
+    if (auto procedureVisitor = dynamic_cast<ProcedureNodeVisitor*>(&visitor)) {
+        std::shared_ptr<ProcedureNode> self(this);
+        procedureVisitor->visitProcedureNode(self);
+    }
 }

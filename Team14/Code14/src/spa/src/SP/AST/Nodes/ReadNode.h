@@ -5,6 +5,12 @@
 #include "StatementNode.h"
 #include "VariableNode.h"
 
+class ReadNode; // forward declaration
+class ReadNodeVisitor {
+public:
+    virtual void visitReadNode(std::shared_ptr<ReadNode> node) const = 0;
+};
+
 class ReadNode : public StatementNode {
 private:
     std::shared_ptr<VariableNode> var;

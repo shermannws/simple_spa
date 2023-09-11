@@ -5,6 +5,12 @@
 #include "ASTNode.h"
 #include "ProcedureNode.h"
 
+class ProgramNode; // forward declaration
+class ProgramNodeVisitor {
+public:
+    virtual void visitProgramNode(std::shared_ptr<ProgramNode> node) const = 0;
+};
+
 class ProgramNode : public ASTNode {
 private:
     std::vector<std::shared_ptr<ProcedureNode>> procedures;

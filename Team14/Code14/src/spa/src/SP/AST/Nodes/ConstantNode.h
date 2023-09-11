@@ -2,6 +2,12 @@
 
 #include "ExpressionNode.h"
 
+class ConstantNode; // forward declaration
+class ConstantNodeVisitor {
+public:
+    virtual void visitConstantNode(std::shared_ptr<ConstantNode> node) const = 0;
+};
+
 class ConstantNode : public ExpressionNode {
 private:
     // TODO: Wrap int type in typedef (ConstValue)

@@ -9,10 +9,6 @@ std::shared_ptr<VariableNode> PrintNode::getVar() {
     return var;
 }
 
-void PrintNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitPrintNode(std::make_shared<PrintNode>(this));
-}
-
 std::vector<std::shared_ptr<ASTNode>> PrintNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children { var };
     return children;
@@ -20,4 +16,11 @@ std::vector<std::shared_ptr<ASTNode>> PrintNode::getAllChildNodes() {
 
 StatementNodeType PrintNode::getStatementType() {
     return StatementNodeType::Print;
+}
+
+void PrintNode::accept(DesignExtractorVisitor& visitor) {
+    if (auto printVisitor = dynamic_cast<PrintNodeVisitor*>(&visitor)) {
+        std::shared_ptr<PrintNode> self(this);
+        printVisitor->visitPrintNode(self);
+    }
 }

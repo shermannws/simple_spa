@@ -9,10 +9,6 @@ std::shared_ptr<VariableNode> ReadNode::getVar() {
     return var;
 }
 
-void ReadNode::accept(DesignExtractorVisitor &visitor) {
-    visitor.visitReadNode(std::make_shared<ReadNode>(this));
-}
-
 std::vector<std::shared_ptr<ASTNode>> ReadNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children { var };
     return children;
@@ -20,4 +16,11 @@ std::vector<std::shared_ptr<ASTNode>> ReadNode::getAllChildNodes() {
 
 StatementNodeType ReadNode::getStatementType() {
     return StatementNodeType::Read;
+}
+
+void ReadNode::accept(DesignExtractorVisitor& visitor) {
+    if (auto readVisitor = dynamic_cast<ReadNodeVisitor*>(&visitor)) {
+        std::shared_ptr<ReadNode> self(this);
+        readVisitor->visitReadNode(self);
+    }
 }

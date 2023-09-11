@@ -6,6 +6,12 @@
 #include "ExpressionNode.h"
 #include "ArithmeticOperatorType.h"
 
+class ArithmeticExpressionNode; // forward declaration
+class ArithmeticExpressionNodeVisitor {
+public:
+    virtual void visitArithmeticExpressionNode(std::shared_ptr<ArithmeticExpressionNode> node) const = 0;
+};
+
 class ArithmeticExpressionNode : public ExpressionNode {
 private:
     ArithmeticOperatorType operatorType;

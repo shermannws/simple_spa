@@ -34,12 +34,14 @@ ArithmeticOperatorType ArithmeticExpressionNode::translateOperatorTypeString(std
     assert(operatorTypeMap.find(operatorTypeString) != operatorTypeMap.end());
     return operatorTypeMap[operatorTypeString];
 }
-
-void ArithmeticExpressionNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitArithmeticExpressionNode(std::make_shared<ArithmeticExpressionNode>(this));
-}
-
 std::vector<std::shared_ptr<ASTNode>> ArithmeticExpressionNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children { leftExpression, rightExpression };
     return children;
+}
+
+void ArithmeticExpressionNode::accept(DesignExtractorVisitor& visitor) {
+    if (auto aenVisitor = dynamic_cast<ArithmeticExpressionNodeVisitor*>(&visitor)) {
+        std::shared_ptr<ArithmeticExpressionNode> self(this);
+        aenVisitor->visitArithmeticExpressionNode(self);
+    }
 }

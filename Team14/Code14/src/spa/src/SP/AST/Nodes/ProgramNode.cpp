@@ -8,11 +8,14 @@ std::vector<std::shared_ptr<ProcedureNode>> ProgramNode::getProcedures() {
     return procedures;
 }
 
-void ProgramNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitProgramNode(std::make_shared<ProgramNode>(this));
-}
-
 std::vector<std::shared_ptr<ASTNode>> ProgramNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children(procedures.begin(), procedures.end());
     return children;
+}
+
+void ProgramNode::accept(DesignExtractorVisitor& visitor) {
+    if (auto programVisitor = dynamic_cast<ProgramNodeVisitor*>(&visitor)) {
+        std::shared_ptr<ProgramNode> self(this);
+        programVisitor->visitProgramNode(self);
+    }
 }

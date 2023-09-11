@@ -8,10 +8,13 @@ std::string VariableNode::getVarName() {
     return varName;
 }
 
-void VariableNode::accept(DesignExtractorVisitor& visitor) {
-    visitor.visitVariableNode(std::make_shared<VariableNode>(this));
-}
-
 std::vector<std::shared_ptr<ASTNode>> VariableNode::getAllChildNodes() {
     return {};
+}
+
+void VariableNode::accept(DesignExtractorVisitor& visitor) {
+    if (auto variableVisitor = dynamic_cast<VariableNodeVisitor*>(&visitor)) {
+        std::shared_ptr<VariableNode> self(this);
+        variableVisitor->visitVariableNode(self);
+    }
 }
