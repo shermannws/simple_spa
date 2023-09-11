@@ -69,7 +69,12 @@ Result PQLEvaluator::evaluate(Query& query) {
         clauseHandler->setStrategy(std::make_shared<AssignPatternStrategy>(AssignPatternStrategy()));
         Result result;
         clauseHandler-> executeClause(query.getPattern()[0], result);
-        return result;
+        if (result.getType() == ResultType::Tuples) {
+            return result;
+        }
+        if (result.getType() == ResultType::Boolean && !result.getBoolResult()) {
+            return result;
+        }
     }
 
     // else query is just select
