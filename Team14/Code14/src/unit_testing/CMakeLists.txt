@@ -13,6 +13,8 @@ add_executable(unit_testing ${srcs}
 	"src/TestPQLParser.cpp"
 	"src/TestQuery.cpp"
 	"src/TestTokenizer.cpp"
+  "src/TestSPTokenizer.cpp"
+  "src/TestSPToken.cpp"
 	"src/TestToken.cpp"
 	src/SP/AST/Nodes/TestASTNodes.cpp
 	src/PKB/TestPkbReader.cpp
