@@ -24,7 +24,7 @@ std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>
 std::shared_ptr<std::vector<std::shared_ptr<Entity>>> UsesRelationshipManager::getVariableAssignment(std::shared_ptr<Variable> variable) const {
     auto result = std::make_shared<std::vector<std::shared_ptr<Entity>>>();
     for (auto it = usesRelationshipStore->getBeginIterator(); it != usesRelationshipStore->getEndIterator(); it++) {
-        if ((*it)->getRightEntity() == variable && std::dynamic_pointer_cast<Statement>((*it)->getLeftEntity())->getStatementType() == StatementType::Assign) {
+        if (*((*it)->getRightEntity()) == *variable && std::dynamic_pointer_cast<Statement>((*it)->getLeftEntity())->getStatementType() == StatementType::Assign) {
             result->push_back((*it)->getLeftEntity());
         }
     }
