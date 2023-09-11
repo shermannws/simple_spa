@@ -35,10 +35,13 @@ Result FollowsSuchThatStrategy::evaluateClause(Clause& clause, std::shared_ptr<P
         if (leftEntityType == QueryEntityType::Stmt) {
             std::string syn = leftRef.getRep();
             std::shared_ptr<Statement> s = std::make_shared<Statement>(stoi(rightRef.getRep()), StatementType::Stmt);
-            std::vector<std::shared_ptr<Entity>> v {(*pkbReader).getFollowsByStatement(s)};
+            auto output = pkbReader->getFollowsByStatement(s);
+            std::vector<std::shared_ptr<Entity>> v;
+            if (output) {
+                v.emplace_back(output);
+            }
             std::shared_ptr<std::vector<std::shared_ptr<Entity>>> data = std::make_shared<std::vector<std::shared_ptr<Entity>>>(v);
             tuples.emplace_back(data);
-
             std::unordered_map<std::string, int> indices {{syn, 0}};
             res.setSynIndices(indices);
 

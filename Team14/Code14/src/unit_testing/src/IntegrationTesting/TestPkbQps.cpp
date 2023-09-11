@@ -245,6 +245,9 @@ TEST_CASE("Test integration of PKB with QPS - Follows (1, 2)") {
     shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
     shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
 
+    pkbWriter->addAssignStatement(assignStatement1, nullptr, nullptr);
+    pkbWriter->addAssignStatement(assignStatement2, nullptr, nullptr);
+    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
     pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
 
     PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
@@ -288,17 +291,18 @@ TEST_CASE("Test integration of PKB with QPS - Uses (a, 'x')") {
 
     PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
 
+//    PQLParser parser1("assign a; variable v; Select v such that Uses (a, v)");
     PQLParser parser1("assign a; Select a such that Uses (a, \"x\")");
     Query queryObj1 = parser1.parse();
     Result resultObj1 = evaluator.evaluate(queryObj1);
     auto results1 = evaluator.formatResult(queryObj1, resultObj1);
 
-    PQLParser parser2("assign a; Select a such that Follows (a, \"y\")");
+    PQLParser parser2("stmt a; Select a such that Uses (a, \"y\")");
     Query queryObj2 = parser2.parse();
     Result resultObj2 = evaluator.evaluate(queryObj2);
     auto results2 = evaluator.formatResult(queryObj2, resultObj2);
 
-    PQLParser parser3("assign a; Select a such that Follows (a, \"b\")");
+    PQLParser parser3("assign a; Select a such that Uses (a, \"b\")");
     Query queryObj3 = parser3.parse();
     Result resultObj3 = evaluator.evaluate(queryObj3);
     auto results3 = evaluator.formatResult(queryObj3, resultObj3);
@@ -310,5 +314,57 @@ TEST_CASE("Test integration of PKB with QPS - Uses (a, 'x')") {
     REQUIRE(find(results2.begin(), results2.end(), "2") != results2.end());
 
     REQUIRE(results3.size() == 1);
+    REQUIRE(find(results3.begin(), results3.end(), "2") != results3.end());
+}
+
+TEST_CASE("Test integration of PKB with QPS - Uses (a, x)") {
+    Pkb pkb = Pkb();
+    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
+
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Variable> variableX = make_shared<Variable>(Variable("x"));
+    shared_ptr<Variable> variableY = make_shared<Variable>(Variable("y"));
+    shared_ptr<Variable> variableZ = make_shared<Variable>(Variable("z"));
+    shared_ptr<string> expression1 = make_shared<string>("y + z");
+
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
+    shared_ptr<Variable> variableA = make_shared<Variable>(Variable("a"));
+    shared_ptr<Variable> variableB = make_shared<Variable>(Variable("b"));
+    shared_ptr<string> expression2 = make_shared<string>("b * y");
+
+    pkbWriter->addUsesRelationship(assignStatement1, variableY);
+    pkbWriter->addUsesRelationship(assignStatement1, variableZ);
+    pkbWriter->addUsesRelationship(assignStatement2, variableB);
+    pkbWriter->addUsesRelationship(assignStatement2, variableY);
+
+    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+
+    PQLParser parser1("assign a; variable v; Select v such that Uses (a, v)");
+    Query queryObj1 = parser1.parse();
+    Result resultObj1 = evaluator.evaluate(queryObj1);
+    auto results1 = evaluator.formatResult(queryObj1, resultObj1);
+
+    PQLParser parser2("stmt a; variable x; Select a such that Uses (a, x)");
+    Query queryObj2 = parser2.parse();
+    Result resultObj2 = evaluator.evaluate(queryObj2);
+    auto results2 = evaluator.formatResult(queryObj2, resultObj2);
+
+    PQLParser parser3("assign a; variable v; Select a such that Uses (a, v)");
+    Query queryObj3 = parser3.parse();
+    Result resultObj3 = evaluator.evaluate(queryObj3);
+    auto results3 = evaluator.formatResult(queryObj3, resultObj3);
+
+    REQUIRE(results1.size() == 3);
+    REQUIRE(results2.size() == 2);
+    REQUIRE(results2.size() == 2);
+
+    REQUIRE(find(results1.begin(), results1.end(), "y") != results1.end());
+    REQUIRE(find(results1.begin(), results1.end(), "z") != results1.end());
+    REQUIRE(find(results1.begin(), results1.end(), "b") != results1.end());
+
+    REQUIRE(find(results2.begin(), results2.end(), "1") != results2.end());
+    REQUIRE(find(results2.begin(), results2.end(), "2") != results2.end());
+
     REQUIRE(find(results3.begin(), results3.end(), "1") != results3.end());
+    REQUIRE(find(results3.begin(), results3.end(), "2") != results3.end());
 }

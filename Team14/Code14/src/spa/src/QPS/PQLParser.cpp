@@ -321,7 +321,7 @@ Ref PQLParser::extractEntRef(Query& query) {
         std::string right_quote = tokenizer->peekToken()->getRep();
         expect(tokenizer->peekToken()->isToken(TokenType::Quote), "No right quote");
 
-        refString = "\"" + syn->getRep() + "\"";
+        refString = syn->getRep();
         rootType = RootType::Ident;
     } else if (curr->isToken(TokenType::Underscore)) { // WILDCARD
         refString = tokenizer->popToken()->getRep();

@@ -28,10 +28,12 @@ Result UsesSuchThatStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbR
 
         } if (leftRootType == RootType::Synonym && rightRootType == RootType::Ident) { // Uses(a,"x")
             std::string syn = leftRef.getRep();
-            std::unordered_map<std::string, std::shared_ptr<Entity>> tmp;
             std::shared_ptr<Variable> v = std::make_shared<Variable>(rightRef.getRep());
             std::shared_ptr<std::vector<std::shared_ptr<Entity>>> data = (*pkbReader).getAllUsesAssignByVariable(v); // TODO: to change to new method name with "Uses" inside
-            tuples.emplace_back(data);
+            for (auto & ent : *data) {
+                std::vector<std::shared_ptr<Entity>> tuple_vector {ent};
+                tuples.emplace_back(std::make_shared<std::vector<std::shared_ptr<Entity>>>(tuple_vector));
+            }
 
             std::unordered_map<std::string, int> indices {{syn, 0}};
             res.setSynIndices(indices);
