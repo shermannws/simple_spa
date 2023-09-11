@@ -22,7 +22,9 @@ add_executable(unit_testing ${srcs}
 	src/PKB/Managers/TestUseRelationshipManager.cpp
 	src/PKB/Managers/TestFollowsRelationshipManager.cpp
 	src/SP/AST/TestSPParser.cpp
-	src/PKB/TestPkbWriter.cpp)
+	src/QPS/TestToken.cpp
+	src/PKB/TestPkbWriter.cpp
+	src/IntegrationTesting/TestPkbQps.cpp)
 
 target_link_libraries(unit_testing spa)
 
