@@ -4,7 +4,7 @@
 #include "Ref.h"
 #include <string>
 
-enum class RelationshipType {
+enum class ClauseType {
     Uses,
     Follows,
     FollowsStar
@@ -12,14 +12,14 @@ enum class RelationshipType {
 
 class SuchThatClause {
 private:
-    RelationshipType type;
+    ClauseType type;
     Ref leftRef;
     Ref rightRef;
 
 public:
     SuchThatClause();
-    void setType(RelationshipType type);
-    RelationshipType getType();
+    void setType(ClauseType type);
+    ClauseType getType();
     void setLeftRef(Ref& ref);
     void setRightRef(Ref& ref);
     Ref getLeftRef();

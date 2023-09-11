@@ -2,7 +2,7 @@
 
 SuchThatClause::SuchThatClause() = default;
 
-void SuchThatClause::setType(RelationshipType t) {
+void SuchThatClause::setType(ClauseType t) {
     type = t;
 }
 
@@ -14,7 +14,7 @@ void SuchThatClause::setRightRef(Ref& ref) {
     rightRef = ref;
 }
 
-RelationshipType SuchThatClause::getType() {
+ClauseType SuchThatClause::getType() {
     return type;
 }
 
