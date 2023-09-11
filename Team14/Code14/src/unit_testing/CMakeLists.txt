@@ -13,7 +13,12 @@ add_executable(unit_testing ${srcs}
 	"src/TestPQLParser.cpp"
 	"src/TestQuery.cpp"
 	"src/TestTokenizer.cpp"
- "src/PKB/TestPkbWriter.cpp")
+    "src/PKB/TestPkbWriter.cpp"
+	"src/TestToken.cpp"
+	"src/SP/AST/Nodes/TestASTNodes.cpp"
+	"src/PKB/TestPkbReader.cpp"
+	"src/PKB/Managers/TestUseRelationshipManager.cpp"
+	"src/PKB/Managers/TestFollowsRelationshipManager.cpp")
 
 target_link_libraries(unit_testing spa)
 
