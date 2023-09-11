@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+
 #include "SPTokenType.h"
 
 class SPToken {

@@ -10,17 +10,21 @@ add_executable(unit_testing ${srcs}
 	"src/PKB/TestPkb.cpp"
 	"src/main.cpp"
 	"src/TestAST.cpp"
-	"src/TestPQLParser.cpp"
-	"src/TestQuery.cpp"
-	"src/TestTokenizer.cpp"
 	"src/TestSPTokenizer.cpp"
 	"src/TestSPToken.cpp"
+	"src/QPS/TestPQLParser.cpp"
+	"src/QPS/TestQuery.cpp"
+	"src/QPS/TestTokenizer.cpp"
+	"src/QPS/TestToken.cpp"
+	"src/TestSPTokenizer.cpp"
+	"src/TestSPToken.cpp"
+	src/QPS/TestPQLEvaluator.cpp
 	src/SP/AST/Nodes/TestASTNodes.cpp
 	src/PKB/TestPkbReader.cpp
 	src/PKB/Managers/TestUseRelationshipManager.cpp
 	src/PKB/Managers/TestFollowsRelationshipManager.cpp
-		src/SP/AST/TestSPParser.cpp
-)
+	src/SP/AST/TestSPParser.cpp
+	src/PKB/TestPkbReader.cpp)
 
 target_link_libraries(unit_testing spa)
 
