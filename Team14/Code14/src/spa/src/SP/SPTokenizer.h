@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+
 #include "SPTokenType.h"
 #include "SPToken.h"
 

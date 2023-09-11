@@ -1,11 +1,11 @@
-#include "SPTokenizer.h"
-#include "SPToken.h"
-
 #include <string>
 #include <iostream>
 
-SPTokenizer::SPTokenizer(const std::string& input) : curr(0) {
-    this->input = input;
+#include "SPTokenizer.h"
+#include "SPToken.h"
+
+SPTokenizer::SPTokenizer(const std::string& input) : curr(0), input(input) {
+//    this->input = input;
     tokens = std::vector<SPToken>();
 }
 
@@ -70,7 +70,7 @@ std::vector<SPToken> SPTokenizer::tokenize() {
 }
 
 bool SPTokenizer::isCurrValid() {
-    return curr >= 0 and curr < (int)input.size();
+    return curr >= 0 && curr < (int)input.size();
 }
 
 int SPTokenizer::peekChar() {
@@ -94,7 +94,7 @@ void SPTokenizer::tokenizeName() {
             break;
         }
     }
-    SPToken token(NAME, tokenValue);
+    SPToken token(TokenType::NAME, tokenValue);
     tokens.push_back(token);
 };
 
