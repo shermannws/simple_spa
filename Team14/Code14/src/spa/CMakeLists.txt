@@ -64,6 +64,18 @@ add_library(spa ${srcs} ${headers}
     "src/PKB/PkbWriter.cpp"
     "src/PKB/PkbWriter.h"
     "src/PKB/PkbReader.cpp"
+    src/QPS/Tokenizer.cpp
+    src/QPS/Token.cpp
+    src/QPS/Query.cpp
+    src/QPS/PQLParser.cpp
+    src/QPS/SuchThatClause.cpp
+    src/QPS/Ref.cpp
+    src/QPS/ClauseHandler.cpp
+    src/QPS/PQLEvaluator.cpp
+    src/QPS/Result.cpp
+    src/QPS/UsesSuchThatStrategy.cpp
+    src/QPS/FollowsSuchThatStrategy.cpp
+    src/QPS/QueryEntity.cpp
     src/SP/SPTokenizer.cpp
     src/SP/SPTokenizer.h
     src/SP/SPToken.cpp
@@ -123,8 +135,6 @@ add_library(spa ${srcs} ${headers}
     src/PKB/Managers/PkbReaderManager.cpp
     src/PKB/Managers/FollowsRelationshipManager.h
     src/PKB/Managers/FollowsRelationshipManager.cpp
-    src/PKB/Managers/FollowsRelationshipManager.cpp
-
     src/SP/SPTokenizer.cpp
     src/SP/SPTokenizer.h
     src/SP/SPToken.cpp
@@ -135,7 +145,8 @@ add_library(spa ${srcs} ${headers}
     src/PKB/Managers/PkbWriterManager.h
     src/PKB/Managers/PkbWriterManager.cpp
     src/QPS/ClauseHandler.h
-    src/QPS/ClauseHandler.cpp)
+    src/QPS/ClauseHandler.cpp
+        src/QPS/Clause.cpp)
 
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

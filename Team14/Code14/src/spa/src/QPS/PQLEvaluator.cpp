@@ -1,19 +1,24 @@
 #include "PQLEvaluator.h"
 #include "QueryEntity.h"
+#include "UsesSuchThatStrategy.h"
+#include "FollowsSuchThatStrategy.h"
 
 #include <numeric>
+#include <unordered_set>
 
-// PQLEvaluator::PQLEvaluator() {}
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :pkbReader(pkbReader),clauseHandler(std::make_shared<ClauseHandler>(pkbReader)){}
 
 std::list<std::string> PQLEvaluator::formatResult(Query& query, Result& result) {
     std::vector<std::shared_ptr<QueryEntity>> selects = query.getSelect();
-    std::list<std::string> results;
-    // TODO: add formatter for ResultType::Boolean
+//    std::list<std::string> results
+    std::unordered_set<std::string> results;
 
     if (result.getType() == ResultType::Tuples) {
         for (auto & tuple_ptr : result.getTuples()) { // tuple_ptr is std::shared_ptr<std::vector<std::shared_ptr<Entity>>>
             std::vector<std::string> tmp;
+            if (tuple_ptr->empty()) {
+                continue;
+            }
             for (auto & entity : selects) {
                 std::string syn = entity->getSynonym();
                 std::unordered_map<std::string, int> indicesMap = result.getSynIndices();
@@ -27,21 +32,40 @@ std::list<std::string> PQLEvaluator::formatResult(Query& query, Result& result) 
                                                  [](std::string& a, const std::string& b) {
                                                      return a += (a.empty() ? "" : " ") + b;
                                                  }); // handles formatting of more than two variables in select clause
-            if (!concat.empty()) {
-                results.push_back(concat);
+//            if (!concat.empty() {
+//                results.push_back(concat);
+//            }
+            if (!concat.empty() && (results.find(concat) == results.end())) {
+                results.insert(concat);
             }
         }
     }
-    return results;
+
+    std::list<std::string> list_results(results.begin(),results.end());
+    return list_results;
 }
 
 Result PQLEvaluator::evaluate(Query& query) {
 
     // TODO iterate through clauses, get Strategy Type from clause type
-    // example :
+    if (!query.getSuchThat().empty()) {
+        if (query.getSuchThat()[0].getType() == ClauseType::Uses) {
+            clauseHandler->setStrategy(std::make_shared<UsesSuchThatStrategy>(UsesSuchThatStrategy()));
+        } else if (query.getSuchThat()[0].getType() == ClauseType::Follows) {
+            clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
+        }
+        Result result;
+        clauseHandler->executeClause(query.getSuchThat()[0], result);
+        if (result.getType() == ResultType::Tuples) {
+            return result;
+        }
+        if (result.getType() == ResultType::Boolean && !result.getBoolResult()) {
+            return result;
+        }
+    }
     // clauseHandler->setStrategy(std::make_unique<AssignPatternStrategy>());
     // Result result;
-    // clauseHandler->executeQuery(query, result);
+    // clauseHandler->executeClause(query, result);
 
     std::shared_ptr<QueryEntity> entity = query.getSelect()[0];
     std::shared_ptr<std::vector<std::shared_ptr<Entity>>> entities = getAll(entity);
@@ -79,6 +103,4 @@ std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PQLEvaluator::getAll(std::
         default:
             throw std::runtime_error("Not supported entity type in query select clause");
     }
-    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> results;
-    return results;
 }

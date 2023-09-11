@@ -40,6 +40,6 @@ void PkbWriter::addFollowsRelationship(std::shared_ptr<Statement> s1, std::share
     this->writerManager->addFollowsRelationship(s1, s2);
 }
 
-void PkbWriter::addUsesRelalationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
+void PkbWriter::addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
     this->writerManager->addUsesRelalationship(s, v);
 }

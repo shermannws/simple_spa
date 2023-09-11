@@ -1,28 +1,17 @@
 #pragma once
 
 #include "QueryEntity.h"
+#include "Clause.h"
 #include "Ref.h"
 #include <string>
 
-enum class ClauseType {
-    Uses,
-    Follows,
-    FollowsStar
-};
-
-class SuchThatClause {
+class SuchThatClause : public Clause {
 private:
-    ClauseType type;
-    Ref leftRef;
-    Ref rightRef;
+    Ref secondParam;
 
 public:
     SuchThatClause();
-    void setType(ClauseType type);
-    ClauseType getType();
-    void setLeftRef(Ref& ref);
-    void setRightRef(Ref& ref);
-    Ref getLeftRef();
-    Ref getRightRef();
+    void setSecondParam(Ref& ref);
+    Ref getSecondParam();
 
 };

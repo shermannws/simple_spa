@@ -135,9 +135,9 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
     // TODO: check each entity is appropriate for the RelationshipType
 
     ClauseType type = clause.getType();
-    Ref leftRef = clause.getLeftRef();
+    Ref leftRef = clause.getFirstParam();
     RootType leftRootType = leftRef.getRootType();
-    Ref rightRef = clause.getRightRef();
+    Ref rightRef = clause.getSecondParam();
     RootType rightRootType = rightRef.getRootType();
 
     // check wildcard & entity type
@@ -252,7 +252,7 @@ void PQLParser::processSuchThatLeft(Query &query, SuchThatClause &clause) {
         throw std::runtime_error("Invalid Relationship Type in left such that clause");
     }
 
-    clause.setLeftRef(ref);
+    clause.setFirstParam(ref);
 }
 
 void PQLParser::processSuchThatRight(Query &query, SuchThatClause &clause) {
@@ -268,7 +268,7 @@ void PQLParser::processSuchThatRight(Query &query, SuchThatClause &clause) {
         throw std::runtime_error("Invalid Relationship Type in left such that clause");
     }
 
-    clause.setRightRef(ref);
+    clause.setSecondParam(ref);
 }
 
 Ref PQLParser::extractStmtRef(Query& query) {
@@ -321,7 +321,7 @@ Ref PQLParser::extractEntRef(Query& query) {
         std::string right_quote = tokenizer->peekToken()->getRep();
         expect(tokenizer->peekToken()->isToken(TokenType::Quote), "No right quote");
 
-        refString = "\"" + syn->getRep() + "\"";
+        refString = syn->getRep();
         rootType = RootType::Ident;
     } else if (curr->isToken(TokenType::Underscore)) { // WILDCARD
         refString = tokenizer->popToken()->getRep();
