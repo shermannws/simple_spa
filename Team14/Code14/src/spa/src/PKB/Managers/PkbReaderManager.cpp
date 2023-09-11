@@ -1,0 +1,69 @@
+#pragma once
+
+#include "PkbReaderManager.h"
+
+PkbReaderManager::PkbReaderManager(
+        std::shared_ptr<AssignmentManager> assignmentManager,
+        std::shared_ptr<ConstantStore> constantStore,
+        std::shared_ptr<ProcedureStore> procedureStore,
+        std::shared_ptr<StatementStore> statementStore,
+        std::shared_ptr<VariableStore> variableStore,
+        std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
+        std::shared_ptr<UsesRelationshipManager> usesRelationshipManager
+) {
+    this->assignmentManager = assignmentManager;
+    this->constantStore = constantStore;
+    this->procedureStore = procedureStore;
+    this->statementStore = statementStore;
+    this->variableStore = variableStore;
+    this->followsRelationshipManager = followsRelationshipManager;
+    this->usesRelationshipManager = usesRelationshipManager;
+};
+
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllEntities(const std::shared_ptr<EntityStorage>& store) const {
+    return store->getAllEntities();
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<Statement>>> PkbReaderManager::getAllAssign() const {
+    return this->assignmentManager->getAllAssignStatements();
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllVariables() const {
+    return this->getAllEntities(this->variableStore);
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllConstants() const {
+    return this->getAllEntities(this->constantStore);
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllProcedures() const {
+    return this->getAllEntities(this->procedureStore);
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllStatements() const {
+    return this->getAllEntities(this->statementStore);
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> PkbReaderManager::getAllAssignVariablePair() const {
+    return this->usesRelationshipManager->getAllAssignVariable();
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllAssignByVariable(std::shared_ptr<Variable> variable) const {
+    return this->usesRelationshipManager->getVariableAssignment(variable);
+}
+
+std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Statement>>>>> PkbReaderManager::getAllFollowsStatementPair() const {
+    return this->followsRelationshipManager->getAllFollowsStatementPair();
+}
+
+std::shared_ptr<Statement> PkbReaderManager::getFollowsByStatement(std::shared_ptr<Statement> statement) const {
+    return this->followsRelationshipManager->getFollowsByStatement(statement);
+}
+
+std::shared_ptr<Statement> PkbReaderManager::getFollowingStatement(std::shared_ptr<Statement> statement) const {
+    return this->followsRelationshipManager->getFollowingStatement(statement);
+}
+
+bool PkbReaderManager::getIsFollows(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) const {
+    return this->followsRelationshipManager->getIsFollows(statement1, statement2);
+}

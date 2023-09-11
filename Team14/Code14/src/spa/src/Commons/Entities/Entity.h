@@ -4,15 +4,19 @@
 #include <memory>
 
 #include "../HashableKey.h"
+#include "EntityType.h"
 
 class Entity: public HashableKey {
 private:
+    EntityType entityType;
     std::shared_ptr<std::string> entityValue;
     bool isInt;
 
 public:
-    Entity(const std::shared_ptr<std::string> entityValue, bool isInt);
+    Entity(const std::shared_ptr<std::string> entityValue, bool isInt, EntityType entityType);
     virtual ~Entity() = default;
+
+    EntityType getEntityType() const;
 
     std::string* getEntityValue() const;
     bool isEntityOfTypeInt() const;

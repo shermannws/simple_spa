@@ -14,8 +14,8 @@ public:
 	Relationship(const RelationshipType relationshipType,
 		const std::shared_ptr<Entity> leftEntity,
 		const std::shared_ptr<Entity> rightEntity);
-	Entity* getLeftEntity() const;
-	Entity* getRightEntity() const;
+	std::shared_ptr<Entity> getLeftEntity() const;
+    std::shared_ptr<Entity> getRightEntity() const;
 
 	bool operator==(const HashableKey& other) const override;
 };

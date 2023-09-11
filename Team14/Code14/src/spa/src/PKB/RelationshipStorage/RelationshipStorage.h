@@ -18,6 +18,10 @@ public:
 
     void storeRelationship(std::shared_ptr<Relationship> relationship);
 
-    Relationship* getRelationship(std::shared_ptr<Relationship> relationship) const;
+    std::shared_ptr<Relationship> getRelationship(std::shared_ptr<Relationship> relationship) const;
+
+    std::unordered_set<std::shared_ptr<Relationship>>::iterator getBeginIterator();
+
+    std::unordered_set<std::shared_ptr<Relationship>>::iterator getEndIterator();
 };
 
