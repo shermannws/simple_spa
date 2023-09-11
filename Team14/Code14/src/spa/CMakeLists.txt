@@ -1,6 +1,7 @@
 file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
 add_library(spa ${srcs} ${headers}
+
     "src/Commons/Entities/Statement.h"
     "src/Commons/Entities/Statement.cpp" 
     "src/Commons/Entities/Procedure.h"
@@ -129,13 +130,10 @@ add_library(spa ${srcs} ${headers}
     src/SP/SPToken.cpp
     src/SP/SPToken.h
     src/SP/SPTokenType.h
+    src/SP/SyntacticValidator.cpp
+    src/SP/SyntacticValidator.h
     src/PKB/Managers/PkbWriterManager.h
     src/PKB/Managers/PkbWriterManager.cpp
-    src/SP/SPTokenizer.cpp
-    src/SP/SPTokenizer.h
-    src/SP/SPToken.cpp
-    src/SP/SPToken.h
-    src/SP/SPTokenType.h
     src/QPS/ClauseHandler.h
     src/QPS/ClauseHandler.cpp)
 
