@@ -1,6 +1,7 @@
 #include "SP.h"
 #include "SPTokenizer.h"
 #include "SPParser.h"
+#include "SyntacticValidator.h"
 #include "SP/AST/Visitors/EntityExtractorVisitor.h"
 #include "SP/AST/Visitors/FollowsExtractorVisitor.h"
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
@@ -13,7 +14,9 @@ void SP::startSPProcessing(std::string& input) {
 	SPTokenizer tokenizer = SPTokenizer(input);
 	std::vector<SPToken> tokens = tokenizer.tokenize();
 
-	//TODO: Syntactic Validator takes in tokens
+	//Syntactic Validator takes in tokens
+	SyntacticValidator syntacticValidator = SyntacticValidator(tokens);
+	syntacticValidator.validate();
 
 	//Parse the tokens
 	SPParser parser = SPParser();
