@@ -3,10 +3,8 @@
 #include "PkbReader.h"
 
 PkbReader::PkbReader(
-        std::shared_ptr<PkbReaderManager> readerManager
-) {
-    this->readerManager = readerManager;
-}
+    std::shared_ptr<PkbReaderManager> readerManager
+) : readerManager(readerManager) {}
 
 std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReader::getAllAssign() const {
     return this->readerManager->getAllAssign();
