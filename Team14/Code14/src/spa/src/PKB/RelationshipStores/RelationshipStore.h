@@ -5,7 +5,7 @@
 
 #include "../Relationships/Relationship.h"
 
-class RelationshipStorage {
+class RelationshipStore {
 private:
     std::unordered_set<
         std::shared_ptr<Relationship>,
@@ -14,7 +14,7 @@ private:
     > relationshipStore;
 
 public:
-    RelationshipStorage();
+    RelationshipStore();
 
     void storeRelationship(std::shared_ptr<Relationship> relationship);
 

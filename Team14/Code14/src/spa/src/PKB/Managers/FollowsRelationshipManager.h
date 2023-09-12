@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "PKB/RelationshipStorage/FollowsRelationshipStore.h"
+#include "PKB/RelationshipStores/FollowsRelationshipStore.h"
 #include "Commons/Entities/Statement.h"
 #include "PKB/Relationships/FollowsRelationship.h"
 
