@@ -6,7 +6,7 @@
 
 #include "../../Commons/Entities/Entity.h"
 
-class EntityStorage {
+class EntityStore {
 private:
     std::unordered_set<
         std::shared_ptr<Entity>,
@@ -15,7 +15,7 @@ private:
     > entityStore;
 
 public:
-    EntityStorage();
+    EntityStore();
 
     void storeEntity(std::shared_ptr<Entity> entity);
 

@@ -20,7 +20,7 @@ PkbReaderManager::PkbReaderManager(
     this->usesRelationshipManager = usesRelationshipManager;
 };
 
-std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllEntities(const std::shared_ptr<EntityStorage>& store) const {
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllEntities(const std::shared_ptr<EntityStore>& store) const {
     return store->getAllEntities();
 }
 

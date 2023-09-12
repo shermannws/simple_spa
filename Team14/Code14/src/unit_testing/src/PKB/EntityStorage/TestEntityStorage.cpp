@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "PKB/EntityStorage/EntityStorage.h"
+#include "PKB/EntityStores/EntityStore.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "Commons/Entities/Constant.h"
@@ -16,7 +16,7 @@ TEST_CASE("Test Entity Storage and Retrieval") {
     auto mockConstant = std::make_shared<Constant>(Constant(2));
     auto mockProcedure = std::make_shared<Procedure>(Procedure("y"));
 
-	EntityStorage store = EntityStorage();
+    EntityStore store = EntityStore();
 
 	store.storeEntity(mockStatement);
 	store.storeEntity(mockVariable);
