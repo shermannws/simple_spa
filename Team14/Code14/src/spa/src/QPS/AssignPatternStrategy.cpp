@@ -3,7 +3,7 @@
 #include "AssignPatternStrategy.h"
 
 Result AssignPatternStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbReader> pkbReader) const {
-    PatternClause& patternClause = dynamic_cast<PatternClause&>(clause);
+    auto& patternClause = dynamic_cast<PatternClause&>(clause);
     Ref first = patternClause.getFirstParam();
     Ref second = patternClause.getSecondParam();
     Result result;
@@ -14,10 +14,9 @@ Result AssignPatternStrategy::evaluateClause(Clause& clause, std::shared_ptr<Pkb
         std::unordered_map<std::string, int> map {{patternClause.getEntity()->getSynonym(), 0}};
         result.setSynIndices(map);
         auto entities = pkbReader->getAllAssign();
-        std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> mappedEntities;
-        for (const auto& entityPtr : *entities) {
-            auto mappedEntity = std::make_shared<std::vector<std::shared_ptr<Entity>>>();
-            mappedEntity->push_back(entityPtr);
+        std::vector<std::vector<Entity>> mappedEntities;
+        for (const auto& entity : entities) {
+            std::vector<Entity> mappedEntity {entity};
             mappedEntities.push_back(mappedEntity);
         }
         result.setTuples(mappedEntities);
