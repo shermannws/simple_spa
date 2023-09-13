@@ -4,5 +4,8 @@
 
 class FollowsRelationshipStore : public RelationshipStore {
 public:
+	/*!
+	 * Constructor for FollowsRelationshipStore
+	 */
 	FollowsRelationshipStore();
 };
