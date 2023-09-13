@@ -4,11 +4,15 @@
 
 #include "Entity.h"
 
-Entity::Entity(const std::shared_ptr<std::string> entityValue, bool isInt) {
+Entity::Entity(const std::shared_ptr<std::string> entityValue, bool isInt, EntityType entityType) {
     this->entityValue = entityValue;
     this->isInt = isInt;
+    this->entityType = entityType;
 }
 
+EntityType Entity::getEntityType() const {
+    return this->entityType;
+}
 
 std::string* Entity::getEntityValue() const {
     return this->entityValue.get();
