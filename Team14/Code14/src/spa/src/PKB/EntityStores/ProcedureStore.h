@@ -4,5 +4,8 @@
 
 class ProcedureStore : public EntityStore {
 public:
+	/*!
+	 * Constructor for ProcedureStore
+	 */
 	ProcedureStore();
 };

@@ -15,12 +15,25 @@ private:
     > entityStore;
 
 public:
+    /*!
+     * Constructor for EntityStore
+     */
     EntityStore();
 
+    /*!
+     * Takes in as argumennt an entity and store it into the EntityStore
+     */
     void storeEntity(std::shared_ptr<Entity> entity);
 
+    /*!
+     * Takes in as argumet an entity and retrieves an entiy that == the argument
+     * Returns the Entity if it exists, retur nullptr otherwise
+     */
     std::shared_ptr<Entity> getEntity(std::shared_ptr<Entity> entity) const;
 
+    /*!
+     * Returns all the Entities in the EntityStore in a vector
+     */
     std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllEntities() const;
 };
 

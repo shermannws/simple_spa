@@ -4,5 +4,8 @@
 
 class VariableStore : public EntityStore {
 public:
+	/*!
+	 * Constructor for VariableStore
+	 */
 	VariableStore();
 };

@@ -4,5 +4,8 @@
 
 class StatementStore : public EntityStore {
 public:
+	/*!
+	 * Constructor for StatementStore
+	 */
 	StatementStore();
 };

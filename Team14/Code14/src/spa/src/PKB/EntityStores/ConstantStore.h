@@ -4,5 +4,8 @@
 
 class ConstantStore : public EntityStore {
 public:
+	/*!
+	 * Constructor for ConstantStore class
+	 */
 	ConstantStore();
 };
