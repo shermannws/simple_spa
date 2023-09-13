@@ -11,12 +11,26 @@ private:
 	std::shared_ptr<Entity> rightEntity;
 
 public:
+	/*!
+	 * Constructor for Relationship class
+	 */
 	Relationship(const RelationshipType relationshipType,
 		const std::shared_ptr<Entity> leftEntity,
 		const std::shared_ptr<Entity> rightEntity);
+
+	/*!
+	 * Returns the left Entity in a Relationship
+	 */
 	std::shared_ptr<Entity> getLeftEntity() const;
+
+	/*!
+	 * Returns the right Entity in a Relationship
+	 */
     std::shared_ptr<Entity> getRightEntity() const;
 
+	/*!
+	 * Overriden == operator for comparison between Relationship
+	 */
 	bool operator==(const HashableKey& other) const override;
 };
 
