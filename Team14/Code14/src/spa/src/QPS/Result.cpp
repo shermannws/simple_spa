@@ -17,11 +17,11 @@ bool Result::getBoolResult() {
     return boolResult;
 }
 
-void Result::setTuples(const std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> ttuples) {
+void Result::setTuples(std::vector<std::vector<Entity>>& ttuples) {
     tuples = ttuples;
 }
 
-std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> Result::getTuples() {
+std::vector<std::vector<Entity>> Result::getTuples() {
     return tuples;
 }
 

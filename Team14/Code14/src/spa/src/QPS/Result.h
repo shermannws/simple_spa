@@ -17,7 +17,7 @@ private:
     ResultType type;
     bool boolResult;
     std::unordered_map<std::string, int> synIndices;
-    std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> tuples;
+    std::vector<std::vector<Entity>> tuples;
 
 public:
     Result();
@@ -27,7 +27,7 @@ public:
     bool getBoolResult();
     void setSynIndices(std::unordered_map<std::string, int>& ssynIndices);
     std::unordered_map<std::string, int> getSynIndices();
-    void setTuples(const std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> ttuples);
-    std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> getTuples();
+    void setTuples(std::vector<std::vector<Entity>>& ttuples);
+    std::vector<std::vector<Entity>> getTuples();
 
 };
