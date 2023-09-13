@@ -3,24 +3,22 @@
 #include "PkbReaderManager.h"
 
 PkbReaderManager::PkbReaderManager(
-        std::shared_ptr<AssignmentManager> assignmentManager,
-        std::shared_ptr<ConstantStore> constantStore,
-        std::shared_ptr<ProcedureStore> procedureStore,
-        std::shared_ptr<StatementStore> statementStore,
-        std::shared_ptr<VariableStore> variableStore,
-        std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
-        std::shared_ptr<UsesRelationshipManager> usesRelationshipManager
-) {
-    this->assignmentManager = assignmentManager;
-    this->constantStore = constantStore;
-    this->procedureStore = procedureStore;
-    this->statementStore = statementStore;
-    this->variableStore = variableStore;
-    this->followsRelationshipManager = followsRelationshipManager;
-    this->usesRelationshipManager = usesRelationshipManager;
-};
+    std::shared_ptr<AssignmentManager> assignmentManager,
+    std::shared_ptr<ConstantStore> constantStore,
+    std::shared_ptr<ProcedureStore> procedureStore,
+    std::shared_ptr<StatementStore> statementStore,
+    std::shared_ptr<VariableStore> variableStore,
+    std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
+    std::shared_ptr<UsesRelationshipManager> usesRelationshipManager)
+    : assignmentManager(assignmentManager),
+    constantStore(constantStore),
+    procedureStore(procedureStore),
+    statementStore(statementStore),
+    variableStore(variableStore),
+    followsRelationshipManager(followsRelationshipManager),
+    usesRelationshipManager(usesRelationshipManager) {}
 
-std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllEntities(const std::shared_ptr<EntityStorage>& store) const {
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllEntities(const std::shared_ptr<EntityStore>& store) const {
     return store->getAllEntities();
 }
 

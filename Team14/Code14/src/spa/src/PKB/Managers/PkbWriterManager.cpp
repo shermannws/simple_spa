@@ -14,16 +14,14 @@ PkbWriterManager::PkbWriterManager(
         std::shared_ptr<StatementStore> statementStore,
         std::shared_ptr<VariableStore> variableStore,
         std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
-        std::shared_ptr<UsesRelationshipManager> usesRelationshipManager
-) {
-    this->assignmentManager = assignmentManager;
-    this->constantStore = constantStore;
-    this->procedureStore = procedureStore;
-    this->statementStore = statementStore;
-    this->variableStore = variableStore;
-    this->followsRelationshipManager = followsRelationshipManager;
-    this->usesRelationshipManager = usesRelationshipManager;
-};
+        std::shared_ptr<UsesRelationshipManager> usesRelationshipManager)
+    : assignmentManager(assignmentManager),
+    constantStore(constantStore),
+    procedureStore(procedureStore),
+    statementStore(statementStore),
+    variableStore(variableStore),
+    followsRelationshipManager(followsRelationshipManager),
+    usesRelationshipManager(usesRelationshipManager) {}
 
 void PkbWriterManager::addConstant(std::shared_ptr<Constant> c) {
     this->constantStore->storeEntity(c);

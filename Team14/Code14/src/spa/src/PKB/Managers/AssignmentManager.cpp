@@ -2,9 +2,8 @@
 
 #include "AssignmentManager.h"
 
-AssignmentManager::AssignmentManager() {
-    this->assignmentStore = std::make_shared<AssignmentPatternStore>(AssignmentPatternStore());
-}
+AssignmentManager::AssignmentManager()
+    : assignmentStore(std::make_shared<AssignmentPatternStore>(AssignmentPatternStore())) {}
 
 bool AssignmentManager::addAssignment(std::shared_ptr<Assignment> assignment) {
     return this->assignmentStore->addAssignment(assignment);

@@ -7,10 +7,8 @@
 #include "PKB/AssignmentPatternStore/Assignment.h"
 
 PkbWriter::PkbWriter(
-        std::shared_ptr<PkbWriterManager> writerManager
-) {
-    this->writerManager = writerManager;
-};
+    std::shared_ptr<PkbWriterManager> writerManager
+) : writerManager(writerManager) {}
 
 void PkbWriter::addConstant(std::shared_ptr<Constant> c) {
     this->writerManager->addConstant(c);
