@@ -18,7 +18,8 @@ PkbReaderManager::PkbReaderManager(
     followsRelationshipManager(followsRelationshipManager),
     usesRelationshipManager(usesRelationshipManager) {}
 
-std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllEntities(const std::shared_ptr<EntityStore>& store) const {
+template <typename T>
+std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllEntities(const std::shared_ptr<EntityStore<T>>& store) const {
     return store->getAllEntities();
 }
 
@@ -27,19 +28,19 @@ std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllAs
 }
 
 std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllVariables() const {
-    return this->getAllEntities(this->variableStore);
+    return this->getAllEntities<Variable>(this->variableStore);
 }
 
 std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllConstants() const {
-    return this->getAllEntities(this->constantStore);
+    return this->getAllEntities<Constant>(this->constantStore);
 }
 
 std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllProcedures() const {
-    return this->getAllEntities(this->procedureStore);
+    return this->getAllEntities<Procedure>(this->procedureStore);
 }
 
 std::shared_ptr<std::vector<std::shared_ptr<Entity>>> PkbReaderManager::getAllStatements() const {
-    return this->getAllEntities(this->statementStore);
+    return this->getAllEntities<Statement>(this->statementStore);
 }
 
 std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> PkbReaderManager::getAllUsesAssignVariablePair() const {

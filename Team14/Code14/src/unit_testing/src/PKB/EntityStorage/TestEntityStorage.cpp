@@ -16,7 +16,7 @@ TEST_CASE("Test Entity Storage and Retrieval") {
     auto mockConstant = std::make_shared<Constant>(Constant(2));
     auto mockProcedure = std::make_shared<Procedure>(Procedure("y"));
 
-    EntityStore store = EntityStore();
+    EntityStore store = EntityStore<Entity>();
 
 	store.storeEntity(mockStatement);
 	store.storeEntity(mockVariable);

@@ -22,7 +22,8 @@ private:
     std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager;
     std::shared_ptr<UsesRelationshipManager> usesRelationshipManager;
 
-    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllEntities(const std::shared_ptr<EntityStore>&) const;
+    template <typename T>
+    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllEntities(const std::shared_ptr<EntityStore<T>>&) const;
 
 public:
     PkbReaderManager(

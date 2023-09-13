@@ -69,19 +69,19 @@ TEST_CASE("Test AST Traverser") {
     Traverser traverser = Traverser(visitors);
     traverser.traverse(rootNode);
 
-    REQUIRE(*(procedureStore->getEntity(std::make_shared<Entity>(Procedure("doMath")))) == *(std::make_shared<Procedure>("doMath")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("x")))) == *(std::make_shared<Variable>("x")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("v")))) == *(std::make_shared<Variable>("v")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("y")))) == *(std::make_shared<Variable>("y")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("z")))) == *(std::make_shared<Variable>("z")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("t")))) == *(std::make_shared<Variable>("t")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("num1")))) == *(std::make_shared<Variable>("num1")));
+    REQUIRE(*(procedureStore->getEntity(std::make_shared<Procedure>(Procedure("doMath")))) == *(std::make_shared<Procedure>("doMath")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("x")))) == *(std::make_shared<Variable>("x")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("v")))) == *(std::make_shared<Variable>("v")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("y")))) == *(std::make_shared<Variable>("y")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("z")))) == *(std::make_shared<Variable>("z")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("t")))) == *(std::make_shared<Variable>("t")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("num1")))) == *(std::make_shared<Variable>("num1")));
 
-    REQUIRE(*(statementStore->getEntity(std::make_shared<Entity>(Statement(1,StatementType::Assign)))) == *(std::make_shared<Statement>(1, StatementType::Assign)));
-    REQUIRE(*(statementStore->getEntity(std::make_shared<Entity>(Statement(2, StatementType::Read)))) == *(std::make_shared<Statement>(2, StatementType::Read)));
-    REQUIRE(*(statementStore->getEntity(std::make_shared<Entity>(Statement(3, StatementType::Print)))) == *(std::make_shared<Statement>(3, StatementType::Print)));
+    REQUIRE(*(statementStore->getEntity(std::make_shared<Statement>(Statement(1,StatementType::Assign)))) == *(std::make_shared<Statement>(1, StatementType::Assign)));
+    REQUIRE(*(statementStore->getEntity(std::make_shared<Statement>(Statement(2, StatementType::Read)))) == *(std::make_shared<Statement>(2, StatementType::Read)));
+    REQUIRE(*(statementStore->getEntity(std::make_shared<Statement>(Statement(3, StatementType::Print)))) == *(std::make_shared<Statement>(3, StatementType::Print)));
 
-    REQUIRE(*(constantStore->getEntity(std::make_shared<Entity>(Constant(1)))) == *(std::make_shared<Constant>(1)));
+    REQUIRE(*(constantStore->getEntity(std::make_shared<Constant>(Constant(1)))) == *(std::make_shared<Constant>(1)));
 
     auto usesV = *(usesRelationshipManager->getVariableAssignment(std::make_shared<Variable>("v")));
     REQUIRE(usesV.size() == 1);
