@@ -21,5 +21,5 @@ public:
 
     std::unordered_set<std::shared_ptr<Assignment>>::iterator getEndIterator();
 
-    bool contains(std::shared_ptr<Statement> statement) const;
+    bool contains(Statement& statement) const;
 };

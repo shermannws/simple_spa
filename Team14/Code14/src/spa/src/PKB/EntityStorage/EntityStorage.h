@@ -21,6 +21,6 @@ public:
 
     std::shared_ptr<Entity> getEntity(std::shared_ptr<Entity> entity) const;
 
-    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllEntities() const;
+    std::vector<Entity> getAllEntities() const;
 };
 

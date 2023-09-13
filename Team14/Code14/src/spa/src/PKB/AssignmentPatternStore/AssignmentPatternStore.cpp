@@ -16,6 +16,6 @@ std::unordered_set<std::shared_ptr<Assignment>>::iterator AssignmentPatternStore
     return this->assignmentStore.end();
 }
 
-bool AssignmentPatternStore::contains(std::shared_ptr<Statement> statement) const {
-    return this->assignmentStore.find(std::make_shared<Assignment>(statement, nullptr, nullptr)) != this->assignmentStore.end();
+bool AssignmentPatternStore::contains(Statement& statement) const {
+    return this->assignmentStore.find(std::make_shared<Assignment>(std::make_shared<Statement>(statement), nullptr, nullptr)) != this->assignmentStore.end();
 }
