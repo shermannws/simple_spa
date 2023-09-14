@@ -35,23 +35,6 @@ public:
 	bool operator==(const HashableKey& other) const override;
 };
 
-template <typename T, typename U>
-struct std::hash<Relationship<T, U>> {
-	std::size_t operator()(const Relationship<T, U>& relationship) const;
-};
-
-template <typename T, typename U>
-struct std::hash<std::shared_ptr<Relationship<T, U>>> {
-	std::size_t operator()(const std::shared_ptr<Relationship<T, U>> relationshipPtr) const;
-};
-
-template <typename T, typename U>
-struct std::equal_to<std::shared_ptr<Relationship<T,U>>> {
-	bool operator()(
-		std::shared_ptr<Relationship<T, U>> const& lhs,
-		std::shared_ptr<Relationship<T, U>> const& rhs) const;
-};
-
 
 //Including definitions in this file due to Generics in use
 
@@ -78,24 +61,4 @@ bool Relationship<T, U>::operator==(const HashableKey& other) const {
 			&& *(this->getRightEntity()->getEntityValue()) == *(otherKey->getRightEntity()->getEntityValue());
 	}
 	return false;
-}
-
-template <typename T, typename U>
-std::size_t std::hash<Relationship<T, U>>::operator()(const Relationship<T, U>& relationship) const {
-	return std::hash<std::string>()(
-		*(relationship.getLeftEntity()->getEntityValue()) +
-		"," +
-		*(relationship.getRightEntity()->getEntityValue()));
-}
-
-template <typename T, typename U>
-std::size_t std::hash<std::shared_ptr<Relationship<T, U>>>::operator()(const std::shared_ptr<Relationship<T, U>> relationshipPtr) const {
-	return std::hash<Relationship<T, U>>()(*relationshipPtr.get());
-}
-
-template <typename T, typename U>
-bool std::equal_to<std::shared_ptr<Relationship<T, U>>>::operator()(
-	std::shared_ptr<Relationship<T, U>> const& lhs,
-	std::shared_ptr<Relationship<T, U>> const& rhs) const {
-	return *lhs == *rhs;
 }
