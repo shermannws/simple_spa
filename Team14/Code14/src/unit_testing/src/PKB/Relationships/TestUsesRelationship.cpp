@@ -1,6 +1,7 @@
 #include "PKB/Relationships/UsesRelationship.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
+#include "PKB/Relationships/RelationshipHash.h"
 
 #include "catch.hpp"
 #include <iostream>

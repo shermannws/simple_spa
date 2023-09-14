@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "../Relationships/Relationship.h"
+#include "../Relationships/RelationshipHash.h"
 
 template <typename T>
 class RelationshipStore {

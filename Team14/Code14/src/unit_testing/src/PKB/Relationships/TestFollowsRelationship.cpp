@@ -1,5 +1,6 @@
 #include "PKB/Relationships/FollowsRelationship.h"
 #include "Commons/Entities/Statement.h"
+#include "PKB/Relationships/RelationshipHash.h"
 
 #include "catch.hpp"
 #include <iostream>

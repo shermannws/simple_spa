@@ -17,20 +17,3 @@ public:
 	FollowsRelationship(const std::shared_ptr<Statement> leftEntity,
 		const std::shared_ptr<Statement> rightEntity);
 };
-
-template <>
-struct std::hash<FollowsRelationship> {
-	std::size_t operator()(const FollowsRelationship& relationship) const;
-};
-
-template <>
-struct std::hash<std::shared_ptr<FollowsRelationship>> {
-	std::size_t operator()(const std::shared_ptr<FollowsRelationship> relationshipPtr) const;
-};
-
-template <>
-struct std::equal_to<std::shared_ptr<FollowsRelationship>> {
-	bool operator()(
-		std::shared_ptr<FollowsRelationship> const& lhs,
-		std::shared_ptr<FollowsRelationship> const& rhs) const;
-};
