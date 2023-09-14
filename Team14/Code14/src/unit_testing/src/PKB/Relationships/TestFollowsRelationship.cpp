@@ -80,7 +80,7 @@ TEST_CASE("Test FollowsRelationship Hash") {
 		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
 		std::make_shared<Statement>(Statement(4, StatementType::Assign)));
 
-	std::hash<Relationship> relationshipHasher;
+	std::hash<Relationship<Statement, Statement>> relationshipHasher;
 	std::size_t hashValue = relationshipHasher(follows);
 	std::size_t hashValueDiffPtr = relationshipHasher(followsWithDiffPtr);
 
@@ -99,9 +99,9 @@ TEST_CASE("Test FollowsRelationshipPtr Hasher") {
 		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
 		std::make_shared<Statement>(Statement(4, StatementType::Assign)));
 
-	std::hash<std::shared_ptr<Relationship>> relationshipPtrHasher;
-	std::size_t hashValue = relationshipPtrHasher(std::make_shared<Relationship>(follows));
-	std::size_t hashValueDiffPtr = relationshipPtrHasher(std::make_shared<Relationship>(followsWithDiffPtr));
+	std::hash<std::shared_ptr<Relationship<Statement, Statement>>> relationshipPtrHasher;
+	std::size_t hashValue = relationshipPtrHasher(std::make_shared<FollowsRelationship>(follows));
+	std::size_t hashValueDiffPtr = relationshipPtrHasher(std::make_shared<FollowsRelationship>(followsWithDiffPtr));
 
 
 	REQUIRE(hashValue == hashValueDiffPtr);

@@ -81,7 +81,7 @@ TEST_CASE("Test UsesRelationship Hash") {
 		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
 		std::make_shared<Variable>(Variable("x")));
 
-	std::hash<Relationship> relationshipHasher;
+	std::hash<Relationship<Statement, Variable>> relationshipHasher;
 	std::size_t hashValue = relationshipHasher(uses);
 	std::size_t hashValueDiffPtr = relationshipHasher(usesWithDiffPtr);
 
@@ -100,9 +100,9 @@ TEST_CASE("Test UsesRelationshipPtr Hasher") {
 		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
 		std::make_shared<Variable>(Variable("x")));
 
-	std::hash<std::shared_ptr<Relationship>> relationshipPtrHasher;
-	std::size_t hashValue = relationshipPtrHasher(std::make_shared<Relationship>(uses));
-	std::size_t hashValueDiffPtr = relationshipPtrHasher(std::make_shared<Relationship>(usesWithDiffPtr));
+	std::hash<std::shared_ptr<Relationship<Statement, Variable>>> relationshipPtrHasher;
+	std::size_t hashValue = relationshipPtrHasher(std::make_shared<UsesRelationship>(uses));
+	std::size_t hashValueDiffPtr = relationshipPtrHasher(std::make_shared<UsesRelationship>(usesWithDiffPtr));
 
 
 	REQUIRE(hashValue == hashValueDiffPtr);
