@@ -1,12 +1,11 @@
 #pragma once
 
-#include "AssignmentManager.h"
-
 #include <utility>
 
-AssignmentManager::AssignmentManager() {
-    this->assignmentStore = std::make_shared<AssignmentPatternStore>(AssignmentPatternStore());
-}
+#include "AssignmentManager.h"
+
+AssignmentManager::AssignmentManager()
+    : assignmentStore(std::make_shared<AssignmentPatternStore>(AssignmentPatternStore())) {}
 
 bool AssignmentManager::addAssignment(std::shared_ptr<Assignment> assignment) {
     return this->assignmentStore->addAssignment(std::move(assignment));

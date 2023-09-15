@@ -6,11 +6,8 @@
 
 Relationship::Relationship(const RelationshipType relationshipType,
     const std::shared_ptr<Entity> leftEntity,
-    const std::shared_ptr<Entity> rightEntity) {
-    this->relationshipType = relationshipType;
-    this->leftEntity = leftEntity;
-    this->rightEntity = rightEntity;
-}
+    const std::shared_ptr<Entity> rightEntity)
+    : relationshipType(relationshipType), leftEntity(leftEntity), rightEntity(rightEntity) {}
 
 std::shared_ptr<Entity> Relationship::getLeftEntity() const {
     return this->leftEntity;

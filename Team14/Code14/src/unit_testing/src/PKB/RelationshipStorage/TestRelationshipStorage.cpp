@@ -1,5 +1,5 @@
-#include "PKB/RelationshipStorage/RelationshipStorage.h"
-#include "PKB/RelationshipStorage/UsesRelationshipStore.h"
+#include "PKB/RelationshipStores/RelationshipStore.h"
+#include "PKB/RelationshipStores/UsesRelationshipStore.h"
 #include "PKB/Relationships/UsesRelationship.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
@@ -24,7 +24,7 @@ TEST_CASE("Test Relationship Storage and Retrieval") {
 		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
 		std::make_shared<Variable>(Variable("x")));
 
-	RelationshipStorage store = RelationshipStorage();
+	RelationshipStore store = RelationshipStore();
 
 	store.storeRelationship(std::make_shared<Relationship>(uses));
 	auto r = store.getRelationship(std::make_shared<Relationship>(usesCloned));
@@ -49,7 +49,7 @@ TEST_CASE("Test Relationship Storage and Retrieval - Negative Test") {
 		std::make_shared<Statement>(Statement(2, StatementType::Assign)),
 		std::make_shared<Variable>(Variable("x")));
 
-	RelationshipStorage store = RelationshipStorage();
+	RelationshipStore store = RelationshipStore();
 
 	store.storeRelationship(std::make_shared<Relationship>(uses));
 	auto r = store.getRelationship(std::make_shared<Relationship>(usesCloned));

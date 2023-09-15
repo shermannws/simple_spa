@@ -36,11 +36,7 @@ Pkb::Pkb() {
 };
 
 std::shared_ptr<PkbReader> Pkb::createPkbReader() {
-    return static_cast<std::shared_ptr<PkbReader>>(std::make_shared<PkbConcreteReader>(
-        PkbConcreteReader(
-            this->pkbReaderManager
-        ))
-    );
+    return std::make_shared<PkbConcreteReader>(this->pkbReaderManager);
 };
 
 std::shared_ptr<PkbWriter> Pkb::createPkbWriter() {

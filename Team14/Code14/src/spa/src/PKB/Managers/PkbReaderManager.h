@@ -3,10 +3,10 @@
 #include <memory>
 
 #include "PKB/Managers/AssignmentManager.h"
-#include "PKB/EntityStorage/ConstantStore.h"
-#include "PKB/EntityStorage/ProcedureStore.h"
-#include "PKB/EntityStorage/StatementStore.h"
-#include "PKB/EntityStorage/VariableStore.h"
+#include "PKB/EntityStores/ConstantStore.h"
+#include "PKB/EntityStores/ProcedureStore.h"
+#include "PKB/EntityStores/StatementStore.h"
+#include "PKB/EntityStores/VariableStore.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 
@@ -22,7 +22,7 @@ private:
     std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager;
     std::shared_ptr<UsesRelationshipManager> usesRelationshipManager;
 
-    std::vector<Entity> getAllEntities(const std::shared_ptr<EntityStorage>&) const;
+    std::vector<Entity> getAllEntities(const std::shared_ptr<EntityStore>&) const;
 
 public:
     PkbReaderManager(
