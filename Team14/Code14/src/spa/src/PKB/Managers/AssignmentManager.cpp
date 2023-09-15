@@ -28,7 +28,7 @@ std::vector<Entity> AssignmentManager::getAssignStatements(Variable& variable, s
             continue;
         }
         // TEMP CODE
-        statements.push_back(currVar);
+        statements.push_back(*((*it)->getStatement()));
 
         // Parse string into brackets
         // Validate wild cards
