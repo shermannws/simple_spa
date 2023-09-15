@@ -12,6 +12,7 @@
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/AST/Traverser/Traverser.h"
 #include "PKB/Pkb.h"
+#include "PKB/PkbConcreteWriter.h"
 
 TEST_CASE("Test AST Traverser") {
     SPParser parser;
@@ -58,7 +59,7 @@ TEST_CASE("Test AST Traverser") {
             followsRelationshipManager,
             usesRelationshipManager
     );
-    std::shared_ptr<PkbWriter> pkbWriter = std::make_shared<PkbWriter>(pkbWriterManager);
+    std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
     std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
     std::shared_ptr<FollowsExtractorVisitor> followsExtractor = std::make_shared<FollowsExtractorVisitor>(pkbWriter);
@@ -103,13 +104,6 @@ TEST_CASE("Test AST Traverser") {
     auto followsRS2 = followsRelationshipManager->getFollowingStatement(Stmt2);
     REQUIRE(followsRS2.size() == 1);
     REQUIRE(followsRS2.at(0) == Statement(3, StatementType::Print));
-
-    //Pkb pkb = Pkb();
-    //auto reader = pkb.createPkbReader();
-    //auto writer = pkb.createPkbWriter();
-    //writer->addFollowsRelationship(std::make_shared<Statement>(2, StatementType::Read), std::make_shared<Statement>(3, StatementType::Print));
-    //auto followsRS3 = reader->getFollowingStatement(Statement(2, StatementType::Read));
-    //REQUIRE(followsRS3.at(0) == Statement(3, StatementType::Print));
 
     //auto usesVarName = *(usesRelationshipManager->getVariableAssignment(std::make_shared<Variable>(varName)));
     //REQUIRE(usesVarName.size() == 1);
