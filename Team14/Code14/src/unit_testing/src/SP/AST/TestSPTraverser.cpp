@@ -83,19 +83,23 @@ TEST_CASE("Test AST Traverser") {
 
     REQUIRE(*(constantStore->getEntity(std::make_shared<Entity>(Constant(1)))) == *(std::make_shared<Constant>(1)));
 
-    auto usesV = usesRelationshipManager->getVariableAssignment(Variable("v"));
+    auto VarV = Variable("v");
+    auto usesV = usesRelationshipManager->getVariableAssignment(VarV);
     REQUIRE(usesV.size() == 1);
     REQUIRE(usesV.at(0) == Statement(1, StatementType::Assign));
 
-    auto usesY = usesRelationshipManager->getVariableAssignment(Variable("y"));
+    auto VarY = Variable("y");
+    auto usesY = usesRelationshipManager->getVariableAssignment(VarY);
     REQUIRE(usesY.size() == 1);
     REQUIRE(usesY.at(0) == Statement(1, StatementType::Assign));
 
-    auto followsRS = followsRelationshipManager->getFollowingStatement(Statement(1, StatementType::Assign));
+    auto Stmt1 = Statement(1, StatementType::Assign);
+    auto followsRS = followsRelationshipManager->getFollowingStatement(Stmt1);
     REQUIRE(followsRS.size() == 1);
     REQUIRE(followsRS.at(0) == Statement(2, StatementType::Read));
 
-    auto followsRS2 = followsRelationshipManager->getFollowingStatement(Statement(2, StatementType::Read));
+    auto Stmt2 = Statement(2, StatementType::Read);
+    auto followsRS2 = followsRelationshipManager->getFollowingStatement(Stmt2);
     REQUIRE(followsRS2.size() == 1);
     REQUIRE(followsRS2.at(0) == Statement(3, StatementType::Print));
 
