@@ -167,9 +167,9 @@ std::shared_ptr<ExpressionNode> SPParser::parseExpression(std::queue<SPToken>& t
             assert(expressionStack.size() >= 2); // need 2 expressions for arithmetic expressions
             ArithmeticOperatorType operatorType =
                     ArithmeticExpressionNode::translateOperatorTypeString(postfixTokens.front().getValue());
-            auto leftExpression = expressionStack.top();
-            expressionStack.pop();
             auto rightExpression = expressionStack.top();
+            expressionStack.pop();
+            auto leftExpression = expressionStack.top();
             expressionStack.pop();
             auto newExpression =
                     std::make_shared<ArithmeticExpressionNode>(operatorType, leftExpression, rightExpression);
