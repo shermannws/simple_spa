@@ -2,6 +2,9 @@
 
 #include <string>
 
+typedef std::string ProcedureName;
+typedef int StatementNumber;
+
 class AppConstants {
 public:
     // Entities
@@ -54,5 +57,4 @@ public:
     inline static const char CHAR_OPEN_CURLY_PARENTHESIS = '{';
     inline static const char CHAR_CLOSE_CURLY_PARENTHESIS = '}';
     inline static const char CHAR_SEMICOLON = ';';
-
 };
