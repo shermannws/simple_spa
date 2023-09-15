@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 
+#include "Commons/AppConstants.h"
 #include "SyntacticValidator.h"
 
 class SyntaxError : public std::runtime_error {
@@ -24,7 +25,7 @@ std::vector<SPToken> SyntacticValidator::validate() {
 void SyntacticValidator::validateProcedure() {
     // validate 'procedure'
     SPToken token = peekToken();
-    if (token.getType() == TokenType::NAME && token.getValue() == "procedure" ) {
+    if (token.getType() == TokenType::Name && token.getValue() == AppConstants::STRING_PROCEDURE ) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected 'procedure'");
@@ -41,15 +42,15 @@ void SyntacticValidator::validateStmtLst() {
     while (isCurrValid()) {
         SPToken token = peekToken();
 
-        if (token.getType() == TokenType::NAME) {
-            if (token.getValue() == "read") {
+        if (token.getType() == TokenType::Name) {
+            if (token.getValue() == AppConstants::STRING_READ) {
                 validateRead();
-            } else if (token.getValue() == "print") {
+            } else if (token.getValue() == AppConstants::STRING_PRINT) {
                 validatePrint();
             } else {
                 validateAssign();
             }
-        }  else if (token.getType() == TokenType::CLOSE_CURLY_PARAN) {
+        }  else if (token.getType() == TokenType::CloseCurlyParenthesis) {
             break;
         } else {
             throw SyntaxError("Syntax error: Expected TokenType NAME for statement");
@@ -88,8 +89,8 @@ void SyntacticValidator::validateExpr() {
 
     // Recursively check for the next valid term or arithmetic operator til reach end of exp
     validateTerm();
-    if (peekNextToken().getType() != TokenType::SEMICOLON &&
-        peekToken().getType() == TokenType::ARITHMETIC_OPERATOR) {
+    if (peekNextToken().getType() != TokenType::Semicolon &&
+        peekToken().getType() == TokenType::ArithmeticOperator) {
         validateArithmeticOperator();
         validateExpr();
     }
@@ -111,11 +112,11 @@ void SyntacticValidator::validateExpr() {
 
 void SyntacticValidator::validateTerm() {
     SPToken currToken = peekToken();
-    if (currToken.getType() == TokenType::NAME) {
+    if (currToken.getType() == TokenType::Name) {
         validateName();
-    } else if (currToken.getType() == TokenType::INTEGER) {
+    } else if (currToken.getType() == TokenType::Integer) {
         validateInteger();
-    } else if (currToken.getType() == TokenType::OPEN_ROUND_PARAN) {
+    } else if (currToken.getType() == TokenType::OpenRoundParenthesis) {
         validateOpenRoundParan();
         validateExpr();
         validateCloseRoundParan();
@@ -126,7 +127,7 @@ void SyntacticValidator::validateTerm() {
 
 void SyntacticValidator::validateName() {
     SPToken currToken = peekToken();
-    if (currToken.getType() == TokenType::NAME) {
+    if (currToken.getType() == TokenType::Name) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected TokenType NAME");
@@ -135,7 +136,7 @@ void SyntacticValidator::validateName() {
 
 void SyntacticValidator::validateInteger() {
     SPToken currToken = peekToken();
-    if (currToken.getType() == TokenType::INTEGER) {
+    if (currToken.getType() == TokenType::Integer) {
         if (currToken.getValue()[0] == '0') {
             throw SyntaxError("Syntax error: INTEGER cannot start with 0");
         }
@@ -147,7 +148,7 @@ void SyntacticValidator::validateInteger() {
 
 void SyntacticValidator::validateOpenRoundParan() {
     SPToken currToken = peekToken();
-    if (currToken.getType() == TokenType::OPEN_ROUND_PARAN) {
+    if (currToken.getType() == TokenType::OpenRoundParenthesis) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected TokenType OPEN_ROUND_PARAN");
@@ -156,7 +157,7 @@ void SyntacticValidator::validateOpenRoundParan() {
 
 void SyntacticValidator::validateCloseRoundParan() {
     SPToken currToken = peekToken();
-    if (currToken.getType() == TokenType::CLOSE_ROUND_PARAN) {
+    if (currToken.getType() == TokenType::CloseRoundParenthesis) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected TokenType CLOSE_ROUND_PARAN");
@@ -165,7 +166,7 @@ void SyntacticValidator::validateCloseRoundParan() {
 
 void SyntacticValidator::validateOpenCurlyParan() {
     SPToken currToken = peekToken();
-    if (currToken.getType() == TokenType::OPEN_CURLY_PARAN) {
+    if (currToken.getType() == TokenType::OpenCurlyParenthesis) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected TokenType OPEN_CURLY_PARAN");
@@ -174,7 +175,7 @@ void SyntacticValidator::validateOpenCurlyParan() {
 
 void SyntacticValidator::validateCloseCurlyParan() {
     SPToken currToken = peekToken();
-    if (currToken.getType() == TokenType::CLOSE_CURLY_PARAN) {
+    if (currToken.getType() == TokenType::CloseCurlyParenthesis) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected TokenType CLOSE_CURLY_PARAN");
@@ -183,7 +184,7 @@ void SyntacticValidator::validateCloseCurlyParan() {
 
 void SyntacticValidator::validateSemicolon() {
     SPToken currToken = peekToken();
-    if (currToken.getType() == TokenType::SEMICOLON) {
+    if (currToken.getType() == TokenType::Semicolon) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected TokenType SEMICOLON");
@@ -192,7 +193,7 @@ void SyntacticValidator::validateSemicolon() {
 
 void SyntacticValidator::validateEquals() {
     SPToken currToken = peekToken();
-    if (currToken.getType() == TokenType::EQUALS) {
+    if (currToken.getType() == TokenType::Equals) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected TokenType EQUALS");
@@ -201,7 +202,7 @@ void SyntacticValidator::validateEquals() {
 
 void SyntacticValidator::validateArithmeticOperator() {
     SPToken currToken = peekToken();
-    if (currToken.getType() == TokenType::ARITHMETIC_OPERATOR) {
+    if (currToken.getType() == TokenType::ArithmeticOperator) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected TokenType ARITHMETIC_OPERATOR");

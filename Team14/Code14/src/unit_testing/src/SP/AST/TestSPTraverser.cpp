@@ -16,29 +16,30 @@ TEST_CASE("Test AST Traverser") {
     SPParser parser;
     std::string varName = "num1";
     std::vector<SPToken> tokens = {
-            SPToken(TokenType::NAME, "procedure"),
-            SPToken(TokenType::NAME, "doMath"),
-            SPToken(TokenType::OPEN_CURLY_PARAN, "{"),
-            SPToken(TokenType::NAME, "x"),
-            SPToken(TokenType::EQUALS, "="),
-            SPToken(TokenType::NAME, "v"),
-            SPToken(TokenType::ARITHMETIC_OPERATOR, "+"),
-            SPToken(TokenType::INTEGER, "1"),
-            SPToken(TokenType::ARITHMETIC_OPERATOR, "*"),
-            SPToken(TokenType::NAME, "y"),
-            SPToken(TokenType::ARITHMETIC_OPERATOR, "+"),
-            SPToken(TokenType::NAME, "z"),
-            SPToken(TokenType::ARITHMETIC_OPERATOR, "*"),
-            SPToken(TokenType::NAME, "t"),
-            SPToken(TokenType::SEMICOLON, ";"),
-            SPToken(TokenType::NAME, "read"),
-            SPToken(TokenType::NAME, varName),
-            SPToken(TokenType::SEMICOLON, ";"),
-            SPToken(TokenType::NAME, "print"),
-            SPToken(TokenType::NAME, varName),
-            SPToken(TokenType::SEMICOLON, ";"),
-            SPToken(TokenType::CLOSE_CURLY_PARAN, "}")
+            SPToken(TokenType::Name, "procedure"),
+            SPToken(TokenType::Name, "doMath"),
+            SPToken(TokenType::OpenCurlyParenthesis, "{"),
+            SPToken(TokenType::Name, "x"),
+            SPToken(TokenType::Equals, "="),
+            SPToken(TokenType::Name, "v"),
+            SPToken(TokenType::ArithmeticOperator, "+"),
+            SPToken(TokenType::Integer, "1"),
+            SPToken(TokenType::ArithmeticOperator, "*"),
+            SPToken(TokenType::Name, "y"),
+            SPToken(TokenType::ArithmeticOperator, "+"),
+            SPToken(TokenType::Name, "z"),
+            SPToken(TokenType::ArithmeticOperator, "*"),
+            SPToken(TokenType::Name, "t"),
+            SPToken(TokenType::Semicolon, ";"),
+            SPToken(TokenType::Name, "read"),
+            SPToken(TokenType::Name, varName),
+            SPToken(TokenType::Semicolon, ";"),
+            SPToken(TokenType::Name, "print"),
+            SPToken(TokenType::Name, varName),
+            SPToken(TokenType::Semicolon, ";"),
+            SPToken(TokenType::CloseCurlyParenthesis, "}")
     };
+
     std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
 
     auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
