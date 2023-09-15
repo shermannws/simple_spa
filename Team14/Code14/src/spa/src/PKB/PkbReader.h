@@ -5,30 +5,29 @@
 #include "PKB/Managers/PkbReaderManager.h"
 
 class PkbReader {
-private:
-    std::shared_ptr<PkbReaderManager> readerManager;
 public:
-    PkbReader(std::shared_ptr<PkbReaderManager> readerManager);
+    virtual std::vector<Entity> getAllAssign() const = 0;
 
-    std::vector<Entity> getAllAssign() const;
+    virtual std::vector<Entity> getAllVariables() const = 0;
 
-    std::vector<Entity> getAllVariables() const;
+    virtual std::vector<Entity> getAllConstants() const = 0;
 
-    std::vector<Entity> getAllConstants() const;
+    virtual std::vector<Entity> getAllProcedures() const = 0;
 
-    std::vector<Entity> getAllProcedures() const;
+    virtual std::vector<Entity> getAllStatements() const = 0;
 
-    std::vector<Entity> getAllStatements() const;
+    virtual std::vector<std::vector<Entity>> getAllUsesAssignVariablePair() const = 0;
 
-    std::vector<std::vector<Entity>> getAllUsesAssignVariablePair() const;
+    virtual std::vector<Entity> getAllUsesAssignByVariable(Variable& variable) const = 0;
 
-    std::vector<Entity> getAllUsesAssignByVariable(Variable& variable) const;
+    virtual std::vector<std::vector<Entity>> getAllFollowsStatementPair() const = 0;
 
-    std::vector<std::vector<Entity>> getAllFollowsStatementPair() const;
+    // Returns statement followed by (ahead) given statement
+    virtual std::vector<Entity> getFollowsByStatement(Statement& statement) const = 0;
+    
+    // Returns statement following (behind) given statement
+    virtual std::vector<Entity> getFollowingStatement(Statement& statement) const = 0;
 
-    std::vector<Entity> getFollowsByStatement(Statement& statement) const; // Returns statement followed by (ahead) given statement
-
-    std::vector<Entity> getFollowingStatement(Statement& statement) const; // Returns statement following (behind) given statement
-
-    bool getIsFollows(Statement& statement1, Statement& statement2) const; // Returns true if statement1 follows statement2
+    // Returns true if statement1 follows statement2
+    virtual bool getIsFollows(Statement& statement1, Statement& statement2) const = 0;
 };
