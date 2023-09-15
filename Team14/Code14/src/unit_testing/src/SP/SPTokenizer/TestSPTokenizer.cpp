@@ -14,7 +14,7 @@ TEST_CASE("SPTokenizer tokenize name test") {
     REQUIRE(tokens.size() == 4);
 
     // check each token individually using .at() method
-    REQUIRE(tokens.at(0).getType() == TokenType::NAME);
+    REQUIRE(tokens.at(0).getType() == TokenType::Name);
     REQUIRE(tokens.at(0).getValue() == "var1");
     REQUIRE(tokens.at(1).getValue() == "var2");
     REQUIRE(tokens.at(2).getValue() == "var3");
@@ -29,7 +29,7 @@ TEST_CASE("SPTokenizer tokenize name with whitespace test") {
     REQUIRE(tokens.size() == 2);
 
     // check each token individually using .at() method
-    REQUIRE(tokens.at(0).getType() == TokenType::NAME);
+    REQUIRE(tokens.at(0).getType() == TokenType::Name);
     REQUIRE(tokens.at(0).getValue() == "var1");
     REQUIRE(tokens.at(1).getValue() == "var2");
 }
@@ -42,13 +42,13 @@ TEST_CASE("SPTokenizer tokenize name and int test") {
     REQUIRE(tokens.size() == 4);
 
     // check each token individually using .at() method
-    REQUIRE(tokens.at(0).getType() == TokenType::NAME);
+    REQUIRE(tokens.at(0).getType() == TokenType::Name);
     REQUIRE(tokens.at(0).getValue() == "var1");
-    REQUIRE(tokens.at(1).getType() == TokenType::INTEGER);
+    REQUIRE(tokens.at(1).getType() == TokenType::Integer);
     REQUIRE(tokens.at(1).getValue() == "123");
-    REQUIRE(tokens.at(2).getType() == TokenType::NAME);
+    REQUIRE(tokens.at(2).getType() == TokenType::Name);
     REQUIRE(tokens.at(2).getValue() == "var2");
-    REQUIRE(tokens.at(3).getType() == TokenType::INTEGER);
+    REQUIRE(tokens.at(3).getType() == TokenType::Integer);
     REQUIRE(tokens.at(3).getValue() == "456");
 }
 

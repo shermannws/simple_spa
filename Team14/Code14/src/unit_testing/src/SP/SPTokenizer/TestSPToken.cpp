@@ -5,7 +5,7 @@
 
 TEST_CASE("SPToken Test") {
     INFO("Test case start");
-    SPToken testToken(OPEN_CURLY_PARAN, "(");
+    SPToken testToken(TokenType::OpenRoundParenthesis, "(");
     REQUIRE(testToken.getValue() == "(");
-    REQUIRE(testToken.getType() == TokenType::OPEN_CURLY_PARAN);
+    REQUIRE(testToken.getType() == TokenType::OpenRoundParenthesis);
 }
