@@ -11,7 +11,9 @@
 #include "SP/AST/Visitors/FollowsExtractorVisitor.h"
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/AST/Traverser/Traverser.h"
-#
+#include "PKB/Pkb.h"
+#include "PKB/PkbConcreteWriter.h"
+
 TEST_CASE("Test AST Traverser") {
     SPParser parser;
     std::string varName = "num1";
@@ -58,7 +60,7 @@ TEST_CASE("Test AST Traverser") {
             followsRelationshipManager,
             usesRelationshipManager
     );
-    std::shared_ptr<PkbWriter> pkbWriter = std::make_shared<PkbWriter>(pkbWriterManager);
+    std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
     std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
     std::shared_ptr<FollowsExtractorVisitor> followsExtractor = std::make_shared<FollowsExtractorVisitor>(pkbWriter);
@@ -84,19 +86,25 @@ TEST_CASE("Test AST Traverser") {
 
     REQUIRE(*(constantStore->getEntity(std::make_shared<Constant>(Constant(1)))) == *(std::make_shared<Constant>(1)));
 
-    auto usesV = *(usesRelationshipManager->getVariableAssignment(std::make_shared<Variable>("v")));
+    auto VarV = Variable("v");
+    auto usesV = usesRelationshipManager->getVariableAssignment(VarV);
     REQUIRE(usesV.size() == 1);
-    REQUIRE(*(usesV.at(0)) == Statement(1, StatementType::Assign));
+    REQUIRE(usesV.at(0) == Statement(1, StatementType::Assign));
 
-    auto usesY = *(usesRelationshipManager->getVariableAssignment(std::make_shared<Variable>("y")));
+    auto VarY = Variable("y");
+    auto usesY = usesRelationshipManager->getVariableAssignment(VarY);
     REQUIRE(usesY.size() == 1);
-    REQUIRE(*(usesY.at(0)) == Statement(1, StatementType::Assign));
+    REQUIRE(usesY.at(0) == Statement(1, StatementType::Assign));
 
-    auto followsRS = followsRelationshipManager->getFollowingStatement(std::make_shared<Statement>(Statement(1, StatementType::Assign)));
-    REQUIRE(*followsRS == Statement(2, StatementType::Read));
+    auto Stmt1 = Statement(1, StatementType::Assign);
+    auto followsRS = followsRelationshipManager->getFollowingStatement(Stmt1);
+    REQUIRE(followsRS.size() == 1);
+    REQUIRE(followsRS.at(0) == Statement(2, StatementType::Read));
 
-    auto followsRS2 = followsRelationshipManager->getFollowingStatement(std::make_shared<Statement>(Statement(2, StatementType::Read)));
-    REQUIRE(*followsRS2 == Statement(3, StatementType::Print));
+    auto Stmt2 = Statement(2, StatementType::Read);
+    auto followsRS2 = followsRelationshipManager->getFollowingStatement(Stmt2);
+    REQUIRE(followsRS2.size() == 1);
+    REQUIRE(followsRS2.at(0) == Statement(3, StatementType::Print));
 
     //auto usesVarName = *(usesRelationshipManager->getVariableAssignment(std::make_shared<Variable>(varName)));
     //REQUIRE(usesVarName.size() == 1);

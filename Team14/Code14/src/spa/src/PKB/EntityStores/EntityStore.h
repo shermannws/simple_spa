@@ -35,7 +35,7 @@ public:
     /*!
      * Returns all the Entities in the EntityStore in a vector
      */
-    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllEntities() const;
+    std::vector<Entity> getAllEntities() const;
 };
 
 #include "EntityStore.cpp"

@@ -37,9 +37,9 @@ TEST_CASE("Test Entity Storage and Retrieval") {
 	REQUIRE(e4 == mockProcedure);
 
     auto entities = store.getAllEntities();
-    REQUIRE(entities->size() == 4);
-    REQUIRE(find(entities->begin(), entities->end(), mockStatement) != entities->end());
-    REQUIRE(find(entities->begin(), entities->end(), mockConstant) != entities->end());
-    REQUIRE(find(entities->begin(), entities->end(), mockProcedure) != entities->end());
-    REQUIRE(find(entities->begin(), entities->end(), mockVariable) != entities->end());
+    REQUIRE(entities.size() == 4);
+    REQUIRE(find(entities.begin(), entities.end(), *mockStatement) != entities.end());
+    REQUIRE(find(entities.begin(), entities.end(), *mockConstant) != entities.end());
+    REQUIRE(find(entities.begin(), entities.end(), *mockProcedure) != entities.end());
+    REQUIRE(find(entities.begin(), entities.end(), *mockVariable) != entities.end());
 }

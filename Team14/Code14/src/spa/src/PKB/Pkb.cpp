@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Pkb.h"
+#include "PKB/PkbConcreteReader.h"
+#include "PKB/PkbConcreteWriter.h"
 
 Pkb::Pkb() {
     this->assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
@@ -35,17 +37,9 @@ Pkb::Pkb() {
 };
 
 std::shared_ptr<PkbReader> Pkb::createPkbReader() {
-    return std::make_shared<PkbReader>(
-            PkbReader(
-                    this->pkbReaderManager
-            )
-    );
+    return std::make_shared<PkbConcreteReader>(this->pkbReaderManager);
 };
 
 std::shared_ptr<PkbWriter> Pkb::createPkbWriter() {
-    return std::make_shared<PkbWriter>(
-            PkbWriter(
-                    this->pkbWriterManager
-            )
-    );
+    return std::make_shared<PkbConcreteWriter>(this->pkbWriterManager);
 };

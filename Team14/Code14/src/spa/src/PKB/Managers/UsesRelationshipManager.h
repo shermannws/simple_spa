@@ -18,7 +18,7 @@ public:
 
     void storeUsesRelationship(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable);
 
-    std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> getAllAssignVariable() const;
+    std::vector<std::vector<Entity>> getAllAssignVariable() const;
 
-    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getVariableAssignment(std::shared_ptr<Variable> variable) const;
+    std::vector<Entity> getVariableAssignment(Variable& variable) const;
 };
