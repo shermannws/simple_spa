@@ -6,10 +6,11 @@
 
 #include "../../Commons/Entities/Entity.h"
 
+template <typename T>
 class EntityStore {
 private:
     std::unordered_set<
-        std::shared_ptr<Entity>,
+        std::shared_ptr<T>,
         std::hash<std::shared_ptr<Entity>>,
         std::equal_to<std::shared_ptr<Entity>>
     > entityStore;
@@ -23,13 +24,13 @@ public:
     /*!
      * Takes in as argumennt an entity and store it into the EntityStore
      */
-    void storeEntity(std::shared_ptr<Entity> entity);
+    void storeEntity(std::shared_ptr<T> entity);
 
     /*!
      * Takes in as argumet an entity and retrieves an entiy that == the argument
      * Returns the Entity if it exists, retur nullptr otherwise
      */
-    std::shared_ptr<Entity> getEntity(std::shared_ptr<Entity> entity) const;
+    std::shared_ptr<Entity> getEntity(std::shared_ptr<T> entity) const;
 
     /*!
      * Returns all the Entities in the EntityStore in a vector
@@ -37,3 +38,4 @@ public:
     std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAllEntities() const;
 };
 
+#include "EntityStore.cpp"

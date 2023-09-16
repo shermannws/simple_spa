@@ -2,8 +2,10 @@
 
 #include "Relationship.h"
 #include "RelationshipType.h"
+#include "Commons/Entities/Statement.h"
+#include "Commons/Entities/Variable.h"
 
-class UsesRelationship : public Relationship {
+class UsesRelationship : public Relationship<Statement, Variable> {
 public:
 	/*!
 	 * Static field specifying the relatioshipType of the Relationship
@@ -13,6 +15,6 @@ public:
 	/*!
 	 * Constructor for UsesRelationship
 	 */
-	UsesRelationship(const std::shared_ptr<Entity> leftEntity,
-		const std::shared_ptr<Entity> rightEntity);
+	UsesRelationship(const std::shared_ptr<Statement> leftEntity,
+		const std::shared_ptr<Variable> rightEntity);
 };

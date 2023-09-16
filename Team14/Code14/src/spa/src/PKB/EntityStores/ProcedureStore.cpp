@@ -2,4 +2,4 @@
 
 #include "ProcedureStore.h"
 
-ProcedureStore::ProcedureStore() : EntityStore() {}
+ProcedureStore::ProcedureStore() : EntityStore<Procedure>() {}

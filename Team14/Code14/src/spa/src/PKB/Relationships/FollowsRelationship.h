@@ -2,8 +2,9 @@
 
 #include "Relationship.h"
 #include "RelationshipType.h"
+#include "Commons/Entities/Statement.h"
 
-class FollowsRelationship : public Relationship {
+class FollowsRelationship : public Relationship<Statement, Statement> {
 public:
 	/*!
 	 * Static field specifying the relatioshipType of the Relationship
@@ -13,6 +14,6 @@ public:
 	/*!
 	 * Constructor for FollowsRelationship
 	 */
-	FollowsRelationship(const std::shared_ptr<Entity> leftEntity,
-		const std::shared_ptr<Entity> rightEntity);
+	FollowsRelationship(const std::shared_ptr<Statement> leftEntity,
+		const std::shared_ptr<Statement> rightEntity);
 };
