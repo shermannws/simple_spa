@@ -2,4 +2,4 @@
 
 #include "ConstantStore.h"
 
-ConstantStore::ConstantStore() : EntityStore() {}
+ConstantStore::ConstantStore() : EntityStore<Constant>() {}

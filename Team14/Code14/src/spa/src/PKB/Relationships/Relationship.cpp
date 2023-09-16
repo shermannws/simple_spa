@@ -4,41 +4,33 @@
 
 #include "Relationship.h"
 
-Relationship::Relationship(const RelationshipType relationshipType,
-    const std::shared_ptr<Entity> leftEntity,
-    const std::shared_ptr<Entity> rightEntity)
-    : relationshipType(relationshipType), leftEntity(leftEntity), rightEntity(rightEntity) {}
+template <typename T, typename U>
+Relationship<T, U>::Relationship(const RelationshipType relationshipType,
+	const std::shared_ptr<T> leftEntity,
+	const std::shared_ptr<U> rightEntity)
+	: relationshipType(relationshipType), leftEntity(leftEntity), rightEntity(rightEntity) {}
 
-std::shared_ptr<Entity> Relationship::getLeftEntity() const {
-    return this->leftEntity;
+template <typename T, typename U>
+std::shared_ptr<Entity> Relationship<T, U>::getLeftEntity() const {
+	return this->leftEntity;
 }
 
-std::shared_ptr<Entity> Relationship::getRightEntity() const {
-    return this->rightEntity;
+template <typename T, typename U>
+std::shared_ptr<Entity> Relationship<T, U>::getRightEntity() const {
+	return this->rightEntity;
 }
 
-
-bool Relationship::operator==(const HashableKey& other) const {
-    if (const Relationship* otherKey = dynamic_cast<const Relationship*>(&other)) {
-        return *(this->getLeftEntity()->getEntityValue()) == *(otherKey->getLeftEntity()->getEntityValue())
-            && *(this->getRightEntity()->getEntityValue()) == *(otherKey->getRightEntity()->getEntityValue());
-    }
-    return false;
+template <typename T, typename U>
+RelationshipType Relationship<T, U>::getRelationshipType() const {
+	return this->relationshipType;
 }
 
-std::size_t std::hash<Relationship>::operator()(const Relationship& relationship) const {
-    return std::hash<std::string>()(
-        *(relationship.getLeftEntity()->getEntityValue()) +
-        "," +
-        *(relationship.getRightEntity()->getEntityValue()));
-}
-
-std::size_t std::hash<std::shared_ptr<Relationship>>::operator()(const std::shared_ptr<Relationship> relationshipPtr) const {
-    return std::hash<Relationship>()(*relationshipPtr);
-}
-
-bool std::equal_to<std::shared_ptr<Relationship>>::operator()(
-    std::shared_ptr<Relationship> const& lhs,
-    std::shared_ptr<Relationship> const& rhs) const {
-    return *lhs == *rhs;
+template <typename T, typename U>
+bool Relationship<T, U>::operator==(const HashableKey& other) const {
+	if (const Relationship* otherKey = dynamic_cast<const Relationship*>(&other)) {
+		return *(this->getLeftEntity()->getEntityValue()) == *(otherKey->getLeftEntity()->getEntityValue())
+			&& *(this->getRightEntity()->getEntityValue()) == *(otherKey->getRightEntity()->getEntityValue())
+			&& this->getRelationshipType() == otherKey->getRelationshipType();
+	}
+	return false;
 }
