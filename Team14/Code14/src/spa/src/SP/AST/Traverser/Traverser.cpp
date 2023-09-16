@@ -23,9 +23,9 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
 		}
 
 		//add child of current node into the frontier
-		std::vector<std::shared_ptr<ASTNode>> childreOfCurrent = current->getAllChildNodes();
+		std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();
 		//reverse iterator is used to add child from right to left
-		for (auto it = childreOfCurrent.rbegin(); it != childreOfCurrent.rend(); it++) {
+		for (auto it = childrenOfCurrent.rbegin(); it != childrenOfCurrent.rend(); it++) {
 			frontier.push(*it);
 		}
 	}

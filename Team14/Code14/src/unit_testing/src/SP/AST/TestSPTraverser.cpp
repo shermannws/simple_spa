@@ -18,29 +18,30 @@ TEST_CASE("Test AST Traverser") {
     SPParser parser;
     std::string varName = "num1";
     std::vector<SPToken> tokens = {
-            SPToken(TokenType::NAME, "procedure"),
-            SPToken(TokenType::NAME, "doMath"),
-            SPToken(TokenType::OPEN_CURLY_PARAN, "{"),
-            SPToken(TokenType::NAME, "x"),
-            SPToken(TokenType::EQUALS, "="),
-            SPToken(TokenType::NAME, "v"),
-            SPToken(TokenType::ARITHMETIC_OPERATOR, "+"),
-            SPToken(TokenType::INTEGER, "1"),
-            SPToken(TokenType::ARITHMETIC_OPERATOR, "*"),
-            SPToken(TokenType::NAME, "y"),
-            SPToken(TokenType::ARITHMETIC_OPERATOR, "+"),
-            SPToken(TokenType::NAME, "z"),
-            SPToken(TokenType::ARITHMETIC_OPERATOR, "*"),
-            SPToken(TokenType::NAME, "t"),
-            SPToken(TokenType::SEMICOLON, ";"),
-            SPToken(TokenType::NAME, "read"),
-            SPToken(TokenType::NAME, varName),
-            SPToken(TokenType::SEMICOLON, ";"),
-            SPToken(TokenType::NAME, "print"),
-            SPToken(TokenType::NAME, varName),
-            SPToken(TokenType::SEMICOLON, ";"),
-            SPToken(TokenType::CLOSE_CURLY_PARAN, "}")
+            SPToken(TokenType::Name, "procedure"),
+            SPToken(TokenType::Name, "doMath"),
+            SPToken(TokenType::OpenCurlyParenthesis, "{"),
+            SPToken(TokenType::Name, "x"),
+            SPToken(TokenType::Equals, "="),
+            SPToken(TokenType::Name, "v"),
+            SPToken(TokenType::ArithmeticOperator, "+"),
+            SPToken(TokenType::Integer, "1"),
+            SPToken(TokenType::ArithmeticOperator, "*"),
+            SPToken(TokenType::Name, "y"),
+            SPToken(TokenType::ArithmeticOperator, "+"),
+            SPToken(TokenType::Name, "z"),
+            SPToken(TokenType::ArithmeticOperator, "*"),
+            SPToken(TokenType::Name, "t"),
+            SPToken(TokenType::Semicolon, ";"),
+            SPToken(TokenType::Name, "read"),
+            SPToken(TokenType::Name, varName),
+            SPToken(TokenType::Semicolon, ";"),
+            SPToken(TokenType::Name, "print"),
+            SPToken(TokenType::Name, varName),
+            SPToken(TokenType::Semicolon, ";"),
+            SPToken(TokenType::CloseCurlyParenthesis, "}")
     };
+
     std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
 
     auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
@@ -71,19 +72,19 @@ TEST_CASE("Test AST Traverser") {
     Traverser traverser = Traverser(visitors);
     traverser.traverse(rootNode);
 
-    REQUIRE(*(procedureStore->getEntity(std::make_shared<Entity>(Procedure("doMath")))) == *(std::make_shared<Procedure>("doMath")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("x")))) == *(std::make_shared<Variable>("x")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("v")))) == *(std::make_shared<Variable>("v")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("y")))) == *(std::make_shared<Variable>("y")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("z")))) == *(std::make_shared<Variable>("z")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("t")))) == *(std::make_shared<Variable>("t")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Entity>(Variable("num1")))) == *(std::make_shared<Variable>("num1")));
+    REQUIRE(*(procedureStore->getEntity(std::make_shared<Procedure>(Procedure("doMath")))) == *(std::make_shared<Procedure>("doMath")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("x")))) == *(std::make_shared<Variable>("x")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("v")))) == *(std::make_shared<Variable>("v")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("y")))) == *(std::make_shared<Variable>("y")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("z")))) == *(std::make_shared<Variable>("z")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("t")))) == *(std::make_shared<Variable>("t")));
+    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("num1")))) == *(std::make_shared<Variable>("num1")));
 
-    REQUIRE(*(statementStore->getEntity(std::make_shared<Entity>(Statement(1,StatementType::Assign)))) == *(std::make_shared<Statement>(1, StatementType::Assign)));
-    REQUIRE(*(statementStore->getEntity(std::make_shared<Entity>(Statement(2, StatementType::Read)))) == *(std::make_shared<Statement>(2, StatementType::Read)));
-    REQUIRE(*(statementStore->getEntity(std::make_shared<Entity>(Statement(3, StatementType::Print)))) == *(std::make_shared<Statement>(3, StatementType::Print)));
+    REQUIRE(*(statementStore->getEntity(std::make_shared<Statement>(Statement(1,StatementType::Assign)))) == *(std::make_shared<Statement>(1, StatementType::Assign)));
+    REQUIRE(*(statementStore->getEntity(std::make_shared<Statement>(Statement(2, StatementType::Read)))) == *(std::make_shared<Statement>(2, StatementType::Read)));
+    REQUIRE(*(statementStore->getEntity(std::make_shared<Statement>(Statement(3, StatementType::Print)))) == *(std::make_shared<Statement>(3, StatementType::Print)));
 
-    REQUIRE(*(constantStore->getEntity(std::make_shared<Entity>(Constant(1)))) == *(std::make_shared<Constant>(1)));
+    REQUIRE(*(constantStore->getEntity(std::make_shared<Constant>(Constant(1)))) == *(std::make_shared<Constant>(1)));
 
     auto VarV = Variable("v");
     auto usesV = usesRelationshipManager->getVariableAssignment(VarV);

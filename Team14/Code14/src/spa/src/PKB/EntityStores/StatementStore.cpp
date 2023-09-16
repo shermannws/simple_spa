@@ -2,4 +2,4 @@
 
 #include "StatementStore.h"
 
-StatementStore::StatementStore() : EntityStore() {}
+StatementStore::StatementStore() : EntityStore<Statement>() {}
