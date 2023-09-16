@@ -46,6 +46,8 @@ public:
     inline static const char CHAR_GREATER_THAN = '>';
     inline static const char CHAR_LESS_THAN = '<';
     inline static const char CHAR_NOT = '!';
+    inline static const char CHAR_AMPERSAND = '&';
+    inline static const char CHAR_VERTICAL_BAR = '|';
     inline static const char CHAR_EQUAL = '=';
     inline static const char CHAR_PLUS = '+';
     inline static const char CHAR_MINUS = '-';
