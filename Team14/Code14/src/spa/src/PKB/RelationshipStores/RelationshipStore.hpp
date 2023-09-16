@@ -1,7 +1,5 @@
 #pragma once
 
-#include "RelationshipStore.h"
-
 template <typename T>
 RelationshipStore<T>::RelationshipStore() {}
 

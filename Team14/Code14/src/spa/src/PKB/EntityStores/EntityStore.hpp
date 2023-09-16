@@ -1,7 +1,5 @@
 #pragma once
 
-#include "EntityStore.h"
-
 template <typename T>
 EntityStore<T>::EntityStore() = default;
 

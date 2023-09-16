@@ -38,4 +38,4 @@ public:
     std::vector<Entity> getAllEntities() const;
 };
 
-#include "EntityStore.cpp"
+#include "EntityStore.hpp"
