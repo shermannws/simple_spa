@@ -7,9 +7,11 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
-#include "PKB/PKB.h"
+#include "StubPkbReader.h"
 
 TEST_CASE("Test formatResult") {
+    std::shared_ptr<StubPkbReader> stubPkbReader = std::make_shared<StubPkbReader>();
+
     SECTION("Uses query single tuple") {
         PQLParser parser("assign a; variable x; Select x such that Uses(a, x)");
         Query query = parser.parse();
@@ -26,8 +28,7 @@ TEST_CASE("Test formatResult") {
         std::vector<std::vector<Entity>> tuples {v1, v2};
         r.setTuples(tuples);
 
-        Pkb pkb = Pkb();
-        PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+        PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
 
         std::list<std::string> formattedResults = evaluator.formatResult(query, r);
 
@@ -53,8 +54,7 @@ TEST_CASE("Test formatResult") {
         std::vector<std::vector<Entity>> tuples{v1, v2};
         r.setTuples(tuples);
 
-        Pkb pkb = Pkb();
-        PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+        PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
 
         std::list<std::string> formattedResults = evaluator.formatResult(query, r);
 
@@ -63,3 +63,5 @@ TEST_CASE("Test formatResult") {
         REQUIRE(find(formattedResults.begin(), formattedResults.end(), "2") != formattedResults.end());
     }
 }
+
+//TODO Testcase for different queries
