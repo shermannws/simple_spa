@@ -21,10 +21,16 @@ std::shared_ptr<Entity> Relationship<T, U>::getRightEntity() const {
 }
 
 template <typename T, typename U>
+RelationshipType Relationship<T, U>::getRelationshipType() const {
+	return this->relationshipType;
+}
+
+template <typename T, typename U>
 bool Relationship<T, U>::operator==(const HashableKey& other) const {
 	if (const Relationship* otherKey = dynamic_cast<const Relationship*>(&other)) {
 		return *(this->getLeftEntity()->getEntityValue()) == *(otherKey->getLeftEntity()->getEntityValue())
-			&& *(this->getRightEntity()->getEntityValue()) == *(otherKey->getRightEntity()->getEntityValue());
+			&& *(this->getRightEntity()->getEntityValue()) == *(otherKey->getRightEntity()->getEntityValue())
+			&& this->getRelationshipType() == otherKey->getRelationshipType();
 	}
 	return false;
 }

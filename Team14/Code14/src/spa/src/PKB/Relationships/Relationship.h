@@ -30,6 +30,11 @@ public:
     std::shared_ptr<Entity> getRightEntity() const;
 
 	/*!
+	 * Returns the RelationshipType of the object
+	 */
+	RelationshipType getRelationshipType() const;
+
+	/*!
 	 * Overriden == operator for comparison between Relationship
 	 */
 	bool operator==(const HashableKey& other) const override;
