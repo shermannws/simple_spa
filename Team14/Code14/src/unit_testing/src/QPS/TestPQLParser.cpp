@@ -87,7 +87,7 @@ TEST_CASE("processSelect Errors") {
     }
 }
 
-TEST_CASE("processSuchThatClause") {
+TEST_CASE("processSuchThatClause Uses") {
     SECTION("Valid Uses query") {
         PQLParser parser("assign a; variable v;\nSelect a such that Uses(a, v)");
         Query query = parser.parse();
@@ -138,9 +138,115 @@ TEST_CASE("processSuchThatClause") {
         REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
         REQUIRE(rightRef.getRep() == "x");
     }
+}
 
-    SECTION("Valid Follows query") {
-        PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Follows (s1,s2)");
+TEST_CASE("processSuchThatClause Modifies") {
+    SECTION("Valid Modifies(s,v) query") {
+        PQLParser parser("stmt s; variable v; \nSelect v such that Modifies(s,v)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Modifies);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Stmt);
+        REQUIRE(leftRef.getRep() == "s");
+        REQUIRE(rightRef.getType() == RefType::EntRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Variable);
+        REQUIRE(rightRef.getRep() == "v");
+    }
+
+    SECTION("Valid Modifies(s,ident) query") {
+        PQLParser parser("read re; \nSelect re such that Modifies(re,\"variable\")");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Modifies);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Read);
+        REQUIRE(leftRef.getRep() == "re");
+        REQUIRE(rightRef.getType() == RefType::EntRef);
+        REQUIRE(rightRef.getRootType() == RootType::Ident);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "variable");
+    }
+
+    SECTION("Valid Modifies(integer,v) query") {
+        PQLParser parser("variable l; \nSelect l such that Modifies(3,l)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Modifies);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "3");
+        REQUIRE(rightRef.getType() == RefType::EntRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Variable);
+        REQUIRE(rightRef.getRep() == "l");
+    }
+
+    SECTION("Valid Modifies(integer,ident) query") {
+        PQLParser parser("stmt s; \nSelect s such that Modifies(1,\"hello\")");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Modifies);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "1");
+        REQUIRE(rightRef.getType() == RefType::EntRef);
+        REQUIRE(rightRef.getRootType() == RootType::Ident);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "hello");
+    }
+
+    SECTION("Valid Modifies(s,_) query") {
+        PQLParser parser("call a; \nSelect a such that Modifies(a,_)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Modifies);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Call);
+        REQUIRE(leftRef.getRep() == "a");
+        REQUIRE(rightRef.getType() == RefType::EntRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+
+    SECTION("Valid Modifies(integer,_) query") {
+        PQLParser parser("assign a; \nSelect a such that Modifies(5,_)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Modifies);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "5");
+        REQUIRE(rightRef.getType() == RefType::EntRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+}
+
+TEST_CASE("processSuchThatClause Follows") {
+    SECTION("Valid Follows(s1,s2)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1 such that Follows (s1,s2)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
         Ref leftRef = clause.getFirstParam();
@@ -156,8 +262,42 @@ TEST_CASE("processSuchThatClause") {
         REQUIRE(rightRef.getRep() == "s2");
     }
 
-    SECTION("Valid Follows query") {
-        PQLParser parser("stmt s1; assign x;\nSelect x such that Follows(3,x) ");
+    SECTION("Valid Follows(s,integer)") {
+        PQLParser parser("print pr;\nSelect pr  such  that  Follows(pr,1)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Follows);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Print);
+        REQUIRE(leftRef.getRep() == "pr");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "1");
+    }
+
+    SECTION("Valid Follows(s,_)") {
+        PQLParser parser("if ifs;\nSelect ifs such that Follows(ifs,_)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Follows);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::If);
+        REQUIRE(leftRef.getRep() == "ifs");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+
+    SECTION("Valid Follows(integer,s)") {
+        PQLParser parser("while w;\nSelect w such  that  Follows(1,w)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
         Ref leftRef = clause.getFirstParam();
@@ -166,37 +306,54 @@ TEST_CASE("processSuchThatClause") {
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Integer);
         REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
-        REQUIRE(leftRef.getRep() == "3");
+        REQUIRE(leftRef.getRep() == "1");
         REQUIRE(rightRef.getType() == RefType::StmtRef);
         REQUIRE(rightRef.getRootType() == RootType::Synonym);
-        REQUIRE(rightRef.getEntityType() == QueryEntityType::Assign);
-        REQUIRE(rightRef.getRep() == "x");
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::While);
+        REQUIRE(rightRef.getRep() == "w");
     }
 
-    SECTION("Valid Follows* query") {
-        PQLParser parser("stmt s1;\nSelect s1 such that Follows*(_, 1)");
+    SECTION("Valid Follows(_,s)") {
+        PQLParser parser("assign a;\nSelect a such that Follows(_,a)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
         Ref leftRef = clause.getFirstParam();
         Ref rightRef = clause.getSecondParam();
-        REQUIRE(clause.getType() == ClauseType::FollowsStar);
+        REQUIRE(clause.getType() == ClauseType::Follows);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Wildcard);
         REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
         REQUIRE(leftRef.getRep() == "_");
         REQUIRE(rightRef.getType() == RefType::StmtRef);
-        REQUIRE(rightRef.getRootType() == RootType::Integer);
-        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
-        REQUIRE(rightRef.getRep() == "1");
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(rightRef.getRep() == "a");
     }
 
-    SECTION("Valid Follows* query") {
-        PQLParser parser("stmt x;\nSelect x such that Follows*(_,_)");
+    SECTION("Valid Follows(integer,integer)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Follows(2,3)");
         Query query = parser.parse();
         SuchThatClause clause = query.getSuchThat()[0];
         Ref leftRef = clause.getFirstParam();
         Ref rightRef = clause.getSecondParam();
-        REQUIRE(clause.getType() == ClauseType::FollowsStar);
+        REQUIRE(clause.getType() == ClauseType::Follows);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "2");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "3");
+    }
+
+    SECTION("Valid Follows(_,_)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Follows(_,_)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Follows);
         REQUIRE(leftRef.getType() == RefType::StmtRef);
         REQUIRE(leftRef.getRootType() == RootType::Wildcard);
         REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
@@ -206,7 +363,251 @@ TEST_CASE("processSuchThatClause") {
         REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
         REQUIRE(rightRef.getRep() == "_");
     }
+}
 
+TEST_CASE("processSuchThatClause Parent") {
+    SECTION("Valid Parent(s1,s2)") {
+        PQLParser parser("call s1, s2;\nSelect s1 such that Parent (s1,s2)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Parent);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Call);
+        REQUIRE(leftRef.getRep() == "s1");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Call);
+        REQUIRE(rightRef.getRep() == "s2");
+    }
+
+    SECTION("Valid Parent(s,integer)") {
+        PQLParser parser("print pr;\nSelect pr  such  that  Parent(pr,1)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Parent);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Print);
+        REQUIRE(leftRef.getRep() == "pr");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "1");
+    }
+
+    SECTION("Valid Parent(s,_)") {
+        PQLParser parser("if ifs;\nSelect ifs such that Parent(ifs,_)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Parent);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::If);
+        REQUIRE(leftRef.getRep() == "ifs");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+
+    SECTION("Valid Parent(integer,s)") {
+        PQLParser parser("while w;\nSelect w such  that  Parent(1,w)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Parent);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "1");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::While);
+        REQUIRE(rightRef.getRep() == "w");
+    }
+
+    SECTION("Valid Parent(_,s)") {
+        PQLParser parser("assign a;\nSelect a such that Parent(_,a)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Parent);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(rightRef.getRep() == "a");
+    }
+
+    SECTION("Valid Parent(integer,integer)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Parent(2,3)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Parent);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "2");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "3");
+    }
+
+    SECTION("Valid Parent(_,_)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Parent(_,_)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::Parent);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+}
+
+TEST_CASE("processSuchThatClause Parent*") {
+    SECTION("Valid Parent*(s1,s2)") {
+        PQLParser parser("call s1, s2;\nSelect s1 such that Parent* (s1,s2)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::ParentStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Call);
+        REQUIRE(leftRef.getRep() == "s1");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Call);
+        REQUIRE(rightRef.getRep() == "s2");
+    }
+
+    SECTION("Valid Parent*(s,integer)") {
+        PQLParser parser("assign assign;\nSelect assign such that  Parent*(assign,3)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::ParentStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(leftRef.getRep() == "assign");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "3");
+    }
+
+    SECTION("Valid Parent*(s,_)") {
+        PQLParser parser("read hello;\nSelect hello such that Parent*(hello,_)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::ParentStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Read);
+        REQUIRE(leftRef.getRep() == "hello");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+
+    SECTION("Valid Parent*(integer,s)") {
+        PQLParser parser("stmt read;\nSelect read such  that  Parent*(1,read)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::ParentStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "1");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Stmt);
+        REQUIRE(rightRef.getRep() == "read");
+    }
+
+    SECTION("Valid Parent*(_,s)") {
+        PQLParser parser("while while;\nSelect while such that Parent*(_,while)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::ParentStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::While);
+        REQUIRE(rightRef.getRep() == "while");
+    }
+
+    SECTION("Valid Parent*(integer,integer)") {
+        PQLParser parser("stmt s1; stmt s2;\nSelect s1  such  that  Parent*(2,3)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::ParentStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "2");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "3");
+    }
+
+    SECTION("Valid Parent*(_,_)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Parent*(_,_)");
+        Query query = parser.parse();
+        SuchThatClause clause = query.getSuchThat()[0];
+        Ref leftRef = clause.getFirstParam();
+        Ref rightRef = clause.getSecondParam();
+        REQUIRE(clause.getType() == ClauseType::ParentStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+}
+
+TEST_CASE("Invalid processSuchThat cases") {
     SECTION("Invalid general queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assign a; print d;\nSelect a such",
@@ -245,6 +646,27 @@ TEST_CASE("processSuchThatClause") {
         }
     }
 
+    SECTION("Invalid Modifies queries") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("assign a; variable v;\nSelect a such that Modifies(_, v)",
+                               "Invalid Modifies LHS, wildcard found");
+        testcases.emplace_back("print a; constant v;\nSelect a such that Modifies(v, a)",
+                               "Invalid Modifies LHS, invalid entity type found");
+        testcases.emplace_back("call a; constant d;\nSelect a such that Modifies(\"test\", d)",
+                               "Invalid Modifies RHS, non-variable found");
+        testcases.emplace_back("stmt a; variable d;\nSelect a such that Modifies(b, d)",
+                               "Invalid Modifies LHS, undeclared synonym found");
+        testcases.emplace_back("print a; print d;\nSelect a such that Modifies(a, 3)",
+                               "Invalid entRef");
+        testcases.emplace_back("print a; variable d;\nSelect a such that Modifies(a, d)",
+                               "Invalid Modifies LHS, invalid entity type found");
+
+        for (const auto& testcase : testcases) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+        }
+    }
+
     SECTION("Invalid Follow queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("stmt a; variable v;\nSelect v such that Follows(v, a)",
@@ -256,6 +678,48 @@ TEST_CASE("processSuchThatClause") {
         testcases.emplace_back("procedure a; call v;\nSelect a such that Follows(\"hello\", v)",
                                "Invalid stmtRef");
         testcases.emplace_back("assign a; call v;\nSelect a such that Follows(a, \"world\")",
+                               "Invalid stmtRef");
+
+        for (const auto& testcase : testcases) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+        }
+    }
+
+    SECTION("Invalid Parent queries") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("stmt a; variable v;\nSelect v such that Parent(v, a)",
+                               "Invalid Parent LHS, non-statement found");
+        testcases.emplace_back("procedure a; call v;\nSelect v such that Parent(v, a)",
+                               "Invalid Parent RHS, non-statement found");
+        testcases.emplace_back("constant a; call v;\nSelect v such that Parent(a, v)",
+                               "Invalid Parent LHS, non-statement found");
+        testcases.emplace_back("procedure a; call v;\nSelect v such that Parent(hello, a)",
+                               "Undeclared synonym found");
+        testcases.emplace_back("stmt a; print v;\nSelect a such that Parent(\"hello\", v)",
+                               "Invalid stmtRef");
+        testcases.emplace_back("print a; assign v;\nSelect a such that Parent(a, \"world\")",
+                               "Invalid stmtRef");
+
+        for (const auto& testcase : testcases) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+        }
+    }
+
+    SECTION("Invalid Parent* queries") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("stmt a; variable v;\nSelect v such that Parent*(v, a)",
+                               "Invalid Parent* LHS, non-statement found");
+        testcases.emplace_back("procedure a; call v;\nSelect v such that Parent*(v, a)",
+                               "Invalid Parent* RHS, non-statement found");
+        testcases.emplace_back("constant a; call v;\nSelect v such that Parent*(a, v)",
+                               "Invalid Parent* LHS, non-statement found");
+        testcases.emplace_back("procedure a; call v;\nSelect v such that Parent*(hello, a)",
+                               "Undeclared synonym found");
+        testcases.emplace_back("stmt a; print v;\nSelect a such that Parent*(\"hello\", v)",
+                               "Invalid stmtRef");
+        testcases.emplace_back("print a; assign v;\nSelect a such that Parent*(a, \"world\")",
                                "Invalid stmtRef");
 
         for (const auto& testcase : testcases) {
