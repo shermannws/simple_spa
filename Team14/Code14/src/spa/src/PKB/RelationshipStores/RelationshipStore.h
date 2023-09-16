@@ -43,4 +43,4 @@ public:
     typename std::unordered_set<std::shared_ptr<T>>::iterator getEndIterator();
 };
 
-#include "RelationshipStore.cpp"
+#include "RelationshipStore.hpp"
