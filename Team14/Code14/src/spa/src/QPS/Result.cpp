@@ -17,18 +17,18 @@ bool Result::getBoolResult() {
     return boolResult;
 }
 
-void Result::setTuples(const std::vector<std::vector<Entity>>& ttuples) {
+void Result::setTuples(const std::vector<ResultTuple>& ttuples) {
     tuples = ttuples;
 }
 
-std::vector<std::vector<Entity>> Result::getTuples() {
+std::vector<ResultTuple> Result::getTuples() {
     return tuples;
 }
 
-std::unordered_map<std::string, int> Result::getSynIndices() {
+SynonymMap Result::getSynIndices() {
     return synIndices;
 }
 
-void Result::setSynIndices(std::unordered_map<std::string, int> &ssynIndices) {
+void Result::setSynIndices(SynonymMap &ssynIndices) {
     synIndices = ssynIndices;
 }

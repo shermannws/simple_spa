@@ -7,15 +7,16 @@
 #include "Query.h"
 #include "ClauseHandler.h"
 #include "./PKB/PkbReader.h"
+#include "QPSTypes.h"
 
 class PQLEvaluator {
 private:
     std::shared_ptr<PkbReader> pkbReader;
     std::shared_ptr<ClauseHandler> clauseHandler;
-    std::vector<Entity> getAll(const std::shared_ptr<QueryEntity>& queryEntity);
+    std::vector<Entity> getAll(const EntityPtr& queryEntity);
 
 public:
     explicit PQLEvaluator(std::shared_ptr<PkbReader> pkbReader);
     Result evaluate(Query&);
-    std::list<std::string> formatResult(Query& query, Result& result); // TODO: to set as private in the future
+    ResultList formatResult(Query& query, Result& result); // TODO: to set as private in the future
 };

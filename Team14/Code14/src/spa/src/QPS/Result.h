@@ -5,6 +5,9 @@
 #include <unordered_map>
 
 #include "../Commons/Entities/Entity.h"
+#include "QPSTypes.h"
+
+typedef std::vector<Entity> ResultTuple;
 
 enum class ResultType {
     Invalid,
@@ -16,8 +19,8 @@ class Result {
 private:
     ResultType type;
     bool boolResult;
-    std::unordered_map<std::string, int> synIndices;
-    std::vector<std::vector<Entity>> tuples;
+    SynonymMap synIndices;
+    std::vector<ResultTuple> tuples;
 
 public:
     Result();
@@ -25,9 +28,9 @@ public:
     void setType(ResultType& ttype);
     void setBoolResult(bool result);
     bool getBoolResult();
-    void setSynIndices(std::unordered_map<std::string, int>& ssynIndices);
-    std::unordered_map<std::string, int> getSynIndices();
-    void setTuples(const std::vector<std::vector<Entity>>& ttuples);
-    std::vector<std::vector<Entity>> getTuples();
+    void setSynIndices(SynonymMap & ssynIndices);
+    SynonymMap getSynIndices();
+    void setTuples(const std::vector<ResultTuple>& ttuples);
+    std::vector<ResultTuple> getTuples();
 
 };

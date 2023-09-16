@@ -1,10 +1,10 @@
+#include <string>
 
 #include "Ref.h"
-#include <string>
 
 Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid), entityType(QueryEntityType::Invalid) {}
 
-void Ref::setRep(std::string& rrep) {
+void Ref::setRep(Expression & rrep) {
     rep = rrep;
 }
 
