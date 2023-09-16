@@ -18,4 +18,5 @@ public:
     std::string getVarName();
     void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
+    std::string toString() override;
 };
