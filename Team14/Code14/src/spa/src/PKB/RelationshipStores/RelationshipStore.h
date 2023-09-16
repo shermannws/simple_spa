@@ -11,8 +11,8 @@ class RelationshipStore {
 private:
     std::unordered_set<
         std::shared_ptr<T>,
-        std::hash<std::shared_ptr<T>>,
-        std::equal_to<std::shared_ptr<T>>
+        RelationshipPtrHash<T>,
+        RelationshipPtrComparator<T>
     > relationshipStore;
 
 public:
