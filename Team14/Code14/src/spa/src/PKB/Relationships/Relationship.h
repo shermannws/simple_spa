@@ -40,4 +40,4 @@ public:
 	bool operator==(const HashableKey& other) const override;
 };
 
-#include "Relationship.cpp"
+#include "Relationship.hpp"

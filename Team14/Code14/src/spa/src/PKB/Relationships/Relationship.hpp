@@ -2,8 +2,6 @@
 
 #include <stdexcept>
 
-#include "Relationship.h"
-
 template <typename T, typename U>
 Relationship<T, U>::Relationship(const RelationshipType relationshipType,
 	const std::shared_ptr<T> leftEntity,
