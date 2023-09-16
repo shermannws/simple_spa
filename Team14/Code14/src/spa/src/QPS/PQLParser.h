@@ -23,6 +23,6 @@ private:
     void validateSuchThatSemantics(Query &query, SuchThatClause& clause);
     bool isOfStmtType(QueryEntityType entityType);
 public:
-    explicit PQLParser(const std::string& str);
+    explicit PQLParser(const std::string& PQLQuery);
     Query parse();
 };
