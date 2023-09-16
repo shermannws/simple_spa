@@ -8,7 +8,7 @@
 
 class SPTokenizer {
 public:
-    SPTokenizer(const std::string& input);
+    explicit SPTokenizer(std::string  input);
     std::vector<SPToken> tokenize();
 private:
     int curr;
@@ -17,12 +17,16 @@ private:
 
     void tokenizeName();
     void tokenizeInteger();
-    void tokenizeParantheses();
+    void tokenizeParanthesis();
     void tokenizeSemicolon();
     void tokenizeEquals();
     void tokenizeArithmeticOperator();
+    void tokenizeConditionalOperator();
+    void tokenizeRelationalOperator();
+    void tokenizeNot();
 
     int peekChar();
     int popChar();
     bool isCurrValid();
+    int peekNextChar();
 };
