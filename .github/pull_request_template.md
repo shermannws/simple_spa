@@ -15,5 +15,4 @@ https://e0544167.atlassian.net/browse/SPAONEFOUR-
 - [ ] Passed all existing unit tests
 - [ ] Passed all existing integration/e2e tests
 - [ ] Merged PR dependencies, please list: <!---  DELETE IF N.A. -->
-
   - [ ] https://github.com/nus-cs3203/23s1-cp-spa-team-14/pull/
