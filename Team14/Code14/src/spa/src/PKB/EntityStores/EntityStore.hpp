@@ -19,7 +19,7 @@ std::vector<Entity> EntityStore<T>::getAllEntities() const {
 
 template <typename T>
 std::shared_ptr<Entity> EntityStore<T>::getEntity(std::shared_ptr<T> entity) const {
-    std::unordered_set<std::shared_ptr<T>>::const_iterator got = this->entityStore.find(entity);
+    typename std::unordered_set<std::shared_ptr<T>>::const_iterator got = this->entityStore.find(entity);
     if (got == this->entityStore.end()) {
         return nullptr;
     }

@@ -10,7 +10,7 @@ void RelationshipStore<T>::storeRelationship(std::shared_ptr<T> relationship) {
 
 template <typename T>
 std::shared_ptr<T> RelationshipStore<T>::getRelationship(std::shared_ptr<T> relationship) const {
-    std::unordered_set<std::shared_ptr<T>>::const_iterator got = this->relationshipStore.find(relationship);
+    typename std::unordered_set<std::shared_ptr<T>>::const_iterator got = this->relationshipStore.find(relationship);
     if (got == this->relationshipStore.end()) {
         return nullptr;
     }
