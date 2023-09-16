@@ -3,7 +3,9 @@
 StubPkbReader::StubPkbReader() {}
 
 std::vector<Entity> StubPkbReader::getAllAssign() const {
-    return std::vector<Entity>();
+    return std::vector<Entity>{Statement(1, StatementType::Assign),
+                               Statement(2, StatementType::Assign),
+                               Statement(3, StatementType::Assign)};
 }
 
 std::vector<Entity> StubPkbReader::getAllVariables() const {
