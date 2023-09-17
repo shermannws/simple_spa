@@ -56,7 +56,7 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         // TODO: write into pkb
 
         PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-        PQLParser parser1("variable v; Select w such that Uses(3, v)");
+        PQLParser parser1("variable v; Select v such that Uses(3, v)");
         Query queryObj1 = parser1.parse();
         Result resultObj1 = evaluator.evaluate(queryObj1);
         auto results1 = evaluator.formatResult(queryObj1, resultObj1);
