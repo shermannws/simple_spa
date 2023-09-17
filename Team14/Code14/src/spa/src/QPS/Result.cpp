@@ -17,7 +17,7 @@ bool Result::getBoolResult() {
     return boolResult;
 }
 
-void Result::setTuples(std::vector<std::vector<Entity>>& ttuples) {
+void Result::setTuples(const std::vector<std::vector<Entity>>& ttuples) {
     tuples = ttuples;
 }
 

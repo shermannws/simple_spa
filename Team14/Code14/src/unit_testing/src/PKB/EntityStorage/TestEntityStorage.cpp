@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "PKB/EntityStorage/EntityStorage.h"
+#include "PKB/EntityStores/EntityStore.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "Commons/Entities/Constant.h"
@@ -16,7 +16,7 @@ TEST_CASE("Test Entity Storage and Retrieval") {
     auto mockConstant = std::make_shared<Constant>(Constant(2));
     auto mockProcedure = std::make_shared<Procedure>(Procedure("y"));
 
-	EntityStorage store = EntityStorage();
+    EntityStore store = EntityStore<Entity>();
 
 	store.storeEntity(mockStatement);
 	store.storeEntity(mockVariable);
@@ -37,9 +37,9 @@ TEST_CASE("Test Entity Storage and Retrieval") {
 	REQUIRE(e4 == mockProcedure);
 
     auto entities = store.getAllEntities();
-    REQUIRE(entities->size() == 4);
-    REQUIRE(find(entities->begin(), entities->end(), mockStatement) != entities->end());
-    REQUIRE(find(entities->begin(), entities->end(), mockConstant) != entities->end());
-    REQUIRE(find(entities->begin(), entities->end(), mockProcedure) != entities->end());
-    REQUIRE(find(entities->begin(), entities->end(), mockVariable) != entities->end());
+    REQUIRE(entities.size() == 4);
+    REQUIRE(find(entities.begin(), entities.end(), *mockStatement) != entities.end());
+    REQUIRE(find(entities.begin(), entities.end(), *mockConstant) != entities.end());
+    REQUIRE(find(entities.begin(), entities.end(), *mockProcedure) != entities.end());
+    REQUIRE(find(entities.begin(), entities.end(), *mockVariable) != entities.end());
 }

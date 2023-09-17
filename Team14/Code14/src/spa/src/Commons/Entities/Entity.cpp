@@ -4,11 +4,8 @@
 
 #include "Entity.h"
 
-Entity::Entity(const std::shared_ptr<std::string> entityValue, bool isInt, EntityType entityType) {
-    this->entityValue = entityValue;
-    this->isInt = isInt;
-    this->entityType = entityType;
-}
+Entity::Entity(const std::shared_ptr<std::string> entityValue, bool isInt, EntityType entityType)
+    : entityValue(entityValue), isInt(isInt), entityType(entityType) {}
 
 EntityType Entity::getEntityType() const {
     return this->entityType;

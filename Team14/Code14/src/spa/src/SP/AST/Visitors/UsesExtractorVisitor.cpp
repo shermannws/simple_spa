@@ -26,8 +26,8 @@ void UsesExtractorVisitor::visitAssignNode(AssignNode* node) const {
 				std::make_shared<Variable>(ptr->getVarName()));
 		}
 
-		std::vector<std::shared_ptr<ASTNode>> childreOfCurrent = current->getAllChildNodes();
-		for (auto it = childreOfCurrent.rbegin(); it != childreOfCurrent.rend(); it++) {
+		std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();
+		for (auto it = childrenOfCurrent.rbegin(); it != childrenOfCurrent.rend(); it++) {
 			frontier.push(*it);
 		}
 

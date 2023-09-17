@@ -1,6 +1,7 @@
 #include "PKB/Relationships/UsesRelationship.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
+#include "PKB/Relationships/RelationshipHash.h"
 
 #include "catch.hpp"
 #include <iostream>
@@ -81,7 +82,7 @@ TEST_CASE("Test UsesRelationship Hash") {
 		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
 		std::make_shared<Variable>(Variable("x")));
 
-	std::hash<Relationship> relationshipHasher;
+	RelationshipHash<UsesRelationship> relationshipHasher;
 	std::size_t hashValue = relationshipHasher(uses);
 	std::size_t hashValueDiffPtr = relationshipHasher(usesWithDiffPtr);
 
@@ -100,9 +101,9 @@ TEST_CASE("Test UsesRelationshipPtr Hasher") {
 		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
 		std::make_shared<Variable>(Variable("x")));
 
-	std::hash<std::shared_ptr<Relationship>> relationshipPtrHasher;
-	std::size_t hashValue = relationshipPtrHasher(std::make_shared<Relationship>(uses));
-	std::size_t hashValueDiffPtr = relationshipPtrHasher(std::make_shared<Relationship>(usesWithDiffPtr));
+	RelationshipPtrHash<UsesRelationship> relationshipPtrHasher;
+	std::size_t hashValue = relationshipPtrHasher(std::make_shared<UsesRelationship>(uses));
+	std::size_t hashValueDiffPtr = relationshipPtrHasher(std::make_shared<UsesRelationship>(usesWithDiffPtr));
 
 
 	REQUIRE(hashValue == hashValueDiffPtr);

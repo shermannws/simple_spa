@@ -6,11 +6,8 @@ Assignment::Assignment(
         std::shared_ptr<Statement> statement,
         std::shared_ptr<Variable> variable,
         std::shared_ptr<std::string> expression
-        ) {
-    this->statement = statement;
-    this->variable = variable;
-    this->expression = expression;
-}
+        ) 
+    : statement(statement), variable(variable), expression(expression) {}
 
 std::shared_ptr<Statement> Assignment::getStatement() const {
     return statement;

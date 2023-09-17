@@ -1,6 +1,7 @@
 #include <unordered_map>
 #include <utility>
 
+#include "Commons/AppConstants.h"
 #include "ArithmeticExpressionNode.h"
 
 ArithmeticExpressionNode::ArithmeticExpressionNode(ArithmeticOperatorType operatorType,
@@ -24,12 +25,11 @@ std::shared_ptr<ExpressionNode> ArithmeticExpressionNode::getRightExpression() {
 
 ArithmeticOperatorType ArithmeticExpressionNode::translateOperatorTypeString(std::string operatorTypeString) {
     std::unordered_map<std::string, ArithmeticOperatorType> operatorTypeMap = {
-            // TODO: move raw operator strings to common enum
-            { "+", ArithmeticOperatorType::Plus },
-            { "-", ArithmeticOperatorType::Minus },
-            { "*", ArithmeticOperatorType::Times },
-            { "/", ArithmeticOperatorType::Divide },
-            { "%", ArithmeticOperatorType::Modulo }
+            { AppConstants::STRING_PLUS, ArithmeticOperatorType::Plus },
+            { AppConstants::STRING_MINUS, ArithmeticOperatorType::Minus },
+            { AppConstants::STRING_TIMES, ArithmeticOperatorType::Times },
+            { AppConstants::STRING_DIVIDE, ArithmeticOperatorType::Divide },
+            { AppConstants::STRING_MODULO, ArithmeticOperatorType::Modulo }
     };
     assert(operatorTypeMap.find(operatorTypeString) != operatorTypeMap.end());
     return operatorTypeMap[operatorTypeString];

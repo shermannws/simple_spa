@@ -11,7 +11,8 @@ PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :pkbReader(pkbR
 
 std::list<std::string> PQLEvaluator::formatResult(Query& query, Result& result) {
     std::vector<std::shared_ptr<QueryEntity>> selects = query.getSelect();
-    std::list<std::string> results;
+    std::unordered_set<std::string> results;
+
 
     if (result.getType() == ResultType::Tuples) {
         for (auto & tuple : result.getTuples()) {
@@ -25,19 +26,21 @@ std::list<std::string> PQLEvaluator::formatResult(Query& query, Result& result) 
                 if (indicesMap.find(syn) != indicesMap.end()) {
                     int idx = indicesMap.at(syn);
                     std::string value = *tuple[idx].getEntityValue();
+                    tmp.emplace_back(value);
                 }
             }
             std::string concat = std::accumulate(tmp.begin(), tmp.end(), std::string(),
                                                  [](std::string& a, const std::string& b) {
                                                      return a += (a.empty() ? "" : " ") + b;
                                                  }); // handles formatting of more than two variables in select clause
-            if (!concat.empty()) {
-                results.emplace_back(concat);
+
+            if (!concat.empty() && results.find(concat) == results.end()) {
+                results.insert(concat);
             }
         }
     }
-
-    return results;
+    std::list<std::string> list_results(results.begin(),results.end());
+    return list_results;
 }
 
 Result PQLEvaluator::evaluate(Query& query) {

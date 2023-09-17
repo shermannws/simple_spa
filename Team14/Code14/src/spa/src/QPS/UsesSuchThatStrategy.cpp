@@ -12,6 +12,7 @@ Result UsesSuchThatStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbR
     Result res;
     ResultType type;
     std::vector<std::vector<Entity>> tuples;
+
     // TODO: check leftType entRef
     // TODO: check EntityType
 

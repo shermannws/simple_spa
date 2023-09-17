@@ -1,5 +1,5 @@
-#include "PKB/RelationshipStorage/RelationshipStorage.h"
-#include "PKB/RelationshipStorage/UsesRelationshipStore.h"
+#include "PKB/RelationshipStores/RelationshipStore.h"
+#include "PKB/RelationshipStores/UsesRelationshipStore.h"
 #include "PKB/Relationships/UsesRelationship.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
@@ -24,11 +24,12 @@ TEST_CASE("Test Relationship Storage and Retrieval") {
 		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
 		std::make_shared<Variable>(Variable("x")));
 
-	RelationshipStorage store = RelationshipStorage();
+	RelationshipStore store = RelationshipStore<UsesRelationship>();
 
-	store.storeRelationship(std::make_shared<Relationship>(uses));
-	auto r = store.getRelationship(std::make_shared<Relationship>(usesCloned));
-	auto r2 = store.getRelationship(std::make_shared<Relationship>(usesCloned2));
+	store.storeRelationship(std::make_shared<UsesRelationship>(uses));
+
+	auto r = store.getRelationship(std::make_shared<UsesRelationship>(usesCloned));
+	auto r2 = store.getRelationship(std::make_shared<UsesRelationship>(usesCloned2));
 
 	REQUIRE(r != nullptr);
 	REQUIRE(*r == usesCloned);
@@ -49,10 +50,10 @@ TEST_CASE("Test Relationship Storage and Retrieval - Negative Test") {
 		std::make_shared<Statement>(Statement(2, StatementType::Assign)),
 		std::make_shared<Variable>(Variable("x")));
 
-	RelationshipStorage store = RelationshipStorage();
+	RelationshipStore store = RelationshipStore<UsesRelationship>();
 
-	store.storeRelationship(std::make_shared<Relationship>(uses));
-	auto r = store.getRelationship(std::make_shared<Relationship>(usesCloned));
+	store.storeRelationship(std::make_shared<UsesRelationship>(uses));
+	auto r = store.getRelationship(std::make_shared<UsesRelationship>(usesCloned));
 
 	REQUIRE(r == nullptr);
 }
@@ -75,9 +76,9 @@ TEST_CASE("Test UsesRelationshipStore") {
 
 	UsesRelationshipStore store = UsesRelationshipStore();
 
-	store.storeRelationship(std::make_shared<Relationship>(uses));
-	auto r = store.getRelationship(std::make_shared<Relationship>(usesCloned));
-	auto r2 = store.getRelationship(std::make_shared<Relationship>(usesCloned2));
+	store.storeRelationship(std::make_shared<UsesRelationship>(uses));
+	auto r = store.getRelationship(std::make_shared<UsesRelationship>(usesCloned));
+	auto r2 = store.getRelationship(std::make_shared<UsesRelationship>(usesCloned2));
 
 	REQUIRE(r != nullptr);
 	REQUIRE(*r == usesCloned);

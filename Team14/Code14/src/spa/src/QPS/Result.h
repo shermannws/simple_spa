@@ -27,7 +27,7 @@ public:
     bool getBoolResult();
     void setSynIndices(std::unordered_map<std::string, int>& ssynIndices);
     std::unordered_map<std::string, int> getSynIndices();
-    void setTuples(std::vector<std::vector<Entity>>& ttuples);
+    void setTuples(const std::vector<std::vector<Entity>>& ttuples);
     std::vector<std::vector<Entity>> getTuples();
 
 };
