@@ -37,7 +37,7 @@ std::vector<SPToken> SPTokenizer::tokenize() {
             case AppConstants::CHAR_CLOSE_ROUND_PARENTHESIS: // fallthrough
             case AppConstants::CHAR_OPEN_CURLY_PARENTHESIS: // fallthrough
             case AppConstants::CHAR_CLOSE_CURLY_PARENTHESIS:
-                tokenizeParanthesis();
+                tokenizeParenthesis();
                 break;
 
             case AppConstants::CHAR_SEMICOLON:
@@ -130,7 +130,7 @@ void SPTokenizer::tokenizeInteger() {
     tokens.push_back(token);
 };
 
-void SPTokenizer::tokenizeParanthesis() {
+void SPTokenizer::tokenizeParenthesis() {
     int currChar = peekChar();
     std::string tokenValue;
     tokenValue.push_back(popChar());
@@ -222,7 +222,7 @@ void SPTokenizer::tokenizeRelationalOperator() {
 }
 
 void SPTokenizer::tokenizeNot() {
-    if (peekNextChar() == '=') {
+    if (peekNextChar() == AppConstants::CHAR_EQUAL) {
         tokenizeRelationalOperator();
     } else {
         tokenizeConditionalOperator();

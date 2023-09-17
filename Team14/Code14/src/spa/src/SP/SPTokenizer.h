@@ -17,7 +17,7 @@ private:
 
     void tokenizeName();
     void tokenizeInteger();
-    void tokenizeParanthesis();
+    void tokenizeParenthesis();
     void tokenizeSemicolon();
     void tokenizeEquals();
     void tokenizeArithmeticOperator();
