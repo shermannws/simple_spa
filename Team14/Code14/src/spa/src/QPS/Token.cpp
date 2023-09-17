@@ -3,6 +3,14 @@
 #include <string>
 #include <regex>
 
+std::unordered_map<TokenType, int> operatorPrecedence = {
+        {TokenType::Asterisk, 1},
+        {TokenType::Slash, 1},
+        {TokenType::Percent, 1},
+        {TokenType::Plus, 0},
+        {TokenType::Minus, 0},
+};
+
 Token::Token(const std::string& input) {
     this->rep = input;
     if (rep == "(") {
@@ -67,4 +75,17 @@ bool Token::isDesignEntity() {
 bool Token::isIdent() {
     std::regex pattern("[a-zA-Z][a-zA-Z0-9]*");
     return std::regex_match(rep, pattern);
+}
+
+bool Token::isOperand() {
+    return isIdent() || isInteger();
+}
+
+bool Token::isOperator() {
+    return (isToken(TokenType::Plus) || isToken(TokenType::Minus)|| isToken(TokenType::Asterisk) ||
+            isToken(TokenType::Slash) || isToken(TokenType::Percent));
+}
+
+bool Token::precedes(const std::shared_ptr<Token> other){
+    return operatorPrecedence[type] >= operatorPrecedence[other->getType()];
 }

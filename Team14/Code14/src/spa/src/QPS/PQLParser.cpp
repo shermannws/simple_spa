@@ -1,6 +1,7 @@
 
 #include <string>
 #include <stdexcept>
+#include <stack>
 
 #include "PQLParser.h"
 #include "Tokenizer.h"
@@ -138,7 +139,7 @@ void PQLParser::processSuchThatClause(Query& query) {
 }
 
 void PQLParser::processPatternClause(Query& query) {
-    std::shared_ptr<Token> patternToken = tokenizer->peekToken();
+    std::shared_ptr<Token> patternToken = tokenizer->peekToken(); //TODO use expect func
     try {
         expect(patternToken->isToken("pattern"), "No pattern");
     } catch (...) {
@@ -152,43 +153,33 @@ void PQLParser::processPatternClause(Query& query) {
     } else if (entity->getType() != QueryEntityType::Assign) {
         throw std::runtime_error("Unsupported pattern clause, expected an assignment");
     }
+    PatternClause clause;
+    clause.setType(ClauseType::Assign);
+    clause.setEntity(entity);
 
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken(TokenType::Lparenthesis)) {
         throw std::runtime_error("Expected Lparenthesis");
     }
 
-    next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Underscore)) {
-        throw std::runtime_error("Expected wildcard as first arg");
-    }
+    Ref firstParam = extractEntRef(query);
+    clause.setFirstParam(firstParam);
 
     next = tokenizer->popToken();
     if (!next->isToken(TokenType::Comma)) {
         throw std::runtime_error("Expected comma ");
     }
 
-    next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Underscore)) {
-        throw std::runtime_error("Expected wildcard as second arg");
+    try {
+        ExpressionSpec secondParam = extractExpressionSpec();
+        clause.setSecondParam(secondParam);
+    } catch (...) {
+        throw std::runtime_error("INVALID EXPRESSION SPEC ");
     }
-
-    Ref wildcard;
-    std::string rep = next->getRep();
-    RefType ent = RefType::EntRef;
-    RootType root = RootType::Wildcard;
-    wildcard.setRep(rep);
-    wildcard.setRootType(root);
-    wildcard.setType(ent);
 
     next = tokenizer->popToken();
     expect(next->isToken(TokenType::Rparenthesis), "Expected right parenthesis");
 
-    PatternClause clause;
-    clause.setType(ClauseType::Assign);
-    clause.setEntity(entity);
-    clause.setFirstParam(wildcard);
-    clause.setSecondParam(wildcard);
     query.addPattern(clause);
 }
 
@@ -487,6 +478,100 @@ Ref PQLParser::extractEntRef(Query& query) {
     ref.setRep(refString);
     ref.setRootType(rootType);
     return ref;
+}
+
+ExpressionSpec PQLParser::extractExpressionSpec() {
+    std::shared_ptr<Token> curr = tokenizer->peekToken();
+    if (curr->isToken(TokenType::Underscore)) { // WILDCARD OR PARTIAL MATCH
+        tokenizer->popToken();
+        curr = tokenizer->peekToken();
+        if (!curr->isToken(TokenType::Quote)) { //WILDCARD
+            return {ExpressionSpecType::WildCard, ""};
+        } else {
+            Expression expr = extractExpression();
+            curr = tokenizer->popToken(); //consume expected trailing underscore
+            if (!curr->isToken(TokenType::Underscore)) {
+                throw std::runtime_error("Invalid Expression Spec, missing trailing _");
+            }
+            return {ExpressionSpecType::PartialMatch,expr};
+        }
+    } else if (curr->isToken(TokenType::Quote)) { // EXACT MATCH
+        Expression expr = extractExpression();
+        return {ExpressionSpecType::ExactMatch,expr};
+    } else {
+        throw std::runtime_error("Invalid Expression Spec");
+    }
+}
+
+Expression PQLParser::extractExpression() {
+    std::shared_ptr<Token> curr = tokenizer->peekToken(); // consume Quote
+    expect (curr->isToken(TokenType::Quote), "Invalid expression spec");
+
+    std::stack<std::shared_ptr<Token>> operators;
+    std::stack<std::string> expression;
+    std::string rawInput;
+
+    curr = tokenizer->popToken();
+    while (!curr->isToken(TokenType::Quote)) {
+        rawInput += curr->getRep();
+        if (curr->isOperand()) {
+            expression.push("(" + curr->getRep() + ")");
+        } else if (curr->isToken(TokenType::Lparenthesis)) {
+            operators.push(curr);
+        } else if (curr->isOperator()) {
+            while (!operators.empty()
+                    && !operators.top()->isToken(TokenType::Lparenthesis)
+                    && operators.top()->precedes(curr)) {
+                if (expression.size() < 2) {
+                    throw std::runtime_error("not enough factors");
+                }
+                auto rightOperand = expression.top();
+                expression.pop();
+                auto leftOperand = expression.top();
+                expression.pop();
+                expression.push("(" + leftOperand + operators.top()->getRep() + rightOperand + ")");
+                operators.pop();
+            }
+            operators.push(curr);
+        } else if (curr->isToken(TokenType::Rparenthesis)) {
+            while (!operators.empty() && !operators.top()->isToken(TokenType::Lparenthesis)) {
+                if (expression.size() < 2) {
+                    throw std::runtime_error("not enough factors");
+                }
+                auto rightOperand = expression.top();
+                expression.pop();
+                auto leftOperand = expression.top();
+                expression.pop();
+                expression.push("(" + leftOperand + operators.top()->getRep() + rightOperand + ")");
+                operators.pop();
+            }
+            if (!operators.top()->isToken(TokenType::Lparenthesis)){ // pop Lparentheses
+                throw std::runtime_error("Invalid expression spec");
+            }
+            operators.pop();
+        } else { //unexpected token
+            throw std::runtime_error("Invalid expression spec");
+        }
+        curr = tokenizer->popToken();
+    }
+    while(!operators.empty()) {
+        if (expression.size() < 2) {
+            throw std::runtime_error("not enough factors");
+        }
+        auto rightOperand = expression.top();
+        expression.pop();
+        auto leftOperand = expression.top();
+        expression.pop();
+        expression.push("(" + leftOperand + operators.top()->getRep() + rightOperand + ")");
+        operators.pop();
+    }
+
+    if (expression.empty() || expression.size() > 1) { // empty expression OR too many factors e.g "x y"
+        throw std::runtime_error("Invalid Expression Spec");
+    }
+
+    // TODO validate rawInput (handle cases like "xy+")
+    return expression.top();
 }
 
 std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string& errorMsg) {

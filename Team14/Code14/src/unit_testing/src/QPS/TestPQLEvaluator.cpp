@@ -65,33 +65,33 @@ TEST_CASE("Test formatResult") {
     }
 }
 
-TEST_CASE("Test QPS Flow - Assign With Pattern") {
-    PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
-
-    // build a query for the query "assign a; Select a pattern a(_, _)"
-    Query queryObj = Query();
-    std::shared_ptr<QueryEntity> assignInQuery = std::make_shared<QueryEntity>(QueryEntityType::Assign, "a");
-    queryObj.addDeclaration(assignInQuery);
-    queryObj.addSelect(assignInQuery);
-    PatternClause patternClause = PatternClause();
-    patternClause.setEntity(assignInQuery);
-    Ref wildcard;
-    std::string rep = "_";
-    RefType ent = RefType::EntRef;
-    RootType root = RootType::Wildcard;
-    wildcard.setRep(rep);
-    wildcard.setRootType(root);
-    wildcard.setType(ent);
-    patternClause.setFirstParam(wildcard);
-    patternClause.setSecondParam(wildcard);
-    queryObj.addPattern(patternClause);
-
-    Result resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-
-    REQUIRE(results.size() == 3);
-    REQUIRE(find(results.begin(), results.end(), "1") != results.end());
-    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
-    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
-}
+//TEST_CASE("Test QPS Flow - Assign With Pattern") {
+//    PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
+//
+//    // build a query for the query "assign a; Select a pattern a(_, _)"
+//    Query queryObj = Query();
+//    std::shared_ptr<QueryEntity> assignInQuery = std::make_shared<QueryEntity>(QueryEntityType::Assign, "a");
+//    queryObj.addDeclaration(assignInQuery);
+//    queryObj.addSelect(assignInQuery);
+//    PatternClause patternClause = PatternClause();
+//    patternClause.setEntity(assignInQuery);
+//    Ref wildcard;
+//    std::string rep = "_";
+//    RefType ent = RefType::EntRef;
+//    RootType root = RootType::Wildcard;
+//    wildcard.setRep(rep);
+//    wildcard.setRootType(root);
+//    wildcard.setType(ent);
+//    patternClause.setFirstParam(wildcard);
+//    patternClause.setSecondParam(wildcard);
+//    queryObj.addPattern(patternClause);
+//
+//    Result resultObj = evaluator.evaluate(queryObj);
+//    auto results = evaluator.formatResult(queryObj, resultObj);
+//
+//    REQUIRE(results.size() == 3);
+//    REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+//    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+//    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+//}
 

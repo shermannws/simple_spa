@@ -2,18 +2,18 @@
 
 PatternClause::PatternClause() : Clause() {};
 
-void PatternClause::setSecondParam(Ref& ref) {
-    secondParam = ref;
+void PatternClause::setSecondParam(ExpressionSpec & expr) {
+    secondParam = expr;
 }
 
-Ref PatternClause::getSecondParam() {
+ExpressionSpec PatternClause::getSecondParam() {
     return secondParam;
 }
 
-void PatternClause::setEntity(std::shared_ptr<QueryEntity> ent) {
+void PatternClause::setEntity(EntityPtr ent) {
     entity = ent;
 }
 
-std::shared_ptr<QueryEntity> PatternClause::getEntity() {
+EntityPtr PatternClause::getEntity() {
     return entity;
 };

@@ -41,4 +41,7 @@ public:
     bool isDesignEntity();
     bool isInteger();
     bool isIdent();
+    bool isOperand();
+    bool isOperator();
+    bool precedes(const std::shared_ptr<Token> other);
 };
