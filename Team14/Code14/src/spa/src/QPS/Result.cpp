@@ -17,11 +17,11 @@ bool Result::getBoolResult() {
     return boolResult;
 }
 
-void Result::setTuples(const std::vector<ResultTuple>& ttuples) {
+void Result::setTuples(const ResultTuples& ttuples) {
     tuples = ttuples;
 }
 
-std::vector<ResultTuple> Result::getTuples() {
+ResultTuples Result::getTuples() {
     return tuples;
 }
 

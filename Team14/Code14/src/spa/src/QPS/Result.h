@@ -18,7 +18,7 @@ private:
     ResultType type;
     bool boolResult;
     SynonymMap synIndices;
-    std::vector<ResultTuple> tuples;
+    ResultTuples tuples;
 
 public:
     Result();
@@ -28,7 +28,6 @@ public:
     bool getBoolResult();
     void setSynIndices(SynonymMap & ssynIndices);
     SynonymMap getSynIndices();
-    void setTuples(const std::vector<ResultTuple>& ttuples);
-    std::vector<ResultTuple> getTuples();
-
+    void setTuples(const ResultTuples & ttuples);
+    ResultTuples getTuples();
 };

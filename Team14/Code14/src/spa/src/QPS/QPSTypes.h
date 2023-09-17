@@ -23,4 +23,4 @@ typedef std::unordered_map<Synonym, int> SynonymMap;
 typedef std::list<std::string> ResultList;
 typedef std::unordered_set<std::string> ResultSet;
 typedef std::string FormattedResult;
-typedef std::vector<Entity> ResultTuple;
+typedef std::vector<std::vector<Entity>> ResultTuples;

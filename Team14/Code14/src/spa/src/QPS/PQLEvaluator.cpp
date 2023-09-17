@@ -15,7 +15,7 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
     ResultSet results;
 
     if (result.getType() == ResultType::Tuples) {
-        for (ResultTuple& tuple : result.getTuples()) {
+        for (auto& tuple : result.getTuples()) {
             std::vector<std::string> tmp;
             if (tuple.empty()) {
                 continue;
@@ -80,7 +80,7 @@ Result PQLEvaluator::evaluate(Query& query) {
     std::vector<Entity> entities = getAll(entity);
 
     // set Result fields
-    std::vector<ResultTuple> mappedEntities;
+    ResultTuples mappedEntities;
     for (const Entity& resEntity : entities) {
         std::vector<Entity> mappedEntity {resEntity};
         mappedEntities.push_back(mappedEntity);
