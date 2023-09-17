@@ -7,8 +7,6 @@
 #include "../Commons/Entities/Entity.h"
 #include "QPSTypes.h"
 
-typedef std::vector<Entity> ResultTuple;
-
 enum class ResultType {
     Invalid,
     Boolean, // future milestones

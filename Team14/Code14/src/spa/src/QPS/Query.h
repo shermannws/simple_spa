@@ -9,9 +9,6 @@
 #include "PatternClause.h"
 #include "QPSTypes.h"
 
-typedef std::unordered_map<std::string, std::shared_ptr<QueryEntity>> DeclarationMap;
-typedef std::shared_ptr<QueryEntity> EntityPtr;
-
 class Query {
 private:
     DeclarationMap declarations;
