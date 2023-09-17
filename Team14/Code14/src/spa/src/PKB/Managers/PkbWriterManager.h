@@ -3,10 +3,10 @@
 #include <memory>
 
 #include "PKB/Managers/AssignmentManager.h"
-#include "PKB/EntityStorage/ConstantStore.h"
-#include "PKB/EntityStorage/ProcedureStore.h"
-#include "PKB/EntityStorage/StatementStore.h"
-#include "PKB/EntityStorage/VariableStore.h"
+#include "PKB/EntityStores/ConstantStore.h"
+#include "PKB/EntityStores/ProcedureStore.h"
+#include "PKB/EntityStores/StatementStore.h"
+#include "PKB/EntityStores/VariableStore.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "Commons/Entities/Constant.h"

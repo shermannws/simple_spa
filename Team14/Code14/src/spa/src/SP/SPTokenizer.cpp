@@ -1,6 +1,6 @@
 #include <string>
-#include <iostream>
 
+#include "Commons/AppConstants.h"
 #include "SPTokenizer.h"
 #include "SPToken.h"
 
@@ -32,26 +32,26 @@ std::vector<SPToken> SPTokenizer::tokenize() {
         }
 
         switch (currChar) {
-            case '(':
-            case ')':
-            case '{':
-            case '}':
+            case AppConstants::CHAR_OPEN_ROUND_PARENTHESIS: // fallthrough
+            case AppConstants::CHAR_CLOSE_ROUND_PARENTHESIS: // fallthrough
+            case AppConstants::CHAR_OPEN_CURLY_PARENTHESIS: // fallthrough
+            case AppConstants::CHAR_CLOSE_CURLY_PARENTHESIS:
                 tokenizeParantheses();
                 break;
 
-            case ';':
+            case AppConstants::CHAR_SEMICOLON:
                 tokenizeSemicolon();
                 break;
 
-            case '=':
+            case AppConstants::CHAR_EQUAL:
                 tokenizeEquals();
                 break;
 
-            case '+':
-            case '-':
-            case '*':
-            case '/':
-            case '%':
+            case AppConstants::CHAR_PLUS: // fallthrough
+            case AppConstants::CHAR_MINUS: // fallthrough
+            case AppConstants::CHAR_TIMES: // fallthrough
+            case AppConstants::CHAR_DIVIDE: // fallthrough
+            case AppConstants::CHAR_MODULO:
                 tokenizeArithmeticOperator();
                 break;
 
@@ -60,11 +60,6 @@ std::vector<SPToken> SPTokenizer::tokenize() {
                 break;
         }
     }
-
-    // print statements for debugging
-//    for (SPToken token : tokens) {
-//        std::cout << "Token Value: " << token.getValue() << std::endl;
-//    }
 
     return this->tokens;
 }
@@ -94,7 +89,7 @@ void SPTokenizer::tokenizeName() {
             break;
         }
     }
-    SPToken token(TokenType::NAME, tokenValue);
+    SPToken token(TokenType::Name, tokenValue);
     tokens.push_back(token);
 };
 
@@ -109,7 +104,7 @@ void SPTokenizer::tokenizeInteger() {
             break;
         }
     }
-    SPToken token(INTEGER, tokenValue);
+    SPToken token(TokenType::Integer, tokenValue);
     tokens.push_back(token);
 };
 
@@ -121,16 +116,16 @@ void SPTokenizer::tokenizeParantheses() {
 
     switch (currChar) {
         case '(':
-            token = SPToken(OPEN_ROUND_PARAN, tokenValue);
+            token = SPToken(TokenType::OpenRoundParenthesis, tokenValue);
             break;
         case ')':
-            token = SPToken(CLOSE_ROUND_PARAN, tokenValue);
+            token = SPToken(TokenType::CloseRoundParenthesis, tokenValue);
             break;
         case '{':
-            token = SPToken(OPEN_CURLY_PARAN, tokenValue);
+            token = SPToken(TokenType::OpenCurlyParenthesis, tokenValue);
             break;
         case '}':
-            token = SPToken(CLOSE_CURLY_PARAN, tokenValue);
+            token = SPToken(TokenType::CloseCurlyParenthesis, tokenValue);
             break;
         default:
             break;
@@ -141,20 +136,20 @@ void SPTokenizer::tokenizeParantheses() {
 void SPTokenizer::tokenizeSemicolon() {
     std::string tokenValue;
     tokenValue.push_back(popChar());
-    SPToken token(SEMICOLON, tokenValue);
+    SPToken token(TokenType::Semicolon, tokenValue);
     tokens.push_back(token);
 };
 
 void SPTokenizer::tokenizeEquals() {
     std::string tokenValue;
     tokenValue.push_back(popChar());
-    SPToken token(EQUALS, tokenValue);
+    SPToken token(TokenType::Equals, tokenValue);
     tokens.push_back(token);
 };
 
 void SPTokenizer::tokenizeArithmeticOperator() {
     std::string tokenValue;
     tokenValue.push_back(popChar());
-    SPToken token(ARITHMETIC_OPERATOR, tokenValue);
+    SPToken token(TokenType::ArithmeticOperator, tokenValue);
     tokens.push_back(token);
 };

@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "PKB/RelationshipStorage/FollowsRelationshipStore.h"
+#include "PKB/RelationshipStores/FollowsRelationshipStore.h"
 #include "Commons/Entities/Statement.h"
 #include "PKB/Relationships/FollowsRelationship.h"
 
@@ -15,13 +15,13 @@ public:
 
     void storeFollowsRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2);
 
-    std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>>> getAllFollowsStatementPair() const;
+    std::vector<std::vector<Entity>> getAllFollowsStatementPair() const;
 
-    std::shared_ptr<Entity> getFollowsByStatement(std::shared_ptr<Statement> statement) const; // Returns statement followed by (ahead) given statement
+    std::vector<Entity> getFollowsByStatement(Statement& statement) const; // Returns statement followed by (ahead) given statement
 
-    std::shared_ptr<Entity> getFollowingStatement(std::shared_ptr<Statement> statement) const; // Returns statement following (behind) given statement
+    std::vector<Entity> getFollowingStatement(Statement& statement) const; // Returns statement following (behind) given statement
 
-    bool getIsFollows(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) const; // Returns true if statement1 follows statement2
+    bool getIsFollows(Statement& statement1, Statement& statement2) const; // Returns true if statement1 follows statement2
 
 
 };

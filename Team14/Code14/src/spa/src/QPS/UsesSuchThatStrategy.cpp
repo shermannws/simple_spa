@@ -10,7 +10,7 @@ Result UsesSuchThatStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbR
     RootType rightRootType = rightRef.getRootType();
     Result res;
     ResultType type;
-    std::vector<std::shared_ptr<std::vector<std::shared_ptr<Entity>>>> tuples;
+    std::vector<std::vector<Entity>> tuples;
 
     // TODO: check leftType entRef
     // TODO: check EntityType
@@ -19,7 +19,7 @@ Result UsesSuchThatStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbR
         if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym) { // Uses(a,v)
             std::string leftSyn = leftRef.getRep();
             std::string rightSyn = rightRef.getRep();
-            tuples = *((*pkbReader).getAllUsesAssignVariablePair());
+            tuples = pkbReader->getAllUsesAssignVariablePair();
 
             std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
             res.setSynIndices(indices);
@@ -28,11 +28,11 @@ Result UsesSuchThatStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbR
 
         } if (leftRootType == RootType::Synonym && rightRootType == RootType::Ident) { // Uses(a,"x")
             std::string syn = leftRef.getRep();
-            std::shared_ptr<Variable> v = std::make_shared<Variable>(rightRef.getRep());
-            std::shared_ptr<std::vector<std::shared_ptr<Entity>>> data = (*pkbReader).getAllUsesAssignByVariable(v); // TODO: to change to new method name with "Uses" inside
-            for (auto & ent : *data) {
-                std::vector<std::shared_ptr<Entity>> tuple_vector {ent};
-                tuples.emplace_back(std::make_shared<std::vector<std::shared_ptr<Entity>>>(tuple_vector));
+            Variable v = Variable(rightRef.getRep());
+            std::vector<Entity> data = (*pkbReader).getAllUsesAssignByVariable(v);
+            for (auto & ent : data) {
+                std::vector<Entity> tuple_vector {ent};
+                tuples.emplace_back(tuple_vector);
             }
 
             std::unordered_map<std::string, int> indices {{syn, 0}};

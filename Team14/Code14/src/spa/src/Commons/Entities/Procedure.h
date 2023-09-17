@@ -6,5 +6,8 @@
 
 class Procedure : public Entity {
 public:
+	/*!
+	 * Costructor for Constant object
+	 */
 	Procedure(std::string name);
 };
