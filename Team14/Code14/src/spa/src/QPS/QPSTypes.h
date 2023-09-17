@@ -15,7 +15,7 @@ typedef std::shared_ptr<QueryEntity> EntityPtr;
 typedef std::unordered_map<std::string, std::shared_ptr<QueryEntity>> DeclarationMap;
 
 // Refs
-typedef std::string Expression;
+typedef std::string StringRep;
 
 // Result
 class Entity;

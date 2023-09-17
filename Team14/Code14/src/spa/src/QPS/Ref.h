@@ -22,17 +22,17 @@ enum class RootType {
 
 class Ref {
 private:
-    Expression rep;
+    StringRep rep;
     RefType type;
     RootType rootType;
     QueryEntityType entityType;
 public:
     explicit Ref();
-    Expression getRep();
+    StringRep getRep();
     RefType getType();
     RootType getRootType();
     QueryEntityType getEntityType();
-    void setRep(Expression& rrep);
+    void setRep(StringRep& rrep);
     void setType(RefType& rrefType);
     void setRootType(RootType& rrootType);
     void setEntityType(QueryEntityType& eentityType);

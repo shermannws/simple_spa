@@ -4,7 +4,7 @@
 
 Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid), entityType(QueryEntityType::Invalid) {}
 
-void Ref::setRep(Expression & rrep) {
+void Ref::setRep(StringRep & rrep) {
     rep = rrep;
 }
 
