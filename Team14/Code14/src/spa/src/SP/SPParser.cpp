@@ -279,5 +279,50 @@ std::shared_ptr<ConstantNode> SPParser::parseConstant(std::queue<SPToken>& token
 }
 
 std::shared_ptr<ConditionalExpressionNode> SPParser::parseConditionalExpression(std::queue<SPToken> &tokens) {
+    if (tokens.front().getType() == TokenType::ConditionalOperator && tokens.front().getValue() == AppConstants::STRING_NOT) {
+        // case: '!' '(' cond_expr ')'
+        tokens.pop(); // consume "!" token
+
+        assert(tokens.front().getType() == TokenType::OpenRoundParenthesis);
+        tokens.pop(); // consume "(" token
+        auto conditionalExpression = parseConditionalExpression(tokens);
+        assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
+        tokens.pop(); // consume ")" token
+
+        auto unaryConditionalExpression =
+                std::make_shared<UnaryConditionalExpressionNode>(conditionalExpression);
+        return unaryConditionalExpression;
+    } else if (tokens.front().getType() == TokenType::OpenRoundParenthesis) {
+        // case: '(' cond_expr ')' '&&' '(' cond_expr ')'
+        // case: '(' cond_expr ')' '||' '(' cond_expr ')'
+        tokens.pop(); // consume "(" token
+        auto leftConditionalExpression = parseConditionalExpression(tokens);
+        assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
+        tokens.pop(); // consume ")" token
+
+        assert(tokens.front().getType() == TokenType::ConditionalOperator);
+        assert(tokens.front().getValue() == AppConstants::STRING_AND || tokens.front().getValue() == AppConstants::STRING_OR);
+        std::string conditionalOperator = tokens.front().getValue();
+        tokens.pop(); // consume "&&" or "||" token
+
+        assert(tokens.front().getType() == TokenType::OpenRoundParenthesis);
+        tokens.pop(); // consume "(" token
+        auto rightConditionalExpression = parseConditionalExpression(tokens);
+        assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
+        tokens.pop();
+
+        auto binaryConditionalExpressionType =
+                BinaryConditionalExpressionNode::translateBinaryConditionalExpressionTypeString(conditionalOperator);
+        auto binaryConditionalExpression = std::make_shared<BinaryConditionalExpressionNode>(
+                binaryConditionalExpressionType , leftConditionalExpression, rightConditionalExpression);
+        return binaryConditionalExpression;
+    } else {
+        // case: rel_expr
+        auto relativeExpression = parseRelativeExpression(tokens);
+        return relativeExpression;
+    }
+}
+
+std::shared_ptr<RelativeExpressionNode> SPParser::parseRelativeExpression(std::queue<SPToken> &tokens) {
 
 }

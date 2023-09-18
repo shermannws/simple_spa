@@ -43,6 +43,7 @@ private:
     std::shared_ptr<VariableNode> parseVariable(std::queue<SPToken>& tokens);
     std::shared_ptr<ConstantNode> parseConstant(std::queue<SPToken>& tokens);
     std::shared_ptr<ConditionalExpressionNode> parseConditionalExpression(std::queue<SPToken>& tokens);
+    std::shared_ptr<RelativeExpressionNode> parseRelativeExpression(std::queue<SPToken>& tokens);
 
     /**
      * Returns an int representing the precedence value of the given operator,
