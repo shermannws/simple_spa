@@ -5,6 +5,6 @@
 RelationshipType ParentRelationship::relationshipType = RelationshipType::Parent;
 
 
-ParentRelationship::ParentRelationship(const std::shared_ptr<Statement> leftEntity,
-	const std::shared_ptr<Statement> rightEntity)
-	: Relationship(this->relationshipType, leftEntity, rightEntity) {};
+ParentRelationship::ParentRelationship(const std::shared_ptr<Statement> parentEntity,
+	const std::shared_ptr<Statement> childEntity)
+	: Relationship(this->relationshipType, parentEntity, childEntity) {};

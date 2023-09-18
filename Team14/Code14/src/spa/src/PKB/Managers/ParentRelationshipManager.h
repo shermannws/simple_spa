@@ -19,5 +19,5 @@ public:
     /*!
      * Stores ParentRelationship into PKB via the Manager
      */
-    void storeParentRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2);
+    void storeParentRelationship(std::shared_ptr<Statement> parentStatement, std::shared_ptr<Statement> childStatement);
 };

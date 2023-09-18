@@ -14,6 +14,6 @@ public:
 	/*!
 	 * Constructor for FollowsRelationship
 	 */
-	ParentRelationship(const std::shared_ptr<Statement> leftEntity,
-		const std::shared_ptr<Statement> rightEntity);
+	ParentRelationship(const std::shared_ptr<Statement> parentEntity,
+		const std::shared_ptr<Statement> childEntity);
 };
