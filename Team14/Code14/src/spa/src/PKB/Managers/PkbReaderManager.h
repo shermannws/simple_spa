@@ -9,6 +9,8 @@
 #include "PKB/EntityStores/VariableStore.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
+#include "PKB/Managers/ModifiesRelationshipManager.h"
+#include "PKB/Managers/ParentRelationshipManager.h"
 
 class PkbReaderManager {
 private:
@@ -21,6 +23,8 @@ private:
 
     std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager;
     std::shared_ptr<UsesRelationshipManager> usesRelationshipManager;
+    std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager;
+    std::shared_ptr<ParentRelationshipManager> parentRelationshipManager;
 
     template <typename T>
     std::vector<Entity> getAllEntities(const std::shared_ptr<EntityStore<T>>&) const;
@@ -33,7 +37,9 @@ public:
             std::shared_ptr<StatementStore> statementStore,
             std::shared_ptr<VariableStore> variableStore,
             std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
-            std::shared_ptr<UsesRelationshipManager> usesRelationshipManager
+            std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
+            std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
+            std::shared_ptr<ParentRelationshipManager> parentRelationshipManager
     );
 
     std::vector<Entity> getAllAssign() const;

@@ -11,6 +11,8 @@
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "Commons/Entities/Constant.h"
 #include "Commons/Entities/Procedure.h"
+#include "PKB/Managers/ModifiesRelationshipManager.h"
+#include "PKB/Managers/ParentRelationshipManager.h"
 
 class PkbWriterManager {
 private:
@@ -23,6 +25,8 @@ private:
 
     std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager;
     std::shared_ptr<UsesRelationshipManager> usesRelationshipManager;
+    std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager;
+    std::shared_ptr<ParentRelationshipManager> parentRelationshipManager;
 public:
     PkbWriterManager(
             std::shared_ptr<AssignmentManager> assignmentManager,
@@ -31,7 +35,9 @@ public:
             std::shared_ptr<StatementStore> statementStore,
             std::shared_ptr<VariableStore> variableStore,
             std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
-            std::shared_ptr<UsesRelationshipManager> usesRelationshipManager
+            std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
+            std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
+            std::shared_ptr<ParentRelationshipManager> parentRelationshipManager
     );
 
     void addConstant(std::shared_ptr<Constant> c);
