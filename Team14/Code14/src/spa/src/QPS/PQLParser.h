@@ -27,6 +27,7 @@ private:
 public:
     explicit PQLParser(const std::string& PQLQuery);
     Query parse();
+    void validateExprSyntax(const Expression& input);
     Expression extractExpression();
     ExpressionSpec extractExpressionSpec();
 

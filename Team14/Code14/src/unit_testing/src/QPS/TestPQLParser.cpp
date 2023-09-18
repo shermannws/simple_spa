@@ -744,6 +744,55 @@ TEST_CASE("extractExpressionSpec") {
     REQUIRE(true);
 }
 
+TEST_CASE("processPatternClause") {
+    SECTION("Valid wildcard pattern") {
+        PQLParser parser("assign a; variable v;\nSelect a pattern a(_,_)");
+        Query query = parser.parse();
+
+        PatternClause actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause.getFirstParam();
+        ExpressionSpec rightRef = actualClause.getSecondParam();
+        REQUIRE(actualClause.getType() == ClauseType::Assign);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.first == ExpressionSpecType::Wildcard);
+        REQUIRE(rightRef.second == "");
+    }
+
+    SECTION("Valid pattern, Synonym entRef and exact match") {
+        PQLParser parser("assign a; variable v;\nSelect a pattern a(v,\"x+y\")");
+        Query query = parser.parse();
+
+        PatternClause actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause.getFirstParam();
+        ExpressionSpec rightRef = actualClause.getSecondParam();
+        REQUIRE(actualClause.getType() == ClauseType::Assign);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getRep() == "v");
+        REQUIRE(rightRef.first == ExpressionSpecType::ExactMatch);
+        REQUIRE(rightRef.second == "((x)+(y))");
+    }
+
+    SECTION("Valid pattern, Synonym entRef and exact match") {
+        PQLParser parser("assign a; variable v;\nSelect a pattern a(\"y\",_\"x*2\"_)");
+        Query query = parser.parse();
+
+        PatternClause actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause.getFirstParam();
+        ExpressionSpec rightRef = actualClause.getSecondParam();
+        REQUIRE(actualClause.getType() == ClauseType::Assign);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Ident);
+        REQUIRE(leftRef.getRep() == "y");
+        REQUIRE(rightRef.first == ExpressionSpecType::PartialMatch);
+        REQUIRE(rightRef.second == "((x)*(2))");
+    }
+
+
+}
+
 //TEST_CASE("processPatternClause") {
 //    SECTION("Valid wildcard pattern") {
 //        PQLParser parser("assign a; variable v;\nSelect a pattern a(_,_)");

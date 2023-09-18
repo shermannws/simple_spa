@@ -17,7 +17,7 @@ typedef std::unordered_map<std::string, std::shared_ptr<QueryEntity>> Declaratio
 // Refs
 typedef std::string StringRep;
 enum ExpressionSpecType {
-    WildCard,
+    Wildcard,
     PartialMatch,
     ExactMatch
 };

@@ -6,6 +6,7 @@
 #include "PQLParser.h"
 #include "Tokenizer.h"
 #include "SuchThatClause.h"
+#include "QPSUtil.h"
 
 
 PQLParser::PQLParser(const std::string& PQLQuery) : tokenizer(std::make_shared<Tokenizer>(PQLQuery)){}
@@ -486,7 +487,7 @@ ExpressionSpec PQLParser::extractExpressionSpec() {
         tokenizer->popToken();
         curr = tokenizer->peekToken();
         if (!curr->isToken(TokenType::Quote)) { //WILDCARD
-            return {ExpressionSpecType::WildCard, ""};
+            return {ExpressionSpecType::Wildcard, ""};
         } else {
             Expression expr = extractExpression();
             curr = tokenizer->popToken(); //consume expected trailing underscore
@@ -570,8 +571,14 @@ Expression PQLParser::extractExpression() {
         throw std::runtime_error("Invalid Expression Spec");
     }
 
-    // TODO validate rawInput (handle cases like "xy+")
+    validateExprSyntax(rawInput);
     return expression.top();
+}
+
+void PQLParser::validateExprSyntax(const Expression& input){
+    if (!QPSUtil::IsExpr(input)) {
+        throw std::runtime_error("Invalid expression syntax");
+    }
 }
 
 std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string& errorMsg) {
