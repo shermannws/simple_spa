@@ -9,14 +9,18 @@ PkbReaderManager::PkbReaderManager(
     std::shared_ptr<StatementStore> statementStore,
     std::shared_ptr<VariableStore> variableStore,
     std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
-    std::shared_ptr<UsesRelationshipManager> usesRelationshipManager)
+    std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
+    std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
+    std::shared_ptr<ParentRelationshipManager> parentRelationshipManager)
     : assignmentManager(assignmentManager),
     constantStore(constantStore),
     procedureStore(procedureStore),
     statementStore(statementStore),
     variableStore(variableStore),
     followsRelationshipManager(followsRelationshipManager),
-    usesRelationshipManager(usesRelationshipManager) {}
+    usesRelationshipManager(usesRelationshipManager),
+    modifiesRelationshipManager(modifiesRelationshipManager),
+    parentRelationshipManager(parentRelationshipManager) {}
 
 template <typename T>
 std::vector<Entity> PkbReaderManager::getAllEntities(const std::shared_ptr<EntityStore<T>>& store) const {
