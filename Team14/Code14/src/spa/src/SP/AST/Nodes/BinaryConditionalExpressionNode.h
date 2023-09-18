@@ -23,6 +23,7 @@ public:
     BinaryConditionalExpressionType getBinaryConditionalExpressionType();
     std::shared_ptr<ConditionalExpressionNode> getLeftConditionalExpression();
     std::shared_ptr<ConditionalExpressionNode> getRightConditionalExpression();
+    BinaryConditionalExpressionType translateBinaryConditionalExpressionTypeString(std::string typeString);
     void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };
