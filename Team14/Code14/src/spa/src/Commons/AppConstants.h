@@ -16,6 +16,8 @@ public:
     inline static const std::string STRING_CALL = "call";
     inline static const std::string STRING_WHILE = "while";
     inline static const std::string STRING_IF = "if";
+    inline static const std::string STRING_THEN = "then";
+    inline static const std::string STRING_ELSE = "else";
     inline static const std::string STRING_VARIABLE = "variable";
     inline static const std::string STRING_CONSTANT = "constant";
 
