@@ -19,11 +19,18 @@ private:
 
     void validateRead();
     void validatePrint();
+    void validateCall();
     void validateAssign();
 
     void validateExpr();
     void validateTerm();
-    void validateFactor();
+
+    void validateWhile();
+    void validateIf();
+    void validateThen();
+    void validateElse();
+    void validateConditionalExpression();
+    void validateRelationalExpression();
 
     void validateName(); // var_name or proc_name
     void validateInteger();
@@ -34,6 +41,8 @@ private:
     void validateSemicolon();
     void validateEquals();
     void validateArithmeticOperator();
+    void validateAndOrOperator();
+    void validateRelationalOperator();
 
     SPToken peekToken();
     SPToken peekNextToken();
