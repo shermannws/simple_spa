@@ -7,12 +7,13 @@
 class PatternClause :  public Clause {
 private:
     ExpressionSpec secondParam;
-    EntityPtr entity;
+    Synonym syn;
+    DeclarationMap entityMap;
 
 public:
     PatternClause();
     void setSecondParam(ExpressionSpec & expr);
     ExpressionSpec getSecondParam();
-    void setEntity(EntityPtr ent);
-    EntityPtr getEntity();
+    void setSyn(Synonym synonym);
+    Synonym getSyn();
 };

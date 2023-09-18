@@ -10,10 +10,10 @@ ExpressionSpec PatternClause::getSecondParam() {
     return secondParam;
 }
 
-void PatternClause::setEntity(EntityPtr ent) {
-    entity = ent;
+void PatternClause::setSyn(Synonym synonym) {
+    syn = synonym;
 }
 
-EntityPtr PatternClause::getEntity() {
-    return entity;
-};
+Synonym PatternClause::getSyn() {
+    return syn;
+}

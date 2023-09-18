@@ -146,17 +146,10 @@ void PQLParser::processPatternClause(Query& query) {
     } catch (...) {
         return;
     }
+    PatternClause clause;
 
     std::shared_ptr<Token> patternSyn = tokenizer->popToken();
-    EntityPtr entity = query.getEntity(patternSyn->getRep());
-    if (!entity) {
-        throw std::runtime_error("Undeclared synonym in pattern clause");
-    } else if (entity->getType() != QueryEntityType::Assign) {
-        throw std::runtime_error("Unsupported pattern clause, expected an assignment");
-    }
-    PatternClause clause;
-    clause.setType(ClauseType::Assign);
-    clause.setEntity(entity);
+    clause.setSyn(patternSyn->getRep());
 
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken(TokenType::Lparenthesis)) {
@@ -182,6 +175,19 @@ void PQLParser::processPatternClause(Query& query) {
     expect(next->isToken(TokenType::Rparenthesis), "Expected right parenthesis");
 
     query.addPattern(clause);
+}
+
+void PQLParser::validatePatternSemantics(Query& query, PatternClause& clause) {
+    EntityPtr entity = query.getEntity(clause.getSyn());
+    if (!entity) {
+        throw std::runtime_error("Undeclared synonym in pattern clause");
+    } else if (entity->getType() != QueryEntityType::Assign) {
+        throw std::runtime_error("Unsupported pattern clause, expected an assign synonym");
+    }
+    clause.setType(ClauseType::Assign);
+
+    // TODO MOVE entRef semantic check HERE
+    // if firstParam is Variable Synonym, check declared in query
 }
 
 void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) {
@@ -570,7 +576,6 @@ Expression PQLParser::extractExpression() {
     if (expression.empty() || expression.size() > 1) { // empty expression OR too many factors e.g "x y"
         throw std::runtime_error("Invalid Expression Spec");
     }
-
     validateExprSyntax(rawInput);
     return expression.top();
 }

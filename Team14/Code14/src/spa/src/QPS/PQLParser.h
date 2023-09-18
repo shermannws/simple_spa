@@ -21,6 +21,7 @@ private:
     void processSuchThatLeft(Query &query, SuchThatClause& clause);
     void processSuchThatRight(Query &query, SuchThatClause& clause);
     void validateSuchThatSemantics(Query &query, SuchThatClause& clause);
+    void validatePatternSemantics(Query &query, PatternClause& clause);
     bool isOfStmtType(QueryEntityType entityType);
     bool isOfUsesEntityType(QueryEntityType entityType);
     bool isOfModifiesEntityType(QueryEntityType entityType);

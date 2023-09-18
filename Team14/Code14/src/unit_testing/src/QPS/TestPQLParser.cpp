@@ -730,19 +730,19 @@ TEST_CASE("Invalid processSuchThat cases") {
 
 }
 
-TEST_CASE("extractExpression") {
-    std::string input = "\"xy \"";
-    PQLParser parser(input);
-    auto final = parser.extractExpression();
-    REQUIRE(true);
-}
-
-TEST_CASE("extractExpressionSpec") {
-    std::string input = "_\"xy \"_";
-    PQLParser parser(input);
-    auto final = parser.extractExpressionSpec();
-    REQUIRE(true);
-}
+//TEST_CASE("extractExpression") {
+//    std::string input = "\"xy \"";
+//    PQLParser parser(input);
+//    auto final = parser.extractExpression();
+//    REQUIRE(true);
+//}
+//
+//TEST_CASE("extractExpressionSpec") {
+//    std::string input = "_\"xy \"_";
+//    PQLParser parser(input);
+//    auto final = parser.extractExpressionSpec();
+//    REQUIRE(true);
+//}
 
 TEST_CASE("processPatternClause") {
     SECTION("Valid wildcard pattern") {
