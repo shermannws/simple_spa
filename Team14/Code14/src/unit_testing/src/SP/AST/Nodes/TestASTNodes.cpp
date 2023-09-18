@@ -239,6 +239,8 @@ TEST_CASE("Test ConditionalExpressionNode family") {
 
 TEST_CASE("Test statement family") {
     int statementNumber = 1;
+    int constVal1 = 100;
+    int constVal2 = 200;
     std::vector<std::shared_ptr<ASTNode>> emptyChildVector;
     std::string procedureName = "Procedure";
     auto varNode = std::make_shared<VariableNode>("variable");
@@ -307,8 +309,28 @@ TEST_CASE("Test statement family") {
     REQUIRE(statementListNode1 != statementListNode2);
     REQUIRE(statementListNode1 == statementListNode1Copy);
 
-    // add if and while tests
+    std::shared_ptr<ExpressionNode> expNode1 = std::make_shared<ConstantNode>(constVal1);
+    std::shared_ptr<ExpressionNode> expNode2 = std::make_shared<ConstantNode>(constVal2);
+    std::shared_ptr<ConditionalExpressionNode> condExpNode =
+            std::make_shared<RelativeExpressionNode>(ComparisonOperatorType::GreaterThanEqual, expNode1, expNode2);
+    auto ifNode =
+            std::make_shared<IfNode>(statementNumber++, condExpNode, statementListNode1, statementListNode2);
+    REQUIRE(ifNode->getStatementType() == StatementNodeType::If);
+    std::vector<std::shared_ptr<ASTNode>> ifChildren = { condExpNode, statementListNode1, statementListNode2 };
+    REQUIRE(ifNode->getAllChildNodes() == ifChildren);
+    REQUIRE(ifNode->getConditionalExpression() == condExpNode);
+    REQUIRE(ifNode->getThenStatementList() == statementListNode1);
+    REQUIRE(ifNode->getElseStatementList() == statementListNode2);
 
+    auto whileNode =
+            std::make_shared<WhileNode>(statementNumber++, condExpNode, statementListNode1);
+    REQUIRE(whileNode->getStatementType() == StatementNodeType::While);
+    std::vector<std::shared_ptr<ASTNode>> whileChildren = { condExpNode, statementListNode1 };
+    REQUIRE(whileNode->getAllChildNodes() == whileChildren);
+    REQUIRE(whileNode->getConditionalExpression() == condExpNode);
+    REQUIRE(whileNode->getStatementList() == statementListNode1);
+
+    //add if and while tests
     auto procedureNode1 = std::make_shared<ProcedureNode>("Procedure1", statementListNode1);
     auto procedureNode2 = std::make_shared<ProcedureNode>("Procedure2", statementListNode2);
     auto procedureNode1Copy = procedureNode1;
@@ -320,7 +342,6 @@ TEST_CASE("Test statement family") {
     };
     auto programNode = std::make_shared<ProgramNode>(procedures);
 
-
     SECTION("Test that all nodes are subtypes of ASTNode") {
         std::vector<std::shared_ptr<ASTNode>> astNodes = {
                 varNode,
@@ -330,7 +351,9 @@ TEST_CASE("Test statement family") {
                 readNode,
                 printNode,
                 assignNode2,
-                statementNode1,
+                ifNode,
+                whileNode,
+                callNode,
                 statementListNode1,
                 procedureNode1,
                 programNode
