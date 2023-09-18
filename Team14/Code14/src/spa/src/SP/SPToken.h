@@ -11,7 +11,7 @@ private:
     std::string value;
 
 public:
-    SPToken(TokenType type, const std::string& value);
+    SPToken(TokenType type, std::string  value);
     SPToken();
     TokenType getType();
     std::string getValue();
