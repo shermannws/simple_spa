@@ -51,3 +51,7 @@ std::vector<Entity> PkbConcreteReader::getFollowingStatement(Statement& statemen
 bool PkbConcreteReader::getIsFollows(Statement& statement1, Statement& statement2) const {
     return this->readerManager->getIsFollows(statement1, statement2);
 }
+
+std::vector<Entity> PkbConcreteReader::getAssignPatternStatements(Variable& variable, std::string& pattern, bool hasExpressionWildCard) const {
+    return this->readerManager->getAssignPatternStatements(variable, pattern, hasExpressionWildCard);
+}

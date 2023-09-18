@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <unordered_set>
 
 typedef std::string ProcedureName;
 typedef int StatementNumber;
@@ -57,4 +58,14 @@ public:
     inline static const char CHAR_OPEN_CURLY_PARENTHESIS = '{';
     inline static const char CHAR_CLOSE_CURLY_PARENTHESIS = '}';
     inline static const char CHAR_SEMICOLON = ';';
+
+    inline static const std::unordered_set<char> MATH_SPECIAL_CHAR_SET = {
+            CHAR_PLUS,
+            CHAR_MINUS,
+            CHAR_TIMES,
+            CHAR_DIVIDE,
+            CHAR_MODULO,
+            CHAR_OPEN_ROUND_PARENTHESIS,
+            CHAR_CLOSE_ROUND_PARENTHESIS
+    };
 };

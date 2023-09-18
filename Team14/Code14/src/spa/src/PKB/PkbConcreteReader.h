@@ -35,4 +35,6 @@ public:
 
     // Returns true if statement1 follows statement2
     bool getIsFollows(Statement& statement1, Statement& statement2) const override;
+
+    std::vector<Entity> getAssignPatternStatements(Variable& variable, std::string& pattern, bool hasExpressionWildCard) const override;
 };

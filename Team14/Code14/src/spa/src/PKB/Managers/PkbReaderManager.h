@@ -64,4 +64,6 @@ public:
 
     bool getIsFollows(Statement& statement1, Statement& statement2) const; // Returns true if statement1 follows statement2
 
+    std::vector<Entity> getAssignPatternStatements(Variable& variable, std::string& pattern, bool hasExpressionWildCard) const;
+
 };

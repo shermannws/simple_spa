@@ -70,3 +70,7 @@ std::vector<Entity> PkbReaderManager::getFollowingStatement(Statement& statement
 bool PkbReaderManager::getIsFollows(Statement& statement1, Statement& statement2) const {
     return this->followsRelationshipManager->getIsFollows(statement1, statement2);
 }
+
+std::vector<Entity> PkbReaderManager::getAssignPatternStatements(Variable& variable, std::string& pattern, bool hasExpressionWildCard) const {
+    return this->assignmentManager->getAssignStatements(variable, pattern, hasExpressionWildCard);
+}

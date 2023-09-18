@@ -30,4 +30,6 @@ public:
 
     // Returns true if statement1 follows statement2
     virtual bool getIsFollows(Statement& statement1, Statement& statement2) const = 0;
+
+    virtual std::vector<Entity> getAssignPatternStatements(Variable& variable, std::string& pattern, bool hasExpressionWildCard) const = 0;
 };

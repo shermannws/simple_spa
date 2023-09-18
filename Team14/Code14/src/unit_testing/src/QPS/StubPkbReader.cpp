@@ -47,3 +47,7 @@ std::vector<Entity> StubPkbReader::getFollowingStatement(Statement& statement) c
 bool StubPkbReader::getIsFollows(Statement& statement1, Statement& statement2) const {
     return false;
 }
+
+std::vector<Entity> StubPkbReader::getAssignPatternStatements(Variable& variable, std::string& pattern, bool hasExpressionWildCard) const {
+    return std::vector<Entity>();
+}
