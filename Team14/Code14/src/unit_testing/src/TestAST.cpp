@@ -14,6 +14,7 @@ TEST_CASE("1st Test") {
 	
 	
     require(1 == 1);
+    require(1 == 2);
 }
 
 

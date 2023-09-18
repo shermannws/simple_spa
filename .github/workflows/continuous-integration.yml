@@ -37,10 +37,3 @@ jobs:
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         #run: ctest -C ${{env.BUILD_TYPE}}
         run: ./src/unit_testing/unit_testing
-
-      - name: Test2
-        working-directory: ${{github.workspace}}/Team14/Code14/build
-        # Execute tests defined by the CMake configuration.
-        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-        #run: ctest -C ${{env.BUILD_TYPE}}
-        run: ./src/unit_testing/unit_testing -r xml -d yes --order lex
