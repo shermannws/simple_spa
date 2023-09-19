@@ -47,3 +47,55 @@ std::vector<Entity> StubPkbReader::getFollowingStatement(Statement& statement) c
 bool StubPkbReader::getIsFollows(Statement& statement1, Statement& statement2) const {
     return false;
 }
+
+std::vector<std::vector<Entity>> StubPkbReader::getFollowsPair(StatementType formerType, StatementType latterType) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<std::vector<Entity>> StubPkbReader::getFollowsStarPair(StatementType formerType, StatementType latterType) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<Entity> StubPkbReader::getFollowsTypeStmt(StatementType type, Statement& statement) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getFollowsStarTypeStmt(StatementType type, Statement& statement) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getFollowsTypeWildcard(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getFollowsStarTypeWildcard(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getFollowsStmtType(Statement& statement, StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getFollowsStarStmtType(Statement& statement, StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getFollowsWildcardType(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getFollowsStarWildcardType(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+bool StubPkbReader::isFollows(Statement& statement1, Statement& statement2) const {
+    return false;
+}
+
+bool StubPkbReader::isFollowsStar(Statement& statement1, Statement& statement2) const  {
+    return false;
+}
+
+bool StubPkbReader::hasFollows() const {
+    return false;
+}

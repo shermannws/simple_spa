@@ -101,12 +101,12 @@ TEST_CASE("Test AST Traverser") {
     REQUIRE(usesY.at(0) == Statement(1, StatementType::Assign));
 
     auto Stmt1 = Statement(1, StatementType::Assign);
-    auto followsRS = followsRelationshipManager->getFollowingStatement(Stmt1);
+    auto followsRS = followsRelationshipManager->getFollowsStmtType(Stmt1, StatementType::Stmt, true);
     REQUIRE(followsRS.size() == 1);
     REQUIRE(followsRS.at(0) == Statement(2, StatementType::Read));
 
     auto Stmt2 = Statement(2, StatementType::Read);
-    auto followsRS2 = followsRelationshipManager->getFollowingStatement(Stmt2);
+    auto followsRS2 = followsRelationshipManager->getFollowsStmtType(Stmt2, StatementType::Stmt, true);
     REQUIRE(followsRS2.size() == 1);
     REQUIRE(followsRS2.at(0) == Statement(3, StatementType::Print));
 

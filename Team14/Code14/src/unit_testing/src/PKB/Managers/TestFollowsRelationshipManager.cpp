@@ -9,33 +9,46 @@ using namespace std;
 TEST_CASE("Test Follows Relationship Retrieval") {
     FollowsRelationshipManager followsRelationshipManager = FollowsRelationshipManager();
 
+    REQUIRE(followsRelationshipManager.hasFollows() == false);
+
     shared_ptr<Statement> statement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
     shared_ptr<Statement> statement2 = make_shared<Statement>(Statement(2, StatementType::Call));
     shared_ptr<Statement> statement3 = make_shared<Statement>(Statement(3, StatementType::Print));
 
     followsRelationshipManager.storeFollowsRelationship(statement1, statement2, true);
     followsRelationshipManager.storeFollowsRelationship(statement2, statement3, true);
+    followsRelationshipManager.storeFollowsRelationship(statement1, statement3, false);
 
-    REQUIRE(followsRelationshipManager.getFollowsByStatement(*statement1).empty());
-    auto followsStatement2 = followsRelationshipManager.getFollowsByStatement(*statement2);
-    REQUIRE(followsStatement2.size() == 1);
-    REQUIRE(followsStatement2.at(0) == *statement1);
-    auto followsStatement3 = followsRelationshipManager.getFollowsByStatement(*statement3);
-    REQUIRE(followsStatement3.size() == 1);
-    REQUIRE(followsStatement3.at(0) == *statement2);
+    REQUIRE(followsRelationshipManager.getFollowsPair(StatementType::Stmt, StatementType::Stmt, true).size() == 2);
+    REQUIRE(followsRelationshipManager.getFollowsPair(StatementType::Stmt, StatementType::Stmt, false).size() == 3);
+    REQUIRE(followsRelationshipManager.getFollowsPair(StatementType::Assign, StatementType::Call, true).size() == 1);
+    REQUIRE(followsRelationshipManager.getFollowsPair(StatementType::Assign, StatementType::Print, false).size() == 1);
+    REQUIRE(followsRelationshipManager.getFollowsPair(StatementType::Assign, StatementType::Print, true).empty());
 
-    auto followingStatement1 = followsRelationshipManager.getFollowingStatement(*statement1);
-    REQUIRE(followingStatement1.size() == 1);
-    REQUIRE(followingStatement1.at(0) == *statement2);
-    auto followingStatement2 = followsRelationshipManager.getFollowingStatement(*statement2);
-    REQUIRE(followingStatement2.size() == 1);
-    REQUIRE(followingStatement2.at(0) == *statement3);
-    REQUIRE(followsRelationshipManager.getFollowingStatement(*statement3).empty());
+    REQUIRE(followsRelationshipManager.getFollowsTypeStmt(StatementType::Stmt, *statement3, true).size() == 1);
+    REQUIRE(followsRelationshipManager.getFollowsTypeStmt(StatementType::Stmt, *statement3, false).size() == 2);
+    REQUIRE(followsRelationshipManager.getFollowsTypeStmt(StatementType::Assign, *statement3, false).size() == 1);
+    REQUIRE(followsRelationshipManager.getFollowsTypeStmt(StatementType::Assign, *statement3, true).empty());
 
-    REQUIRE(followsRelationshipManager.getIsFollows(*statement1, *statement2) == true);
-    REQUIRE(followsRelationshipManager.getIsFollows(*statement2, *statement3) == true);
-    REQUIRE(followsRelationshipManager.getIsFollows(*statement1, *statement3) == false);
+    REQUIRE(followsRelationshipManager.getFollowsWildcardType(StatementType::Stmt).size() == 2);
+    REQUIRE(followsRelationshipManager.getFollowsWildcardType(StatementType::Assign).size() == 1);
+    REQUIRE(followsRelationshipManager.getFollowsWildcardType(StatementType::Print).empty());
+    REQUIRE(followsRelationshipManager.getFollowsWildcardType(StatementType::Call).size() == 1);
 
-    auto allFollowsStatementPair = followsRelationshipManager.getAllFollowsStatementPair();
-    REQUIRE(allFollowsStatementPair.size() == 2);
+    REQUIRE(followsRelationshipManager.getFollowsStmtType(*statement1, StatementType::Stmt, true).size() == 1);
+    REQUIRE(followsRelationshipManager.getFollowsStmtType(*statement1, StatementType::Stmt, false).size() == 2);
+    REQUIRE(followsRelationshipManager.getFollowsStmtType(*statement1, StatementType::Call, true).size() == 1);
+    REQUIRE(followsRelationshipManager.getFollowsStmtType(*statement1, StatementType::Call, false).empty());
+
+    REQUIRE(followsRelationshipManager.getFollowsTypeWildcard(StatementType::Stmt).size() == 2);
+    REQUIRE(followsRelationshipManager.getFollowsTypeWildcard(StatementType::Assign).empty());
+    REQUIRE(followsRelationshipManager.getFollowsTypeWildcard(StatementType::Print).size() == 2);
+    REQUIRE(followsRelationshipManager.getFollowsTypeWildcard(StatementType::Call).size() == 1);
+
+    REQUIRE(followsRelationshipManager.isFollows(*statement1, *statement2, true) == true);
+    REQUIRE(followsRelationshipManager.isFollows(*statement1, *statement2, false) == true);
+    REQUIRE(followsRelationshipManager.isFollows(*statement1, *statement3, true) == false);
+    REQUIRE(followsRelationshipManager.isFollows(*statement1, *statement3, false) == true);
+
+    REQUIRE(followsRelationshipManager.hasFollows() == true);
 }

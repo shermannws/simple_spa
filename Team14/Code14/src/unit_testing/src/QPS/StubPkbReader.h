@@ -32,4 +32,30 @@ public:
 
     // Returns true if statement1 follows statement2
     bool getIsFollows(Statement& statement1, Statement& statement2) const override;
+
+    std::vector<std::vector<Entity>> getFollowsPair(StatementType formerType, StatementType latterType) const override;
+
+    std::vector<std::vector<Entity>> getFollowsStarPair(StatementType formerType, StatementType latterType) const override;
+
+    std::vector<Entity> getFollowsTypeStmt(StatementType type, Statement& statement) const override;
+
+    std::vector<Entity> getFollowsStarTypeStmt(StatementType type, Statement& statement) const override;
+
+    std::vector<Entity> getFollowsTypeWildcard(StatementType type) const override;
+
+    std::vector<Entity> getFollowsStarTypeWildcard(StatementType type) const override;
+
+    std::vector<Entity> getFollowsStmtType(Statement& statement, StatementType type) const override;
+
+    std::vector<Entity> getFollowsStarStmtType(Statement& statement, StatementType type) const override;
+
+    std::vector<Entity> getFollowsWildcardType(StatementType type) const override;
+
+    std::vector<Entity> getFollowsStarWildcardType(StatementType type) const override;
+
+    bool isFollows(Statement& statement1, Statement& statement2) const override;
+
+    bool isFollowsStar(Statement& statement1, Statement& statement2) const override;
+
+    bool hasFollows() const override;
 };
