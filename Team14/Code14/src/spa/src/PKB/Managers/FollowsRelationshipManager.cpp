@@ -17,15 +17,15 @@ std::vector<std::vector<Entity>> FollowsRelationshipManager::getFollowsPair(Stat
     return followsPair;
 }
 
-std::vector<Entity> FollowsRelationshipManager::getFollowsTypeStmt(StatementType type, Statement& statement, bool requireDirect) const {
-    auto result = std::vector<Entity>();
-    for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
-        if (*((*it)->getRightObject()) == statement && (*it)->getLeftObject()->isStatementType(type) && (*it)->isDirect() >= requireDirect) {
-            result.push_back(*((*it)->getLeftEntity()));
-        }
-    }
-    return result;
-}
+//std::vector<Entity> FollowsRelationshipManager::getFollowsTypeStmt(StatementType type, Statement& statement, bool requireDirect) const {
+//    auto result = std::vector<Entity>();
+//    for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
+//        if (*((*it)->getRightObject()) == statement && (*it)->getLeftObject()->isStatementType(type) && (*it)->isDirect() >= requireDirect) {
+//            result.push_back(*((*it)->getLeftEntity()));
+//        }
+//    }
+//    return result;
+//}
 
 std::vector<Entity> FollowsRelationshipManager::getFollowsTypeWildcard(StatementType type) const { // Same for Follows and Follows* since Follows* is a superset of Follows
     auto result = std::vector<Entity>();
@@ -69,12 +69,13 @@ bool FollowsRelationshipManager::hasFollows() const {
 }
 
 
-//std::vector<Entity> FollowsRelationshipManager::getFollowsTypeStmt(StatementType type, Statement& statement) {
-//    auto matcher = [type](std::shared_ptr<FollowsRelationship> followsRelationship) {
-//        return followsRelationship->getLeftObject()->isStatementType(type);
-//    };
-//    auto getter = [](std::shared_ptr<FollowsRelationship> followsRelationship) {
-//        return *((*followsRelationship).getLeftEntity());
-//    };
-//    return ManagerUtils::getFromStore<>(followsRelationshipStore, matcher, getter);
-//}
+std::vector<Entity> FollowsRelationshipManager::getFollowsTypeStmt(StatementType type, Statement& statement, bool requireDirect) const {
+    auto matcher = [type, statement, requireDirect](FollowsRelationship& followsRelationship) {
+        return *(followsRelationship.getRightObject()) == statement && followsRelationship.getLeftObject()->isStatementType(type) && followsRelationship.isDirect() >= requireDirect;
+    };
+
+    auto getter = [](FollowsRelationship& followsRelationship) {
+        return *followsRelationship.getLeftEntity();
+    };
+    return ManagerUtils::getFromStore<FollowsRelationshipStore, FollowsRelationship>(followsRelationshipStore, matcher, getter);
+}
