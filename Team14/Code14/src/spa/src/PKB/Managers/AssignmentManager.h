@@ -5,6 +5,7 @@
 #include <string>
 #include <utility>
 #include <regex>
+#include <algorithm>
 
 #include "PKB/AssignmentPatternStore/AssignmentPatternStore.h"
 #include "Commons/Entities/Statement.h"

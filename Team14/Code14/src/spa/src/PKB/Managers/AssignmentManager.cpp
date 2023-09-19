@@ -37,9 +37,9 @@ bool AssignmentManager::contains(Statement& statement) const {
 // pattern a (_,_)
 std::vector<Entity> AssignmentManager::getAllAssignStmts() const {
     std::vector<Entity> statements = std::vector<Entity>();
-    for (auto it = assignmentStore->getBeginIterator(); it != assignmentStore->getEndIterator(); it++) {
-        statements.push_back(*((*it)->getStatement()));
-    }
+    std::for_each(assignmentStore->getBeginIterator(), assignmentStore->getEndIterator(), [&statements](std::shared_ptr<Assignment> assignment) {
+        statements.push_back(*(assignment->getStatement()));
+    });
     return statements;
 }
 
