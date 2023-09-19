@@ -1,8 +1,9 @@
+#include <string>
+#include <utility>
+
 #include "SPToken.h"
 
-#include <string>
-
-SPToken::SPToken(TokenType type, const std::string& value): type(type), value(value) {}
+SPToken::SPToken(TokenType type, std::string  value): type(type), value(std::move(value)) {}
 SPToken::SPToken() = default;
 
 TokenType SPToken::getType() {

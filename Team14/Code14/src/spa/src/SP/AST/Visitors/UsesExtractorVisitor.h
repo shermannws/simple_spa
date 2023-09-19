@@ -15,9 +15,18 @@ class UsesExtractorVisitor : public DesignExtractorVisitor,
     public AssignNodeVisitor,
     public PrintNodeVisitor {
 public:
+    /*!
+     * Constructor for UsesExtractorVisitor
+     */
     UsesExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
+    /*!
+     * Visits an AssignNide and add variables used by the Assignment into PKB
+     */
     void visitAssignNode(AssignNode* node) const override;
 
+    /*!
+     * Visits a PrintNode and add variable used into PKB
+     */
     void visitPrintNode(PrintNode* node) const override;
 };
