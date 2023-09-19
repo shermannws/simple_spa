@@ -2,12 +2,12 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 
-Result FollowsSuchThatStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbReader> pkbReader) const {
-    auto& suchThat = dynamic_cast<SuchThatClause&>(clause);
-    Ref leftRef = suchThat.getFirstParam();
+Result FollowsSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const {
+    std::shared_ptr<SuchThatClause> suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
+    Ref leftRef = suchThat->getFirstParam();
     RootType leftRootType = leftRef.getRootType();
     QueryEntityType leftEntityType = leftRef.getEntityType();
-    Ref rightRef = suchThat.getSecondParam();
+    Ref rightRef = suchThat->getSecondParam();
     RootType rightRootType = rightRef.getRootType();
     QueryEntityType rightEntityType = rightRef.getEntityType();
     Result res;
@@ -58,7 +58,7 @@ Result FollowsSuchThatStrategy::evaluateClause(Clause& clause, std::shared_ptr<P
             type = ResultType::Tuples;
         }
 
-    // INTEGERS
+        // INTEGERS
     } if (leftRootType == RootType::Integer && rightRootType == RootType::Integer) { // Follows(1,2)
         Statement s1 = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
         Statement s2 = Statement(stoi(rightRef.getRep()), StatementType::Stmt);

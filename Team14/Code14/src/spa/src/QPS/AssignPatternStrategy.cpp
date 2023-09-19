@@ -2,16 +2,16 @@
 
 #include "AssignPatternStrategy.h"
 
-Result AssignPatternStrategy::evaluateClause(Clause& clause, std::shared_ptr<PkbReader> pkbReader) const {
-    auto& patternClause = dynamic_cast<PatternClause&>(clause);
-    Ref first = patternClause.getFirstParam();
-    Ref second = patternClause.getSecondParam();
+Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const {
+    std::shared_ptr<PatternClause> patternClause = std::dynamic_pointer_cast<PatternClause>(clause);
+    Ref first = patternClause->getFirstParam();
+    Ref second = patternClause->getSecondParam();
     Result result;
     if (first.getRootType() == RootType::Wildcard && second.getRootType() == RootType::Wildcard) {
         // build result
         ResultType type = ResultType::Tuples;
         result.setType(type);
-        std::unordered_map<std::string, int> map {{patternClause.getEntity()->getSynonym(), 0}};
+        std::unordered_map<std::string, int> map {{patternClause->getEntity()->getSynonym(), 0}};
         result.setSynIndices(map);
         auto entities = pkbReader->getAllAssign();
         std::vector<std::vector<Entity>> mappedEntities;

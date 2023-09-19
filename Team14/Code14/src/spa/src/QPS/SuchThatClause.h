@@ -13,7 +13,7 @@ private:
 
 public:
     SuchThatClause();
-    explicit SuchThatClause(const std::shared_ptr<Token>& token);
+    SuchThatClause(const std::shared_ptr<Token>& token);
     void setSecondParam(Ref& ref);
     Ref& getSecondParam();
 

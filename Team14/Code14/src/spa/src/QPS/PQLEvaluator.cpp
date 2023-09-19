@@ -46,9 +46,9 @@ Result PQLEvaluator::evaluate(Query& query) {
     Result result;
     // if query is a such that query
     if (!query.getSuchThat().empty()) {
-        if (query.getSuchThat()[0].getType() == ClauseType::Uses) {
+        if (query.getSuchThat()[0]->getType() == ClauseType::Uses) {
             clauseHandler->setStrategy(std::make_shared<UsesSuchThatStrategy>(UsesSuchThatStrategy()));
-        } else if (query.getSuchThat()[0].getType() == ClauseType::Follows) {
+        } else if (query.getSuchThat()[0]->getType() == ClauseType::Follows) {
             clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
         }
         clauseHandler->executeClause(query.getSuchThat()[0], result);

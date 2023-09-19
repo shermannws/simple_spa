@@ -73,8 +73,8 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     std::shared_ptr<QueryEntity> assignInQuery = std::make_shared<QueryEntity>(QueryEntityType::Assign, "a");
     queryObj.addDeclaration(assignInQuery);
     queryObj.addSelect(assignInQuery);
-    PatternClause patternClause = PatternClause();
-    patternClause.setEntity(assignInQuery);
+    std::shared_ptr<PatternClause> patternClause = std::make_shared<PatternClause>();
+    patternClause->setEntity(assignInQuery);
     Ref wildcard;
     std::string rep = "_";
     RefType ent = RefType::EntRef;
@@ -82,8 +82,8 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     wildcard.setRep(rep);
     wildcard.setRootType(root);
     wildcard.setType(ent);
-    patternClause.setFirstParam(wildcard);
-    patternClause.setSecondParam(wildcard);
+    patternClause->setFirstParam(wildcard);
+    patternClause->setSecondParam(wildcard);
     queryObj.addPattern(patternClause);
 
     Result resultObj = evaluator.evaluate(queryObj);

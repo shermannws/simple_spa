@@ -110,23 +110,22 @@ void PQLParser::processSuchThatClause(Query& query) {
     } catch (...) {
         return;
     }
-    SuchThatClause clause;
+    std::shared_ptr<Token> absToken = tokenizer->popToken();
+    std::shared_ptr<SuchThatClause> clause = std::make_shared<SuchThatClause>(absToken);
     validateSuchThatSyntax(clause);
     validateSuchThatSemantics(query, clause);
     query.addSuchThat(clause);
 }
 
-void PQLParser::validateSuchThatSyntax(SuchThatClause& clause) {
-    std::shared_ptr<Token> absToken = tokenizer->popToken();
 
-    clause = SuchThatClause(absToken);
+void PQLParser::validateSuchThatSyntax(const std::shared_ptr<SuchThatClause>& clause) {
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken(TokenType::Lparenthesis)) {
         throw std::runtime_error("No left parenthesis");
     }
 
     Ref leftRef = extractRef();
-    clause.setFirstParam(leftRef);
+    clause->setFirstParam(leftRef);
 
     next = tokenizer->popToken();
     if (!next->isToken(TokenType::Comma)) {
@@ -134,7 +133,7 @@ void PQLParser::validateSuchThatSyntax(SuchThatClause& clause) {
     }
 
     Ref rightRef = extractRef();
-    clause.setSecondParam(rightRef);
+    clause->setSecondParam(rightRef);
 
     next = tokenizer->popToken();
     if (!next->isToken(TokenType::Rparenthesis)) {
@@ -144,10 +143,10 @@ void PQLParser::validateSuchThatSyntax(SuchThatClause& clause) {
     validateSuchThatRefType(clause);
 }
 
-void PQLParser::validateSuchThatRefType(SuchThatClause& clause) {
-    ClauseType type = clause.getType();
-    Ref& leftRef = clause.getFirstParam();
-    Ref& rightRef = clause.getSecondParam();
+void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause>& clause) {
+    ClauseType type = clause->getType();
+    Ref& leftRef = clause->getFirstParam();
+    Ref& rightRef = clause->getSecondParam();
     RootType leftRootType = leftRef.getRootType();
     RootType rightRootType = rightRef.getRootType();
     RefType leftType = RefType::Invalid;
@@ -194,11 +193,11 @@ void PQLParser::validateSuchThatRefType(SuchThatClause& clause) {
     rightRef.setType(rightType);
 }
 
-void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) {
-    ClauseType type = clause.getType();
-    Ref& leftRef = clause.getFirstParam();
+void PQLParser::validateSuchThatSemantics(Query& query, const std::shared_ptr<SuchThatClause>& clause) {
+    ClauseType type = clause->getType();
+    Ref& leftRef = clause->getFirstParam();
     RootType leftRootType = leftRef.getRootType();
-    Ref& rightRef = clause.getSecondParam();
+    Ref& rightRef = clause->getSecondParam();
     RootType rightRootType = rightRef.getRootType();
 
     // check whether synonyms are declared
@@ -407,11 +406,11 @@ void PQLParser::processPatternClause(Query& query) {
     next = tokenizer->popToken();
     expect(next->isToken(TokenType::Rparenthesis), "Expected right parenthesis");
 
-    PatternClause clause;
-    clause.setType(ClauseType::Assign);
-    clause.setEntity(entity);
-    clause.setFirstParam(wildcard);
-    clause.setSecondParam(wildcard);
+    std::shared_ptr<PatternClause> clause = std::make_shared<PatternClause>();
+    clause->setType(ClauseType::Assign);
+    clause->setEntity(entity);
+    clause->setFirstParam(wildcard);
+    clause->setSecondParam(wildcard);
     query.addPattern(clause);
 }
 
