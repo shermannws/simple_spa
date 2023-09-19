@@ -174,6 +174,7 @@ void PQLParser::processPatternClause(Query& query) {
     next = tokenizer->popToken();
     expect(next->isToken(TokenType::Rparenthesis), "Expected right parenthesis");
 
+    validatePatternSemantics(query, clause);
     query.addPattern(clause);
 }
 
