@@ -5,6 +5,9 @@
 #include "PQLParser.h"
 #include "Tokenizer.h"
 #include "SuchThatClause.h"
+#include "QPS/SemanticValHandler/SynonymHandler.h"
+#include "QPS/SemanticValHandler/StmtrefStmtrefHandler.h"
+#include "QPS/SemanticValHandler/StmtrefEntrefHandler.h"
 
 
 PQLParser::PQLParser(const std::string& str) : tokenizer(std::make_shared<Tokenizer>(str)){}
@@ -117,7 +120,6 @@ void PQLParser::processSuchThatClause(Query& query) {
     query.addSuchThat(clause);
 }
 
-
 void PQLParser::validateSuchThatSyntax(const std::shared_ptr<SuchThatClause>& clause) {
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken(TokenType::Lparenthesis)) {
@@ -188,175 +190,18 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause>& c
             throw std::runtime_error("Invalid ClauseType in Such That Clause");
     }
 
-
+    // TODO: decide whether all types should be set in Validation Handlers instead
     leftRef.setType(leftType);
     rightRef.setType(rightType);
 }
 
+// TODO: generalise this to cater both such that & pattern clauses
 void PQLParser::validateSuchThatSemantics(Query& query, const std::shared_ptr<SuchThatClause>& clause) {
-    ClauseType type = clause->getType();
-    Ref& leftRef = clause->getFirstParam();
-    RootType leftRootType = leftRef.getRootType();
-    Ref& rightRef = clause->getSecondParam();
-    RootType rightRootType = rightRef.getRootType();
-
-    // check whether synonyms are declared
-    if (leftRootType == RootType::Synonym) {
-        std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-        if (!entity) {
-            throw std::runtime_error("Invalid LHS, undeclared synonym found");
-        }
-        QueryEntityType entityType = entity->getType();
-        leftRef.setEntityType(entityType);
-    }
-    if (rightRootType == RootType::Synonym) {
-        std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
-        if (!entity) {
-            throw std::runtime_error("Invalid RHS, undeclared synonym found");
-        }
-        QueryEntityType entityType = entity->getType();
-        rightRef.setEntityType(entityType);
-    }
-
-
-    // check wildcard & entity type
-    if (type == ClauseType::Uses) {
-        if (leftRootType == RootType::Wildcard) {
-            throw std::runtime_error("Invalid Uses LHS, wildcard found");
-        }
-
-        if (leftRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (!isOfUsesEntityType(entityType)) {
-                throw std::runtime_error("Invalid Uses LHS, invalid entity type found");
-            }
-
-            if (entityType == QueryEntityType::Procedure) {
-                RefType leftRefType = RefType::EntRef;
-                leftRef.setType(leftRefType);
-            } else {
-                RefType leftRefType = RefType::StmtRef;
-                leftRef.setType(leftRefType);
-            }
-
-        } else if (leftRootType == RootType::Integer) {
-            RefType leftRefType = RefType::StmtRef;
-            leftRef.setType(leftRefType);
-        } else if (leftRootType == RootType::Ident) {
-            RefType leftRefType = RefType::EntRef;
-            leftRef.setType(leftRefType);
-        }
-
-        if (rightRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (entityType != QueryEntityType::Variable) {
-                throw std::runtime_error("Invalid Uses RHS, non-variable found");
-            }
-        }
-    } else if (type == ClauseType::Modifies) {
-        if (leftRootType == RootType::Wildcard) {
-            throw std::runtime_error("Invalid Modifies LHS, wildcard found");
-        }
-
-        if (leftRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (!isOfModifiesEntityType(entityType)) {
-                throw std::runtime_error("Invalid Modifies LHS, invalid entity type found");
-            }
-
-            if (entityType == QueryEntityType::Procedure) {
-                RefType leftRefType = RefType::EntRef;
-                leftRef.setType(leftRefType);
-            } else {
-                RefType leftRefType = RefType::StmtRef;
-                leftRef.setType(leftRefType);
-            }
-
-        } else if (leftRootType == RootType::Integer) {
-            RefType leftRefType = RefType::StmtRef;
-            leftRef.setType(leftRefType);
-        } else if (leftRootType == RootType::Ident) {
-            RefType leftRefType = RefType::EntRef;
-            leftRef.setType(leftRefType);
-        }
-
-        if (rightRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (entityType != QueryEntityType::Variable) {
-                throw std::runtime_error("Invalid Modifies RHS, non-variable found");
-            }
-        }
-    } else if (type == ClauseType::Follows) {
-        if (leftRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (!isOfStmtType(entityType)) {
-                throw std::runtime_error("Invalid Follows LHS, non-statement found");
-            }
-        }
-
-        if (rightRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (!isOfStmtType(entityType)) {
-                throw std::runtime_error("Invalid Follows RHS, non-statement found");
-            }
-        }
-
-    } else if (type == ClauseType::FollowsStar) {
-        if (leftRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (!isOfStmtType(entityType)) {
-                throw std::runtime_error("Invalid Follows* LHS, non-statement found");
-            }
-        }
-
-        if (rightRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (!isOfStmtType(entityType)) {
-                throw std::runtime_error("Invalid Follows* RHS, non-statement found");
-            }
-        }
-    } else if (type == ClauseType::Parent) {
-        if (leftRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (!isOfStmtType(entityType)) {
-                throw std::runtime_error("Invalid Parent LHS, non-statement found");
-            }
-        }
-
-        if (rightRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (!isOfStmtType(entityType)) {
-                throw std::runtime_error("Invalid Parent RHS, non-statement found");
-            }
-        }
-
-    } else if (type == ClauseType::ParentStar) {
-        if (leftRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (!isOfStmtType(entityType)) {
-                throw std::runtime_error("Invalid Parent* LHS, non-statement found");
-            }
-        }
-
-        if (rightRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
-            QueryEntityType entityType = entity->getType();
-            if (!isOfStmtType(entityType)) {
-                throw std::runtime_error("Invalid Parent* RHS, non-statement found");
-            }
-        }
-    }
+    std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
+    std::shared_ptr<StmtrefStmtrefHandler> stmtrefHandler = std::make_shared<StmtrefStmtrefHandler>();
+    std::shared_ptr<StmtrefEntrefHandler> stmtEntHandler = std::make_shared<StmtrefEntrefHandler>();
+    synonymHandler->setNext(stmtrefHandler)->setNext(stmtEntHandler);
+    synonymHandler->handle(query, clause);
 }
 
 void PQLParser::processPatternClause(Query& query) {
@@ -412,27 +257,6 @@ void PQLParser::processPatternClause(Query& query) {
     clause->setFirstParam(wildcard);
     clause->setSecondParam(wildcard);
     query.addPattern(clause);
-}
-
-bool PQLParser::isOfStmtType(QueryEntityType entityType) {
-    return entityType == QueryEntityType::Stmt || entityType == QueryEntityType::Assign
-           || entityType == QueryEntityType::Print || entityType == QueryEntityType::If
-           || entityType == QueryEntityType::While || entityType == QueryEntityType::Call
-           || entityType == QueryEntityType::Read;
-}
-
-bool PQLParser::isOfUsesEntityType(QueryEntityType entityType) {
-    return entityType == QueryEntityType::Stmt || entityType == QueryEntityType::Assign
-           || entityType == QueryEntityType::Print || entityType == QueryEntityType::If
-           || entityType == QueryEntityType::While || entityType == QueryEntityType::Call
-           || entityType == QueryEntityType::Procedure;
-}
-
-bool PQLParser::isOfModifiesEntityType(QueryEntityType entityType) {
-    return entityType == QueryEntityType::Stmt || entityType == QueryEntityType::Assign
-           || entityType == QueryEntityType::Read || entityType == QueryEntityType::If
-           || entityType == QueryEntityType::While || entityType == QueryEntityType::Call
-           || entityType == QueryEntityType::Procedure;
 }
 
 Ref PQLParser::extractRef() {

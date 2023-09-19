@@ -105,22 +105,23 @@ TEST_CASE("processSuchThatClause Uses") {
         REQUIRE(rightRef.getRep() == "v");
     }
 
-    SECTION("Valid Uses query") {
-        PQLParser parser("assign a;\nSelect a such that Uses(\"main\",\"x\")"); // LHS is procedure
-        Query query = parser.parse();
-        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
-        Ref leftRef = clause->getFirstParam();
-        Ref rightRef = clause->getSecondParam();
-        REQUIRE(clause->getType() == ClauseType::Uses);
-        REQUIRE(leftRef.getType() == RefType::EntRef);
-        REQUIRE(leftRef.getRootType() == RootType::Ident);
-        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
-        REQUIRE(leftRef.getRep() == "main");
-        REQUIRE(rightRef.getType() == RefType::EntRef);
-        REQUIRE(rightRef.getRootType() == RootType::Ident);
-        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
-        REQUIRE(rightRef.getRep() == "x");
-    }
+    // MILESTONE 1: USES(PROC, V) IS NOT INCLUDED, will throw SyntaxError for now
+//    SECTION("Valid Uses query") {
+//        PQLParser parser("assign a;\nSelect a such that Uses(\"main\",\"x\")"); // LHS is procedure
+//        Query query = parser.parse();
+//        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+//        Ref leftRef = clause->getFirstParam();
+//        Ref rightRef = clause->getSecondParam();
+//        REQUIRE(clause->getType() == ClauseType::Uses);
+//        REQUIRE(leftRef.getType() == RefType::EntRef);
+//        REQUIRE(leftRef.getRootType() == RootType::Ident);
+//        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+//        REQUIRE(leftRef.getRep() == "main");
+//        REQUIRE(rightRef.getType() == RefType::EntRef);
+//        REQUIRE(rightRef.getRootType() == RootType::Ident);
+//        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+//        REQUIRE(rightRef.getRep() == "x");
+//    }
 
     SECTION("Valid Uses query") {
         PQLParser parser("assign x;\nSelect x such that Uses(x, \"x\")");
@@ -630,11 +631,11 @@ TEST_CASE("Invalid processSuchThat cases") {
     SECTION("Invalid Uses queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assign a; variable v;\nSelect a such that Uses(_, v)",
-                               "Invalid Uses LHS, wildcard found");
+                               "Invalid LHS, wildcard found");
         testcases.emplace_back("assign a; variable v;\nSelect a such that Uses(v, a)",
-                               "Invalid Uses LHS, invalid entity type found");
+                               "Invalid LHS synonym, non-statement found");
         testcases.emplace_back("call a; print d;\nSelect a such that Uses(\"y\", d)",
-                               "Invalid Uses RHS, non-variable found");
+                               "Invalid LHS stmtRef");
         testcases.emplace_back("assign a; print d;\nSelect a such that Uses(b, d)",
                                "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("assign a; print d;\nSelect a such that Uses(a, 2)",
@@ -649,17 +650,17 @@ TEST_CASE("Invalid processSuchThat cases") {
     SECTION("Invalid Modifies queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assign a; variable v;\nSelect a such that Modifies(_, v)",
-                               "Invalid Modifies LHS, wildcard found");
+                               "Invalid LHS, wildcard found");
         testcases.emplace_back("print a; constant v;\nSelect a such that Modifies(v, a)",
-                               "Invalid Modifies LHS, invalid entity type found");
+                               "Invalid LHS synonym, non-statement found");
         testcases.emplace_back("call a; constant d;\nSelect a such that Modifies(\"test\", d)",
-                               "Invalid Modifies RHS, non-variable found");
+                               "Invalid LHS stmtRef");
         testcases.emplace_back("stmt a; variable d;\nSelect a such that Modifies(b, d)",
                                "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("print a; print d;\nSelect a such that Modifies(a, 3)",
                               "Invalid RHS, entRef expected");
         testcases.emplace_back("print a; variable d;\nSelect a such that Modifies(a, d)",
-                               "Invalid Modifies LHS, invalid entity type found");
+                               "Invalid Modifies LHS, invalid stmtRef found");
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
@@ -670,9 +671,9 @@ TEST_CASE("Invalid processSuchThat cases") {
     SECTION("Invalid Follow queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("stmt a; variable v;\nSelect v such that Follows(v, a)",
-                               "Invalid Follows LHS, non-statement found");
+                               "Invalid LHS synonym, non-statement found");
         testcases.emplace_back("procedure a; call v;\nSelect v such that Follows(v, a)",
-                               "Invalid Follows RHS, non-statement found");
+                               "Invalid RHS synonym, non-statement found");
         testcases.emplace_back("procedure a; call v;\nSelect v such that Follows(hello, a)",
                                "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("procedure a; call v;\nSelect a such that Follows(\"hello\", v)",
@@ -689,11 +690,11 @@ TEST_CASE("Invalid processSuchThat cases") {
     SECTION("Invalid Parent queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("stmt a; variable v;\nSelect v such that Parent(v, a)",
-                               "Invalid Parent LHS, non-statement found");
+                               "Invalid LHS synonym, non-statement found");
         testcases.emplace_back("procedure a; call v;\nSelect v such that Parent(v, a)",
-                               "Invalid Parent RHS, non-statement found");
+                               "Invalid RHS synonym, non-statement found");
         testcases.emplace_back("constant a; call v;\nSelect v such that Parent(a, v)",
-                               "Invalid Parent LHS, non-statement found");
+                               "Invalid LHS synonym, non-statement found");
         testcases.emplace_back("procedure a; call v;\nSelect v such that Parent(hello, a)",
                                "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("stmt a; print v;\nSelect a such that Parent(\"hello\", v)",
@@ -710,11 +711,11 @@ TEST_CASE("Invalid processSuchThat cases") {
     SECTION("Invalid Parent* queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("stmt a; variable v;\nSelect v such that Parent*(v, a)",
-                               "Invalid Parent* LHS, non-statement found");
+                               "Invalid LHS synonym, non-statement found");
         testcases.emplace_back("procedure a; call v;\nSelect v such that Parent*(v, a)",
-                               "Invalid Parent* RHS, non-statement found");
+                               "Invalid RHS synonym, non-statement found");
         testcases.emplace_back("constant a; call v;\nSelect v such that Parent*(a, v)",
-                               "Invalid Parent* LHS, non-statement found");
+                               "Invalid LHS synonym, non-statement found");
         testcases.emplace_back("procedure a; call v;\nSelect v such that Parent*(hello, a)",
                                "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("stmt a; print v;\nSelect a such that Parent*(\"hello\", v)",

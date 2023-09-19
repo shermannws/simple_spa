@@ -19,9 +19,6 @@ private:
     void validateSuchThatSyntax(const std::shared_ptr<SuchThatClause>& clause);
     void validateSuchThatSemantics(Query& query, const std::shared_ptr<SuchThatClause>& clause);
     void validateSuchThatRefType(const std::shared_ptr<SuchThatClause>& clause);
-    bool isOfStmtType(QueryEntityType entityType);
-    bool isOfUsesEntityType(QueryEntityType entityType);
-    bool isOfModifiesEntityType(QueryEntityType entityType);
 public:
     explicit PQLParser(const std::string& str);
     Query parse();
