@@ -10,3 +10,7 @@ Statement::Statement(int lineNo, StatementType statementType)
 StatementType Statement::getStatementType() const {
     return this->statementType;
 }
+
+bool Statement::isStatementType(StatementType statementType) const {
+    return this->statementType == statementType || statementType == StatementType::Stmt;
+}
