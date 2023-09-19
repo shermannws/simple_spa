@@ -4,6 +4,7 @@
 
 typedef std::string ProcedureName;
 typedef int StatementNumber;
+typedef std::string FormattedExpression;
 
 class AppConstants {
 public:

@@ -1,5 +1,6 @@
 #include <string>
 
+#include "Commons/AppConstants.h"
 #include "EntityExtractorVisitor.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Statement.h"
@@ -19,7 +20,7 @@ void EntityExtractorVisitor::visitAssignNode(AssignNode *node) const {
 	this->pkbWriter->addAssignStatement(
 			std::make_shared<Statement>(node->getStatementNumber(), StatementType::Assign),
 			std::make_shared<Variable>(node->getVar()->getVarName()),
-			std::make_shared<std::string>(node->getExpression()->toString()));
+			std::make_shared<FormattedExpression>(node->getExpression()->toString()));
 }
 
 void EntityExtractorVisitor::visitReadNode(ReadNode *node) const {
@@ -36,4 +37,16 @@ void EntityExtractorVisitor::visitVariableNode(VariableNode *node) const {
 
 void EntityExtractorVisitor::visitConstantNode(ConstantNode *node) const {
 	this->pkbWriter->addConstant(std::make_shared<Constant>(node->getValue()));
+}
+
+void EntityExtractorVisitor::visitCallNode(CallNode* node) const {
+	this->pkbWriter->addCallStatement(std::make_shared<Statement>(node->getStatementNumber(), StatementType::Call));
+}
+
+void EntityExtractorVisitor::visitIfNode(IfNode* node) const {
+	this->pkbWriter->addIfStatement(std::make_shared<Statement>(node->getStatementNumber(), StatementType::If));
+}
+
+void EntityExtractorVisitor::visitWhileNode(WhileNode* node) const {
+	this->pkbWriter->addWhileStatement(std::make_shared<Statement>(node->getStatementNumber(), StatementType::While));
 }

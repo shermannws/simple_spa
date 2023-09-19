@@ -39,11 +39,7 @@ void PkbWriterManager::addProcedure(std::shared_ptr<Procedure> p) {
     this->procedureStore->storeEntity(p);
 }
 
-void PkbWriterManager::addPrintStatement(std::shared_ptr<Statement> s) {
-    this->statementStore->storeEntity(s);
-}
-
-void PkbWriterManager::addReadStatement(std::shared_ptr<Statement> s) {
+void PkbWriterManager::addStatement(std::shared_ptr<Statement> s) {
     this->statementStore->storeEntity(s);
 }
 

@@ -10,6 +10,9 @@
 #include "../../AST/Nodes/ArithmeticExpressionNode.h"
 #include "../../AST/Nodes/VariableNode.h"
 #include "../../AST/Nodes/ConstantNode.h"
+#include "../../AST/Nodes/CallNode.h"
+#include "../../AST/Nodes/IfNode.h"
+#include "../../AST/Nodes/WhileNode.h"
 
 class EntityExtractorVisitor : public DesignExtractorVisitor,
     public ProcedureNodeVisitor,
@@ -17,7 +20,10 @@ class EntityExtractorVisitor : public DesignExtractorVisitor,
     public ReadNodeVisitor,
     public PrintNodeVisitor,
     public VariableNodeVisitor,
-    public ConstantNodeVisitor {
+    public ConstantNodeVisitor,
+    public CallNodeVisitor,
+    public IfNodeVisitor,
+    public WhileNodeVisitor {
 public:
     /*!
      * Constructor for EntityExtractorVisitor
@@ -53,4 +59,19 @@ public:
      * Visits a ConstantNode and add Constant into PKB
      */
     void visitConstantNode(ConstantNode* node) const override;
+
+    /*!
+     * Visits a CallNode and add Call statement into PKB
+     */
+    void visitCallNode(CallNode* node) const override;
+
+    /*!
+     * Visits a IfNode and add If statement into PKB
+     */
+    void visitIfNode(IfNode* node) const override;
+
+    /*!
+     * Visits a WhileNode and add While statement into PKB
+     */
+    void visitWhileNode(WhileNode* node) const override;
 };

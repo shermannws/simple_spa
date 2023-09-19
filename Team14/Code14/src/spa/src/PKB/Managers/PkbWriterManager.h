@@ -44,8 +44,7 @@ public:
     void addVariable(std::shared_ptr<Variable> v);
     void addProcedure(std::shared_ptr<Procedure> p);
 
-    void addPrintStatement(std::shared_ptr<Statement> s);
-    void addReadStatement(std::shared_ptr<Statement> s);
+    void addStatement(std::shared_ptr<Statement> s);
     void addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<std::string> rhs);
 
     void addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2);

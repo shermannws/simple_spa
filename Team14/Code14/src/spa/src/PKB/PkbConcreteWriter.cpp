@@ -23,11 +23,11 @@ void PkbConcreteWriter::addProcedure(std::shared_ptr<Procedure> p) {
 }
 
 void PkbConcreteWriter::addPrintStatement(std::shared_ptr<Statement> s) {
-    this->writerManager->addPrintStatement(s);
+    this->writerManager->addStatement(s);
 }
 
 void PkbConcreteWriter::addReadStatement(std::shared_ptr<Statement> s) {
-    this->writerManager->addReadStatement(s);
+    this->writerManager->addStatement(s);
 }
 
 void PkbConcreteWriter::addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<std::string> rhs) {
@@ -40,4 +40,16 @@ void PkbConcreteWriter::addFollowsRelationship(std::shared_ptr<Statement> s1, st
 
 void PkbConcreteWriter::addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
     this->writerManager->addUsesRelalationship(s, v);
+}
+
+void PkbConcreteWriter::addCallStatement(std::shared_ptr<Statement> s) {
+    this->writerManager->addStatement(s);
+}
+
+void PkbConcreteWriter::addIfStatement(std::shared_ptr<Statement> s) {
+    this->writerManager->addStatement(s);
+}
+
+void PkbConcreteWriter::addWhileStatement(std::shared_ptr<Statement> s) {
+    this->writerManager->addStatement(s);
 }

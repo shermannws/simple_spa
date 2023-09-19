@@ -53,4 +53,19 @@ public:
      * Adds new Uses Relationship into the PKB
      */
     void addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) override;
+
+    /*!
+     * Adds new Call Statement Entity into the PKB
+     */
+    void addCallStatement(std::shared_ptr<Statement> s) override;
+
+    /*!
+     * Adds new If Statement Entity into the PKB
+     */
+    void addIfStatement(std::shared_ptr<Statement> s) override;
+
+    /*!
+     * Adds new While Statement Entity into the PKB
+     */
+    void addWhileStatement(std::shared_ptr<Statement> s) override;
 };

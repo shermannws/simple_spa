@@ -56,4 +56,19 @@ public:
      * Adds new Uses Relationship into the PKB
      */
     virtual void addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) = 0;
+
+    /*!
+     * Adds new Call Statement Entity into the PKB
+     */
+    virtual void addCallStatement(std::shared_ptr<Statement> s) = 0;
+
+    /*!
+     * Adds new If Statement Entity into the PKB
+     */
+    virtual void addIfStatement(std::shared_ptr<Statement> s) = 0;
+
+    /*!
+     * Adds new While Statement Entity into the PKB
+     */
+    virtual void addWhileStatement(std::shared_ptr<Statement> s) = 0;
 };
