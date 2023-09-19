@@ -25,6 +25,6 @@ private:
     bool isOfUsesEntityType(QueryEntityType entityType);
     bool isOfModifiesEntityType(QueryEntityType entityType);
 public:
-    explicit PQLParser(const std::string& str);
+    explicit PQLParser(const std::string& PQLQuery);
     Query parse();
 };
