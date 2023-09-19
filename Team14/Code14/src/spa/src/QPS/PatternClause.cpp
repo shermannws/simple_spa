@@ -6,7 +6,7 @@ void PatternClause::setSecondParam(Ref& ref) {
     secondParam = ref;
 }
 
-Ref PatternClause::getSecondParam() {
+Ref& PatternClause::getSecondParam() {
     return secondParam;
 }
 

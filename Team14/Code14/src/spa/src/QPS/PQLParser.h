@@ -15,12 +15,10 @@ private:
     void processSuchThatClause(Query& query);
     void processPatternClause(Query& query);
     std::shared_ptr<Token> expect(bool isToken, const std::string& errorMsg);
-    Ref extractStmtRef(Query& query);
-    Ref extractEntRef(Query& query);
-    void processSuchThatBody(Query& query, SuchThatClause& clause);
-    void processSuchThatLeft(Query &query, SuchThatClause& clause);
-    void processSuchThatRight(Query &query, SuchThatClause& clause);
-    void validateSuchThatSemantics(Query &query, SuchThatClause& clause);
+    Ref extractRef();
+    void validateSuchThatSyntax(SuchThatClause& clause);
+    void validateSuchThatSemantics(Query& query, SuchThatClause& clause);
+    void validateSuchThatRefType(SuchThatClause& clause);
     bool isOfStmtType(QueryEntityType entityType);
     bool isOfUsesEntityType(QueryEntityType entityType);
     bool isOfModifiesEntityType(QueryEntityType entityType);

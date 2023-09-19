@@ -636,9 +636,9 @@ TEST_CASE("Invalid processSuchThat cases") {
         testcases.emplace_back("call a; print d;\nSelect a such that Uses(\"y\", d)",
                                "Invalid Uses RHS, non-variable found");
         testcases.emplace_back("assign a; print d;\nSelect a such that Uses(b, d)",
-                               "Invalid Uses LHS, undeclared synonym found");
+                               "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("assign a; print d;\nSelect a such that Uses(a, 2)",
-                               "Invalid entRef");
+                               "Invalid RHS, entRef expected");
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
@@ -655,9 +655,9 @@ TEST_CASE("Invalid processSuchThat cases") {
         testcases.emplace_back("call a; constant d;\nSelect a such that Modifies(\"test\", d)",
                                "Invalid Modifies RHS, non-variable found");
         testcases.emplace_back("stmt a; variable d;\nSelect a such that Modifies(b, d)",
-                               "Invalid Modifies LHS, undeclared synonym found");
+                               "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("print a; print d;\nSelect a such that Modifies(a, 3)",
-                               "Invalid entRef");
+                              "Invalid RHS, entRef expected");
         testcases.emplace_back("print a; variable d;\nSelect a such that Modifies(a, d)",
                                "Invalid Modifies LHS, invalid entity type found");
 
@@ -674,18 +674,18 @@ TEST_CASE("Invalid processSuchThat cases") {
         testcases.emplace_back("procedure a; call v;\nSelect v such that Follows(v, a)",
                                "Invalid Follows RHS, non-statement found");
         testcases.emplace_back("procedure a; call v;\nSelect v such that Follows(hello, a)",
-                               "Undeclared synonym found");
+                               "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("procedure a; call v;\nSelect a such that Follows(\"hello\", v)",
-                               "Invalid stmtRef");
+                               "Invalid LHS, stmtRef expected");
         testcases.emplace_back("assign a; call v;\nSelect a such that Follows(a, \"world\")",
-                               "Invalid stmtRef");
+                               "Invalid RHS, stmtRef expected");
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
             REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
         }
     }
-
+//
     SECTION("Invalid Parent queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("stmt a; variable v;\nSelect v such that Parent(v, a)",
@@ -695,18 +695,18 @@ TEST_CASE("Invalid processSuchThat cases") {
         testcases.emplace_back("constant a; call v;\nSelect v such that Parent(a, v)",
                                "Invalid Parent LHS, non-statement found");
         testcases.emplace_back("procedure a; call v;\nSelect v such that Parent(hello, a)",
-                               "Undeclared synonym found");
+                               "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("stmt a; print v;\nSelect a such that Parent(\"hello\", v)",
-                               "Invalid stmtRef");
+                               "Invalid LHS, stmtRef expected");
         testcases.emplace_back("print a; assign v;\nSelect a such that Parent(a, \"world\")",
-                               "Invalid stmtRef");
+                               "Invalid RHS, stmtRef expected");
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
             REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
         }
     }
-
+//
     SECTION("Invalid Parent* queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("stmt a; variable v;\nSelect v such that Parent*(v, a)",
@@ -716,11 +716,11 @@ TEST_CASE("Invalid processSuchThat cases") {
         testcases.emplace_back("constant a; call v;\nSelect v such that Parent*(a, v)",
                                "Invalid Parent* LHS, non-statement found");
         testcases.emplace_back("procedure a; call v;\nSelect v such that Parent*(hello, a)",
-                               "Undeclared synonym found");
+                               "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("stmt a; print v;\nSelect a such that Parent*(\"hello\", v)",
-                               "Invalid stmtRef");
+                               "Invalid LHS, stmtRef expected");
         testcases.emplace_back("print a; assign v;\nSelect a such that Parent*(a, \"world\")",
-                               "Invalid stmtRef");
+                               "Invalid RHS, stmtRef expected");
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);

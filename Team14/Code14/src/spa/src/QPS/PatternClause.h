@@ -12,7 +12,7 @@ private:
 public:
     PatternClause();
     void setSecondParam(Ref& ref);
-    Ref getSecondParam();
+    Ref& getSecondParam();
     void setEntity(std::shared_ptr<QueryEntity> ent);
     std::shared_ptr<QueryEntity> getEntity();
 };

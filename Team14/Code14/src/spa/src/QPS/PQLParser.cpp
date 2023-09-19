@@ -110,96 +110,115 @@ void PQLParser::processSuchThatClause(Query& query) {
     } catch (...) {
         return;
     }
-
-    std::shared_ptr<Token> absToken = tokenizer->popToken();
-
     SuchThatClause clause;
-    if (absToken->isToken("Uses")) {
-        clause.setType(ClauseType::Uses);
-    } else if (absToken->isToken("Modifies")) {
-        clause.setType(ClauseType::Modifies);
-    } else if (absToken->isToken("Follows")) {
-        clause.setType(ClauseType::Follows);
-    } else if (absToken->isToken("Follows*")) {
-        clause.setType(ClauseType::FollowsStar);
-    } else if (absToken->isToken("Parent")) {
-        clause.setType(ClauseType::Parent);
-    } else if (absToken->isToken("Parent*")) {
-        clause.setType(ClauseType::ParentStar);
-    } else {
-        throw std::runtime_error("Invalid token, abstraction expected");
-    }
-
-    processSuchThatBody(query, clause);
+    validateSuchThatSyntax(clause);
     validateSuchThatSemantics(query, clause);
     query.addSuchThat(clause);
-
-    // TODO: handle multiple "such that" and here recursively
 }
 
-void PQLParser::processPatternClause(Query& query) {
-    std::shared_ptr<Token> patternToken = tokenizer->peekToken();
-    try {
-        expect(patternToken->isToken("pattern"), "No pattern");
-    } catch (...) {
-        return;
-    }
+void PQLParser::validateSuchThatSyntax(SuchThatClause& clause) {
+    std::shared_ptr<Token> absToken = tokenizer->popToken();
 
-    std::shared_ptr<Token> patternSyn = tokenizer->popToken();
-    std::shared_ptr<QueryEntity> entity = query.getEntity(patternSyn->getRep());
-    if (!entity) {
-        throw std::runtime_error("Undeclared synonym in pattern clause");
-    } else if (entity->getType() != QueryEntityType::Assign) {
-        throw std::runtime_error("Unsupported pattern clause, expected an assignment");
-    }
-
+    clause = SuchThatClause(absToken);
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken(TokenType::Lparenthesis)) {
-        throw std::runtime_error("Expected Lparenthesis");
+        throw std::runtime_error("No left parenthesis");
     }
 
-    next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Underscore)) {
-        throw std::runtime_error("Expected wildcard as first arg");
-    }
+    Ref leftRef = extractRef();
+    clause.setFirstParam(leftRef);
 
     next = tokenizer->popToken();
     if (!next->isToken(TokenType::Comma)) {
-        throw std::runtime_error("Expected comma ");
+        throw std::runtime_error("No comma");
     }
 
+    Ref rightRef = extractRef();
+    clause.setSecondParam(rightRef);
+
     next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Underscore)) {
-        throw std::runtime_error("Expected wildcard as second arg");
+    if (!next->isToken(TokenType::Rparenthesis)) {
+        throw std::runtime_error("No right parenthesis");
     }
 
-    Ref wildcard;
-    std::string rep = next->getRep();
-    RefType ent = RefType::EntRef;
-    RootType root = RootType::Wildcard;
-    wildcard.setRep(rep);
-    wildcard.setRootType(root);
-    wildcard.setType(ent);
+    validateSuchThatRefType(clause);
+}
 
-    next = tokenizer->popToken();
-    expect(next->isToken(TokenType::Rparenthesis), "Expected right parenthesis");
+void PQLParser::validateSuchThatRefType(SuchThatClause& clause) {
+    ClauseType type = clause.getType();
+    Ref& leftRef = clause.getFirstParam();
+    Ref& rightRef = clause.getSecondParam();
+    RootType leftRootType = leftRef.getRootType();
+    RootType rightRootType = rightRef.getRootType();
+    RefType leftType = RefType::Invalid;
+    RefType rightType = RefType::Invalid;
 
-    PatternClause clause;
-    clause.setType(ClauseType::Assign);
-    clause.setEntity(entity);
-    clause.setFirstParam(wildcard);
-    clause.setSecondParam(wildcard);
-    query.addPattern(clause);
+    // TODO: to refactor checks of entRef and stmtRef to Utils?
+    switch (type) {
+        case ClauseType::Uses:
+        case ClauseType::Modifies:
+            // check right
+            if (rightRootType == RootType::Synonym || rightRootType == RootType::Wildcard
+                || rightRootType == RootType::Ident) {
+                rightType = RefType::EntRef;
+            } else {
+                throw std::runtime_error("Invalid RHS, entRef expected");
+            }
+            break;
+        case ClauseType::Follows:
+        case ClauseType::FollowsStar:
+        case ClauseType::Parent:
+        case ClauseType::ParentStar:
+            // check left
+            if (leftRootType == RootType::Synonym || leftRootType == RootType::Wildcard
+                || leftRootType == RootType::Integer) {
+                leftType = RefType::StmtRef;
+            } else {
+                throw std::runtime_error("Invalid LHS, stmtRef expected");
+            }
+
+            // check right
+            if (rightRootType == RootType::Synonym || rightRootType == RootType::Wildcard
+                || rightRootType == RootType::Integer) {
+                rightType = RefType::StmtRef;
+            } else {
+                throw std::runtime_error("Invalid RHS, stmtRef expected");
+            }
+            break;
+        default:
+            throw std::runtime_error("Invalid ClauseType in Such That Clause");
+    }
+
+
+    leftRef.setType(leftType);
+    rightRef.setType(rightType);
 }
 
 void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) {
-    // TODO: refactor checks/error messages and prevent DRY
-
     ClauseType type = clause.getType();
-    Ref leftRef = clause.getFirstParam();
+    Ref& leftRef = clause.getFirstParam();
     RootType leftRootType = leftRef.getRootType();
-    Ref rightRef = clause.getSecondParam();
+    Ref& rightRef = clause.getSecondParam();
     RootType rightRootType = rightRef.getRootType();
+
+    // check whether synonyms are declared
+    if (leftRootType == RootType::Synonym) {
+        std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
+        if (!entity) {
+            throw std::runtime_error("Invalid LHS, undeclared synonym found");
+        }
+        QueryEntityType entityType = entity->getType();
+        leftRef.setEntityType(entityType);
+    }
+    if (rightRootType == RootType::Synonym) {
+        std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
+        if (!entity) {
+            throw std::runtime_error("Invalid RHS, undeclared synonym found");
+        }
+        QueryEntityType entityType = entity->getType();
+        rightRef.setEntityType(entityType);
+    }
+
 
     // check wildcard & entity type
     if (type == ClauseType::Uses) {
@@ -213,6 +232,21 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
             if (!isOfUsesEntityType(entityType)) {
                 throw std::runtime_error("Invalid Uses LHS, invalid entity type found");
             }
+
+            if (entityType == QueryEntityType::Procedure) {
+                RefType leftRefType = RefType::EntRef;
+                leftRef.setType(leftRefType);
+            } else {
+                RefType leftRefType = RefType::StmtRef;
+                leftRef.setType(leftRefType);
+            }
+
+        } else if (leftRootType == RootType::Integer) {
+            RefType leftRefType = RefType::StmtRef;
+            leftRef.setType(leftRefType);
+        } else if (leftRootType == RootType::Ident) {
+            RefType leftRefType = RefType::EntRef;
+            leftRef.setType(leftRefType);
         }
 
         if (rightRootType == RootType::Synonym) {
@@ -233,6 +267,21 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
             if (!isOfModifiesEntityType(entityType)) {
                 throw std::runtime_error("Invalid Modifies LHS, invalid entity type found");
             }
+
+            if (entityType == QueryEntityType::Procedure) {
+                RefType leftRefType = RefType::EntRef;
+                leftRef.setType(leftRefType);
+            } else {
+                RefType leftRefType = RefType::StmtRef;
+                leftRef.setType(leftRefType);
+            }
+
+        } else if (leftRootType == RootType::Integer) {
+            RefType leftRefType = RefType::StmtRef;
+            leftRef.setType(leftRefType);
+        } else if (leftRootType == RootType::Ident) {
+            RefType leftRefType = RefType::EntRef;
+            leftRef.setType(leftRefType);
         }
 
         if (rightRootType == RootType::Synonym) {
@@ -311,6 +360,61 @@ void PQLParser::validateSuchThatSemantics(Query& query, SuchThatClause& clause) 
     }
 }
 
+void PQLParser::processPatternClause(Query& query) {
+    std::shared_ptr<Token> patternToken = tokenizer->peekToken();
+    try {
+        expect(patternToken->isToken("pattern"), "No pattern");
+    } catch (...) {
+        return;
+    }
+
+    std::shared_ptr<Token> patternSyn = tokenizer->popToken();
+    std::shared_ptr<QueryEntity> entity = query.getEntity(patternSyn->getRep());
+    if (!entity) {
+        throw std::runtime_error("Undeclared synonym in pattern clause");
+    } else if (entity->getType() != QueryEntityType::Assign) {
+        throw std::runtime_error("Unsupported pattern clause, expected an assignment");
+    }
+
+    std::shared_ptr<Token> next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Lparenthesis)) {
+        throw std::runtime_error("Expected Lparenthesis");
+    }
+
+    next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Underscore)) {
+        throw std::runtime_error("Expected wildcard as first arg");
+    }
+
+    next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Comma)) {
+        throw std::runtime_error("Expected comma ");
+    }
+
+    next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Underscore)) {
+        throw std::runtime_error("Expected wildcard as second arg");
+    }
+
+    Ref wildcard;
+    std::string rep = next->getRep();
+    RefType ent = RefType::EntRef;
+    RootType root = RootType::Wildcard;
+    wildcard.setRep(rep);
+    wildcard.setRootType(root);
+    wildcard.setType(ent);
+
+    next = tokenizer->popToken();
+    expect(next->isToken(TokenType::Rparenthesis), "Expected right parenthesis");
+
+    PatternClause clause;
+    clause.setType(ClauseType::Assign);
+    clause.setEntity(entity);
+    clause.setFirstParam(wildcard);
+    clause.setSecondParam(wildcard);
+    query.addPattern(clause);
+}
+
 bool PQLParser::isOfStmtType(QueryEntityType entityType) {
     return entityType == QueryEntityType::Stmt || entityType == QueryEntityType::Assign
            || entityType == QueryEntityType::Print || entityType == QueryEntityType::If
@@ -332,132 +436,15 @@ bool PQLParser::isOfModifiesEntityType(QueryEntityType entityType) {
            || entityType == QueryEntityType::Procedure;
 }
 
-void PQLParser::processSuchThatBody(Query& query, SuchThatClause& clause) {
-    expect(tokenizer->peekToken()->isToken(TokenType::Lparenthesis), "No left parenthesis");
-    processSuchThatLeft(query, clause);
-    expect(tokenizer->peekToken()->isToken(TokenType::Comma), "No comma");
-    processSuchThatRight(query, clause);
-    expect(tokenizer->peekToken()->isToken(TokenType::Rparenthesis), "No right parenthesis");
-}
-
-void PQLParser::processSuchThatLeft(Query &query, SuchThatClause &clause) {
-    // TODO: refactor and prevent DRY
-    ClauseType type = clause.getType();
+Ref PQLParser::extractRef() {
     Ref ref;
-
-    // validate if synonyms
-
-    if (type == ClauseType::Uses) {
-        std::shared_ptr<Token> next = tokenizer->peekToken();
-        if (next->isIdent()) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(next->getRep());
-            if (!entity) {
-                throw std::runtime_error("Invalid Uses LHS, undeclared synonym found");
-            }
-
-            if (entity->getType() == QueryEntityType::Procedure) {
-                ref = extractEntRef(query);
-            } else {
-                ref = extractStmtRef(query);
-            }
-
-        } else {
-            try {
-                ref = extractStmtRef(query);
-            } catch (...) {
-                ref = extractEntRef(query);
-            }
-        }
-    } else if (type == ClauseType::Modifies) {
-        std::shared_ptr<Token> next = tokenizer->peekToken();
-        if (next->isIdent()) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(next->getRep());
-            if (!entity) {
-                throw std::runtime_error("Invalid Modifies LHS, undeclared synonym found");
-            }
-
-            if (entity->getType() == QueryEntityType::Procedure) {
-                ref = extractEntRef(query);
-            } else {
-                ref = extractStmtRef(query);
-            }
-
-        } else {
-            try {
-                ref = extractStmtRef(query);
-            } catch (...) {
-                ref = extractEntRef(query);
-            }
-        }
-    } else if (type == ClauseType::Follows || type == ClauseType::FollowsStar
-               || type == ClauseType::Parent || type == ClauseType::ParentStar) {
-        ref = extractStmtRef(query);
-    } else {
-        throw std::runtime_error("Invalid Relationship Type in left such that clause");
-    }
-
-    clause.setFirstParam(ref);
-}
-
-void PQLParser::processSuchThatRight(Query &query, SuchThatClause &clause) {
-    ClauseType type = clause.getType();
-    Ref ref;
-    if (type == ClauseType::Uses || type == ClauseType::Modifies) {
-        ref = extractEntRef(query);
-    } else if (type == ClauseType::Follows || type == ClauseType::FollowsStar
-               || type == ClauseType::Parent || type == ClauseType::ParentStar) {
-        ref = extractStmtRef(query);
-    } else {
-        throw std::runtime_error("Invalid Relationship Type in left such that clause");
-    }
-
-    clause.setSecondParam(ref);
-}
-
-Ref PQLParser::extractStmtRef(Query& query) {
-    Ref ref;
-    RefType type = RefType::StmtRef;
-    ref.setType(type);
     RootType rootType;
-
     std::string refString;
     std::shared_ptr<Token> curr = tokenizer->peekToken();
     if (curr->isInteger()) { // INTEGER
         refString = tokenizer->popToken()->getRep();
         rootType = RootType::Integer;
-    } else if (curr->isToken(TokenType::Underscore)) { // WILDCARD
-        refString = tokenizer->popToken()->getRep();
-        rootType = RootType::Wildcard;
-    } else if (curr->isToken(TokenType::Word) && curr->isIdent()) { // SYNONYM
-        refString = tokenizer->popToken()->getRep();
-        rootType = RootType::Synonym;
-
-        // check that synonyms are declared
-        std::shared_ptr<QueryEntity> entity = query.getEntity(refString);
-        if (!entity) {
-            throw std::runtime_error("Undeclared synonym found");
-        }
-        QueryEntityType entityType = entity->getType();
-        ref.setEntityType(entityType);
-
-    } else {
-        throw std::runtime_error("Invalid stmtRef");
-    }
-
-    ref.setRep(refString);
-    ref.setRootType(rootType);
-    return ref;
-}
-
-Ref PQLParser::extractEntRef(Query& query) {
-    Ref ref;
-    RefType type = RefType::EntRef;
-    ref.setType(type);
-    RootType rootType;
-
-    std::string refString;
-    std::shared_ptr<Token> curr = tokenizer->peekToken();
-    if (curr->isToken(TokenType::Quote)) { // IDENTITY
+    } else if (curr->isToken(TokenType::Quote)) { // IDENTITY
         tokenizer->popToken();
         std::shared_ptr<Token> syn = tokenizer->peekToken();
         expect(syn->isIdent(), "Identity invalid");
@@ -472,16 +459,8 @@ Ref PQLParser::extractEntRef(Query& query) {
     } else if (curr->isToken(TokenType::Word) && curr->isIdent()) { // SYNONYM
         refString = tokenizer->popToken()->getRep();
         rootType = RootType::Synonym;
-
-        // check that synonyms are declared
-        std::shared_ptr<QueryEntity> entity = query.getEntity(refString);
-        if (!entity) {
-            throw std::runtime_error("Undeclared synonym found");
-        }
-        QueryEntityType entityType = entity->getType();
-        ref.setEntityType(entityType);
     } else {
-        throw std::runtime_error("Invalid entRef");
+        throw std::runtime_error("Invalid stmtRef");
     }
 
     ref.setRep(refString);
