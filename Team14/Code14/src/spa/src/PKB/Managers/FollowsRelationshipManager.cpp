@@ -16,6 +16,7 @@ std::vector<std::vector<Entity>> FollowsRelationshipManager::getAllFollowsStatem
 }
 
 std::vector<Entity> FollowsRelationshipManager::getFollowsByStatement(Statement& statement) const {
+    //TODO: to fix to take into accout follows vs follows* rs
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
         if (*((*it)->getRightEntity()) == statement) {
             return std::vector<Entity>{*((*it)->getLeftEntity())};
@@ -25,6 +26,7 @@ std::vector<Entity> FollowsRelationshipManager::getFollowsByStatement(Statement&
 }
 
 std::vector<Entity> FollowsRelationshipManager::getFollowingStatement(Statement& statement) const {
+    //TODO: to fix to take into accout follows vs follows* rs
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
         if (*((*it)->getLeftEntity()) == statement) {
             return std::vector<Entity>{*((*it)->getRightEntity())};
@@ -34,6 +36,7 @@ std::vector<Entity> FollowsRelationshipManager::getFollowingStatement(Statement&
 }
 
 bool FollowsRelationshipManager::getIsFollows(Statement& statement1, Statement& statement2) const {
+    //TODO: should not be an iterator but use the .getRelationship method ad check if nullptr
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
         if (*((*it)->getLeftEntity()) == statement1 && *((*it)->getRightEntity()) == statement2) {
             return true;
