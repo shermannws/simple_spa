@@ -1,40 +1,55 @@
-#include <stack>
+#include <functional>
 
 #include "UsesExtractorVisitor.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
+#include "VisitorUtility.h"
 
 UsesExtractorVisitor::UsesExtractorVisitor(std::shared_ptr<PkbWriter> writer) {
 	this->pkbWriter = writer;
 }
 
 void UsesExtractorVisitor::visitAssignNode(AssignNode* node) const {
-	std::shared_ptr<ExpressionNode> root = node->getExpression();
-	std::stack<std::shared_ptr<ASTNode>> frontier;
-	frontier.push(root);
+	std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func = [this](std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) -> void {
+		this->pkbWriter->addUsesRelationship(s, v);
+		};
 
-	while (!frontier.empty()) {
-		std::shared_ptr<ASTNode> current = frontier.top();
-		frontier.pop();
-
-		VariableNode* ptr = dynamic_cast<VariableNode*>(current.get());
-		if (ptr) {
-			this->pkbWriter->addUsesRelationship(
-				std::make_shared<Statement>(node->getStatementNumber(), StatementType::Assign),
-				std::make_shared<Variable>(ptr->getVarName()));
-		}
-
-		std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();
-		for (auto it = childrenOfCurrent.rbegin(); it != childrenOfCurrent.rend(); it++) {
-			frontier.push(*it);
-		}
-	}
+	VisitorUtility::addAllStatementVariableRelationshipFrom(
+		node->getExpression(),
+		Statement(node->getStatementNumber(), StatementType::Assign),
+		func
+	);
 }
 
 void UsesExtractorVisitor::visitPrintNode(PrintNode* node) const {
 	this->pkbWriter->addUsesRelationship(
 		std::make_shared<Statement>(node->getStatementNumber(), StatementType::Print),
 		std::make_shared<Variable>(node->getVar()->getVarName())
+	);
+}
+
+void UsesExtractorVisitor::visitIfNode(IfNode* node) const {
+	std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func = [this](std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) -> void {
+		this->pkbWriter->addUsesRelationship(s, v);
+		};
+
+	VisitorUtility::addAllStatementVariableRelationshipFrom(
+		node->getConditionalExpression(),
+		Statement(node->getStatementNumber(), StatementType::If),
+		func
+	);
+}
+
+
+void UsesExtractorVisitor::visitWhileNode(WhileNode* node) const {
+	std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func = [this](std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) -> void {
+		this->pkbWriter->addUsesRelationship(s, v);
+		};
+
+	VisitorUtility::addAllStatementVariableRelationshipFrom(
+		node->getConditionalExpression(),
+		Statement(node->getStatementNumber(), StatementType::While),
+		func
 	);
 }

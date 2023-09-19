@@ -10,10 +10,15 @@
 #include "../../AST/Nodes/ArithmeticExpressionNode.h"
 #include "../../AST/Nodes/VariableNode.h"
 #include "../../AST/Nodes/ConstantNode.h"
+#include "../../AST/Nodes/IfNode.h"
+#include "../../AST/Nodes/WhileNode.h"
 
 class UsesExtractorVisitor : public DesignExtractorVisitor,
     public AssignNodeVisitor,
-    public PrintNodeVisitor {
+    public PrintNodeVisitor,
+    public IfNodeVisitor,
+    public WhileNodeVisitor
+{
 public:
     /*!
      * Constructor for UsesExtractorVisitor
@@ -29,4 +34,14 @@ public:
      * Visits a PrintNode and add variable used into PKB
      */
     void visitPrintNode(PrintNode* node) const override;
+
+    /*!
+     * Visits an IfNode and add variable used into PKB
+     */
+    void visitIfNode(IfNode* node) const override;
+
+    /*!
+     * Visits a PrintNode and add variable used into PKB
+     */
+    void visitWhileNode(WhileNode* node) const override;
 };
