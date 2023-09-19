@@ -1,6 +1,7 @@
 #include <regex>
 #include <stack>
 #include <deque>
+#include <functional>
 
 #include "Commons/AppConstants.h"
 #include "SPParser.h"
@@ -39,20 +40,20 @@ std::shared_ptr<ProcedureNode> SPParser::parseProcedure(std::queue<SPToken>& tok
 }
 
 std::shared_ptr<StatementListNode> SPParser::parseStatementList(std::queue<SPToken>& tokens) {
+    std::unordered_map<std::string, std::function<std::shared_ptr<StatementNode>(std::queue<SPToken>&)>> parseFunctionMap;
+    parseFunctionMap["read"] = [&] (std::queue<SPToken>& tokens) -> std::shared_ptr<ReadNode> { return parseReadStatement(tokens); };
+    parseFunctionMap["print"] = [&] (std::queue<SPToken>& tokens) -> std::shared_ptr<PrintNode> { return parsePrintStatement(tokens); };
+    parseFunctionMap["call"] = [&] (std::queue<SPToken>& tokens) -> std::shared_ptr<CallNode> { return parseCallStatement(tokens); };;
+    parseFunctionMap["if"] = [&] (std::queue<SPToken>& tokens) -> std::shared_ptr<IfNode> { return parseIfStatement(tokens); };;
+    parseFunctionMap["while"] = [&] (std::queue<SPToken>& tokens) -> std::shared_ptr<WhileNode> { return parseWhileStatement(tokens); };;
+
     std::vector<std::shared_ptr<StatementNode>> statements;
     while (tokens.front().getType() != TokenType::CloseCurlyParenthesis) {
-        if (tokens.front().getType() == TokenType::Name && tokens.front().getValue() == AppConstants::STRING_READ) {
-            statements.push_back(parseReadStatement(tokens));
-        } else if (tokens.front().getType() == TokenType::Name && tokens.front().getValue() == AppConstants::STRING_PRINT) {
-            statements.push_back(parsePrintStatement(tokens));
-        } else if (tokens.front().getType() == TokenType::Name && tokens.front().getValue() == AppConstants::STRING_CALL) {
-            statements.push_back(parseCallStatement(tokens));
-        } else if (tokens.front().getType() == TokenType::Name && tokens.front().getValue() == AppConstants::STRING_IF) {
-            statements.push_back(parseIfStatement(tokens));
-        } else if (tokens.front().getType() == TokenType::Name && tokens.front().getValue() == AppConstants::STRING_WHILE) {
-            statements.push_back(parseWhileStatement(tokens));
-        } else { // assign is the only statementType not starting with a keyword
+        assert(tokens.front().getType() == TokenType::Name);
+        if (parseFunctionMap.find(tokens.front().getValue()) == parseFunctionMap.end()) { // handle assign statements
             statements.push_back(parseAssignStatement(tokens));
+        } else {
+            statements.push_back(parseFunctionMap[tokens.front().getValue()](tokens));
         }
     }
     std::shared_ptr<StatementListNode> statementListNode = std::make_shared<StatementListNode>(statements);
@@ -196,9 +197,9 @@ std::queue<SPToken> SPParser::infixToPostfix(std::queue<SPToken> &tokens, TokenT
         SPToken nextToken = tokens.front();
         tokens.pop(); // consume token from queue
 
-        if (nextToken.getType() == TokenType::Name) {   // variable or constant
+        if (nextToken.getType() == TokenType::Name) { // variable
             outputQueue.push(nextToken);
-        } else if (nextToken.getType() == TokenType::Integer) {
+        } else if (nextToken.getType() == TokenType::Integer) { // constant
             outputQueue.push(nextToken);
         } else if (nextToken.getType() == TokenType::ArithmeticOperator) {
             while (!operatorStack.empty()
