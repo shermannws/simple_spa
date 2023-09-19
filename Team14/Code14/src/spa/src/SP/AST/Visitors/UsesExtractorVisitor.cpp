@@ -18,7 +18,7 @@ void UsesExtractorVisitor::visitAssignNode(AssignNode* node) const {
 		std::shared_ptr<ASTNode> current = frontier.top();
 		frontier.pop();
 
-		//main logic
+		//main logic, iteratively get all variables used in the expression
 		VariableNode* ptr = dynamic_cast<VariableNode*>(current.get());
 		if (ptr) {
 			this->pkbWriter->addUsesRelationship(
@@ -30,7 +30,6 @@ void UsesExtractorVisitor::visitAssignNode(AssignNode* node) const {
 		for (auto it = childrenOfCurrent.rbegin(); it != childrenOfCurrent.rend(); it++) {
 			frontier.push(*it);
 		}
-
 	}
 }
 
