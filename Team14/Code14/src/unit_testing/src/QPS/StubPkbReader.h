@@ -8,8 +8,6 @@ private:
 public:
     StubPkbReader();
 
-    std::vector<Entity> getAllAssign() const override;
-
     std::vector<Entity> getAllVariables() const override;
 
     std::vector<Entity> getAllConstants() const override;
@@ -33,5 +31,23 @@ public:
     // Returns true if statement1 follows statement2
     bool getIsFollows(Statement& statement1, Statement& statement2) const override;
 
-    std::vector<Entity> getAssignPatternStatements(Variable& variable, std::string& pattern, bool hasExpressionWildCard) const override;
+    // Pattern queries i.e. pattern a (...,...)
+    // pattern a (_,_)
+    std::vector<Entity> getAllAssign() const override;
+
+    // pattern a (_, "x")
+    std::vector<Entity> getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const override;
+
+    // pattern a (v, _)
+    std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const override;
+
+    // pattern a (v, "x")
+    std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const override;
+
+    // pattern a ("x", _)
+    std::vector<Entity> getAssignStmtsByLhs(Variable& lhs) const override;
+
+    // pattern a ("x", "x")
+    std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const override;
+
 };

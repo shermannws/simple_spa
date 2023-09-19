@@ -8,10 +8,6 @@ PkbConcreteReader::PkbConcreteReader(
     this->readerManager = readerManager;
 }
 
-std::vector<Entity> PkbConcreteReader::getAllAssign() const {
-    return this->readerManager->getAllAssign();
-}
-
 std::vector<Entity> PkbConcreteReader::getAllVariables() const {
     return this->readerManager->getAllVariables();
 }
@@ -52,6 +48,33 @@ bool PkbConcreteReader::getIsFollows(Statement& statement1, Statement& statement
     return this->readerManager->getIsFollows(statement1, statement2);
 }
 
-std::vector<Entity> PkbConcreteReader::getAssignPatternStatements(Variable& variable, std::string& pattern, bool hasExpressionWildCard) const {
-    return this->readerManager->getAssignPatternStatements(variable, pattern, hasExpressionWildCard);
+// Pattern queries i.e. pattern a (...,...)
+// pattern a (_,_)
+std::vector<Entity> PkbConcreteReader::getAllAssign() const {
+    return this->readerManager->getAllAssign();
+}
+
+// pattern a (_, "x")
+std::vector<Entity> PkbConcreteReader::getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const {
+    return this->readerManager->getAssignStmtsByRhs(rhs, hasRhsWildCard);
+}
+
+// pattern a (v, _)
+std::vector<std::vector<Entity>> PkbConcreteReader::getAllAssignStmtVarPair() const {
+    return this->readerManager->getAllAssignStmtVarPair();
+}
+
+// pattern a (v, "x")
+std::vector<std::vector<Entity>> PkbConcreteReader::getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const {
+    return this->readerManager->getAssignStmtsVarPairByRhs(rhs, hasWildCard);
+}
+
+// pattern a ("x", _)
+std::vector<Entity> PkbConcreteReader::getAssignStmtsByLhs(Variable& lhs) const {
+    return this->readerManager->getAssignStmtsByLhs(lhs);
+}
+
+// pattern a ("x", "x")
+std::vector<Entity> PkbConcreteReader::getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const {
+    return this->readerManager->getAssignStmtsByLhsRhs(lhs, rhs, hasRhsWildCard);
 }

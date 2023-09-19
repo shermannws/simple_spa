@@ -27,10 +27,6 @@ std::vector<Entity> PkbReaderManager::getAllEntities(const std::shared_ptr<Entit
     return store->getAllEntities();
 }
 
-std::vector<Entity> PkbReaderManager::getAllAssign() const {
-    return this->assignmentManager->getAllAssignStatements();
-}
-
 std::vector<Entity> PkbReaderManager::getAllVariables() const {
     return this->getAllEntities<Variable>(this->variableStore);
 }
@@ -71,6 +67,34 @@ bool PkbReaderManager::getIsFollows(Statement& statement1, Statement& statement2
     return this->followsRelationshipManager->getIsFollows(statement1, statement2);
 }
 
-std::vector<Entity> PkbReaderManager::getAssignPatternStatements(Variable& variable, std::string& pattern, bool hasExpressionWildCard) const {
-    return this->assignmentManager->getAssignStatements(variable, pattern, hasExpressionWildCard);
+
+// Pattern queries i.e. pattern a (...,...)
+// pattern a (_,_)
+std::vector<Entity> PkbReaderManager::getAllAssign() const {
+    return this->assignmentManager->getAllAssignStmts();
+}
+
+// pattern a (_, "x")
+std::vector<Entity> PkbReaderManager::getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const {
+    return this->assignmentManager->getAssignStmtsByRhs(rhs, hasRhsWildCard);
+}
+
+// pattern a (v, _)
+std::vector<std::vector<Entity>> PkbReaderManager::getAllAssignStmtVarPair() const {
+    return this->assignmentManager->getAllAssignStmtVarPair();
+}
+
+// pattern a (v, "x")
+std::vector<std::vector<Entity>> PkbReaderManager::getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const {
+    return this->assignmentManager->getAssignStmtsVarPairByRhs(rhs, hasWildCard);
+}
+
+// pattern a ("x", _)
+std::vector<Entity> PkbReaderManager::getAssignStmtsByLhs(Variable& lhs) const {
+    return this->assignmentManager->getAssignStmtsByLhs(lhs);
+}
+
+// pattern a ("x", "x")
+std::vector<Entity> PkbReaderManager::getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const {
+    return this->assignmentManager->getAssignStmtsByLhsRhs(lhs, rhs, hasRhsWildCard);
 }

@@ -6,7 +6,6 @@
 
 class PkbReader {
 public:
-    virtual std::vector<Entity> getAllAssign() const = 0;
 
     virtual std::vector<Entity> getAllVariables() const = 0;
 
@@ -31,5 +30,22 @@ public:
     // Returns true if statement1 follows statement2
     virtual bool getIsFollows(Statement& statement1, Statement& statement2) const = 0;
 
-    virtual std::vector<Entity> getAssignPatternStatements(Variable& variable, std::string& pattern, bool hasExpressionWildCard) const = 0;
+    // Pattern queries i.e. pattern a (...,...)
+    // pattern a (_,_)
+    virtual std::vector<Entity> getAllAssign() const = 0;
+
+    // pattern a (_, "x")
+    virtual std::vector<Entity> getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const = 0;
+
+    // pattern a (v, _)
+    virtual std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const = 0;
+
+    // pattern a (v, "x")
+    virtual std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const = 0;
+
+    // pattern a ("x", _)
+    virtual std::vector<Entity> getAssignStmtsByLhs(Variable& lhs) const = 0;
+
+    // pattern a ("x", "x")
+    virtual std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const = 0;
 };
