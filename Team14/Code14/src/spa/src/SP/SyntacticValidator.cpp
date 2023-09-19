@@ -92,7 +92,7 @@ void SyntacticValidator::validateCall() {
     // 'call' terminal validated by validateStmtLst()
     popToken();
 
-    // validate rest of print CGS
+    // validate rest of call CGS
     validateName();
     validateSemicolon();
 }
@@ -146,7 +146,7 @@ void SyntacticValidator::validateWhile() {
 }
 
 void SyntacticValidator::validateIf() {
-    // 'while' terminal validated by validateStmtLst()
+    // 'if' terminal validated by validateStmtLst()
     popToken();
 
     validateOpenRoundParan();

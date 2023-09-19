@@ -1,9 +1,8 @@
+#include <string>
 
+#include "catch.hpp"
 #include "SP/SyntacticValidator.h"
 #include "SP/SPTokenizer.h"
-
-#include <string>
-#include "catch.hpp"
 
 TEST_CASE("SyntacticValidator - Valid syntax") {
 

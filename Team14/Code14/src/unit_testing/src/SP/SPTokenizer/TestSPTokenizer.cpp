@@ -1,9 +1,8 @@
+#include <string>
 
+#include "catch.hpp"
 #include "SP/SPTokenizer.h"
 #include "Commons/AppConstants.h"
-
-#include <string>
-#include "catch.hpp"
 
 TEST_CASE("SPTokenizer - Valid Tokens") {
 
