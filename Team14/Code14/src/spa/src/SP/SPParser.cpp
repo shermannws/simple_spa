@@ -66,7 +66,7 @@ std::shared_ptr<AssignNode> SPParser::parseAssignStatement(std::queue<SPToken>& 
     assert(tokens.front().getType() == TokenType::Equals);
     tokens.pop(); // consume equals symbol
 
-    std::shared_ptr<ExpressionNode> expression = parseExpression(tokens);
+    std::shared_ptr<ExpressionNode> expression = parseExpression(tokens, TokenType::Semicolon);
 
     assert(tokens.front().getType() == TokenType::Semicolon);
     tokens.pop(); // consume semicolon
@@ -187,11 +187,11 @@ int SPParser::getOperatorPrecedence(SPToken &operatorToken) {
     return precedenceMap[operatorToken.getValue()];
 }
 
-std::queue<SPToken> SPParser::infixToPostfix(std::queue<SPToken> &tokens) {
+std::queue<SPToken> SPParser::infixToPostfix(std::queue<SPToken> &tokens, TokenType endDelimiter) {
     std::queue<SPToken> outputQueue;
     std::stack<SPToken> operatorStack;
 
-    while (tokens.front().getType() != TokenType::Semicolon) {
+    while (tokens.front().getType() != endDelimiter) {
         SPToken nextToken = tokens.front();
         tokens.pop(); // consume token from queue
 
@@ -231,8 +231,8 @@ std::queue<SPToken> SPParser::infixToPostfix(std::queue<SPToken> &tokens) {
     return outputQueue;
 }
 
-std::shared_ptr<ExpressionNode> SPParser::parseExpression(std::queue<SPToken>& tokens) {
-    std::queue<SPToken> postfixTokens = infixToPostfix(tokens);
+std::shared_ptr<ExpressionNode> SPParser::parseExpression(std::queue<SPToken>& tokens, TokenType endDelimiter) {
+    std::queue<SPToken> postfixTokens = infixToPostfix(tokens, endDelimiter);
     std::stack<std::shared_ptr<ExpressionNode>> expressionStack;
 
     while (!postfixTokens.empty()) {
@@ -324,5 +324,18 @@ std::shared_ptr<ConditionalExpressionNode> SPParser::parseConditionalExpression(
 }
 
 std::shared_ptr<RelativeExpressionNode> SPParser::parseRelativeExpression(std::queue<SPToken> &tokens) {
+    // end when encounter ")"
+    auto leftExpression = parseExpression(tokens, TokenType::RelationalOperator);
 
+    assert(tokens.front().getType() == TokenType::RelationalOperator);
+    std::string relationalOperatorString = tokens.front().getValue();
+    ComparisonOperatorType relationalOperator =
+            RelativeExpressionNode::translateComparisonOperatorType(relationalOperatorString);
+    tokens.pop(); // consume comparison/relational operator e.g. ">", ">=", "!=", etc
+
+    auto rightExpression = parseExpression(tokens, TokenType::CloseRoundParenthesis);
+    assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
+
+    auto relativeExpression = std::make_shared<RelativeExpressionNode>(relationalOperator, leftExpression, rightExpression);
+    return relativeExpression;
 }
