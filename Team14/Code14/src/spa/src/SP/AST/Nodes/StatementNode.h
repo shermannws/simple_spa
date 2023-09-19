@@ -5,7 +5,10 @@
 enum class StatementNodeType {
     Assign,
     Read,
-    Print
+    Print,
+    Call,
+    While,
+    If
 };
 
 
