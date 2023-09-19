@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "QPSTypes.h"
+
 enum class QueryEntityType {
     Procedure,
     Stmt,
@@ -18,11 +20,11 @@ enum class QueryEntityType {
 
 class QueryEntity {
 private:
-    std::string synonym;
+    Synonym synonym;
     QueryEntityType type;
 public:
-    explicit QueryEntity(QueryEntityType type, const std::string &synonym);
+    explicit QueryEntity(QueryEntityType type, const Synonym &synonym);
     bool operator==(const QueryEntity& other) const;
-    std::string getSynonym();
+    Synonym getSynonym();
     QueryEntityType getType();
 };

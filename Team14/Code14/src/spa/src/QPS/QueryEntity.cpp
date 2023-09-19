@@ -2,7 +2,7 @@
 
 #include <string>
 
-QueryEntity::QueryEntity(QueryEntityType type, const std::string& synonym) : type(type), synonym(synonym) {}
+QueryEntity::QueryEntity(QueryEntityType type, const Synonym &synonym) : type(type), synonym(synonym) {}
 
 bool QueryEntity::operator==(const QueryEntity& other) const {
     return (type == other.type) && (synonym == other.synonym);

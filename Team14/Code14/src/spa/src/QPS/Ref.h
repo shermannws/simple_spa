@@ -3,6 +3,7 @@
 #include <string>
 
 #include "QueryEntity.h"
+#include "QPSTypes.h"
 
 enum class RefType {
     StmtRef,
@@ -21,17 +22,17 @@ enum class RootType {
 
 class Ref {
 private:
-    std::string rep;
+    StringRep rep;
     RefType type;
     RootType rootType;
     QueryEntityType entityType;
 public:
     explicit Ref();
-    std::string getRep();
+    StringRep getRep();
     RefType getType();
     RootType getRootType();
     QueryEntityType getEntityType();
-    void setRep(std::string& rrep);
+    void setRep(StringRep& rrep);
     void setType(RefType& rrefType);
     void setRootType(RootType& rrootType);
     void setEntityType(QueryEntityType& eentityType);

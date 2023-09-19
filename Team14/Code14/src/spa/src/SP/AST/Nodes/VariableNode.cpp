@@ -17,3 +17,7 @@ void VariableNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
         variableVisitor->visitVariableNode(this);
     }
 }
+
+std::string VariableNode::toString() {
+    return varName;
+}
