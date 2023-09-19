@@ -5,8 +5,6 @@
 #include "SPTokenizer.h"
 #include "SPToken.h"
 
-#include <iostream>
-
 SPTokenizer::SPTokenizer(std::string  input) : curr(0), input(std::move(input)) {
 }
 
@@ -94,7 +92,11 @@ int SPTokenizer::popChar() {
 }
 
 int SPTokenizer::peekNextChar() {
-    return input[curr + 1];
+    if (curr + 1 < input.size()) {
+        return input[curr + 1];
+    } else {
+        throw std::out_of_range("Error: attempted to access out-of-range char in input file");
+    }
 }
 
 void SPTokenizer::tokenizeName() {
