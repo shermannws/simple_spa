@@ -10,37 +10,36 @@ Result AssignPatternStrategy::evaluateClause(Clause& clause, std::shared_ptr<Pkb
     result.setType(type);
     std::unordered_map<std::string, int> columns {{patternClause.getSyn(), 0}};
 
-
     if (firstArg.getRootType() == RootType::Wildcard) { // first arg is wildcard
         result.setSynIndices(columns); // no more columns in result table
         if (secondArg.first == ExpressionSpecType::Wildcard) {
-            //get All Assign
+            auto resultRows = pkbReader->getAllAssign();
+            result.setTuples(resultRows);
         } else {
-            //get Matching Assign(Expression, isExact)
+            auto resultRows = pkbReader->getAssignStmtsByRhs(secondArg.second,  secondArg.first == ExpressionSpecType::PartialMatch);
+            result.setTuples(resultRows);
         }
     } else if (firstArg.getRootType() == RootType::Synonym) { //Variable synonym
         columns.insert({firstArg.getRep(), 1});
         result.setSynIndices(columns);
         if (secondArg.first == ExpressionSpecType::Wildcard) {
-            //get All Assign by LHSType (TypeConstraint)
+            auto resultRows = pkbReader->getAllAssignStmtVarPair();
+            result.setTuples(resultRows);
         } else {
-            //get Matching Assign by LHSType (TypeConstraint, Expression, isExact)
+            auto resultRows = pkbReader->getAssignStmtsVarPairByRhs(secondArg.second, secondArg.first == ExpressionSpecType::PartialMatch);
+            result.setTuples(resultRows);
         }
     } else { // first arg is character strings (ident)
         result.setSynIndices(columns);
+        Variable lhsVariable = Variable(firstArg.getRep());
         if (secondArg.first == ExpressionSpecType::Wildcard) {
-            //get All Assign by LHSExpression (firstArg.StringRep)
+            auto resultRows = pkbReader->getAssignStmtsByLhs(lhsVariable);
+            result.setTuples(resultRows);
         } else {
-            //get Matching Assign by LHSExpression (firstArg.StringRep, Expression, isExact)
+            auto resultRows = pkbReader->getAssignStmtsByLhsRhs(lhsVariable, secondArg.second, secondArg.first == ExpressionSpecType::PartialMatch);
+            result.setTuples(resultRows);
         }
     }
-
-//    std::vector<std::vector<Entity>> mappedEntities;
-//        for (const auto& entity : entities) {
-//            std::vector<Entity> mappedEntity {entity};
-//            mappedEntities.push_back(mappedEntity);
-//        }
-//        result.setTuples(mappedEntities);
 
     return result;
 }
