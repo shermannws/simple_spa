@@ -46,24 +46,24 @@ void SyntacticValidator::validateStmtLst() {
     while (isCurrValid()) {
         SPToken token = peekToken();
 
-        if (peekNextToken().getType() == TokenType::Equals) {
+        if (token.getType() == TokenType::CloseCurlyParenthesis) {
+            break;
+        } else if (peekNextToken().getType() == TokenType::Equals) {
             validateAssign();
         } else if (token.getType() == TokenType::Name) {
             if (token.getValue() == AppConstants::STRING_READ) {
                 validateRead();
             } else if (token.getValue() == AppConstants::STRING_PRINT) {
                 validatePrint();
-            } else if (token.getValue() == AppConstants::STRING_CALL){
+            } else if (token.getValue() == AppConstants::STRING_CALL) {
                 validateCall();
             } else if (token.getValue() == AppConstants::STRING_WHILE) {
                 validateWhile();
-            } else if(token.getValue() == AppConstants::STRING_IF) {
+            } else if (token.getValue() == AppConstants::STRING_IF) {
                 validateIf();
             } else {
                 throw SyntaxError("Syntax error: Invalid Stmt");
             }
-        } else if (token.getType() == TokenType::CloseCurlyParenthesis) {
-            break;
         } else {
             throw SyntaxError("Syntax error: Expected TokenType NAME for statement");
         }
