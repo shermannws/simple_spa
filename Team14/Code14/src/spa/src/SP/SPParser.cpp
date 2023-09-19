@@ -113,6 +113,7 @@ std::shared_ptr<CallNode> SPParser::parseCallStatement(std::queue<SPToken> &toke
     tokens.pop(); // consume procName
 
     assert(tokens.front().getType() == TokenType::Semicolon);
+    tokens.pop(); // consume ";" token
     std::shared_ptr<CallNode> callNode = std::make_shared<CallNode>(runningStatementNumber, procedureName);
     runningStatementNumber++;
     return callNode;
