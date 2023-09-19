@@ -25,17 +25,6 @@ public:
 
     std::vector<Entity> getAllUsesAssignByVariable(Variable& variable) const override;
 
-    std::vector<std::vector<Entity>> getAllFollowsStatementPair() const override;
-
-    // Returns statement followed by (ahead) given statement
-    std::vector<Entity> getFollowsByStatement(Statement& statement) const override;
-
-    // Returns statement following (behind) given statement
-    std::vector<Entity> getFollowingStatement(Statement& statement) const override;
-
-    // Returns true if statement1 follows statement2
-    bool getIsFollows(Statement& statement1, Statement& statement2) const override;
-
     std::vector<std::vector<Entity>> getFollowsPair(StatementType formerType, StatementType latterType) const override;
 
     std::vector<std::vector<Entity>> getFollowsStarPair(StatementType formerType, StatementType latterType) const override;

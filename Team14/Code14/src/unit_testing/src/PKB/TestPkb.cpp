@@ -19,9 +19,9 @@ TEST_CASE("Test PKB end-to-end using Facades") {
     Statement statement2(2, StatementType::Read);
     Statement statement3(3, StatementType::Print);
 
-    auto isFollows = reader->getIsFollows(statement2, statement3);
+    auto isFollows = reader->isFollows(statement2, statement3);
     REQUIRE(isFollows);
-    auto followingStmts = reader->getFollowingStatement(statement2);
+    auto followingStmts = reader->getFollowsStmtType(statement2, StatementType::Print);
     REQUIRE(followingStmts.at(0) == Statement(3, StatementType::Print));
 
     writer->addConstant(std::make_shared<Constant>(2));

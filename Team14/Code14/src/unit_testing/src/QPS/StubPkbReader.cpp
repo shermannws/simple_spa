@@ -32,22 +32,6 @@ std::vector<Entity> StubPkbReader::getAllUsesAssignByVariable(Variable& variable
     return std::vector<Entity>();
 }
 
-std::vector<std::vector<Entity>> StubPkbReader::getAllFollowsStatementPair() const {
-    return std::vector<std::vector<Entity>>();
-}
-
-std::vector<Entity> StubPkbReader::getFollowsByStatement(Statement& statement) const {
-    return std::vector<Entity>();
-}
-
-std::vector<Entity> StubPkbReader::getFollowingStatement(Statement& statement) const {
-    return std::vector<Entity>();
-}
-
-bool StubPkbReader::getIsFollows(Statement& statement1, Statement& statement2) const {
-    return false;
-}
-
 std::vector<std::vector<Entity>> StubPkbReader::getFollowsPair(StatementType formerType, StatementType latterType) const {
     return std::vector<std::vector<Entity>>();
 }

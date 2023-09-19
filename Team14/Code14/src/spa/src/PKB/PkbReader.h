@@ -20,17 +20,6 @@ public:
 
     virtual std::vector<Entity> getAllUsesAssignByVariable(Variable& variable) const = 0;
 
-    virtual std::vector<std::vector<Entity>> getAllFollowsStatementPair() const = 0;
-
-    // Returns statement followed by (ahead) given statement
-    virtual std::vector<Entity> getFollowsByStatement(Statement& statement) const = 0;
-    
-    // Returns statement following (behind) given statement
-    virtual std::vector<Entity> getFollowingStatement(Statement& statement) const = 0;
-
-    // Returns true if statement1 follows statement2
-    virtual bool getIsFollows(Statement& statement1, Statement& statement2) const = 0;
-
     virtual std::vector<std::vector<Entity>> getFollowsPair(StatementType formerType, StatementType latterType) const = 0;
 
     virtual std::vector<std::vector<Entity>> getFollowsStarPair(StatementType formerType, StatementType latterType) const = 0;
