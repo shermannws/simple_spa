@@ -51,6 +51,8 @@ TEST_CASE("Test AST Traverser") {
     auto variableStore = std::make_shared<VariableStore>(VariableStore());
     auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
+    auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
+    auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager,
             constantStore,
@@ -58,7 +60,9 @@ TEST_CASE("Test AST Traverser") {
             statementStore,
             variableStore,
             followsRelationshipManager,
-            usesRelationshipManager
+            usesRelationshipManager,
+            modifiesRelationshipManager,
+            parentRelationshipManager
     );
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
