@@ -2,4 +2,4 @@
 
 #include "VariableStore.h"
 
-VariableStore::VariableStore() : EntityStore() {}
+VariableStore::VariableStore() : EntityStore<Variable>() {}

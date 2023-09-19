@@ -6,8 +6,11 @@
 
 enum class ClauseType {
     Uses,
+    Modifies,
     Follows,
     FollowsStar,
+    Parent,
+    ParentStar,
     Assign,
     Invalid
 };

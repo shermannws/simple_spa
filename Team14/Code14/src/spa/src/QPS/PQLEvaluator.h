@@ -12,7 +12,7 @@ class PQLEvaluator {
 private:
     std::shared_ptr<PkbReader> pkbReader;
     std::shared_ptr<ClauseHandler> clauseHandler;
-    std::shared_ptr<std::vector<std::shared_ptr<Entity>>> getAll(std::shared_ptr<QueryEntity> queryEntity);
+    std::vector<Entity> getAll(const std::shared_ptr<QueryEntity>& queryEntity);
 
 public:
     explicit PQLEvaluator(std::shared_ptr<PkbReader> pkbReader);
