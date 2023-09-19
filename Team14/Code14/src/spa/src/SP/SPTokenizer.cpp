@@ -1,12 +1,11 @@
 #include <string>
+#include <utility>
 
 #include "Commons/AppConstants.h"
 #include "SPTokenizer.h"
 #include "SPToken.h"
 
-SPTokenizer::SPTokenizer(const std::string& input) : curr(0), input(input) {
-//    this->input = input;
-    tokens = std::vector<SPToken>();
+SPTokenizer::SPTokenizer(std::string  input) : curr(0), input(std::move(input)) {
 }
 
 // main function, does not handle syntactic validation
@@ -36,7 +35,7 @@ std::vector<SPToken> SPTokenizer::tokenize() {
             case AppConstants::CHAR_CLOSE_ROUND_PARENTHESIS: // fallthrough
             case AppConstants::CHAR_OPEN_CURLY_PARENTHESIS: // fallthrough
             case AppConstants::CHAR_CLOSE_CURLY_PARENTHESIS:
-                tokenizeParantheses();
+                tokenizeParenthesis();
                 break;
 
             case AppConstants::CHAR_SEMICOLON:
@@ -53,6 +52,20 @@ std::vector<SPToken> SPTokenizer::tokenize() {
             case AppConstants::CHAR_DIVIDE: // fallthrough
             case AppConstants::CHAR_MODULO:
                 tokenizeArithmeticOperator();
+                break;
+
+            case AppConstants::CHAR_NOT:
+                tokenizeNot();
+                break;
+
+            case AppConstants::CHAR_AMPERSAND: // fallthrough
+            case AppConstants::CHAR_VERTICAL_BAR:
+                tokenizeConditionalOperator();
+                break;
+
+            case AppConstants::CHAR_GREATER_THAN: // fallthrough
+            case AppConstants::CHAR_LESS_THAN:
+                tokenizeRelationalOperator();
                 break;
 
             default:
@@ -76,6 +89,14 @@ int SPTokenizer::popChar() {
     int res = peekChar();
     curr += 1;
     return res;
+}
+
+int SPTokenizer::peekNextChar() {
+    if (curr + 1 < input.size()) {
+        return input[curr + 1];
+    } else {
+        throw std::out_of_range("Error: attempted to access out-of-range char in input file");
+    }
 }
 
 void SPTokenizer::tokenizeName() {
@@ -108,23 +129,23 @@ void SPTokenizer::tokenizeInteger() {
     tokens.push_back(token);
 };
 
-void SPTokenizer::tokenizeParantheses() {
+void SPTokenizer::tokenizeParenthesis() {
     int currChar = peekChar();
     std::string tokenValue;
     tokenValue.push_back(popChar());
     SPToken token;
 
     switch (currChar) {
-        case '(':
+        case AppConstants::CHAR_OPEN_ROUND_PARENTHESIS:
             token = SPToken(TokenType::OpenRoundParenthesis, tokenValue);
             break;
-        case ')':
+        case AppConstants::CHAR_CLOSE_ROUND_PARENTHESIS:
             token = SPToken(TokenType::CloseRoundParenthesis, tokenValue);
             break;
-        case '{':
+        case AppConstants::CHAR_OPEN_CURLY_PARENTHESIS:
             token = SPToken(TokenType::OpenCurlyParenthesis, tokenValue);
             break;
-        case '}':
+        case AppConstants::CHAR_CLOSE_CURLY_PARENTHESIS:
             token = SPToken(TokenType::CloseCurlyParenthesis, tokenValue);
             break;
         default:
@@ -142,9 +163,15 @@ void SPTokenizer::tokenizeSemicolon() {
 
 void SPTokenizer::tokenizeEquals() {
     std::string tokenValue;
-    tokenValue.push_back(popChar());
-    SPToken token(TokenType::Equals, tokenValue);
-    tokens.push_back(token);
+
+    // Could be '=' or '=='
+    if (peekNextChar() == AppConstants::CHAR_EQUAL) {
+        tokenizeRelationalOperator();
+    } else {
+        tokenValue.push_back(popChar());
+        SPToken token(TokenType::Equals, tokenValue);
+        tokens.push_back(token);
+    }
 };
 
 void SPTokenizer::tokenizeArithmeticOperator() {
@@ -153,3 +180,50 @@ void SPTokenizer::tokenizeArithmeticOperator() {
     SPToken token(TokenType::ArithmeticOperator, tokenValue);
     tokens.push_back(token);
 };
+
+//TODO: Check if they can be separated by a whitespace? e.g. '&  &'
+void SPTokenizer::tokenizeConditionalOperator() {
+    std::string tokenValue;
+    int currChar = peekChar();
+
+    switch (currChar) {
+        case AppConstants::CHAR_NOT :
+            tokenValue.push_back(popChar());
+            break;
+
+        case AppConstants::CHAR_AMPERSAND:
+        case AppConstants::CHAR_VERTICAL_BAR:
+            if (peekNextChar() == currChar) {
+                tokenValue.push_back(popChar());
+                tokenValue.push_back(popChar());
+            } else {
+                break; //TODO: Throw error
+            }
+
+        default:
+            break;
+    }
+
+    SPToken token(TokenType::ConditionalOperator, tokenValue);
+    tokens.push_back(token);
+}
+
+void SPTokenizer::tokenizeRelationalOperator() {
+    std::string tokenValue;
+    tokenValue.push_back(popChar());
+
+    if (peekChar() == AppConstants::CHAR_EQUAL) {
+        tokenValue.push_back(popChar());
+    }
+
+    SPToken token(TokenType::RelationalOperator, tokenValue);
+    tokens.push_back(token);
+}
+
+void SPTokenizer::tokenizeNot() {
+    if (peekNextChar() == AppConstants::CHAR_EQUAL) {
+        tokenizeRelationalOperator();
+    } else {
+        tokenizeConditionalOperator();
+    }
+}
