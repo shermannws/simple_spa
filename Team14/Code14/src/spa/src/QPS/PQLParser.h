@@ -25,11 +25,16 @@ private:
     bool isOfStmtType(QueryEntityType entityType);
     bool isOfUsesEntityType(QueryEntityType entityType);
     bool isOfModifiesEntityType(QueryEntityType entityType);
+
+    //Expr spec methods
+    Expression extractExpression();
+    ExpressionSpec extractExpressionSpec();
+    bool validateExprSyntax(std::vector<std::shared_ptr<Token>>& input);
+    bool isExpr(std::vector<std::shared_ptr<Token>>& input, size_t& index);
+    bool isTerm(std::vector<std::shared_ptr<Token>>& input, size_t& index);
+    bool isFactor(std::vector<std::shared_ptr<Token>>& input, size_t& index);
 public:
     explicit PQLParser(const std::string& PQLQuery);
     Query parse();
-    void validateExprSyntax(const Expression& input);
-    Expression extractExpression();
-    ExpressionSpec extractExpressionSpec();
 
 };

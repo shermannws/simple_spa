@@ -731,18 +731,75 @@ TEST_CASE("Invalid processSuchThat cases") {
 }
 
 //TEST_CASE("extractExpression") {
-//    std::string input = "\"xy \"";
-//    PQLParser parser(input);
-//    auto final = parser.extractExpression();
-//    REQUIRE(true);
-//}
+//    SECTION("only const value") {
+//        std::string input = "\"9999\"";
+//        PQLParser parser(input);
+//        auto actual = parser.extractExpression();
+//        REQUIRE(actual == "(9999)");
+//    }
 //
-//TEST_CASE("extractExpressionSpec") {
-//    std::string input = "_\"xy \"_";
-//    PQLParser parser(input);
-//    auto final = parser.extractExpressionSpec();
-//    REQUIRE(true);
+//    SECTION("only var name") {
+//        std::string input = "\"thisisaverylongvariablename123\"";
+//        PQLParser parser(input);
+//        auto actual = parser.extractExpression();
+//        std::string expected = "(thisisaverylongvariablename123)";
+//        REQUIRE(actual == expected);
+//    }
+//
+//    SECTION("only var name with brackets") { // BUG when enclosed in bracket
+//        std::string input = "\"(v)\"";
+//        PQLParser parser(input);
+//        auto actual = parser.extractExpression();
+//        std::string expected = "(v)";
+//        REQUIRE(actual == expected);
+//    }
+//
+//    SECTION("only var name with multiple brackets") { // BUG when enclosed in bracket
+//        std::string input = "\"((v))\"";
+//        PQLParser parser(input);
+//        auto actual = parser.extractExpression();
+//        std::string expected = "(v)";
+//        REQUIRE(actual == expected);
+//    }
+//
+//    SECTION("all operators, no brackets") {
+//        std::string input = "\"x + y % z * 3 - a + b / q / 9\"";
+//        PQLParser parser(input);
+//        auto actual = parser.extractExpression();
+//        std::string expected = "((((x)+(((y)%(z))*(3)))-(a))+(((b)/(q))/(9)))";
+//        REQUIRE(actual == expected);
+//    }
+//
+//    SECTION("brackets with more than 1 operator") {
+//        std::string input = "\"(x+1) * 8 % q - (a+b+c)     +1\"";
+//        PQLParser parser(input);
+//        auto actual = parser.extractExpression();
+//        std::string expected = "((((((x)+(1))*(8))%(q))-(((a)+(b))+(c)))+(1))";
+//        REQUIRE(actual == expected);
+//    }
+//
+//    SECTION("nested brackets ") {
+//        std::string input = "\"x * (b * a + (n + (1%c))) \"";
+//        PQLParser parser(input);
+//        auto actual = parser.extractExpression();
+//        std::string expected = "((x)*(((b)*(a))+((n)+((1)%(c)))))";
+//        REQUIRE(actual == expected);
+//    }
+//
+//    SECTION("invalid const value") {
+//        std::string input = "\"09999\""; // tested ; ()
+//        PQLParser parser(input);
+//        REQUIRE_THROWS_WITH(parser.extractExpression(), "Invalid expression spec");
+//    }
+//
+//    SECTION("invalid expressions") {
+//        std::string input = "\"x+(y-z\""; // tested ; ()
+//        PQLParser parser(input);
+//        REQUIRE_THROWS_WITH(parser.extractExpression(), "not enough factors");
+//    }
+//
 //}
+
 
 TEST_CASE("processPatternClause") {
     SECTION("Valid wildcard pattern") {
@@ -761,7 +818,7 @@ TEST_CASE("processPatternClause") {
     }
 
     SECTION("Valid pattern, Synonym entRef and exact match") {
-        PQLParser parser("assign a; variable v;\nSelect a pattern a(v,\"x+y\")");
+        PQLParser parser("assign a; variable v;\nSelect a pattern a(v,\"x * (b * a + (n + (1%c))) \")");
         Query query = parser.parse();
 
         PatternClause actualClause = query.getPattern()[0];
@@ -772,11 +829,11 @@ TEST_CASE("processPatternClause") {
         REQUIRE(leftRef.getRootType() == RootType::Synonym);
         REQUIRE(leftRef.getRep() == "v");
         REQUIRE(rightRef.first == ExpressionSpecType::ExactMatch);
-        REQUIRE(rightRef.second == "((x)+(y))");
+        REQUIRE(rightRef.second == "((x)*(((b)*(a))+((n)+((1)%(c)))))");
     }
 
     SECTION("Valid pattern, Synonym entRef and exact match") {
-        PQLParser parser("assign a; variable v;\nSelect a pattern a(\"y\",_\"x*2\"_)");
+        PQLParser parser("assign a; variable v;\nSelect a pattern a(\"y\",_\"x\"_)");
         Query query = parser.parse();
 
         PatternClause actualClause = query.getPattern()[0];
@@ -787,40 +844,7 @@ TEST_CASE("processPatternClause") {
         REQUIRE(leftRef.getRootType() == RootType::Ident);
         REQUIRE(leftRef.getRep() == "y");
         REQUIRE(rightRef.first == ExpressionSpecType::PartialMatch);
-        REQUIRE(rightRef.second == "((x)*(2))");
+        REQUIRE(rightRef.second == "(x)");
     }
 
-
 }
-
-//TEST_CASE("processPatternClause") {
-//    SECTION("Valid wildcard pattern") {
-//        PQLParser parser("assign a; variable v;\nSelect a pattern a(_,_)");
-//        Query query = parser.parse();
-//
-//        PatternClause actualClause = query.getPattern()[0];
-//        Ref leftRef = actualClause.getFirstParam();
-//        Ref rightRef = actualClause.getSecondParam();
-//        REQUIRE(actualClause.getType() == ClauseType::Assign);
-//        REQUIRE(leftRef.getType() == RefType::EntRef);
-//        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
-//        REQUIRE(leftRef.getRep() == "_");
-//        REQUIRE(rightRef.getType() == RefType::EntRef);
-//        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
-//        REQUIRE(rightRef.getRep() == "_");
-//    }
-//
-//    SECTION("Invalid pattern queries") {
-//        std::vector<std::pair<std::string, std::string>> testcases;
-//        testcases.emplace_back("assign a1; Select a1 pattern a(_,_)",
-//                               "Undeclared synonym in pattern clause");
-//        testcases.emplace_back("assign a1; variable v; Select a1 pattern a1 ( v,_)",
-//                               "Expected wildcard as first arg");
-//
-//        for (const auto& testcase : testcases) {
-//            PQLParser parser(testcase.first);
-//            REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
-//        }
-//    }
-//
-//}

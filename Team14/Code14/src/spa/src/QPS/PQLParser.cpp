@@ -6,7 +6,6 @@
 #include "PQLParser.h"
 #include "Tokenizer.h"
 #include "SuchThatClause.h"
-#include "QPSUtil.h"
 
 
 PQLParser::PQLParser(const std::string& PQLQuery) : tokenizer(std::make_shared<Tokenizer>(PQLQuery)){}
@@ -517,11 +516,11 @@ Expression PQLParser::extractExpression() {
 
     std::stack<std::shared_ptr<Token>> operators;
     std::stack<std::string> expression;
-    std::string rawInput;
+    std::vector<std::shared_ptr<Token>> tokens;
 
     curr = tokenizer->popToken();
     while (!curr->isToken(TokenType::Quote)) {
-        rawInput += curr->getRep();
+        tokens.push_back(curr);
         if (curr->isOperand()) {
             expression.push("(" + curr->getRep() + ")");
         } else if (curr->isToken(TokenType::Lparenthesis)) {
@@ -577,14 +576,72 @@ Expression PQLParser::extractExpression() {
     if (expression.empty() || expression.size() > 1) { // empty expression OR too many factors e.g "x y"
         throw std::runtime_error("Invalid Expression Spec");
     }
-    validateExprSyntax(rawInput);
+    if (!validateExprSyntax(tokens)) {
+        throw std::runtime_error("Invalid Expression Spec from VALIDATE");
+    }
     return expression.top();
 }
 
-void PQLParser::validateExprSyntax(const Expression& input){
-    if (!QPSUtil::IsExpr(input)) {
-        throw std::runtime_error("Invalid expression syntax");
+bool PQLParser::validateExprSyntax(std::vector<std::shared_ptr<Token>>& input) {
+    size_t currIndex = 0;
+    return isExpr(input, currIndex) && currIndex == input.size();
+}
+
+bool PQLParser::isExpr(std::vector<std::shared_ptr<Token>>& input, size_t& index) {
+    if (index >= input.size()) {
+        return false;
     }
+    if(isTerm(input, index)) {
+        while (index < input.size()
+               && (input[index]->isToken(TokenType::Plus)
+                   || input[index]->isToken(TokenType::Minus))) {
+            index++;
+            if (!isTerm(input, index)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool PQLParser::isTerm(std::vector<std::shared_ptr<Token>>& input, size_t& index) {
+    if (index >= input.size()) {
+        return false;
+    }
+    if (isFactor(input, index)) {
+        while (index < input.size()
+                && (input[index]->isToken(TokenType::Asterisk)
+                || input[index]->isToken(TokenType::Slash)
+                || input[index]->isToken(TokenType::Percent))) {
+            index++;
+            if (!isFactor(input, index)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool PQLParser::isFactor(std::vector<std::shared_ptr<Token>>& input, size_t& index) {
+    if (index >= input.size()) {
+        return false;
+    }
+    if (input[index]->isIdent() || input[index]->isInteger()) {
+        index++;
+        return true;
+    }
+    if (input[index]->isToken(TokenType::Lparenthesis)) {
+        index++;
+        bool hasValidExpr = isExpr(input, index);
+        if (hasValidExpr && index < input.size()) {
+            bool hasRParenthesis = input[index]->isToken(TokenType::Rparenthesis);
+            index++;
+            return hasRParenthesis;
+        }
+    }
+    return false;
 }
 
 std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string& errorMsg) {
