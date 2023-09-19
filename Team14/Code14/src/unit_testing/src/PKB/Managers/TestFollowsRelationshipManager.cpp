@@ -13,8 +13,8 @@ TEST_CASE("Test Follows Relationship Retrieval") {
     shared_ptr<Statement> statement2 = make_shared<Statement>(Statement(2, StatementType::Call));
     shared_ptr<Statement> statement3 = make_shared<Statement>(Statement(3, StatementType::Print));
 
-    followsRelationshipManager.storeFollowsRelationship(statement1, statement2);
-    followsRelationshipManager.storeFollowsRelationship(statement2, statement3);
+    followsRelationshipManager.storeFollowsRelationship(statement1, statement2, true);
+    followsRelationshipManager.storeFollowsRelationship(statement2, statement3, true);
 
     REQUIRE(followsRelationshipManager.getFollowsByStatement(*statement1).empty());
     auto followsStatement2 = followsRelationshipManager.getFollowsByStatement(*statement2);

@@ -3,8 +3,8 @@
 FollowsRelationshipManager::FollowsRelationshipManager()
     : followsRelationshipStore(std::make_shared<FollowsRelationshipStore>(FollowsRelationshipStore())) {}
 
-void FollowsRelationshipManager::storeFollowsRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2) {
-    followsRelationshipStore->storeRelationship(std::make_shared<FollowsRelationship>(statement1, statement2));
+void FollowsRelationshipManager::storeFollowsRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2, bool isDirect) {
+    followsRelationshipStore->storeRelationship(std::make_shared<FollowsRelationship>(statement1, statement2, isDirect));
 }
 
 std::vector<std::vector<Entity>> FollowsRelationshipManager::getAllFollowsStatementPair() const {

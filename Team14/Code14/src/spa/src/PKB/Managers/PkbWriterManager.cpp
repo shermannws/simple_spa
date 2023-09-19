@@ -54,10 +54,10 @@ void PkbWriterManager::addAssignStatement(std::shared_ptr<Statement> s, std::sha
     this->assignmentManager->addAssignment(assignStmt);
 }
 
-void PkbWriterManager::addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) {
-    this->followsRelationshipManager->storeFollowsRelationship(s1, s2);
+void PkbWriterManager::addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
+    this->followsRelationshipManager->storeFollowsRelationship(s1, s2, isDirect);
 }
 
-void PkbWriterManager::addUsesRelalationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
+void PkbWriterManager::addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
     this->usesRelationshipManager->storeUsesRelationship(s, v);
 }

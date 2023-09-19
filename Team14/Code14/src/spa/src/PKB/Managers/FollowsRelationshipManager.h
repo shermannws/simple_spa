@@ -13,7 +13,7 @@ private:
 public:
     FollowsRelationshipManager();
 
-    void storeFollowsRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2);
+    void storeFollowsRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2, bool isDirect);
 
     std::vector<std::vector<Entity>> getAllFollowsStatementPair() const;
 
