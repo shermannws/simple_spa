@@ -20,7 +20,7 @@ std::vector<std::vector<Entity>> FollowsRelationshipManager::getFollowsPair(Stat
 std::vector<Entity> FollowsRelationshipManager::getFollowsTypeStmt(StatementType type, Statement& statement, bool requireDirect) const {
     auto result = std::vector<Entity>();
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
-        if (*((*it)->getRightObject()) == statement && (*it)->getLeftObject()->isStatementType(type), (*it)->isDirect() >= requireDirect) {
+        if (*((*it)->getRightObject()) == statement && (*it)->getLeftObject()->isStatementType(type) && (*it)->isDirect() >= requireDirect) {
             result.push_back(*((*it)->getLeftEntity()));
         }
     }
@@ -40,7 +40,7 @@ std::vector<Entity> FollowsRelationshipManager::getFollowsTypeWildcard(Statement
 std::vector<Entity> FollowsRelationshipManager::getFollowsStmtType(Statement& statement, StatementType type, bool requireDirect) const {
     auto result = std::vector<Entity>();
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
-        if (*((*it)->getLeftObject()) == statement && (*it)->getRightObject()->isStatementType(type), (*it)->isDirect() >= requireDirect) {
+        if (*((*it)->getLeftObject()) == statement && (*it)->getRightObject()->isStatementType(type) && (*it)->isDirect() >= requireDirect) {
             result.push_back(*((*it)->getRightEntity()));
         }
     }
@@ -60,7 +60,8 @@ std::vector<Entity> FollowsRelationshipManager::getFollowsWildcardType(Statement
 
 bool FollowsRelationshipManager::isFollows(Statement& statement1, Statement& statement2, bool requireDirect) const {
     std::shared_ptr<FollowsRelationship> followsRelationship = std::make_shared<FollowsRelationship>(std::make_shared<Statement>(statement1), std::make_shared<Statement>(statement2), requireDirect);
-    return followsRelationshipStore->getRelationship(followsRelationship) != nullptr;
+    std::shared_ptr<FollowsRelationship> relationship = followsRelationshipStore->getRelationship(followsRelationship);
+    return relationship != nullptr && relationship->isDirect() >= requireDirect;
 }
 
 bool FollowsRelationshipManager::hasFollows() const {

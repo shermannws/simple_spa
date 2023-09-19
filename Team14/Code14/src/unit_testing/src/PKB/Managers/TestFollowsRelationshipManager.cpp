@@ -31,18 +31,18 @@ TEST_CASE("Test Follows Relationship Retrieval") {
     REQUIRE(followsRelationshipManager.getFollowsTypeStmt(StatementType::Assign, *statement3, true).empty());
 
     REQUIRE(followsRelationshipManager.getFollowsWildcardType(StatementType::Stmt).size() == 2);
-    REQUIRE(followsRelationshipManager.getFollowsWildcardType(StatementType::Assign).size() == 1);
-    REQUIRE(followsRelationshipManager.getFollowsWildcardType(StatementType::Print).empty());
+    REQUIRE(followsRelationshipManager.getFollowsWildcardType(StatementType::Assign).empty());
+    REQUIRE(followsRelationshipManager.getFollowsWildcardType(StatementType::Print).size() == 1);
     REQUIRE(followsRelationshipManager.getFollowsWildcardType(StatementType::Call).size() == 1);
 
     REQUIRE(followsRelationshipManager.getFollowsStmtType(*statement1, StatementType::Stmt, true).size() == 1);
     REQUIRE(followsRelationshipManager.getFollowsStmtType(*statement1, StatementType::Stmt, false).size() == 2);
-    REQUIRE(followsRelationshipManager.getFollowsStmtType(*statement1, StatementType::Call, true).size() == 1);
-    REQUIRE(followsRelationshipManager.getFollowsStmtType(*statement1, StatementType::Call, false).empty());
+    REQUIRE(followsRelationshipManager.getFollowsStmtType(*statement1, StatementType::Print, true).empty());
+    REQUIRE(followsRelationshipManager.getFollowsStmtType(*statement1, StatementType::Print, false).size() == 1);
 
     REQUIRE(followsRelationshipManager.getFollowsTypeWildcard(StatementType::Stmt).size() == 2);
-    REQUIRE(followsRelationshipManager.getFollowsTypeWildcard(StatementType::Assign).empty());
-    REQUIRE(followsRelationshipManager.getFollowsTypeWildcard(StatementType::Print).size() == 2);
+    REQUIRE(followsRelationshipManager.getFollowsTypeWildcard(StatementType::Assign).size() == 1);
+    REQUIRE(followsRelationshipManager.getFollowsTypeWildcard(StatementType::Print).empty());
     REQUIRE(followsRelationshipManager.getFollowsTypeWildcard(StatementType::Call).size() == 1);
 
     REQUIRE(followsRelationshipManager.isFollows(*statement1, *statement2, true) == true);
