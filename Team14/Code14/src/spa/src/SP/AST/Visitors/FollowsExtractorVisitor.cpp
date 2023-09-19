@@ -27,28 +27,31 @@ StatementType getStamentTypeFromStatementNodeType(StatementNodeType type) {
 
 void FollowsExtractorVisitor::visitStatementListNode(StatementListNode* node) const {
 	auto stmts = node->getStatements();
-
-	for (auto it = stmts.begin(); it != stmts.end(); it++) {
-		if (it + 1 == stmts.end()) {
-			break;
-		}
-		StatementType s1Type = getStamentTypeFromStatementNodeType((*it).get()->getStatementType());
-		StatementType s2Type = getStamentTypeFromStatementNodeType((*(it+1)).get()->getStatementType());
-		this->pkbWriter->addFollowsRelationship(
-			std::make_shared<Statement>((*it).get()->getStatementNumber(), s1Type),
-			std::make_shared<Statement>((*(it + 1)).get()->getStatementNumber(), s2Type)
-		);
-	}
-
-	////Below is for Follow(*)
+	//
 	//for (auto it = stmts.begin(); it != stmts.end(); it++) {
-	//	for (auto it2 = it+1; it2 != stmts.end(); it2++) {
-	//		StatementType s1Type = getStamentTypeFromStatementNodeType((*it).get()->getStatementType());
-	//		StatementType s2Type = getStamentTypeFromStatementNodeType((*it2).get()->getStatementType());
-	//		this->pkbWriter->addFollowsRelationship(
-	//			std::make_shared<Statement>((*it).get()->getStatementNumber(), s1Type),
-	//			std::make_shared<Statement>((*it2).get()->getStatementNumber(), s2Type)
-	//		);
+	//	if (it + 1 == stmts.end()) {
+	//		break;
 	//	}
+	//	StatementType s1Type = getStamentTypeFromStatementNodeType((*it).get()->getStatementType());
+	//	StatementType s2Type = getStamentTypeFromStatementNodeType((*(it+1)).get()->getStatementType());
+	//	this->pkbWriter->addFollowsRelationship(
+	//		std::make_shared<Statement>((*it).get()->getStatementNumber(), s1Type),
+	//		std::make_shared<Statement>((*(it + 1)).get()->getStatementNumber(), s2Type)
+	//	);
 	//}
+
+	//Below is for Follow(*)
+	for (auto it = stmts.begin(); it != stmts.end(); it++) {
+		bool isDirect = true;
+		for (auto it2 = it+1; it2 != stmts.end(); it2++) {
+			StatementType s1Type = getStamentTypeFromStatementNodeType((*it).get()->getStatementType());
+			StatementType s2Type = getStamentTypeFromStatementNodeType((*it2).get()->getStatementType());
+			this->pkbWriter->addFollowsRelationship(
+				std::make_shared<Statement>((*it).get()->getStatementNumber(), s1Type),
+				std::make_shared<Statement>((*it2).get()->getStatementNumber(), s2Type),
+				isDirect
+			);
+			isDirect = false;
+		}
+	}
 }
