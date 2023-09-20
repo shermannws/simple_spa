@@ -10,7 +10,7 @@ void FollowsRelationshipManager::storeFollowsRelationship(std::shared_ptr<Statem
 std::vector<std::vector<Entity>> FollowsRelationshipManager::getFollowsPair(StatementType formerType, StatementType latterType, bool requireDirect) const {
     auto followsPair = std::vector<std::vector<Entity>>();
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
-        if ((*it)->getLeftObject()->isStatementType(formerType) && (*it)->getRightObject()->isStatementType(latterType) && (*it)->isDirect() >= requireDirect) {
+        if ((*it)->isDirect() >= requireDirect && (*it)->getLeftObject()->isStatementType(formerType) && (*it)->getRightObject()->isStatementType(latterType)) {
             followsPair.push_back(std::vector<Entity>{*((*it)->getLeftEntity()), *((*it)->getRightEntity())});
         }
     }
@@ -20,7 +20,7 @@ std::vector<std::vector<Entity>> FollowsRelationshipManager::getFollowsPair(Stat
 std::vector<Entity> FollowsRelationshipManager::getFollowsTypeStmt(StatementType type, Statement& statement, bool requireDirect) const {
     auto result = std::vector<Entity>();
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
-        if (*((*it)->getRightObject()) == statement && (*it)->getLeftObject()->isStatementType(type) && (*it)->isDirect() >= requireDirect) {
+        if ((*it)->isDirect() >= requireDirect && *((*it)->getRightObject()) == statement && (*it)->getLeftObject()->isStatementType(type)) {
             result.push_back(*((*it)->getLeftEntity()));
         }
     }
@@ -30,7 +30,7 @@ std::vector<Entity> FollowsRelationshipManager::getFollowsTypeStmt(StatementType
 std::vector<Entity> FollowsRelationshipManager::getFollowsTypeWildcard(StatementType type) const { // Same for Follows and Follows* since Follows* is a superset of Follows
     auto result = std::vector<Entity>();
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
-        if ((*it)->getLeftObject()->isStatementType(type) && (*it)->isDirect()) {
+        if ((*it)->isDirect() && (*it)->getLeftObject()->isStatementType(type)) {
             result.push_back(*((*it)->getLeftEntity()));
         }
     }
@@ -40,7 +40,7 @@ std::vector<Entity> FollowsRelationshipManager::getFollowsTypeWildcard(Statement
 std::vector<Entity> FollowsRelationshipManager::getFollowsStmtType(Statement& statement, StatementType type, bool requireDirect) const {
     auto result = std::vector<Entity>();
     for (auto it = followsRelationshipStore->getBeginIterator(); it != followsRelationshipStore->getEndIterator(); it++) {
-        if (*((*it)->getLeftObject()) == statement && (*it)->getRightObject()->isStatementType(type) && (*it)->isDirect() >= requireDirect) {
+        if ((*it)->isDirect() >= requireDirect && *((*it)->getLeftObject()) == statement && (*it)->getRightObject()->isStatementType(type)) {
             result.push_back(*((*it)->getRightEntity()));
         }
     }
@@ -51,7 +51,7 @@ std::vector<Entity> FollowsRelationshipManager::getFollowsWildcardType(Statement
     auto result = std::vector<Entity>();
     for (auto it = followsRelationshipStore->getBeginIterator();
          it != followsRelationshipStore->getEndIterator(); it++) {
-        if ((*it)->getRightObject()->isStatementType(type) && (*it)->isDirect()) {
+        if ((*it)->isDirect() && (*it)->getRightObject()->isStatementType(type)) {
             result.push_back(*((*it)->getRightEntity()));
         }
     }
