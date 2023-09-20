@@ -12,6 +12,8 @@ class UsesExtractorVisitor : public DesignExtractorVisitor,
     public IfNodeVisitor,
     public WhileNodeVisitor
 {
+private:
+    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func;
 public:
     /*!
      * Constructor for UsesExtractorVisitor
