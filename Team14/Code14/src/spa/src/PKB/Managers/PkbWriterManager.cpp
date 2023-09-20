@@ -57,3 +57,7 @@ void PkbWriterManager::addFollowsRelationship(std::shared_ptr<Statement> s1, std
 void PkbWriterManager::addUsesRelalationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
     this->usesRelationshipManager->storeUsesRelationship(s, v);
 }
+
+void PkbWriterManager::addModifiesRelalationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
+    this->modifiesRelationshipManager->storeModifiesRelationship(s, v);
+}

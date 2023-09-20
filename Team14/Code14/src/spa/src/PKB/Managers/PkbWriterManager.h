@@ -49,4 +49,5 @@ public:
 
     void addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2);
     void addUsesRelalationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v);
+    void addModifiesRelalationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v);
 };

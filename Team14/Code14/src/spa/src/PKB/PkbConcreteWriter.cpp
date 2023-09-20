@@ -53,3 +53,7 @@ void PkbConcreteWriter::addIfStatement(std::shared_ptr<Statement> s) {
 void PkbConcreteWriter::addWhileStatement(std::shared_ptr<Statement> s) {
     this->writerManager->addStatement(s);
 }
+
+void PkbConcreteWriter::addModifiesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
+    this->writerManager->addModifiesRelalationship(s, v);
+}

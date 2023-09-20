@@ -71,4 +71,9 @@ public:
      * Adds new While Statement Entity into the PKB
      */
     virtual void addWhileStatement(std::shared_ptr<Statement> s) = 0;
+
+    /*!
+     * Adds new Modifies Relationship into the PKB
+     */
+    virtual void addModifiesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) = 0;
 };
