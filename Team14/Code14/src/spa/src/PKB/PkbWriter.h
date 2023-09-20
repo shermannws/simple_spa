@@ -50,7 +50,7 @@ public:
     /*!
      * Adds new Follows Relationship into the PKB
      */
-    virtual void addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) = 0;
+    virtual void addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) = 0;
 
     /*!
      * Adds new Uses Relationship into the PKB

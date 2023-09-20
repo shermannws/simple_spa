@@ -34,12 +34,12 @@ void PkbConcreteWriter::addAssignStatement(std::shared_ptr<Statement> s, std::sh
     this->writerManager->addAssignStatement(s, lhs, rhs);
 }
 
-void PkbConcreteWriter::addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) {
-    this->writerManager->addFollowsRelationship(s1, s2);
+void PkbConcreteWriter::addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
+    this->writerManager->addFollowsRelationship(s1, s2, isDirect);
 }
 
 void PkbConcreteWriter::addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
-    this->writerManager->addUsesRelalationship(s, v);
+    this->writerManager->addUsesRelationship(s, v);
 }
 
 void PkbConcreteWriter::addCallStatement(std::shared_ptr<Statement> s) {
@@ -55,5 +55,5 @@ void PkbConcreteWriter::addWhileStatement(std::shared_ptr<Statement> s) {
 }
 
 void PkbConcreteWriter::addModifiesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
-    this->writerManager->addModifiesRelalationship(s, v);
+    this->writerManager->addModifiesRelationship(s, v);
 }

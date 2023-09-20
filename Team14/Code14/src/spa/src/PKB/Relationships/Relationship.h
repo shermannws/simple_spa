@@ -29,6 +29,16 @@ public:
 	 */
     std::shared_ptr<Entity> getRightEntity() const;
 
+    /*!
+ * Returns the left Entity in a Relationship
+ */
+    std::shared_ptr<T> getLeftObject() const;
+
+    /*!
+     * Returns the right Entity in a Relationship
+     */
+    std::shared_ptr<U> getRightObject() const;
+
 	/*!
 	 * Returns the RelationshipType of the object
 	 */
