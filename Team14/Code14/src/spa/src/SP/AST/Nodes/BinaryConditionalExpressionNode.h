@@ -24,5 +24,6 @@ public:
     std::shared_ptr<ConditionalExpressionNode> getLeftConditionalExpression();
     std::shared_ptr<ConditionalExpressionNode> getRightConditionalExpression();
     void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
+    static BinaryConditionalExpressionType translateBinaryConditionalExpressionTypeString(std::string typeString);
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

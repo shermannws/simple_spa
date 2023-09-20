@@ -25,5 +25,6 @@ public:
     std::shared_ptr<ExpressionNode> getLeftExpression();
     std::shared_ptr<ExpressionNode> getRightExpression();
     void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
+    static ComparisonOperatorType translateComparisonOperatorType(std::string operatorTypeString);
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };
