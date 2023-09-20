@@ -61,6 +61,8 @@ TEST_CASE("processDeclarations Errors") {
     std::vector<std::pair<std::string, std::string>> testcases;
     testcases.emplace_back("Select s ", "Expected a declaration but found none");
     testcases.emplace_back("assignment a; ", "Expected a declaration but found none");
+    // TODO: add assignment a; variable v;
+    // TODO: add assignment ; variable v;
     testcases.emplace_back("assign a Select s", "Expected ; but found 'Select'");
     testcases.emplace_back("assign a a1;", "Expected ; but found 'a1'");
     testcases.emplace_back("assign a; print a;", "Trying to redeclare a synonym");

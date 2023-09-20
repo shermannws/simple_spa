@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "Token.h"
 
 enum class QueryEntityType {
     Procedure,
@@ -22,6 +23,7 @@ private:
     QueryEntityType type;
 public:
     explicit QueryEntity(QueryEntityType type, const std::string &synonym);
+    QueryEntity(const std::shared_ptr<Token>& designEntity, const std::string& synonym);
     bool operator==(const QueryEntity& other) const;
     std::string getSynonym();
     QueryEntityType getType();

@@ -13,7 +13,7 @@
 
 PQLParser::PQLParser(const std::string& str) : tokenizer(std::make_shared<Tokenizer>(str)){}
 
-Query PQLParser::parse(){
+Query PQLParser::parse() {
     Query query = Query();
     processDeclarations(query);
     processSelectClause(query);
@@ -27,28 +27,6 @@ Query PQLParser::parse(){
 void PQLParser::processDeclarations(Query& query) {
     while(tokenizer->peekToken()->isDesignEntity()) {
         std::shared_ptr<Token> designEntity = tokenizer->popToken();
-        QueryEntityType currentType;
-        if (designEntity->isToken("procedure")) {
-            currentType = QueryEntityType::Procedure;
-        } else if (designEntity->isToken("stmt")) {
-            currentType = QueryEntityType::Stmt;
-        } else if (designEntity->isToken("read")) {
-            currentType = QueryEntityType::Read;
-        } else if (designEntity->isToken("print")) {
-            currentType = QueryEntityType::Print;
-        } else if (designEntity->isToken("assign")) {
-            currentType = QueryEntityType::Assign;
-        } else if (designEntity->isToken("call")) {
-            currentType = QueryEntityType::Call;
-        } else if (designEntity->isToken("while")) {
-            currentType = QueryEntityType::While;
-        } else if (designEntity->isToken("if")) {
-            currentType = QueryEntityType::If;
-        } else if (designEntity->isToken("variable")) {
-            currentType = QueryEntityType::Variable;
-        } else if (designEntity->isToken("constant")) {
-            currentType = QueryEntityType::Constant;
-        }
 
         std::shared_ptr<Token> synonym = tokenizer->popToken();
         if (!synonym->isIdent()) {
@@ -57,7 +35,7 @@ void PQLParser::processDeclarations(Query& query) {
             }
             throw std::runtime_error("Invalid synonym '" + synonym->getRep() + "'");
         }
-        std::shared_ptr<QueryEntity> newEntity = std::make_shared<QueryEntity>(currentType, synonym->getRep());
+        std::shared_ptr<QueryEntity> newEntity = std::make_shared<QueryEntity>(designEntity, synonym->getRep());
         query.addDeclaration(newEntity);
 
         while(tokenizer->peekToken()->isToken(TokenType::Comma)) {
@@ -69,7 +47,7 @@ void PQLParser::processDeclarations(Query& query) {
                 }
                 throw std::runtime_error("Invalid synonym '" + synonym->getRep() + "'");
             }
-            newEntity = std::make_shared<QueryEntity>(currentType, synonym->getRep());
+            newEntity = std::make_shared<QueryEntity>(designEntity, synonym->getRep());
             query.addDeclaration(newEntity);
         }
 
