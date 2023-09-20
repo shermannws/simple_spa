@@ -52,9 +52,17 @@ public:
 
     std::vector<Entity> getAllStatements() const;
 
-    std::vector<std::vector<Entity>> getAllUsesAssignVariablePair() const;
+    std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const;
 
-    std::vector<Entity> getAllUsesAssignByVariable(Variable& variable) const;
+    std::vector<Entity> getUsesTypeIdent(StatementType type, Variable& var) const;
+
+    std::vector<Entity> getUsesStmt(StatementType type) const;
+
+    std::vector<Entity> getUsesVar(Statement& stmt) const;
+
+    bool isStmtUsesVar(Statement& stmt, Variable& var) const;
+
+    bool hasUses(Statement& stmt) const;
 
     std::vector<std::vector<Entity>> getFollowsPair(StatementType formerType, StatementType latterType) const;
 

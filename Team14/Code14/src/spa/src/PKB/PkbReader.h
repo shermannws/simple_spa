@@ -16,9 +16,17 @@ public:
 
     virtual std::vector<Entity> getAllStatements() const = 0;
 
-    virtual std::vector<std::vector<Entity>> getAllUsesAssignVariablePair() const = 0;
+    virtual std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const = 0;
 
-    virtual std::vector<Entity> getAllUsesAssignByVariable(Variable& variable) const = 0;
+    virtual std::vector<Entity> getUsesTypeIdent(StatementType type, Variable& var) const = 0;
+
+    virtual std::vector<Entity> getUsesStmt(StatementType type) const = 0;
+
+    virtual  std::vector<Entity> getUsesVar(Statement& stmt) const = 0;
+
+    virtual bool isStmtUsesVar(Statement& stmt, Variable& var) const = 0;
+
+    virtual bool hasUses(Statement& stmt) const = 0;
 
     virtual std::vector<std::vector<Entity>> getFollowsPair(StatementType formerType, StatementType latterType) const = 0;
 
