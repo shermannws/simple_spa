@@ -9,6 +9,7 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "PKB/Relationships/UsesRelationship.h"
+#include "PKB/Managers/ManagerUtils.h"
 
 class UsesRelationshipManager {
 private:
