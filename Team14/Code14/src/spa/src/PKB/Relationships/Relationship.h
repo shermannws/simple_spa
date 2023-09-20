@@ -19,6 +19,12 @@ public:
 		const std::shared_ptr<T> leftEntity,
 		const std::shared_ptr<U> rightEntity);
 
+    static Entity getLeftEntityFromRelationship(const Relationship<T, U>& relationship);
+
+    static Entity getRightEntityFromRelationship(const Relationship<T, U>& relationship);
+
+    static std::vector<Entity> getEntityPairFromRelationship(const Relationship<T, U>& relationship);
+
 	/*!
 	 * Returns the left Entity in a Relationship
 	 */
