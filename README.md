@@ -18,8 +18,8 @@
 
 Item | Version
 -|-
-OS |
-Toolchain |
+OS | macOS
+Toolchain | CLion
 C++ Standard | C++17
 
 ### Additional Build Instructions
