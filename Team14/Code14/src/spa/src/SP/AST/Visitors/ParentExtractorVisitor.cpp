@@ -11,7 +11,7 @@ void ParentExtractorVisitor::visitStatementListNode(StatementListNode* node, std
 	auto stmts = node->getStatements();
 
 	bool isDirect = true;
-	for (auto parent = stmts.rbegin(); parent != stmts.rend(); ++parent) {
+	for (auto parent = parents.rbegin(); parent != parents.rend(); parent++) {
 		auto parentPtr = std::dynamic_pointer_cast<StatementNode>(*parent);
 		assert(parentPtr != nullptr);
 		Statement parentStatement = Statement(

@@ -25,7 +25,7 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
 			current->accept(v, parents);
 		}
 		
-		//update parent vector if current node is a parent node
+		//update parents vector if current node is a parent node
 		std::vector<std::shared_ptr<ASTNode>> newParents = parents;
 		if (auto currentCasted = std::dynamic_pointer_cast<IfNode>(current)) {
 			newParents.emplace_back(currentCasted);
