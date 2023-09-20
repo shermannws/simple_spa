@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdexcept>
+#include <vector>
 
 template <typename T, typename U>
 Relationship<T, U>::Relationship(const RelationshipType relationshipType,
