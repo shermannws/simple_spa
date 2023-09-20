@@ -9,5 +9,7 @@ enum class TokenType {
     CloseCurlyParenthesis,
     Semicolon,
     Equals,
-    ArithmeticOperator
+    ArithmeticOperator,
+    ConditionalOperator,
+    RelationalOperator
 };

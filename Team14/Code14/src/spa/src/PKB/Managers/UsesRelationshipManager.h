@@ -18,7 +18,15 @@ public:
 
     void storeUsesRelationship(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable);
 
-    std::vector<std::vector<Entity>> getAllAssignVariable() const;
+    std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const;
 
-    std::vector<Entity> getVariableAssignment(Variable& variable) const;
+    std::vector<Entity> getUsesTypeIdent(StatementType type, Variable& var) const;
+
+    std::vector<Entity> getUsesStmt(StatementType type) const;
+
+    std::vector<Entity> getUsesVar(Statement& stmt) const;
+
+    bool isStmtUsesVar(Statement& stmt, Variable& var) const;
+
+    bool hasUses(Statement& stmt) const;
 };

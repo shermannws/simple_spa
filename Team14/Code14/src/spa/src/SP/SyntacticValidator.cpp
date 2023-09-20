@@ -39,19 +39,31 @@ void SyntacticValidator::validateProcedure() {
 }
 
 void SyntacticValidator::validateStmtLst() {
+    if (peekToken().getType() == TokenType::CloseCurlyParenthesis) {
+        throw SyntaxError("Syntax error: StmtLst cannot be empty");
+    }
+
     while (isCurrValid()) {
         SPToken token = peekToken();
 
-        if (token.getType() == TokenType::Name) {
+        if (token.getType() == TokenType::CloseCurlyParenthesis) {
+            break;
+        } else if (peekNextToken().getType() == TokenType::Equals) {
+            validateAssign();
+        } else if (token.getType() == TokenType::Name) {
             if (token.getValue() == AppConstants::STRING_READ) {
                 validateRead();
             } else if (token.getValue() == AppConstants::STRING_PRINT) {
                 validatePrint();
+            } else if (token.getValue() == AppConstants::STRING_CALL) {
+                validateCall();
+            } else if (token.getValue() == AppConstants::STRING_WHILE) {
+                validateWhile();
+            } else if (token.getValue() == AppConstants::STRING_IF) {
+                validateIf();
             } else {
-                validateAssign();
+                throw SyntaxError("Syntax error: Invalid Stmt");
             }
-        }  else if (token.getType() == TokenType::CloseCurlyParenthesis) {
-            break;
         } else {
             throw SyntaxError("Syntax error: Expected TokenType NAME for statement");
         }
@@ -76,6 +88,15 @@ void SyntacticValidator::validatePrint() {
     validateSemicolon();
 }
 
+void SyntacticValidator::validateCall() {
+    // 'call' terminal validated by validateStmtLst()
+    popToken();
+
+    // validate rest of call CGS
+    validateName();
+    validateSemicolon();
+}
+
 void SyntacticValidator::validateAssign() {
     validateName();
     validateEquals();
@@ -96,20 +117,6 @@ void SyntacticValidator::validateExpr() {
     }
 }
 
-// TODO: check necessity of this middle factor validation according to CGS
-//void SyntacticValidator::validateTerm() {
-//    SPToken currToken = peekToken();
-//    SPToken nextToken = peekNextToken();
-//
-//    if (nextToken.getType() == TokenType::ARITHMETIC_OPERATOR) {
-//        validateFactor();
-//        validateArithmeticOperator(); //TODO: change to * or / or %
-//        validateTerm();
-//    } else {
-//        validateFactor();
-//    }
-//}
-
 void SyntacticValidator::validateTerm() {
     SPToken currToken = peekToken();
     if (currToken.getType() == TokenType::Name) {
@@ -125,6 +132,101 @@ void SyntacticValidator::validateTerm() {
     }
 }
 
+void SyntacticValidator::validateWhile() {
+    // 'while' terminal validated by validateStmtLst()
+    popToken();
+
+    validateOpenRoundParan();
+    validateConditionalExpression();
+    validateCloseRoundParan();
+
+    validateOpenCurlyParan();
+    validateStmtLst();
+    validateCloseCurlyParan();
+}
+
+void SyntacticValidator::validateIf() {
+    // 'if' terminal validated by validateStmtLst()
+    popToken();
+
+    validateOpenRoundParan();
+    validateConditionalExpression();
+    validateCloseRoundParan();
+
+    validateThen();
+    validateOpenCurlyParan();
+    validateStmtLst();
+    validateCloseCurlyParan();
+
+    validateElse();
+    validateOpenCurlyParan();
+    validateStmtLst();
+    validateCloseCurlyParan();
+}
+
+void SyntacticValidator::validateThen() {
+    if (peekToken().getType() == TokenType::Name &&
+        peekToken().getValue() == AppConstants::STRING_THEN) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected 'then' in if statement");
+    }
+}
+
+void SyntacticValidator::validateElse() {
+    if (peekToken().getType() == TokenType::Name &&
+        peekToken().getValue() == AppConstants::STRING_ELSE) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected 'else' in if statement");
+    }
+}
+
+void SyntacticValidator::validateConditionalExpression() {
+    if (peekToken().getType() == TokenType::ConditionalOperator &&
+        peekToken().getValue() == AppConstants::STRING_NOT) {
+        popToken();
+        validateOpenRoundParan();
+        validateConditionalExpression();
+        validateCloseRoundParan();
+    } else if (peekToken().getType() == TokenType::OpenRoundParenthesis) {
+        validateOpenRoundParan();
+        validateConditionalExpression();
+        validateCloseRoundParan();
+
+        validateAndOrOperator();
+
+        validateOpenRoundParan();
+        validateConditionalExpression();
+        validateCloseRoundParan();
+    } else {
+        validateRelationalExpression();
+    }
+}
+
+void SyntacticValidator::validateAndOrOperator() {
+    if (peekToken().getType() == TokenType::ConditionalOperator &&
+    (peekToken().getValue() == AppConstants::STRING_AND || peekToken().getValue() == AppConstants::STRING_OR)) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected '&&' or '||' logical operator");
+    }
+}
+
+void SyntacticValidator::validateRelationalExpression() {
+    validateExpr();
+    validateRelationalOperator();
+    validateExpr();
+}
+
+void SyntacticValidator::validateRelationalOperator() {
+    if (peekToken().getType() == TokenType::RelationalOperator) {
+        popToken();
+    } else {
+        throw SyntaxError("Syntax error: Expected relational operator");
+    }
+}
+
 void SyntacticValidator::validateName() {
     SPToken currToken = peekToken();
     if (currToken.getType() == TokenType::Name) {
@@ -137,7 +239,7 @@ void SyntacticValidator::validateName() {
 void SyntacticValidator::validateInteger() {
     SPToken currToken = peekToken();
     if (currToken.getType() == TokenType::Integer) {
-        if (currToken.getValue()[0] == '0') {
+        if (currToken.getValue()[0] == '0' && currToken.getValue().size() != 1) {
             throw SyntaxError("Syntax error: INTEGER cannot start with 0");
         }
         popToken();

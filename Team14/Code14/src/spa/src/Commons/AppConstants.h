@@ -17,6 +17,8 @@ public:
     inline static const std::string STRING_CALL = "call";
     inline static const std::string STRING_WHILE = "while";
     inline static const std::string STRING_IF = "if";
+    inline static const std::string STRING_THEN = "then";
+    inline static const std::string STRING_ELSE = "else";
     inline static const std::string STRING_VARIABLE = "variable";
     inline static const std::string STRING_CONSTANT = "constant";
 
@@ -47,6 +49,8 @@ public:
     inline static const char CHAR_GREATER_THAN = '>';
     inline static const char CHAR_LESS_THAN = '<';
     inline static const char CHAR_NOT = '!';
+    inline static const char CHAR_AMPERSAND = '&';
+    inline static const char CHAR_VERTICAL_BAR = '|';
     inline static const char CHAR_EQUAL = '=';
     inline static const char CHAR_PLUS = '+';
     inline static const char CHAR_MINUS = '-';
