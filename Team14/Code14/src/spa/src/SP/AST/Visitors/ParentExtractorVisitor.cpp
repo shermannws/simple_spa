@@ -12,7 +12,7 @@ void ParentExtractorVisitor::visitStatementListNode(StatementListNode* node, std
 
 	bool isDirect = true;
 	for (auto parent = stmts.rbegin(); parent != stmts.rend(); ++parent) {
-		StatementNode* parentPtr = dynamic_cast<StatementNode*>(parent.get());
+		auto parentPtr = std::dynamic_pointer_cast<StatementNode>(*parent);
 		assert(parentPtr != nullptr);
 		Statement parentStatement = Statement(
 			parentPtr->getStatementNumber(),
@@ -22,7 +22,7 @@ void ParentExtractorVisitor::visitStatementListNode(StatementListNode* node, std
 		for (auto stmt = stmts.begin(); stmt != stmts.end(); stmt++) {
 			Statement childStatement = Statement(
 				(*stmt)->getStatementNumber(),
-				StatementTypeFactory::getStatementTypeFrom((*stmt)->getStatementType());
+				StatementTypeFactory::getStatementTypeFrom((*stmt)->getStatementType())
 			);
 			this->pkbWriter->addParentRelationship(
 				std::make_shared<Statement>(parentStatement),
