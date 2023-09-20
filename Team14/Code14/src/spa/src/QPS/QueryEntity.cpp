@@ -2,7 +2,7 @@
 
 #include <string>
 
-QueryEntity::QueryEntity(QueryEntityType type, const std::string& synonym) : type(type), synonym(synonym) {}
+QueryEntity::QueryEntity(QueryEntityType type, const Synonym &synonym) : type(type), synonym(synonym) {}
 
 QueryEntity::QueryEntity(const std::shared_ptr<Token>& designEntity, const std::string& synonym) : synonym(synonym) {
     if (designEntity->isToken("procedure")) {

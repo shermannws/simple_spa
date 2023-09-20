@@ -204,8 +204,8 @@ TEST_CASE("Test integration of PKB with QPS - Follows (1, s)") {
     shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Stmt));
     shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Stmt));
 
-    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
-    pkbWriter->addFollowsRelationship(assignStatement2, assignStatement3);
+    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2, true);
+    pkbWriter->addFollowsRelationship(assignStatement2, assignStatement3, true);
 
     PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
 
@@ -230,7 +230,7 @@ TEST_CASE("Test integration of PKB with QPS - Follows (1, s)") {
     REQUIRE(results2.size() == 1);
     REQUIRE(*(results2.begin()) == "3");
 
-    REQUIRE(results3.size() == 0);
+    REQUIRE(results3.empty());
     REQUIRE(results3.begin() == results3.end());
 }
 
@@ -242,8 +242,8 @@ TEST_CASE("Test integration of PKB with QPS - Follows (s, 1)") {
     shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
     shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
 
-    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
-    pkbWriter->addFollowsRelationship(assignStatement2, assignStatement3);
+    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2, true);
+    pkbWriter->addFollowsRelationship(assignStatement2, assignStatement3, true);
 
     PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
 
@@ -281,8 +281,8 @@ TEST_CASE("Test integration of PKB with QPS - Follows (1, 2)") {
 
     pkbWriter->addAssignStatement(assignStatement1, nullptr, nullptr);
     pkbWriter->addAssignStatement(assignStatement2, nullptr, nullptr);
-    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
-    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2);
+    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2, true);
+    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2, true);
 
     PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
 

@@ -7,6 +7,7 @@
 #include "QueryEntity.h"
 #include "SuchThatClause.h"
 #include "PatternClause.h"
+#include "QPSTypes.h"
 
 class Query {
 private:

@@ -6,5 +6,11 @@ RelationshipType FollowsRelationship::relationshipType = RelationshipType::Follo
 
 
 FollowsRelationship::FollowsRelationship(const std::shared_ptr<Statement> leftEntity,
-	const std::shared_ptr<Statement> rightEntity)
-	: Relationship(this->relationshipType, leftEntity, rightEntity) {};
+	const std::shared_ptr<Statement> rightEntity, bool isDirect)
+	: Relationship(this->relationshipType, leftEntity, rightEntity) {
+    this->direct = isDirect;
+};
+
+bool FollowsRelationship::isDirect() const {
+    return this->direct;
+}

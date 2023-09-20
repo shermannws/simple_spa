@@ -62,7 +62,7 @@ TEST_CASE("Test initialising PKB Writer") {
 //    REQUIRE(*(followsStore->getRelationship(std::make_shared<FollowsRelationship>(std::make_shared<Statement>(5), std::make_shared<Statement>(6))))
 //        == FollowsRelationship(std::make_shared<Statement>(5), std::make_shared<Statement>(6)));
 //
-//    writer.addUsesRelalationship(std::make_shared<Statement>(7), std::make_shared<Variable>("z"));
+//    writer.addUsesRelationship(std::make_shared<Statement>(7), std::make_shared<Variable>("z"));
 //    REQUIRE(*(usesStore->getRelationship(std::make_shared<UsesRelationship>(std::make_shared<Statement>(7), std::make_shared<Variable>("z"))))
 //        == UsesRelationship(std::make_shared<Statement>(7), std::make_shared<Variable>("z")));
 //}

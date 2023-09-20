@@ -5,11 +5,11 @@
 #include "Query.h"
 
 Query::Query() {
-    declarations = std::unordered_map<std::string, std::shared_ptr<QueryEntity>>();
-    selects = std::vector<std::shared_ptr<QueryEntity>>();
+    declarations = DeclarationMap();
+    selects = std::vector<EntityPtr>();
 }
 
-std::shared_ptr<QueryEntity> Query::getEntity(const std::string& syn) {
+std::shared_ptr<QueryEntity> Query::getEntity(const Synonym& syn) {
     auto it = declarations.find(syn);
 
     if (it != declarations.end()) {
@@ -19,11 +19,11 @@ std::shared_ptr<QueryEntity> Query::getEntity(const std::string& syn) {
     }
 }
 
-void Query::addSelect(const std::shared_ptr<QueryEntity>& entity){
+void Query::addSelect(const EntityPtr& entity){
     selects.push_back(entity);
 }
 
-void Query::addDeclaration(const std::shared_ptr<QueryEntity>& entity){
+void Query::addDeclaration(const EntityPtr& entity){
     if (declarations.find(entity->getSynonym()) != declarations.end()){
         throw std::runtime_error("Trying to redeclare a synonym");
     }
@@ -34,11 +34,11 @@ bool Query::hasDeclarations() {
     return !declarations.empty();
 }
 
-std::unordered_map<std::string, std::shared_ptr<QueryEntity>> Query::getDeclarations() {
+DeclarationMap Query::getDeclarations() {
     return declarations;
 }
 
-std::vector<std::shared_ptr<QueryEntity>> Query::getSelect() {
+std::vector<EntityPtr> Query::getSelect() {
     return selects;
 }
 

@@ -11,7 +11,7 @@
 #include "QPSUtil.h"
 
 
-PQLParser::PQLParser(const std::string& str) : tokenizer(std::make_shared<Tokenizer>(str)){}
+PQLParser::PQLParser(const std::string& PQLQuery) : tokenizer(std::make_shared<Tokenizer>(PQLQuery)){}
 
 Query PQLParser::parse() {
     Query query = Query();
@@ -35,7 +35,7 @@ void PQLParser::processDeclarations(Query& query) {
             }
             throw std::runtime_error("Invalid synonym '" + synonym->getRep() + "'");
         }
-        std::shared_ptr<QueryEntity> newEntity = std::make_shared<QueryEntity>(designEntity, synonym->getRep());
+        EntityPtr newEntity = std::make_shared<QueryEntity>(designEntity, synonym->getRep());
         query.addDeclaration(newEntity);
 
         while(tokenizer->peekToken()->isToken(TokenType::Comma)) {
@@ -75,7 +75,7 @@ void PQLParser::processSelectClause(Query& query) {
         throw std::runtime_error("Expected synonym but found none");
     }
 
-    std::shared_ptr<QueryEntity> entity = query.getEntity(next->getRep());
+    EntityPtr entity = query.getEntity(next->getRep());
     if (!entity) {
         throw std::runtime_error("Undeclared synonym in Select clause");
     }
@@ -175,7 +175,7 @@ void PQLParser::processPatternClause(Query& query) {
     }
 
     std::shared_ptr<Token> patternSyn = tokenizer->popToken();
-    std::shared_ptr<QueryEntity> entity = query.getEntity(patternSyn->getRep());
+    EntityPtr entity = query.getEntity(patternSyn->getRep());
     if (!entity) {
         throw std::runtime_error("Undeclared synonym in pattern clause");
     } else if (entity->getType() != QueryEntityType::Assign) {

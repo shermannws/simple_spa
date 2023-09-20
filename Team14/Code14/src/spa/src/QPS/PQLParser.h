@@ -20,6 +20,6 @@ private:
     void validateSuchThatSemantics(Query& query, const std::shared_ptr<SuchThatClause>& clause);
     void validateSuchThatRefType(const std::shared_ptr<SuchThatClause>& clause);
 public:
-    explicit PQLParser(const std::string& str);
+    explicit PQLParser(const std::string& PQLQuery);
     Query parse();
 };

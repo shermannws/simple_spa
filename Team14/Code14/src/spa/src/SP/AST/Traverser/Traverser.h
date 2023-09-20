@@ -13,6 +13,13 @@ private:
 	std::stack<std::shared_ptr<ASTNode>> frontier;
 
 public:
+	/*!
+	 * Constructor for Traverser which takes in a vector of Visitor Object
+	 */
 	Traverser(std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors);
+
+	/*!
+	 * Traverses the AST from the root ProgramNode
+	 */
 	void traverse(std::shared_ptr<ProgramNode> root);
 };

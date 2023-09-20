@@ -3,6 +3,6 @@
 ParentRelationshipManager::ParentRelationshipManager()
     : parentRelationshipStore(std::make_shared<ParentRelationshipStore>(ParentRelationshipStore())) {}
 
-void ParentRelationshipManager::storeParentRelationship(std::shared_ptr<Statement> parentStatement, std::shared_ptr<Statement> childStatement) {
-    parentRelationshipStore->storeRelationship(std::make_shared<ParentRelationship>(parentStatement, childStatement));
+void ParentRelationshipManager::storeParentRelationship(std::shared_ptr<Statement> parentStatement, std::shared_ptr<Statement> childStatement, bool isDirect) {
+    parentRelationshipStore->storeRelationship(std::make_shared<ParentRelationship>(parentStatement, childStatement, isDirect));
 }

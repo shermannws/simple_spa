@@ -16,4 +16,6 @@ public:
      * Returns the exact statement type of the object
      */
     StatementType getStatementType() const;
+
+    bool isStatementType(StatementType statementType) const;
 };

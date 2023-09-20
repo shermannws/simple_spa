@@ -3,6 +3,8 @@
 #include <string>
 #include "Token.h"
 
+#include "QPSTypes.h"
+
 enum class QueryEntityType {
     Procedure,
     Stmt,
@@ -19,12 +21,12 @@ enum class QueryEntityType {
 
 class QueryEntity {
 private:
-    std::string synonym;
+    Synonym synonym;
     QueryEntityType type;
 public:
-    explicit QueryEntity(QueryEntityType type, const std::string &synonym);
-    QueryEntity(const std::shared_ptr<Token>& designEntity, const std::string& synonym);
+    explicit QueryEntity(QueryEntityType type, const Synonym &synonym);
+    QueryEntity(const std::shared_ptr<Token>& designEntity, const Synonym &synonym);
     bool operator==(const QueryEntity& other) const;
-    std::string getSynonym();
+    Synonym getSynonym();
     QueryEntityType getType();
 };
