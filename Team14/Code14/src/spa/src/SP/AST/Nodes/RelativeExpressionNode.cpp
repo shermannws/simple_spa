@@ -25,8 +25,8 @@ std::vector<std::shared_ptr<ASTNode>> RelativeExpressionNode::getAllChildNodes()
     return children;
 }
 
-void RelativeExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
+void RelativeExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) {
     if (auto relativeExpressionVisitor = std::dynamic_pointer_cast<RelativeExpressionNodeVisitor>(visitor)) {
-        relativeExpressionVisitor->visitRelativeExpressionNode(this);
+        relativeExpressionVisitor->visitRelativeExpressionNode(this, parents);
     }
 }

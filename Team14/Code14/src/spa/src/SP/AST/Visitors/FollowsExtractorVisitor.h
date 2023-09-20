@@ -22,5 +22,5 @@ public:
     /*!
      * Visits a statement list node and add all follows/follows* relationship into PKB
      */
-    void visitStatementListNode(StatementListNode* node) const override;
+    void visitStatementListNode(StatementListNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 };

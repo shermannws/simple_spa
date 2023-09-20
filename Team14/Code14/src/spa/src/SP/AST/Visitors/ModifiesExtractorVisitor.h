@@ -17,10 +17,10 @@ public:
     /*!
      * Visits an AssignNode and add variables used by the Assignment into PKB
      */
-    void visitAssignNode(AssignNode* node) const override;
+    void visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
      * Visits a ReadNode and add variable used into PKB
      */
-    void visitReadNode(ReadNode* node) const override;
+    void visitReadNode(ReadNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 };

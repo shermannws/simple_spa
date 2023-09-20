@@ -9,14 +9,14 @@ ModifiesExtractorVisitor::ModifiesExtractorVisitor(std::shared_ptr<PkbWriter> wr
 	this->pkbWriter = writer;
 }
 
-void ModifiesExtractorVisitor::visitAssignNode(AssignNode* node) const {
+void ModifiesExtractorVisitor::visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const {
 	this->pkbWriter->addModifiesRelationship(
 		std::make_shared<Statement>(node->getStatementNumber(), StatementType::Assign),
 		std::make_shared<Variable>(node->getVar()->getVarName())
 	);
 }
 
-void ModifiesExtractorVisitor::visitReadNode(ReadNode* node) const {
+void ModifiesExtractorVisitor::visitReadNode(ReadNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const {
 	this->pkbWriter->addModifiesRelationship(
 		std::make_shared<Statement>(node->getStatementNumber(), StatementType::Read),
 		std::make_shared<Variable>(node->getVar()->getVarName())

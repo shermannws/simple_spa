@@ -21,20 +21,20 @@ public:
     /*!
      * Visits an AssignNode and add variables used by the Assignment into PKB
      */
-    void visitAssignNode(AssignNode* node) const override;
+    void visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
      * Visits a PrintNode and add variable used into PKB
      */
-    void visitPrintNode(PrintNode* node) const override;
+    void visitPrintNode(PrintNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
      * Visits an IfNode and add variable used into PKB
      */
-    void visitIfNode(IfNode* node) const override;
+    void visitIfNode(IfNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
      * Visits a PrintNode and add variable used into PKB
      */
-    void visitWhileNode(WhileNode* node) const override;
+    void visitWhileNode(WhileNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 };

@@ -10,7 +10,7 @@ UsesExtractorVisitor::UsesExtractorVisitor(std::shared_ptr<PkbWriter> writer) {
 	this->pkbWriter = writer;
 }
 
-void UsesExtractorVisitor::visitAssignNode(AssignNode* node) const {
+void UsesExtractorVisitor::visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const {
 	std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func = [this](std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) -> void {
 		this->pkbWriter->addUsesRelationship(s, v);
 		};
@@ -22,14 +22,14 @@ void UsesExtractorVisitor::visitAssignNode(AssignNode* node) const {
 	);
 }
 
-void UsesExtractorVisitor::visitPrintNode(PrintNode* node) const {
+void UsesExtractorVisitor::visitPrintNode(PrintNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const {
 	this->pkbWriter->addUsesRelationship(
 		std::make_shared<Statement>(node->getStatementNumber(), StatementType::Print),
 		std::make_shared<Variable>(node->getVar()->getVarName())
 	);
 }
 
-void UsesExtractorVisitor::visitIfNode(IfNode* node) const {
+void UsesExtractorVisitor::visitIfNode(IfNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const {
 	std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func = [this](std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) -> void {
 		this->pkbWriter->addUsesRelationship(s, v);
 		};
@@ -41,8 +41,7 @@ void UsesExtractorVisitor::visitIfNode(IfNode* node) const {
 	);
 }
 
-
-void UsesExtractorVisitor::visitWhileNode(WhileNode* node) const {
+void UsesExtractorVisitor::visitWhileNode(WhileNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const {
 	std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func = [this](std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) -> void {
 		this->pkbWriter->addUsesRelationship(s, v);
 		};
