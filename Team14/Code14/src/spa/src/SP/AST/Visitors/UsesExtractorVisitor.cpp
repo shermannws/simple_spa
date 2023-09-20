@@ -1,5 +1,3 @@
-#include <functional>
-
 #include "UsesExtractorVisitor.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Statement.h"
@@ -15,7 +13,7 @@ UsesExtractorVisitor::UsesExtractorVisitor(std::shared_ptr<PkbWriter> writer) {
 }
 
 void UsesExtractorVisitor::visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const {
-	VisitorUtility::addAllStatementVariableRelationshipFrom(
+	return VisitorUtility::addAllStatementVariableRelationshipFrom(
 		node->getExpression(),
 		Statement(node->getStatementNumber(), StatementType::Assign),
 		parents,
@@ -24,7 +22,7 @@ void UsesExtractorVisitor::visitAssignNode(AssignNode* node, std::vector<std::sh
 }
 
 void UsesExtractorVisitor::visitPrintNode(PrintNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const {
-	VisitorUtility::addAllStatementVariableRelationshipFrom(
+	return VisitorUtility::addAllStatementVariableRelationshipFrom(
 		node->getVar(),
 		Statement(node->getStatementNumber(), StatementType::Print),
 		parents,
@@ -33,7 +31,7 @@ void UsesExtractorVisitor::visitPrintNode(PrintNode* node, std::vector<std::shar
 }
 
 void UsesExtractorVisitor::visitIfNode(IfNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const {
-	VisitorUtility::addAllStatementVariableRelationshipFrom(
+	return VisitorUtility::addAllStatementVariableRelationshipFrom(
 		node->getConditionalExpression(),
 		Statement(node->getStatementNumber(), StatementType::If),
 		parents,
@@ -42,7 +40,7 @@ void UsesExtractorVisitor::visitIfNode(IfNode* node, std::vector<std::shared_ptr
 }
 
 void UsesExtractorVisitor::visitWhileNode(WhileNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const {
-	VisitorUtility::addAllStatementVariableRelationshipFrom(
+	return VisitorUtility::addAllStatementVariableRelationshipFrom(
 		node->getConditionalExpression(),
 		Statement(node->getStatementNumber(), StatementType::While),
 		parents,

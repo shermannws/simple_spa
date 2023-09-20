@@ -50,4 +50,5 @@ public:
     void addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect);
     void addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v);
     void addModifiesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v);
+    void addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect);
 };

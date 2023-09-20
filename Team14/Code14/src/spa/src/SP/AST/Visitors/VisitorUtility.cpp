@@ -25,14 +25,13 @@ void VisitorUtility::addAllStatementVariableRelationshipFrom(
 			// Add indirect relationships between parent and variable
 			for (auto parent : parents) {
 				StatementNode* parentPtr = dynamic_cast<StatementNode*>(parent.get());
-				if (parentPtr) {
-					func(
-						std::make_shared<Statement>(
-							parentPtr->getStatementNumber(),
-							StatementTypeFactory::getStatementTypeFrom(parentPtr->getStatementType())),
-						std::make_shared<Variable>(ptr->getVarName())
-						);
-				}
+				assert(parentPtr != nullptr);
+				func(
+					std::make_shared<Statement>(
+						parentPtr->getStatementNumber(),
+						StatementTypeFactory::getStatementTypeFrom(parentPtr->getStatementType())),
+					std::make_shared<Variable>(ptr->getVarName())
+				);
 			}
 		}
 

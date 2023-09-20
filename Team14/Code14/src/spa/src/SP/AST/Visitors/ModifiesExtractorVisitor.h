@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "DesignExtractorVisitor.h"
 #include "../../AST/Nodes/AssignNode.h"
 #include "../../AST/Nodes/ReadNode.h"
@@ -8,6 +10,8 @@ class ModifiesExtractorVisitor : public DesignExtractorVisitor,
     public AssignNodeVisitor,
     public ReadNodeVisitor
 {
+private:
+    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func;
 public:
     /*!
      * Constructor for UsesExtractorVisitor

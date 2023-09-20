@@ -57,3 +57,7 @@ void PkbConcreteWriter::addWhileStatement(std::shared_ptr<Statement> s) {
 void PkbConcreteWriter::addModifiesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
     this->writerManager->addModifiesRelationship(s, v);
 }
+
+void PkbConcreteWriter::addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
+    this->writerManager->addParentRelationship(s1, s2, isDirect);
+}

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "DesignExtractorVisitor.h"
 #include "../../AST/Nodes/AssignNode.h"
 #include "../../AST/Nodes/PrintNode.h"
