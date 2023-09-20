@@ -99,3 +99,27 @@ bool StubPkbReader::isFollowsStar(Statement& statement1, Statement& statement2) 
 bool StubPkbReader::hasFollows() const {
     return false;
 }
+
+std::vector<std::vector<Entity>> StubPkbReader::getModifiesStmtPair(StatementType type) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<Entity> StubPkbReader::getModifiesTypeIdent(StatementType type, Variable& var) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getModifiesStmt(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getModifiesVar(Statement& stmt) const {
+    return std::vector<Entity>();
+}
+
+bool StubPkbReader::isStmtModifiesVar(Statement& stmt, Variable& var) const {
+    return false;
+}
+
+bool StubPkbReader::hasModifies(Statement& stmt) const {
+    return false;
+}

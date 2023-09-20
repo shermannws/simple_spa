@@ -55,4 +55,16 @@ public:
     bool isFollowsStar(Statement& statement1, Statement& statement2) const override;
 
     bool hasFollows() const override;
+
+    std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const override;
+
+    std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const override;
+
+    std::vector<Entity> getModifiesStmt(StatementType type) const override;
+
+    std::vector<Entity> getModifiesVar(Statement& stmt) const override;
+
+    bool isStmtModifiesVar(Statement& stmt, Variable& var) const override;
+
+    bool hasModifies(Statement& stmt) const override;
 };
