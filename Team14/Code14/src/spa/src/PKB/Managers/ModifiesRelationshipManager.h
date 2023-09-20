@@ -23,4 +23,9 @@ public:
      * Stores a new modifies relationship into PKB via the Manager
      */
     void storeModifiesRelationship(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable);
+
+    /*!
+     * Returns true if stmt modifies var, return false otherwise
+     */
+    bool isStmtModifiesVar(Statement& stmt, Variable& var) const;
 };

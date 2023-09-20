@@ -10,11 +10,13 @@
 #include "SP/AST/Visitors/EntityExtractorVisitor.h"
 #include "SP/AST/Visitors/FollowsExtractorVisitor.h"
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
+#include "SP/AST/Visitors/ModifiesExtractorVisitor.h"
+#include "SP/AST/Visitors/ParentExtractorVisitor.h"
 #include "SP/AST/Traverser/Traverser.h"
 #include "PKB/Pkb.h"
 #include "PKB/PkbConcreteWriter.h"
 
-TEST_CASE("Test AST Traverser") {
+TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     SPParser parser;
     std::string varName = "num1";
     std::vector<SPToken> tokens = {
@@ -69,8 +71,9 @@ TEST_CASE("Test AST Traverser") {
     std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
     std::shared_ptr<FollowsExtractorVisitor> followsExtractor = std::make_shared<FollowsExtractorVisitor>(pkbWriter);
     std::shared_ptr<UsesExtractorVisitor> usesExtractor = std::make_shared<UsesExtractorVisitor>(pkbWriter);
+    std::shared_ptr<ModifiesExtractorVisitor> modifiesExtractor = std::make_shared<ModifiesExtractorVisitor>(pkbWriter);
 
-    std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = { entityExtractor, followsExtractor, usesExtractor };
+    std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = { entityExtractor, followsExtractor, usesExtractor, modifiesExtractor };
 
     //Traverse the AST from root node
     Traverser traverser = Traverser(visitors);
