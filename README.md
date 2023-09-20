@@ -19,7 +19,7 @@ Name | Mobile | Email | Development OS/Toolchain
 -:|:-:|:-|-|
 Sherman Ng Wei Sheng | 98638227 | shermannws@u.nus.edu | Windows / Visual Studio 2022
 Lim Ji Wei | 84386004 | jiwei.lim@u.nus.edu | MacOS / CLion
-Justine Koh Yong Tai | 87807468 | justine.koh@u.nus.edu | CLion
+Justine Koh Yong Tai | 87807468 | justine.koh@u.nus.edu | MacOS / CLion
 Timothy Wong Eu-Jin | 97762861 | e0559903@u.nus.edu | MacOS / CLion
 Natania Yovela Purwanto | 88530204 | e0564062@u.nus.edu | MacOS / CLion
 Lethicia Renissa Santoso | 88528793 | e0560012@u.nus.edu | MacOS / CLion
