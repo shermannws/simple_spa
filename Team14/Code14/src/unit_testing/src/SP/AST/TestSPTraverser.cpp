@@ -91,12 +91,12 @@ TEST_CASE("Test AST Traverser") {
     REQUIRE(*(constantStore->getEntity(std::make_shared<Constant>(Constant(1)))) == *(std::make_shared<Constant>(1)));
 
     auto VarV = Variable("v");
-    auto usesV = usesRelationshipManager->getVariableAssignment(VarV);
+    auto usesV = usesRelationshipManager->getUsesTypeIdent(StatementType::Assign, VarV);
     REQUIRE(usesV.size() == 1);
     REQUIRE(usesV.at(0) == Statement(1, StatementType::Assign));
 
     auto VarY = Variable("y");
-    auto usesY = usesRelationshipManager->getVariableAssignment(VarY);
+    auto usesY = usesRelationshipManager->getUsesTypeIdent(StatementType::Assign, VarY);
     REQUIRE(usesY.size() == 1);
     REQUIRE(usesY.at(0) == Statement(1, StatementType::Assign));
 

@@ -28,12 +28,28 @@ std::vector<Entity> PkbConcreteReader::getAllStatements() const {
     return this->readerManager->getAllStatements();
 }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getAllUsesAssignVariablePair() const {
-    return this->readerManager->getAllUsesAssignVariablePair();
+std::vector<std::vector<Entity>> PkbConcreteReader::getUsesStmtPair(StatementType type) const {
+    return this->readerManager->getUsesStmtPair(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getAllUsesAssignByVariable(Variable& variable) const {
-    return this->readerManager->getAllUsesAssignByVariable(variable);
+std::vector<Entity> PkbConcreteReader::getUsesTypeIdent(StatementType type, Variable& var) const {
+    return this->readerManager->getUsesTypeIdent(type, var);
+}
+
+std::vector<Entity> PkbConcreteReader::getUsesStmt(StatementType type) const {
+    return this->readerManager->getUsesStmt(type);
+}
+
+std::vector<Entity> PkbConcreteReader::getUsesVar(Statement& stmt) const {
+    return this->readerManager->getUsesVar(stmt);
+}
+
+bool PkbConcreteReader::isStmtUsesVar(Statement& stmt, Variable& var) const {
+    return this->readerManager->isStmtUsesVar(stmt, var);
+}
+
+bool PkbConcreteReader::hasUses(Statement& stmt) const {
+    return this->readerManager->hasUses(stmt);
 }
 
 std::vector<std::vector<Entity>> PkbConcreteReader::getFollowsPair(StatementType formerType, StatementType latterType) const {

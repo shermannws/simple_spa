@@ -21,9 +21,17 @@ public:
 
     std::vector<Entity> getAllStatements() const override;
 
-    std::vector<std::vector<Entity>> getAllUsesAssignVariablePair() const override;
+    std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const override;
 
-    std::vector<Entity> getAllUsesAssignByVariable(Variable& variable) const override;
+    std::vector<Entity> getUsesTypeIdent(StatementType type, Variable& var) const override;
+
+    std::vector<Entity> getUsesStmt(StatementType type) const override;
+
+    std::vector<Entity> getUsesVar(Statement& stmt) const override;
+
+    bool isStmtUsesVar(Statement& stmt, Variable& var) const override;
+
+    bool hasUses(Statement& stmt) const override;
 
     std::vector<std::vector<Entity>> getFollowsPair(StatementType formerType, StatementType latterType) const override;
 
