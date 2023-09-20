@@ -1,6 +1,4 @@
 #include "ManagerUtils.h"
-#include "PKB/Relationships/FollowsRelationship.h"
-#include "PKB/RelationshipStores/FollowsRelationshipStore.h"
 
 template <typename S, typename R>
 std::vector<Entity> ManagerUtils::getFromStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<Entity(R&)> getter) {
@@ -12,5 +10,3 @@ std::vector<Entity> ManagerUtils::getFromStore(std::shared_ptr<S> store, std::fu
     }
     return result;
 }
-
-template std::vector<Entity> ManagerUtils::getFromStore<FollowsRelationshipStore, FollowsRelationship>(std::shared_ptr<FollowsRelationshipStore> store, std::function<bool(FollowsRelationship&)> matcher, std::function<Entity(FollowsRelationship&)> getter);
