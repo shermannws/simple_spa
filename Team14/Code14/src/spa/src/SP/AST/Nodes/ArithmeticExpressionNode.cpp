@@ -44,3 +44,19 @@ void ArithmeticExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> vi
         aenVisitor->visitArithmeticExpressionNode(this);
     }
 }
+
+std::string ArithmeticExpressionNode::toString() {
+    std::unordered_map<ArithmeticOperatorType, std::string> operatorTypeToStringMap = {
+            { ArithmeticOperatorType::Plus, AppConstants::STRING_PLUS },
+            { ArithmeticOperatorType::Minus, AppConstants::STRING_MINUS },
+            { ArithmeticOperatorType::Times, AppConstants::STRING_TIMES },
+            { ArithmeticOperatorType::Divide, AppConstants::STRING_DIVIDE },
+            { ArithmeticOperatorType::Modulo, AppConstants::STRING_MODULO }
+    };
+
+    return "(" +
+        this->getLeftExpression()->toString() +
+        operatorTypeToStringMap[operatorType] +
+        this->getRightExpression()->toString() +
+        ")";
+}

@@ -11,23 +11,15 @@ EntityExtractorVisitor::EntityExtractorVisitor(std::shared_ptr<PkbWriter> writer
 	this->pkbWriter = writer;
 }
 
-void EntityExtractorVisitor::visitProgramNode(ProgramNode *node) const {
-
-}
-
 void EntityExtractorVisitor::visitProcedureNode(ProcedureNode *node) const {
 	this->pkbWriter->addProcedure(std::make_shared<Procedure>(node->getProcedureName()));
-}
-
-void EntityExtractorVisitor::visitStatementListNode(StatementListNode *node) const {
-
 }
 
 void EntityExtractorVisitor::visitAssignNode(AssignNode *node) const {
 	this->pkbWriter->addAssignStatement(
 			std::make_shared<Statement>(node->getStatementNumber(), StatementType::Assign),
 			std::make_shared<Variable>(node->getVar()->getVarName()),
-			std::make_shared<std::string>("")); //TODO: to get the string expression
+			std::make_shared<std::string>(node->getExpression()->toString()));
 }
 
 void EntityExtractorVisitor::visitReadNode(ReadNode *node) const {
@@ -36,10 +28,6 @@ void EntityExtractorVisitor::visitReadNode(ReadNode *node) const {
 
 void EntityExtractorVisitor::visitPrintNode(PrintNode *node) const {
 	this->pkbWriter->addPrintStatement(std::make_shared<Statement>(node->getStatementNumber(), StatementType::Print));
-}
-
-void EntityExtractorVisitor::visitArithmeticExpressionNode(ArithmeticExpressionNode *node) const {
-
 }
 
 void EntityExtractorVisitor::visitVariableNode(VariableNode *node) const {

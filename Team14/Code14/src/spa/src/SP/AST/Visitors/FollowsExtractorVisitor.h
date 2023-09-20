@@ -14,7 +14,13 @@
 class FollowsExtractorVisitor : public DesignExtractorVisitor,
     public StatementListNodeVisitor {
 public:
+    /*!
+     * Constructor for FollowsExtractorVisitor
+     */
     FollowsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
+    /*!
+     * Visits a statement list node and add all follows/follows* relationship into PKB
+     */
     void visitStatementListNode(StatementListNode* node) const override;
 };
