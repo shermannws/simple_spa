@@ -7,7 +7,7 @@
 #include "PKB/RelationshipStores/FollowsRelationshipStore.h"
 #include "Commons/Entities/Statement.h"
 #include "PKB/Relationships/FollowsRelationship.h"
-#include "PKB/Managers/ManagerUtils.cpp"
+#include "PKB/Managers/ManagerUtils.h"
 
 class FollowsRelationshipManager {
 private:
