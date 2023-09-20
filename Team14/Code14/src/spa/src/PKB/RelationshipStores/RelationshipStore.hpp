@@ -26,3 +26,8 @@ template <typename T>
 typename std::unordered_set<std::shared_ptr<T>>::iterator RelationshipStore<T>::getEndIterator() {
     return this->relationshipStore.end();
 }
+
+template <typename T>
+bool RelationshipStore<T>::isEmpty() const {
+    return this->relationshipStore.empty();
+}

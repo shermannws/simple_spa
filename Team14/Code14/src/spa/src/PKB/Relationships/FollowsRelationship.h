@@ -5,6 +5,8 @@
 #include "Commons/Entities/Statement.h"
 
 class FollowsRelationship : public Relationship<Statement, Statement> {
+private:
+    bool direct;
 public:
 	/*!
 	 * Static field specifying the relatioshipType of the Relationship
@@ -15,5 +17,7 @@ public:
 	 * Constructor for FollowsRelationship
 	 */
 	FollowsRelationship(const std::shared_ptr<Statement> leftEntity,
-		const std::shared_ptr<Statement> rightEntity);
+		const std::shared_ptr<Statement> rightEntity, bool isDirect);
+
+    bool isDirect() const;
 };
