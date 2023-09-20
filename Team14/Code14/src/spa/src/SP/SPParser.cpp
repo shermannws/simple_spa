@@ -121,7 +121,8 @@ std::shared_ptr<CallNode> SPParser::parseCallStatement(std::queue<SPToken> &toke
 }
 
 std::shared_ptr<IfNode> SPParser::parseIfStatement(std::queue<SPToken> &tokens) {
-    auto currentStatementNumber = runningStatementNumber++;
+    auto currentStatementNumber = runningStatementNumber;
+    runningStatementNumber++;
 
     assert(tokens.front().getType() == TokenType::Name && tokens.front().getValue() == AppConstants::STRING_IF);
     tokens.pop(); // consume "if" keyword
@@ -157,7 +158,8 @@ std::shared_ptr<IfNode> SPParser::parseIfStatement(std::queue<SPToken> &tokens) 
 }
 
 std::shared_ptr<WhileNode> SPParser::parseWhileStatement(std::queue<SPToken> &tokens) {
-    auto currentStatementNumber = runningStatementNumber++;
+    auto currentStatementNumber = runningStatementNumber;
+    runningStatementNumber++;
 
     assert(tokens.front().getType() == TokenType::Name && tokens.front().getValue() == AppConstants::STRING_WHILE);
     tokens.pop(); // consume "while" keyword
