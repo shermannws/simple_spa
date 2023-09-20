@@ -15,7 +15,7 @@
 #include "SP/AST/Traverser/Traverser.h"
 #include "PKB/Pkb.h"
 #include "PKB/PkbConcreteWriter.h"
-#include "ASTGenerator.cpp"
+#include "ASTGenerator.h"
 
 TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     SPParser parser;
@@ -172,15 +172,39 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     Traverser traverser = Traverser(visitors);
     traverser.traverse(rootNode);
 
+    // Declare Entities for testing
+    auto stmt1 = Statement(1, StatementType::If);
+    auto stmt2 = Statement(2, StatementType::If);
+    auto stmt3 = Statement(3, StatementType::Assign);
+    auto stmt4 = Statement(4, StatementType::Assign);
+    auto stmt5 = Statement(5, StatementType::Read);
+    auto stmt6 = Statement(6, StatementType::Print);
+    auto stmt7 = Statement(7, StatementType::While);
+    auto stmt8 = Statement(8, StatementType::Assign);
+    auto stmt9 = Statement(9, StatementType::Read);
+    auto stmt10 = Statement(10, StatementType::Assign);
+
+    auto varA = Variable("a");
+    auto varB = Variable("b");
+    auto varC = Variable("c");
+    auto varD = Variable("d");
+    auto varE = Variable("e");
+    auto varF = Variable("f");
+    auto varG = Variable("g");
+    auto varH = Variable("h");
+    auto varI = Variable("i");
+    auto varJ = Variable("j");
+    auto varK = Variable("k");
+    auto varX = Variable("x");
+    auto varM = Variable("m");
+
+    // Check Procedure
     REQUIRE(*(procedureStore->getEntity(std::make_shared<Procedure>(Procedure("kk")))) == *(std::make_shared<Procedure>("kk")));
     
     // Check Follows
-    auto stmt1 = Statement(1, StatementType::If);
     auto follows1 = followsRelationshipManager->getFollowsStmtType(stmt1, StatementType::Stmt, true);
     REQUIRE(follows1.size() == 1);
-    REQUIRE(follows1.at(0) == Statement(9, StatementType::Read));
-
-    auto stmt3 = Statement(3, StatementType::Assign);
+    REQUIRE(follows1.at(0) == stmt9);
     auto follows3 = followsRelationshipManager->getFollowsStmtType(stmt3, StatementType::Stmt, true);
     REQUIRE(follows3.size() == 1);
     REQUIRE(follows3.at(0) == Statement(4, StatementType::Assign));
@@ -189,70 +213,69 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     // Check Follows*
     auto follows1star = followsRelationshipManager->getFollowsStmtType(stmt1, StatementType::Stmt, false);
     REQUIRE(follows1star.size() == 2);
-    REQUIRE(std::find(follows1star.begin(), follows1star.end(), Statement(9, StatementType::Read)) != follows1star.end());
-    REQUIRE(std::find(follows1star.begin(), follows1star.end(), Statement(10, StatementType::Assign)) != follows1star.end());
+    REQUIRE(std::find(follows1star.begin(), follows1star.end(), stmt9) != follows1star.end());
+    REQUIRE(std::find(follows1star.begin(), follows1star.end(), stmt10) != follows1star.end());
     
     // Check Uses exhaustively
     REQUIRE(usesRelationshipManager->getUsesStmtPair(StatementType::Stmt).size() == 17);
-
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(1, StatementType::If), Variable("a")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(1, StatementType::If), Variable("b")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(1, StatementType::If), Variable("c")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(1, StatementType::If), Variable("d")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(1, StatementType::If), Variable("f")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(1, StatementType::If), Variable("i")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(1, StatementType::If), Variable("j")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(1, StatementType::If), Variable("k")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(2, StatementType::If), Variable("c")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(2, StatementType::If), Variable("d")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(2, StatementType::If), Variable("f")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(3, StatementType::Assign), Variable("f")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(6, StatementType::Print), Variable("i")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(7, StatementType::While), Variable("j")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(7, StatementType::While), Variable("k")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(10, StatementType::Assign), Variable("x")));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(Statement(10, StatementType::Assign), Variable("c")));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varA));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varB));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varC));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varD));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varF));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varI));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varJ));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varK));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varC));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varD));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varF));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt3, varF));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt6, varI));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt7, varJ));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt7, varK));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt10, varX));
+    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt10, varC));
     
-    REQUIRE(!usesRelationshipManager->isStmtUsesVar(Statement(5, StatementType::Read), Variable("h")));
-    REQUIRE(!usesRelationshipManager->isStmtUsesVar(Statement(8, StatementType::Assign), Variable("a")));
-    REQUIRE(!usesRelationshipManager->isStmtUsesVar(Statement(10, StatementType::Assign), Variable("m")));
+    REQUIRE(!usesRelationshipManager->isStmtUsesVar(stmt5, varH));
+    REQUIRE(!usesRelationshipManager->isStmtUsesVar(stmt8, varA));
+    REQUIRE(!usesRelationshipManager->isStmtUsesVar(stmt10, varM));
 
     
     // Check Modifies
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(1, StatementType::If), Variable("e")));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(1, StatementType::If), Variable("g")));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(1, StatementType::If), Variable("h")));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(1, StatementType::If), Variable("a")));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt1, varE));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt1, varG));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt1, varH));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt1, varA));
 
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(2, StatementType::If), Variable("e")));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(2, StatementType::If), Variable("g")));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(2, StatementType::If), Variable("h")));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt2, varE));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt2, varG));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt2, varH));
 
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(3, StatementType::If), Variable("e")));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(4, StatementType::If), Variable("g")));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(5, StatementType::If), Variable("h")));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt3, varE));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt4, varG));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt5, varH));
 
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(7, StatementType::While), Variable("a")));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(8, StatementType::Assign), Variable("a")));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt7, varA));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt8, varA));
 
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(9, StatementType::Read), Variable("j")));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(Statement(10, StatementType::Assign), Variable("m")));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt9, varJ));
+    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt10, varM));
 
-    REQUIRE(!modifiesRelationshipManager->isStmtModifiesVar(Statement(1, StatementType::If), Variable("b")));
-    REQUIRE(!modifiesRelationshipManager->isStmtModifiesVar(Statement(10, StatementType::Assign), Variable("x")));
+    REQUIRE(!modifiesRelationshipManager->isStmtModifiesVar(stmt1, varB));
+    REQUIRE(!modifiesRelationshipManager->isStmtModifiesVar(stmt10, varX));
  
     // Check Parent
-    REQUIRE(parentRelationshipManager->isParent(Statement(1, StatementType::If), Statement(2, StatementType::If), true));
-    REQUIRE(parentRelationshipManager->isParent(Statement(1, StatementType::If), Statement(6, StatementType::Print), true));
-    REQUIRE(parentRelationshipManager->isParent(Statement(1, StatementType::If), Statement(7, StatementType::While), true));
-    REQUIRE(parentRelationshipManager->isParent(Statement(2, StatementType::If), Statement(3, StatementType::Assign), true));
-    REQUIRE(parentRelationshipManager->isParent(Statement(2, StatementType::If), Statement(4, StatementType::Assign), true));
-    REQUIRE(parentRelationshipManager->isParent(Statement(2, StatementType::If), Statement(5, StatementType::Read), true));
-    REQUIRE(parentRelationshipManager->isParent(Statement(7, StatementType::While), Statement(8, StatementType::Assign), true));
+    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt2, true));
+    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt6, true));
+    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt7, true));
+    REQUIRE(parentRelationshipManager->isParent(stmt2, stmt3, true));
+    REQUIRE(parentRelationshipManager->isParent(stmt2, stmt4, true));
+    REQUIRE(parentRelationshipManager->isParent(stmt2, stmt5, true));
+    REQUIRE(parentRelationshipManager->isParent(stmt7, stmt8, true));
 
     // Check Parent*
-    REQUIRE(parentRelationshipManager->isParent(Statement(1, StatementType::If), Statement(3, StatementType::Assign), false));
-    REQUIRE(parentRelationshipManager->isParent(Statement(1, StatementType::If), Statement(4, StatementType::Assign), false));
-    REQUIRE(parentRelationshipManager->isParent(Statement(1, StatementType::If), Statement(5, StatementType::Read), false));
-    REQUIRE(parentRelationshipManager->isParent(Statement(1, StatementType::If), Statement(8, StatementType::Assign), false));
+    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt3, false));
+    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt4, false));
+    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt5, false));
+    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt8, false));
 }
