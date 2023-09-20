@@ -121,6 +121,8 @@ std::shared_ptr<CallNode> SPParser::parseCallStatement(std::queue<SPToken> &toke
 }
 
 std::shared_ptr<IfNode> SPParser::parseIfStatement(std::queue<SPToken> &tokens) {
+    auto currentStatementNumber = runningStatementNumber++;
+
     assert(tokens.front().getType() == TokenType::Name && tokens.front().getValue() == AppConstants::STRING_IF);
     tokens.pop(); // consume "if" keyword
 
@@ -149,12 +151,14 @@ std::shared_ptr<IfNode> SPParser::parseIfStatement(std::queue<SPToken> &tokens) 
     tokens.pop(); // consume "}" token
 
     std::shared_ptr<IfNode> ifNode = std::make_shared<IfNode>(
-            runningStatementNumber, conditionalExpression, thenStatementList, elseStatementList);
-    runningStatementNumber++;
+        currentStatementNumber, conditionalExpression, thenStatementList, elseStatementList);
+
     return ifNode;
 }
 
 std::shared_ptr<WhileNode> SPParser::parseWhileStatement(std::queue<SPToken> &tokens) {
+    auto currentStatementNumber = runningStatementNumber++;
+
     assert(tokens.front().getType() == TokenType::Name && tokens.front().getValue() == AppConstants::STRING_WHILE);
     tokens.pop(); // consume "while" keyword
 
@@ -171,8 +175,8 @@ std::shared_ptr<WhileNode> SPParser::parseWhileStatement(std::queue<SPToken> &to
     tokens.pop(); // consume "}" token
 
     std::shared_ptr<WhileNode> whileNode = std::make_shared<WhileNode>(
-            runningStatementNumber, conditionalExpression, statementList);
-    runningStatementNumber++;
+        currentStatementNumber, conditionalExpression, statementList);
+
     return whileNode;
 }
 
