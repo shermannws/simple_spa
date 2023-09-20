@@ -20,3 +20,15 @@ bool QPSUtil::isOfModifiesStmtType(QueryEntityType entityType) {
            || entityType == QueryEntityType::Read || entityType == QueryEntityType::If
            || entityType == QueryEntityType::While || entityType == QueryEntityType::Call;
 }
+
+bool QPSUtil::isRootOfEntref(RootType rootType) {
+    return rootType == RootType::Synonym || rootType == RootType::Wildcard
+           || rootType == RootType::Ident;
+}
+
+bool QPSUtil::isRootOfStmtref(RootType rootType) {
+    return rootType == RootType::Synonym || rootType == RootType::Wildcard
+           || rootType == RootType::Integer;
+}
+
+

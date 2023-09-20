@@ -26,7 +26,7 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
                 // TODO: change to return SemanticValHandler::handle(query, clause); when Uses(proc,v) is handled
                 throw std::runtime_error("Invalid LHS synonym, non-statement found");
             }
-            break;
+//            break;
         }
         case RootType::Integer: {
             RefType leftRefType = RefType::StmtRef;
@@ -71,11 +71,13 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
             if (entityType != QueryEntityType::Variable) {
                 throw std::runtime_error("Invalid RHS synonym, non-variable found");
             }
-            break;
         }
         case RootType::Ident:
-        case RootType::Wildcard:
+        case RootType::Wildcard: {
+            RefType rightRefType = RefType::EntRef;
+            rightRef.setType(rightRefType);
             break;
+        }
         default:
             throw std::runtime_error("Invalid RHS entRef");
     }

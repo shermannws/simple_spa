@@ -23,11 +23,14 @@ void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause)
         if (!QPSUtil::isOfStmtType(entityType)) {
             throw std::runtime_error("Invalid LHS synonym, non-statement found");
         }
-        break;
+//        break;
     }
     case RootType::Integer:
-    case RootType::Wildcard:
+    case RootType::Wildcard: {
+        RefType leftRefType = RefType::StmtRef;
+        leftRef.setType(leftRefType);
         break;
+    }
     default:
         throw std::runtime_error("Invalid LHS stmtRef");
     }
@@ -39,13 +42,16 @@ void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause)
             if (!QPSUtil::isOfStmtType(entityType)) {
                 throw std::runtime_error("Invalid RHS synonym, non-statement found");
             }
-            break;
+//            break;
         }
         case RootType::Integer:
-        case RootType::Wildcard:
+        case RootType::Wildcard: {
+            RefType rightRefType = RefType::StmtRef;
+            rightRef.setType(rightRefType);
             break;
+        }
         default:
-            throw std::runtime_error("Invalid LHS stmtRef");
+            throw std::runtime_error("Invalid RHS stmtRef");
     }
 
     return SemanticValHandler::handle(query, clause);

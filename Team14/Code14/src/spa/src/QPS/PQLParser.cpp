@@ -8,6 +8,7 @@
 #include "QPS/SemanticValHandler/SynonymHandler.h"
 #include "QPS/SemanticValHandler/StmtrefStmtrefHandler.h"
 #include "QPS/SemanticValHandler/StmtrefEntrefHandler.h"
+#include "QPSUtil.h"
 
 
 PQLParser::PQLParser(const std::string& str) : tokenizer(std::make_shared<Tokenizer>(str)){}
@@ -151,48 +152,31 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause>& c
     Ref& rightRef = clause->getSecondParam();
     RootType leftRootType = leftRef.getRootType();
     RootType rightRootType = rightRef.getRootType();
-    RefType leftType = RefType::Invalid;
-    RefType rightType = RefType::Invalid;
 
-    // TODO: to refactor checks of entRef and stmtRef to Utils?
     switch (type) {
-        case ClauseType::Uses:
-        case ClauseType::Modifies:
-            // check right
-            if (rightRootType == RootType::Synonym || rightRootType == RootType::Wildcard
-                || rightRootType == RootType::Ident) {
-                rightType = RefType::EntRef;
-            } else {
-                throw std::runtime_error("Invalid RHS, entRef expected");
-            }
-            break;
-        case ClauseType::Follows:
-        case ClauseType::FollowsStar:
-        case ClauseType::Parent:
-        case ClauseType::ParentStar:
-            // check left
-            if (leftRootType == RootType::Synonym || leftRootType == RootType::Wildcard
-                || leftRootType == RootType::Integer) {
-                leftType = RefType::StmtRef;
-            } else {
-                throw std::runtime_error("Invalid LHS, stmtRef expected");
-            }
-
-            // check right
-            if (rightRootType == RootType::Synonym || rightRootType == RootType::Wildcard
-                || rightRootType == RootType::Integer) {
-                rightType = RefType::StmtRef;
-            } else {
-                throw std::runtime_error("Invalid RHS, stmtRef expected");
-            }
-            break;
-        default:
-            throw std::runtime_error("Invalid ClauseType in Such That Clause");
+    case ClauseType::Uses:
+    case ClauseType::Modifies:
+        // check right
+        if (!QPSUtil::isRootOfEntref(rightRootType)) {
+            throw std::runtime_error("Invalid RHS, entRef expected");
+        }
+        break;
+    case ClauseType::Follows:
+    case ClauseType::FollowsStar:
+    case ClauseType::Parent:
+    case ClauseType::ParentStar:
+        // check left
+        if (!QPSUtil::isRootOfStmtref(leftRootType)) {
+            throw std::runtime_error("Invalid LHS, stmtRef expected");
+        }
+        // check right
+        if (!QPSUtil::isRootOfStmtref(rightRootType)) {
+            throw std::runtime_error("Invalid RHS, stmtRef expected");
+        }
+        break;
+    default:
+        throw std::runtime_error("Invalid ClauseType in Such That Clause");
     }
-
-    // TODO: decide whether all types should be set in Validation Handlers instead
-    leftRef.setType(leftType);
-    rightRef.setType(rightType);
 }
 
 // TODO: generalise this to cater both such that & pattern clauses
