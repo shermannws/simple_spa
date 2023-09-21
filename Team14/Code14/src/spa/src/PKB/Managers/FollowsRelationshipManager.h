@@ -7,11 +7,9 @@
 #include "PKB/RelationshipStores/FollowsRelationshipStore.h"
 #include "Commons/Entities/Statement.h"
 #include "PKB/Relationships/FollowsRelationship.h"
-#include "PKB/Managers/ManagerUtils.h"
+#include "PKB/Managers/StmtToStmtRelationshipManager.h"
 
-class FollowsRelationshipManager {
-private:
-    std::shared_ptr<FollowsRelationshipStore> followsRelationshipStore;
+class FollowsRelationshipManager : StmtToStmtRelationshipManager<FollowsRelationshipStore, FollowsRelationship> {
 public:
     FollowsRelationshipManager();
 
