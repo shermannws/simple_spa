@@ -2,6 +2,7 @@
 
 #include <string>
 #include <regex>
+#include <unordered_map>
 
 std::unordered_map<TokenType, int> operatorPrecedence = {
         {TokenType::Asterisk, 1},
