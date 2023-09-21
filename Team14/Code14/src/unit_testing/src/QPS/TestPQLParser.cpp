@@ -733,77 +733,6 @@ TEST_CASE("Invalid processSuchThat cases") {
 
 }
 
-//TEST_CASE("extractExpression") {
-//    SECTION("only const value") {
-//        std::string input = "\"9999\"";
-//        PQLParser parser(input);
-//        auto actual = parser.extractExpression();
-//        REQUIRE(actual == "(9999)");
-//    }
-//
-//    SECTION("only var name") {
-//        std::string input = "\"thisisaverylongvariablename123\"";
-//        PQLParser parser(input);
-//        auto actual = parser.extractExpression();
-//        std::string expected = "(thisisaverylongvariablename123)";
-//        REQUIRE(actual == expected);
-//    }
-//
-//    SECTION("only var name with brackets") { // BUG when enclosed in bracket
-//        std::string input = "\"(v)\"";
-//        PQLParser parser(input);
-//        auto actual = parser.extractExpression();
-//        std::string expected = "(v)";
-//        REQUIRE(actual == expected);
-//    }
-//
-//    SECTION("only var name with multiple brackets") { // BUG when enclosed in bracket
-//        std::string input = "\"((v))\"";
-//        PQLParser parser(input);
-//        auto actual = parser.extractExpression();
-//        std::string expected = "(v)";
-//        REQUIRE(actual == expected);
-//    }
-//
-//    SECTION("all operators, no brackets") {
-//        std::string input = "\"x + y % z * 3 - a + b / q / 9\"";
-//        PQLParser parser(input);
-//        auto actual = parser.extractExpression();
-//        std::string expected = "((((x)+(((y)%(z))*(3)))-(a))+(((b)/(q))/(9)))";
-//        REQUIRE(actual == expected);
-//    }
-//
-//    SECTION("brackets with more than 1 operator") {
-//        std::string input = "\"(x+1) * 8 % q - (a+b+c)     +1\"";
-//        PQLParser parser(input);
-//        auto actual = parser.extractExpression();
-//        std::string expected = "((((((x)+(1))*(8))%(q))-(((a)+(b))+(c)))+(1))";
-//        REQUIRE(actual == expected);
-//    }
-//
-//    SECTION("nested brackets ") {
-//        std::string input = "\"x * (b * a + (n + (1%c))) \"";
-//        PQLParser parser(input);
-//        auto actual = parser.extractExpression();
-//        std::string expected = "((x)*(((b)*(a))+((n)+((1)%(c)))))";
-//        REQUIRE(actual == expected);
-//    }
-//
-//    SECTION("invalid const value") {
-//        std::string input = "\"09999\""; // tested ; ()
-//        PQLParser parser(input);
-//        REQUIRE_THROWS_WITH(parser.extractExpression(), "Invalid expression spec");
-//    }
-//
-//    SECTION("invalid expressions") {
-//        std::string input = "\"x+(y-z\""; // tested ; ()
-//        PQLParser parser(input);
-//        REQUIRE_THROWS_WITH(parser.extractExpression(), "not enough factors");
-//    }
-//
-//}
-
-
 TEST_CASE("processPatternClause") {
     SECTION("Valid wildcard pattern") {
         PQLParser parser("assign a; variable v;\nSelect a pattern a(_,_)");
@@ -848,6 +777,11 @@ TEST_CASE("processPatternClause") {
         REQUIRE(leftRef.getRep() == "y");
         REQUIRE(rightRef.first == ExpressionSpecType::PartialMatch);
         REQUIRE(rightRef.second == "(x)");
+    }
+
+    SECTION("invalid pattern") {
+        PQLParser parser("assign a; variable v;\nSelect a pattern a(\"y\",_ _)");
+        REQUIRE_THROWS_WITH(parser.parse(), "expected right parenthesis");
     }
 
 }

@@ -252,7 +252,7 @@ void PQLParser::validatePatternSyntax(std::shared_ptr<PatternClause>& clause) {
 
     next = tokenizer->popToken();
     if (!next->isToken(TokenType::Rparenthesis)) {
-        throw std::runtime_error("No right parenthesis");
+        throw std::runtime_error("expected right parenthesis");
     }
 }
 
