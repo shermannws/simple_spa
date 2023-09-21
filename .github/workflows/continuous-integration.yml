@@ -71,7 +71,6 @@ jobs:
           cmake --build . --target unit_testing --config Release
           cmake --build . --target integration_testing --config Release
           cmake --build . --target autotester --config Release
-          cmake --build . --target spa_benchmarks --config Release
 
       - name: Unit Testing
         shell: bash
