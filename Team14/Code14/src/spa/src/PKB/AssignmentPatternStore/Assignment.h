@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "../../Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
