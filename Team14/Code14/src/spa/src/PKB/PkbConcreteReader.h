@@ -60,6 +60,8 @@ public:
 
     bool hasFollows() const override;
 
+    // MODIFIES QUERY
+
     std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const override;
 
     std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const override;
@@ -90,4 +92,32 @@ public:
 
     // pattern a ("x", "x")
     std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const override;
+
+    // PARENT QUERY
+    // FOLLOWS QUERY
+    std::vector<std::vector<Entity>> getParentPair(StatementType formerType, StatementType latterType) const override;
+
+    std::vector<std::vector<Entity>> getParentStarPair(StatementType formerType, StatementType latterType) const override;
+
+    std::vector<Entity> getParentTypeStmt(StatementType type, Statement& statement) const override;
+
+    std::vector<Entity> getParentStarTypeStmt(StatementType type, Statement& statement) const override;
+
+    std::vector<Entity> getParentTypeWildcard(StatementType type) const override;
+
+    std::vector<Entity> getParentStarTypeWildcard(StatementType type) const override;
+
+    std::vector<Entity> getParentStmtType(Statement& statement, StatementType type) const override;
+
+    std::vector<Entity> getParentStarStmtType(Statement& statement, StatementType type) const override;
+
+    std::vector<Entity> getParentWildcardType(StatementType type) const override;
+
+    std::vector<Entity> getParentStarWildcardType(StatementType type) const override;
+
+    bool isParent(Statement& statement1, Statement& statement2) const override;
+
+    bool isParentStar(Statement& statement1, Statement& statement2) const override;
+
+    bool hasParent() const override;
 };

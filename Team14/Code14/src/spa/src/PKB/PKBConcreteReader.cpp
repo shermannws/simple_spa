@@ -153,3 +153,55 @@ std::vector<Entity> PkbConcreteReader::getAssignStmtsByLhs(Variable& lhs) const 
 std::vector<Entity> PkbConcreteReader::getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const {
     return this->readerManager->getAssignStmtsByLhsRhs(lhs, rhs, hasRhsWildCard);
 }
+
+std::vector<std::vector<Entity>> PkbConcreteReader::getParentPair(StatementType formerType, StatementType latterType) const {
+    return this->readerManager->getParentPair(formerType, latterType);
+}
+
+std::vector<std::vector<Entity>> PkbConcreteReader::getParentStarPair(StatementType formerType, StatementType latterType) const {
+    return this->readerManager->getParentStarPair(formerType, latterType);
+}
+
+std::vector<Entity> PkbConcreteReader::getParentTypeStmt(StatementType type, Statement& statement) const {
+    return this->readerManager->getParentTypeStmt(type, statement);
+}
+
+std::vector<Entity> PkbConcreteReader::getParentStarTypeStmt(StatementType type, Statement& statement) const {
+    return this->readerManager->getParentStarTypeStmt(type, statement);
+}
+
+std::vector<Entity> PkbConcreteReader::getParentTypeWildcard(StatementType type) const {
+    return this->readerManager->getParentTypeWildcard(type);
+}
+
+std::vector<Entity> PkbConcreteReader::getParentStarTypeWildcard(StatementType type) const {
+    return this->readerManager->getParentStarTypeWildcard(type);
+}
+
+std::vector<Entity> PkbConcreteReader::getParentStmtType(Statement& statement, StatementType type) const {
+    return this->readerManager->getParentStmtType(statement, type);
+}
+
+std::vector<Entity> PkbConcreteReader::getParentStarStmtType(Statement& statement, StatementType type) const {
+    return this->readerManager->getParentStarStmtType(statement, type);
+}
+
+std::vector<Entity> PkbConcreteReader::getParentWildcardType(StatementType type) const {
+    return this->readerManager->getParentWildcardType(type);
+}
+
+std::vector<Entity> PkbConcreteReader::getParentStarWildcardType(StatementType type) const {
+    return this->readerManager->getParentStarWildcardType(type);
+}
+
+bool PkbConcreteReader::isParent(Statement& statement1, Statement& statement2) const {
+    return this->readerManager->isParent(statement1, statement2);
+}
+
+bool PkbConcreteReader::isParentStar(Statement& statement1, Statement& statement2) const {
+    return this->readerManager->isParentStar(statement1, statement2);
+}
+
+bool PkbConcreteReader::hasParent() const {
+    return this->readerManager->hasParent();
+}

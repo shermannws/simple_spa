@@ -150,3 +150,55 @@ std::vector<Entity> StubPkbReader::getAssignStmtsByLhs(Variable& lhs) const {
 std::vector<Entity> StubPkbReader::getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const {
     return std::vector<Entity>();
 }
+
+std::vector<std::vector<Entity>> StubPkbReader::getParentPair(StatementType formerType, StatementType latterType) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<std::vector<Entity>> StubPkbReader::getParentStarPair(StatementType formerType, StatementType latterType) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<Entity> StubPkbReader::getParentTypeStmt(StatementType type, Statement& statement) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getParentStarTypeStmt(StatementType type, Statement& statement) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getParentTypeWildcard(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getParentStarTypeWildcard(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getParentStmtType(Statement& statement, StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getParentStarStmtType(Statement& statement, StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getParentWildcardType(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getParentStarWildcardType(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+bool StubPkbReader::isParent(Statement& statement1, Statement& statement2) const {
+    return false;
+}
+
+bool StubPkbReader::isParentStar(Statement& statement1, Statement& statement2) const  {
+    return false;
+}
+
+bool StubPkbReader::hasParent() const {
+    return false;
+}

@@ -86,4 +86,31 @@ public:
 
     // pattern a ("x", "x")
     virtual std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const = 0;
+
+    // PARENT & PARENT* QUERY
+    virtual std::vector<std::vector<Entity>> getParentPair(StatementType formerType, StatementType latterType) const = 0;
+
+    virtual std::vector<std::vector<Entity>> getParentStarPair(StatementType formerType, StatementType latterType) const = 0;
+
+    virtual std::vector<Entity> getParentTypeStmt(StatementType type, Statement& statement) const = 0;
+
+    virtual std::vector<Entity> getParentStarTypeStmt(StatementType type, Statement& statement) const = 0;
+
+    virtual std::vector<Entity> getParentTypeWildcard(StatementType type) const = 0;
+
+    virtual std::vector<Entity> getParentStarTypeWildcard(StatementType type) const = 0;
+
+    virtual std::vector<Entity> getParentStmtType(Statement& statement, StatementType type) const = 0;
+
+    virtual std::vector<Entity> getParentStarStmtType(Statement& statement, StatementType type) const = 0;
+
+    virtual std::vector<Entity> getParentWildcardType(StatementType type) const = 0;
+
+    virtual std::vector<Entity> getParentStarWildcardType(StatementType type) const = 0;
+
+    virtual bool isParent(Statement& statement1, Statement& statement2) const = 0;
+
+    virtual bool isParentStar(Statement& statement1, Statement& statement2) const = 0;
+
+    virtual bool hasParent() const = 0;
 };
