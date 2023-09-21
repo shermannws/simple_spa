@@ -2,6 +2,15 @@
 
 #include <string>
 #include <regex>
+#include <unordered_map>
+
+std::unordered_map<TokenType, int> operatorPrecedence = {
+        {TokenType::Asterisk, 1},
+        {TokenType::Slash, 1},
+        {TokenType::Percent, 1},
+        {TokenType::Plus, 0},
+        {TokenType::Minus, 0},
+};
 
 Token::Token(const std::string& input) {
     this->rep = input;
@@ -56,15 +65,24 @@ bool Token::isToken(TokenType ttype) {
 }
 
 bool Token::isDesignEntity() {
-    if (type == TokenType::Word && (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" ||
-    rep == "assign" || rep == "call" || rep == "while" || rep == "if" || rep == "variable" || rep == "constant")
-    ) {
-        return true;
-    }
-    return false;
+   return type == TokenType::Word && (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print"
+        || rep == "assign" || rep == "call" || rep == "while" || rep == "if" || rep == "variable" || rep == "constant");
 }
 
 bool Token::isIdent() {
     std::regex pattern("[a-zA-Z][a-zA-Z0-9]*");
     return std::regex_match(rep, pattern);
+}
+
+bool Token::isOperand() {
+    return isIdent() || isInteger();
+}
+
+bool Token::isOperator() {
+    return (isToken(TokenType::Plus) || isToken(TokenType::Minus)|| isToken(TokenType::Asterisk) ||
+            isToken(TokenType::Slash) || isToken(TokenType::Percent));
+}
+
+bool Token::precedes(const std::shared_ptr<Token> other){
+    return operatorPrecedence[type] >= operatorPrecedence[other->getType()];
 }

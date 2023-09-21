@@ -3,6 +3,7 @@
 #include "QueryEntity.h"
 #include "Clause.h"
 #include "Ref.h"
+#include "Token.h"
 #include <string>
 
 
@@ -12,7 +13,8 @@ private:
 
 public:
     SuchThatClause();
+    SuchThatClause(const std::shared_ptr<Token>& token);
     void setSecondParam(Ref& ref);
-    Ref getSecondParam();
+    Ref& getSecondParam();
 
 };

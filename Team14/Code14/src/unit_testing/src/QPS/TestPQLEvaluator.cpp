@@ -7,7 +7,7 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
-#include "StubPkbReader.h"
+#include "../IntegrationTesting/TestPkbQps/StubPkbReader.h"
 
 std::shared_ptr<StubPkbReader> stubPkbReader = std::make_shared<StubPkbReader>();
 
@@ -70,11 +70,13 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
 
     // build a query for the query "assign a; Select a pattern a(_, _)"
     Query queryObj = Query();
-    std::shared_ptr<QueryEntity> assignInQuery = std::make_shared<QueryEntity>(QueryEntityType::Assign, "a");
+    Synonym assignSyn = "a";
+    std::shared_ptr<QueryEntity> assignInQuery = std::make_shared<QueryEntity>(QueryEntityType::Assign, assignSyn);
     queryObj.addDeclaration(assignInQuery);
     queryObj.addSelect(assignInQuery);
-    PatternClause patternClause = PatternClause();
-    patternClause.setEntity(assignInQuery);
+    ExpressionSpec rhs = ExpressionSpec{ExpressionSpecType::Wildcard, ""};
+    std::shared_ptr<PatternClause> patternClause = std::make_shared<PatternClause>();
+    patternClause->setSyn(assignSyn);
     Ref wildcard;
     std::string rep = "_";
     RefType ent = RefType::EntRef;
@@ -82,8 +84,8 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     wildcard.setRep(rep);
     wildcard.setRootType(root);
     wildcard.setType(ent);
-    patternClause.setFirstParam(wildcard);
-    patternClause.setSecondParam(wildcard);
+    patternClause->setFirstParam(wildcard);
+    patternClause->setSecondParam(rhs);
     queryObj.addPattern(patternClause);
 
     Result resultObj = evaluator.evaluate(queryObj);

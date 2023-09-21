@@ -17,8 +17,14 @@ bool Result::getBoolResult() {
     return boolResult;
 }
 
-void Result::setTuples(const ResultTuples& ttuples) {
-    tuples = ttuples;
+void Result::setTuples(const std::vector<std::vector<Entity>>& resultTuples) {
+    tuples = resultTuples;
+}
+
+void Result::setTuples(const std::vector<Entity>& resultEntities) {
+    for (const Entity& entity : resultEntities) {
+        tuples.push_back(std::vector<Entity>{entity});
+    }
 }
 
 ResultTuples Result::getTuples() {
