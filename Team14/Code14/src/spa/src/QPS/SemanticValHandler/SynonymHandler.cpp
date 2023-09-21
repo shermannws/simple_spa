@@ -29,7 +29,14 @@ void SynonymHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
         }
     }
 
-    return SemanticValHandler::handle(query, clause);
+    auto pattern = std::dynamic_pointer_cast<PatternClause>(clause);
+    if (pattern) {
+        // validate Entity Synonym declared
+        EntityPtr entity = query.getEntity(pattern->getSyn());
+        if (!entity) {
+            throw std::runtime_error("Undeclared synonym in pattern clause entity");
+        }
+    }
 
-    // TODO: use this handler to check synonyms in pattern as well :-)
+    return SemanticValHandler::handle(query, clause);
 }

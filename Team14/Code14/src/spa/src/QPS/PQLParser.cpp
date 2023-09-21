@@ -9,6 +9,7 @@
 #include "QPS/SemanticValHandler/SynonymHandler.h"
 #include "QPS/SemanticValHandler/StmtrefStmtrefHandler.h"
 #include "QPS/SemanticValHandler/StmtrefEntrefHandler.h"
+#include "QPS/SemanticValHandler/EntrefExprSpecHandler.h"
 #include "QPSUtil.h"
 
 
@@ -100,6 +101,46 @@ void PQLParser::processSuchThatClause(Query& query) {
     query.addSuchThat(clause);
 }
 
+void PQLParser::processPatternClause(Query& query) {
+    std::shared_ptr<Token> patternToken = tokenizer->peekToken();
+    try {
+        expect(patternToken->isToken("pattern"), "No pattern");
+    } catch (...) {
+        return;
+    }
+
+    std::shared_ptr<PatternClause> clause = std::make_shared<PatternClause>();
+
+    std::shared_ptr<Token> patternSyn = tokenizer->popToken();
+    clause->setSyn(patternSyn->getRep());
+
+    std::shared_ptr<Token> next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Lparenthesis)) {
+        throw std::runtime_error("Expected Lparenthesis");
+    }
+
+    Ref firstParam = extractRef();
+    clause->setFirstParam(firstParam);
+
+    next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Comma)) {
+        throw std::runtime_error("Expected comma ");
+    }
+
+    try {
+        ExpressionSpec secondParam = extractExpressionSpec();
+        clause->setSecondParam(secondParam);
+    } catch (...) {
+        throw std::runtime_error("INVALID EXPRESSION SPEC ");
+    }
+
+    next = tokenizer->popToken();
+    expect(next->isToken(TokenType::Rparenthesis), "Expected right parenthesis");
+
+    validatePatternSemantics(query, clause);
+    query.addPattern(clause);
+}
+
 void PQLParser::validateSuchThatSyntax(const std::shared_ptr<SuchThatClause>& clause) {
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken(TokenType::Lparenthesis)) {
@@ -167,44 +208,11 @@ void PQLParser::validateSuchThatSemantics(Query& query, const std::shared_ptr<Su
     synonymHandler->handle(query, clause);
 }
 
-void PQLParser::processPatternClause(Query& query) {
-    std::shared_ptr<Token> patternToken = tokenizer->peekToken();
-    try {
-        expect(patternToken->isToken("pattern"), "No pattern");
-    } catch (...) {
-        return;
+std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string& errorMsg) {
+    if (!isToken) {
+        throw std::runtime_error(errorMsg);
     }
-
-    std::shared_ptr<PatternClause> clause = std::make_shared<PatternClause>();
-
-    std::shared_ptr<Token> patternSyn = tokenizer->popToken();
-    clause->setSyn(patternSyn->getRep());
-
-    std::shared_ptr<Token> next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Lparenthesis)) {
-        throw std::runtime_error("Expected Lparenthesis");
-    }
-
-    Ref firstParam = extractRef();
-    clause->setFirstParam(firstParam);
-
-    next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Comma)) {
-        throw std::runtime_error("Expected comma ");
-    }
-
-    try {
-        ExpressionSpec secondParam = extractExpressionSpec();
-        clause->setSecondParam(secondParam);
-    } catch (...) {
-        throw std::runtime_error("INVALID EXPRESSION SPEC ");
-    }
-
-    next = tokenizer->popToken();
-    expect(next->isToken(TokenType::Rparenthesis), "Expected right parenthesis");
-
-    validatePatternSemantics(query, clause);
-    query.addPattern(clause);
+    return tokenizer->popToken();
 }
 
 Ref PQLParser::extractRef() {
@@ -239,11 +247,11 @@ Ref PQLParser::extractRef() {
     return ref;
 }
 
-std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string& errorMsg) {
-    if (!isToken) {
-        throw std::runtime_error(errorMsg);
-    }
-    return tokenizer->popToken();
+void PQLParser::validatePatternSemantics(Query& query, const std::shared_ptr<PatternClause>& clause) {
+    std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
+    std::shared_ptr<EntrefExprSpecHandler> EntExprHandler = std::make_shared<EntrefExprSpecHandler>();
+    synonymHandler->setNext(EntExprHandler);
+    synonymHandler->handle(query, clause);
 }
 
 // Expr spec methods
@@ -402,31 +410,5 @@ bool PQLParser::isFactor(std::vector<std::shared_ptr<Token>>& input, size_t& ind
         }
     }
     return false;
-}
-
-void PQLParser::validatePatternSemantics(Query& query, std::shared_ptr<PatternClause>& clause) {
-    EntityPtr entity = query.getEntity(clause->getSyn());
-    if (!entity) {
-        throw std::runtime_error("Undeclared synonym in pattern clause");
-    } else if (entity->getType() != QueryEntityType::Assign) {
-        throw std::runtime_error("Unsupported pattern clause, expected an assign synonym");
-    }
-    clause->setType(ClauseType::Assign);
-
-    // if firstParam is Synonym, check type is Variable and is declared in query
-    Ref firstParam = clause->getFirstParam();
-    RefType type = RefType::EntRef;
-    clause->getFirstParam().setType(type);
-    if (firstParam.getRootType() == RootType::Synonym) {
-        EntityPtr var = query.getEntity(firstParam.getRep());
-        if (var->getType() != QueryEntityType::Variable) {
-            throw std::runtime_error("Unsupported first param in pattern clause, expected a variable synonym");
-        }
-        if (!var) {
-            throw std::runtime_error("Undeclared synonym in pattern clause");
-        }
-    }
-    QueryEntityType entType = QueryEntityType::Variable;
-    clause->getFirstParam().setEntityType(entType);
 }
 
