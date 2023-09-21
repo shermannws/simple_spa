@@ -7,6 +7,8 @@
 #include "PKB/AssignmentPatternStore/AssignmentPatternStore.h"
 #include "PKB/Relationships/ModifiesRelationship.h"
 #include "PKB/RelationshipStores/ModifiesRelationshipStore.h"
+#include "PKB/Relationships/ParentRelationship.h"
+#include "PKB/RelationshipStores/ParentRelationshipStore.h"
 
 template std::vector<Entity> ManagerUtils::getEntitiesFromStore<FollowsRelationshipStore, FollowsRelationship>(std::shared_ptr<FollowsRelationshipStore> store, std::function<bool(FollowsRelationship&)> matcher, std::function<Entity(FollowsRelationship&)> getter);
 
@@ -23,3 +25,7 @@ template std::vector<std::vector<Entity>> ManagerUtils::getEntityPairsFromStore<
 template std::vector<Entity> ManagerUtils::getEntitiesFromStore<AssignmentPatternStore, Assignment>(std::shared_ptr<AssignmentPatternStore> store, std::function<bool(Assignment&)> matcher, std::function<Entity(Assignment&)> getter);
 
 template std::vector<std::vector<Entity>> ManagerUtils::getEntityPairsFromStore<AssignmentPatternStore, Assignment>(std::shared_ptr<AssignmentPatternStore> store, std::function<bool(Assignment&)> matcher, std::function<std::vector<Entity>(Assignment&)> getter);
+
+template std::vector<Entity> ManagerUtils::getEntitiesFromStore<ParentRelationshipStore, ParentRelationship>(std::shared_ptr<ParentRelationshipStore> store, std::function<bool(ParentRelationship&)> matcher, std::function<Entity(ParentRelationship&)> getter);
+
+template std::vector<std::vector<Entity>> ManagerUtils::getEntityPairsFromStore<ParentRelationshipStore, ParentRelationship>(std::shared_ptr<ParentRelationshipStore> store, std::function<bool(ParentRelationship&)> matcher, std::function<std::vector<Entity>(ParentRelationship&)> getter);

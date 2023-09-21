@@ -173,3 +173,55 @@ std::vector<Entity> PkbReaderManager::getAssignStmtsByLhs(Variable& lhs) const {
 std::vector<Entity> PkbReaderManager::getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const {
     return this->assignmentManager->getAssignStmtsByLhsRhs(lhs, rhs, hasRhsWildCard);
 }
+
+std::vector<std::vector<Entity>> PkbReaderManager::getParentPair(StatementType formerType, StatementType latterType) const {
+    return this->parentRelationshipManager->getParentPair(formerType, latterType, true);
+}
+
+std::vector<std::vector<Entity>> PkbReaderManager::getParentStarPair(StatementType formerType, StatementType latterType) const {
+    return this->parentRelationshipManager->getParentPair(formerType, latterType, false);
+}
+
+std::vector<Entity> PkbReaderManager::getParentTypeStmt(StatementType type, Statement& statement) const {
+    return this->parentRelationshipManager->getParentTypeStmt(type, statement, true);
+}
+
+std::vector<Entity> PkbReaderManager::getParentStarTypeStmt(StatementType type, Statement& statement) const {
+    return this->parentRelationshipManager->getParentTypeStmt(type, statement, false);
+}
+
+std::vector<Entity> PkbReaderManager::getParentTypeWildcard(StatementType type) const {
+    return this->parentRelationshipManager->getParentTypeWildcard(type);
+}
+
+std::vector<Entity> PkbReaderManager::getParentStarTypeWildcard(StatementType type) const {
+    return this->parentRelationshipManager->getParentTypeWildcard(type);
+}
+
+std::vector<Entity> PkbReaderManager::getParentStmtType(Statement& statement, StatementType type) const {
+    return this->parentRelationshipManager->getParentStmtType(statement, type, true);
+}
+
+std::vector<Entity> PkbReaderManager::getParentStarStmtType(Statement& statement, StatementType type) const {
+    return this->parentRelationshipManager->getParentStmtType(statement, type, false);
+}
+
+std::vector<Entity> PkbReaderManager::getParentWildcardType(StatementType type) const {
+    return this->parentRelationshipManager->getParentWildcardType(type);
+}
+
+std::vector<Entity> PkbReaderManager::getParentStarWildcardType(StatementType type) const {
+    return this->parentRelationshipManager->getParentWildcardType(type);
+}
+
+bool PkbReaderManager::isParent(Statement& statement1, Statement& statement2) const {
+    return this->parentRelationshipManager->isParent(statement1, statement2, true);
+}
+
+bool PkbReaderManager::isParentStar(Statement& statement1, Statement& statement2) const {
+    return this->parentRelationshipManager->isParent(statement1, statement2, false);
+}
+
+bool PkbReaderManager::hasParent() const {
+    return this->parentRelationshipManager->hasParent();
+}

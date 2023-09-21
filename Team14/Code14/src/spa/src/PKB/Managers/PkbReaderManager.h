@@ -118,4 +118,30 @@ public:
     // pattern a ("x", "x")
     std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const;
 
+    std::vector<std::vector<Entity>> getParentPair(StatementType formerType, StatementType latterType) const;
+
+    std::vector<std::vector<Entity>> getParentStarPair(StatementType formerType, StatementType latterType) const;
+
+    std::vector<Entity> getParentTypeStmt(StatementType type, Statement& statement) const;
+
+    std::vector<Entity> getParentStarTypeStmt(StatementType type, Statement& statement) const;
+
+    std::vector<Entity> getParentTypeWildcard(StatementType type) const;
+
+    std::vector<Entity> getParentStarTypeWildcard(StatementType type) const;
+
+    std::vector<Entity> getParentStmtType(Statement& statement, StatementType type) const;
+
+    std::vector<Entity> getParentStarStmtType(Statement& statement, StatementType type) const;
+
+    std::vector<Entity> getParentWildcardType(StatementType type) const;
+
+    std::vector<Entity> getParentStarWildcardType(StatementType type) const;
+
+    bool isParent(Statement& statement1, Statement& statement2) const;
+
+    bool isParentStar(Statement& statement1, Statement& statement2) const;
+
+    bool hasParent() const;
+
 };
