@@ -119,6 +119,29 @@ bool PkbReaderManager::hasFollows() const {
     return this->followsRelationshipManager->hasFollows();
 }
 
+std::vector<std::vector<Entity>> PkbReaderManager::getModifiesStmtPair(StatementType type) const {
+    return this->modifiesRelationshipManager->getModifiesStmtPair(type);
+}
+
+std::vector<Entity> PkbReaderManager::getModifiesTypeIdent(StatementType type, Variable& var) const {
+    return this->modifiesRelationshipManager->getModifiesTypeIdent(type, var);
+}
+
+std::vector<Entity> PkbReaderManager::getModifiesStmt(StatementType type) const {
+    return this->modifiesRelationshipManager->getModifiesStmt(type);
+}
+
+std::vector<Entity> PkbReaderManager::getModifiesVar(Statement& stmt) const {
+    return this->modifiesRelationshipManager->getModifiesVar(stmt);
+}
+
+bool PkbReaderManager::isStmtModifiesVar(Statement& stmt, Variable& var) const {
+    return this->modifiesRelationshipManager->isStmtModifiesVar(stmt, var);
+}
+
+bool PkbReaderManager::hasModifies(Statement& stmt) const {
+    return this->modifiesRelationshipManager->hasModifies(stmt);
+}
 
 // Pattern queries i.e. pattern a (...,...)
 // pattern a (_,_)

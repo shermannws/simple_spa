@@ -55,6 +55,19 @@ public:
 
     virtual bool hasFollows() const = 0;
 
+    // MODIFIES QUERY
+    virtual std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const = 0;
+
+    virtual std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const = 0;
+
+    virtual std::vector<Entity> getModifiesStmt(StatementType type) const = 0;
+
+    virtual std::vector<Entity> getModifiesVar(Statement& stmt) const = 0;
+
+    virtual bool isStmtModifiesVar(Statement& stmt, Variable& var) const = 0;
+
+    virtual bool hasModifies(Statement& stmt) const = 0;
+
     // ASSIGN PATTERN QUERY
     // pattern a (_,_)
     virtual std::vector<Entity> getAllAssign() const = 0;

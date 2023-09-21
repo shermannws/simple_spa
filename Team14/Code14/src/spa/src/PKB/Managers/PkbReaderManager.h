@@ -88,6 +88,18 @@ public:
 
     bool hasFollows() const;
 
+    std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const;
+
+    std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const;
+
+    std::vector<Entity> getModifiesStmt(StatementType type) const;
+
+    std::vector<Entity> getModifiesVar(Statement& stmt) const;
+
+    bool isStmtModifiesVar(Statement& stmt, Variable& var) const;
+
+    bool hasModifies(Statement& stmt) const;
+
     // pattern a (_,_)
     std::vector<Entity> getAllAssign() const;
 

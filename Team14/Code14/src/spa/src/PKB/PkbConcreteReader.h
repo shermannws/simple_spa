@@ -60,6 +60,18 @@ public:
 
     bool hasFollows() const override;
 
+    std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const override;
+
+    std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const override;
+
+    std::vector<Entity> getModifiesStmt(StatementType type) const override;
+
+    std::vector<Entity> getModifiesVar(Statement& stmt) const override;
+
+    bool isStmtModifiesVar(Statement& stmt, Variable& var) const override;
+
+    bool hasModifies(Statement& stmt) const override;
+
     // ASSIGN PATTERN QUERY
     // pattern a (_,_)
     std::vector<Entity> getAllAssign() const override;
