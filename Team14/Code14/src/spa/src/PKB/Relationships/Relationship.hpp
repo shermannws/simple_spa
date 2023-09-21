@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdexcept>
+#include <vector>
 
 template <typename T, typename U>
 Relationship<T, U>::Relationship(const RelationshipType relationshipType,
@@ -41,4 +42,19 @@ bool Relationship<T, U>::operator==(const HashableKey& other) const {
 			&& this->getRelationshipType() == otherKey->getRelationshipType();
 	}
 	return false;
+}
+
+template <typename T, typename U>
+Entity Relationship<T, U>::getLeftEntityFromRelationship(const Relationship<T, U>& relationship) {
+    return *relationship.getLeftEntity();
+}
+
+template <typename T, typename U>
+Entity Relationship<T, U>::getRightEntityFromRelationship(const Relationship<T, U>& relationship) {
+    return *relationship.getRightEntity();
+}
+
+template <typename T, typename U>
+std::vector<Entity> Relationship<T, U>::getEntityPairFromRelationship(const Relationship<T, U>& relationship) {
+    return { *relationship.getLeftEntity(), *relationship.getRightEntity() };
 }
