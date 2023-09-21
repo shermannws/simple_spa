@@ -12,7 +12,7 @@ template <typename S, typename R>
 class StmtToVarRelationshipManager {
 private:
     std::shared_ptr<S> relationshipStore;
-public:
+protected:
     StmtToVarRelationshipManager();
 
     void storeRelationship(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable);
