@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "Pkb/Pkb.h"
+#include "PKB/Pkb.h"
 #include "QPS/PQLParser.h"
 #include "QPS/PQLEvaluator.h"
 
