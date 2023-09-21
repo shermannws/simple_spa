@@ -4,15 +4,13 @@
 #include <vector>
 #include <algorithm>
 
-#include "PKB/RelationshipStores/FollowsRelationshipStore.h"
-#include "PKB/Relationships/FollowsRelationship.h"
 #include "PKB/Managers/ManagerUtils.h"
 
 template <typename S, typename R>
 class StmtToStmtRelationshipManager {
 private:
     std::shared_ptr<S> relationshipStore;
-public:
+protected:
     StmtToStmtRelationshipManager();
 
     void storeRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2, bool isDirect);
