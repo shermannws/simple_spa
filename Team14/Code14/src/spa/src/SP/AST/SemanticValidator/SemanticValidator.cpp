@@ -15,7 +15,7 @@ SemanticValidator::SemanticValidator() = default;
  * 3. Recursive and cyclic calls are not allowed. i.e. A-->B-->C-->A or A-->A
  * @param root
  */
-void SemanticValidator::validate(std::shared_ptr<ProgramNode> root) {
+void SemanticValidator::validate(const std::shared_ptr<ProgramNode>& root) {
 
     std::vector<std::shared_ptr<ProcedureNode>> procedures = root->getProcedures();
     std::set<std::string> procedureNames;
@@ -31,7 +31,7 @@ void SemanticValidator::validate(std::shared_ptr<ProgramNode> root) {
         }
     }
 
-    // call graph
+    // build call graph
     CallGraph callGraph;
     std::shared_ptr<ProcedureNode> currProcedureNode;
 

@@ -13,5 +13,5 @@ private:
 
 public:
     SemanticValidator();
-    void validate(std::shared_ptr<ProgramNode> root);
+    void validate(const std::shared_ptr<ProgramNode>& root);
 };
