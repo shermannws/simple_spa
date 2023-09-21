@@ -8,9 +8,11 @@
 #include <algorithm>
 
 #include "PKB/AssignmentPatternStore/AssignmentPatternStore.h"
+#include "PKB/AssignmentPatternStore/Assignment.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "Commons/AppConstants.h"
+#include "PKB/Managers/ManagerUtils.h"
 
 class AssignmentManager {
 private:

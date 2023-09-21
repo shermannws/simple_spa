@@ -21,6 +21,14 @@ std::shared_ptr<std::string> Assignment::getExpression() const {
     return expression;
 }
 
+Entity Assignment::getStmtFromAssign(const Assignment& assignment) {
+    return *assignment.getStatement();
+}
+
+std::vector<Entity> Assignment::getStmtVarPairFromAssign(const Assignment& assignment) {
+    return { *assignment.getStatement(), *assignment.getVariable() };
+}
+
 bool Assignment::operator==(const HashableKey& other) const {
     if (const Assignment* otherKey = dynamic_cast<const Assignment*>(&other)) {
         return *this->getStatement() == *otherKey->getStatement();
