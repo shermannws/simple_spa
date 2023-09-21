@@ -61,23 +61,30 @@ jobs:
         with:
           architecture: 'x64'
 
+      - name: Preparation
+        shell: bash
+        working-directory: ${{github.workspace}}/Team14/Code14
+        run: mkdir build
+
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{github.workspace}}/Team14/Code14
+        run: cmake -A x64
+
       - name: Build
         shell: bash
-        working-directory: ${{github.workspace}}/Team14/Code14/
+        working-directory: ${{github.workspace}}/Team14/Code14/build
         run: |
-          mkdir build
-          cd build
-          cmake -A x64 ..
-          cmake --build . --target unit_testing --config Release
-          cmake --build . --target integration_testing --config Release
-          cmake --build . --target autotester --config Release
+          cmake --build . --target unit_testing --config ${{env.BUILD_TYPE}}
+          cmake --build . --target integration_testing --config ${{env.BUILD_TYPE}}
+          cmake --build . --target autotester --config ${{env.BUILD_TYPE}}
 
       - name: Unit Testing
         shell: bash
-        working-directory: ${{github.workspace}}/Team14/Code14/
-        run: ./build/src/unit_testing/Release/unit_testing.exe
+        working-directory: ${{github.workspace}}/Team14/Code14/build
+        run: ./src/unit_testing/Release/unit_testing.exe
 
       - name: Integration Testing
         shell: bash
-        working-directory: ${{github.workspace}}/Team14/Code14/
-        run: ./build/src/integration_testing/Release/integration_testing.exe
+        working-directory: ${{github.workspace}}/Team14/Code14/build
+        run: ./src/integration_testing/Release/integration_testing.exe
