@@ -19,29 +19,41 @@ TEST_CASE("Test Uses Relationship Retrieval") {
     usesRelationshipManager.storeUsesRelationship(statement1, variableY);
     usesRelationshipManager.storeUsesRelationship(statement1, variableZ);
 
-    // Test a = b + c
+    // Test a = x + y + a
     shared_ptr<Statement> statement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
     shared_ptr<Variable> variableA = make_shared<Variable>(Variable("a"));
-    shared_ptr<Variable> variableB = make_shared<Variable>(Variable("b"));
     shared_ptr<Variable> variableC = make_shared<Variable>(Variable("c"));
 
-    usesRelationshipManager.storeUsesRelationship(statement2, variableB);
-    usesRelationshipManager.storeUsesRelationship(statement2, variableC);
+    usesRelationshipManager.storeUsesRelationship(statement2, variableA);
+    usesRelationshipManager.storeUsesRelationship(statement2, variableX);
+    usesRelationshipManager.storeUsesRelationship(statement2, variableY);
 
-    // Results
-//    auto pairY = make_shared<std::vector<std::shared_ptr<Entity>>>(std::vector<std::shared_ptr<Entity>>{statement1, variableY});
-//    auto pairZ = make_shared<std::vector<std::shared_ptr<Entity>>>(std::vector<std::shared_ptr<Entity>>{statement1, variableZ});
-//    auto pairB = make_shared<std::vector<std::shared_ptr<Entity>>>(std::vector<std::shared_ptr<Entity>>{statement2, variableB});
-//    auto pairC = make_shared<std::vector<std::shared_ptr<Entity>>>(std::vector<std::shared_ptr<Entity>>{statement2, variableC});
+    // Print "test"
+    shared_ptr<Statement> statement3 = make_shared<Statement>(Statement(3, StatementType::Print));
+    shared_ptr<Variable> variableTest = make_shared<Variable>(Variable("test"));
 
-    auto allAssignmentVariables = usesRelationshipManager.getAllAssignVariable();
-    REQUIRE(allAssignmentVariables.size() == 4);
-//    REQUIRE(find(allAssignmentVariables->begin(), allAssignmentVariables->end(), pairY) != allAssignmentVariables->end());
-//    REQUIRE(find(allAssignmentVariables->begin(), allAssignmentVariables->end(), pairZ) != allAssignmentVariables->end());
-//    REQUIRE(find(allAssignmentVariables->begin(), allAssignmentVariables->end(), pairB) != allAssignmentVariables->end());
-//    REQUIRE(find(allAssignmentVariables->begin(), allAssignmentVariables->end(), pairC) != allAssignmentVariables->end());
+    usesRelationshipManager.storeUsesRelationship(statement3, variableTest);
 
-    auto statement1Variables = usesRelationshipManager.getVariableAssignment(*variableB);
-    REQUIRE(statement1Variables.size() == 1);
-    REQUIRE(statement1Variables.at(0) == *statement2);
+    REQUIRE(usesRelationshipManager.getUsesStmtPair(StatementType::Print).size() == 1);
+    REQUIRE(usesRelationshipManager.getUsesStmtPair(StatementType::Assign).size() == 5);
+    REQUIRE(usesRelationshipManager.getUsesStmtPair(StatementType::Stmt).size() == 6);
+
+    REQUIRE(usesRelationshipManager.getUsesTypeIdent(StatementType::Print, *variableTest).size() == 1);
+    REQUIRE(usesRelationshipManager.getUsesTypeIdent(StatementType::Assign, *variableX).size() == 1);
+    REQUIRE(usesRelationshipManager.getUsesTypeIdent(StatementType::Assign, *variableY).size() == 2);
+    REQUIRE(usesRelationshipManager.getUsesTypeIdent(StatementType::Assign, *variableA).size() == 1);
+
+    REQUIRE(usesRelationshipManager.getUsesStmt(StatementType::Print).size() == 1);
+    REQUIRE(usesRelationshipManager.getUsesStmt(StatementType::Assign).size() == 2);
+
+    REQUIRE(usesRelationshipManager.getUsesVar(*statement1).size() == 2);
+    REQUIRE(usesRelationshipManager.getUsesVar(*statement2).size() == 3);
+    REQUIRE(usesRelationshipManager.getUsesVar(*statement3).size() == 1);
+
+    REQUIRE(usesRelationshipManager.isStmtUsesVar(*statement1, *variableY) == true);
+    REQUIRE(usesRelationshipManager.isStmtUsesVar(*statement1, *variableA) == false);
+
+    REQUIRE(usesRelationshipManager.hasUses(*statement1) == true);
+    REQUIRE(usesRelationshipManager.hasUses(*statement2) == true);
+    REQUIRE(usesRelationshipManager.hasUses(*statement3) == true);
 }

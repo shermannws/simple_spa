@@ -126,15 +126,18 @@ TEST_CASE("Test ParentRelationshipStore") {
 
 	ParentRelationship rs = ParentRelationship(
 		std::make_shared<Statement>(mockLeftEntity),
-		std::make_shared<Statement>(mockRightEntity));
+		std::make_shared<Statement>(mockRightEntity),
+        true);
 
 	ParentRelationship rsCloned = ParentRelationship(
 		std::make_shared<Statement>(mockLeftEntity),
-		std::make_shared<Statement>(mockRightEntity));
+		std::make_shared<Statement>(mockRightEntity),
+        true);
 
 	ParentRelationship rsCloned2 = ParentRelationship(
 		std::make_shared<Statement>(Statement(1, StatementType::Assign)),
-		std::make_shared<Statement>(Statement(2, StatementType::Assign)));
+		std::make_shared<Statement>(Statement(2, StatementType::Assign)),
+        true);
 
 	ParentRelationshipStore store = ParentRelationshipStore();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "Token.h"
 
 #include "QPSTypes.h"
 
@@ -24,6 +25,7 @@ private:
     QueryEntityType type;
 public:
     explicit QueryEntity(QueryEntityType type, const Synonym &synonym);
+    QueryEntity(const std::shared_ptr<Token>& designEntity, const Synonym &synonym);
     bool operator==(const QueryEntity& other) const;
     Synonym getSynonym();
     QueryEntityType getType();

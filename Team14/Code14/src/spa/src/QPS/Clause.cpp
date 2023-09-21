@@ -2,8 +2,8 @@
 
 Clause::Clause() {}
 
-void Clause::setType(ClauseType type) {
-    this->type = type;
+void Clause::setType(ClauseType clauseType) {
+    type = clauseType;
 }
 
 ClauseType Clause::getType() {
@@ -14,6 +14,6 @@ void Clause::setFirstParam(Ref& ref) {
     firstParam = ref;
 }
 
-Ref Clause::getFirstParam() {
+Ref& Clause::getFirstParam() {
     return firstParam;
 }

@@ -19,6 +19,16 @@ std::shared_ptr<Entity> Relationship<T, U>::getRightEntity() const {
 }
 
 template <typename T, typename U>
+std::shared_ptr<T> Relationship<T, U>::getLeftObject() const {
+    return this->leftEntity;
+}
+
+template <typename T, typename U>
+std::shared_ptr<U> Relationship<T, U>::getRightObject() const {
+    return this->rightEntity;
+}
+
+template <typename T, typename U>
 RelationshipType Relationship<T, U>::getRelationshipType() const {
 	return this->relationshipType;
 }

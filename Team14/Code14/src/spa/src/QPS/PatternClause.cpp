@@ -1,12 +1,14 @@
 #include "PatternClause.h"
 
+#include <utility>
+
 PatternClause::PatternClause() : Clause() {};
 
 void PatternClause::setSecondParam(ExpressionSpec & expr) {
     secondParam = expr;
 }
 
-ExpressionSpec PatternClause::getSecondParam() {
+ExpressionSpec& PatternClause::getSecondParam() {
     return secondParam;
 }
 
