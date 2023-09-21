@@ -5,6 +5,7 @@
 #include "Ref.h"
 #include "Token.h"
 #include <string>
+#include <stdexcept>
 
 
 class SuchThatClause : public Clause {
