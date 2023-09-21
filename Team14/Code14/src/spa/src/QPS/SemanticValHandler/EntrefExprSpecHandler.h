@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdexcept>
+
 #include "SemanticValHandler.h"
 
 class EntrefExprSpecHandler : public SemanticValHandler {

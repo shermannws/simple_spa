@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <stdexcept>
+
 #include "QPS/Query.h"
 
 class SemanticValHandler {
