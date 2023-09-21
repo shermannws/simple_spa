@@ -244,7 +244,6 @@ void PQLParser::validatePatternSyntax(std::shared_ptr<PatternClause> clause) {
 
     try {
         ExpressionSpec secondParam = exprSpecParser->extractExpressionSpec();
-        //ExpressionSpec secondParam = extractExpressionSpec();
         clause->setSecondParam(secondParam);
     } catch (...) {
         throw std::runtime_error("Invalid expression spec syntax");

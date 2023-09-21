@@ -50,12 +50,7 @@ Expression ExprSpecParser::extractExpression() {
                 if (expression.size() < 2) {
                     throw std::runtime_error("not enough factors");
                 }
-                auto rightOperand = expression.top();
-                expression.pop();
-                auto leftOperand = expression.top();
-                expression.pop();
-                expression.push("(" + leftOperand + operators.top()->getRep() + rightOperand + ")");
-                operators.pop();
+                processSubExpr(operators, expression);
             }
             operators.push(curr);
         } else if (curr->isToken(TokenType::Rparenthesis)) {
@@ -63,12 +58,7 @@ Expression ExprSpecParser::extractExpression() {
                 if (expression.size() < 2) {
                     throw std::runtime_error("not enough factors");
                 }
-                auto rightOperand = expression.top();
-                expression.pop();
-                auto leftOperand = expression.top();
-                expression.pop();
-                expression.push("(" + leftOperand + operators.top()->getRep() + rightOperand + ")");
-                operators.pop();
+                processSubExpr(operators, expression);
             }
             if (!operators.top()->isToken(TokenType::Lparenthesis)){ // pop Lparentheses
                 throw std::runtime_error("Invalid expression spec");
@@ -83,12 +73,7 @@ Expression ExprSpecParser::extractExpression() {
         if (expression.size() < 2) {
             throw std::runtime_error("not enough factors");
         }
-        auto rightOperand = expression.top();
-        expression.pop();
-        auto leftOperand = expression.top();
-        expression.pop();
-        expression.push("(" + leftOperand + operators.top()->getRep() + rightOperand + ")");
-        operators.pop();
+        processSubExpr(operators, expression);
     }
 
     if (expression.empty() || expression.size() > 1) { // empty expression OR too many factors e.g "x y"
@@ -99,6 +84,23 @@ Expression ExprSpecParser::extractExpression() {
     }
     return expression.top();
 }
+
+void ExprSpecParser::processSubExpr(std::stack<std::shared_ptr<Token>>& operators, std::stack<std::string>& expression) {
+    Expression rightOperand = expression.top();
+    expression.pop();
+    Expression leftOperand = expression.top();
+    expression.pop();
+    std::string op = operators.top()->getRep();
+
+    Expression subExpr = std::string("(").
+            append(leftOperand).
+            append(op).
+            append(rightOperand).
+            append(")");
+    expression.push(subExpr);
+    operators.pop();
+}
+
 
 bool ExprSpecParser::validateExprSyntax(std::vector<std::shared_ptr<Token>>& input) {
     size_t currIndex = 0;
