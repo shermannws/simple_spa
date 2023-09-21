@@ -13,7 +13,11 @@
 #include "QPSUtil.h"
 
 
-PQLParser::PQLParser(const std::string& PQLQuery) : tokenizer(std::make_shared<Tokenizer>(PQLQuery)){}
+PQLParser::PQLParser(const std::string& PQLQuery) {
+    tokenizer = std::make_shared<Tokenizer>(PQLQuery);
+    exprSpecParser = std::make_shared<ExprSpecParser>(tokenizer);
+}
+
 
 Query PQLParser::parse() {
     Query query = Query();
@@ -239,7 +243,8 @@ void PQLParser::validatePatternSyntax(std::shared_ptr<PatternClause>& clause) {
     }
 
     try {
-        ExpressionSpec secondParam = extractExpressionSpec();
+        ExpressionSpec secondParam = exprSpecParser->extractExpressionSpec();
+        //ExpressionSpec secondParam = extractExpressionSpec();
         clause->setSecondParam(secondParam);
     } catch (...) {
         throw std::runtime_error("Invalid expression spec syntax");

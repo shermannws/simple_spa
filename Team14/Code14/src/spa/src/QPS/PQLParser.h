@@ -6,10 +6,13 @@
 #include "Query.h"
 #include "Tokenizer.h"
 #include "QueryEntity.h"
+#include "ExprSpecParser.h"
 
 class PQLParser {
 private:
     std::shared_ptr<Tokenizer> tokenizer;
+    std::shared_ptr<ExprSpecParser> exprSpecParser;
+
     void processDeclarations(Query& query);
     void processSelectClause(Query& query);
     void processSuchThatClause(Query& query);
