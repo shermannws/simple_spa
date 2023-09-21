@@ -1,3 +1,6 @@
+#include <unordered_map>
+
+#include "Commons/AppConstants.h"
 #include "BinaryConditionalExpressionNode.h"
 
 BinaryConditionalExpressionNode::BinaryConditionalExpressionNode(
@@ -23,6 +26,16 @@ std::shared_ptr<ConditionalExpressionNode> BinaryConditionalExpressionNode::getR
 std::vector<std::shared_ptr<ASTNode>> BinaryConditionalExpressionNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children { leftConditionalExpression, rightConditionalExpression };
     return children;
+}
+
+BinaryConditionalExpressionType
+BinaryConditionalExpressionNode::translateBinaryConditionalExpressionTypeString(std::string typeString) {
+    std::unordered_map<std::string, BinaryConditionalExpressionType> typeMap = {
+            { AppConstants::STRING_AND, BinaryConditionalExpressionType::And },
+            { AppConstants::STRING_OR, BinaryConditionalExpressionType::Or }
+    };
+    assert(typeMap.find(typeString) != typeMap.end());
+    return typeMap[typeString];
 }
 
 void BinaryConditionalExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {

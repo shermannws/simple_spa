@@ -14,14 +14,14 @@ TEST_CASE("Test PKB end-to-end using Facades") {
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
 
-    writer->addFollowsRelationship(std::make_shared<Statement>(2, StatementType::Read), std::make_shared<Statement>(3, StatementType::Print));
+    writer->addFollowsRelationship(std::make_shared<Statement>(2, StatementType::Read), std::make_shared<Statement>(3, StatementType::Print), true);
 
     Statement statement2(2, StatementType::Read);
     Statement statement3(3, StatementType::Print);
 
-    auto isFollows = reader->getIsFollows(statement2, statement3);
+    auto isFollows = reader->isFollows(statement2, statement3);
     REQUIRE(isFollows);
-    auto followingStmts = reader->getFollowingStatement(statement2);
+    auto followingStmts = reader->getFollowsStmtType(statement2, StatementType::Print);
     REQUIRE(followingStmts.at(0) == Statement(3, StatementType::Print));
 
     writer->addConstant(std::make_shared<Constant>(2));

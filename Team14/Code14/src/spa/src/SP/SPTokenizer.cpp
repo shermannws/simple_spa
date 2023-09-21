@@ -1,5 +1,6 @@
 #include <string>
 #include <utility>
+#include <stdexcept>
 
 #include "Commons/AppConstants.h"
 #include "SPTokenizer.h"

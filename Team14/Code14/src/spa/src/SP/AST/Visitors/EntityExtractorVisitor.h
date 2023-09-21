@@ -12,33 +12,45 @@
 #include "../../AST/Nodes/ConstantNode.h"
 
 class EntityExtractorVisitor : public DesignExtractorVisitor,
-    public ProgramNodeVisitor,
     public ProcedureNodeVisitor,
-    public StatementListNodeVisitor,
     public AssignNodeVisitor,
     public ReadNodeVisitor,
     public PrintNodeVisitor,
-    public ArithmeticExpressionNodeVisitor,
     public VariableNodeVisitor,
     public ConstantNodeVisitor {
 public:
+    /*!
+     * Constructor for EntityExtractorVisitor
+     */
     EntityExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
-    void visitProgramNode(ProgramNode* node) const override;
-
+    /*!
+     * Visits a ProcedureNode and adds Procedure to the PKB
+     */
     void visitProcedureNode(ProcedureNode* node) const override;
 
-    void visitStatementListNode(StatementListNode* node) const override;
-
+    /*!
+     * Visits an AssignNode and adds the assignment to the PKB and stores the assignment pattern to support pattern query
+     */
     void visitAssignNode(AssignNode* node) const override;
 
+    /*!
+     * Visits a ReadNode and add Read statement into PKB
+     */
     void visitReadNode(ReadNode* node) const override;
 
+    /*!
+     * Visits a PrintNode and add Print statement into PKB
+     */
     void visitPrintNode(PrintNode* node) const override;
 
-    void visitArithmeticExpressionNode(ArithmeticExpressionNode* node) const override;
-
+    /*!
+     * Visits a VariableNode and add Variable into PKB
+     */
     void visitVariableNode(VariableNode* node) const override;
 
+    /*!
+     * Visits a ConstantNode and add Constant into PKB
+     */
     void visitConstantNode(ConstantNode* node) const override;
 };
