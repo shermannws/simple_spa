@@ -110,38 +110,12 @@ void PQLParser::processPatternClause(Query& query) {
     }
 
     std::shared_ptr<PatternClause> clause = std::make_shared<PatternClause>();
-
-    std::shared_ptr<Token> patternSyn = tokenizer->popToken();
-    clause->setSyn(patternSyn->getRep());
-
-    std::shared_ptr<Token> next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Lparenthesis)) {
-        throw std::runtime_error("Expected Lparenthesis");
-    }
-
-    Ref firstParam = extractRef();
-    clause->setFirstParam(firstParam);
-
-    next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Comma)) {
-        throw std::runtime_error("Expected comma ");
-    }
-
-    try {
-        ExpressionSpec secondParam = extractExpressionSpec();
-        clause->setSecondParam(secondParam);
-    } catch (...) {
-        throw std::runtime_error("INVALID EXPRESSION SPEC ");
-    }
-
-    next = tokenizer->popToken();
-    expect(next->isToken(TokenType::Rparenthesis), "Expected right parenthesis");
-
+    validatePatternSyntax(clause);
     validatePatternSemantics(query, clause);
     query.addPattern(clause);
 }
 
-void PQLParser::validateSuchThatSyntax(const std::shared_ptr<SuchThatClause>& clause) {
+void PQLParser::validateSuchThatSyntax(std::shared_ptr<SuchThatClause>& clause) {
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken(TokenType::Lparenthesis)) {
         throw std::runtime_error("No left parenthesis");
@@ -245,6 +219,36 @@ Ref PQLParser::extractRef() {
     ref.setRep(refString);
     ref.setRootType(rootType);
     return ref;
+}
+
+void PQLParser::validatePatternSyntax(std::shared_ptr<PatternClause>& clause) {
+    std::shared_ptr<Token> patternSyn = tokenizer->popToken();
+    clause->setSyn(patternSyn->getRep());
+
+    std::shared_ptr<Token> next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Lparenthesis)) {
+        throw std::runtime_error("Expected Lparenthesis");
+    }
+
+    Ref firstParam = extractRef();
+    clause->setFirstParam(firstParam);
+
+    next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Comma)) {
+        throw std::runtime_error("Expected comma ");
+    }
+
+    try {
+        ExpressionSpec secondParam = extractExpressionSpec();
+        clause->setSecondParam(secondParam);
+    } catch (...) {
+        throw std::runtime_error("Invalid expression spec syntax");
+    }
+
+    next = tokenizer->popToken();
+    if (!next->isToken(TokenType::Rparenthesis)) {
+        throw std::runtime_error("No right parenthesis");
+    }
 }
 
 void PQLParser::validatePatternSemantics(Query& query, const std::shared_ptr<PatternClause>& clause) {
