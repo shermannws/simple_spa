@@ -7,7 +7,7 @@
 class CallNode; // forward declaration
 class CallNodeVisitor {
 public:
-    virtual void visitCallNode(CallNode* node) const = 0;
+    virtual void visitCallNode(CallNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
 };
 
 class CallNode: public StatementNode {
@@ -16,7 +16,7 @@ private:
 public:
     explicit CallNode(int statementNumber, std::string procedureName);
     std::string getProcedureName();
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
     StatementNodeType getStatementType() override;
 };

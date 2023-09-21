@@ -39,11 +39,7 @@ void PkbWriterManager::addProcedure(std::shared_ptr<Procedure> p) {
     this->procedureStore->storeEntity(p);
 }
 
-void PkbWriterManager::addPrintStatement(std::shared_ptr<Statement> s) {
-    this->statementStore->storeEntity(s);
-}
-
-void PkbWriterManager::addReadStatement(std::shared_ptr<Statement> s) {
+void PkbWriterManager::addStatement(std::shared_ptr<Statement> s) {
     this->statementStore->storeEntity(s);
 }
 
@@ -60,4 +56,12 @@ void PkbWriterManager::addFollowsRelationship(std::shared_ptr<Statement> s1, std
 
 void PkbWriterManager::addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
     this->usesRelationshipManager->storeUsesRelationship(s, v);
+}
+
+void PkbWriterManager::addModifiesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
+    this->modifiesRelationshipManager->storeModifiesRelationship(s, v);
+}
+
+void PkbWriterManager::addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
+    this->parentRelationshipManager->storeParentRelationship(s1, s2, isDirect);
 }

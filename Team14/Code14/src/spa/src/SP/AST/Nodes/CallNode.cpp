@@ -15,8 +15,8 @@ StatementNodeType CallNode::getStatementType() {
     return StatementNodeType::Call;
 }
 
-void CallNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
+void CallNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) {
     if (auto callVisitor = std::dynamic_pointer_cast<CallNodeVisitor>(visitor)) {
-        callVisitor->visitCallNode(this);
+        callVisitor->visitCallNode(this, parents);
     }
 }

@@ -9,7 +9,7 @@
 class IfNode; // forward declaration
 class IfNodeVisitor {
 public:
-    virtual void visitIfNode(IfNode* node) const = 0;
+    virtual void visitIfNode(IfNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
 };
 
 class IfNode: public StatementNode {
@@ -25,7 +25,7 @@ public:
     std::shared_ptr<ConditionalExpressionNode> getConditionalExpression();
     std::shared_ptr<StatementListNode> getThenStatementList();
     std::shared_ptr<StatementListNode> getElseStatementList();
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
     StatementNodeType getStatementType() override;
 };
