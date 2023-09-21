@@ -10,6 +10,9 @@
 #include "../../AST/Nodes/ArithmeticExpressionNode.h"
 #include "../../AST/Nodes/VariableNode.h"
 #include "../../AST/Nodes/ConstantNode.h"
+#include "../../AST/Nodes/CallNode.h"
+#include "../../AST/Nodes/IfNode.h"
+#include "../../AST/Nodes/WhileNode.h"
 
 class EntityExtractorVisitor : public DesignExtractorVisitor,
     public ProcedureNodeVisitor,
@@ -17,7 +20,10 @@ class EntityExtractorVisitor : public DesignExtractorVisitor,
     public ReadNodeVisitor,
     public PrintNodeVisitor,
     public VariableNodeVisitor,
-    public ConstantNodeVisitor {
+    public ConstantNodeVisitor,
+    public CallNodeVisitor,
+    public IfNodeVisitor,
+    public WhileNodeVisitor {
 public:
     /*!
      * Constructor for EntityExtractorVisitor
@@ -27,30 +33,45 @@ public:
     /*!
      * Visits a ProcedureNode and adds Procedure to the PKB
      */
-    void visitProcedureNode(ProcedureNode* node) const override;
+    void visitProcedureNode(ProcedureNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
      * Visits an AssignNode and adds the assignment to the PKB and stores the assignment pattern to support pattern query
      */
-    void visitAssignNode(AssignNode* node) const override;
+    void visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
      * Visits a ReadNode and add Read statement into PKB
      */
-    void visitReadNode(ReadNode* node) const override;
+    void visitReadNode(ReadNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
      * Visits a PrintNode and add Print statement into PKB
      */
-    void visitPrintNode(PrintNode* node) const override;
+    void visitPrintNode(PrintNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
      * Visits a VariableNode and add Variable into PKB
      */
-    void visitVariableNode(VariableNode* node) const override;
+    void visitVariableNode(VariableNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
      * Visits a ConstantNode and add Constant into PKB
      */
-    void visitConstantNode(ConstantNode* node) const override;
+    void visitConstantNode(ConstantNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
+
+    /*!
+     * Visits a CallNode and add Call statement into PKB
+     */
+    void visitCallNode(CallNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
+
+    /*!
+     * Visits a IfNode and add If statement into PKB
+     */
+    void visitIfNode(IfNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
+
+    /*!
+     * Visits a WhileNode and add While statement into PKB
+     */
+    void visitWhileNode(WhileNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 };

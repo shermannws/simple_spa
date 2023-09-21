@@ -38,8 +38,8 @@ BinaryConditionalExpressionNode::translateBinaryConditionalExpressionTypeString(
     return typeMap[typeString];
 }
 
-void BinaryConditionalExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
+void BinaryConditionalExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) {
     if (auto bceVisitor = std::dynamic_pointer_cast<BinaryConditionalExpressionNodeVisitor>(visitor)) {
-        bceVisitor->visitBinaryConditionalExpressionNode(this);
+        bceVisitor->visitBinaryConditionalExpressionNode(this, parents);
     }
 }

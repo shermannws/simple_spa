@@ -9,7 +9,7 @@
 class RelativeExpressionNode; // forward declaration
 class RelativeExpressionNodeVisitor {
 public:
-    virtual void visitRelativeExpressionNode(RelativeExpressionNode* node) const = 0;
+    virtual void visitRelativeExpressionNode(RelativeExpressionNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
 };
 
 class RelativeExpressionNode : public ConditionalExpressionNode {
@@ -24,7 +24,7 @@ public:
     ComparisonOperatorType getComparisonOperatorType();
     std::shared_ptr<ExpressionNode> getLeftExpression();
     std::shared_ptr<ExpressionNode> getRightExpression();
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
     static ComparisonOperatorType translateComparisonOperatorType(std::string operatorTypeString);
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

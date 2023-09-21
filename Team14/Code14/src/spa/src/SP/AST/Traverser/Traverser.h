@@ -10,7 +10,11 @@
 class Traverser {
 private:
 	std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors;
-	std::stack<std::shared_ptr<ASTNode>> frontier;
+
+	/*!
+	 * Keeps a reference of pair of children nodes and their parents in a stack
+	 */
+	std::stack<std::pair<std::shared_ptr<ASTNode>, std::vector<std::shared_ptr<ASTNode>>>> frontier;
 
 public:
 	/*!

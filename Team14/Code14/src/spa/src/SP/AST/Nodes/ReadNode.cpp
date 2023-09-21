@@ -18,8 +18,8 @@ StatementNodeType ReadNode::getStatementType() {
     return StatementNodeType::Read;
 }
 
-void ReadNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
+void ReadNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) {
     if (auto readVisitor = std::dynamic_pointer_cast<ReadNodeVisitor>(visitor)) {
-        readVisitor->visitReadNode(this);
+        readVisitor->visitReadNode(this, parents);
     }
 }

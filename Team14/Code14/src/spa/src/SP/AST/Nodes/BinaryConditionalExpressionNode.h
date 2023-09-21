@@ -8,7 +8,7 @@
 class BinaryConditionalExpressionNode; // forward declaration
 class BinaryConditionalExpressionNodeVisitor {
 public:
-    virtual void visitBinaryConditionalExpressionNode(BinaryConditionalExpressionNode* node) const = 0;
+    virtual void visitBinaryConditionalExpressionNode(BinaryConditionalExpressionNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
 };
 
 class BinaryConditionalExpressionNode : public ConditionalExpressionNode {
@@ -23,7 +23,7 @@ public:
     BinaryConditionalExpressionType getBinaryConditionalExpressionType();
     std::shared_ptr<ConditionalExpressionNode> getLeftConditionalExpression();
     std::shared_ptr<ConditionalExpressionNode> getRightConditionalExpression();
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
     static BinaryConditionalExpressionType translateBinaryConditionalExpressionTypeString(std::string typeString);
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

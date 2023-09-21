@@ -29,8 +29,8 @@ StatementNodeType IfNode::getStatementType() {
     return StatementNodeType::If;
 }
 
-void IfNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
+void IfNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) {
     if (auto ifVisitor = std::dynamic_pointer_cast<IfNodeVisitor>(visitor)) {
-        ifVisitor->visitIfNode(this);
+        ifVisitor->visitIfNode(this, parents);
     }
 }
