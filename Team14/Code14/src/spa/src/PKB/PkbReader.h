@@ -6,8 +6,7 @@
 
 class PkbReader {
 public:
-    virtual std::vector<Entity> getAllAssign() const = 0;
-
+    // GET ENTITIES
     virtual std::vector<Entity> getAllVariables() const = 0;
 
     virtual std::vector<Entity> getAllConstants() const = 0;
@@ -16,6 +15,7 @@ public:
 
     virtual std::vector<Entity> getAllStatements() const = 0;
 
+    // USES QUERY
     virtual std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const = 0;
 
     virtual std::vector<Entity> getUsesTypeIdent(StatementType type, Variable& var) const = 0;
@@ -28,6 +28,7 @@ public:
 
     virtual bool hasUses(Statement& stmt) const = 0;
 
+    // FOLLOWS & FOLLOWS* QUERY
     virtual std::vector<std::vector<Entity>> getFollowsPair(StatementType formerType, StatementType latterType) const = 0;
 
     virtual std::vector<std::vector<Entity>> getFollowsStarPair(StatementType formerType, StatementType latterType) const = 0;
@@ -54,6 +55,7 @@ public:
 
     virtual bool hasFollows() const = 0;
 
+    // MODIFIES QUERY
     virtual std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const = 0;
 
     virtual std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const = 0;
@@ -65,4 +67,23 @@ public:
     virtual bool isStmtModifiesVar(Statement& stmt, Variable& var) const = 0;
 
     virtual bool hasModifies(Statement& stmt) const = 0;
+
+    // ASSIGN PATTERN QUERY
+    // pattern a (_,_)
+    virtual std::vector<Entity> getAllAssign() const = 0;
+
+    // pattern a (_, "x")
+    virtual std::vector<Entity> getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const = 0;
+
+    // pattern a (v, _)
+    virtual std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const = 0;
+
+    // pattern a (v, "x")
+    virtual std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const = 0;
+
+    // pattern a ("x", _)
+    virtual std::vector<Entity> getAssignStmtsByLhs(Variable& lhs) const = 0;
+
+    // pattern a ("x", "x")
+    virtual std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const = 0;
 };

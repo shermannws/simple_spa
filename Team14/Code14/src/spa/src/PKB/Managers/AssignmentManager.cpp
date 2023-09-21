@@ -1,7 +1,5 @@
 #pragma once
 
-#include <utility>
-
 #include "AssignmentManager.h"
 
 AssignmentManager::AssignmentManager()
@@ -11,35 +9,81 @@ bool AssignmentManager::addAssignment(std::shared_ptr<Assignment> assignment) {
     return this->assignmentStore->addAssignment(std::move(assignment));
 }
 
-std::vector<Entity> AssignmentManager::getAllAssignStatements() const {
-    std::vector<Entity> statements = std::vector<Entity>();
-    for (auto it = assignmentStore->getBeginIterator(); it != assignmentStore->getEndIterator(); it++) {
-        statements.push_back(*((*it)->getStatement()));
+std::regex AssignmentManager::parsePattern(std::string& pattern) const {
+    std::string regexPattern;
+    for (char& c : pattern) {
+        if (AppConstants::MATH_SPECIAL_CHAR_SET.find(c) != AppConstants::MATH_SPECIAL_CHAR_SET.end()) {
+            regexPattern += "\\";
+        }
+        regexPattern += c;
     }
-    return statements;
+    return std::regex(regexPattern);
 }
 
-std::vector<Entity> AssignmentManager::getAssignStatements(Variable& variable, std::string pattern) const {
-    std::vector<Entity> statements = std::vector<Entity>();
-    for (auto it = assignmentStore->getBeginIterator(); it != assignmentStore->getEndIterator(); it++) {
-        Variable currVar = *((*it)->getVariable());
-        //TODO: Refactor second clause. Might need to override != operator for Variable
-        if (!variable.isWildCard() && !(currVar == variable)) {
-            continue;
-        }
-        // TEMP CODE
-        statements.push_back(*((*it)->getStatement()));
-
-        // Parse string into brackets
-        // Validate wild cards
-        // Construct regex
-        // Check if regex matches
-        // If matches, add to statements
+bool AssignmentManager::matchExpression(std::string& expression, std::regex& pattern, bool hasWildCard) const {
+    if (hasWildCard) {
+        // Case where pattern is "_x_"
+        return std::regex_search(expression, std::regex(pattern));
     }
-    return statements;
-
+    // Case where pattern is "x"
+    return std::regex_match(expression, std::regex(pattern));
 }
 
 bool AssignmentManager::contains(Statement& statement) const {
     return assignmentStore->contains(statement);
+}
+
+// Pattern queries i.e. pattern a (...,...)
+// pattern a (_,_)
+std::vector<Entity> AssignmentManager::getAllAssignStmts() const {
+    std::vector<Entity> statements = std::vector<Entity>();
+    std::for_each(assignmentStore->getBeginIterator(), assignmentStore->getEndIterator(), [&statements](std::shared_ptr<Assignment> assignment) {
+        statements.push_back(*(assignment->getStatement()));
+    });
+    return statements;
+}
+
+// pattern a (_, "x")
+std::vector<Entity> AssignmentManager::getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const {
+    std::regex regexPattern = AssignmentManager::parsePattern(rhs);
+
+    auto matcher = [&regexPattern, &hasRhsWildCard, this](Assignment& assignment) {
+        return AssignmentManager::matchExpression(*(assignment.getExpression()), regexPattern, hasRhsWildCard);
+    };
+
+    return ManagerUtils::getEntitiesFromStore<AssignmentPatternStore, Assignment>(assignmentStore, matcher, Assignment::getStmtFromAssign);
+}
+
+// pattern a (v, _)
+std::vector<std::vector<Entity>> AssignmentManager::getAllAssignStmtVarPair() const {
+    auto matcher = [](Assignment& assignment) {
+        return true;
+    };
+    return ManagerUtils::getEntityPairsFromStore<AssignmentPatternStore, Assignment>(assignmentStore, matcher, Assignment::getStmtVarPairFromAssign);
+}
+
+// pattern a (v, "x")
+std::vector<std::vector<Entity>> AssignmentManager::getAssignStmtsVarPairByRhs(std::string& rhs, bool hasRhsWildCard) const {
+    std::regex regexPattern = AssignmentManager::parsePattern(rhs);
+    auto matcher = [&regexPattern, &hasRhsWildCard, this](Assignment& assignment) {
+        return AssignmentManager::matchExpression(*(assignment.getExpression()), regexPattern, hasRhsWildCard);
+    };
+    return ManagerUtils::getEntityPairsFromStore<AssignmentPatternStore, Assignment>(assignmentStore, matcher, Assignment::getStmtVarPairFromAssign);
+}
+
+// pattern a ("x", _)
+std::vector<Entity> AssignmentManager::getAssignStmtsByLhs(Variable& lhs) const {
+    auto matcher = [&lhs](Assignment& assignment) {
+        return *(assignment.getVariable()) == lhs;
+    };
+    return ManagerUtils::getEntitiesFromStore<AssignmentPatternStore, Assignment>(assignmentStore, matcher, Assignment::getStmtFromAssign);
+}
+
+// pattern a ("x", "x")
+std::vector<Entity> AssignmentManager::getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const {
+    std::regex regexPattern = AssignmentManager::parsePattern(rhs);
+    auto matcher = [&regexPattern, &lhs, &hasRhsWildCard, this](Assignment& assignment) {
+        return *(assignment.getVariable()) == lhs && AssignmentManager::matchExpression(*(assignment.getExpression()), regexPattern, hasRhsWildCard);
+    };
+    return ManagerUtils::getEntitiesFromStore<AssignmentPatternStore, Assignment>(assignmentStore, matcher, Assignment::getStmtFromAssign);
 }

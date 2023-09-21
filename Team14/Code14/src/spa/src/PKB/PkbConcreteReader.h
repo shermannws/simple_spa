@@ -11,8 +11,7 @@ private:
 public:
     PkbConcreteReader(std::shared_ptr<PkbReaderManager> readerManager);
 
-    std::vector<Entity> getAllAssign() const override;
-
+    // GET ENTITIES
     std::vector<Entity> getAllVariables() const override;
 
     std::vector<Entity> getAllConstants() const override;
@@ -21,6 +20,7 @@ public:
 
     std::vector<Entity> getAllStatements() const override;
 
+    // USES QUERY
     std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const override;
 
     std::vector<Entity> getUsesTypeIdent(StatementType type, Variable& var) const override;
@@ -33,6 +33,7 @@ public:
 
     bool hasUses(Statement& stmt) const override;
 
+    // FOLLOWS QUERY
     std::vector<std::vector<Entity>> getFollowsPair(StatementType formerType, StatementType latterType) const override;
 
     std::vector<std::vector<Entity>> getFollowsStarPair(StatementType formerType, StatementType latterType) const override;
@@ -71,4 +72,22 @@ public:
 
     bool hasModifies(Statement& stmt) const override;
 
+    // ASSIGN PATTERN QUERY
+    // pattern a (_,_)
+    std::vector<Entity> getAllAssign() const override;
+
+    // pattern a (_, "x")
+    std::vector<Entity> getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const override;
+
+    // pattern a (v, _)
+    std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const override;
+
+    // pattern a (v, "x")
+    std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const override;
+
+    // pattern a ("x", _)
+    std::vector<Entity> getAssignStmtsByLhs(Variable& lhs) const override;
+
+    // pattern a ("x", "x")
+    std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const override;
 };

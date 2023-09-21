@@ -42,8 +42,6 @@ public:
             std::shared_ptr<ParentRelationshipManager> parentRelationshipManager
     );
 
-    std::vector<Entity> getAllAssign() const;
-
     std::vector<Entity> getAllVariables() const;
 
     std::vector<Entity> getAllConstants() const;
@@ -101,4 +99,23 @@ public:
     bool isStmtModifiesVar(Statement& stmt, Variable& var) const;
 
     bool hasModifies(Statement& stmt) const;
+
+    // pattern a (_,_)
+    std::vector<Entity> getAllAssign() const;
+
+    // pattern a (_, "x")
+    std::vector<Entity> getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const;
+
+    // pattern a (v, _)
+    std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const;
+
+    // pattern a (v, "x")
+    std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const;
+
+    // pattern a ("x", _)
+    std::vector<Entity> getAssignStmtsByLhs(Variable& lhs) const;
+
+    // pattern a ("x", "x")
+    std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const;
+
 };

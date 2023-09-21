@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "../../Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
@@ -14,6 +15,10 @@ private:
 public:
     Assignment(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable, std::shared_ptr<std::string> expression);
     virtual ~Assignment() = default;
+
+    static Entity getStmtFromAssign(const Assignment& assignment);
+
+    static std::vector<Entity> getStmtVarPairFromAssign(const Assignment& assignment);
 
     std::shared_ptr<Statement> getStatement() const;
     std::shared_ptr<Variable> getVariable() const;
