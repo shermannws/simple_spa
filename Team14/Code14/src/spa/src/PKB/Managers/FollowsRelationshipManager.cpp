@@ -2,8 +2,8 @@
 
 FollowsRelationshipManager::FollowsRelationshipManager() : StmtToStmtRelationshipManager<FollowsRelationshipStore, FollowsRelationship>() {};
 
-void FollowsRelationshipManager::storeFollowsRelationship(std::shared_ptr<Statement> parentStatement, std::shared_ptr<Statement> childStatement, bool isDirect) {
-    this->storeRelationship(parentStatement, childStatement, isDirect);
+void FollowsRelationshipManager::storeFollowsRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2, bool isDirect) {
+    this->storeRelationship(statement1, statement2, isDirect);
 };
 
 std::vector<std::vector<Entity>> FollowsRelationshipManager::getFollowsPair(StatementType formerType, StatementType latterType, bool requireDirect) const {
