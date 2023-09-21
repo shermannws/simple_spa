@@ -8,8 +8,6 @@ private:
 public:
     StubPkbReader();
 
-    std::vector<Entity> getAllAssign() const override;
-
     std::vector<Entity> getAllVariables() const override;
 
     std::vector<Entity> getAllConstants() const override;
@@ -55,4 +53,35 @@ public:
     bool isFollowsStar(Statement& statement1, Statement& statement2) const override;
 
     bool hasFollows() const override;
+
+    std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const override;
+
+    std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const override;
+
+    std::vector<Entity> getModifiesStmt(StatementType type) const override;
+
+    std::vector<Entity> getModifiesVar(Statement& stmt) const override;
+
+    bool isStmtModifiesVar(Statement& stmt, Variable& var) const override;
+
+    bool hasModifies(Statement& stmt) const override;
+
+    // pattern a (_,_)
+    std::vector<Entity> getAllAssign() const override;
+
+    // pattern a (_, "x")
+    std::vector<Entity> getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const override;
+
+    // pattern a (v, _)
+    std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const override;
+
+    // pattern a (v, "x")
+    std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const override;
+
+    // pattern a ("x", _)
+    std::vector<Entity> getAssignStmtsByLhs(Variable& lhs) const override;
+
+    // pattern a ("x", "x")
+    std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const override;
+
 };

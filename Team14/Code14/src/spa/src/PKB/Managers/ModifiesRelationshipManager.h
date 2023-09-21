@@ -9,6 +9,7 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "PKB/Relationships/ModifiesRelationship.h"
+#include "PKB/Managers/ManagerUtils.h"
 
 class ModifiesRelationshipManager {
 private:
@@ -25,7 +26,32 @@ public:
     void storeModifiesRelationship(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable);
 
     /*!
-     * Returns true if stmt modifies var, return false otherwise
+     * Returns a vector of Statement, Variable pair where the statement modifies the variable
+     */
+    std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const;
+
+    /*!
+     * Returns a vector of statements of the given statement type which modifies the given variable
+     */
+    std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const;
+
+    /*!
+     * Returns a vector of statements of the given statement type which modifies any variable
+     */
+    std::vector<Entity> getModifiesStmt(StatementType type) const;
+
+    /*!
+     * Returns a vector of variables which are modified by the given statement
+     */
+    std::vector<Entity> getModifiesVar(Statement& stmt) const;
+
+    /*!
+     * Returns a boolean value indicating if the given statement modifies the given variable
      */
     bool isStmtModifiesVar(Statement& stmt, Variable& var) const;
+
+    /*!
+     * Returns a boolean value indicating if there are any modifies relationships for the statement
+     */
+    bool hasModifies(Statement& stmt) const;
 };

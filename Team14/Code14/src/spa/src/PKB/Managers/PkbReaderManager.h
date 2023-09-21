@@ -42,8 +42,6 @@ public:
             std::shared_ptr<ParentRelationshipManager> parentRelationshipManager
     );
 
-    std::vector<Entity> getAllAssign() const;
-
     std::vector<Entity> getAllVariables() const;
 
     std::vector<Entity> getAllConstants() const;
@@ -89,4 +87,35 @@ public:
     bool isFollowsStar(Statement& statement1, Statement& statement2) const;
 
     bool hasFollows() const;
+
+    std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const;
+
+    std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const;
+
+    std::vector<Entity> getModifiesStmt(StatementType type) const;
+
+    std::vector<Entity> getModifiesVar(Statement& stmt) const;
+
+    bool isStmtModifiesVar(Statement& stmt, Variable& var) const;
+
+    bool hasModifies(Statement& stmt) const;
+
+    // pattern a (_,_)
+    std::vector<Entity> getAllAssign() const;
+
+    // pattern a (_, "x")
+    std::vector<Entity> getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const;
+
+    // pattern a (v, _)
+    std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const;
+
+    // pattern a (v, "x")
+    std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const;
+
+    // pattern a ("x", _)
+    std::vector<Entity> getAssignStmtsByLhs(Variable& lhs) const;
+
+    // pattern a ("x", "x")
+    std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const;
+
 };

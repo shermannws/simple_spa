@@ -2,12 +2,6 @@
 
 StubPkbReader::StubPkbReader() {}
 
-std::vector<Entity> StubPkbReader::getAllAssign() const {
-    return std::vector<Entity>{Statement(1, StatementType::Assign),
-                               Statement(2, StatementType::Assign),
-                               Statement(3, StatementType::Assign)};
-}
-
 std::vector<Entity> StubPkbReader::getAllVariables() const {
     return std::vector<Entity>();
 }
@@ -98,4 +92,61 @@ bool StubPkbReader::isFollowsStar(Statement& statement1, Statement& statement2) 
 
 bool StubPkbReader::hasFollows() const {
     return false;
+}
+
+std::vector<std::vector<Entity>> StubPkbReader::getModifiesStmtPair(StatementType type) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<Entity> StubPkbReader::getModifiesTypeIdent(StatementType type, Variable& var) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getModifiesStmt(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getModifiesVar(Statement& stmt) const {
+    return std::vector<Entity>();
+}
+
+bool StubPkbReader::isStmtModifiesVar(Statement& stmt, Variable& var) const {
+    return false;
+}
+
+bool StubPkbReader::hasModifies(Statement& stmt) const {
+    return false;
+}
+
+// Pattern queries i.e. pattern a (...,...)
+// pattern a (_,_)
+std::vector<Entity> StubPkbReader::getAllAssign() const {
+    return std::vector<Entity>{Statement(1, StatementType::Assign),
+                               Statement(2, StatementType::Assign),
+                               Statement(3, StatementType::Assign)};
+}
+
+// pattern a (_, "x")
+std::vector<Entity> StubPkbReader::getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const {
+    return std::vector<Entity>();
+}
+
+// pattern a (v, _)
+std::vector<std::vector<Entity>> StubPkbReader::getAllAssignStmtVarPair() const {
+    return std::vector<std::vector<Entity>>();
+}
+
+// pattern a (v, "x")
+std::vector<std::vector<Entity>> StubPkbReader::getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+// pattern a ("x", _)
+std::vector<Entity> StubPkbReader::getAssignStmtsByLhs(Variable& lhs) const {
+    return std::vector<Entity>();
+}
+
+// pattern a ("x", "x")
+std::vector<Entity> StubPkbReader::getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const {
+    return std::vector<Entity>();
 }
