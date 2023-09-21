@@ -7,7 +7,7 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
-#include "StubPkbReader.h"
+#include "../IntegrationTesting/TestPkbQps/StubPkbReader.h"
 
 std::shared_ptr<StubPkbReader> stubPkbReader = std::make_shared<StubPkbReader>();
 
