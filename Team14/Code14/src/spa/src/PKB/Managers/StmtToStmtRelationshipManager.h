@@ -28,6 +28,10 @@ protected:
     bool isRelationship(Statement& statement1, Statement& statement2, bool requireDirect) const;
 
     bool hasRelationship() const;
+
+    bool isFormer(Statement& statement) const;
+
+    bool isLatter(Statement& statement) const;
 };
 
 #include "StmtToStmtRelationshipManager.hpp"

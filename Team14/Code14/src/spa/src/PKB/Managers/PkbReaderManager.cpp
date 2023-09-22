@@ -119,6 +119,22 @@ bool PkbReaderManager::hasFollows() const {
     return this->followsRelationshipManager->hasFollows();
 }
 
+bool PkbReaderManager::hasFollowingStmt(Statement& statement) const {
+    return this->followsRelationshipManager->hasFollowingStmt(statement);
+}
+
+bool PkbReaderManager::hasFollowedStmt(Statement& statement) const {
+    return this->followsRelationshipManager->hasFollowedStmt(statement);
+}
+
+bool PkbReaderManager::hasFollowingStarStmt(Statement& statement) const {
+    return this->followsRelationshipManager->hasFollowingStarStmt(statement);
+}
+
+bool PkbReaderManager::hasFollowedStarStmt(Statement& statement) const {
+    return this->followsRelationshipManager->hasFollowedStarStmt(statement);
+}
+
 std::vector<std::vector<Entity>> PkbReaderManager::getModifiesStmtPair(StatementType type) const {
     return this->modifiesRelationshipManager->getModifiesStmtPair(type);
 }
@@ -225,3 +241,20 @@ bool PkbReaderManager::isParentStar(Statement& statement1, Statement& statement2
 bool PkbReaderManager::hasParent() const {
     return this->parentRelationshipManager->hasParent();
 }
+
+bool PkbReaderManager::hasChildStmt(Statement& statement) const {
+    return this->parentRelationshipManager->hasChildStmt(statement);
+}
+
+bool PkbReaderManager::hasChildStarStmt(Statement& statement) const {
+    return this->parentRelationshipManager->hasChildStarStmt(statement);
+}
+
+bool PkbReaderManager::hasParentStmt(Statement& statement) const {
+    return this->parentRelationshipManager->hasParentStmt(statement);
+}
+
+bool PkbReaderManager::hasParentStarStmt(Statement& statement) const {
+    return this->parentRelationshipManager->hasParentStarStmt(statement);
+}
+

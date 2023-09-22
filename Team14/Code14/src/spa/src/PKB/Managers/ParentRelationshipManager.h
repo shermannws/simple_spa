@@ -27,4 +27,12 @@ public:
     bool isParent(Statement& statement1, Statement& statement2, bool requireDirect) const;
 
     bool hasParent() const;
+
+    bool hasParentStmt(Statement& statement) const;
+
+    bool hasParentStarStmt(Statement& statement) const;
+
+    bool hasChildStmt(Statement& statement) const;
+
+    bool hasChildStarStmt(Statement& statement) const;
 };

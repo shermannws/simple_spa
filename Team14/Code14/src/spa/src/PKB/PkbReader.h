@@ -55,6 +55,14 @@ public:
 
     virtual bool hasFollows() const = 0;
 
+    virtual bool hasFollowingStmt(Statement& statement) const = 0;
+
+    virtual bool hasFollowedStmt(Statement& statement) const = 0;
+
+    virtual bool hasFollowingStarStmt(Statement& statement) const = 0;
+
+    virtual bool hasFollowedStarStmt(Statement& statement) const = 0;
+
     // MODIFIES QUERY
     virtual std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const = 0;
 
@@ -113,4 +121,12 @@ public:
     virtual bool isParentStar(Statement& statement1, Statement& statement2) const = 0;
 
     virtual bool hasParent() const = 0;
+
+    virtual bool hasParentStmt(Statement& statement) const = 0;
+
+    virtual bool hasParentStarStmt(Statement& statement) const = 0;
+
+    virtual bool hasChildStmt(Statement& statement) const = 0;
+
+    virtual bool hasChildStarStmt(Statement& statement) const = 0;
 };

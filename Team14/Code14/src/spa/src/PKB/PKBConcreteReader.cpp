@@ -100,6 +100,22 @@ bool PkbConcreteReader::hasFollows() const {
     return this->readerManager->hasFollows();
 }
 
+bool PkbConcreteReader::hasFollowingStmt(Statement& statement) const {
+    return this->readerManager->hasFollowingStmt(statement);
+}
+
+bool PkbConcreteReader::hasFollowedStmt(Statement& statement) const {
+    return this->readerManager->hasFollowedStmt(statement);
+}
+
+bool PkbConcreteReader::hasFollowingStarStmt(Statement& statement) const {
+    return this->readerManager->hasFollowingStarStmt(statement);
+}
+
+bool PkbConcreteReader::hasFollowedStarStmt(Statement& statement) const {
+    return this->readerManager->hasFollowedStarStmt(statement);
+}
+
 std::vector<std::vector<Entity>> PkbConcreteReader::getModifiesStmtPair(StatementType type) const {
     return this->readerManager->getModifiesStmtPair(type);
 }
@@ -204,4 +220,20 @@ bool PkbConcreteReader::isParentStar(Statement& statement1, Statement& statement
 
 bool PkbConcreteReader::hasParent() const {
     return this->readerManager->hasParent();
+}
+
+bool PkbConcreteReader::hasParentStmt(Statement& statement) const {
+    return this->readerManager->hasParentStmt(statement);
+}
+
+bool PkbConcreteReader::hasParentStarStmt(Statement& statement) const {
+    return this->readerManager->hasParentStarStmt(statement);
+}
+
+bool PkbConcreteReader::hasChildStmt(Statement& statement) const {
+    return this->readerManager->hasChildStmt(statement);
+}
+
+bool PkbConcreteReader::hasChildStarStmt(Statement& statement) const {
+    return this->readerManager->hasChildStarStmt(statement);
 }

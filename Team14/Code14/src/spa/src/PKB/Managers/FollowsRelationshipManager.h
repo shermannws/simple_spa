@@ -28,4 +28,12 @@ public:
     bool isFollows(Statement& statement1, Statement& statement2, bool requireDirect) const;
 
     bool hasFollows() const;
+
+    bool hasFollowingStmt(Statement& statement) const;
+
+    bool hasFollowedStmt(Statement& statement) const;
+
+    bool hasFollowingStarStmt(Statement& statement) const;
+
+    bool hasFollowedStarStmt(Statement& statement) const;
 };

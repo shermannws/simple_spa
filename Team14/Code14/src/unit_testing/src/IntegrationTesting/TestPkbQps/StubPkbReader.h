@@ -54,6 +54,14 @@ public:
 
     bool hasFollows() const override;
 
+    bool hasFollowingStmt(Statement& statement) const override;
+
+    bool hasFollowedStmt(Statement& statement) const override;
+
+    bool hasFollowingStarStmt(Statement& statement) const override;
+
+    bool hasFollowedStarStmt(Statement& statement) const override;
+
     std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const override;
 
     std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const override;
@@ -109,5 +117,13 @@ public:
     bool isParentStar(Statement& statement1, Statement& statement2) const override;
 
     bool hasParent() const override;
+
+    bool hasParentStmt(Statement& statement) const override;
+
+    bool hasParentStarStmt(Statement& statement) const override;
+
+    bool hasChildStmt(Statement& statement) const override;
+
+    bool hasChildStarStmt(Statement& statement) const override;
 
 };
