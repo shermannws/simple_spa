@@ -641,7 +641,7 @@ TEST_CASE("Invalid processSuchThat cases") {
         testcases.emplace_back("assign a; print d;\nSelect a such that Uses(b, d)",
                                "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("assign a; print d;\nSelect a such that Uses(a, 2)",
-                               "Invalid RHS, entRef expected");
+                               "Invalid RHS entRef");
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
@@ -660,7 +660,7 @@ TEST_CASE("Invalid processSuchThat cases") {
         testcases.emplace_back("stmt a; variable d;\nSelect a such that Modifies(b, d)",
                                "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("print a; print d;\nSelect a such that Modifies(a, 3)",
-                              "Invalid RHS, entRef expected");
+                              "Invalid RHS entRef");
         testcases.emplace_back("print a; variable d;\nSelect a such that Modifies(a, d)",
                                "Invalid Modifies LHS, invalid stmtRef found");
 

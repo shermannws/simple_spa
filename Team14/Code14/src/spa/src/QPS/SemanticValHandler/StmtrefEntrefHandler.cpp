@@ -37,7 +37,7 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
         case RootType::Wildcard:
             throw SemanticException("Invalid LHS, wildcard found");
         default:
-            throw SemanticException("Invalid LHS stmtRef");
+            throw std::runtime_error("Invalid LHS stmtRef");
     }
 
     switch (type) {
@@ -80,7 +80,7 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
             break;
         }
         default:
-            throw SemanticException("Invalid RHS entRef");
+            throw std::runtime_error("Invalid RHS entRef");
     }
 
 

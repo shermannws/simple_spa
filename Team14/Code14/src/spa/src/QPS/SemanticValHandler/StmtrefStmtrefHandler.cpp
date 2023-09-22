@@ -32,7 +32,7 @@ void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause)
         break;
     }
     default:
-        throw SemanticException("Invalid LHS stmtRef");
+        throw std::runtime_error("Invalid LHS stmtRef");
     }
 
     switch (rightRootType) {
@@ -51,7 +51,7 @@ void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause)
             break;
         }
         default:
-            throw SemanticException("Invalid RHS stmtRef");
+            throw std::runtime_error("Invalid RHS stmtRef");
     }
 
     return SemanticValHandler::handle(query, clause);

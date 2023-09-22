@@ -153,9 +153,14 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> cl
     switch (type) {
         case ClauseType::Uses:
         case ClauseType::Modifies:
+            // check left // TODO: TO DELETE ONCE PROCEDURE IS SUPPORTED
+            if (!QPSUtil::isRootOfStmtref(leftRootType)) {
+                throw SyntaxException("Invalid LHS stmtRef");
+            }
+
             // check right
             if (!QPSUtil::isRootOfEntref(rightRootType)) {
-                throw SyntaxException("Invalid RHS, entRef expected");
+                throw SyntaxException("Invalid RHS entRef");
             }
             break;
         case ClauseType::Follows:
