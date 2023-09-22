@@ -1,9 +1,9 @@
 #include "CallNode.h"
 
-CallNode::CallNode(int statementNumber, std::string procedureName)
+CallNode::CallNode(StatementNumber statementNumber, ProcedureName procedureName)
         : StatementNode(statementNumber), procedureName(std::move(procedureName)) {}
 
-std::string CallNode::getProcedureName() {
+ProcedureName CallNode::getProcedureName() {
     return procedureName;
 }
 

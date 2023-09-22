@@ -1,6 +1,6 @@
 #include "IfNode.h"
 
-IfNode::IfNode(int statementNumber, std::shared_ptr<ConditionalExpressionNode> conditionalExpression,
+IfNode::IfNode(StatementNumber statementNumber, std::shared_ptr<ConditionalExpressionNode> conditionalExpression,
                std::shared_ptr<StatementListNode> thenStatementList,
                std::shared_ptr<StatementListNode> elseStatementList)
                : StatementNode(statementNumber),

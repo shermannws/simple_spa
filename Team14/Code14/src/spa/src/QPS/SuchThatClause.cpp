@@ -1,4 +1,5 @@
 #include "SuchThatClause.h"
+#include "Exception/SyntaxException.h"
 
 SuchThatClause::SuchThatClause() = default;
 
@@ -16,7 +17,7 @@ SuchThatClause::SuchThatClause(const std::shared_ptr<Token>& absToken) {
     } else if (absToken->isToken("Parent*")) {
         this->setType(ClauseType::ParentStar);
     } else {
-        throw std::runtime_error("Invalid token, abstraction expected");
+        throw SyntaxException("Invalid token, abstraction expected");
     }
 }
 

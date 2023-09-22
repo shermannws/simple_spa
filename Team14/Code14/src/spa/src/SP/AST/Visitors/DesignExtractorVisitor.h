@@ -1,9 +1,14 @@
 #pragma once
 #include <PKB/PkbWriter.h>
 
-// interface for all design extractors
+/**
+ * Interface for all design extractors.
+ */
 class DesignExtractorVisitor {
 protected:
+    /**
+     * PkbWriter instance for writing to the PKB.
+     */
     std::shared_ptr<PkbWriter> pkbWriter;
 
 public:
