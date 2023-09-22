@@ -27,15 +27,20 @@ public:
     void storeEntity(std::shared_ptr<T> entity);
 
     /*!
+     * Retrieve the begin iterator for the RelationshipStore
+     */
+    typename std::unordered_set<std::shared_ptr<T>>::iterator getBeginIterator();
+
+    /*!
+     * Retrieve the end iterator for the RelationshipStore
+     */
+    typename std::unordered_set<std::shared_ptr<T>>::iterator getEndIterator();
+
+    /*!
      * Takes in as argumet an entity and retrieves an entiy that == the argument
      * Returns the Entity if it exists, retur nullptr otherwise
      */
     std::shared_ptr<Entity> getEntity(std::shared_ptr<T> entity) const;
-
-    /*!
-     * Returns all the Entities in the EntityStore in a vector
-     */
-    std::vector<Entity> getAllEntities() const;
 };
 
 #include "EntityStore.hpp"

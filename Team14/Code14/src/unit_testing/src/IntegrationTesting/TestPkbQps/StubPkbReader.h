@@ -16,6 +16,14 @@ public:
 
     std::vector<Entity> getAllStatements() const override;
 
+    std::vector<Entity> getAllRead() const override;
+
+    std::vector<Entity> getAllPrint() const override;
+
+    std::vector<Entity> getAllWhile() const override;
+
+    std::vector<Entity> getAllIf() const override;
+
     std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const override;
 
     std::vector<Entity> getUsesTypeIdent(StatementType type, Variable& var) const override;
