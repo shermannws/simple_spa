@@ -11,7 +11,7 @@ std::vector<std::vector<Entity>> StmtToStmtRelationshipManager<S, R>::getRelatio
     auto matcher = [formerType, latterType, requireDirect](R& relationship) {
         return relationship.isDirect() >= requireDirect && relationship.getLeftObject()->isStatementType(formerType) && relationship.getRightObject()->isStatementType(latterType);
     };
-    return ManagerUtils::getEntityPairsFromStore<S, R>(relationshipStore,
+    return ManagerUtils::getEntityPairsFromRelationshipStore<R>(relationshipStore,
                                                        matcher,
                                                        R::getEntityPairFromRelationship);
 }
@@ -22,7 +22,7 @@ std::vector<Entity> StmtToStmtRelationshipManager<S, R>::getRelationshipTypeStmt
         return relationship.isDirect() >= requireDirect && *(relationship.getRightObject()) == statement && relationship.getLeftObject()->isStatementType(type);
     };
 
-    return ManagerUtils::getEntitiesFromStore<S, R>(relationshipStore,
+    return ManagerUtils::getEntitiesFromRelationshipStore<R>(relationshipStore,
                                                     matcher,
                                                     R::getLeftEntityFromRelationship);
 }
@@ -32,7 +32,7 @@ std::vector<Entity> StmtToStmtRelationshipManager<S, R>::getRelationshipTypeWild
     auto matcher = [type](R& relationship) {
         return relationship.isDirect() && relationship.getLeftObject()->isStatementType(type);
     };
-    return ManagerUtils::getEntitiesFromStore<S, R>(relationshipStore,
+    return ManagerUtils::getEntitiesFromRelationshipStore<R>(relationshipStore,
                                                     matcher,
                                                     R::getLeftEntityFromRelationship);
 }
@@ -42,7 +42,7 @@ std::vector<Entity> StmtToStmtRelationshipManager<S, R>::getRelationshipStmtType
     auto matcher = [statement, type, requireDirect](R& relationship) {
         return relationship.isDirect() >= requireDirect && *(relationship.getLeftObject()) == statement && relationship.getRightObject()->isStatementType(type);
     };
-    return ManagerUtils::getEntitiesFromStore<S, R>(relationshipStore,
+    return ManagerUtils::getEntitiesFromRelationshipStore<R>(relationshipStore,
                                                     matcher,
                                                     R::getRightEntityFromRelationship);
 }
@@ -52,7 +52,7 @@ std::vector<Entity> StmtToStmtRelationshipManager<S, R>::getRelationshipWildcard
     auto matcher = [type](R& relationship) {
         return relationship.isDirect() && relationship.getRightObject()->isStatementType(type);
     };
-    return ManagerUtils::getEntitiesFromStore<S, R>(relationshipStore,
+    return ManagerUtils::getEntitiesFromRelationshipStore<R>(relationshipStore,
                                                     matcher,
                                                     R::getRightEntityFromRelationship);
 }
