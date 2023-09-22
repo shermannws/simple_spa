@@ -1,6 +1,6 @@
 #include "WhileNode.h"
 
-WhileNode::WhileNode(int statementNumber, std::shared_ptr<ConditionalExpressionNode> conditionalExpression,
+WhileNode::WhileNode(StatementNumber statementNumber, std::shared_ptr<ConditionalExpressionNode> conditionalExpression,
                      std::shared_ptr<StatementListNode> statementList)
                      : StatementNode(statementNumber),
                      conditionalExpression(std::move(conditionalExpression)),

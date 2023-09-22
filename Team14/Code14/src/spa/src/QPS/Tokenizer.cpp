@@ -6,6 +6,7 @@
 
 #include "Tokenizer.h"
 #include "Token.h"
+#include "Exception/SyntaxException.h"
 
 
 std::vector<std::string> specials{"(",")",";",",","_","+","-","*","/","%", "\""};
@@ -17,7 +18,7 @@ Tokenizer::Tokenizer(const std::string& input) : curr(0) {
 
 int Tokenizer::peekChar() {
     if (!isCurrValid()) {
-        throw std::runtime_error("No more char");
+        throw SyntaxException("No more char");
     }
 
     return input[curr];
@@ -31,7 +32,7 @@ int Tokenizer::popChar() {
 
 std::string Tokenizer::peekString() {
     if (!isCurrValid()) {
-        throw std::runtime_error("No more string");
+        throw SyntaxException("No more string");
     }
     std::string res;
     res += input[curr];
@@ -87,7 +88,7 @@ std::shared_ptr<Token> Tokenizer::popToken() {
 
         return std::make_shared<Token>(res);
     }
-    throw std::runtime_error("Invalid token");
+    throw SyntaxException("Invalid token");
 }
 
 std::shared_ptr<Token> Tokenizer::peekToken() {

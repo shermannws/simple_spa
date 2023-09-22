@@ -1,4 +1,5 @@
 #include "ExprSpecParser.h"
+#include "QPS/Exception/SyntaxException.h"
 
 ExprSpecParser::ExprSpecParser(std::shared_ptr<Tokenizer> tokenizer) : tokenizer(tokenizer){}
 
@@ -13,7 +14,7 @@ ExpressionSpec ExprSpecParser::extractExpressionSpec() {
             Expression expr = extractExpression();
             curr = tokenizer->popToken(); //consume expected trailing underscore
             if (!curr->isToken(TokenType::Underscore)) {
-                throw std::runtime_error("Invalid Expression Spec, missing trailing _");
+                throw SyntaxException("Invalid Expression Spec, missing trailing _");
             }
             return {ExpressionSpecType::PartialMatch,expr};
         }
@@ -21,14 +22,14 @@ ExpressionSpec ExprSpecParser::extractExpressionSpec() {
         Expression expr = extractExpression();
         return {ExpressionSpecType::ExactMatch,expr};
     } else {
-        throw std::runtime_error("Invalid Expression Spec");
+        throw SyntaxException("Invalid Expression Spec");
     }
 }
 
 Expression ExprSpecParser::extractExpression() {
     std::shared_ptr<Token> curr = tokenizer->peekToken(); // consume Quote
     if (!curr->isToken(TokenType::Quote)) {
-        throw std::runtime_error("Invalid expression spec");
+        throw SyntaxException("Invalid expression spec");
     }
     tokenizer->popToken();
 
@@ -48,7 +49,7 @@ Expression ExprSpecParser::extractExpression() {
                    && !operators.top()->isToken(TokenType::Lparenthesis)
                    && operators.top()->precedes(curr)) {
                 if (expression.size() < 2) {
-                    throw std::runtime_error("not enough factors");
+                    throw SyntaxException("not enough factors");
                 }
                 processSubExpr(operators, expression);
             }
@@ -56,31 +57,31 @@ Expression ExprSpecParser::extractExpression() {
         } else if (curr->isToken(TokenType::Rparenthesis)) {
             while (!operators.empty() && !operators.top()->isToken(TokenType::Lparenthesis)) {
                 if (expression.size() < 2) {
-                    throw std::runtime_error("not enough factors");
+                    throw SyntaxException("not enough factors");
                 }
                 processSubExpr(operators, expression);
             }
             if (!operators.top()->isToken(TokenType::Lparenthesis)){ // pop Lparentheses
-                throw std::runtime_error("Invalid expression spec");
+                throw SyntaxException("Invalid expression spec");
             }
             operators.pop();
         } else { //unexpected token
-            throw std::runtime_error("Invalid expression spec");
+            throw SyntaxException("Invalid expression spec");
         }
         curr = tokenizer->popToken();
     }
     while(!operators.empty()) {
         if (expression.size() < 2) {
-            throw std::runtime_error("not enough factors");
+            throw SyntaxException("not enough factors");
         }
         processSubExpr(operators, expression);
     }
 
     if (expression.empty() || expression.size() > 1) { // empty expression OR too many factors e.g "x y"
-        throw std::runtime_error("Invalid Expression Spec");
+        throw SyntaxException("Invalid Expression Spec");
     }
     if (!validateExprSyntax(tokens)) {
-        throw std::runtime_error("Invalid Expression Spec from VALIDATE");
+        throw SyntaxException("Invalid Expression Spec from VALIDATE");
     }
     return expression.top();
 }

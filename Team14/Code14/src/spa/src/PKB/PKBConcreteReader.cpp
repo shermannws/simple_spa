@@ -24,6 +24,22 @@ std::vector<Entity> PkbConcreteReader::getAllStatements() const {
     return this->readerManager->getAllStatements();
 }
 
+std::vector<Entity> PkbConcreteReader::getAllRead() const {
+    return this->readerManager->getAllRead();
+}
+
+std::vector<Entity> PkbConcreteReader::getAllPrint() const {
+    return this->readerManager->getAllPrint();
+}
+
+std::vector<Entity> PkbConcreteReader::getAllWhile() const {
+    return this->readerManager->getAllWhile();
+}
+
+std::vector<Entity> PkbConcreteReader::getAllIf() const {
+    return this->readerManager->getAllIf();
+}
+
 std::vector<std::vector<Entity>> PkbConcreteReader::getUsesStmtPair(StatementType type) const {
     return this->readerManager->getUsesStmtPair(type);
 }

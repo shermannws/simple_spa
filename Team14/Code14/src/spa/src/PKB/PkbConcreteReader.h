@@ -21,6 +21,14 @@ public:
 
     std::vector<Entity> getAllStatements() const override;
 
+    std::vector<Entity> getAllRead() const override;
+
+    std::vector<Entity> getAllPrint() const override;
+
+    std::vector<Entity> getAllWhile() const override;
+
+    std::vector<Entity> getAllIf() const override;
+
     // USES QUERY
     std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const override;
 

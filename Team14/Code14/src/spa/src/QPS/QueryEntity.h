@@ -12,7 +12,7 @@ enum class QueryEntityType {
     Read,
     Print,
     Assign,
-    Call,
+//    Call,
     While,
     If,
     Variable,

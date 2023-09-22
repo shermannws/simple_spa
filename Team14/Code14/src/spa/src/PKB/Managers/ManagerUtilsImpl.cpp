@@ -5,6 +5,14 @@
 #include "PKB/AssignmentPatternStore/AssignmentPatternStore.h"
 #include "PKB/Relationships/ModifiesRelationship.h"
 #include "PKB/Relationships/ParentRelationship.h"
+#include "Commons/Entities/Constant.h"
+#include "PKB/EntityStores/ConstantStore.h"
+#include "Commons/Entities/Procedure.h"
+#include "PKB/EntityStores/ProcedureStore.h"
+#include "Commons/Entities/Statement.h"
+#include "PKB/EntityStores/StatementStore.h"
+#include "Commons/Entities/Variable.h"
+#include "PKB/EntityStores/VariableStore.h"
 
 template std::vector<Entity> ManagerUtils::getEntitiesFromRelationshipStore<FollowsRelationship>(std::shared_ptr<RelationshipStore<FollowsRelationship>> store, std::function<bool(FollowsRelationship&)> matcher, std::function<Entity(FollowsRelationship&)> getter);
 
@@ -25,3 +33,12 @@ template std::vector<std::vector<Entity>> ManagerUtils::getEntityPairsFromStore<
 template std::vector<Entity> ManagerUtils::getEntitiesFromRelationshipStore<ParentRelationship>(std::shared_ptr<RelationshipStore<ParentRelationship>> store, std::function<bool(ParentRelationship&)> matcher, std::function<Entity(ParentRelationship&)> getter);
 
 template std::vector<std::vector<Entity>> ManagerUtils::getEntityPairsFromRelationshipStore<ParentRelationship>(std::shared_ptr<RelationshipStore<ParentRelationship>> store, std::function<bool(ParentRelationship&)> matcher, std::function<std::vector<Entity>(ParentRelationship&)> getter);
+
+template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Constant>(std::shared_ptr<EntityStore<Constant>> store, std::function<bool(Constant&)> matcher, std::function<Entity(Constant&)> getter);
+
+template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Procedure>(std::shared_ptr<EntityStore<Procedure>> store, std::function<bool(Procedure&)> matcher, std::function<Entity(Procedure&)> getter);
+
+template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Statement>(std::shared_ptr<EntityStore<Statement>> store, std::function<bool(Statement&)> matcher, std::function<Entity(Statement&)> getter);
+
+template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Variable>(std::shared_ptr<EntityStore<Variable>> store, std::function<bool(Variable&)> matcher, std::function<Entity(Variable&)> getter);
+

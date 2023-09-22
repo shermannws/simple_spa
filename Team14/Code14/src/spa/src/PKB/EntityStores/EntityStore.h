@@ -38,18 +38,22 @@ public:
      */
     void storeEntity(std::shared_ptr<T> entity);
 
+    /*!
+     * Retrieve the begin iterator for the RelationshipStore
+     */
+    typename std::unordered_set<std::shared_ptr<T>>::iterator getBeginIterator();
+
+    /*!
+     * Retrieve the end iterator for the RelationshipStore
+     */
+    typename std::unordered_set<std::shared_ptr<T>>::iterator getEndIterator();
+
     /**
      * @brief Returns the entity from the EntityStore that is equal to the entity passed in
      * @param entity The entity to be compared against
      * @return The entity from the EntityStore that is equal to the entity passed in
      */
     std::shared_ptr<Entity> getEntity(std::shared_ptr<T> entity) const;
-
-    /**
-     * @brief Returns all the entities in the EntityStore
-     * @return A vector containing all the entities in the EntityStore
-     */
-    std::vector<Entity> getAllEntities() const;
 };
 
 #include "EntityStore.hpp"
