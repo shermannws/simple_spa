@@ -4,6 +4,9 @@
 #include <list>
 
 class QPS {
+private:
+    std::shared_ptr<PkbReader> pkbReader;
 public:
-    static void evaluate(std::shared_ptr<PkbReader> pkbReader, std::string& query, std::list<std::string>& results);
+    explicit QPS(std::shared_ptr<PkbReader> pkbReader);
+    void evaluate(std::string& query, std::list<std::string>& results);
 };

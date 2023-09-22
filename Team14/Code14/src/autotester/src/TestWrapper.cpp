@@ -48,5 +48,6 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
   // ...code to evaluate query...
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.
-   QPS::evaluate(this->pkb.createPkbReader(), query, results);
+   QPS qps = QPS(this->pkb.createPkbReader());
+   qps.evaluate(query, results);
 }

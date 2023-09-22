@@ -6,11 +6,13 @@
 #include "Exception/SemanticException.h"
 #include "Exception/SyntaxException.h"
 
-void QPS::evaluate(std::shared_ptr<PkbReader> pkbReader, std::string& query, std::list<std::string>& results) {
+QPS::QPS(std::shared_ptr<PkbReader> pkbReader) : pkbReader(std::move(pkbReader)) {}
+
+void QPS::evaluate(std::string& query, std::list<std::string>& results) {
     try {
         PQLParser parser(query);
         Query queryObj = parser.parse();
-        PQLEvaluator evaluator = PQLEvaluator(std::move(pkbReader));
+        PQLEvaluator evaluator = PQLEvaluator(pkbReader);
         Result resultObj = evaluator.evaluate(queryObj);
         results = evaluator.formatResult(queryObj, resultObj);
     } catch (SyntaxException& e) {

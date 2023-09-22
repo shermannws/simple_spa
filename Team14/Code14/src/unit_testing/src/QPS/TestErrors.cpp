@@ -5,6 +5,9 @@
 
 using namespace std;
 
+Pkb pkb = Pkb();
+QPS qps = QPS(pkb.createPkbReader());
+
 TEST_CASE("Syntax Errors") {
     SECTION("in declarations") {
         vector<string> queries = {
@@ -13,10 +16,9 @@ TEST_CASE("Syntax Errors") {
                 "stmt s; Select ",
         };
 
-        Pkb pkb = Pkb();
         for (auto query : queries) {
             std::list<std::string> results;
-            QPS::evaluate(pkb.createPkbReader(), query, results);
+            qps.evaluate(query, results);
             REQUIRE(results.size() == 1);
             REQUIRE(find(results.begin(), results.end(), "SyntaxError") != results.end());
         }
@@ -34,10 +36,9 @@ TEST_CASE("Syntax Errors") {
             "variable v; Select v such that Follows(v,\"x\")", // SemanticError of v is handled after SyntaxError
         };
 
-        Pkb pkb = Pkb();
         for (auto query : queries) {
             std::list<std::string> results;
-            QPS::evaluate(pkb.createPkbReader(), query, results);
+            qps.evaluate(query, results);
             REQUIRE(results.size() == 1);
             REQUIRE(find(results.begin(), results.end(), "SyntaxError") != results.end());
         }
@@ -58,10 +59,9 @@ TEST_CASE("Semantic Errors") {
 
 //        "print p, variable v; Select p such that Modifies(p, v)" // TODO: to uncomment once Modifies is implemented
         };
-        Pkb pkb = Pkb();
         for (auto query : queries) {
             std::list<std::string> results;
-            QPS::evaluate(pkb.createPkbReader(), query, results);
+            qps.evaluate(query, results);
             REQUIRE(results.size() == 1);
             REQUIRE(find(results.begin(), results.end(), "SemanticError") != results.end());
         }
