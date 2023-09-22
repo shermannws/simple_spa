@@ -38,13 +38,15 @@ public:
      */
     void storeEntity(std::shared_ptr<T> entity);
 
-    /*!
-     * Retrieve the begin iterator for the RelationshipStore
+    /**
+     * @brief Retrieve the start iterator for the RelationshipStore
+     * @return The start iterator for the RelationshipStore
      */
     typename std::unordered_set<std::shared_ptr<T>>::iterator getBeginIterator();
 
-    /*!
-     * Retrieve the end iterator for the RelationshipStore
+    /**
+     * @brief Retrieve the end iterator for the RelationshipStore
+     * @return The end iterator for the RelationshipStore
      */
     typename std::unordered_set<std::shared_ptr<T>>::iterator getEndIterator();
 
