@@ -6,9 +6,18 @@
 
 #include "../../Commons/Entities/Entity.h"
 
+/*!
+ * @brief A class that stores all the entities in the SIMPLE source program
+ * @details This class is a template class that takes in a type T that is a subclass of Entity.
+ * This class is a super class of all the entity stores.
+ * @tparam T The type of the Entity that the EntityStore stores
+ */
 template <typename T>
 class EntityStore {
 private:
+    /**
+     * @brief The unordered_set that stores all the entities
+     */
     std::unordered_set<
         std::shared_ptr<T>,
         std::hash<std::shared_ptr<Entity>>,
@@ -16,24 +25,29 @@ private:
     > entityStore;
 
 public:
-    /*!
-     * Constructor for EntityStore
+    /**
+     * @brief Construct a new EntityStore object
+     * @return A new EntityStore object
      */
     EntityStore();
 
-    /*!
-     * Takes in as argumennt an entity and store it into the EntityStore
+    /**
+     * @brief Adds an Entity object to the store
+     * @param entity The Entity object to be added
+     * @return None
      */
     void storeEntity(std::shared_ptr<T> entity);
 
-    /*!
-     * Takes in as argumet an entity and retrieves an entiy that == the argument
-     * Returns the Entity if it exists, retur nullptr otherwise
+    /**
+     * @brief Returns the entity from the EntityStore that is equal to the entity passed in
+     * @param entity The entity to be compared against
+     * @return The entity from the EntityStore that is equal to the entity passed in
      */
     std::shared_ptr<Entity> getEntity(std::shared_ptr<T> entity) const;
 
-    /*!
-     * Returns all the Entities in the EntityStore in a vector
+    /**
+     * @brief Returns all the entities in the EntityStore
+     * @return A vector containing all the entities in the EntityStore
      */
     std::vector<Entity> getAllEntities() const;
 };

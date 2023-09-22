@@ -4,6 +4,7 @@
 
 #include "PKB/Managers/PkbWriterManager.h"
 #include "PKB/PkbWriter.h"
+#include "PKB/PkbTypes.h"
 
 class PkbConcreteWriter : public PkbWriter {
 private:
@@ -42,7 +43,7 @@ public:
     /*!
      * Adds new Assign Statement Entity into the PKB
      */
-    void addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<std::string> rhs) override;
+    void addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) override;
 
     /*!
      * Adds new Follows Relationship into the PKB

@@ -5,7 +5,7 @@
 Assignment::Assignment(
         std::shared_ptr<Statement> statement,
         std::shared_ptr<Variable> variable,
-        std::shared_ptr<std::string> expression
+        std::shared_ptr<Expression> expression
         ) 
     : statement(statement), variable(variable), expression(expression) {}
 
@@ -17,7 +17,7 @@ std::shared_ptr<Variable> Assignment::getVariable() const {
     return variable;
 }
 
-std::shared_ptr<std::string> Assignment::getExpression() const {
+std::shared_ptr<Expression> Assignment::getExpression() const {
     return expression;
 }
 

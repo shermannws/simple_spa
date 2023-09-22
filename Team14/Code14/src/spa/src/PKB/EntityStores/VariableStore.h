@@ -5,8 +5,10 @@
 
 class VariableStore : public EntityStore<Variable> {
 public:
-	/*!
-	 * Constructor for VariableStore
-	 */
+	/**
+     * @brief Construct a new VariableStore object
+     * @param None
+     * @return A new VariableStore object
+     */
 	VariableStore();
 };

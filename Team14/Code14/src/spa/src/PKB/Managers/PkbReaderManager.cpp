@@ -128,11 +128,11 @@ bool PkbReaderManager::hasFormerStmt(Statement& statement) const {
 }
 
 bool PkbReaderManager::hasLatterStarStmt(Statement& statement) const {
-    return this->followsRelationshipManager->hasLatterStarStmt(statement);
+    return this->followsRelationshipManager->hasLatterStmt(statement);
 }
 
 bool PkbReaderManager::hasFormerStarStmt(Statement& statement) const {
-    return this->followsRelationshipManager->hasFormerStarStmt(statement);
+    return this->followsRelationshipManager->hasFormerStmt(statement);
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getModifiesStmtPair(StatementType type) const {
@@ -166,7 +166,7 @@ std::vector<Entity> PkbReaderManager::getAllAssign() const {
 }
 
 // pattern a (_, "x")
-std::vector<Entity> PkbReaderManager::getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const {
+std::vector<Entity> PkbReaderManager::getAssignStmtsByRhs(Expression& rhs, bool hasRhsWildCard) const {
     return this->assignmentManager->getAssignStmtsByRhs(rhs, hasRhsWildCard);
 }
 
@@ -176,7 +176,7 @@ std::vector<std::vector<Entity>> PkbReaderManager::getAllAssignStmtVarPair() con
 }
 
 // pattern a (v, "x")
-std::vector<std::vector<Entity>> PkbReaderManager::getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const {
+std::vector<std::vector<Entity>> PkbReaderManager::getAssignStmtsVarPairByRhs(Expression& rhs, bool hasWildCard) const {
     return this->assignmentManager->getAssignStmtsVarPairByRhs(rhs, hasWildCard);
 }
 
@@ -186,7 +186,7 @@ std::vector<Entity> PkbReaderManager::getAssignStmtsByLhs(Variable& lhs) const {
 }
 
 // pattern a ("x", "x")
-std::vector<Entity> PkbReaderManager::getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const {
+std::vector<Entity> PkbReaderManager::getAssignStmtsByLhsRhs(Variable& lhs, Expression& rhs, bool hasRhsWildCard) const {
     return this->assignmentManager->getAssignStmtsByLhsRhs(lhs, rhs, hasRhsWildCard);
 }
 
@@ -247,7 +247,7 @@ bool PkbReaderManager::hasChildStmt(Statement& statement) const {
 }
 
 bool PkbReaderManager::hasChildStarStmt(Statement& statement) const {
-    return this->parentRelationshipManager->hasChildStarStmt(statement);
+    return this->parentRelationshipManager->hasChildStmt(statement);
 }
 
 bool PkbReaderManager::hasParentStmt(Statement& statement) const {
@@ -255,6 +255,6 @@ bool PkbReaderManager::hasParentStmt(Statement& statement) const {
 }
 
 bool PkbReaderManager::hasParentStarStmt(Statement& statement) const {
-    return this->parentRelationshipManager->hasParentStarStmt(statement);
+    return this->parentRelationshipManager->hasParentStmt(statement);
 }
 

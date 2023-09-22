@@ -4,6 +4,7 @@
 
 #include "PKB/Managers/PkbReaderManager.h"
 #include "PkbReader.h"
+#include "PkbTypes.h"
 
 class PkbConcreteReader : public PkbReader {
 private:
@@ -87,19 +88,19 @@ public:
     std::vector<Entity> getAllAssign() const override;
 
     // pattern a (_, "x")
-    std::vector<Entity> getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const override;
+    std::vector<Entity> getAssignStmtsByRhs(Expression& rhs, bool hasRhsWildCard) const override;
 
     // pattern a (v, _)
     std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const override;
 
     // pattern a (v, "x")
-    std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const override;
+    std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(Expression& rhs, bool hasWildCard) const override;
 
     // pattern a ("x", _)
     std::vector<Entity> getAssignStmtsByLhs(Variable& lhs) const override;
 
     // pattern a ("x", "x")
-    std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const override;
+    std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, Expression& rhs, bool hasRhsWildCard) const override;
 
     // PARENT QUERY
     // FOLLOWS QUERY

@@ -11,6 +11,7 @@
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
 #include "PKB/Managers/ParentRelationshipManager.h"
+#include "PKB/PkbTypes.h"
 
 class PkbReaderManager {
 private:
@@ -112,19 +113,19 @@ public:
     std::vector<Entity> getAllAssign() const;
 
     // pattern a (_, "x")
-    std::vector<Entity> getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const;
+    std::vector<Entity> getAssignStmtsByRhs(Expression& rhs, bool hasRhsWildCard) const;
 
     // pattern a (v, _)
     std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const;
 
     // pattern a (v, "x")
-    std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const;
+    std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(Expression& rhs, bool hasWildCard) const;
 
     // pattern a ("x", _)
     std::vector<Entity> getAssignStmtsByLhs(Variable& lhs) const;
 
     // pattern a ("x", "x")
-    std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const;
+    std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, Expression& rhs, bool hasRhsWildCard) const;
 
     std::vector<std::vector<Entity>> getParentPair(StatementType formerType, StatementType latterType) const;
 

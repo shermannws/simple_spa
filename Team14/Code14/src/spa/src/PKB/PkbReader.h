@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "PKB/Managers/PkbReaderManager.h"
+#include "PkbTypes.h"
 
 class PkbReader {
 public:
@@ -81,19 +82,19 @@ public:
     virtual std::vector<Entity> getAllAssign() const = 0;
 
     // pattern a (_, "x")
-    virtual std::vector<Entity> getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const = 0;
+    virtual std::vector<Entity> getAssignStmtsByRhs(Expression& rhs, bool hasRhsWildCard) const = 0;
 
     // pattern a (v, _)
     virtual std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const = 0;
 
     // pattern a (v, "x")
-    virtual std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const = 0;
+    virtual std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(Expression& rhs, bool hasWildCard) const = 0;
 
     // pattern a ("x", _)
     virtual std::vector<Entity> getAssignStmtsByLhs(Variable& lhs) const = 0;
 
     // pattern a ("x", "x")
-    virtual std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const = 0;
+    virtual std::vector<Entity> getAssignStmtsByLhsRhs(Variable& lhs, Expression& rhs, bool hasRhsWildCard) const = 0;
 
     // PARENT & PARENT* QUERY
     virtual std::vector<std::vector<Entity>> getParentPair(StatementType formerType, StatementType latterType) const = 0;

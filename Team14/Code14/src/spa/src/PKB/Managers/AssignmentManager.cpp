@@ -9,7 +9,7 @@ bool AssignmentManager::addAssignment(std::shared_ptr<Assignment> assignment) {
     return this->assignmentStore->addAssignment(std::move(assignment));
 }
 
-std::regex AssignmentManager::parsePattern(std::string& pattern) const {
+std::regex AssignmentManager::parsePattern(Expression& pattern) const {
     std::string regexPattern;
     for (char& c : pattern) {
         if (AppConstants::MATH_SPECIAL_CHAR_SET.find(c) != AppConstants::MATH_SPECIAL_CHAR_SET.end()) {
@@ -20,7 +20,7 @@ std::regex AssignmentManager::parsePattern(std::string& pattern) const {
     return std::regex(regexPattern);
 }
 
-bool AssignmentManager::matchExpression(std::string& expression, std::regex& pattern, bool hasWildCard) const {
+bool AssignmentManager::matchExpression(Expression& expression, std::regex& pattern, bool hasWildCard) const {
     if (hasWildCard) {
         // Case where pattern is "_x_"
         return std::regex_search(expression, std::regex(pattern));
@@ -44,7 +44,7 @@ std::vector<Entity> AssignmentManager::getAllAssignStmts() const {
 }
 
 // pattern a (_, "x")
-std::vector<Entity> AssignmentManager::getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const {
+std::vector<Entity> AssignmentManager::getAssignStmtsByRhs(Expression& rhs, bool hasRhsWildCard) const {
     std::regex regexPattern = AssignmentManager::parsePattern(rhs);
 
     auto matcher = [&regexPattern, &hasRhsWildCard, this](Assignment& assignment) {
@@ -63,7 +63,7 @@ std::vector<std::vector<Entity>> AssignmentManager::getAllAssignStmtVarPair() co
 }
 
 // pattern a (v, "x")
-std::vector<std::vector<Entity>> AssignmentManager::getAssignStmtsVarPairByRhs(std::string& rhs, bool hasRhsWildCard) const {
+std::vector<std::vector<Entity>> AssignmentManager::getAssignStmtsVarPairByRhs(Expression& rhs, bool hasRhsWildCard) const {
     std::regex regexPattern = AssignmentManager::parsePattern(rhs);
     auto matcher = [&regexPattern, &hasRhsWildCard, this](Assignment& assignment) {
         return AssignmentManager::matchExpression(*(assignment.getExpression()), regexPattern, hasRhsWildCard);
@@ -80,7 +80,7 @@ std::vector<Entity> AssignmentManager::getAssignStmtsByLhs(Variable& lhs) const 
 }
 
 // pattern a ("x", "x")
-std::vector<Entity> AssignmentManager::getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const {
+std::vector<Entity> AssignmentManager::getAssignStmtsByLhsRhs(Variable& lhs, Expression& rhs, bool hasRhsWildCard) const {
     std::regex regexPattern = AssignmentManager::parsePattern(rhs);
     auto matcher = [&regexPattern, &lhs, &hasRhsWildCard, this](Assignment& assignment) {
         return *(assignment.getVariable()) == lhs && AssignmentManager::matchExpression(*(assignment.getExpression()), regexPattern, hasRhsWildCard);

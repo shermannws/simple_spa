@@ -4,6 +4,14 @@
 #include "../../Commons/Entities/Entity.h"
 #include "RelationshipType.h"
 
+/**
+ * @brief A class that represents a relationship between two Entities
+ * @details This class is a template class that takes in two Entity types and represents a relationship between them.
+ * The relationship is represented by a RelationshipType enum value.
+ * This class is the super class of all Relationship classes.
+ * @tparam T The type of the left Entity in the relationship
+ * @tparam U The type of the right Entity in the relationship
+ */
 template <typename T, typename U>
 class Relationship: public HashableKey {
 private:
