@@ -16,7 +16,7 @@ protected:
             {QueryEntityType::Read, StatementType::Read},
             {QueryEntityType::If, StatementType::If},
             {QueryEntityType::While, StatementType::While},
-            {QueryEntityType::Call, StatementType::Call},
+//            {QueryEntityType::Call, StatementType::Call},
             {QueryEntityType::Stmt, StatementType::Stmt}
     };
 public:
