@@ -31,19 +31,19 @@ class SPParser {
 private:
     int runningStatementNumber;
 
-    std::shared_ptr<ProcedureNode> parseProcedure(std::queue<SPToken>& tokens);
-    std::shared_ptr<StatementListNode> parseStatementList(std::queue<SPToken>& tokens);
-    std::shared_ptr<AssignNode> parseAssignStatement(std::queue<SPToken>& tokens);
-    std::shared_ptr<ReadNode> parseReadStatement(std::queue<SPToken>& tokens);
-    std::shared_ptr<PrintNode> parsePrintStatement(std::queue<SPToken>& tokens);
-    std::shared_ptr<CallNode> parseCallStatement(std::queue<SPToken>& tokens);
-    std::shared_ptr<IfNode> parseIfStatement(std::queue<SPToken>& tokens);
-    std::shared_ptr<WhileNode> parseWhileStatement(std::queue<SPToken>& tokens);
-    std::shared_ptr<ExpressionNode> parseExpression(std::queue<SPToken>& tokens, TokenType endDelimiter);
-    std::shared_ptr<VariableNode> parseVariable(std::queue<SPToken>& tokens);
-    std::shared_ptr<ConstantNode> parseConstant(std::queue<SPToken>& tokens);
-    std::shared_ptr<ConditionalExpressionNode> parseConditionalExpression(std::queue<SPToken>& tokens);
-    std::shared_ptr<RelativeExpressionNode> parseRelativeExpression(std::queue<SPToken>& tokens);
+    std::shared_ptr<ProcedureNode> parseProcedure(std::deque<SPToken>& tokens);
+    std::shared_ptr<StatementListNode> parseStatementList(std::deque<SPToken>& tokens);
+    std::shared_ptr<AssignNode> parseAssignStatement(std::deque<SPToken>& tokens);
+    std::shared_ptr<ReadNode> parseReadStatement(std::deque<SPToken>& tokens);
+    std::shared_ptr<PrintNode> parsePrintStatement(std::deque<SPToken>& tokens);
+    std::shared_ptr<CallNode> parseCallStatement(std::deque<SPToken>& tokens);
+    std::shared_ptr<IfNode> parseIfStatement(std::deque<SPToken>& tokens);
+    std::shared_ptr<WhileNode> parseWhileStatement(std::deque<SPToken>& tokens);
+    std::shared_ptr<ExpressionNode> parseExpression(std::deque<SPToken>& tokens, TokenType endDelimiter);
+    std::shared_ptr<VariableNode> parseVariable(std::deque<SPToken>& tokens);
+    std::shared_ptr<ConstantNode> parseConstant(std::deque<SPToken>& tokens);
+    std::shared_ptr<ConditionalExpressionNode> parseConditionalExpression(std::deque<SPToken>& tokens);
+    std::shared_ptr<RelativeExpressionNode> parseRelativeExpression(std::deque<SPToken>& tokens);
 
     /**
      * Returns an int representing the precedence value of the given operator,
@@ -60,7 +60,7 @@ private:
      * @param endDelimiter TokenType of token after the last token to be converted to postfix
      * @return Sorted queue of tokens
      */
-    static std::queue<SPToken> infixToPostfix(std::queue<SPToken>& tokens, TokenType endDelimiter);
+    static std::deque<SPToken> infixToPostfix(std::deque<SPToken>& tokens, TokenType endDelimiter);
 public:
     SPParser();
 
