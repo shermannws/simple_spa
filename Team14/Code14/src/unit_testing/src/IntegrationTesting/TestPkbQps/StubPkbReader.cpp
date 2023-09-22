@@ -94,6 +94,10 @@ bool StubPkbReader::hasFollows() const {
     return false;
 }
 
+bool StubPkbReader::hasFollowsStar() const {
+    return false;
+}
+
 bool StubPkbReader::hasLatterStmt(Statement& statement) const {
     return false;
 }
@@ -227,6 +231,10 @@ bool StubPkbReader::isParentStar(Statement& statement1, Statement& statement2) c
 }
 
 bool StubPkbReader::hasParent() const {
+    return false;
+}
+
+bool StubPkbReader::hasParentStar() const {
     return false;
 }
 

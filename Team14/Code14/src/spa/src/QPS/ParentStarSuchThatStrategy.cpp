@@ -94,7 +94,7 @@ Result ParentStarSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause
         type = ResultType::Boolean;
 
     } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Wildcard) { // Parent*(_,_)
-        res.setBoolResult(pkbReader->hasParent());
+        res.setBoolResult(pkbReader->hasParentStar());
         type = ResultType::Boolean;
 
     }

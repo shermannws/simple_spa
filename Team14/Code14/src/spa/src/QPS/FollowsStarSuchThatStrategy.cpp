@@ -94,7 +94,7 @@ Result FollowsStarSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> claus
         type = ResultType::Boolean;
 
     } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Wildcard) { // Follows*(_,_)
-        res.setBoolResult(pkbReader->hasFollows());
+        res.setBoolResult(pkbReader->hasFollowsStar());
         type = ResultType::Boolean;
 
     }
