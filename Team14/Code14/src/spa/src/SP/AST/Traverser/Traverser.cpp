@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Traverser.h"
 #include "SP/AST/Nodes/IfNode.h"
 #include "SP/AST/Nodes/WhileNode.h"

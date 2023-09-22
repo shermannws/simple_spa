@@ -1,5 +1,3 @@
-#pragma once
-
 #include "SemanticValHandler.h"
 
 SemanticValHandler::SemanticValHandler() : nextHandler(nullptr) {}

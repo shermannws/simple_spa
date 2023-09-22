@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Procedure.h"
 
 Procedure::Procedure(std::string name)

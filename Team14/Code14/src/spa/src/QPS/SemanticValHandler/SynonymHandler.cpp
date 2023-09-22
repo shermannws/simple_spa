@@ -1,5 +1,3 @@
-#pragma once
-
 #include "SynonymHandler.h"
 #include "../Exception/SemanticException.h"
 
