@@ -34,11 +34,11 @@ template std::vector<Entity> ManagerUtils::getEntitiesFromRelationshipStore<Pare
 
 template std::vector<std::vector<Entity>> ManagerUtils::getEntityPairsFromRelationshipStore<ParentRelationship>(std::shared_ptr<RelationshipStore<ParentRelationship>> store, std::function<bool(ParentRelationship&)> matcher, std::function<std::vector<Entity>(ParentRelationship&)> getter);
 
-template std::vector<Entity> ManagerUtils::getEntitiesFromStore<ConstantStore, Constant>(std::shared_ptr<ConstantStore> store, std::function<bool(Constant&)> matcher, std::function<Entity(Constant&)> getter);
+template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Constant>(std::shared_ptr<EntityStore<Constant>> store, std::function<bool(Constant&)> matcher, std::function<Entity(Constant&)> getter);
 
-template std::vector<Entity> ManagerUtils::getEntitiesFromStore<ProcedureStore, Procedure>(std::shared_ptr<ProcedureStore> store, std::function<bool(Procedure&)> matcher, std::function<Entity(Procedure&)> getter);
+template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Procedure>(std::shared_ptr<EntityStore<Procedure>> store, std::function<bool(Procedure&)> matcher, std::function<Entity(Procedure&)> getter);
 
-template std::vector<Entity> ManagerUtils::getEntitiesFromStore<StatementStore, Statement>(std::shared_ptr<StatementStore> store, std::function<bool(Statement&)> matcher, std::function<Entity(Statement&)> getter);
+template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Statement>(std::shared_ptr<EntityStore<Statement>> store, std::function<bool(Statement&)> matcher, std::function<Entity(Statement&)> getter);
 
-template std::vector<Entity> ManagerUtils::getEntitiesFromStore<VariableStore, Variable>(std::shared_ptr<VariableStore> store, std::function<bool(Variable&)> matcher, std::function<Entity(Variable&)> getter);
+template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Variable>(std::shared_ptr<EntityStore<Variable>> store, std::function<bool(Variable&)> matcher, std::function<Entity(Variable&)> getter);
 

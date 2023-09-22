@@ -17,11 +17,11 @@ private:
     std::shared_ptr<StatementStore> statementStore;
     std::shared_ptr<VariableStore> variableStore;
 protected:
-    template <typename S, typename E>
-    std::vector<Entity> getAllEntities(std::shared_ptr<S>) const;
+    template <typename E>
+    std::vector<Entity> getAllEntities(std::shared_ptr<EntityStore<E>>) const;
 
-    template <typename S, typename E>
-    std::vector<Entity> getEntities(std::shared_ptr<S>, std::function<bool(E&)> matcher) const;
+    template <typename E>
+    std::vector<Entity> getEntities(std::shared_ptr<EntityStore<E>>, std::function<bool(E&)> matcher) const;
 public:
     EntitiesManager();
 
