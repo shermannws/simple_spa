@@ -46,9 +46,9 @@ Result PQLEvaluator::evaluate(Query& query) {
     Result result;
     // if query is a such that query
     if (!query.getSuchThat().empty()) {
-        if (query.getSuchThat()[0].getType() == ClauseType::Uses) {
+        if (query.getSuchThat()[0]->getType() == ClauseType::Uses) {
             clauseHandler->setStrategy(std::make_shared<UsesSuchThatStrategy>(UsesSuchThatStrategy()));
-        } else if (query.getSuchThat()[0].getType() == ClauseType::Follows) {
+        } else if (query.getSuchThat()[0]->getType() == ClauseType::Follows) {
             clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
         }
         clauseHandler->executeClause(query.getSuchThat()[0], result);
@@ -107,6 +107,14 @@ std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& que
             return pkbReader->getAllVariables();
         case QueryEntityType::Constant:
             return pkbReader->getAllConstants();
+        case QueryEntityType::While:
+            return pkbReader->getAllWhile();
+        case QueryEntityType::If:
+            return pkbReader->getAllIf();
+        case QueryEntityType::Read:
+            return pkbReader->getAllRead();
+        case QueryEntityType::Print:
+            return pkbReader->getAllPrint();
         default:
             throw std::runtime_error("Not supported entity type in query select clause");
     }

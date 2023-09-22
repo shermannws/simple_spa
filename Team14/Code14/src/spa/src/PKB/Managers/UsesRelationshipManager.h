@@ -9,11 +9,9 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "PKB/Relationships/UsesRelationship.h"
-#include "PKB/Managers/ManagerUtils.h"
+#include "PKB/Managers/StmtToVarRelationshipManager.h"
 
-class UsesRelationshipManager {
-private:
-    std::shared_ptr<UsesRelationshipStore> usesRelationshipStore;
+class UsesRelationshipManager : StmtToVarRelationshipManager<UsesRelationshipStore, UsesRelationship> {
 public:
     UsesRelationshipManager();
 

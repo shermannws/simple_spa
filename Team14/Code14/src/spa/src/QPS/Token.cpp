@@ -2,6 +2,7 @@
 
 #include <string>
 #include <regex>
+#include <unordered_map>
 
 std::unordered_map<TokenType, int> operatorPrecedence = {
         {TokenType::Asterisk, 1},
@@ -64,12 +65,8 @@ bool Token::isToken(TokenType ttype) {
 }
 
 bool Token::isDesignEntity() {
-    if (type == TokenType::Word && (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" ||
-    rep == "assign" || rep == "call" || rep == "while" || rep == "if" || rep == "variable" || rep == "constant")
-    ) {
-        return true;
-    }
-    return false;
+   return type == TokenType::Word && (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print"
+        || rep == "assign" || rep == "call" || rep == "while" || rep == "if" || rep == "variable" || rep == "constant");
 }
 
 bool Token::isIdent() {

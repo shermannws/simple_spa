@@ -2,9 +2,9 @@
 
 #include "VariableNode.h"
 
-VariableNode::VariableNode(std::string varName) : varName(std::move(varName)) {}
+VariableNode::VariableNode(VariableName varName) : varName(std::move(varName)) {}
 
-std::string VariableNode::getVarName() {
+VariableName VariableNode::getVarName() {
     return varName;
 }
 

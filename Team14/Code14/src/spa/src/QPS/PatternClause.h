@@ -12,8 +12,8 @@ private:
 
 public:
     PatternClause();
-    void setSecondParam(ExpressionSpec & expr);
-    ExpressionSpec getSecondParam();
+    void setSecondParam(ExpressionSpec& expr);
+    ExpressionSpec& getSecondParam();
     void setSyn(Synonym synonym);
     Synonym getSyn();
 };

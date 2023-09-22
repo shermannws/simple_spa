@@ -24,6 +24,22 @@ std::vector<Entity> PkbConcreteReader::getAllStatements() const {
     return this->readerManager->getAllStatements();
 }
 
+std::vector<Entity> PkbConcreteReader::getAllRead() const {
+    return this->readerManager->getAllRead();
+}
+
+std::vector<Entity> PkbConcreteReader::getAllPrint() const {
+    return this->readerManager->getAllPrint();
+}
+
+std::vector<Entity> PkbConcreteReader::getAllWhile() const {
+    return this->readerManager->getAllWhile();
+}
+
+std::vector<Entity> PkbConcreteReader::getAllIf() const {
+    return this->readerManager->getAllIf();
+}
+
 std::vector<std::vector<Entity>> PkbConcreteReader::getUsesStmtPair(StatementType type) const {
     return this->readerManager->getUsesStmtPair(type);
 }
@@ -98,6 +114,22 @@ bool PkbConcreteReader::isFollowsStar(Statement& statement1, Statement& statemen
 
 bool PkbConcreteReader::hasFollows() const {
     return this->readerManager->hasFollows();
+}
+
+bool PkbConcreteReader::hasLatterStmt(Statement& statement) const {
+    return this->readerManager->hasLatterStmt(statement);
+}
+
+bool PkbConcreteReader::hasFormerStmt(Statement& statement) const {
+    return this->readerManager->hasFormerStmt(statement);
+}
+
+bool PkbConcreteReader::hasLatterStarStmt(Statement& statement) const {
+    return this->readerManager->hasLatterStarStmt(statement);
+}
+
+bool PkbConcreteReader::hasFormerStarStmt(Statement& statement) const {
+    return this->readerManager->hasFormerStarStmt(statement);
 }
 
 std::vector<std::vector<Entity>> PkbConcreteReader::getModifiesStmtPair(StatementType type) const {
@@ -204,4 +236,20 @@ bool PkbConcreteReader::isParentStar(Statement& statement1, Statement& statement
 
 bool PkbConcreteReader::hasParent() const {
     return this->readerManager->hasParent();
+}
+
+bool PkbConcreteReader::hasParentStmt(Statement& statement) const {
+    return this->readerManager->hasParentStmt(statement);
+}
+
+bool PkbConcreteReader::hasParentStarStmt(Statement& statement) const {
+    return this->readerManager->hasParentStarStmt(statement);
+}
+
+bool PkbConcreteReader::hasChildStmt(Statement& statement) const {
+    return this->readerManager->hasChildStmt(statement);
+}
+
+bool PkbConcreteReader::hasChildStarStmt(Statement& statement) const {
+    return this->readerManager->hasChildStarStmt(statement);
 }

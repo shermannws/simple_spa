@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include "Query.h"
+#include "Exception/SemanticException.h"
 
 Query::Query() {
     declarations = DeclarationMap();
@@ -25,7 +26,7 @@ void Query::addSelect(const EntityPtr& entity){
 
 void Query::addDeclaration(const EntityPtr& entity){
     if (declarations.find(entity->getSynonym()) != declarations.end()){
-        throw std::runtime_error("Trying to redeclare a synonym");
+        throw SemanticException("Trying to redeclare a synonym");
     }
     declarations.insert({entity->getSynonym(), entity});
 }
@@ -42,18 +43,18 @@ std::vector<EntityPtr> Query::getSelect() {
     return selects;
 }
 
-void Query::addSuchThat(SuchThatClause& clause) {
+void Query::addSuchThat(std::shared_ptr<SuchThatClause> clause) {
     suchThatClauses.push_back(clause);
 }
 
-std::vector<SuchThatClause> Query::getSuchThat() {
+std::vector<std::shared_ptr<SuchThatClause>> Query::getSuchThat() {
     return suchThatClauses;
 }
 
-void Query::addPattern(PatternClause& clause) {
+void Query::addPattern(std::shared_ptr<PatternClause> clause) {
     patternClauses.push_back(clause);
 }
 
-std::vector<PatternClause> Query::getPattern() {
+std::vector<std::shared_ptr<PatternClause>> Query::getPattern() {
     return patternClauses;
 }

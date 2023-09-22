@@ -15,6 +15,14 @@ public:
 
     virtual std::vector<Entity> getAllStatements() const = 0;
 
+    virtual std::vector<Entity> getAllRead() const = 0;
+
+    virtual std::vector<Entity> getAllPrint() const = 0;
+
+    virtual std::vector<Entity> getAllWhile() const = 0;
+
+    virtual std::vector<Entity> getAllIf() const = 0;
+
     // USES QUERY
     virtual std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const = 0;
 
@@ -54,6 +62,14 @@ public:
     virtual bool isFollowsStar(Statement& statement1, Statement& statement2) const = 0;
 
     virtual bool hasFollows() const = 0;
+
+    virtual bool hasLatterStmt(Statement& statement) const = 0;
+
+    virtual bool hasFormerStmt(Statement& statement) const = 0;
+
+    virtual bool hasLatterStarStmt(Statement& statement) const = 0;
+
+    virtual bool hasFormerStarStmt(Statement& statement) const = 0;
 
     // MODIFIES QUERY
     virtual std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const = 0;
@@ -113,4 +129,12 @@ public:
     virtual bool isParentStar(Statement& statement1, Statement& statement2) const = 0;
 
     virtual bool hasParent() const = 0;
+
+    virtual bool hasParentStmt(Statement& statement) const = 0;
+
+    virtual bool hasParentStarStmt(Statement& statement) const = 0;
+
+    virtual bool hasChildStmt(Statement& statement) const = 0;
+
+    virtual bool hasChildStarStmt(Statement& statement) const = 0;
 };

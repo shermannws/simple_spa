@@ -20,6 +20,14 @@ public:
 
     std::vector<Entity> getAllStatements() const override;
 
+    std::vector<Entity> getAllRead() const override;
+
+    std::vector<Entity> getAllPrint() const override;
+
+    std::vector<Entity> getAllWhile() const override;
+
+    std::vector<Entity> getAllIf() const override;
+
     // USES QUERY
     std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const override;
 
@@ -59,6 +67,14 @@ public:
     bool isFollowsStar(Statement& statement1, Statement& statement2) const override;
 
     bool hasFollows() const override;
+
+    bool hasLatterStmt(Statement& statement) const override;
+
+    bool hasFormerStmt(Statement& statement) const override;
+
+    bool hasLatterStarStmt(Statement& statement) const override;
+
+    bool hasFormerStarStmt(Statement& statement) const override;
 
     // MODIFIES QUERY
 
@@ -120,4 +136,12 @@ public:
     bool isParentStar(Statement& statement1, Statement& statement2) const override;
 
     bool hasParent() const override;
+
+    bool hasParentStmt(Statement& statement) const override;
+
+    bool hasParentStarStmt(Statement& statement) const override;
+
+    bool hasChildStmt(Statement& statement) const override;
+
+    bool hasChildStarStmt(Statement& statement) const override;
 };

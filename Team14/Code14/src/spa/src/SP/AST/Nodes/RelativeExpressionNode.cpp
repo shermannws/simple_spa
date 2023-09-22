@@ -34,7 +34,7 @@ ComparisonOperatorType RelativeExpressionNode::translateComparisonOperatorType(s
             { AppConstants::STRING_GREATER_EQUAL, ComparisonOperatorType::GreaterThanEqual },
             { AppConstants::STRING_LESS_THAN, ComparisonOperatorType::LessThan },
             { AppConstants::STRING_LESS_EQUAL, ComparisonOperatorType::LessThanEqual },
-            { AppConstants::STRING_EQUAL, ComparisonOperatorType::Equal },
+            { AppConstants::STRING_DOUBLE_EQUAL, ComparisonOperatorType::Equal },
             { AppConstants::STRING_NOT_EQUAL, ComparisonOperatorType::NotEqual }
     };
     assert(operatorTypeMap.find(operatorTypeString) != operatorTypeMap.end());

@@ -2,11 +2,7 @@
 
 #include <memory>
 
-#include "PKB/Managers/AssignmentManager.h"
-#include "PKB/EntityStores/ConstantStore.h"
-#include "PKB/EntityStores/ProcedureStore.h"
-#include "PKB/EntityStores/StatementStore.h"
-#include "PKB/EntityStores/VariableStore.h"
+#include "PKB/Managers/EntitiesManager.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
@@ -16,26 +12,16 @@ class PkbReaderManager {
 private:
     std::shared_ptr<AssignmentManager> assignmentManager;
 
-    std::shared_ptr<ConstantStore> constantStore;
-    std::shared_ptr<ProcedureStore> procedureStore;
-    std::shared_ptr<StatementStore> statementStore;
-    std::shared_ptr<VariableStore> variableStore;
+    std::shared_ptr<EntitiesManager> entityManager;
 
     std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager;
     std::shared_ptr<UsesRelationshipManager> usesRelationshipManager;
     std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager;
     std::shared_ptr<ParentRelationshipManager> parentRelationshipManager;
-
-    template <typename T>
-    std::vector<Entity> getAllEntities(const std::shared_ptr<EntityStore<T>>&) const;
-
 public:
     PkbReaderManager(
             std::shared_ptr<AssignmentManager> assignmentManager,
-            std::shared_ptr<ConstantStore> constantStore,
-            std::shared_ptr<ProcedureStore> procedureStore,
-            std::shared_ptr<StatementStore> statementStore,
-            std::shared_ptr<VariableStore> variableStore,
+            std::shared_ptr<EntitiesManager> entityManager,
             std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
             std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
@@ -49,6 +35,14 @@ public:
     std::vector<Entity> getAllProcedures() const;
 
     std::vector<Entity> getAllStatements() const;
+
+    std::vector<Entity> getAllRead() const;
+
+    std::vector<Entity> getAllPrint() const;
+
+    std::vector<Entity> getAllWhile() const;
+
+    std::vector<Entity> getAllIf() const;
 
     std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const;
 
@@ -87,6 +81,14 @@ public:
     bool isFollowsStar(Statement& statement1, Statement& statement2) const;
 
     bool hasFollows() const;
+
+    bool hasLatterStmt(Statement& statement) const;
+
+    bool hasFormerStmt(Statement& statement) const;
+
+    bool hasLatterStarStmt(Statement& statement) const;
+
+    bool hasFormerStarStmt(Statement& statement) const;
 
     std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const;
 
@@ -143,5 +145,13 @@ public:
     bool isParentStar(Statement& statement1, Statement& statement2) const;
 
     bool hasParent() const;
+
+    bool hasParentStmt(Statement& statement) const;
+
+    bool hasParentStarStmt(Statement& statement) const;
+
+    bool hasChildStmt(Statement& statement) const;
+
+    bool hasChildStarStmt(Statement& statement) const;
 
 };

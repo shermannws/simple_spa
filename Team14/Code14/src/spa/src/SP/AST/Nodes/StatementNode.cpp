@@ -1,7 +1,7 @@
 #include "StatementNode.h"
 
-StatementNode::StatementNode(int statementNumber) : statementNumber(statementNumber) {}
+StatementNode::StatementNode(StatementNumber statementNumber) : statementNumber(statementNumber) {}
 
-int StatementNode::getStatementNumber() {
+StatementNumber StatementNode::getStatementNumber() {
     return statementNumber;
 }

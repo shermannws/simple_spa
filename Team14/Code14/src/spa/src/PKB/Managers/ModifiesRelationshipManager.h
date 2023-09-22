@@ -9,11 +9,9 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "PKB/Relationships/ModifiesRelationship.h"
-#include "PKB/Managers/ManagerUtils.h"
+#include "PKB/Managers/StmtToVarRelationshipManager.h"
 
-class ModifiesRelationshipManager {
-private:
-    std::shared_ptr<ModifiesRelationshipStore> modifiesRelationshipStore;
+class ModifiesRelationshipManager : StmtToVarRelationshipManager<ModifiesRelationshipStore, ModifiesRelationship> {
 public:
     /*!
      * Constructor for ModifiesRelationshipManager

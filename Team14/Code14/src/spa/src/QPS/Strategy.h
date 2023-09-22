@@ -16,11 +16,11 @@ protected:
             {QueryEntityType::Read, StatementType::Read},
             {QueryEntityType::If, StatementType::If},
             {QueryEntityType::While, StatementType::While},
-            {QueryEntityType::Call, StatementType::Call},
+//            {QueryEntityType::Call, StatementType::Call},
             {QueryEntityType::Stmt, StatementType::Stmt}
     };
 public:
     Strategy() = default;
     virtual ~Strategy() = default;
-    virtual Result evaluateClause(Clause& clause, std::shared_ptr<PkbReader> pkbReader) const = 0;
+    virtual Result evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const = 0;
 };
