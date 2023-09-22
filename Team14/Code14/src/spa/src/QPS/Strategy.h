@@ -22,5 +22,5 @@ protected:
 public:
     Strategy() = default;
     virtual ~Strategy() = default;
-    virtual Result evaluateClause(Clause& clause, std::shared_ptr<PkbReader> pkbReader) const = 0;
+    virtual Result evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const = 0;
 };

@@ -33,3 +33,19 @@ bool ParentRelationshipManager::isParent(Statement& statement1, Statement& state
 bool ParentRelationshipManager::hasParent() const {
     return this->hasRelationship();
 };
+
+bool ParentRelationshipManager::hasParentStmt(Statement& statement) const {
+    return this->isLatter(statement);
+};
+
+bool ParentRelationshipManager::hasParentStarStmt(Statement& statement) const {
+    return this->isLatter(statement);
+};
+
+bool ParentRelationshipManager::hasChildStmt(Statement& statement) const {
+    return this->isFormer(statement);
+};
+
+bool ParentRelationshipManager::hasChildStarStmt(Statement& statement) const {
+    return this->isFormer(statement);
+};

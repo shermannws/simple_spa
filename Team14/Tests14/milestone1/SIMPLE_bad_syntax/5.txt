@@ -1,0 +1,3 @@
+procedure abc {
+print 0;
+}

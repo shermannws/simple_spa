@@ -1,0 +1,5 @@
+procedure abc {
+while ((a<b)) {
+read c;
+}
+}

@@ -8,7 +8,7 @@ void ClauseHandler::setStrategy(std::shared_ptr<Strategy> strategy) {
     this->strategy = std::move(strategy);
 }
 
-void ClauseHandler::executeClause(Clause& clause, Result& result) const {
+void ClauseHandler::executeClause(std::shared_ptr<Clause> clause, Result& result) const {
     if (strategy) {
         result = strategy->evaluateClause(clause, pkbReader);
     } else {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 enum class TokenType {
     // brackets
@@ -41,4 +42,7 @@ public:
     bool isDesignEntity();
     bool isInteger();
     bool isIdent();
+    bool isOperand();
+    bool isOperator();
+    bool precedes(const std::shared_ptr<Token> other);
 };

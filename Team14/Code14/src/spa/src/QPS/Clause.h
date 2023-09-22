@@ -19,15 +19,14 @@ class Clause {
 private:
     ClauseType type;
     Ref firstParam;
-
 public:
     explicit Clause();
     virtual ~Clause() = default;
 
-    void setType(ClauseType type);
+    void setType(ClauseType clauseType);
 
     ClauseType getType();
 
     void setFirstParam(Ref& ref);
-    Ref getFirstParam();
+    Ref& getFirstParam();
 };

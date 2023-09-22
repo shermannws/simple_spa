@@ -1,0 +1,7 @@
+procedure testIf {
+if (if > print) then {
+while = read;
+} else {
+read = call;
+}
+}

@@ -6,13 +6,14 @@
 
 class PatternClause :  public Clause {
 private:
-    Ref secondParam; //TODO support expression spec
-    std::shared_ptr<QueryEntity> entity;
+    ExpressionSpec secondParam;
+    Synonym syn;
+    DeclarationMap entityMap;
 
 public:
     PatternClause();
-    void setSecondParam(Ref& ref);
-    Ref getSecondParam();
-    void setEntity(std::shared_ptr<QueryEntity> ent);
-    std::shared_ptr<QueryEntity> getEntity();
+    void setSecondParam(ExpressionSpec& expr);
+    ExpressionSpec& getSecondParam();
+    void setSyn(Synonym synonym);
+    Synonym getSyn();
 };

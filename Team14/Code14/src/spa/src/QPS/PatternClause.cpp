@@ -1,19 +1,21 @@
 #include "PatternClause.h"
 
+#include <utility>
+
 PatternClause::PatternClause() : Clause() {};
 
-void PatternClause::setSecondParam(Ref& ref) {
-    secondParam = ref;
+void PatternClause::setSecondParam(ExpressionSpec & expr) {
+    secondParam = expr;
 }
 
-Ref PatternClause::getSecondParam() {
+ExpressionSpec& PatternClause::getSecondParam() {
     return secondParam;
 }
 
-void PatternClause::setEntity(std::shared_ptr<QueryEntity> ent) {
-    entity = ent;
+void PatternClause::setSyn(Synonym synonym) {
+    syn = synonym;
 }
 
-std::shared_ptr<QueryEntity> PatternClause::getEntity() {
-    return entity;
-};
+Synonym PatternClause::getSyn() {
+    return syn;
+}

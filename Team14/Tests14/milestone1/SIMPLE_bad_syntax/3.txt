@@ -1,0 +1,2 @@
+procedure abc {
+read a;
