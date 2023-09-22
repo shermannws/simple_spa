@@ -1,12 +1,12 @@
 1 - check procedure name
 procedure p;
 Select p
-testIf
+testWhile
 5000
 2 - check stmt
 stmt s;
 Select s
-1, 2, 3
+1, 2
 5000
 3 - check read stmt
 read r;
@@ -16,40 +16,45 @@ Select r
 4 - check var
 variable v;
 Select v
-if, print, while, read, call
+a, while
 5000
 5 - check assign
 assign a;
 Select a
-2, 3
+
 5000
 6 - check if stmt
 if if;
 Select if
-1
+
 5000
 7 - check Uses
 variable v;
 Select v such that Uses(1, v)
-if, print, read, call
+while, a
 5000
 8 - check Modifies
 variable v;
 Select v such that Modifies(1, v)
-while, read
+
 5000
-9 - check Modifies for stmt in if-block
+9 - check Uses for stmt in if-block
 variable v;
-Select v such that Modifies(3, v)
-read
+Select v such that Uses(2, v)
+a
 5000
 10 - check while stmt
 while while;
 Select while
-
+1
 5000
-10 - check parent rs
-procedure p;
-Select p such that Parent(1,2)
-testIf
+11 - check print stmt
+print print;
+Select print
+2
+5000
+12 - check print stmt with such that Parent clause
+print print;
+Select print such that Parent(1, print)
+2
 5000
