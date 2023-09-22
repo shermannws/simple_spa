@@ -88,6 +88,14 @@ public:
 
     bool hasFollows() const;
 
+    bool hasLatterStmt(Statement& statement) const;
+
+    bool hasFormerStmt(Statement& statement) const;
+
+    bool hasLatterStarStmt(Statement& statement) const;
+
+    bool hasFormerStarStmt(Statement& statement) const;
+
     std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const;
 
     std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const;
@@ -143,5 +151,13 @@ public:
     bool isParentStar(Statement& statement1, Statement& statement2) const;
 
     bool hasParent() const;
+
+    bool hasParentStmt(Statement& statement) const;
+
+    bool hasParentStarStmt(Statement& statement) const;
+
+    bool hasChildStmt(Statement& statement) const;
+
+    bool hasChildStarStmt(Statement& statement) const;
 
 };

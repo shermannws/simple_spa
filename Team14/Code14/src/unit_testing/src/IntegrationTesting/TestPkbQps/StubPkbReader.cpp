@@ -94,6 +94,22 @@ bool StubPkbReader::hasFollows() const {
     return false;
 }
 
+bool StubPkbReader::hasLatterStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasFormerStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasLatterStarStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasFormerStarStmt(Statement& statement) const {
+    return false;
+}
+
 std::vector<std::vector<Entity>> StubPkbReader::getModifiesStmtPair(StatementType type) const {
     return std::vector<std::vector<Entity>>();
 }
@@ -211,5 +227,21 @@ bool StubPkbReader::isParentStar(Statement& statement1, Statement& statement2) c
 }
 
 bool StubPkbReader::hasParent() const {
+    return false;
+}
+
+bool StubPkbReader::hasParentStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasParentStarStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasChildStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasChildStarStmt(Statement& statement) const {
     return false;
 }

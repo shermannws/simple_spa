@@ -68,3 +68,17 @@ template <typename S, typename R>
 bool StmtToStmtRelationshipManager<S, R>::hasRelationship() const {
     return !relationshipStore->isEmpty();
 }
+
+template <typename S, typename R>
+bool StmtToStmtRelationshipManager<S, R>::isFormer(Statement& statement) const {
+    return std::find_if(relationshipStore->getBeginIterator(), relationshipStore->getEndIterator(), [&statement](std::shared_ptr<R> relationship) {
+        return *relationship->getLeftObject() == statement;
+    }) != relationshipStore->getEndIterator();
+}
+
+template <typename S, typename R>
+bool StmtToStmtRelationshipManager<S, R>::isLatter(Statement& statement) const {
+    return std::find_if(relationshipStore->getBeginIterator(), relationshipStore->getEndIterator(), [&statement](std::shared_ptr<R> relationship) {
+        return *relationship->getRightObject() == statement;
+    }) != relationshipStore->getEndIterator();
+}
