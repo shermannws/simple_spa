@@ -15,6 +15,14 @@ public:
 
     virtual std::vector<Entity> getAllStatements() const = 0;
 
+    virtual std::vector<Entity> getAllRead() const = 0;
+
+    virtual std::vector<Entity> getAllPrint() const = 0;
+
+    virtual std::vector<Entity> getAllWhile() const = 0;
+
+    virtual std::vector<Entity> getAllIf() const = 0;
+
     // USES QUERY
     virtual std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const = 0;
 

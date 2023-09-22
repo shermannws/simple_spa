@@ -48,20 +48,14 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
 
     auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
-    auto constantStore = std::make_shared<ConstantStore>(ConstantStore());
-    auto procedureStore = std::make_shared<ProcedureStore>(ProcedureStore());
-    auto statementStore = std::make_shared<StatementStore>(StatementStore());
-    auto variableStore = std::make_shared<VariableStore>(VariableStore());
+    auto entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
     auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
     auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
     auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager,
-            constantStore,
-            procedureStore,
-            statementStore,
-            variableStore,
+            entitiesManager,
             followsRelationshipManager,
             usesRelationshipManager,
             modifiesRelationshipManager,
@@ -80,19 +74,19 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     Traverser traverser = Traverser(visitors);
     traverser.traverse(rootNode);
 
-    REQUIRE(*(procedureStore->getEntity(std::make_shared<Procedure>(Procedure("doMath")))) == *(std::make_shared<Procedure>("doMath")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("x")))) == *(std::make_shared<Variable>("x")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("v")))) == *(std::make_shared<Variable>("v")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("y")))) == *(std::make_shared<Variable>("y")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("z")))) == *(std::make_shared<Variable>("z")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("t")))) == *(std::make_shared<Variable>("t")));
-    REQUIRE(*(variableStore->getEntity(std::make_shared<Variable>(Variable("num1")))) == *(std::make_shared<Variable>("num1")));
+    REQUIRE(*(entitiesManager->getProcedure(std::make_shared<Procedure>(Procedure("doMath")))) == *(std::make_shared<Procedure>("doMath")));
+    REQUIRE(*(entitiesManager->getVariable(std::make_shared<Variable>(Variable("x")))) == *(std::make_shared<Variable>("x")));
+    REQUIRE(*(entitiesManager->getVariable(std::make_shared<Variable>(Variable("v")))) == *(std::make_shared<Variable>("v")));
+    REQUIRE(*(entitiesManager->getVariable(std::make_shared<Variable>(Variable("y")))) == *(std::make_shared<Variable>("y")));
+    REQUIRE(*(entitiesManager->getVariable(std::make_shared<Variable>(Variable("z")))) == *(std::make_shared<Variable>("z")));
+    REQUIRE(*(entitiesManager->getVariable(std::make_shared<Variable>(Variable("t")))) == *(std::make_shared<Variable>("t")));
+    REQUIRE(*(entitiesManager->getVariable(std::make_shared<Variable>(Variable("num1")))) == *(std::make_shared<Variable>("num1")));
 
-    REQUIRE(*(statementStore->getEntity(std::make_shared<Statement>(Statement(1,StatementType::Assign)))) == *(std::make_shared<Statement>(1, StatementType::Assign)));
-    REQUIRE(*(statementStore->getEntity(std::make_shared<Statement>(Statement(2, StatementType::Read)))) == *(std::make_shared<Statement>(2, StatementType::Read)));
-    REQUIRE(*(statementStore->getEntity(std::make_shared<Statement>(Statement(3, StatementType::Print)))) == *(std::make_shared<Statement>(3, StatementType::Print)));
+    REQUIRE(*(entitiesManager->getStatement(std::make_shared<Statement>(Statement(1,StatementType::Assign)))) == *(std::make_shared<Statement>(1, StatementType::Assign)));
+    REQUIRE(*(entitiesManager->getStatement(std::make_shared<Statement>(Statement(2, StatementType::Read)))) == *(std::make_shared<Statement>(2, StatementType::Read)));
+    REQUIRE(*(entitiesManager->getStatement(std::make_shared<Statement>(Statement(3, StatementType::Print)))) == *(std::make_shared<Statement>(3, StatementType::Print)));
 
-    REQUIRE(*(constantStore->getEntity(std::make_shared<Constant>(Constant(1)))) == *(std::make_shared<Constant>(1)));
+    REQUIRE(*(entitiesManager->getConstant(std::make_shared<Constant>(Constant(1)))) == *(std::make_shared<Constant>(1)));
 
     auto VarV = Variable("v");
     auto usesV = usesRelationshipManager->getUsesTypeIdent(StatementType::Assign, VarV);
@@ -139,20 +133,14 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceCode);
 
     auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
-    auto constantStore = std::make_shared<ConstantStore>(ConstantStore());
-    auto procedureStore = std::make_shared<ProcedureStore>(ProcedureStore());
-    auto statementStore = std::make_shared<StatementStore>(StatementStore());
-    auto variableStore = std::make_shared<VariableStore>(VariableStore());
+    auto entitiesStore = std::make_shared<EntitiesManager>(EntitiesManager());
     auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
     auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
     auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
         assignmentManager,
-        constantStore,
-        procedureStore,
-        statementStore,
-        variableStore,
+        entitiesStore,
         followsRelationshipManager,
         usesRelationshipManager,
         modifiesRelationshipManager,
@@ -199,7 +187,7 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     auto varM = Variable("m");
 
     // Check Procedure
-    REQUIRE(*(procedureStore->getEntity(std::make_shared<Procedure>(Procedure("kk")))) == *(std::make_shared<Procedure>("kk")));
+    REQUIRE(*(entitiesStore->getProcedure(std::make_shared<Procedure>(Procedure("kk")))) == *(std::make_shared<Procedure>("kk")));
     
     // Check Follows
     auto follows1 = followsRelationshipManager->getFollowsStmtType(stmt1, StatementType::Stmt, true);

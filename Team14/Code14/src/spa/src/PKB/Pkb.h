@@ -4,10 +4,7 @@
 
 #include "PKB/Managers/AssignmentManager.h"
 #include "PKB/AssignmentPatternStore/AssignmentPatternStore.h"
-#include "PKB/EntityStores/ConstantStore.h"
-#include "PKB/EntityStores/ProcedureStore.h"
-#include "PKB/EntityStores/StatementStore.h"
-#include "PKB/EntityStores/VariableStore.h"
+#include "PKB/Managers/EntitiesManager.h"
 #include "PKB/RelationshipStores/FollowsRelationshipStore.h"
 #include "PKB/RelationshipStores/UsesRelationshipStore.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
@@ -23,10 +20,7 @@ class Pkb {
 private:
     std::shared_ptr<AssignmentManager> assignmentManager;
 
-    std::shared_ptr<ConstantStore> constantStore;
-    std::shared_ptr<ProcedureStore> procedureStore;
-    std::shared_ptr<StatementStore> statementStore;
-    std::shared_ptr<VariableStore> variableStore;
+    std::shared_ptr<EntitiesManager> entitiesManager;
 
     std::shared_ptr<UsesRelationshipManager> usesRelationshipManager;
     std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager;

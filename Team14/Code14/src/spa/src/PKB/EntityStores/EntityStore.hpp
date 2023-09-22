@@ -9,12 +9,13 @@ void EntityStore<T>::storeEntity(std::shared_ptr<T> entity) {
 }
 
 template <typename T>
-std::vector<Entity> EntityStore<T>::getAllEntities() const {
-    std::vector<Entity> entities = std::vector<Entity>();
-    for (std::shared_ptr<Entity> entity : this->entityStore) {
-        entities.push_back(*entity);
-    }
-    return entities;
+typename std::unordered_set<std::shared_ptr<T>>::iterator EntityStore<T>::getBeginIterator() {
+    return this->entityStore.begin();
+}
+
+template <typename T>
+typename std::unordered_set<std::shared_ptr<T>>::iterator EntityStore<T>::getEndIterator() {
+    return this->entityStore.end();
 }
 
 template <typename T>
