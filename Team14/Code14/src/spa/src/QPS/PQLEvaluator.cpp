@@ -46,25 +46,20 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
 }
 
 Result PQLEvaluator::evaluate(Query& query) {
+
+    // if query has Such that Clause
     Result sResult;
-    // if query is a such that query
     if (!query.getSuchThat().empty()) {
-        if (query.getSuchThat()[0]->getType() == ClauseType::Uses) {
-            clauseHandler->setStrategy(std::make_shared<UsesSuchThatStrategy>(UsesSuchThatStrategy()));
-        } else if (query.getSuchThat()[0]->getType() == ClauseType::Follows) {
-            clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
-        }
-        clauseHandler->executeClause(query.getSuchThat()[0], sResult);
+        evaluateSuchThat(query.getSuchThat()[0], sResult);
         if (sResult.getType() == ResultType::Boolean && !sResult.getBoolResult()) {
             return sResult;
         }
     }
 
-    Result pResult;
     // if query is an assign pattern query
+    Result pResult;
     if (!query.getPattern().empty()) {
-        clauseHandler->setStrategy(std::make_shared<AssignPatternStrategy>(AssignPatternStrategy()));
-        clauseHandler-> executeClause(query.getPattern()[0], pResult);
+        evaluatePattern(query.getPattern()[0], pResult);
         if (pResult.getType() == ResultType::Boolean && !pResult.getBoolResult()) {
             return pResult;
         }
@@ -91,6 +86,20 @@ Result PQLEvaluator::evaluate(Query& query) {
     result.setSynIndices(map);
 
     return result;
+}
+
+void PQLEvaluator::evaluateSuchThat(const std::shared_ptr<SuchThatClause> clause, Result& result) {
+    if (clause->getType() == ClauseType::Uses) {
+        clauseHandler->setStrategy(std::make_shared<UsesSuchThatStrategy>(UsesSuchThatStrategy()));
+    } else if (clause->getType() == ClauseType::Follows) {
+        clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
+    }
+    clauseHandler->executeClause(clause, result);
+}
+
+void PQLEvaluator::evaluatePattern(const std::shared_ptr<PatternClause> clause, Result& result) {
+    clauseHandler->setStrategy(std::make_shared<AssignPatternStrategy>(AssignPatternStrategy()));
+    clauseHandler-> executeClause(clause, result);
 }
 
 std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& queryEntity) {

@@ -2,7 +2,7 @@
 
 #include <unordered_set>
 
-ResultHandler::ResultHandler() {};
+ResultHandler::ResultHandler(){};
 
 Result ResultHandler::getCombined(Result& r1, Result& r2) {
     if ((r1.getType() == ResultType::Invalid) ||
@@ -15,18 +15,6 @@ Result ResultHandler::getCombined(Result& r1, Result& r2) {
             (r2.getType() == ResultType::Boolean && r2.getBoolResult())) {
         return r1;
     }
-//    if (r1.getType() == ResultType::Boolean && r1.getBoolResult()) {
-//        return r2;
-//    }
-//    if (r1.getType() == ResultType::Boolean && !r1.getBoolResult()) {
-//        return r1;
-//    }
-//    if (r2.getType() == ResultType::Boolean && r2.getBoolResult()) {
-//        return r1;
-//    }
-//    if (r2.getType() == ResultType::Boolean && !r2.getBoolResult()) {
-//        return r2;
-//    }
 
     return join(r1, r2);
 }

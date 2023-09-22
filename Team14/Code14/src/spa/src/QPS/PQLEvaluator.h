@@ -16,6 +16,8 @@ private:
     std::shared_ptr<ClauseHandler> clauseHandler;
     std::shared_ptr<ResultHandler> resultHandler;
     std::vector<Entity> getAll(const EntityPtr& queryEntity);
+    void evaluateSuchThat(const std::shared_ptr<SuchThatClause> clause, Result& result);
+    void evaluatePattern(const std::shared_ptr<PatternClause> clause, Result& result);
 
 public:
     explicit PQLEvaluator(std::shared_ptr<PkbReader> pkbReader);
