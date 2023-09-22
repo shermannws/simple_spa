@@ -6,7 +6,9 @@
 
 #include "../Visitors/DesignExtractorVisitor.h"
 
-// Interface for all ASTNodes
+/**
+ * Interface for all ASTNodes.
+ */
 class ASTNode {
 public:
     /**

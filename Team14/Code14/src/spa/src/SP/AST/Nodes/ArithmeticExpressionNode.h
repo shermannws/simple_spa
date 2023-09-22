@@ -72,7 +72,7 @@ public:
     std::shared_ptr<ExpressionNode> getRightExpression();
 
     /**
-     * Converts ths given string representing an arithmetic operator to the corresponding ArithmeticOperatorType value.
+     * Converts the given string representing an arithmetic operator to the corresponding ArithmeticOperatorType value.
      * @param operatorTypeString The string representing an arithmetic operator
      * @return The ArithmeticOperatorType value corresponding to the string
      */

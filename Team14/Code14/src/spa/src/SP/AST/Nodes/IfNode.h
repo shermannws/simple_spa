@@ -63,16 +63,16 @@ public:
     std::shared_ptr<ConditionalExpressionNode> getConditionalExpression();
 
     /**
-     * Returns the statement list for the then branch.
+     * Returns the statement list for the "then" branch.
      * This statement list will be run if the conditional expression returns true.
-     * @return The statement list for the then branch
+     * @return The statement list for the "then" branch
      */
     std::shared_ptr<StatementListNode> getThenStatementList();
 
     /**
-     * Returns the statement list for the else branch.
+     * Returns the statement list for the "else" branch.
      * This statement list will be run if the conditional expression returns false.
-     * @return The statement list for the else branch
+     * @return The statement list for the "else" branch
      */
     std::shared_ptr<StatementListNode> getElseStatementList();
 

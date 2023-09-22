@@ -2,9 +2,9 @@
 
 #include "ConstantNode.h"
 
-ConstantNode::ConstantNode(int value) : value(value) {}
+ConstantNode::ConstantNode(ConstantValue value) : value(value) {}
 
-int ConstantNode::getValue() {
+ConstantValue ConstantNode::getValue() {
     return value;
 }
 

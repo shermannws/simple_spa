@@ -3,7 +3,7 @@
 
 #include "AssignNode.h"
 
-AssignNode::AssignNode(int statementNumber,
+AssignNode::AssignNode(StatementNumber statementNumber,
                        std::shared_ptr<VariableNode> var,
                        std::shared_ptr<ExpressionNode> expression)
                        : StatementNode(statementNumber),

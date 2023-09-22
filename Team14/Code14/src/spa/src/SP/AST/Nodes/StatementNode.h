@@ -2,6 +2,9 @@
 
 #include "ASTNode.h"
 
+/**
+ * Enum class representing all valid statement node types.
+ */
 enum class StatementNodeType {
     Assign,
     Read,
@@ -12,26 +15,28 @@ enum class StatementNodeType {
 };
 
 
-// Abstract parent class for all statement node types
+/**
+ * Abstract parent class for all statement node types.
+ */
 class StatementNode : public ASTNode {
 protected:
     /**
-     * The statement number of the statement, used for identification.
+     * The statement number of the statement, used for statement identification.
      */
-    int statementNumber;
+    StatementNumber statementNumber;
 
 public:
     /**
      * Creates and initializes a statement.
      * @param statementNumber The statement number of the statement
      */
-    explicit StatementNode(int statementNumber);
+    explicit StatementNode(StatementNumber statementNumber);
 
     /**
      * Returns the statement number.
      * @return The statement number of the statement
      */
-    int getStatementNumber();
+    StatementNumber getStatementNumber();
 
     /**
      * Returns the specific type of the statement.
