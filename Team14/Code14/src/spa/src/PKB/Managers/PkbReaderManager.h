@@ -82,13 +82,13 @@ public:
 
     bool hasFollows() const;
 
-    bool hasFollowingStmt(Statement& statement) const;
+    bool hasLatterStmt(Statement& statement) const;
 
-    bool hasFollowedStmt(Statement& statement) const;
+    bool hasFormerStmt(Statement& statement) const;
 
-    bool hasFollowingStarStmt(Statement& statement) const;
+    bool hasLatterStarStmt(Statement& statement) const;
 
-    bool hasFollowedStarStmt(Statement& statement) const;
+    bool hasFormerStarStmt(Statement& statement) const;
 
     std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const;
 

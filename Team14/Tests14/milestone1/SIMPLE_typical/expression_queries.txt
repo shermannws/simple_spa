@@ -1,0 +1,53 @@
+1 - check procedure name
+procedure p;
+Select p
+expression
+5000
+2 - check stmt
+stmt s;
+Select s
+1, 2, 3, 4, 5, 6, 7, 8, 9
+5000
+3 - check read stmt
+read r;
+Select r
+
+5000
+4 - check print stmt
+print pn;
+Select pn
+
+5000
+5 - check assign
+assign a;
+Select a
+1, 2, 3, 4, 5, 6, 7, 8, 9
+5000
+6 - check if stmt
+if if;
+Select if
+
+5000
+7 - check while stmt
+while while;
+Select while
+
+5000
+8 - check var
+variable v;
+Select v
+expression, a , b, c, d, e
+5000
+9 - check constant
+constant constant;
+Select constant
+1, 2, 3, 4
+5000
+
+10 - check modifies
+
+11 - check uses
+
+12 - check parent
+
+13 - check follows
