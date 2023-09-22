@@ -11,8 +11,8 @@ void CallGraph::addEdge(const std::string &caller, const std::string &callee) {
 }
 
 bool CallGraph::hasCycle() {
-    std::set<std::string> visited;
-    std::set<std::string> currentPath;
+    std::unordered_set<std::string> visited;
+    std::unordered_set<std::string> currentPath;
 
     for (const auto& node: nodes) {
         const std::string& procedureName = node.first;
@@ -25,17 +25,10 @@ bool CallGraph::hasCycle() {
     return false;
 }
 
-/**
- * Recursive depth-first search to detect cycles in the call graph.
- * @param currentProcedure
- * @param visited
- * @param currentPath
- * @return
- */
 bool CallGraph::hasCycleDFS(
         const std::string& currentProcedure,
-        std::set<std::string>& visited,
-        std::set<std::string>& currentPath) {
+        std::unordered_set<std::string>& visited,
+        std::unordered_set<std::string>& currentPath) {
     visited.insert(currentProcedure);
     currentPath.insert(currentProcedure);
 

@@ -8,17 +8,10 @@ public:
 
 SemanticValidator::SemanticValidator() = default;
 
-/**
- * Semantically validate current program
- * 1. A program cannot have two procedures with the same name.
- * 2. A procedure cannot call a non-existing procedure.
- * 3. Recursive and cyclic calls are not allowed. i.e. A-->B-->C-->A or A-->A
- * @param root
- */
 void SemanticValidator::validate(const std::shared_ptr<ProgramNode>& root) {
 
     std::vector<std::shared_ptr<ProcedureNode>> procedures = root->getProcedures();
-    std::set<std::string> procedureNames;
+    std::unordered_set<std::string> procedureNames;
 
     // insert procedure names into set and check for duplicates
     for (const auto& procedure : procedures) {
