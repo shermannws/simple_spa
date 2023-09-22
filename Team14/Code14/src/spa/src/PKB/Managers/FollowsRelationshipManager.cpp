@@ -33,3 +33,19 @@ bool FollowsRelationshipManager::isFollows(Statement& statement1, Statement& sta
 bool FollowsRelationshipManager::hasFollows() const {
     return this->hasRelationship();
 };
+
+bool FollowsRelationshipManager::hasLatterStmt(Statement& statement) const {
+    return this->isFormer(statement);
+};
+
+bool FollowsRelationshipManager::hasFormerStmt(Statement& statement) const {
+    return this->isLatter(statement);
+};
+
+bool FollowsRelationshipManager::hasLatterStarStmt(Statement& statement) const {
+    return this->isFormer(statement);
+};
+
+bool FollowsRelationshipManager::hasFormerStarStmt(Statement& statement) const {
+    return this->isLatter(statement);
+};
