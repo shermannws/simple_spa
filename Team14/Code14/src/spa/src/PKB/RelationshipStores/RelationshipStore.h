@@ -32,6 +32,8 @@ public:
      */
     std::shared_ptr<T> getRelationship(std::shared_ptr<T> relationship) const;
 
+    bool isEmpty() const;
+
     /*!
      * Retrieve the begin iterator for the RelationshipStore
      */

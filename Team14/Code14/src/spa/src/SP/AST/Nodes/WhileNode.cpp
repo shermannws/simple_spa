@@ -23,8 +23,8 @@ StatementNodeType WhileNode::getStatementType() {
     return StatementNodeType::While;
 }
 
-void WhileNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor) {
+void WhileNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) {
     if (auto whileVisitor = std::dynamic_pointer_cast<WhileNodeVisitor>(visitor)) {
-        whileVisitor->visitWhileNode(this);
+        whileVisitor->visitWhileNode(this, parents);
     }
 }

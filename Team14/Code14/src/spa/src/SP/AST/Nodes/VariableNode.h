@@ -7,7 +7,7 @@
 class VariableNode; // forward declaration
 class VariableNodeVisitor {
 public:
-    virtual void visitVariableNode(VariableNode* node) const = 0;
+    virtual void visitVariableNode(VariableNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
 };
 
 class VariableNode : public ExpressionNode {
@@ -16,7 +16,7 @@ private:
 public:
     explicit VariableNode(std::string varName);
     std::string getVarName();
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
     std::string toString() override;
 };

@@ -9,7 +9,7 @@
 class AssignNode; // forward declaration
 class AssignNodeVisitor {
 public:
-    virtual void visitAssignNode(AssignNode* node) const = 0;
+    virtual void visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
 };
 
 class AssignNode : public StatementNode {
@@ -22,7 +22,7 @@ public:
                         std::shared_ptr<ExpressionNode> expression);
     std::shared_ptr<VariableNode> getVar();
     std::shared_ptr<ExpressionNode> getExpression();
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
     StatementNodeType getStatementType() override;
 };

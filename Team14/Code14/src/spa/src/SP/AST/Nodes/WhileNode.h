@@ -9,7 +9,7 @@
 class WhileNode; // forward declaration
 class WhileNodeVisitor {
 public:
-    virtual void visitWhileNode(WhileNode* node) const = 0;
+    virtual void visitWhileNode(WhileNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
 };
 
 class WhileNode: public StatementNode {
@@ -22,7 +22,7 @@ public:
                     std::shared_ptr<StatementListNode> statementList);
     std::shared_ptr<ConditionalExpressionNode> getConditionalExpression();
     std::shared_ptr<StatementListNode> getStatementList();
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
     StatementNodeType getStatementType() override;
 };

@@ -47,10 +47,35 @@ public:
     /*!
      * Adds new Follows Relationship into the PKB
      */
-    void addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) override;
+    void addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) override;
 
     /*!
      * Adds new Uses Relationship into the PKB
      */
     void addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) override;
+
+    /*!
+     * Adds new Call Statement Entity into the PKB
+     */
+    void addCallStatement(std::shared_ptr<Statement> s) override;
+
+    /*!
+     * Adds new If Statement Entity into the PKB
+     */
+    void addIfStatement(std::shared_ptr<Statement> s) override;
+
+    /*!
+     * Adds new While Statement Entity into the PKB
+     */
+    void addWhileStatement(std::shared_ptr<Statement> s) override;
+
+    /*!
+     * Adds new Modifies Relationship into the PKB
+     */
+    void addModifiesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) override;
+
+    /*!
+     * Adds new Parent Relationship into the PKB
+     */
+    void addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) override;
 };
