@@ -43,7 +43,7 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
 }
 
 Result PQLEvaluator::evaluate(Query& query) {
-    Result result;
+    Result sResult;
     // if query is a such that query
     if (!query.getSuchThat().empty()) {
         if (query.getSuchThat()[0]->getType() == ClauseType::Uses) {
@@ -51,20 +51,23 @@ Result PQLEvaluator::evaluate(Query& query) {
         } else if (query.getSuchThat()[0]->getType() == ClauseType::Follows) {
             clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
         }
-        clauseHandler->executeClause(query.getSuchThat()[0], result);
-        if (result.getType() == ResultType::Boolean && !result.getBoolResult()) {
-            return result;
+        clauseHandler->executeClause(query.getSuchThat()[0], sResult);
+        if (sResult.getType() == ResultType::Boolean && !sResult.getBoolResult()) {
+            return sResult;
         }
     }
 
+    Result pResult;
     // if query is an assign pattern query
     if (!query.getPattern().empty()) {
         clauseHandler->setStrategy(std::make_shared<AssignPatternStrategy>(AssignPatternStrategy()));
-        clauseHandler-> executeClause(query.getPattern()[0], result);
-        if (result.getType() == ResultType::Boolean && !result.getBoolResult()) {
-            return result;
+        clauseHandler-> executeClause(query.getPattern()[0], pResult);
+        if (pResult.getType() == ResultType::Boolean && !pResult.getBoolResult()) {
+            return pResult;
         }
     }
+
+    Result result = getCombined(sResult, pResult);
 
     // check if synonym in select is in result
 //     ASSUMES ONLY ONE SELECT VARIABLE RETURNED
@@ -115,6 +118,12 @@ std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& que
 }
 
 Result PQLEvaluator::getCombined(Result& r1, Result& r2) {
+    if (r1.getType() == ResultType::Invalid) {
+        return r2;
+    }
+    if (r2.getType() == ResultType::Invalid) {
+        return r1;
+    }
     if (r1.getType() == ResultType::Boolean && r1.getBoolResult()) {
         return r2;
     }
