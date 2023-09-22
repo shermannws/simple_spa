@@ -28,6 +28,9 @@
 #include "AST/Nodes/BinaryConditionalExpressionNode.h"
 #include "AST/Nodes/RelativeExpressionNode.h"
 
+/**
+ * An SP subcomponent to parse the tokenized source program.
+ */
 class SPParser {
 private:
     /**

@@ -4,6 +4,9 @@
 
 #include "PKB/PkbWriter.h"
 
+/**
+ * A SPA component for processing the source program.
+ */
 class SP {
 private:
     /**
