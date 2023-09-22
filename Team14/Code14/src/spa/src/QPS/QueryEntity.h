@@ -1,8 +1,9 @@
 #pragma once
 
 #include <string>
-#include "Token.h"
+#include <stdexcept>
 
+#include "Token.h"
 #include "QPSTypes.h"
 
 enum class QueryEntityType {

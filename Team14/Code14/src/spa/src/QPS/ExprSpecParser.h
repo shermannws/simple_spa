@@ -2,6 +2,7 @@
 
 #include <string>
 #include <stack>
+#include <stdexcept>
 
 #include "Tokenizer.h"
 #include "QPSTypes.h"
