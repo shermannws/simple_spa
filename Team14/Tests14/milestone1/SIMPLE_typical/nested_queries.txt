@@ -1,0 +1,40 @@
+1 - select if stmt
+if if;
+Select if
+4, 5, 9, 11, 14, 18, 22, 27
+5000
+2 - select while stmt
+while w;
+Select w
+1, 2, 15, 20, 23, 26, 30, 31, 32
+5000
+3 - select print in double and triple nested
+print pn;
+Select pn
+24, 33
+5000
+4 - check follows in triple nested
+print pn; read r; constant c;
+Select c such that Follows(pn, r)
+1, 2, 3, 5, 10
+5000
+5 - check parent (where while is the parent)
+while w1, w2;
+Select w2 such that Parent(w1, w2)
+2, 31, 32
+5000
+6 - check parent (where if is the parent)
+if i; print pn;
+Select pn such that Parent(i, pn)
+
+5000
+7 - check parent* (where if is the parent)
+if i; print pn;
+Select pn such that Parent*(i, pn)
+24
+5000
+8 - check parent* (where while is the parent)
+while w; assign s;
+Select s such that Parent*(w,s)
+16, 21, 28, 30
+5000
