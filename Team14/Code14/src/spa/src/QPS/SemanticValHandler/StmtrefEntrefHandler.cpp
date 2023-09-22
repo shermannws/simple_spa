@@ -2,6 +2,7 @@
 
 #include "StmtrefEntrefHandler.h"
 #include "../QPSUtil.h"
+#include "../Exception/SemanticException.h"
 
 void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
@@ -24,7 +25,7 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
             QueryEntityType entityType = entity->getType();
             if (!QPSUtil::isOfStmtType(entityType)) {
                 // TODO: change to return SemanticValHandler::handle(query, clause); when Uses(proc,v) is handled
-                throw std::runtime_error("Invalid LHS synonym, non-statement found");
+                throw SemanticException("Invalid LHS synonym, non-statement found");
             }
 //            break;
         }
@@ -34,9 +35,9 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
             break;
         }
         case RootType::Wildcard:
-            throw std::runtime_error("Invalid LHS, wildcard found");
+            throw SemanticException("Invalid LHS, wildcard found");
         default:
-            throw std::runtime_error("Invalid LHS stmtRef");
+            throw SemanticException("Invalid LHS stmtRef");
     }
 
     switch (type) {
@@ -45,7 +46,7 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
                 std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
                 QueryEntityType entityType = entity->getType();
                 if (!QPSUtil::isOfUsesStmtType(entityType)) {
-                    throw std::runtime_error("Invalid Uses LHS, invalid stmtRef found");
+                    throw SemanticException("Invalid Uses LHS, invalid stmtRef found");
                 }
                 RefType leftRefType = RefType::StmtRef;
                 leftRef.setType(leftRefType);
@@ -56,7 +57,7 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
                 std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
                 QueryEntityType entityType = entity->getType();
                 if (!QPSUtil::isOfModifiesStmtType(entityType)) {
-                    throw std::runtime_error("Invalid Modifies LHS, invalid stmtRef found");
+                    throw SemanticException("Invalid Modifies LHS, invalid stmtRef found");
                 }
                 RefType leftRefType = RefType::StmtRef;
                 leftRef.setType(leftRefType);
@@ -69,7 +70,7 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
             std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
             QueryEntityType entityType = entity->getType();
             if (entityType != QueryEntityType::Variable) {
-                throw std::runtime_error("Invalid RHS synonym, non-variable found");
+                throw SemanticException("Invalid RHS synonym, non-variable found");
             }
         }
         case RootType::Ident:
@@ -79,7 +80,7 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
             break;
         }
         default:
-            throw std::runtime_error("Invalid RHS entRef");
+            throw SemanticException("Invalid RHS entRef");
     }
 
 
