@@ -1,0 +1,20 @@
+procedure procedure {
+while (!(a<b)) {
+print c;
+}
+
+while ((d>=e) && (f<=g)) {
+read h;
+}
+
+while ( (!(i>j)) || ((k<l) && (n != (o+p)*q))) {
+m = ((1000+2222));
+}
+
+if (s+1+2+t*u%v == 1/(2-3)*w) then {
+x = 1;
+} else {
+y = z;
+}
+
+}
