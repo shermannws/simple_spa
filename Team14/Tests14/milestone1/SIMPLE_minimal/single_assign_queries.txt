@@ -35,7 +35,7 @@ print
 5000
 8 - check Uses - no synonym
 procedure p;
-Select p such that Uses (1, "call")
+Select p such that Uses (1, "print")
 testAssign
 5000
 9 - check Modifies - stmt synonym
