@@ -33,6 +33,7 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
                                                  [](std::string& a, const std::string& b) {
                                                      return a += (a.empty() ? "" : " ") + b;
                                                  }); // handles formatting of more than two variables in select clause
+
             if (!concat.empty() && results.find(concat) == results.end()) {
                 results.insert(concat);
             }

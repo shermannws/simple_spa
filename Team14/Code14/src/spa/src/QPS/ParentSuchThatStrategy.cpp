@@ -1,8 +1,8 @@
-#include "FollowsSuchThatStrategy.h"
+#include "ParentSuchThatStrategy.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 
-Result FollowsSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const {
+Result ParentSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const {
     std::shared_ptr<SuchThatClause> suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
     Ref leftRef = suchThat->getFirstParam();
     RootType leftRootType = leftRef.getRootType();
@@ -14,19 +14,19 @@ Result FollowsSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, s
     ResultType type;
     std::vector<std::vector<Entity>> tuples;
 
-    if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym) { // Follows(s1,s2)
+    if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym) { // Parent(s1,s2)
         std::string leftSyn = leftRef.getRep();
         std::string rightSyn = rightRef.getRep();
-        tuples = pkbReader->getFollowsPair(stmtMap.at(leftEntityType), stmtMap.at(rightEntityType));
+        tuples = pkbReader->getParentPair(stmtMap.at(leftEntityType), stmtMap.at(rightEntityType));
 
         std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
         res.setSynIndices(indices);
 
         type = ResultType::Tuples;
-    } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Integer) { // Follows(s,1) // one answer
+    } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Integer) { // Parent(s,1) // one answer
         std::string syn = leftRef.getRep();
         Statement s = Statement(stoi(rightRef.getRep()), StatementType::Stmt);
-        auto data = pkbReader->getFollowsTypeStmt(stmtMap.at(leftEntityType), s);
+        auto data = pkbReader->getParentTypeStmt(stmtMap.at(leftEntityType), s);
         tuples.emplace_back(data);
 
         std::unordered_map<std::string, int> indices{{syn, 0}};
@@ -34,9 +34,9 @@ Result FollowsSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, s
 
         type = ResultType::Tuples;
 
-    } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Wildcard) { // Follows(s,_)
+    } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Wildcard) { // Parent(s,_)
         std::string syn = leftRef.getRep();
-        auto data = pkbReader->getFollowsTypeWildcard(stmtMap.at(leftEntityType));
+        auto data = pkbReader->getParentTypeWildcard(stmtMap.at(leftEntityType));
         for (const auto& ent : data) {
             std::vector<Entity> tuple_vector {ent};
             tuples.emplace_back(tuple_vector);
@@ -47,10 +47,10 @@ Result FollowsSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, s
 
         type = ResultType::Tuples;
 
-    } else if (leftRootType == RootType::Integer && rightRootType == RootType::Synonym) { // Follows(1,s)
+    } else if (leftRootType == RootType::Integer && rightRootType == RootType::Synonym) { // Parent(1,s)
         std::string syn = rightRef.getRep();
         Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
-        auto data = pkbReader->getFollowsStmtType(s, stmtMap.at(rightEntityType));
+        auto data = pkbReader->getParentStmtType(s, stmtMap.at(rightEntityType));
         tuples.emplace_back(data);
 
         std::unordered_map<std::string, int> indices{{syn, 0}};
@@ -58,11 +58,11 @@ Result FollowsSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, s
 
         type = ResultType::Tuples;
 
-    } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Synonym) { // Follows(_,s)
+    } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Synonym) { // Parent(_,s)
         std::string syn = rightRef.getRep();
-        auto data = pkbReader->getFollowsWildcardType(stmtMap.at(rightEntityType));
-        for (const auto &ent: data) {
-            std::vector<Entity> tuple_vector{ent};
+        auto data = pkbReader->getParentWildcardType(stmtMap.at(rightEntityType));
+        for (const auto& ent : data) {
+            std::vector<Entity> tuple_vector {ent};
             tuples.emplace_back(tuple_vector);
         }
 
@@ -71,24 +71,24 @@ Result FollowsSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, s
 
         type = ResultType::Tuples;
 
-    } else if (leftRootType == RootType::Integer && rightRootType == RootType::Wildcard) { // Follows(1,_)
+    } else if (leftRootType == RootType::Integer && rightRootType == RootType::Wildcard) { // Parent(1,_)
         Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
-        res.setBoolResult(pkbReader->hasLatterStmt(s));
+        res.setBoolResult(pkbReader->hasChildStmt(s));
         type = ResultType::Boolean;
 
-    } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Integer) { // Follows(_,1)
+    } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Integer) { // Parent(_,1)
         Statement s = Statement(stoi(rightRef.getRep()), StatementType::Stmt);
-        res.setBoolResult(pkbReader->hasFormerStmt(s));
+        res.setBoolResult(pkbReader->hasParentStmt(s));
         type = ResultType::Boolean;
 
-    } else if (leftRootType == RootType::Integer && rightRootType == RootType::Integer) { // Follows(1,2)
+    } else if (leftRootType == RootType::Integer && rightRootType == RootType::Integer) { // Parent(1,2)
         Statement s1 = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
         Statement s2 = Statement(stoi(rightRef.getRep()), StatementType::Stmt);
-        res.setBoolResult(pkbReader->isFollows(s1, s2));
+        res.setBoolResult(pkbReader->isParent(s1, s2));
         type = ResultType::Boolean;
 
-    } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Wildcard) { // Follows(_,_)
-        res.setBoolResult(pkbReader->hasFollows());
+    } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Wildcard) { // Parent(_,_)
+        res.setBoolResult(pkbReader->hasParent());
         type = ResultType::Boolean;
 
     }
