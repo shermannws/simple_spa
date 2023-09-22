@@ -43,11 +43,28 @@ constant constant;
 Select constant
 1, 2, 3, 4
 5000
-
 10 - check modifies
-
+assign a;
+Select a such that Modifies(a, "expression")
+1, 2, 3, 4, 5, 6, 7
+5000
 11 - check uses
-
+stmt s;
+Select s such that Uses(s, "e")
+7
+5000
 12 - check parent
+constant c;
+Select c such that Parent(1,1)
 
+5000
 13 - check follows
+stmt s;
+Select s such that Follows(s, 2)
+1
+5000
+14 - check follows*
+assign a;
+Select s such that Follows*(1,s)
+2, 3, 4, 5, 6, 7, 8, 9
+5000
