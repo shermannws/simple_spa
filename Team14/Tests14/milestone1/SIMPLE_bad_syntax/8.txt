@@ -1,0 +1,5 @@
+procedure procedure {
+while (b) {
+print k;
+}
+}
