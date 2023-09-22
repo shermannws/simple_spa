@@ -26,52 +26,71 @@ class EntityExtractorVisitor : public DesignExtractorVisitor,
     public WhileNodeVisitor {
 public:
     /*!
-     * Constructor for EntityExtractorVisitor
+     * Constructor for EntityExtractorVisitor.
+     * @param pkbWriter A shared ptr to a concrete implementation of PkbWriter class
      */
     EntityExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
     /*!
-     * Visits a ProcedureNode and adds Procedure to the PKB
+     * Visits a ProcedureNode and adds Procedure to the PKB.
+     * @param node The node to be visited
+     * @param parents A vector of parent nodes for this node
      */
     void visitProcedureNode(ProcedureNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
-     * Visits an AssignNode and adds the assignment to the PKB and stores the assignment pattern to support pattern query
+     * Visits an AssignNode and adds the assignment to the PKB and stores the assignment pattern to support pattern query.
+     * @param node The node to be visited
+     * @param parents A vector of parent nodes for this node
      */
     void visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
-     * Visits a ReadNode and add Read statement into PKB
+     * Visits a ReadNode and add Read statement into PKB.
+     * @param node The node to be visited
+     * @param parents A vector of parent nodes for this node
      */
     void visitReadNode(ReadNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
-     * Visits a PrintNode and add Print statement into PKB
+     * Visits a PrintNode and add Print statement into PKB.
+     * @param node The node to be visited
+     * @param parents A vector of parent nodes for this node
      */
     void visitPrintNode(PrintNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
-     * Visits a VariableNode and add Variable into PKB
+     * Visits a VariableNode and add Variable into PKB.
+     * @param node The node to be visited
+     * @param parents A vector of parent nodes for this node
      */
     void visitVariableNode(VariableNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
-     * Visits a ConstantNode and add Constant into PKB
+     * Visits a ConstantNode and add Constant into PKB.
+     * @param node The node to be visited
+     * @param parents A vector of parent nodes for this node
      */
     void visitConstantNode(ConstantNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
-     * Visits a CallNode and add Call statement into PKB
+     * Visits a CallNode and add Call statement into PKB.
+     * @param node The node to be visited
+     * @param parents A vector of parent nodes for this node
      */
     void visitCallNode(CallNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
-     * Visits a IfNode and add If statement into PKB
+     * Visits a IfNode and add If statement into PKB.
+     * @param node The node to be visited
+     * @param parents A vector of parent nodes for this node
      */
     void visitIfNode(IfNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
-     * Visits a WhileNode and add While statement into PKB
+     * Visits a WhileNode and add While statement into PKB.
+     * @param node The node to be visited
+     * @param parents A vector of parent nodes for this node
      */
     void visitWhileNode(WhileNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 };
