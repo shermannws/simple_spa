@@ -12,7 +12,7 @@ std::vector<std::vector<Entity>> StmtToVarRelationshipManager<S, R>::getRelation
     auto matcher = [type](R& relationship) {
         return relationship.getLeftObject()->isStatementType(type);
     };
-    return ManagerUtils::getEntityPairsFromStore<S, R>(relationshipStore,
+    return ManagerUtils::getEntityPairsFromRelationshipStore<R>(relationshipStore,
                                                        matcher,
                                                        R::getEntityPairFromRelationship);
 }
@@ -22,7 +22,7 @@ std::vector<Entity> StmtToVarRelationshipManager<S, R>::getRelationshipTypeIdent
     auto matcher = [type, var](R& relationship) {
         return *(relationship.getRightObject()) == var && relationship.getLeftObject()->isStatementType(type);
     };
-    return ManagerUtils::getEntitiesFromStore<S, R>(relationshipStore,
+    return ManagerUtils::getEntitiesFromRelationshipStore<R>(relationshipStore,
                                                     matcher,
                                                     R::getLeftEntityFromRelationship);
 }
@@ -39,7 +39,7 @@ std::vector<Entity> StmtToVarRelationshipManager<S, R>::getRelationshipStmt(Stat
         set.insert(*(relationship.getLeftEntity()));
         return *(relationship.getLeftEntity());
     };
-    return ManagerUtils::getEntitiesFromStore<S, R>(relationshipStore,
+    return ManagerUtils::getEntitiesFromRelationshipStore<R>(relationshipStore,
                                                     matcher,
                                                     getter);
 }
@@ -49,7 +49,7 @@ std::vector<Entity> StmtToVarRelationshipManager<S, R>::getRelationshipVar(State
     auto matcher = [&stmt](R& relationship) {
         return *(relationship.getLeftObject()) == stmt;
     };
-    return ManagerUtils::getEntitiesFromStore<S, R>(relationshipStore,
+    return ManagerUtils::getEntitiesFromRelationshipStore<R>(relationshipStore,
                                                     matcher,
                                                     R::getRightEntityFromRelationship);
 }
