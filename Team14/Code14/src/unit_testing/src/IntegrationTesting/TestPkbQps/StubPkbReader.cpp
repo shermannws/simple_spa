@@ -94,19 +94,19 @@ bool StubPkbReader::hasFollows() const {
     return false;
 }
 
-bool StubPkbReader::hasFollowingStmt(Statement& statement) const {
+bool StubPkbReader::hasLatterStmt(Statement& statement) const {
     return false;
 }
 
-bool StubPkbReader::hasFollowedStmt(Statement& statement) const {
+bool StubPkbReader::hasFormerStmt(Statement& statement) const {
     return false;
 }
 
-bool StubPkbReader::hasFollowingStarStmt(Statement& statement) const {
+bool StubPkbReader::hasLatterStarStmt(Statement& statement) const {
     return false;
 }
 
-bool StubPkbReader::hasFollowedStarStmt(Statement& statement) const {
+bool StubPkbReader::hasFormerStarStmt(Statement& statement) const {
     return false;
 }
 

@@ -55,13 +55,13 @@ public:
 
     virtual bool hasFollows() const = 0;
 
-    virtual bool hasFollowingStmt(Statement& statement) const = 0;
+    virtual bool hasLatterStmt(Statement& statement) const = 0;
 
-    virtual bool hasFollowedStmt(Statement& statement) const = 0;
+    virtual bool hasFormerStmt(Statement& statement) const = 0;
 
-    virtual bool hasFollowingStarStmt(Statement& statement) const = 0;
+    virtual bool hasLatterStarStmt(Statement& statement) const = 0;
 
-    virtual bool hasFollowedStarStmt(Statement& statement) const = 0;
+    virtual bool hasFormerStarStmt(Statement& statement) const = 0;
 
     // MODIFIES QUERY
     virtual std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const = 0;

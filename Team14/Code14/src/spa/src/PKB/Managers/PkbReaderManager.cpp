@@ -119,20 +119,20 @@ bool PkbReaderManager::hasFollows() const {
     return this->followsRelationshipManager->hasFollows();
 }
 
-bool PkbReaderManager::hasFollowingStmt(Statement& statement) const {
-    return this->followsRelationshipManager->hasFollowingStmt(statement);
+bool PkbReaderManager::hasLatterStmt(Statement& statement) const {
+    return this->followsRelationshipManager->hasLatterStmt(statement);
 }
 
-bool PkbReaderManager::hasFollowedStmt(Statement& statement) const {
-    return this->followsRelationshipManager->hasFollowedStmt(statement);
+bool PkbReaderManager::hasFormerStmt(Statement& statement) const {
+    return this->followsRelationshipManager->hasFormerStmt(statement);
 }
 
-bool PkbReaderManager::hasFollowingStarStmt(Statement& statement) const {
-    return this->followsRelationshipManager->hasFollowingStarStmt(statement);
+bool PkbReaderManager::hasLatterStarStmt(Statement& statement) const {
+    return this->followsRelationshipManager->hasLatterStarStmt(statement);
 }
 
-bool PkbReaderManager::hasFollowedStarStmt(Statement& statement) const {
-    return this->followsRelationshipManager->hasFollowedStarStmt(statement);
+bool PkbReaderManager::hasFormerStarStmt(Statement& statement) const {
+    return this->followsRelationshipManager->hasFormerStarStmt(statement);
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getModifiesStmtPair(StatementType type) const {

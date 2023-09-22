@@ -100,20 +100,20 @@ bool PkbConcreteReader::hasFollows() const {
     return this->readerManager->hasFollows();
 }
 
-bool PkbConcreteReader::hasFollowingStmt(Statement& statement) const {
-    return this->readerManager->hasFollowingStmt(statement);
+bool PkbConcreteReader::hasLatterStmt(Statement& statement) const {
+    return this->readerManager->hasLatterStmt(statement);
 }
 
-bool PkbConcreteReader::hasFollowedStmt(Statement& statement) const {
-    return this->readerManager->hasFollowedStmt(statement);
+bool PkbConcreteReader::hasFormerStmt(Statement& statement) const {
+    return this->readerManager->hasFormerStmt(statement);
 }
 
-bool PkbConcreteReader::hasFollowingStarStmt(Statement& statement) const {
-    return this->readerManager->hasFollowingStarStmt(statement);
+bool PkbConcreteReader::hasLatterStarStmt(Statement& statement) const {
+    return this->readerManager->hasLatterStarStmt(statement);
 }
 
-bool PkbConcreteReader::hasFollowedStarStmt(Statement& statement) const {
-    return this->readerManager->hasFollowedStarStmt(statement);
+bool PkbConcreteReader::hasFormerStarStmt(Statement& statement) const {
+    return this->readerManager->hasFormerStarStmt(statement);
 }
 
 std::vector<std::vector<Entity>> PkbConcreteReader::getModifiesStmtPair(StatementType type) const {

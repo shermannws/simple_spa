@@ -54,13 +54,13 @@ public:
 
     bool hasFollows() const override;
 
-    bool hasFollowingStmt(Statement& statement) const override;
+    bool hasLatterStmt(Statement& statement) const override;
 
-    bool hasFollowedStmt(Statement& statement) const override;
+    bool hasFormerStmt(Statement& statement) const override;
 
-    bool hasFollowingStarStmt(Statement& statement) const override;
+    bool hasLatterStarStmt(Statement& statement) const override;
 
-    bool hasFollowedStarStmt(Statement& statement) const override;
+    bool hasFormerStarStmt(Statement& statement) const override;
 
     std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const override;
 

@@ -34,18 +34,18 @@ bool FollowsRelationshipManager::hasFollows() const {
     return this->hasRelationship();
 };
 
-bool FollowsRelationshipManager::hasFollowingStmt(Statement& statement) const {
+bool FollowsRelationshipManager::hasLatterStmt(Statement& statement) const {
     return this->isFormer(statement);
 };
 
-bool FollowsRelationshipManager::hasFollowedStmt(Statement& statement) const {
+bool FollowsRelationshipManager::hasFormerStmt(Statement& statement) const {
     return this->isLatter(statement);
 };
 
-bool FollowsRelationshipManager::hasFollowingStarStmt(Statement& statement) const {
+bool FollowsRelationshipManager::hasLatterStarStmt(Statement& statement) const {
     return this->isFormer(statement);
 };
 
-bool FollowsRelationshipManager::hasFollowedStarStmt(Statement& statement) const {
+bool FollowsRelationshipManager::hasFormerStarStmt(Statement& statement) const {
     return this->isLatter(statement);
 };
