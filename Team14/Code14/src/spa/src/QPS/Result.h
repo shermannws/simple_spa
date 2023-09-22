@@ -27,8 +27,8 @@ public:
     void setBoolResult(bool result);
     bool getBoolResult();
     void setSynIndices(SynonymMap & ssynIndices);
-    SynonymMap getSynIndices();
+    SynonymMap& getSynIndices();
     void setTuples(const std::vector<Entity>& resultEntities);
     void setTuples(const std::vector<std::vector<Entity>>& resultTuples);
-    ResultTuples getTuples();
+    ResultTuples& getTuples();
 };

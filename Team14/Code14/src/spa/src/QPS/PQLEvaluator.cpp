@@ -74,18 +74,12 @@ Result PQLEvaluator::evaluate(Query& query) {
         return result;
     }
 
-
     // else query is just select
     EntityPtr entity = query.getSelect()[0];
     std::vector<Entity> entities = getAll(entity);
 
     // set Result fields
-    ResultTuples mappedEntities;
-    for (const Entity& resEntity : entities) {
-        std::vector<Entity> mappedEntity {resEntity};
-        mappedEntities.push_back(mappedEntity);
-    }
-    result.setTuples(mappedEntities);
+    result.setTuples(entities);
     ResultType type = ResultType::Tuples;
     result.setType(type);
     SynonymMap map {{entity->getSynonym(), 0}};
