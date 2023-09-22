@@ -68,8 +68,13 @@ assign a;
 Select a such that Follows*(1,a)
 2, 3, 4, 5, 6, 7, 8, 9
 5000
-15 - pattern check
+15 - pattern check (v1)
 assign a;
-Select a pattern a (expression, "e")
+Select a pattern a ("expression", _"e"_)
 7
+5000
+16 - pattern check (v2)
+assign a;
+Select a pattern a (_, "((a))")
+2
 5000
