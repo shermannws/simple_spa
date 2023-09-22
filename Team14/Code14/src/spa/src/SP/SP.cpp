@@ -6,6 +6,7 @@
 #include "SP/AST/Visitors/FollowsExtractorVisitor.h"
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/AST/Traverser/Traverser.h"
+#include "SP/AST/SemanticValidator/SemanticValidator.h"
 
 SP::SP(std::shared_ptr<PkbWriter> pkbWriter) : pkbWriter(pkbWriter) {}
 
@@ -21,6 +22,10 @@ void SP::startSPProcessing(std::string& input) {
 	//Parse the tokens
 	SPParser parser = SPParser();
 	std::shared_ptr<ProgramNode> root = parser.parse(tokens);
+
+    //Semantically validate from the root node
+    SemanticValidator semanticValidator;
+    semanticValidator.validate(root);
 
 	//Instantiate all visitors to be used
 	std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);

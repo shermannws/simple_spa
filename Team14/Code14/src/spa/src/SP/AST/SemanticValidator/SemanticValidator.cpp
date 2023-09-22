@@ -28,7 +28,6 @@ void SemanticValidator::validate(const std::shared_ptr<ProgramNode>& root) {
     CallGraph callGraph;
     std::shared_ptr<ProcedureNode> currProcedureNode;
 
-    // -----------------------------------
     // Same DFS algorithm used in traverser
     frontier.push(root);
     while (!frontier.empty()) {
@@ -53,10 +52,9 @@ void SemanticValidator::validate(const std::shared_ptr<ProgramNode>& root) {
             frontier.push(*it);
         }
     }
+    // End of DFS algorithm
 
     if (callGraph.hasCycle()) {
         throw SemanticError("Semantic error: Cyclic procedure calls detected");
     }
-    // End of DFS algorithm
-    // -----------------------------------
 }
