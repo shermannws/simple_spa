@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Variable.h"
 
 Variable::Variable(std::string name)

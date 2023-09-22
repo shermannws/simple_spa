@@ -1,5 +1,3 @@
-#pragma once
-
 #include "ModifiesRelationship.h"
 
 RelationshipType ModifiesRelationship::relationshipType = RelationshipType::Modifies;

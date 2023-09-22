@@ -1,5 +1,3 @@
-#pragma once
-
 #include "WildCard.h"
 
 WildCard::WildCard() : Variable("_") {}

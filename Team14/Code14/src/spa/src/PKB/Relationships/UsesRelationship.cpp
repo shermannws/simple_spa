@@ -1,5 +1,3 @@
-#pragma once
-
 #include "UsesRelationship.h"
 
 RelationshipType UsesRelationship::relationshipType = RelationshipType::Uses;

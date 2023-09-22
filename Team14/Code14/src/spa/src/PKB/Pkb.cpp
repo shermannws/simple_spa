@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Pkb.h"
 #include "PKB/PkbConcreteReader.h"
 #include "PKB/PkbConcreteWriter.h"
