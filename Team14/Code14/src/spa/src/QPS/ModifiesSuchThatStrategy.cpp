@@ -40,8 +40,12 @@ Result ModifiesSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, 
             std::string syn = rightRef.getRep();
             res.setTuples(pkbReader->getModifiesVar(s));
 
-            std::unordered_map<std::string, int> indices {{syn, 0}};
+            std::unordered_map<std::string, int> indices{{syn, 0}};
             res.setSynIndices(indices);
+
+        } else if (leftRootType == RootType::Integer && rightRootType == RootType::Wildcard) { // Modifies(1,_)
+            Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
+            res.setBoolResult(pkbReader->hasModifies(s));
 
         } else if (leftRootType == RootType::Integer && rightRootType == RootType::Ident) { // Modifies(1,"x")
             Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);

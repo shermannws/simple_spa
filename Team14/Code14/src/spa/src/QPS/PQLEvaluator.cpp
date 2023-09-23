@@ -52,46 +52,36 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
 
 Result PQLEvaluator::evaluate(Query& query) {
 
-    // if query has Such that Clause
     Result sResult;
     if (!query.getSuchThat().empty()) {
         evaluateSuchThat(query.getSuchThat()[0], sResult);
-        if (sResult.getType() == ResultType::Boolean && !sResult.getBoolResult()) {
-            return sResult;
-        }
     }
 
-    // if query is an assign pattern query
     Result pResult;
     if (!query.getPattern().empty()) {
         evaluatePattern(query.getPattern()[0], pResult);
-        if (pResult.getType() == ResultType::Boolean && !pResult.getBoolResult()) {
-            return pResult;
-        }
     }
 
     Result result = resultHandler->getCombined(sResult, pResult);
 
-    // CASE EMPTY TABLE terminate early
-    if (result.getType()==ResultType::Tuples && result.getTuples().empty()) {
-        return result; //OR do we need to return a FALSE result?
+    // CASE FALSE OR EMPTY
+    if ((result.getType()==ResultType::Boolean && !result.getBoolResult()) ||
+        (result.getType()==ResultType::Tuples && result.getTuples().empty()) ){
+        return result;
     }
 
-    // CASE NON-EMPTY TABLE, check if synonym in select is in result table
+    // CASE SYN IN RESULT TABLE, check if synonym in select is in result table
     Synonym syn = query.getSelect()[0]->getSynonym();
     SynonymMap indicesMap = result.getSynIndices();
     if (indicesMap.find(syn) != indicesMap.end()) { //if yes, return
         return result;
     }
 
-    // CASE BOOLEAN TRUE OR NON-EMPTY TABLE, evaluate select independently
+    // CASE TRUE OR NON-EMPTY TABLE OR INVALID, evaluate select independently
 
-    // else query is just select
     Result selectResult;
     EntityPtr entity = query.getSelect()[0];
     std::vector<Entity> entities = getAll(entity);
-
-    // set Result fields
     selectResult.setTuples(entities);
     SynonymMap map {{entity->getSynonym(), 0}};
     selectResult.setSynIndices(map);

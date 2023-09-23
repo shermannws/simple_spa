@@ -237,6 +237,34 @@ TEST_CASE("Test Result combiner") {
         REQUIRE(find(finalTuples.begin(), finalTuples.end(), v2) != finalTuples.end());
     }
 
+    SECTION("Test both tuples with 1 empty Tuples Result") {
+        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
+        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
+        std::vector<Entity> v3{Statement(7, StatementType::Stmt), Variable("third_variable")};
+        ResultType type = ResultType::Tuples;
+
+        Result r = Result();
+        r.setType(type);
+        std::unordered_map<std::string, int> map{{"a", 0},
+                                                 {"x", 1}};
+        r.setSynIndices(map);
+        std::vector<std::vector<Entity>> tuples{v1, v2};
+        r.setTuples(tuples);
+
+        Result r1 = Result();
+        r1.setType(type);
+        std::unordered_map<std::string, int> map1{{"v", 0}};
+        r1.setSynIndices(map1);
+
+        ResultHandler evaluator = ResultHandler();
+        Result final = evaluator.getCombined(r, r1);
+        auto finalTuples = final.getTuples();
+
+        REQUIRE(final.getTuples().empty());
+        REQUIRE(final.getSynIndices().size()==3);
+
+    }
+
     SECTION("FALSE boolean result x tuple result") {
         Entity a1 = Statement(1, StatementType::Assign);
         Entity a2 = Statement(2, StatementType::Assign);
@@ -333,6 +361,56 @@ TEST_CASE("Test Result combiner") {
         Result ft = evaluator.getCombined(rFalse, rTrue);
         REQUIRE(ft.getBoolResult() == false);
         REQUIRE(ft.getType() == ResultType::Boolean);
+    }
+
+    SECTION("one invalid result") {
+        ResultType boolType = ResultType::Boolean;
+        Result rTrue = Result();
+        rTrue.setType(boolType);
+        rTrue.setBoolResult(true);
+
+        Result rFalse = Result();
+        rFalse.setType(boolType);
+        rFalse.setBoolResult(false);
+
+        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
+        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
+        ResultType tupleType = ResultType::Tuples;
+
+        Result rTuple = Result();
+        rTuple.setType(tupleType);
+        std::unordered_map<std::string, int> map{{"a", 0},
+                                                 {"x", 1}};
+        rTuple.setSynIndices(map);
+        std::vector<std::vector<Entity>> tuples{v1, v2};
+        rTuple.setTuples(tuples);
+
+        Result rInvalid;
+
+        ResultHandler evaluator = ResultHandler();
+
+        // TRUE X INVALID
+        Result t = evaluator.getCombined(rTrue, rInvalid);
+        REQUIRE(t.getBoolResult() == true);
+        REQUIRE(t.getType() == ResultType::Boolean);
+
+        // FALSE x INVALID
+        Result f = evaluator.getCombined(rInvalid, rFalse);
+        REQUIRE(f.getBoolResult() == false);
+        REQUIRE(f.getType() == ResultType::Boolean);
+
+        // Tuple x INVALID
+        Result tup = evaluator.getCombined(rInvalid, rTuple);
+        REQUIRE(tup.getType() == ResultType::Tuples);
+        REQUIRE(tup.getTuples().size()==2);
+        auto finalTuples = tup.getTuples();
+        REQUIRE(find(finalTuples.begin(), finalTuples.end(), v1) != finalTuples.end());
+        REQUIRE(find(finalTuples.begin(), finalTuples.end(), v2) != finalTuples.end());
+
+        // INVALID x INVALID
+        Result i = evaluator.getCombined(rInvalid, rInvalid);
+        REQUIRE(i.getBoolResult() == false);
+        REQUIRE(i.getType() == ResultType::Invalid);
     }
 
 }
