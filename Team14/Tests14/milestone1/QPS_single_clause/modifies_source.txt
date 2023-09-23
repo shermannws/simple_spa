@@ -1,0 +1,18 @@
+procedure Modifies {
+    read var1;
+    print var2;
+
+    while (var3 < var4) {
+        var1 = var2 + var5 + 1;
+    }
+
+    if (var5 > var6) then {
+        print var5;
+        var10 = 2 + var1 * var5;
+    } else {
+        read var7;
+        read var8;
+    }
+
+    var9 = 20;
+}
