@@ -45,7 +45,7 @@ Result FollowsStarSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> claus
 
     } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Synonym) { // Follows*(_,s)
         std::string syn = rightRef.getRep();
-        auto data = pkbReader->getFollowsStarWildcardType(stmtMap.at(rightEntityType));
+        res.setTuples(pkbReader->getFollowsStarWildcardType(stmtMap.at(rightEntityType)));
 
         std::unordered_map<std::string, int> indices{{syn, 0}};
         res.setSynIndices(indices);
