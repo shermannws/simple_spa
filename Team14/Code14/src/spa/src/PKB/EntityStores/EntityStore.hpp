@@ -1,5 +1,3 @@
-#pragma once
-
 template <typename T>
 EntityStore<T>::EntityStore() = default;
 

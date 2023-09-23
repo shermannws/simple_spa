@@ -2,7 +2,10 @@
 
 #include <string>
 #include <vector>
+#include <utility>
+#include <stdexcept>
 
+#include "Commons/AppConstants.h"
 #include "SPTokenType.h"
 #include "SPToken.h"
 

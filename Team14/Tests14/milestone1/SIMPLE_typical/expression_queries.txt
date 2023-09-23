@@ -43,11 +43,43 @@ constant constant;
 Select constant
 1, 2, 3, 4
 5000
-
 10 - check modifies
-
+assign a;
+Select a such that Modifies(a, "expression")
+1, 2, 3, 4, 5, 6, 7
+5000
 11 - check uses
-
+stmt s;
+Select s such that Uses(s, "e")
+7
+5000
 12 - check parent
+constant c;
+Select c such that Parent(1,1)
 
+5000
 13 - check follows
+stmt s;
+Select s such that Follows(s, 2)
+1
+5000
+14 - check follows*
+assign a;
+Select a such that Follows*(1,a)
+2, 3, 4, 5, 6, 7, 8, 9
+5000
+15 - pattern check (v1)
+assign a;
+Select a pattern a ("expression", _"e"_)
+7
+5000
+16 - pattern check (v2)
+assign a;
+Select a pattern a (_, "((a))")
+2
+5000
+17 - select all stmt with useless clause
+stmt s, s1;
+Select s1 such that Follows(1,s)
+1, 2, 3, 4, 5, 6, 7, 8, 9
+5000

@@ -38,31 +38,6 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
             throw std::runtime_error("Invalid LHS stmtRef");
     }
 
-    switch (type) {
-        case ClauseType::Uses:
-            if (leftRootType == RootType::Synonym) {
-                std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-                QueryEntityType entityType = entity->getType();
-                if (!QPSUtil::isOfUsesStmtType(entityType)) {
-                    throw SemanticException("Invalid Uses LHS, invalid stmtRef found");
-                }
-                RefType leftRefType = RefType::StmtRef;
-                leftRef.setType(leftRefType);
-            }
-            break;
-        case ClauseType::Modifies:
-            if (leftRootType == RootType::Synonym) {
-                std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-                QueryEntityType entityType = entity->getType();
-                if (!QPSUtil::isOfModifiesStmtType(entityType)) {
-                    throw SemanticException("Invalid Modifies LHS, invalid stmtRef found");
-                }
-                RefType leftRefType = RefType::StmtRef;
-                leftRef.setType(leftRefType);
-            }
-            break;
-    }
-
     switch (rightRootType) {
         case RootType::Synonym: {
             std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());

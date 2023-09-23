@@ -1,7 +1,8 @@
 #pragma once
 
-/*!
- * Enum class for diferennt RelationshipType
+/**
+ * @brief An enum class that represents the type of relationship
+ * @details An enum class that represents the type of relationship
  */
 enum class RelationshipType {
     Follows,

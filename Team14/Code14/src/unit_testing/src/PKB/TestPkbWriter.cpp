@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "Pkb/PkbWriter.h"
+#include "PKB/PkbWriter.h"
 #include "PKB/Relationships/FollowsRelationship.h"
 #include "PKB/Relationships/UsesRelationship.h"
 #include "PKB/Pkb.h"

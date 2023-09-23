@@ -1,0 +1,80 @@
+1 - pattern (var-synonym, _)
+assign a; variable v;
+Select a pattern a (v, _)
+1, 2, 3, 5, 6, 8
+5000
+2 - pattern (var-synonym, partial-match_var)
+assign a; variable v;
+Select a pattern a (v, _"v2"_)
+8
+5000
+3 - pattern (var-synonym, partial-match_const)
+assign a; variable v;
+Select a pattern a (v, _"2000"_)
+8
+5000
+4 - pattern (_, partial-match_var)
+assign a; variable v;
+Select a pattern a (_, _"pattern"_)
+5, 6
+5000
+5 - pattern (_,_)
+assign a; variable v;
+Select a pattern a (_, _)
+1, 2, 3, 5, 6, 8
+5000
+6 - pattern (_, partial-match_const)
+assign a1; variable v;
+Select a1 pattern a1 (_, _"999"_)
+6
+5000
+7 - pattern (char-string, partial-match_const)
+assign a; variable v;
+Select a pattern a ("v1", _"1"_)
+1, 8
+5000
+8 - pattern (char-string, partial-match_var)
+assign a; variable v;
+Select a pattern a ("v1", _"x"_)
+none
+5000
+9 - pattern (char-string, _),
+assign a; variable v;
+Select a pattern a ("v2", _)
+2, 5
+5000
+10 - pattern (char-string, _), select not in clause
+assign a; variable v;
+Select v pattern a ("v2", _)
+v1, v2, pattern, x
+5000
+11 - pattern (var-synonym, partial match), select not assign
+assign a; variable v;
+Select v pattern a (v, _"3"_)
+pattern
+5000
+12 - No results, pattern with non-existing variable name
+assign a; variable v;
+Select a pattern a (v, _"someVarName"_)
+none
+5000
+13 - SyntaxError invalid integer in expr
+assign a; variable v;
+Select a pattern a (_, _"0999"_)
+SyntaxError
+5000
+14 - SyntaxError pattern invalid variable name in expr
+assign a; variable v;
+Select a pattern a (v, _"invalid^varname"_)
+SyntaxError
+5000
+15 - Semantic error, pattern syn is not assign
+assign a; variable v; stmt s;
+Select a pattern s (_, _)
+SemanticError
+5000
+16 - Semantic error, undeclared variable
+assign a; variable v;
+Select a pattern a (v1, _)
+SemanticError
+5000

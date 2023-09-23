@@ -7,6 +7,10 @@
 #include "UsesSuchThatStrategy.h"
 #include "FollowsSuchThatStrategy.h"
 #include "QPSTypes.h"
+#include "ModifiesSuchThatStrategy.h"
+#include "FollowsStarSuchThatStrategy.h"
+#include "ParentSuchThatStrategy.h"
+#include "ParentStarSuchThatStrategy.h"
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :
     pkbReader(pkbReader),
@@ -48,51 +52,58 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
 
 Result PQLEvaluator::evaluate(Query& query) {
 
-    // if query has Such that Clause
     Result sResult;
     if (!query.getSuchThat().empty()) {
         evaluateSuchThat(query.getSuchThat()[0], sResult);
-        if (sResult.getType() == ResultType::Boolean && !sResult.getBoolResult()) {
-            return sResult;
-        }
     }
 
-    // if query is an assign pattern query
     Result pResult;
     if (!query.getPattern().empty()) {
         evaluatePattern(query.getPattern()[0], pResult);
-        if (pResult.getType() == ResultType::Boolean && !pResult.getBoolResult()) {
-            return pResult;
-        }
     }
 
     Result result = resultHandler->getCombined(sResult, pResult);
 
-    // check if synonym in select is in result
-    Synonym syn = query.getSelect()[0]->getSynonym();
-    SynonymMap indicesMap = result.getSynIndices();
-    if (indicesMap.find(syn) != indicesMap.end()) {
+    // CASE FALSE OR EMPTY
+    if ((result.getType()==ResultType::Boolean && !result.getBoolResult()) ||
+        (result.getType()==ResultType::Tuples && result.getTuples().empty()) ){
         return result;
     }
 
-    // else query is just select
+    // CASE SYN IN RESULT TABLE, check if synonym in select is in result table
+    Synonym syn = query.getSelect()[0]->getSynonym();
+    SynonymMap indicesMap = result.getSynIndices();
+    if (indicesMap.find(syn) != indicesMap.end()) { //if yes, return
+        return result;
+    }
+
+    // CASE TRUE OR NON-EMPTY TABLE OR INVALID, evaluate select independently
+
+    Result selectResult;
     EntityPtr entity = query.getSelect()[0];
     std::vector<Entity> entities = getAll(entity);
-
-    // set Result fields
-    result.setTuples(entities);
+    selectResult.setTuples(entities);
     SynonymMap map {{entity->getSynonym(), 0}};
-    result.setSynIndices(map);
+    selectResult.setSynIndices(map);
 
-    return result;
+    return selectResult;
 }
 
 void PQLEvaluator::evaluateSuchThat(const std::shared_ptr<SuchThatClause> clause, Result& result) {
     if (clause->getType() == ClauseType::Uses) {
         clauseHandler->setStrategy(std::make_shared<UsesSuchThatStrategy>(UsesSuchThatStrategy()));
+    } else if (clause->getType() == ClauseType::Modifies) {
+        clauseHandler->setStrategy(std::make_shared<ModifiesSuchThatStrategy>(ModifiesSuchThatStrategy()));
     } else if (clause->getType() == ClauseType::Follows) {
         clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
+    } else if (clause->getType() == ClauseType::FollowsStar) {
+        clauseHandler->setStrategy(std::make_shared<FollowsStarSuchThatStrategy>(FollowsStarSuchThatStrategy()));
+    } else if (clause->getType() == ClauseType::Parent) {
+        clauseHandler->setStrategy(std::make_shared<ParentSuchThatStrategy>(ParentSuchThatStrategy()));
+    } else if (clause->getType() == ClauseType::ParentStar) {
+        clauseHandler->setStrategy(std::make_shared<ParentStarSuchThatStrategy>(ParentStarSuchThatStrategy()));
     }
+
     clauseHandler->executeClause(clause, result);
 }
 

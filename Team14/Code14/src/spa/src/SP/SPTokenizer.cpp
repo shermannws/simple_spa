@@ -1,10 +1,5 @@
-#include <string>
-#include <utility>
-#include <stdexcept>
-
-#include "Commons/AppConstants.h"
 #include "SPTokenizer.h"
-#include "SPToken.h"
+#include "Errors/SyntaxError.h"
 
 SPTokenizer::SPTokenizer(std::string  input) : curr(0), input(std::move(input)) {
 }
@@ -17,6 +12,7 @@ std::vector<SPToken> SPTokenizer::tokenize() {
         // skip if whitespace
         if (isspace(peekChar())) {
             popChar();
+            continue;
         }
 
         // read current char
@@ -25,10 +21,12 @@ std::vector<SPToken> SPTokenizer::tokenize() {
         // call different tokenize methods based on curr char
         if (isalpha(currChar)) {
             tokenizeName();
+            continue;
         }
 
         if (isdigit(currChar)) {
             tokenizeInteger();
+            continue;
         }
 
         switch (currChar) {
@@ -71,7 +69,9 @@ std::vector<SPToken> SPTokenizer::tokenize() {
 
             default:
                 // Handle unrecognized chars or errors
-                break;
+                std::string errorMessage = "Unexpected character found: ";
+                errorMessage.push_back(char(currChar));
+                throw SyntaxError(errorMessage);
         }
     }
 

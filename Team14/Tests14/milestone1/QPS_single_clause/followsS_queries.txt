@@ -1,0 +1,70 @@
+1 - check Follows*(read, print) second param
+read read; print print;
+Select print such that Follows(read, print)
+3
+5000
+2 - check Follows*(print, assign) first param
+print p; assign a;
+Select p such that Follows*(p, a)
+3,
+5000
+3 - check Follows*(assign, while) second param
+assign a; while w;
+Select w such that Follows*(a, w)
+12
+5000
+4 - check Follows*(while, if) first param
+while w; if i;
+Select w such that Follows*(w,i)
+12
+5000
+5 - check Follows*(if, read) first param
+if i; read r;
+Select i such that Follows*(i, r)
+15
+5000
+6 - check Follows*(wildcard, print) second param
+print print;
+Select print such that Follows*(_, print)
+3, 18, 19
+5000
+7 - check Follows*(stmt, while) first param
+stmt stmt; while while;
+Select stmt such that Follows*(stmt, while)
+1, 2, 3, 4, 10, 11
+5000
+8 - check Follows*(read, wildcard) first param
+read read;
+Select read such that Follows*(read,_)
+1, 2, 4, 11
+5000
+9 - check Follows*(while, stmt) second param
+while while; stmt stmt;
+Select stmt such that Follows*(while, stmt)
+14, 15, 19, 20, 21, 22
+5000
+10 - check SyntaxError Follows*(stmt, ident)
+stmt s;
+Select s such that Follows*(s, "error")
+SyntaxError
+5000
+11 - check SyntaxError Follows*(ident, stmt)
+stmt s;
+Select s such that Follows*("nothere", stmt)
+SyntaxError
+5000
+12 - check SemanticError Follows*(v, _)
+variable v;
+Select v such that Follows*(v,_)
+SemanticError
+5000
+13 - check SemanticError Follows*(1, c)
+constant c;
+Select c such that Follows*(1, c)
+SemanticError
+5000
+14 - check out of bound int
+stmt s;
+Select s such that Follows*(0,1)
+
+5000

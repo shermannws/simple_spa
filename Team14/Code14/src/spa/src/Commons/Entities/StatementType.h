@@ -1,7 +1,8 @@
 #pragma once
 
-/*!
- * Enum Class of all possible Statement Types
+/**
+ * @brief Enum class for the type of statement
+ *
  */
 enum class StatementType {
     Assign,

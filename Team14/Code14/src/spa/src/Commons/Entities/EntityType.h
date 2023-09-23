@@ -1,7 +1,8 @@
 #pragma once
 
-/*!
- * Enum class for diferennt EntityTypes
+/**
+ * @brief Enum class for the type of entity
+ *
  */
 enum class EntityType {
     Constant,

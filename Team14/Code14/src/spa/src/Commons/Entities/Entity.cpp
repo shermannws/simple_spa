@@ -2,8 +2,8 @@
 
 #include "Entity.h"
 
-Entity::Entity(const std::shared_ptr<std::string> entityValue, bool isInt, EntityType entityType)
-    : entityValue(entityValue), isInt(isInt), entityType(entityType) {}
+Entity::Entity(const std::shared_ptr<std::string> entityValue, EntityType entityType)
+    : entityValue(entityValue), entityType(entityType) {}
 
 EntityType Entity::getEntityType() const {
     return this->entityType;
@@ -11,10 +11,6 @@ EntityType Entity::getEntityType() const {
 
 std::string* Entity::getEntityValue() const {
     return this->entityValue.get();
-}
-
-bool Entity::isEntityOfTypeInt() const {
-    return this->isInt;
 }
 
 bool Entity::operator==(const HashableKey& other) const {

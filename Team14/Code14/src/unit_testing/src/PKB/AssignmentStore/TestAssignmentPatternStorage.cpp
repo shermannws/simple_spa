@@ -3,7 +3,6 @@
 #include "catch.hpp"
 #include "PKB/Managers/AssignmentManager.h"
 #include "PKB/AssignmentPatternStore/Assignment.h"
-#include "Commons/Entities/WildCard.h"
 
 using namespace std;
 

@@ -28,7 +28,7 @@ void PkbConcreteWriter::addReadStatement(std::shared_ptr<Statement> s) {
     this->writerManager->addStatement(s);
 }
 
-void PkbConcreteWriter::addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<std::string> rhs) {
+void PkbConcreteWriter::addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) {
     this->writerManager->addAssignStatement(s, lhs, rhs);
 }
 
