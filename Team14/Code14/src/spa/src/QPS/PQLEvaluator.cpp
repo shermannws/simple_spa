@@ -83,15 +83,16 @@ Result PQLEvaluator::evaluate(Query& query) {
     // CASE BOOLEAN TRUE OR NON-EMPTY TABLE, evaluate select independently
 
     // else query is just select
+    Result selectResult;
     EntityPtr entity = query.getSelect()[0];
     std::vector<Entity> entities = getAll(entity);
 
     // set Result fields
-    result.setTuples(entities);
+    selectResult.setTuples(entities);
     SynonymMap map {{entity->getSynonym(), 0}};
-    result.setSynIndices(map);
+    selectResult.setSynIndices(map);
 
-    return result;
+    return selectResult;
 }
 
 void PQLEvaluator::evaluateSuchThat(const std::shared_ptr<SuchThatClause> clause, Result& result) {
