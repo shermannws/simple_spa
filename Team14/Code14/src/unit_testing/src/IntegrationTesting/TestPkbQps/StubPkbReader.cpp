@@ -18,6 +18,22 @@ std::vector<Entity> StubPkbReader::getAllStatements() const {
     return std::vector<Entity>();
 }
 
+std::vector<Entity> StubPkbReader::getAllRead() const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getAllPrint() const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getAllWhile() const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getAllIf() const {
+    return std::vector<Entity>();
+}
+
 std::vector<std::vector<Entity>> StubPkbReader::getUsesStmtPair(StatementType type) const {
     return std::vector<std::vector<Entity>>();
 }
@@ -91,6 +107,10 @@ bool StubPkbReader::isFollowsStar(Statement& statement1, Statement& statement2) 
 }
 
 bool StubPkbReader::hasFollows() const {
+    return false;
+}
+
+bool StubPkbReader::hasFollowsStar() const {
     return false;
 }
 
@@ -227,6 +247,10 @@ bool StubPkbReader::isParentStar(Statement& statement1, Statement& statement2) c
 }
 
 bool StubPkbReader::hasParent() const {
+    return false;
+}
+
+bool StubPkbReader::hasParentStar() const {
     return false;
 }
 

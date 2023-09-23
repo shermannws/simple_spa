@@ -2,9 +2,9 @@
 
 #include "ConstantNode.h"
 
-ConstantNode::ConstantNode(int value) : value(value) {}
+ConstantNode::ConstantNode(ConstantValue value) : value(value) {}
 
-int ConstantNode::getValue() {
+ConstantValue ConstantNode::getValue() {
     return value;
 }
 
@@ -18,5 +18,5 @@ void ConstantNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::
     }
 }
 std::string ConstantNode::toString() {
-    return std::to_string(this->getValue());
+    return std::string ("(") .append(std::to_string(this->getValue())).append(")");
 }

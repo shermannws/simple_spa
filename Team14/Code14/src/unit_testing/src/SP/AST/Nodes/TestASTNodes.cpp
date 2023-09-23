@@ -418,13 +418,13 @@ TEST_CASE("Test ExpressionNode toString() method") {
     // test case of 3
     auto constantNode3 = ConstantNode(3);
     std::shared_ptr<ExpressionNode> expression = std::make_shared<ConstantNode>(constantNode3);
-    assert(expression->toString() == "3");
+    assert(expression->toString() == "(3)");
 
     // test case of (2+v)
     std::shared_ptr<ExpressionNode> constantNode2 = std::make_shared<ConstantNode>(ConstantNode(2));
     std::shared_ptr<ExpressionNode> varV = std::make_shared<VariableNode>(VariableNode("v"));
     std::shared_ptr<ExpressionNode> expression2 = std::make_shared<ArithmeticExpressionNode>(ArithmeticExpressionNode(ArithmeticOperatorType::Plus, constantNode2, varV));
-    assert(expression2->toString() == "(2+v)");
+    assert(expression2->toString() == "((2)+(v))");
 
     // test case of ((2+v)*(10/g)-8)
     std::shared_ptr<ExpressionNode> constantNode10 = std::make_shared<ConstantNode>(ConstantNode(10));
@@ -435,5 +435,5 @@ TEST_CASE("Test ExpressionNode toString() method") {
 
     std::shared_ptr<ExpressionNode> constantNode8 = std::make_shared<ConstantNode>(ConstantNode(8));
     std::shared_ptr<ExpressionNode> expression5 = std::make_shared<ArithmeticExpressionNode>(ArithmeticExpressionNode(ArithmeticOperatorType::Minus, expression4, constantNode8));
-    assert(expression5->toString() == "(((2+v)*(10/g))-8)");
+    assert(expression5->toString() == "((((2)+(v))*((10)/(g)))-(8))");
 }

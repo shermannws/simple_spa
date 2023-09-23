@@ -2,9 +2,9 @@
 
 #include "VariableNode.h"
 
-VariableNode::VariableNode(std::string varName) : varName(std::move(varName)) {}
+VariableNode::VariableNode(VariableName varName) : varName(std::move(varName)) {}
 
-std::string VariableNode::getVarName() {
+VariableName VariableNode::getVarName() {
     return varName;
 }
 
@@ -19,5 +19,5 @@ void VariableNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::
 }
 
 std::string VariableNode::toString() {
-    return varName;
+    return std::string ("(") .append(varName).append(")");
 }

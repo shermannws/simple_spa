@@ -3,6 +3,7 @@
 #include "Result.h"
 #include "Clause.h"
 #include "./PKB/PkbReader.h"
+#include "Commons/Entities/StatementType.h"
 
 /*
  * Strategy interface for each type of clause e.g. UsesStrategy, FollowsStrategy, AssignPatternStrategy, etc
@@ -10,13 +11,13 @@
 class Strategy {
 protected:
     // TODO: move this to util or make it static
-    std::unordered_map<QueryEntityType, StatementType> stmtMap {
+    std::unordered_map<QueryEntityType, StatementType> stmtMap{
             {QueryEntityType::Assign, StatementType::Assign},
             {QueryEntityType::Print, StatementType::Print},
             {QueryEntityType::Read, StatementType::Read},
             {QueryEntityType::If, StatementType::If},
             {QueryEntityType::While, StatementType::While},
-            {QueryEntityType::Call, StatementType::Call},
+//            {QueryEntityType::Call, StatementType::Call},
             {QueryEntityType::Stmt, StatementType::Stmt}
     };
 public:

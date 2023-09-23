@@ -8,7 +8,6 @@ class PatternClause :  public Clause {
 private:
     ExpressionSpec secondParam;
     Synonym syn;
-    DeclarationMap entityMap;
 
 public:
     PatternClause();

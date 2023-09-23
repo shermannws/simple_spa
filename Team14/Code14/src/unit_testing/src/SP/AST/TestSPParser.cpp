@@ -166,6 +166,28 @@ TEST_CASE("Test parse with one procedure, one assign statement, different RHS") 
         };
         std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
     }
+
+    SECTION("assign statement, RHS nested arithmetic expression") {
+        std::vector<SPToken> tokens = {
+                SPToken(TokenType::Name, "procedure"),
+                SPToken(TokenType::Name, "doMath"),
+                SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                SPToken(TokenType::Name, "x"),
+                SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "v"),
+                SPToken(TokenType::ArithmeticOperator, "+"),
+                SPToken(TokenType::Name, "x"),
+                SPToken(TokenType::ArithmeticOperator, "*"),
+                SPToken(TokenType::Name, "y"),
+                SPToken(TokenType::ArithmeticOperator, "+"),
+                SPToken(TokenType::Name, "z"),
+                SPToken(TokenType::ArithmeticOperator, "*"),
+                SPToken(TokenType::Name, "t"),
+                SPToken(TokenType::Semicolon, ";"),
+                SPToken(TokenType::CloseCurlyParenthesis, "}")
+        };
+        std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
+    }
 }
 
 TEST_CASE("Test parse with one procedure, all statement types") {
@@ -198,4 +220,104 @@ TEST_CASE("Test parse with one procedure, all statement types") {
     };
 
     std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
+}
+
+TEST_CASE("Tests parse with one procedure, one if statement with one assign statement for each statementlist") {
+    SPParser parser;
+
+    SECTION("Complicated conditional expression 1") {
+        std::vector<SPToken> tokens = {
+                SPToken(TokenType::Name, "procedure"),
+                SPToken(TokenType::Name, "doMath"),
+                SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                SPToken(TokenType::Name, "if"),
+                SPToken(TokenType::OpenRoundParenthesis, "("),
+                // Conditional expression
+                SPToken(TokenType::Name, "s"),
+                SPToken(TokenType::ArithmeticOperator, "+"),
+                SPToken(TokenType::Integer, "1"),
+                SPToken(TokenType::ArithmeticOperator, "+"),
+                SPToken(TokenType::Integer, "2"),
+                SPToken(TokenType::ArithmeticOperator, "+"),
+                SPToken(TokenType::Name, "t"),
+                SPToken(TokenType::ArithmeticOperator, "*"),
+                SPToken(TokenType::Name, "u"),
+                SPToken(TokenType::ArithmeticOperator, "%"),
+                SPToken(TokenType::Name, "v"),
+                SPToken(TokenType::RelationalOperator, "=="),
+                SPToken(TokenType::Name, "x"),
+
+                SPToken(TokenType::CloseRoundParenthesis, ")"),
+                SPToken(TokenType::Name, "then"),
+                SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                // then statement list
+                SPToken(TokenType::Name, "x"),
+                SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "v"),
+                SPToken(TokenType::ArithmeticOperator, "+"),
+                SPToken(TokenType::Name, "x"),
+                SPToken(TokenType::ArithmeticOperator, "*"),
+                SPToken(TokenType::Name, "y"),
+                SPToken(TokenType::ArithmeticOperator, "+"),
+                SPToken(TokenType::Name, "z"),
+                SPToken(TokenType::ArithmeticOperator, "*"),
+                SPToken(TokenType::Name, "t"),
+                SPToken(TokenType::Semicolon, ";"),
+
+                SPToken(TokenType::CloseCurlyParenthesis, "}"),
+                // else statement list
+                SPToken(TokenType::Name, "else"),
+                SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                SPToken(TokenType::Name, "x"),
+                SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Integer, "1"),
+                SPToken(TokenType::ArithmeticOperator, "/"),
+                SPToken(TokenType::OpenRoundParenthesis, "("),
+                SPToken(TokenType::Integer, "2"),
+                SPToken(TokenType::ArithmeticOperator, "-"),
+                SPToken(TokenType::Integer, "3"),
+                SPToken(TokenType::CloseRoundParenthesis, ")"),
+                SPToken(TokenType::ArithmeticOperator, "*"),
+                SPToken(TokenType::Name, "w"),
+                SPToken(TokenType::Semicolon, ";"),
+
+                SPToken(TokenType::CloseCurlyParenthesis, "}"),
+                SPToken(TokenType::CloseCurlyParenthesis, "}")
+        };
+        REQUIRE_NOTHROW(parser.parse(tokens));
+    }
+}
+
+TEST_CASE("Tests parse with one procedure, one while statement with one assign statement") {
+    SPParser parser;
+
+    SECTION("Complicated conditional expression 1") {
+        std::vector<SPToken> tokens = {
+                SPToken(TokenType::Name, "procedure"),
+                SPToken(TokenType::Name, "doMath"),
+                SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                SPToken(TokenType::Name, "while"),
+                SPToken(TokenType::OpenRoundParenthesis, "("),
+                // Conditional expression
+                SPToken(TokenType::OpenRoundParenthesis, "("),
+                SPToken(TokenType::Name, "k"),
+                SPToken(TokenType::CloseRoundParenthesis, ")"),
+                SPToken(TokenType::RelationalOperator, ">"),
+                SPToken(TokenType::OpenRoundParenthesis, "("),
+                SPToken(TokenType::Name, "r"),
+                SPToken(TokenType::CloseRoundParenthesis, ")"),
+
+                SPToken(TokenType::CloseRoundParenthesis, ")"),
+                SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                // statement list
+                SPToken(TokenType::Name, "a"),
+                SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "r"),
+                SPToken(TokenType::Semicolon, ";"),
+
+                SPToken(TokenType::CloseCurlyParenthesis, "}"),
+                SPToken(TokenType::CloseCurlyParenthesis, "}")
+        };
+        REQUIRE_NOTHROW(parser.parse(tokens));
+    }
 }

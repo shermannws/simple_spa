@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SynonymHandler.h"
+#include "../Exception/SemanticException.h"
 
 void SynonymHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
     Ref& leftRef = clause->getFirstParam();
@@ -9,7 +10,7 @@ void SynonymHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
     if (leftRootType == RootType::Synonym) {
         std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
         if (!entity) {
-            throw std::runtime_error("Invalid LHS, undeclared synonym found");
+            throw SemanticException("Invalid LHS, undeclared synonym found");
         }
         QueryEntityType entityType = entity->getType();
         leftRef.setEntityType(entityType);
@@ -22,7 +23,7 @@ void SynonymHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
         if (rightRootType == RootType::Synonym) {
             std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
             if (!entity) {
-                throw std::runtime_error("Invalid RHS, undeclared synonym found");
+                throw SemanticException("Invalid RHS, undeclared synonym found");
             }
             QueryEntityType entityType = entity->getType();
             rightRef.setEntityType(entityType);
@@ -34,7 +35,7 @@ void SynonymHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
         // validate Entity Synonym declared
         EntityPtr entity = query.getEntity(pattern->getSyn());
         if (!entity) {
-            throw std::runtime_error("Undeclared synonym in pattern clause entity");
+            throw SemanticException("Undeclared synonym in pattern clause entity");
         }
     }
 

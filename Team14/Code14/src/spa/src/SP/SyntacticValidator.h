@@ -5,6 +5,7 @@
 
 #include "ConditionalValidator.h"
 #include "SPToken.h"
+#include "Commons/AppConstants.h"
 
 /**
  * An SP subcomponent to validate the syntax of the tokenized source program.

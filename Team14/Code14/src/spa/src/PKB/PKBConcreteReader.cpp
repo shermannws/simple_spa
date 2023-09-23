@@ -24,6 +24,22 @@ std::vector<Entity> PkbConcreteReader::getAllStatements() const {
     return this->readerManager->getAllStatements();
 }
 
+std::vector<Entity> PkbConcreteReader::getAllRead() const {
+    return this->readerManager->getAllRead();
+}
+
+std::vector<Entity> PkbConcreteReader::getAllPrint() const {
+    return this->readerManager->getAllPrint();
+}
+
+std::vector<Entity> PkbConcreteReader::getAllWhile() const {
+    return this->readerManager->getAllWhile();
+}
+
+std::vector<Entity> PkbConcreteReader::getAllIf() const {
+    return this->readerManager->getAllIf();
+}
+
 std::vector<std::vector<Entity>> PkbConcreteReader::getUsesStmtPair(StatementType type) const {
     return this->readerManager->getUsesStmtPair(type);
 }
@@ -98,6 +114,10 @@ bool PkbConcreteReader::isFollowsStar(Statement& statement1, Statement& statemen
 
 bool PkbConcreteReader::hasFollows() const {
     return this->readerManager->hasFollows();
+}
+
+bool PkbConcreteReader::hasFollowsStar() const {
+    return this->readerManager->hasFollowsStar();
 }
 
 bool PkbConcreteReader::hasLatterStmt(Statement& statement) const {
@@ -220,6 +240,10 @@ bool PkbConcreteReader::isParentStar(Statement& statement1, Statement& statement
 
 bool PkbConcreteReader::hasParent() const {
     return this->readerManager->hasParent();
+}
+
+bool PkbConcreteReader::hasParentStar() const {
+    return this->readerManager->hasParentStar();
 }
 
 bool PkbConcreteReader::hasParentStmt(Statement& statement) const {

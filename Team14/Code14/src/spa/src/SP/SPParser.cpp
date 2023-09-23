@@ -1,9 +1,3 @@
-#include <regex>
-#include <stack>
-#include <deque>
-#include <functional>
-
-#include "Commons/AppConstants.h"
 #include "SPParser.h"
 
 SPParser::SPParser() {
@@ -71,7 +65,7 @@ std::shared_ptr<AssignNode> SPParser::parseAssignStatement(std::deque<SPToken>& 
     assert(tokens.front().getType() == TokenType::Equals);
     tokens.pop_front(); // consume equals symbol
 
-    std::shared_ptr<ExpressionNode> expression = parseExpression(tokens, TokenType::Semicolon);
+    std::shared_ptr<ExpressionNode> expression = parseExpression(tokens);
 
     assert(tokens.front().getType() == TokenType::Semicolon);
     tokens.pop_front(); // consume semicolon
@@ -132,10 +126,10 @@ std::shared_ptr<IfNode> SPParser::parseIfStatement(std::deque<SPToken> &tokens) 
     tokens.pop_front(); // consume "if" keyword
 
     assert(tokens.front().getType() == TokenType::OpenRoundParenthesis);
-    tokens.pop_front(); // consume "(" token
+    tokens.pop_front(); // consume "("
     auto conditionalExpression = parseConditionalExpression(tokens);
     assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
-    tokens.pop_front(); // consume ")" token
+    tokens.pop_front(); // consume ")"
 
     assert(tokens.front().getType() == TokenType::Name && tokens.front().getValue() == AppConstants::STRING_THEN);
     tokens.pop_front(); // consume "then" keyword
@@ -169,10 +163,10 @@ std::shared_ptr<WhileNode> SPParser::parseWhileStatement(std::deque<SPToken> &to
     tokens.pop_front(); // consume "while" keyword
 
     assert(tokens.front().getType() == TokenType::OpenRoundParenthesis);
-    tokens.pop_front(); // consume "(" token
+    tokens.pop_front(); // consume "("
     auto conditionalExpression = parseConditionalExpression(tokens);
     assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
-    tokens.pop_front(); // consume ")" token
+    tokens.pop_front(); // consume ")"
 
     assert(tokens.front().getType() == TokenType::OpenCurlyParenthesis);
     tokens.pop_front(); // consume "{" token
@@ -186,91 +180,161 @@ std::shared_ptr<WhileNode> SPParser::parseWhileStatement(std::deque<SPToken> &to
     return whileNode;
 }
 
-int SPParser::getOperatorPrecedence(SPToken &operatorToken) {
-    assert(operatorToken.getType() == TokenType::ArithmeticOperator);
-    std::unordered_map<std::string, int> precedenceMap = {
-            { AppConstants::STRING_PLUS, 5 },
-            { AppConstants::STRING_MINUS, 5 },
-            { AppConstants::STRING_TIMES, 10 },
-            { AppConstants::STRING_DIVIDE, 10 },
-            { AppConstants::STRING_MODULO, 10 },
-    };
-    assert(precedenceMap.find(operatorToken.getValue()) != precedenceMap.end());
-    return precedenceMap[operatorToken.getValue()];
-}
 
-std::deque<SPToken> SPParser::infixToPostfix(std::deque<SPToken> &tokens, TokenType endDelimiter) {
-    std::deque<SPToken> outputQueue;
-    std::stack<SPToken> operatorStack;
+std::shared_ptr<ConditionalExpressionNode> SPParser::parseConditionalExpression(std::deque<SPToken> &tokens) {
+    if (tokens.front().getType() == TokenType::ConditionalOperator && tokens.front().getValue() == AppConstants::STRING_NOT) {
+        // case: '!' '(' cond_expr ')'
+        tokens.pop_front(); // consume "!" token
 
-    while (tokens.front().getType() != endDelimiter) {
-        SPToken nextToken = tokens.front();
-        tokens.pop_front(); // consume token from queue
+        assert(tokens.front().getType() == TokenType::OpenRoundParenthesis);
+        tokens.pop_front(); // consume "("
+        auto conditionalExpression = parseConditionalExpression(tokens);
+        assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
+        tokens.pop_front(); // consume ")"
 
-        if (nextToken.getType() == TokenType::Name) { // variable
-            outputQueue.push_back(nextToken);
-        } else if (nextToken.getType() == TokenType::Integer) { // constant
-            outputQueue.push_back(nextToken);
-        } else if (nextToken.getType() == TokenType::ArithmeticOperator) {
-            while (!operatorStack.empty()
-                   && operatorStack.top().getType() != TokenType::OpenRoundParenthesis
-                   && (getOperatorPrecedence(operatorStack.top()) >= getOperatorPrecedence(nextToken))
-                    ) {
-                outputQueue.push_back(operatorStack.top());
-                operatorStack.pop();
+        auto unaryConditionalExpression =
+                std::make_shared<UnaryConditionalExpressionNode>(conditionalExpression);
+        return unaryConditionalExpression;
+    } else if (tokens.front().getType() == TokenType::OpenRoundParenthesis) {
+        // case 1: rel_expr with parentheses around rel_factor
+        // Check for relational operator on LHS
+        // If present, means the LHS is a rel_expr within parentheses, which can only mean a binary cond_expr
+        // If not present, means whatever is in the parentheses must be a rel_factor, so call parseRelativeExpression
+        int index = 1;
+        int stack = 1;
+        bool hasRelationalOperator = false;
+        while (stack != 0) {
+            if (tokens.at(index).getType() == TokenType::OpenRoundParenthesis) {
+                stack++;
+            } else if (tokens.at(index).getType() == TokenType::CloseRoundParenthesis) {
+                stack--;
+            } else if (tokens.at(index).getType() == TokenType::RelationalOperator) {
+                hasRelationalOperator = true;
+                break;
             }
-            operatorStack.push(nextToken);
-        } else if (nextToken.getType() == TokenType::OpenRoundParenthesis) {
-            operatorStack.push(nextToken);
-        } else if (nextToken.getType() == TokenType::CloseRoundParenthesis) {
-            while (operatorStack.top().getType() != TokenType::OpenRoundParenthesis) {
-                assert(!operatorStack.empty()); // if this fails, parentheses are mismatched
-                outputQueue.push_back(operatorStack.top());
-                operatorStack.pop();
-            }
-            assert(operatorStack.top().getType() == TokenType::OpenRoundParenthesis);
-            operatorStack.pop(); // consume "(" token
+            index++;
         }
-    }
+        if (!hasRelationalOperator) {
+            return parseRelativeExpression(tokens);
+        }
 
-    while (!operatorStack.empty()) {
-        assert(operatorStack.top().getType() != TokenType::OpenRoundParenthesis); // if this fails, parentheses mismatched
-        outputQueue.push_back(operatorStack.top());
-        operatorStack.pop();
+        // case 2: '(' cond_expr ')' '&&' '(' cond_expr ')'
+        // case 3: '(' cond_expr ')' '||' '(' cond_expr ')'
+        return parseBinaryConditionalExpression(tokens);
+    } else {
+        // case: rel_expr
+        auto relativeExpression = parseRelativeExpression(tokens);
+        return relativeExpression;
     }
-
-    assert(operatorStack.empty());
-    return outputQueue;
 }
 
-std::shared_ptr<ExpressionNode> SPParser::parseExpression(std::deque<SPToken>& tokens, TokenType endDelimiter) {
-    std::deque<SPToken> postfixTokens = infixToPostfix(tokens, endDelimiter);
-    std::stack<std::shared_ptr<ExpressionNode>> expressionStack;
+std::shared_ptr<BinaryConditionalExpressionNode> SPParser::parseBinaryConditionalExpression(std::deque<SPToken> &tokens) {
+    assert(tokens.front().getType() == TokenType::OpenRoundParenthesis);
+    tokens.pop_front(); // consume "("
+    auto leftConditionalExpression = parseConditionalExpression(tokens);
+    assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
+    tokens.pop_front(); // consume ")"
 
-    while (!postfixTokens.empty()) {
-        if (postfixTokens.front().getType() == TokenType::ArithmeticOperator) {
-            assert(expressionStack.size() >= 2); // need 2 expressions for arithmetic expressions
-            ArithmeticOperatorType operatorType =
-                    ArithmeticExpressionNode::translateOperatorTypeString(postfixTokens.front().getValue());
-            auto rightExpression = expressionStack.top();
-            expressionStack.pop();
-            auto leftExpression = expressionStack.top();
-            expressionStack.pop();
-            auto newExpression =
-                    std::make_shared<ArithmeticExpressionNode>(operatorType, leftExpression, rightExpression);
-            expressionStack.push(newExpression);
-            postfixTokens.pop_front(); // consume token
-        } else if (postfixTokens.front().getType() == TokenType::Integer) {
-            expressionStack.push(parseConstant(postfixTokens)); // consumes token
+    assert(tokens.front().getType() == TokenType::ConditionalOperator);
+    assert(tokens.front().getValue() == AppConstants::STRING_AND || tokens.front().getValue() == AppConstants::STRING_OR);
+    std::string conditionalOperator = tokens.front().getValue();
+    tokens.pop_front(); // consume "&&" or "||" token
+
+    assert(tokens.front().getType() == TokenType::OpenRoundParenthesis);
+    tokens.pop_front(); // consume "("
+    auto rightConditionalExpression = parseConditionalExpression(tokens);
+    assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
+    tokens.pop_front(); // consume ")"
+
+    auto binaryConditionalExpressionType =
+            BinaryConditionalExpressionNode::translateBinaryConditionalExpressionTypeString(conditionalOperator);
+    auto binaryConditionalExpression = std::make_shared<BinaryConditionalExpressionNode>(
+            binaryConditionalExpressionType , leftConditionalExpression, rightConditionalExpression);
+    return binaryConditionalExpression;
+}
+
+std::shared_ptr<RelativeExpressionNode> SPParser::parseRelativeExpression(std::deque<SPToken> &tokens) {
+    auto leftExpression = parseRelativeFactor(tokens);
+
+    assert(tokens.front().getType() == TokenType::RelationalOperator);
+    std::string relationalOperatorString = tokens.front().getValue();
+    ComparisonOperatorType relationalOperator =
+            RelativeExpressionNode::translateComparisonOperatorType(relationalOperatorString);
+    tokens.pop_front(); // consume relational operator e.g. ">", ">=", "!=", etc
+
+    auto rightExpression = parseRelativeFactor(tokens);
+    assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
+
+    auto relativeExpression = std::make_shared<RelativeExpressionNode>(
+            relationalOperator, leftExpression, rightExpression);
+    return relativeExpression;
+}
+
+std::shared_ptr<ExpressionNode> SPParser::parseRelativeFactor(std::deque<SPToken> &tokens) {
+    // Relative expressions are all in the form ( ... <rel_operator> ... ), so we can use relational
+    // operators and closing parenthesis to demarcate the end of a relative factor
+    if (tokens.at(1).getType() == TokenType::RelationalOperator ||
+        tokens.at(1).getType() == TokenType::CloseRoundParenthesis) {
+        if (tokens.front().getType() == TokenType::Name) {
+            return parseVariable(tokens);
         } else {
-            assert(postfixTokens.front().getType() == TokenType::Name);
-            expressionStack.push(parseVariable(postfixTokens)); // consumes token
+            assert(tokens.front().getType() == TokenType::Integer);
+            return parseConstant(tokens);
         }
+    } else {
+        return parseExpression(tokens);
     }
-
-    assert(expressionStack.size() == 1);
-    return expressionStack.top();
 }
+
+std::shared_ptr<ExpressionNode> SPParser::parseExpression(std::deque<SPToken> &tokens) {
+    // parse leftmost term, then parse next term from left to right
+    auto leftExpression = parseTerm(tokens);
+    // repeat while next token is "+" or "-"
+    while (tokens.front().getType() == TokenType::ArithmeticOperator &&
+           AppConstants::EXPR_ARITHMETIC_OPERATOR_STRING_SET.count(tokens.front().getValue()) != 0) {
+        ArithmeticOperatorType arithmeticOperator =
+                ArithmeticExpressionNode::translateOperatorTypeString(tokens.front().getValue());
+        tokens.pop_front(); // consume "+" or "-"
+        auto nextExpression = parseExpression(tokens);
+        leftExpression =
+                std::make_shared<ArithmeticExpressionNode>(
+                        arithmeticOperator, leftExpression, nextExpression);
+    }
+    return leftExpression;
+}
+
+std::shared_ptr<ExpressionNode> SPParser::parseTerm(std::deque<SPToken>& tokens) {
+    // parse leftmost factor, then parse next factor from left to right
+    auto leftExpression = parseFactor(tokens);
+    // repeat while next token is "*", "/" or "%"
+    while (tokens.front().getType() == TokenType::ArithmeticOperator &&
+            AppConstants::TERM_ARITHMETIC_OPERATOR_STRING_SET.count(tokens.front().getValue()) != 0) {
+        ArithmeticOperatorType arithmeticOperator =
+                ArithmeticExpressionNode::translateOperatorTypeString(tokens.front().getValue());
+        tokens.pop_front(); // consume "*", "/" or "%"
+        auto nextExpression = parseTerm(tokens);
+        leftExpression =
+                std::make_shared<ArithmeticExpressionNode>(
+                        arithmeticOperator, leftExpression, nextExpression);
+    }
+    return leftExpression;
+}
+
+std::shared_ptr<ExpressionNode> SPParser::parseFactor(std::deque<SPToken>& tokens) {
+    if (tokens.front().getType() == TokenType::OpenRoundParenthesis) {
+        tokens.pop_front(); // consume "("
+        auto expression = parseExpression(tokens);
+        assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
+        tokens.pop_front(); // consume ")"
+        return expression;
+    } else if (tokens.front().getType() == TokenType::Name) {
+        return parseVariable(tokens);
+    } else {
+        assert(tokens.front().getType() == TokenType::Integer);
+        return parseConstant(tokens);
+    }
+}
+
 
 std::shared_ptr<VariableNode> SPParser::parseVariable(std::deque<SPToken>& tokens) {
     assert(tokens.front().getType() == TokenType::Name);
@@ -288,66 +352,4 @@ std::shared_ptr<ConstantNode> SPParser::parseConstant(std::deque<SPToken>& token
     tokens.pop_front(); // consume integer constant
     std::shared_ptr<ConstantNode> constantNode = std::make_shared<ConstantNode>(value);
     return constantNode;
-}
-
-std::shared_ptr<ConditionalExpressionNode> SPParser::parseConditionalExpression(std::deque<SPToken> &tokens) {
-    if (tokens.front().getType() == TokenType::ConditionalOperator && tokens.front().getValue() == AppConstants::STRING_NOT) {
-        // case: '!' '(' cond_expr ')'
-        tokens.pop_front(); // consume "!" token
-
-        assert(tokens.front().getType() == TokenType::OpenRoundParenthesis);
-        tokens.pop_front(); // consume "(" token
-        auto conditionalExpression = parseConditionalExpression(tokens);
-        assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
-        tokens.pop_front(); // consume ")" token
-
-        auto unaryConditionalExpression =
-                std::make_shared<UnaryConditionalExpressionNode>(conditionalExpression);
-        return unaryConditionalExpression;
-    } else if (tokens.front().getType() == TokenType::OpenRoundParenthesis) {
-        // case: '(' cond_expr ')' '&&' '(' cond_expr ')'
-        // case: '(' cond_expr ')' '||' '(' cond_expr ')'
-        tokens.pop_front(); // consume "(" token
-        auto leftConditionalExpression = parseConditionalExpression(tokens);
-        assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
-        tokens.pop_front(); // consume ")" token
-
-        assert(tokens.front().getType() == TokenType::ConditionalOperator);
-        assert(tokens.front().getValue() == AppConstants::STRING_AND || tokens.front().getValue() == AppConstants::STRING_OR);
-        std::string conditionalOperator = tokens.front().getValue();
-        tokens.pop_front(); // consume "&&" or "||" token
-
-        assert(tokens.front().getType() == TokenType::OpenRoundParenthesis);
-        tokens.pop_front(); // consume "(" token
-        auto rightConditionalExpression = parseConditionalExpression(tokens);
-        assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
-        tokens.pop_front();
-
-        auto binaryConditionalExpressionType =
-                BinaryConditionalExpressionNode::translateBinaryConditionalExpressionTypeString(conditionalOperator);
-        auto binaryConditionalExpression = std::make_shared<BinaryConditionalExpressionNode>(
-                binaryConditionalExpressionType , leftConditionalExpression, rightConditionalExpression);
-        return binaryConditionalExpression;
-    } else {
-        // case: rel_expr
-        auto relativeExpression = parseRelativeExpression(tokens);
-        return relativeExpression;
-    }
-}
-
-std::shared_ptr<RelativeExpressionNode> SPParser::parseRelativeExpression(std::deque<SPToken> &tokens) {
-    // end when encounter ")"
-    auto leftExpression = parseExpression(tokens, TokenType::RelationalOperator);
-
-    assert(tokens.front().getType() == TokenType::RelationalOperator);
-    std::string relationalOperatorString = tokens.front().getValue();
-    ComparisonOperatorType relationalOperator =
-            RelativeExpressionNode::translateComparisonOperatorType(relationalOperatorString);
-    tokens.pop_front(); // consume comparison/relational operator e.g. ">", ">=", "!=", etc
-
-    auto rightExpression = parseExpression(tokens, TokenType::CloseRoundParenthesis);
-    assert(tokens.front().getType() == TokenType::CloseRoundParenthesis);
-
-    auto relativeExpression = std::make_shared<RelativeExpressionNode>(relationalOperator, leftExpression, rightExpression);
-    return relativeExpression;
 }

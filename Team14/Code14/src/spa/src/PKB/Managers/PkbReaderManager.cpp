@@ -4,43 +4,48 @@
 
 PkbReaderManager::PkbReaderManager(
     std::shared_ptr<AssignmentManager> assignmentManager,
-    std::shared_ptr<ConstantStore> constantStore,
-    std::shared_ptr<ProcedureStore> procedureStore,
-    std::shared_ptr<StatementStore> statementStore,
-    std::shared_ptr<VariableStore> variableStore,
+    std::shared_ptr<EntitiesManager> entityManager,
     std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
     std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
     std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
     std::shared_ptr<ParentRelationshipManager> parentRelationshipManager)
     : assignmentManager(assignmentManager),
-    constantStore(constantStore),
-    procedureStore(procedureStore),
-    statementStore(statementStore),
-    variableStore(variableStore),
+    entityManager(entityManager),
     followsRelationshipManager(followsRelationshipManager),
     usesRelationshipManager(usesRelationshipManager),
     modifiesRelationshipManager(modifiesRelationshipManager),
     parentRelationshipManager(parentRelationshipManager) {}
 
-template <typename T>
-std::vector<Entity> PkbReaderManager::getAllEntities(const std::shared_ptr<EntityStore<T>>& store) const {
-    return store->getAllEntities();
-}
-
 std::vector<Entity> PkbReaderManager::getAllVariables() const {
-    return this->getAllEntities<Variable>(this->variableStore);
+    return this->entityManager->getAllVariables();
 }
 
 std::vector<Entity> PkbReaderManager::getAllConstants() const {
-    return this->getAllEntities<Constant>(this->constantStore);
+    return this->entityManager->getAllConstants();
 }
 
 std::vector<Entity> PkbReaderManager::getAllProcedures() const {
-    return this->getAllEntities<Procedure>(this->procedureStore);
+    return this->entityManager->getAllProcedures();
 }
 
 std::vector<Entity> PkbReaderManager::getAllStatements() const {
-    return this->getAllEntities<Statement>(this->statementStore);
+    return this->entityManager->getAllStatements();
+}
+
+std::vector<Entity> PkbReaderManager::getAllRead() const {
+    return this->entityManager->getAllRead();
+}
+
+std::vector<Entity> PkbReaderManager::getAllPrint() const {
+    return this->entityManager->getAllPrint();
+}
+
+std::vector<Entity> PkbReaderManager::getAllWhile() const {
+    return this->entityManager->getAllWhile();
+}
+
+std::vector<Entity> PkbReaderManager::getAllIf() const {
+    return this->entityManager->getAllIf();
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getUsesStmtPair(StatementType type) const {
@@ -116,6 +121,10 @@ bool PkbReaderManager::isFollowsStar(Statement& statement1, Statement& statement
 }
 
 bool PkbReaderManager::hasFollows() const {
+    return this->followsRelationshipManager->hasFollows();
+}
+
+bool PkbReaderManager::hasFollowsStar() const {
     return this->followsRelationshipManager->hasFollows();
 }
 
@@ -239,6 +248,10 @@ bool PkbReaderManager::isParentStar(Statement& statement1, Statement& statement2
 }
 
 bool PkbReaderManager::hasParent() const {
+    return this->parentRelationshipManager->hasParent();
+}
+
+bool PkbReaderManager::hasParentStar() const {
     return this->parentRelationshipManager->hasParent();
 }
 

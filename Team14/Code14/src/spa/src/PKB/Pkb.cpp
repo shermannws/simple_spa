@@ -6,10 +6,7 @@
 
 Pkb::Pkb() {
     this->assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
-    this->constantStore = std::make_shared<ConstantStore>(ConstantStore());
-    this->procedureStore = std::make_shared<ProcedureStore>(ProcedureStore());
-    this->statementStore = std::make_shared<StatementStore>(StatementStore());
-    this->variableStore = std::make_shared<VariableStore>(VariableStore());
+    this->entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
     this->followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     this->usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
     this->modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
@@ -19,10 +16,7 @@ Pkb::Pkb() {
     this->pkbReaderManager = std::make_shared<PkbReaderManager>(
             PkbReaderManager(
                     this->assignmentManager,
-                    this->constantStore,
-                    this->procedureStore,
-                    this->statementStore,
-                    this->variableStore,
+                    this->entitiesManager,
                     this->followsRelationshipManager,
                     this->usesRelationshipManager,
                     this->modifiesRelationshipManager,
@@ -32,10 +26,7 @@ Pkb::Pkb() {
     this->pkbWriterManager = std::make_shared<PkbWriterManager>(
             PkbWriterManager(
                     this->assignmentManager,
-                    this->constantStore,
-                    this->procedureStore,
-                    this->statementStore,
-                    this->variableStore,
+                    this->entitiesManager,
                     this->followsRelationshipManager,
                     this->usesRelationshipManager,
                     this->modifiesRelationshipManager,
