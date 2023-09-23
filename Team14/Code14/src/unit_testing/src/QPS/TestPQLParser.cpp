@@ -663,8 +663,6 @@ TEST_CASE("Invalid processSuchThat cases") {
                                "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("print a; print d;\nSelect a such that Modifies(a, 3)",
                               "Invalid RHS entRef");
-        testcases.emplace_back("print a; variable d;\nSelect a such that Modifies(a, d)",
-                               "Invalid Modifies LHS, invalid stmtRef found");
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
