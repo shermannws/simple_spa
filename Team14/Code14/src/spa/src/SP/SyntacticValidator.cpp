@@ -12,18 +12,14 @@ public:
 
 SyntacticValidator::SyntacticValidator(const std::vector<SPToken> &tokens) : tokens(tokens), curr(0) {}
 
-// main function
 std::vector<SPToken> SyntacticValidator::validate() {
-
-        // Check for procedures
-        while (isCurrValid()) {
-            validateProcedure();
-        }
+    while (isCurrValid()) {
+        validateProcedure();
+    }
     return tokens;
 }
 
 void SyntacticValidator::validateProcedure() {
-    // validate 'procedure'
     SPToken token = peekToken();
     if (token.getType() == TokenType::Name && token.getValue() == AppConstants::STRING_PROCEDURE ) {
         popToken();
@@ -31,7 +27,6 @@ void SyntacticValidator::validateProcedure() {
         throw SyntaxError("Syntax error: Expected 'procedure'");
     }
 
-    // validate procedure CGS
     validateName();
     validateOpenCurlyParen();
     validateStmtLst();
@@ -69,10 +64,7 @@ void SyntacticValidator::validateStmtLst() {
 }
 
 void SyntacticValidator::validateReadPrintCall() {
-    // 'read' terminal validated by validateStmtLst()
-    popToken();
-
-    // validate rest of read CGS
+    popToken(); // terminals validated by validateStmtLst()
     validateName();
     validateSemicolon();
 }
@@ -113,8 +105,7 @@ void SyntacticValidator::validateTerm() {
 }
 
 void SyntacticValidator::validateWhile() {
-    // 'while' terminal validated by validateStmtLst()
-    popToken();
+    popToken(); // 'while' terminal validated by validateStmtLst()
 
     // Read all tokens until "{"
     std::vector<SPToken> expression;
@@ -132,8 +123,7 @@ void SyntacticValidator::validateWhile() {
 }
 
 void SyntacticValidator::validateIf() {
-    // 'if' terminal validated by validateStmtLst()
-    popToken();
+    popToken(); // 'if' terminal validated by validateStmtLst()
 
     // Read all tokens until "then {"
     std::vector<SPToken> expression;
@@ -258,10 +248,6 @@ void SyntacticValidator::validateArithmeticOperator() {
     }
 }
 
-bool SyntacticValidator::isCurrValid() {
-    return curr >= 0 && curr < (int)tokens.size();
-}
-
 SPToken SyntacticValidator::peekToken() {
     return tokens[curr];
 }
@@ -274,4 +260,8 @@ SPToken SyntacticValidator::popToken() {
     SPToken res = peekToken();
     curr += 1;
     return res;
+}
+
+bool SyntacticValidator::isCurrValid() {
+    return curr >= 0 && curr < (int)tokens.size();
 }
