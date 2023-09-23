@@ -106,14 +106,62 @@ private:
     std::shared_ptr<WhileNode> parseWhileStatement(std::deque<SPToken>& tokens);
 
     /**
-     * Recursively creates and combines VariableNodes, ConstantNodes and/or ArithmeticExpressionNodes in pairs
-     * to form one final ExpressionNode.
-     * Calls the parser methods for Variable and Constant where necessary.
+     * Recursively creates RelativeExpressionNodes, UnaryConditionalExpressionNodes and
+     * BinaryConditionalExpressionNodes to form one final ConditionalExpressionNode.
+     * Calls the parser methods for RelativeExpression and BinaryConditionalExpression.
      * @param tokens Deque of tokens passed by reference
-     * @param endDelimiter The TokenType of the token after the expression
-     * @return A pointer to the final ExpressionNode
+     * @return A pointer to the final ConditionalExpressionNode
      */
-    std::shared_ptr<ExpressionNode> parseExpression(std::deque<SPToken>& tokens, TokenType endDelimiter);
+    std::shared_ptr<ConditionalExpressionNode> parseConditionalExpression(std::deque<SPToken>& tokens);
+
+    /**
+     * Recursively creates left and right conditional expressions and combines them into one final
+     * BinaryConditionalExpressionNode.
+     * Calls the parser methods of ConditionalExpression.
+     * @param tokens Deque of tokens passed by reference
+     * @return A pointer to the final BinaryConditionalExpressionNode
+     */
+    std::shared_ptr<BinaryConditionalExpressionNode> parseBinaryConditionalExpression(std::deque<SPToken>& tokens);
+
+    /**
+     * Consumes tokens, creates a RelativeExpressionNode and returns a pointer to it.
+     * Calls the parser methods for Expression.
+     * @param tokens Deque of tokens passed by reference
+     * @return A pointer to the created RelativeExpressionNode
+     */
+    std::shared_ptr<RelativeExpressionNode> parseRelativeExpression(std::deque<SPToken>& tokens);
+
+    /**
+     * Creates a VariableNode, ConstantNode, or parses the nested expression.
+     * Returns an ExpressionNode representing a relative factor.
+     * @param tokens Deque of tokens passed by reference
+     * @return A pointer to the final ExpressionNode (variable, constant or expr)
+     */
+    std::shared_ptr<ExpressionNode> parseRelativeFactor(std::deque<SPToken>& tokens);
+
+    /**
+     * Creates and combines exprs in pairs from left to right.
+     * Returns an ExpressionNode representing an expr.
+     * @param tokens Deque of tokens passed by reference
+     * @return A pointer to the final ExpressionNode (expr)
+     */
+    std::shared_ptr<ExpressionNode> parseExpression(std::deque<SPToken>& tokens);
+
+    /**
+     * Creates and combines terms in pairs from left to right.
+     * Returns an ExpressionNode representing a term.
+     * @param tokens Deque of tokens passed by reference
+     * @return A pointer to the final ExpressionNode (term)
+     */
+    std::shared_ptr<ExpressionNode> parseTerm(std::deque<SPToken>& tokens);
+
+    /**
+     * Creates a VariableNode, ConstantNode or parses the nested expression.
+     * Returns an ExpressionNode representing a factor.
+     * @param tokens Deque of tokens passed by reference
+     * @return A pointer to the final ExpressionNode (factor)
+     */
+    std::shared_ptr<ExpressionNode> parseFactor(std::deque<SPToken>& tokens);
 
     /**
      * Consumes tokens, creates an VariableNode and returns a pointer to it.
@@ -128,41 +176,6 @@ private:
      * @return A pointer to the created ConstantNode
      */
     std::shared_ptr<ConstantNode> parseConstant(std::deque<SPToken>& tokens);
-
-    /**
-     * Recursively creates and combines RelativeExpressionNodes, UnaryConditionalExpressionNodes and
-     * BinaryConditionalExpressionNodes in pairs to form one final ConditionalExpressionNode.
-     * Calls the parser methods for RelativeExpression.
-     * @param tokens Deque of tokens passed by reference
-     * @return A pointer to the final ConditionalExpressionNode
-     */
-    std::shared_ptr<ConditionalExpressionNode> parseConditionalExpression(std::deque<SPToken>& tokens);
-
-    /**
-     * Consumes tokens, creates a RelativeExpressionNode and returns a pointer to it.
-     * Calls the parser methods for Expression.
-     * @param tokens Deque of tokens passed by reference
-     * @return A pointer to the created RelativeExpressionNode
-     */
-    std::shared_ptr<RelativeExpressionNode> parseRelativeExpression(std::deque<SPToken>& tokens);
-
-    /**
-     * Returns an int representing the precedence value of the given operator,
-     * used for relative comparison with other operators.
-     * @param operatorToken Operator token to obtain precedence value
-     * @return Int representing precedence value of given operator
-     */
-    static int getOperatorPrecedence(SPToken& operatorToken);
-
-    /**
-     * Helper function for SPParser::parseExpression.
-     * Converts a sequence of tokens representing an arithmetic expression in infix to postfix.
-     * See shunting yard algorithm: https://en.wikipedia.org/wiki/Shunting_yard_algorithm
-     * @param tokens Deque of tokens passed by reference
-     * @param endDelimiter The TokenType of the token after the arithmetic expression
-     * @return Sorted deque of tokens in postfix
-     */
-    static std::deque<SPToken> infixToPostfix(std::deque<SPToken>& tokens, TokenType endDelimiter);
 
 public:
     /**

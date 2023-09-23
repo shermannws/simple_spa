@@ -1,9 +1,5 @@
 #include "SyntacticValidator.h"
-
-class SyntaxError : public std::runtime_error {
-public:
-    SyntaxError(const std::string& message) : std::runtime_error(message) {}
-};
+#include "Errors/SyntaxError.h"
 
 SyntacticValidator::SyntacticValidator(const std::vector<SPToken> &tokens) : tokens(tokens), curr(0) {}
 
