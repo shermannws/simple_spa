@@ -81,7 +81,7 @@ public:
     void visitCallNode(CallNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
     /*!
-     * Visits a IfNode and add If statement into PKB.
+     * Visits an IfNode and add If statement into PKB.
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
      */
