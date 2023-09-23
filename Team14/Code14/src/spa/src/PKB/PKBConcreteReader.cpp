@@ -114,6 +114,10 @@ bool PkbConcreteReader::hasFollows() const {
     return this->readerManager->hasFollows();
 }
 
+bool PkbConcreteReader::hasFollowsStar() const {
+    return this->readerManager->hasFollowsStar();
+}
+
 bool PkbConcreteReader::hasLatterStmt(Statement& statement) const {
     return this->readerManager->hasLatterStmt(statement);
 }
@@ -234,6 +238,10 @@ bool PkbConcreteReader::isParentStar(Statement& statement1, Statement& statement
 
 bool PkbConcreteReader::hasParent() const {
     return this->readerManager->hasParent();
+}
+
+bool PkbConcreteReader::hasParentStar() const {
+    return this->readerManager->hasParentStar();
 }
 
 bool PkbConcreteReader::hasParentStmt(Statement& statement) const {
