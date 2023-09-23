@@ -124,6 +124,10 @@ bool PkbReaderManager::hasFollows() const {
     return this->followsRelationshipManager->hasFollows();
 }
 
+bool PkbReaderManager::hasFollowsStar() const {
+    return this->followsRelationshipManager->hasFollows();
+}
+
 bool PkbReaderManager::hasLatterStmt(Statement& statement) const {
     return this->followsRelationshipManager->hasLatterStmt(statement);
 }
@@ -244,6 +248,10 @@ bool PkbReaderManager::isParentStar(Statement& statement1, Statement& statement2
 }
 
 bool PkbReaderManager::hasParent() const {
+    return this->parentRelationshipManager->hasParent();
+}
+
+bool PkbReaderManager::hasParentStar() const {
     return this->parentRelationshipManager->hasParent();
 }
 
