@@ -66,19 +66,22 @@ Result PQLEvaluator::evaluate(Query& query) {
         }
     }
 
-    Result result = resultHandler->getCombined(sResult, pResult);
+    Result result = resultHandler->getCombined(sResult, pResult); ///MAY RETURN TUPLE / BOOL TRUE
 
-    // check if synonym in select is in result // TODO ISSUE 1 debug
+    // CASE EMPTY TABLE terminate early
+    // return None, dont evaluate as select only  // TODO ISSUE 1 debug
+    if (result.getType()==ResultType::Tuples && result.getTuples().empty()) {
+        return result; //OR do we need to return a FALSE result?
+    }
+
+    // CASE NON EMPTY TABLE, check if synonym in select is in result // TODO ISSUE 1 debug
     Synonym syn = query.getSelect()[0]->getSynonym();
     SynonymMap indicesMap = result.getSynIndices();
     if (indicesMap.find(syn) != indicesMap.end()) { //if yes, return
         return result;
     }
 
-    // if syn not in final result table && result table is empty -> return None, dont evaluate as select only  // TODO ISSUE 1 debug
-    if (result.getType()==ResultType::Tuples && result.getTuples().empty()) {
-        return result; //OR do we need to return a FALSE result?
-    }
+    // CASE BOOLEAN TRUE, evaluate select independently
 
     // else query is just select
     EntityPtr entity = query.getSelect()[0];
