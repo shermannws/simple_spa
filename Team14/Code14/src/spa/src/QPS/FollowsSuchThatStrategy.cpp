@@ -45,7 +45,7 @@ Result FollowsSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, s
 
     } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Synonym) { // Follows(_,s)
         std::string syn = rightRef.getRep();
-        auto data = pkbReader->getFollowsWildcardType(stmtMap.at(rightEntityType));
+        res.setTuples(pkbReader->getFollowsWildcardType(stmtMap.at(rightEntityType)));
 
         std::unordered_map<std::string, int> indices{{syn, 0}};
         res.setSynIndices(indices);
