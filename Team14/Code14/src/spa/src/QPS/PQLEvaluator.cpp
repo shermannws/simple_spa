@@ -36,6 +36,7 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
                                                  [](std::string& a, const std::string& b) {
                                                      return a += (a.empty() ? "" : " ") + b;
                                                  }); // handles formatting of more than two variables in select clause
+
             if (!concat.empty() && results.find(concat) == results.end()) {
                 results.insert(concat);
             }
@@ -80,8 +81,6 @@ Result PQLEvaluator::evaluate(Query& query) {
 
     // set Result fields
     result.setTuples(entities);
-    ResultType type = ResultType::Tuples;
-    result.setType(type);
     SynonymMap map {{entity->getSynonym(), 0}};
     result.setSynIndices(map);
 

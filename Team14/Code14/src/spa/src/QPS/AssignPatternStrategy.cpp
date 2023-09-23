@@ -6,8 +6,6 @@ Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause, std
     ExpressionSpec secondArg = patternClause->getSecondParam();
 
     Result result;
-    ResultType type = ResultType::Tuples;
-    result.setType(type);
     std::unordered_map<std::string, int> columns {{patternClause->getSyn(), 0}};
     if (firstArg.getRootType() == RootType::Synonym) {
         columns.insert({firstArg.getRep(), 1});
