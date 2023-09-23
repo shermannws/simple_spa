@@ -5,6 +5,10 @@
 #include <queue>
 #include <unordered_map>
 #include <functional>
+#include <regex>
+#include <stack>
+#include <deque>
+#include <functional>
 
 #include "Commons/AppConstants.h"
 #include "SPToken.h"

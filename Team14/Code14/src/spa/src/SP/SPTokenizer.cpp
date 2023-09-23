@@ -1,10 +1,4 @@
-#include <string>
-#include <utility>
-#include <stdexcept>
-
-#include "Commons/AppConstants.h"
 #include "SPTokenizer.h"
-#include "SPToken.h"
 
 SPTokenizer::SPTokenizer(std::string  input) : curr(0), input(std::move(input)) {
 }

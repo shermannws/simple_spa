@@ -6,6 +6,7 @@
 #include "SP/AST/Visitors/FollowsExtractorVisitor.h"
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/AST/Visitors/ModifiesExtractorVisitor.h"
+#include "SP/AST/Visitors/ParentExtractorVisitor.h"
 #include "SP/AST/Traverser/Traverser.h"
 #include "SP/AST/SemanticValidator/SemanticValidator.h"
 
@@ -33,8 +34,8 @@ void SP::startSPProcessing(std::string& input) {
 	std::shared_ptr<FollowsExtractorVisitor> followsExtractor = std::make_shared<FollowsExtractorVisitor>(pkbWriter);
 	std::shared_ptr<UsesExtractorVisitor> usesExtractor = std::make_shared<UsesExtractorVisitor>(pkbWriter);
 	std::shared_ptr<ModifiesExtractorVisitor> modifiesExtractor = std::make_shared<ModifiesExtractorVisitor>(pkbWriter);
-
-	std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = { entityExtractor, followsExtractor, usesExtractor, modifiesExtractor };
+    std::shared_ptr<ParentExtractorVisitor> parentExtractor = std::make_shared<ParentExtractorVisitor>(pkbWriter);
+	std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = { entityExtractor, followsExtractor, usesExtractor, modifiesExtractor, parentExtractor };
 
 	//Traverse the AST from root node
 	Traverser traverser = Traverser(visitors);
