@@ -1,0 +1,110 @@
+1 - check Follows(read,read) second param
+read r1, r2;
+Select r2 such that Follows(r1, r2)
+3
+5000
+2 - check Follows(print,print) first param
+print p1; print p2;
+Select p1 such that Follows(p1,p2)
+8
+5000
+3 - check Follows(assign, assign) second param
+assign a1, assign;
+Select assign such that Follows(a1, assign)
+6
+5000
+4 - check Follows(while, while) first param
+while w1, w2;
+Select w1 such that Follows(w1, w2)
+
+5000
+5 - check Follows(if, if) second param
+if if1, if2;
+Select if2 such that Follows(if1, if2)
+
+5000
+6 - check Follows(if, stmt) first param
+if if; stmt s;
+Select if such that Follows(if, s)
+4
+5000
+7 - check Follows(wildcard, read) second param
+read read;
+Select read such that Follows(_, read)
+2, 3, 10
+5000
+8 - check Follows(stmt, assign) second param
+stmt stmt; assign assign;
+Select assign such that Follows(stmt, assign)
+6, 11, 12, 14
+5000
+9 - check Follows(read, if) first param
+read read; if if;
+Select read such that Follows(read, if)
+3
+5000
+10 - check Follows(assign, integer) first param
+assign assign;
+Select assign such that Follows(assign, 6)
+5
+5000
+11 - check Follows(stmt, integer) first param
+stmt stmt;
+Select stmt such that Follows(stmt, 1)
+
+5000
+12 - check Follows(stmt, stmt) second param
+stmt s1, s2;
+Select s1 such that Follows(s1, s2)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+13 - check Follows(read, stmt) first param
+read read; stmt stmt;
+Select read such that Follows(read, stmt)
+2, 3, 10
+5000
+14 - check Follows(print, read) first param
+print print; read read;
+Select print such that Follows(print, read)
+9
+5000
+15 - check Follows(assign, print) second param
+assign assign; print print;
+Select print such that Follows(assign, print)
+
+5000
+16 - check Follows(while, assign) first param
+while while; assign assign;
+Select assign such that Follows(while, assign)
+12
+5000
+17 - check Follows(if, while) second param
+if if; while while;
+Select while such that Follows(if, while)
+
+5000
+18 - check SyntaxError Follows(ident, stmt)
+stmt s;
+Select s such that Follows("x", s)
+SyntaxError
+5000
+19 - check SyntaxError Follows(stmt, ident)
+stmt s;
+Select s such that Follows(s, "hello")
+SyntaxError
+5000
+20 - check SemanticError Follows(v,_)
+variable v;
+Select v such that Follows(v,_)
+SemanticError
+5000
+21 - check SemanticError Follows(1,c)
+constant c;
+Select c such that Follows(1,c)
+SemanticError
+5000
+24 - check out of bound int
+stmt s;
+Select s such that Follows(123,124)
+
+5000
