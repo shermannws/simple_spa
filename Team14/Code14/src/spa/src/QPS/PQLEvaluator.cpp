@@ -68,11 +68,16 @@ Result PQLEvaluator::evaluate(Query& query) {
 
     Result result = resultHandler->getCombined(sResult, pResult);
 
-    // check if synonym in select is in result
+    // check if synonym in select is in result // TODO ISSUE 1 debug
     Synonym syn = query.getSelect()[0]->getSynonym();
     SynonymMap indicesMap = result.getSynIndices();
-    if (indicesMap.find(syn) != indicesMap.end()) {
+    if (indicesMap.find(syn) != indicesMap.end()) { //if yes, return
         return result;
+    }
+
+    // if syn not in final result table && result table is empty -> return None, dont evaluate as select only  // TODO ISSUE 1 debug
+    if (result.getType()==ResultType::Tuples && result.getTuples().empty()) {
+        return result; //OR do we need to return a FALSE result?
     }
 
     // else query is just select
