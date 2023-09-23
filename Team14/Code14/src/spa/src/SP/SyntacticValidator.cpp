@@ -1,8 +1,3 @@
-#include <stdexcept>
-#include <vector>
-#include <string>
-
-#include "Commons/AppConstants.h"
 #include "SyntacticValidator.h"
 
 class SyntaxError : public std::runtime_error {

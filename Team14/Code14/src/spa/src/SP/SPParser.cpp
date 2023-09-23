@@ -1,9 +1,3 @@
-#include <regex>
-#include <stack>
-#include <deque>
-#include <functional>
-
-#include "Commons/AppConstants.h"
 #include "SPParser.h"
 
 SPParser::SPParser() {
