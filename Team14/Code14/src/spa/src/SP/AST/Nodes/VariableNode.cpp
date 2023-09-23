@@ -19,5 +19,5 @@ void VariableNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::
 }
 
 std::string VariableNode::toString() {
-    return varName;
+    return std::string ("(") .append(varName).append(")");
 }
