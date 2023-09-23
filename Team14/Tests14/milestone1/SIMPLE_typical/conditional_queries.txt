@@ -61,9 +61,9 @@ i, j, k, l, n, o, p, q
 13 - check uses (v5)
 variable v;
 Select v such that Uses(7, v)
-s, t, u, v, w
+s, t, u, v, w, z
 5000
 14 - check modifies
 stmt s;
 Select s such that Modifies(s, _)
-3, 4, 5, 6, 7, 8, 9, 10
+3, 4, 5, 6, 7, 8, 9, 10, 11
