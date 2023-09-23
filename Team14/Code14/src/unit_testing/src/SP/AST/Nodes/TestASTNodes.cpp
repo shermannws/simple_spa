@@ -370,7 +370,7 @@ TEST_CASE("Test AST node getters") {
     REQUIRE(varNode->getVarName() == varName);
 
     ConstantValue value = "100";
-    auto constNode = std::make_shared<ConstantNode>("value");
+    auto constNode = std::make_shared<ConstantNode>(value);
     REQUIRE(constNode->getValue() == value);
 
     ArithmeticOperatorType operatorType = ArithmeticOperatorType::Times;
