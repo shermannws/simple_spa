@@ -27,11 +27,11 @@ void Result::setTuples(const std::vector<Entity>& resultEntities) {
     }
 }
 
-ResultTuples Result::getTuples() {
+ResultTuples& Result::getTuples() {
     return tuples;
 }
 
-SynonymMap Result::getSynIndices() {
+SynonymMap& Result::getSynIndices() {
     return synIndices;
 }
 

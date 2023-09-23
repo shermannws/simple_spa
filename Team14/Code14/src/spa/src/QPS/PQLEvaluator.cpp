@@ -8,7 +8,10 @@
 #include "FollowsSuchThatStrategy.h"
 #include "QPSTypes.h"
 
-PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :pkbReader(pkbReader),clauseHandler(std::make_shared<ClauseHandler>(pkbReader)){}
+PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :
+    pkbReader(pkbReader),
+    clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
+    resultHandler(std::make_shared<ResultHandler>()) {}
 
 ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
     std::vector<EntityPtr> selects = query.getSelect();
@@ -43,55 +46,60 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
 }
 
 Result PQLEvaluator::evaluate(Query& query) {
-    Result result;
-    // if query is a such that query
+
+    // if query has Such that Clause
+    Result sResult;
     if (!query.getSuchThat().empty()) {
-        if (query.getSuchThat()[0]->getType() == ClauseType::Uses) {
-            clauseHandler->setStrategy(std::make_shared<UsesSuchThatStrategy>(UsesSuchThatStrategy()));
-        } else if (query.getSuchThat()[0]->getType() == ClauseType::Follows) {
-            clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
-        }
-        clauseHandler->executeClause(query.getSuchThat()[0], result);
-        if (result.getType() == ResultType::Boolean && !result.getBoolResult()) {
-            return result;
+        evaluateSuchThat(query.getSuchThat()[0], sResult);
+        if (sResult.getType() == ResultType::Boolean && !sResult.getBoolResult()) {
+            return sResult;
         }
     }
 
     // if query is an assign pattern query
+    Result pResult;
     if (!query.getPattern().empty()) {
-        clauseHandler->setStrategy(std::make_shared<AssignPatternStrategy>(AssignPatternStrategy()));
-        clauseHandler-> executeClause(query.getPattern()[0], result);
-        if (result.getType() == ResultType::Boolean && !result.getBoolResult()) {
-            return result;
+        evaluatePattern(query.getPattern()[0], pResult);
+        if (pResult.getType() == ResultType::Boolean && !pResult.getBoolResult()) {
+            return pResult;
         }
     }
 
+    Result result = resultHandler->getCombined(sResult, pResult);
+
     // check if synonym in select is in result
-//     ASSUMES ONLY ONE SELECT VARIABLE RETURNED
     Synonym syn = query.getSelect()[0]->getSynonym();
     SynonymMap indicesMap = result.getSynIndices();
     if (indicesMap.find(syn) != indicesMap.end()) {
         return result;
     }
 
-
     // else query is just select
     EntityPtr entity = query.getSelect()[0];
     std::vector<Entity> entities = getAll(entity);
 
     // set Result fields
-    ResultTuples mappedEntities;
-    for (const Entity& resEntity : entities) {
-        std::vector<Entity> mappedEntity {resEntity};
-        mappedEntities.push_back(mappedEntity);
-    }
-    result.setTuples(mappedEntities);
+    result.setTuples(entities);
     ResultType type = ResultType::Tuples;
     result.setType(type);
     SynonymMap map {{entity->getSynonym(), 0}};
     result.setSynIndices(map);
 
     return result;
+}
+
+void PQLEvaluator::evaluateSuchThat(const std::shared_ptr<SuchThatClause> clause, Result& result) {
+    if (clause->getType() == ClauseType::Uses) {
+        clauseHandler->setStrategy(std::make_shared<UsesSuchThatStrategy>(UsesSuchThatStrategy()));
+    } else if (clause->getType() == ClauseType::Follows) {
+        clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
+    }
+    clauseHandler->executeClause(clause, result);
+}
+
+void PQLEvaluator::evaluatePattern(const std::shared_ptr<PatternClause> clause, Result& result) {
+    clauseHandler->setStrategy(std::make_shared<AssignPatternStrategy>(AssignPatternStrategy()));
+    clauseHandler-> executeClause(clause, result);
 }
 
 std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& queryEntity) {
