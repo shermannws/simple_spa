@@ -781,9 +781,66 @@ TEST_CASE("processPatternClause") {
         REQUIRE(rightRef.second == "(x)");
     }
 
+    SECTION("Valid pattern, Synonym entRef and exact match") {
+        PQLParser parser("assign a; variable v;\nSelect a such that Uses(a, v) pattern a(\"y\",_\"x\"_)");
+        Query query = parser.parse();
+
+        auto actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause->getFirstParam();
+        ExpressionSpec rightRef = actualClause->getSecondParam();
+        REQUIRE(actualClause->getType() == ClauseType::Assign);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Ident);
+        REQUIRE(leftRef.getRep() == "y");
+        REQUIRE(rightRef.first == ExpressionSpecType::PartialMatch);
+        REQUIRE(rightRef.second == "(x)");
+
+        auto clause = query.getSuchThat()[0];
+        leftRef = clause->getFirstParam();
+        Ref rightRef1 = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Uses);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(leftRef.getRep() == "a");
+        REQUIRE(rightRef1.getType() == RefType::EntRef);
+        REQUIRE(rightRef1.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef1.getEntityType() == QueryEntityType::Variable);
+        REQUIRE(rightRef1.getRep() == "v");
+    }
+
     SECTION("invalid pattern") {
         PQLParser parser("assign a; variable v;\nSelect a pattern a(\"y\",_ _)");
         REQUIRE_THROWS_WITH(parser.parse(), "expected right parenthesis");
     }
+
+}
+
+TEST_CASE("both clause present") {
+    PQLParser parser("assign a; variable v;\nSelect a such that Uses(a, v) pattern a(\"y\",_\"x\"_)");
+    Query query = parser.parse();
+
+    auto actualClause = query.getPattern()[0];
+    Ref leftRef = actualClause->getFirstParam();
+    ExpressionSpec rightRef = actualClause->getSecondParam();
+    REQUIRE(actualClause->getType() == ClauseType::Assign);
+    REQUIRE(leftRef.getType() == RefType::EntRef);
+    REQUIRE(leftRef.getRootType() == RootType::Ident);
+    REQUIRE(leftRef.getRep() == "y");
+    REQUIRE(rightRef.first == ExpressionSpecType::PartialMatch);
+    REQUIRE(rightRef.second == "(x)");
+
+    auto clause = query.getSuchThat()[0];
+    leftRef = clause->getFirstParam();
+    Ref rightRef1 = clause->getSecondParam();
+    REQUIRE(clause->getType() == ClauseType::Uses);
+    REQUIRE(leftRef.getType() == RefType::StmtRef);
+    REQUIRE(leftRef.getRootType() == RootType::Synonym);
+    REQUIRE(leftRef.getEntityType() == QueryEntityType::Assign);
+    REQUIRE(leftRef.getRep() == "a");
+    REQUIRE(rightRef1.getType() == RefType::EntRef);
+    REQUIRE(rightRef1.getRootType() == RootType::Synonym);
+    REQUIRE(rightRef1.getEntityType() == QueryEntityType::Variable);
+    REQUIRE(rightRef1.getRep() == "v");
 
 }

@@ -3,10 +3,7 @@
 #include <memory>
 
 #include "PKB/Managers/AssignmentManager.h"
-#include "PKB/EntityStores/ConstantStore.h"
-#include "PKB/EntityStores/ProcedureStore.h"
-#include "PKB/EntityStores/StatementStore.h"
-#include "PKB/EntityStores/VariableStore.h"
+#include "PKB/Managers/EntitiesManager.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "Commons/Entities/Constant.h"
@@ -18,10 +15,7 @@ class PkbWriterManager {
 private:
     std::shared_ptr<AssignmentManager> assignmentManager;
 
-    std::shared_ptr<ConstantStore> constantStore;
-    std::shared_ptr<ProcedureStore> procedureStore;
-    std::shared_ptr<StatementStore> statementStore;
-    std::shared_ptr<VariableStore> variableStore;
+    std::shared_ptr<EntitiesManager> entitiesManager;
 
     std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager;
     std::shared_ptr<UsesRelationshipManager> usesRelationshipManager;
@@ -30,10 +24,7 @@ private:
 public:
     PkbWriterManager(
             std::shared_ptr<AssignmentManager> assignmentManager,
-            std::shared_ptr<ConstantStore> constantStore,
-            std::shared_ptr<ProcedureStore> procedureStore,
-            std::shared_ptr<StatementStore> statementStore,
-            std::shared_ptr<VariableStore> variableStore,
+            std::shared_ptr<EntitiesManager> entitiesManager,
             std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
             std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,

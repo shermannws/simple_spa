@@ -18,6 +18,22 @@ std::vector<Entity> StubPkbReader::getAllStatements() const {
     return std::vector<Entity>();
 }
 
+std::vector<Entity> StubPkbReader::getAllRead() const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getAllPrint() const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getAllWhile() const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getAllIf() const {
+    return std::vector<Entity>();
+}
+
 std::vector<std::vector<Entity>> StubPkbReader::getUsesStmtPair(StatementType type) const {
     return std::vector<std::vector<Entity>>();
 }
