@@ -35,6 +35,11 @@ read
 5000
 8 - check Uses - no synonym
 procedure p;
-Select p such that Uses (1, "read")
+Select p such that Modifies (1, read)
 testPrint
+5000
+9 - check Modifies - wildcard
+procedure p;
+Select p such that Modifies (1, _)
+
 5000

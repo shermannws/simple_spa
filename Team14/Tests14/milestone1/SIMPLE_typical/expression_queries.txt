@@ -78,3 +78,8 @@ assign a;
 Select a pattern a (_, "((a))")
 2
 5000
+17 - select all stmt with useless clause
+stmt s, s1;
+Select s1 such that Follows(1,s)
+1, 2, 3, 4, 5, 6, 7, 8, 9
+5000
