@@ -38,3 +38,8 @@ procedure p;
 Select p such that Uses (1, "read")
 testPrint
 5000
+9 - check Modifies - wildcard
+procedure p;
+Select p such that Modifies (1, _)
+
+5000

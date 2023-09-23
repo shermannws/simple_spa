@@ -40,8 +40,8 @@ testAssign
 5000
 9 - check Modifies - stmt synonym
 stmt s;
-Select s such that Modifies (s, call)
-print
+Select s such that Modifies (s, "call")
+1
 5000
 10 - check Modifies - variable synonym
 variable v;
