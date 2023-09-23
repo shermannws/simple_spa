@@ -2,7 +2,9 @@
 
 #include <string>
 #include <vector>
+
 #include "SPToken.h"
+#include "ConditionalValidator.h"
 
 class SyntacticValidator {
 public:
@@ -17,9 +19,7 @@ private:
 
     void validateStmtLst();
 
-    void validateRead();
-    void validatePrint();
-    void validateCall();
+    void validateReadPrintCall();
     void validateAssign();
 
     void validateExpr();
@@ -29,20 +29,16 @@ private:
     void validateIf();
     void validateThen();
     void validateElse();
-    void validateConditionalExpression();
-    void validateRelationalExpression();
 
     void validateName(); // var_name or proc_name
     void validateInteger();
-    void validateOpenRoundParan();
-    void validateCloseRoundParan();
-    void validateOpenCurlyParan();
-    void validateCloseCurlyParan();
+    void validateOpenRoundParen();
+    void validateCloseRoundParen();
+    void validateOpenCurlyParen();
+    void validateCloseCurlyParen();
     void validateSemicolon();
     void validateEquals();
     void validateArithmeticOperator();
-    void validateAndOrOperator();
-    void validateRelationalOperator();
 
     SPToken peekToken();
     SPToken peekNextToken();

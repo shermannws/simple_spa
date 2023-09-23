@@ -33,9 +33,9 @@ void SyntacticValidator::validateProcedure() {
 
     // validate procedure CGS
     validateName();
-    validateOpenCurlyParan();
+    validateOpenCurlyParen();
     validateStmtLst();
-    validateCloseCurlyParan();
+    validateCloseCurlyParen();
 }
 
 void SyntacticValidator::validateStmtLst() {
@@ -51,12 +51,10 @@ void SyntacticValidator::validateStmtLst() {
         } else if (peekNextToken().getType() == TokenType::Equals) {
             validateAssign();
         } else if (token.getType() == TokenType::Name) {
-            if (token.getValue() == AppConstants::STRING_READ) {
-                validateRead();
-            } else if (token.getValue() == AppConstants::STRING_PRINT) {
-                validatePrint();
-            } else if (token.getValue() == AppConstants::STRING_CALL) {
-                validateCall();
+            if (token.getValue() == AppConstants::STRING_READ ||
+                    token.getValue() == AppConstants::STRING_PRINT ||
+                    token.getValue() == AppConstants::STRING_CALL) {
+                validateReadPrintCall();
             } else if (token.getValue() == AppConstants::STRING_WHILE) {
                 validateWhile();
             } else if (token.getValue() == AppConstants::STRING_IF) {
@@ -70,29 +68,11 @@ void SyntacticValidator::validateStmtLst() {
     }
 }
 
-void SyntacticValidator::validateRead() {
+void SyntacticValidator::validateReadPrintCall() {
     // 'read' terminal validated by validateStmtLst()
     popToken();
 
     // validate rest of read CGS
-    validateName();
-    validateSemicolon();
-}
-
-void SyntacticValidator::validatePrint() {
-    // 'print' terminal validated by validateStmtLst()
-    popToken();
-
-    // validate rest of print CGS
-    validateName();
-    validateSemicolon();
-}
-
-void SyntacticValidator::validateCall() {
-    // 'call' terminal validated by validateStmtLst()
-    popToken();
-
-    // validate rest of call CGS
     validateName();
     validateSemicolon();
 }
@@ -124,9 +104,9 @@ void SyntacticValidator::validateTerm() {
     } else if (currToken.getType() == TokenType::Integer) {
         validateInteger();
     } else if (currToken.getType() == TokenType::OpenRoundParenthesis) {
-        validateOpenRoundParan();
+        validateOpenRoundParen();
         validateExpr();
-        validateCloseRoundParan();
+        validateCloseRoundParen();
     } else {
         throw SyntaxError("Syntax error: Invalid Term");
     }
@@ -136,32 +116,44 @@ void SyntacticValidator::validateWhile() {
     // 'while' terminal validated by validateStmtLst()
     popToken();
 
-    validateOpenRoundParan();
-    validateConditionalExpression();
-    validateCloseRoundParan();
+    // Read all tokens until "{"
+    std::vector<SPToken> expression;
+    while (peekToken().getType() != TokenType::OpenCurlyParenthesis) {
+        expression.push_back(popToken());
+    }
 
-    validateOpenCurlyParan();
+    // Pass expression '(' conditional expr ')' into validator
+    ConditionalValidator conditionalValidator(expression);
+    conditionalValidator.validate();
+
+    validateOpenCurlyParen();
     validateStmtLst();
-    validateCloseCurlyParan();
+    validateCloseCurlyParen();
 }
 
 void SyntacticValidator::validateIf() {
     // 'if' terminal validated by validateStmtLst()
     popToken();
 
-    validateOpenRoundParan();
-    validateConditionalExpression();
-    validateCloseRoundParan();
+    // Read all tokens until "then {"
+    std::vector<SPToken> expression;
+    while (peekNextToken().getType() != TokenType::OpenCurlyParenthesis) {
+        expression.push_back(popToken());
+    }
+
+    // Pass expression '(' conditional expr ')' into validator
+    ConditionalValidator conditionalValidator(expression);
+    conditionalValidator.validate();
 
     validateThen();
-    validateOpenCurlyParan();
+    validateOpenCurlyParen();
     validateStmtLst();
-    validateCloseCurlyParan();
+    validateCloseCurlyParen();
 
     validateElse();
-    validateOpenCurlyParan();
+    validateOpenCurlyParen();
     validateStmtLst();
-    validateCloseCurlyParan();
+    validateCloseCurlyParen();
 }
 
 void SyntacticValidator::validateThen() {
@@ -179,51 +171,6 @@ void SyntacticValidator::validateElse() {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected 'else' in if statement");
-    }
-}
-
-void SyntacticValidator::validateConditionalExpression() {
-    if (peekToken().getType() == TokenType::ConditionalOperator &&
-        peekToken().getValue() == AppConstants::STRING_NOT) {
-        popToken();
-        validateOpenRoundParan();
-        validateConditionalExpression();
-        validateCloseRoundParan();
-    } else if (peekToken().getType() == TokenType::OpenRoundParenthesis) {
-        validateOpenRoundParan();
-        validateConditionalExpression();
-        validateCloseRoundParan();
-
-        validateAndOrOperator();
-
-        validateOpenRoundParan();
-        validateConditionalExpression();
-        validateCloseRoundParan();
-    } else {
-        validateRelationalExpression();
-    }
-}
-
-void SyntacticValidator::validateAndOrOperator() {
-    if (peekToken().getType() == TokenType::ConditionalOperator &&
-    (peekToken().getValue() == AppConstants::STRING_AND || peekToken().getValue() == AppConstants::STRING_OR)) {
-        popToken();
-    } else {
-        throw SyntaxError("Syntax error: Expected '&&' or '||' logical operator");
-    }
-}
-
-void SyntacticValidator::validateRelationalExpression() {
-    validateExpr();
-    validateRelationalOperator();
-    validateExpr();
-}
-
-void SyntacticValidator::validateRelationalOperator() {
-    if (peekToken().getType() == TokenType::RelationalOperator) {
-        popToken();
-    } else {
-        throw SyntaxError("Syntax error: Expected relational operator");
     }
 }
 
@@ -248,7 +195,7 @@ void SyntacticValidator::validateInteger() {
     }
 }
 
-void SyntacticValidator::validateOpenRoundParan() {
+void SyntacticValidator::validateOpenRoundParen() {
     SPToken currToken = peekToken();
     if (currToken.getType() == TokenType::OpenRoundParenthesis) {
         popToken();
@@ -257,7 +204,7 @@ void SyntacticValidator::validateOpenRoundParan() {
     }
 }
 
-void SyntacticValidator::validateCloseRoundParan() {
+void SyntacticValidator::validateCloseRoundParen() {
     SPToken currToken = peekToken();
     if (currToken.getType() == TokenType::CloseRoundParenthesis) {
         popToken();
@@ -266,7 +213,7 @@ void SyntacticValidator::validateCloseRoundParan() {
     }
 }
 
-void SyntacticValidator::validateOpenCurlyParan() {
+void SyntacticValidator::validateOpenCurlyParen() {
     SPToken currToken = peekToken();
     if (currToken.getType() == TokenType::OpenCurlyParenthesis) {
         popToken();
@@ -275,7 +222,7 @@ void SyntacticValidator::validateOpenCurlyParan() {
     }
 }
 
-void SyntacticValidator::validateCloseCurlyParan() {
+void SyntacticValidator::validateCloseCurlyParen() {
     SPToken currToken = peekToken();
     if (currToken.getType() == TokenType::CloseCurlyParenthesis) {
         popToken();
