@@ -10,7 +10,7 @@
  * @brief A class that stores all the Relationships in the SIMPLE source program
  * @details This class is a template class that takes in a Relationship as a template parameter
  * This class is the superclass of all RelationshipStores
- * @tparam T
+ * @tparam T The type of Relationship that the RelationshipStore stores
  */
 template <typename T>
 class RelationshipStore {

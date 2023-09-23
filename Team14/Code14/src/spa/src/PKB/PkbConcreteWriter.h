@@ -6,6 +6,9 @@
 #include "PKB/PkbWriter.h"
 #include "PKB/PkbTypes.h"
 
+/**
+ * @brief The facade class is responsible for writing from the PKB.
+ */
 class PkbConcreteWriter : public PkbWriter {
 private:
     std::shared_ptr<PkbWriterManager> writerManager;
