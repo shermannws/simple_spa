@@ -348,8 +348,7 @@ std::shared_ptr<ConstantNode> SPParser::parseConstant(std::deque<SPToken>& token
     assert(tokens.front().getType() == TokenType::Integer);
     std::string stringValue = tokens.front().getValue();
     assert(std::regex_match(stringValue, std::regex(AppConstants::STRING_INTEGER_REGEX)));
-    int value = std::stoi(stringValue);
     tokens.pop_front(); // consume integer constant
-    std::shared_ptr<ConstantNode> constantNode = std::make_shared<ConstantNode>(value);
+    std::shared_ptr<ConstantNode> constantNode = std::make_shared<ConstantNode>(stringValue);
     return constantNode;
 }

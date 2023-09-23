@@ -10,13 +10,12 @@ class Entity: public HashableKey {
 private:
     EntityType entityType;
     std::shared_ptr<std::string> entityValue;
-    bool isInt;
 
 public:
     /*!
      *  Constructor for Entity object
      */
-    Entity(const std::shared_ptr<std::string> entityValue, bool isInt, EntityType entityType);
+    Entity(const std::shared_ptr<std::string> entityValue, EntityType entityType);
 
     /*!
      *  Destructor (virtual to allow polymorphic destruction)
@@ -32,11 +31,6 @@ public:
      *  Returns the string value of the entity
      */
     std::string* getEntityValue() const;
-
-    /*!
-     *  Returns true if the entity is of type int, returns false otherwise
-     */
-    bool isEntityOfTypeInt() const;
 
     /*!
      *  Equality operator to compare between Entities
