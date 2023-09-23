@@ -3,7 +3,7 @@ stmt s;
 Select s
 1, 2, 3, 4, 5, 6, 7
 5000
-2 - select procedure
+2 - select procedure using Uses
 procedure p;
 Select p such that Uses(4, "b")
 abc
@@ -12,4 +12,29 @@ abc
 assign a;
 Select a pattern a (_, _"kjusdhfg"_)
 7
+5000
+4 - select procedure using Modifies
+procedure p;
+Select p such that Modifies(4, "a")
+abc
+5000
+4 - select procedure using Follows
+procedure p;
+Select p such that Follows(3, 6)
+abc
+5000
+5 - select procedure using Parents
+procedure p;
+Select p such that Parent(3, 5)
+abc
+5000
+6 - select procedure using Follows*
+procedure p;
+Select p such that Follows*(1, 6)
+abc
+5000
+7 - select procedure using Parent*
+procedure p;
+Select p such that Parent*(3, 5)
+abc
 5000
