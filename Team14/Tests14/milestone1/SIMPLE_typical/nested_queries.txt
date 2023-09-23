@@ -38,8 +38,13 @@ while w; assign s;
 Select s such that Parent*(w,s)
 16, 21, 28, 29
 5000
-9 - Check nested usage
+9 - Check nested usage (stmt synonym)
 stmt s;
 Select s such that Uses (s, "abcd")
+30, 31, 32, 33
+5000
+10 - Check nested usage (print synonym)
+print pn;
+Select pn such that Uses (pn, "abcd")
 33
 5000
