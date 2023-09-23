@@ -11,6 +11,7 @@ void Result::setType(ResultType& ttype) {
 }
 
 void Result::setBoolResult(bool result) {
+    type = ResultType::Boolean;
     boolResult = result;
 }
 bool Result::getBoolResult() {
@@ -18,10 +19,12 @@ bool Result::getBoolResult() {
 }
 
 void Result::setTuples(const std::vector<std::vector<Entity>>& resultTuples) {
+    type = ResultType::Tuples;
     tuples = resultTuples;
 }
 
 void Result::setTuples(const std::vector<Entity>& resultEntities) {
+    type = ResultType::Tuples;
     for (const Entity& entity : resultEntities) {
         tuples.push_back(std::vector<Entity>{entity});
     }

@@ -2,6 +2,7 @@
 
 #include "StmtrefStmtrefHandler.h"
 #include "../QPSUtil.h"
+#include "../Exception/SemanticException.h"
 
 void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
@@ -21,9 +22,8 @@ void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause)
         std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
         QueryEntityType entityType = entity->getType();
         if (!QPSUtil::isOfStmtType(entityType)) {
-            throw std::runtime_error("Invalid LHS synonym, non-statement found");
+            throw SemanticException("Invalid LHS synonym, non-statement found");
         }
-//        break;
     }
     case RootType::Integer:
     case RootType::Wildcard: {
@@ -40,7 +40,7 @@ void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause)
             std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
             QueryEntityType entityType = entity->getType();
             if (!QPSUtil::isOfStmtType(entityType)) {
-                throw std::runtime_error("Invalid RHS synonym, non-statement found");
+                throw SemanticException("Invalid RHS synonym, non-statement found");
             }
 //            break;
         }

@@ -1,0 +1,5 @@
+procedure testWhile {
+while (while == while) {
+print a;
+}
+}

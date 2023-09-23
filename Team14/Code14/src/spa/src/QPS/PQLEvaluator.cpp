@@ -87,8 +87,6 @@ Result PQLEvaluator::evaluate(Query& query) {
         mappedEntities.push_back(mappedEntity);
     }
     result.setTuples(mappedEntities);
-    ResultType type = ResultType::Tuples;
-    result.setType(type);
     SynonymMap map {{entity->getSynonym(), 0}};
     result.setSynIndices(map);
 

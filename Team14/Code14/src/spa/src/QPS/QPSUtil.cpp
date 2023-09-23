@@ -5,20 +5,22 @@
 bool QPSUtil::isOfStmtType(QueryEntityType entityType) {
     return entityType == QueryEntityType::Stmt || entityType == QueryEntityType::Assign
            || entityType == QueryEntityType::Print || entityType == QueryEntityType::If
-           || entityType == QueryEntityType::While || entityType == QueryEntityType::Call
-           || entityType == QueryEntityType::Read;
+           || entityType == QueryEntityType::While || entityType == QueryEntityType::Read;
+//            entityType == QueryEntityType::Call; // TODO: to uncomment after Milestone 1
 }
 
 bool QPSUtil::isOfUsesStmtType(QueryEntityType entityType) {
     return entityType == QueryEntityType::Stmt || entityType == QueryEntityType::Assign
            || entityType == QueryEntityType::Print || entityType == QueryEntityType::If
-           || entityType == QueryEntityType::While || entityType == QueryEntityType::Call;
+           || entityType == QueryEntityType::While;
+//            entityType == QueryEntityType::Call; // TODO: to uncomment after Milestone 1
 }
 
 bool QPSUtil::isOfModifiesStmtType(QueryEntityType entityType) {
     return entityType == QueryEntityType::Stmt || entityType == QueryEntityType::Assign
            || entityType == QueryEntityType::Read || entityType == QueryEntityType::If
-           || entityType == QueryEntityType::While || entityType == QueryEntityType::Call;
+                                                     || entityType == QueryEntityType::While;
+//            entityType == QueryEntityType::Call; // TODO: to uncomment after Milestone 1
 }
 
 bool QPSUtil::isRootOfEntref(RootType rootType) {

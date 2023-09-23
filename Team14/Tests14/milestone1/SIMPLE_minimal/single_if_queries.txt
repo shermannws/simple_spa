@@ -45,6 +45,11 @@ read
 5000
 10 - check while stmt
 while while;
-Select while;
+Select while
 
+5000
+10 - check parent rs
+procedure p;
+Select p such that Parent(1,2)
+testIf
 5000

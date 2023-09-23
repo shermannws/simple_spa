@@ -6,6 +6,7 @@
 #include "QPS/PQLEvaluator.h"
 #include "PKB/Pkb.h"
 #include "SP/SP.h"
+#include "QPS/QPS.h"
 
 // implementation code of WrapperFactory - do NOT modify the next 5 lines
 AbstractWrapper* WrapperFactory::wrapper = 0;
@@ -47,9 +48,6 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
   // ...code to evaluate query...
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.
-    PQLParser parser(query);
-    Query queryObj = parser.parse();
-    PQLEvaluator evaluator = PQLEvaluator(this->pkb.createPkbReader());
-    Result resultObj = evaluator.evaluate(queryObj);
-    results = evaluator.formatResult(queryObj, resultObj);
+   QPS qps = QPS(this->pkb.createPkbReader());
+   qps.evaluate(query, results);
 }
