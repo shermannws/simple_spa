@@ -11,5 +11,5 @@ dsfhdksfnjknkjnbfjkfbjfkdbdsfbkjdsvfhjksdvfkgsyudgsgjkbnjkd, PRINTprintjfndfjigb
 3 - select constant
 constant c;
 Select c
-2147483641, 2147483647
+214748364100000000, 2147483647
 5000
