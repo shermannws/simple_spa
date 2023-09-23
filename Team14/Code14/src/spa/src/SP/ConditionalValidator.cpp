@@ -8,13 +8,11 @@ public:
 ConditionalValidator::ConditionalValidator(const std::vector<SPToken> &tokens) : tokens(tokens){}
 
 void ConditionalValidator::validate() {
-
     std::deque<SPToken> tokensDeque(tokens.begin(), tokens.end());
     validateConditionalExpression(tokensDeque);
 }
 
 void ConditionalValidator::validateConditionalExpression(std::deque<SPToken> &expression) {
-
     SPToken token = expression.front();
 
     if (token.getType() == TokenType::OpenRoundParenthesis) {
@@ -88,7 +86,6 @@ void ConditionalValidator::validateRelationalExpression(std::deque<SPToken>& exp
     if (LHS.empty() || RHS.empty()) {
         throw SyntaxError("Syntax Error: Expected rel_expr in Relation Expression");
     }
-
     validateExpr(LHS);
     validateExpr(RHS);
 }
