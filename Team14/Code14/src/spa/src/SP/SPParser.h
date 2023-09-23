@@ -114,6 +114,8 @@ private:
      */
     std::shared_ptr<ConditionalExpressionNode> parseConditionalExpression(std::deque<SPToken>& tokens);
 
+    std::shared_ptr<ConditionalExpressionNode> parseBinaryConditionalExpression(std::deque<SPToken>& tokens);
+
     /**
      * Consumes tokens, creates a RelativeExpressionNode and returns a pointer to it.
      * Calls the parser methods for Expression.
