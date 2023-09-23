@@ -18,15 +18,19 @@ private:
      * @brief The statement that is an assignment statement
      */
     std::shared_ptr<Statement> statement;
+
     /**
      * @brief The variable that is being assigned to
      */
     std::shared_ptr<Variable> variable;
+
     /**
      * @brief The expression that is being assigned to the variable
      */
     std::shared_ptr<Expression> expression;
+
 public:
+
     /**
      * @brief Construct a new Assignment object
      * @param statement The statement that is an assignment statement
@@ -35,6 +39,7 @@ public:
      * @return A new Assignment object
      */
     Assignment(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable, std::shared_ptr<Expression> expression);
+
     /**
      * @brief Destroy the Assignment object
      * @return None
@@ -50,9 +55,10 @@ public:
     static Entity getStmtFromAssign(const Assignment& assignment);
 
     /**
-     * @brief Returns the Statement and Variable Pair from the Assignment object
+     * @brief Returns the Statement and Variable Pair as a vector from the Assignment object
      * @param assignment The Assignment object
      * @return A vector containing the Statement and Variable objects of the Assignment object
+     * @note The Statement object is at index 0 and the Variable object is at index 1
      */
     static std::vector<Entity> getStmtVarPairFromAssign(const Assignment& assignment);
 
@@ -62,12 +68,14 @@ public:
      * @return The Statement object that represents the assignment statement
      */
     std::shared_ptr<Statement> getStatement() const;
+
     /**
      * @brief Returns the Variable object from the Assignment object
      * @param None
      * @return The Variable object that represents the variable being assigned to
      */
     std::shared_ptr<Variable> getVariable() const;
+
     /**
      * @brief Returns the Expression from the Assignment object
      * @return The Expression that represents the expression being assigned to the variable

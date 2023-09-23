@@ -8,9 +8,9 @@
  */
 class ProcedureStore : public EntityStore<Procedure> {
 public:
-	/**
+    /**
      * @brief Construct a new ProcedureStore object
      * @return A new ProcedureStore object
      */
-	ProcedureStore();
+    ProcedureStore();
 };

@@ -16,12 +16,12 @@ public:
      */
 	static RelationshipType relationshipType;
 
-	/**
+    /**
      * @brief Construct a new UsesRelationship object
      * @param leftEntity The statement that uses the variable
      * @param rightEntity The variable that is used by the statement
      * @return A new UsesRelationship object
      */
-	UsesRelationship(const std::shared_ptr<Statement> leftEntity,
-		const std::shared_ptr<Variable> rightEntity);
+    UsesRelationship(const std::shared_ptr<Statement> leftEntity,
+        const std::shared_ptr<Variable> rightEntity);
 };

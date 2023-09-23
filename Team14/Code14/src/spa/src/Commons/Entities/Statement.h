@@ -20,7 +20,7 @@ public:
      * @param statementType The Statement Type of the Statement object of enum type `StatementType`
      * @return A new Statement object
      */
-	Statement(int lineNo, StatementType statementType);
+    Statement(int lineNo, StatementType statementType);
 
     /**
      * @brief Returns the Statement Type of the Statement object of enum type `StatementType`

@@ -9,9 +9,9 @@
  */
 class ConstantStore : public EntityStore<Constant> {
 public:
-	/**
+    /**
      * @brief Construct a new ConstantStore object
      * @return A new ConstantStore object
      */
-	ConstantStore();
+    ConstantStore();
 };

@@ -27,20 +27,26 @@ private:
      */
     std::shared_ptr<AssignmentManager> assignmentManager;
 
+    /**
+     * @brief The EntitiesManager of the PKB
+     */
     std::shared_ptr<EntitiesManager> entitiesManager;
 
     /**
      * @brief The FollowsRelationshipManager of the PKB
      */
     std::shared_ptr<UsesRelationshipManager> usesRelationshipManager;
+
     /**
      * @brief The FollowsRelationshipManager of the PKB
      */
     std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager;
+
     /**
      * @brief The ModifiesRelationshipManager of the PKB
      */
     std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager;
+
     /**
      * @brief The ParentRelationshipManager of the PKB
      */
@@ -50,6 +56,7 @@ private:
      * @brief The PkbReaderManager of the PKB
      */
     std::shared_ptr<PkbReaderManager> pkbReaderManager;
+
     /**
      * @brief The PkbWriterManager of the PKB
      */

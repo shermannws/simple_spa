@@ -21,15 +21,15 @@ public:
      */
 	static RelationshipType relationshipType;
 
-	/**
+    /**
      * @brief Construct a new ParentRelationship object
      * @param parentEntity The parent statement of the Parent relationship
      * @param childEntity The child statement of the Parent relationship
      * @param isDirect A boolean value that indicates if the Parent relationship is direct
      * @return A new ParentRelationship object
      */
-	ParentRelationship(const std::shared_ptr<Statement> parentEntity,
-		const std::shared_ptr<Statement> childEntity, bool isDirect);
+    ParentRelationship(const std::shared_ptr<Statement> parentEntity,
+        const std::shared_ptr<Statement> childEntity, bool isDirect);
 
     bool isDirect() const;
 };

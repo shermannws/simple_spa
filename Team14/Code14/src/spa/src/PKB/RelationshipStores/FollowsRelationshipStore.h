@@ -9,9 +9,9 @@
  */
 class FollowsRelationshipStore : public RelationshipStore<FollowsRelationship> {
 public:
-	/**
+    /**
      * @brief Construct a new FollowsRelationshipStore object
      * @return A new FollowsRelationshipStore object
      */
-	FollowsRelationshipStore();
+    FollowsRelationshipStore();
 };

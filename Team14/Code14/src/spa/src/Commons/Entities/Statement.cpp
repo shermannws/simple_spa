@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Statement.h"
 
 Statement::Statement(int lineNo, StatementType statementType)

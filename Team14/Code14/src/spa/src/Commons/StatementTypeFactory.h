@@ -14,5 +14,5 @@ public:
      * @param type The StatementNode object
      * @return The StatementType of the StatementNode object
      */
-	static StatementType getStatementTypeFrom(StatementNodeType type);
+    static StatementType getStatementTypeFrom(StatementNodeType type);
 };

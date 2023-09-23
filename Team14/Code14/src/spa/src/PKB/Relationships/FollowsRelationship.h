@@ -21,15 +21,15 @@ public:
 	 */
 	static RelationshipType relationshipType;
 
-	/**
+    /**
      * @brief Construct a new FollowsRelationship object
      * @param leftEntity The former statement of the Follows relationship
      * @param rightEntity The latter statement of the Follows relationship
      * @param isDirect A boolean value that indicates if the Follows relationship is direct
      * @return A new FollowsRelationship object
      */
-	FollowsRelationship(const std::shared_ptr<Statement> leftEntity,
-		const std::shared_ptr<Statement> rightEntity, bool isDirect);
+    FollowsRelationship(const std::shared_ptr<Statement> leftEntity,
+        const std::shared_ptr<Statement> rightEntity, bool isDirect);
 
     /**
      * @brief Returns a boolean value that indicates if the Follows relationship is direct

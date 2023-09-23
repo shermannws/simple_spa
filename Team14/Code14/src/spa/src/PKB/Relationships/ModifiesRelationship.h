@@ -16,12 +16,12 @@ public:
      */
 	static RelationshipType relationshipType;
 
-	/**
+    /**
      * @brief Construct a new ModifiesRelationship object
      * @param leftEntity The statement that modifies the variable
      * @param rightEntity The variable that is modified by the statement
      * @return A new ModifiesRelationship object
      */
-	ModifiesRelationship(const std::shared_ptr<Statement> leftEntity,
-		const std::shared_ptr<Variable> rightEntity);
+    ModifiesRelationship(const std::shared_ptr<Statement> leftEntity,
+        const std::shared_ptr<Variable> rightEntity);
 };

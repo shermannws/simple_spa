@@ -1,5 +1,3 @@
-#pragma once
-
 #include "AssignmentManager.h"
 
 AssignmentManager::AssignmentManager()

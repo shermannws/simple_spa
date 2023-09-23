@@ -15,5 +15,5 @@ public:
      * @param name The name of the procedure
      * @return A new Procedure object
      */
-	Procedure(std::string name);
+    Procedure(std::string name);
 };

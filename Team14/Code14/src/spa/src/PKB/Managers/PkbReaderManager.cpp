@@ -1,5 +1,3 @@
-#pragma once
-
 #include "PkbReaderManager.h"
 
 PkbReaderManager::PkbReaderManager(

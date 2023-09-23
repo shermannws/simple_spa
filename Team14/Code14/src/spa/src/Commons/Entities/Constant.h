@@ -14,5 +14,5 @@ public:
      * @param value The integer value of the constant
      * @return A new Constant object
      */
-	Constant(int value);
+    Constant(int value);
 };

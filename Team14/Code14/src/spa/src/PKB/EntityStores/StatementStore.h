@@ -8,9 +8,9 @@
  */
 class StatementStore : public EntityStore<Statement> {
 public:
-	/**
+    /**
      * @brief Construct a new StatementStore object
      * @return A new StatementStore object
      */
-	StatementStore();
+    StatementStore();
 };

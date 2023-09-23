@@ -1,5 +1,3 @@
-#pragma once
-
 #include "PkbWriterManager.h"
 
 #include "PKB/Relationships/FollowsRelationship.h"
