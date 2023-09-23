@@ -106,15 +106,22 @@ private:
     std::shared_ptr<WhileNode> parseWhileStatement(std::deque<SPToken>& tokens);
 
     /**
-     * Recursively creates and combines RelativeExpressionNodes, UnaryConditionalExpressionNodes and
-     * BinaryConditionalExpressionNodes in pairs to form one final ConditionalExpressionNode.
-     * Calls the parser methods for RelativeExpression.
+     * Recursively creates RelativeExpressionNodes, UnaryConditionalExpressionNodes and
+     * BinaryConditionalExpressionNodes to form one final ConditionalExpressionNode.
+     * Calls the parser methods for RelativeExpression and BinaryConditionalExpression.
      * @param tokens Deque of tokens passed by reference
      * @return A pointer to the final ConditionalExpressionNode
      */
     std::shared_ptr<ConditionalExpressionNode> parseConditionalExpression(std::deque<SPToken>& tokens);
 
-    std::shared_ptr<ConditionalExpressionNode> parseBinaryConditionalExpression(std::deque<SPToken>& tokens);
+    /**
+     * Recursively creates left and right conditional expressions and combines them into one final
+     * BinaryConditionalExpressionNode.
+     * Calls the parser methods of ConditionalExpression.
+     * @param tokens Deque of tokens passed by reference
+     * @return A pointer to the final BinaryConditionalExpressionNode
+     */
+    std::shared_ptr<BinaryConditionalExpressionNode> parseBinaryConditionalExpression(std::deque<SPToken>& tokens);
 
     /**
      * Consumes tokens, creates a RelativeExpressionNode and returns a pointer to it.

@@ -196,10 +196,31 @@ std::shared_ptr<ConditionalExpressionNode> SPParser::parseConditionalExpression(
                 std::make_shared<UnaryConditionalExpressionNode>(conditionalExpression);
         return unaryConditionalExpression;
     } else if (tokens.front().getType() == TokenType::OpenRoundParenthesis) {
-        // case 1: '(' cond_expr ')' '&&' '(' cond_expr ')'
-        // case 2: '(' cond_expr ')' '||' '(' cond_expr ')'
-        // case 3: rel_expr with parentheses around rel_factor
-        return parseBinaryConditionalExpression(tokens);
+        // case 1: rel_expr with parentheses around rel_factor
+        // Check for relational operator on LHS
+        // If present, means the LHS is a rel_expr within parentheses, which can only mean a binary cond_expr
+        // If not present, means whatever is in the parentheses must be a rel_factor, so call parseRelativeExpression
+        int index = 1;
+        int stack = 1;
+        bool hasRelationalOperator = false;
+        while (stack != 0) {
+            if (tokens.at(index).getType() == TokenType::OpenRoundParenthesis) {
+                stack++;
+            } else if (tokens.at(index).getType() == TokenType::CloseRoundParenthesis) {
+                stack--;
+            } else if (tokens.at(index).getType() == TokenType::RelationalOperator) {
+                hasRelationalOperator = true;
+                break;
+            }
+            index++;
+        }
+        if (!hasRelationalOperator) {
+            return parseRelativeExpression(tokens);
+        }
+
+        // case 2: '(' cond_expr ')' '&&' '(' cond_expr ')'
+        // case 3: '(' cond_expr ')' '||' '(' cond_expr ')'
+        return prseBinaryConditionalExpression(tokens);
     } else {
         // case: rel_expr
         auto relativeExpression = parseRelativeExpression(tokens);
@@ -207,30 +228,7 @@ std::shared_ptr<ConditionalExpressionNode> SPParser::parseConditionalExpression(
     }
 }
 
-std::shared_ptr<ConditionalExpressionNode> SPParser::parseBinaryConditionalExpression(std::deque<SPToken> &tokens) {
-    // Check for relational operator on LHS
-    // If present, means the LHS is a rel_expr within parentheses, which can only mean a binary cond_expr
-    // If not present, means whatever is in the parentheses must be a rel_factor, so call parseRelativeExpression
-
-    int index = 1;
-    int stack = 1;
-    bool hasRelationalOperator = false;
-    while (stack != 0) {
-        if (tokens.at(index).getType() == TokenType::OpenRoundParenthesis) {
-            stack++;
-        } else if (tokens.at(index).getType() == TokenType::CloseRoundParenthesis) {
-            stack--;
-        } else if (tokens.at(index).getType() == TokenType::RelationalOperator) {
-            hasRelationalOperator = true;
-            break;
-        }
-        index++;
-    }
-
-    if (!hasRelationalOperator) {
-        return parseRelativeExpression(tokens);
-    }
-
+std::shared_ptr<BinaryConditionalExpressionNode> SPParser::parseBinaryConditionalExpression(std::deque<SPToken> &tokens) {
     assert(tokens.front().getType() == TokenType::OpenRoundParenthesis);
     tokens.pop_front(); // consume "("
     auto leftConditionalExpression = parseConditionalExpression(tokens);
