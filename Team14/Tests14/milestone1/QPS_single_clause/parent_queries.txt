@@ -1,6 +1,6 @@
 1 - Test valid parent - Parent (INT, INT)
 print p;
-Select p such that Parent (2, 8)
+Select p such that Parent (3, 8)
 5, 8
 5000
 2 - Test valid parent - Parent (_, INT)
@@ -10,8 +10,8 @@ Select r such that Parent (_, 8)
 5000
 3 - Test valid parent - Parent (INT, _)
 if i ;
-Select i such that Parent (2, _)
-2, 10
+Select i such that Parent (3, _)
+3, 10
 5000
 4 - Test valid parent - Parent (_, _)
 while w;
@@ -21,22 +21,22 @@ Select w such that Parent (_, _)
 5 - Test valid parent - Parent (SYN, SYN)
 print p; while w;
 Select w such that Parent (w, p)
-5
+4
 5000
 6 - Test valid parent - Parent (SYN, SYN)
 assign a; if i;
 Select a such that Parent (i, a)
-3, 12, 14
+11, 12
 5000
 7 - Test valid parent - Parent (SYN, SYN)
 stmt s; read r;
 Select r such that Parent (s, r)
-7, 9
+9
 5000
 8 - Test valid parent - Parent (SYN, SYN)
 stmt s; if i;
 Select s such that Parent (s, i)
-11
+3
 5000
 9 - Test invalid parent - Assign as Parent - Parent (SYN, SYN)
 stmt s; assign a;
@@ -61,7 +61,7 @@ Select w such that Parent (w, _)
 13 - Test valid parent - Parent (SYN, INT)
 if i;
 Select i such that Parent (i,9)
-2
+3
 5000
 14 - Test invalid parent - Read as Parent - Parent (SYN, INT)
 read r;
@@ -71,11 +71,11 @@ Select r such that Parent (r, 5)
 15 - Test valid parent - Parent (_, SYN)
 stmt s;
 Select s such that Parent (_, s)
-3, 4, 5, 6, 7, 8, 10, 11, 12, 14
+4, 5, 6, 7, 8, 9, 10, 11, 12
 5000
 16 - Test invalid parent - Indirect parent - Parent (INT, INT)
 print p;
-Select p such that Parent (2, 12)
+Select p such that Parent (3, 12)
 
 5000
 17 - Test invalid parent - Indirect parent - Parent (SYN, INT)
@@ -84,7 +84,7 @@ Select i such that Parent (i, 6)
 
 5000
 18 - Test invalid parent - Indirect parent - Parent (INT, SYN)
-print p;
-Select p such that Parent (2, p)
+assign a;
+Select a such that Parent (3, a)
 
 5000
