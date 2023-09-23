@@ -220,7 +220,7 @@ std::shared_ptr<ConditionalExpressionNode> SPParser::parseConditionalExpression(
 
         // case 2: '(' cond_expr ')' '&&' '(' cond_expr ')'
         // case 3: '(' cond_expr ')' '||' '(' cond_expr ')'
-        return prseBinaryConditionalExpression(tokens);
+        return parseBinaryConditionalExpression(tokens);
     } else {
         // case: rel_expr
         auto relativeExpression = parseRelativeExpression(tokens);
