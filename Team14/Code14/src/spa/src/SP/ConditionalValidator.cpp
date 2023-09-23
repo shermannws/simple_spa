@@ -38,7 +38,7 @@ void ConditionalValidator::validateConditionalExpression(std::deque<SPToken> &ex
         // Option 2 - check next token after the initial ')', split left and right
         if (closingParenthesisIndex < expression.size() - 1) {
             SPToken nextToken = expression[closingParenthesisIndex + 1];
-            std::deque<SPToken> rightSubExpression( expression.begin() + closingParenthesisIndex + 2, expression.end());
+            std::deque<SPToken> rightSubExpression(expression.begin() + closingParenthesisIndex + 2, expression.end());
 
             // Option 2.1 Conditional expr
             if (nextToken.getValue() == AppConstants::STRING_AND || nextToken.getValue() == AppConstants::STRING_OR) {
