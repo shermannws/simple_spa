@@ -4,6 +4,7 @@
 
 #include "Commons/AppConstants.h"
 #include "SPToken.h"
+#include "Errors/SyntaxError.h"
 
 /**
  * A helper to the SP subcomponent SyntacticValidator to check conditional expressions.

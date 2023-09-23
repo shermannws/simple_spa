@@ -1,10 +1,5 @@
 #include "ConditionalValidator.h"
 
-class SyntaxError : public std::runtime_error {
-public:
-    SyntaxError(const std::string& message) : std::runtime_error(message) {}
-};
-
 ConditionalValidator::ConditionalValidator(const std::vector<SPToken> &tokens) : tokens(tokens){}
 
 void ConditionalValidator::validate() {
