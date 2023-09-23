@@ -6,7 +6,7 @@
 typedef std::string ProcedureName;
 typedef std::string VariableName;
 typedef int StatementNumber;
-typedef int ConstantValue;
+typedef std::string ConstantValue;
 typedef std::string FormattedExpression;
 
 class AppConstants {

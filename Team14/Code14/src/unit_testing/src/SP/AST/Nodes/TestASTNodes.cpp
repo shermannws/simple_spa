@@ -28,8 +28,8 @@
 TEST_CASE("Test ExpressionNode family") {
     std::string varName1 = "Variable1";
     std::string varName2 = "Variable2";
-    int constVal1 = 100;
-    int constVal2 = 200;
+    ConstantValue constVal1 = "100";
+    ConstantValue constVal2 = "200";
     std::vector<std::shared_ptr<ASTNode>> emptyChildVector;
 
     auto varNode1 = std::make_shared<VariableNode>(varName1);
@@ -162,8 +162,8 @@ TEST_CASE("Test ExpressionNode family") {
 TEST_CASE("Test ConditionalExpressionNode family") {
     std::string varName1 = "Variable1";
     std::string varName2 = "Variable2";
-    int constVal1 = 100;
-    int constVal2 = 200;
+    ConstantValue constVal1 = "100";
+    ConstantValue constVal2 = "200";
 
     std::shared_ptr<ExpressionNode> expNode1 = std::make_shared<VariableNode>(varName1);
     std::shared_ptr<ExpressionNode> expNode2 = std::make_shared<VariableNode>(varName2);
@@ -240,12 +240,12 @@ TEST_CASE("Test ConditionalExpressionNode family") {
 
 TEST_CASE("Test statement family") {
     int statementNumber = 1;
-    int constVal1 = 100;
-    int constVal2 = 200;
+    ConstantValue constVal1 = "100";
+    ConstantValue constVal2 = "200";
     std::vector<std::shared_ptr<ASTNode>> emptyChildVector;
     std::string procedureName = "Procedure";
     auto varNode = std::make_shared<VariableNode>("variable");
-    auto constNode = std::make_shared<ConstantNode>(100);
+    auto constNode = std::make_shared<ConstantNode>("100");
     auto arithmeticExpressionNode =
             std::make_shared<ArithmeticExpressionNode>(ArithmeticOperatorType::Times, varNode, constNode);
     std::shared_ptr<ExpressionNode> expressionNode = arithmeticExpressionNode;
@@ -369,8 +369,8 @@ TEST_CASE("Test AST node getters") {
     auto varNode = std::make_shared<VariableNode>(varName);
     REQUIRE(varNode->getVarName() == varName);
 
-    int value = 100;
-    auto constNode = std::make_shared<ConstantNode>(value);
+    ConstantValue value = "100";
+    auto constNode = std::make_shared<ConstantNode>("value");
     REQUIRE(constNode->getValue() == value);
 
     ArithmeticOperatorType operatorType = ArithmeticOperatorType::Times;
@@ -416,24 +416,24 @@ TEST_CASE("Test AST node getters") {
 
 TEST_CASE("Test ExpressionNode toString() method") {
     // test case of 3
-    auto constantNode3 = ConstantNode(3);
+    auto constantNode3 = ConstantNode("3");
     std::shared_ptr<ExpressionNode> expression = std::make_shared<ConstantNode>(constantNode3);
     assert(expression->toString() == "(3)");
 
     // test case of (2+v)
-    std::shared_ptr<ExpressionNode> constantNode2 = std::make_shared<ConstantNode>(ConstantNode(2));
+    std::shared_ptr<ExpressionNode> constantNode2 = std::make_shared<ConstantNode>(ConstantNode("2"));
     std::shared_ptr<ExpressionNode> varV = std::make_shared<VariableNode>(VariableNode("v"));
     std::shared_ptr<ExpressionNode> expression2 = std::make_shared<ArithmeticExpressionNode>(ArithmeticExpressionNode(ArithmeticOperatorType::Plus, constantNode2, varV));
     assert(expression2->toString() == "((2)+(v))");
 
     // test case of ((2+v)*(10/g)-8)
-    std::shared_ptr<ExpressionNode> constantNode10 = std::make_shared<ConstantNode>(ConstantNode(10));
+    std::shared_ptr<ExpressionNode> constantNode10 = std::make_shared<ConstantNode>(ConstantNode("10"));
     std::shared_ptr<ExpressionNode> varG = std::make_shared<VariableNode>(VariableNode("g"));
     std::shared_ptr<ExpressionNode> expression3 = std::make_shared<ArithmeticExpressionNode>(ArithmeticExpressionNode(ArithmeticOperatorType::Divide, constantNode10, varG));
 
     std::shared_ptr<ExpressionNode> expression4 = std::make_shared<ArithmeticExpressionNode>(ArithmeticExpressionNode(ArithmeticOperatorType::Times, expression2, expression3));
 
-    std::shared_ptr<ExpressionNode> constantNode8 = std::make_shared<ConstantNode>(ConstantNode(8));
+    std::shared_ptr<ExpressionNode> constantNode8 = std::make_shared<ConstantNode>(ConstantNode("8"));
     std::shared_ptr<ExpressionNode> expression5 = std::make_shared<ArithmeticExpressionNode>(ArithmeticExpressionNode(ArithmeticOperatorType::Minus, expression4, constantNode8));
     assert(expression5->toString() == "((((2)+(v))*((10)/(g)))-(8))");
 }

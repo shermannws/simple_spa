@@ -13,7 +13,7 @@ TEST_CASE("Test Entities Retrieval") {
 
     Variable variable1 = Variable("x");
 
-    Constant constant1 = Constant(1);
+    Constant constant1 = Constant("1");
 
     Procedure procedure1 = Procedure("main");
 
