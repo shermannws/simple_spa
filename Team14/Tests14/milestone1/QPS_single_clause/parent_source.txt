@@ -1,0 +1,19 @@
+procedure procedure {
+    read read;
+    if (read > 0) then {
+        sum = 0;
+        while (read > 0) {
+            print inLoop;
+            sum = sum + read;
+            read = read - 1;
+        }
+        print sum;
+    } else {
+        read procedure;
+        if (read <= procedure) then {
+            read = procedure;
+        } else {
+            procedure = read;
+        }
+    }
+}
