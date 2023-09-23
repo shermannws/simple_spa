@@ -83,6 +83,15 @@ void PQLParser::processSelectClause(Query& query) {
         throw SyntaxException("Expected synonym but found none");
     }
 
+    //check that peekNext is empty or valid clause keyword
+    std::shared_ptr<Token> following = tokenizer->peekToken();
+    std::string rep = following->getRep(); //must be empty or such that or pattern
+    if (!following->isToken(TokenType::Empty) &&
+            !following->isToken("such that") &&
+            !following->isToken("pattern")) {
+        throw SyntaxException("Expected EOF or clause keyword");
+    }
+
     EntityPtr entity = query.getEntity(next->getRep());
     if (!entity) {
         throw SemanticException("Undeclared synonym in Select clause");
