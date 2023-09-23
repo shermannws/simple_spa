@@ -36,5 +36,10 @@ Select pn such that Parent*(i, pn)
 8 - check parent* (where while is the parent)
 while w; assign s;
 Select s such that Parent*(w,s)
-16, 21, 28, 30
+16, 21, 28, 29
+5000
+9 - Check nested usage
+stmt s;
+Select s such that Uses (s, "abcd")
+33
 5000
