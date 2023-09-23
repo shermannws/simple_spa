@@ -1,5 +1,3 @@
-#pragma once
-
 #include "ASTGenerator.h"
 #include "SP/SP.h"
 #include "SP/SPTokenizer.h"

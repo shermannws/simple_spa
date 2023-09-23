@@ -24,9 +24,9 @@ TEST_CASE("Test PKB end-to-end using Facades") {
     auto followingStmts = reader->getFollowsStmtType(statement2, StatementType::Print);
     REQUIRE(followingStmts.at(0) == Statement(3, StatementType::Print));
 
-    writer->addConstant(std::make_shared<Constant>(2));
+    writer->addConstant(std::make_shared<Constant>("2"));
     auto c = reader->getAllConstants();
-    REQUIRE(c.at(0) == Constant(2));
+    REQUIRE(c.at(0) == Constant("2"));
 
     writer->addPrintStatement(std::make_shared<Statement>(5, StatementType::Print));
     auto pn = reader->getAllStatements();

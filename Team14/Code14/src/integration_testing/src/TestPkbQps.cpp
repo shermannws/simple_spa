@@ -33,9 +33,9 @@ TEST_CASE("Test integration of PKB with QPS - Get all Constants") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Constant> constant1 = make_shared<Constant>(Constant(1));
-    shared_ptr<Constant> constant2 = make_shared<Constant>(Constant(2));
-    shared_ptr<Constant> constant3 = make_shared<Constant>(Constant(3));
+    shared_ptr<Constant> constant1 = make_shared<Constant>(Constant("1"));
+    shared_ptr<Constant> constant2 = make_shared<Constant>(Constant("2"));
+    shared_ptr<Constant> constant3 = make_shared<Constant>(Constant("3"));
 
     pkbWriter->addConstant(constant1);
     pkbWriter->addConstant(constant2);
@@ -401,4 +401,77 @@ TEST_CASE("Test integration of PKB with QPS - Uses (a, x)") {
 
     REQUIRE(find(results3.begin(), results3.end(), "1") != results3.end());
     REQUIRE(find(results3.begin(), results3.end(), "2") != results3.end());
+}
+
+TEST_CASE("Test multiclause") {
+    Pkb pkb = Pkb();
+    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
+
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Variable> variableX = make_shared<Variable>(Variable("x"));
+    shared_ptr<Variable> variableY = make_shared<Variable>(Variable("y"));
+    shared_ptr<Variable> variableZ = make_shared<Variable>(Variable("z"));
+    shared_ptr<string> expression1 = make_shared<string>("y + z");
+    shared_ptr<string> expression3 = make_shared<string>("((y)+(z))");
+
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
+    shared_ptr<Variable> variableA = make_shared<Variable>(Variable("a"));
+    shared_ptr<Variable> variableB = make_shared<Variable>(Variable("b"));
+    shared_ptr<string> expression2 = make_shared<string>("b * y");
+    shared_ptr<string> expression4 = make_shared<string>("((b)*(y))");
+
+    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
+    shared_ptr<Variable> variableC = make_shared<Variable>(Variable("c"));
+    shared_ptr<string> expression5 = make_shared<string>("c+1");
+    shared_ptr<string> expression6 = make_shared<string>("((c)+(1))");
+
+    pkbWriter->addUsesRelationship(assignStatement1, variableY);
+    pkbWriter->addUsesRelationship(assignStatement1, variableZ);
+    pkbWriter->addUsesRelationship(assignStatement2, variableB);
+    pkbWriter->addUsesRelationship(assignStatement2, variableY);
+    pkbWriter->addUsesRelationship(assignStatement3, variableC);
+
+    pkbWriter->addAssignStatement(assignStatement1, variableX, expression3);
+    pkbWriter->addAssignStatement(assignStatement2, variableA, expression4);
+    pkbWriter->addAssignStatement(assignStatement3, variableC, expression6);
+
+    pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2, true);
+
+    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
+
+    // combining
+    PQLParser parser1("assign a; variable v; Select v such that Uses (a, v) pattern a(_, \"b * y\")");
+    Query queryObj1 = parser1.parse();
+    Result resultObj1 = evaluator.evaluate(queryObj1);
+    auto results1 = evaluator.formatResult(queryObj1, resultObj1);
+
+    REQUIRE(results1.size() == 2);
+    REQUIRE(find(results1.begin(), results1.end(), "y") != results1.end());
+    REQUIRE(find(results1.begin(), results1.end(), "b") != results1.end());
+
+    PQLParser parser2("assign a; variable x; Select a such that Follows(1,2) pattern a(_, _\"z\"_)");
+    Query queryObj2 = parser2.parse();
+    Result resultObj2 = evaluator.evaluate(queryObj2);
+    auto results2 = evaluator.formatResult(queryObj2, resultObj2);
+
+    REQUIRE(results2.size() == 1);
+    REQUIRE(find(results2.begin(), results2.end(), "1") != results2.end());
+
+
+    shared_ptr<Statement> printStatement1 = make_shared<Statement>(Statement(4, StatementType::Print));
+    shared_ptr<Statement> printStatement2 = make_shared<Statement>(Statement(5, StatementType::Print));
+
+    pkbWriter->addPrintStatement(printStatement1);
+    pkbWriter->addPrintStatement(printStatement2);
+    pkbWriter->addUsesRelationship(printStatement1, variableX);
+    pkbWriter->addUsesRelationship(printStatement2, variableY);
+
+    PQLParser parser3(R"(assign a; print pr; Select a such that Uses(pr, _) pattern a("c", _"1"_))");
+    Query queryObj3 = parser3.parse();
+    Result resultObj3 = evaluator.evaluate(queryObj3);
+    auto results3 = evaluator.formatResult(queryObj3, resultObj3);
+
+    REQUIRE(results3.size() == 1);
+    REQUIRE(find(results3.begin(), results3.end(), "3") != results3.end());
+
 }

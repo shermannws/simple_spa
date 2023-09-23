@@ -69,6 +69,8 @@ public:
 
     bool hasFollows() const override;
 
+    bool hasFollowsStar() const override;
+
     bool hasLatterStmt(Statement& statement) const override;
 
     bool hasFormerStmt(Statement& statement) const override;
@@ -137,6 +139,8 @@ public:
     bool isParentStar(Statement& statement1, Statement& statement2) const override;
 
     bool hasParent() const override;
+
+    bool hasParentStar() const override;
 
     bool hasParentStmt(Statement& statement) const override;
 

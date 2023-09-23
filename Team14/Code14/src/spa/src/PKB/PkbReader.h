@@ -64,6 +64,8 @@ public:
 
     virtual bool hasFollows() const = 0;
 
+    virtual bool hasFollowsStar() const = 0;
+
     virtual bool hasLatterStmt(Statement& statement) const = 0;
 
     virtual bool hasFormerStmt(Statement& statement) const = 0;
@@ -130,6 +132,8 @@ public:
     virtual bool isParentStar(Statement& statement1, Statement& statement2) const = 0;
 
     virtual bool hasParent() const = 0;
+
+    virtual bool hasParentStar() const = 0;
 
     virtual bool hasParentStmt(Statement& statement) const = 0;
 

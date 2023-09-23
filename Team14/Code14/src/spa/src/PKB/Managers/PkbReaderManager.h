@@ -83,6 +83,8 @@ public:
 
     bool hasFollows() const;
 
+    bool hasFollowsStar() const;
+
     bool hasLatterStmt(Statement& statement) const;
 
     bool hasFormerStmt(Statement& statement) const;
@@ -146,6 +148,8 @@ public:
     bool isParentStar(Statement& statement1, Statement& statement2) const;
 
     bool hasParent() const;
+
+    bool hasParentStar() const;
 
     bool hasParentStmt(Statement& statement) const;
 

@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "EntityType.h"
+#include "Commons/AppConstants.h"
 
 /**
  * @brief A Constant is a constant in the SIMPLE programming language
@@ -14,5 +15,5 @@ public:
      * @param value The integer value of the constant
      * @return A new Constant object
      */
-    Constant(int value);
+    Constant(ConstantValue value);
 };

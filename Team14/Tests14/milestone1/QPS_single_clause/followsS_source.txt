@@ -1,0 +1,30 @@
+procedure followsS {
+    read x;
+    read y;
+    print hello;
+    read world;
+    while (x != y) {
+        print print;
+        if (hello > y) then {
+            x = hello;
+            y = y + 1;
+        } else {
+            y = 1;
+            read r;
+            while (1 == 2) {
+                this = will + never + happen;
+            }
+            something = to / break;
+            if (1 != 2) then {
+                this = too;
+            } else {
+                this = happens - 1;
+                print y;
+            }
+            print test;
+            read h;
+        }
+    }
+    y = 2 + 1;
+    read another;
+}

@@ -7,7 +7,7 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
-#include "../IntegrationTesting/TestPkbQps/StubPkbReader.h"
+#include "../IntegrationTesting//TestPkbQps/StubPkbReader.h"
 
 std::shared_ptr<StubPkbReader> stubPkbReader = std::make_shared<StubPkbReader>();
 
@@ -37,7 +37,7 @@ TEST_CASE("Test formatResult") {
         REQUIRE(find(formattedResults.begin(), formattedResults.end(), "my_variable") != formattedResults.end());
         REQUIRE(find(formattedResults.begin(), formattedResults.end(), "another_variable") != formattedResults.end());
     }
-    // TODO: CHANGE THIS
+        // TODO: CHANGE THIS
     SECTION("Follows query single tuple") {
         PQLParser parser("stmt s; Select s such that Follows(2,s)");
         Query query = parser.parse();
