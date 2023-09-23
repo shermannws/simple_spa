@@ -41,11 +41,3 @@ bool FollowsRelationshipManager::hasLatterStmt(Statement& statement) const {
 bool FollowsRelationshipManager::hasFormerStmt(Statement& statement) const {
     return this->isLatter(statement);
 };
-
-bool FollowsRelationshipManager::hasLatterStarStmt(Statement& statement) const {
-    return this->isFormer(statement);
-};
-
-bool FollowsRelationshipManager::hasFormerStarStmt(Statement& statement) const {
-    return this->isLatter(statement);
-};

@@ -5,16 +5,23 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 
+/**
+ * @brief A class that represents the Uses relationship between a Statement and a Variable
+ * @details A class that represents the Uses relationship between a Statement and a Variable
+ */
 class UsesRelationship : public Relationship<Statement, Variable> {
 public:
-	/*!
-	 * Static field specifying the relatioshipType of the Relationship
-	 */
+	/**
+     * @brief RelationshipType of UsesRelationship
+     */
 	static RelationshipType relationshipType;
 
-	/*!
-	 * Constructor for UsesRelationship
-	 */
-	UsesRelationship(const std::shared_ptr<Statement> leftEntity,
-		const std::shared_ptr<Variable> rightEntity);
+    /**
+     * @brief Construct a new UsesRelationship object
+     * @param leftEntity The statement that uses the variable
+     * @param rightEntity The variable that is used by the statement
+     * @return A new UsesRelationship object
+     */
+    UsesRelationship(const std::shared_ptr<Statement> leftEntity,
+        const std::shared_ptr<Variable> rightEntity);
 };

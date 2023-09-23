@@ -1,5 +1,3 @@
-#pragma once
-
 #include "FollowsRelationship.h"
 
 RelationshipType FollowsRelationship::relationshipType = RelationshipType::Follows;

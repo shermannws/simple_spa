@@ -15,6 +15,9 @@
 #include "../Commons/Entities/Statement.h"
 #include "PKB/Managers/PkbWriterManager.h"
 
+/**
+ * @brief The facade abstract class for writing from the PKB
+ */
 class PkbWriter {
 public:
     /*!

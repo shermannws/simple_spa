@@ -25,7 +25,6 @@ public:
     inline static const std::string STRING_VARIABLE = "variable";
     inline static const std::string STRING_CONSTANT = "constant";
 
-
     inline static const std::string STRING_INTEGER_REGEX = "^[0-9]+$";
 
     inline static const std::string STRING_GREATER_THAN = ">";

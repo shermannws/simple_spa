@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Constant.h"
 
 Constant::Constant(ConstantValue value)
