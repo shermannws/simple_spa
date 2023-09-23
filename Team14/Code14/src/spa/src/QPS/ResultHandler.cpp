@@ -5,17 +5,24 @@
 ResultHandler::ResultHandler(){};
 
 Result ResultHandler::getCombined(Result& r1, Result& r2) {
-    if ((r1.getType() == ResultType::Invalid) ||
-            (r1.getType() == ResultType::Boolean && r1.getBoolResult()) ||
-            (r2.getType() == ResultType::Boolean && !r2.getBoolResult())) {
+    if (r1.getType() == ResultType::Invalid) {
         return r2;
     }
-    if (r2.getType() == ResultType::Invalid ||
-            (r1.getType() == ResultType::Boolean && !r1.getBoolResult()) ||
-            (r2.getType() == ResultType::Boolean && r2.getBoolResult())) {
+    if (r2.getType() == ResultType::Invalid) {
         return r1;
     }
-
+    if (r1.getType() == ResultType::Boolean && !r1.getBoolResult()) {
+        return r1;
+    }
+    if (r2.getType() == ResultType::Boolean && !r2.getBoolResult()) {
+        return r2;
+    }
+    if (r1.getType() == ResultType::Boolean && r1.getBoolResult()) {
+        return r2;
+    }
+    if (r2.getType() == ResultType::Boolean && r2.getBoolResult()) {
+        return r1;
+    }
     return join(r1, r2);
 }
 
