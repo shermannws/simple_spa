@@ -1,6 +1,6 @@
 1 - pattern (var-synonym, _)
 assign a; variable v;
-Select a pattern a (v, _);
+Select a pattern a (v, _)
 1, 2, 3, 5, 6, 8
 5000
 2 - pattern (_, partial-match_var)
@@ -20,12 +20,14 @@ Select a pattern a (_, _)
 5000
 5 - pattern (var-synonym, partial match), select not assign
 assign a; variable v;
-Select v pattern a (v, _"3"_);
+Select v pattern a (v, _"3"_)
 pattern
+5000
 6 - pattern (char-string, _), select not in clause
 assign a; variable v;
-Select v pattern a ("v2", _);
+Select v pattern a ("v2", _)
 v1, v2, pattern, x
+5000
 7 - No results, pattern with non-existing variable name
 assign a; variable v;
 Select a pattern a (v, _"someVarName"_)
