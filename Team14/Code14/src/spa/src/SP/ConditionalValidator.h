@@ -18,11 +18,8 @@ private:
     void validateRelationalExpression(std::deque<SPToken>& expression);
     void validateExpr(std::deque<SPToken>& tokens);
     void validateTerm(std::deque<SPToken>& tokens);
-    size_t findMatchingClosingParenthesis(std::deque<SPToken>& tokens);
     void validateName(std::deque<SPToken>& tokens);
     void validateInteger(std::deque<SPToken>& tokens);
-
-    void validateConditionalExpression2(std::deque<SPToken>& expression);
-
+    size_t findMatchingClosingParenthesis(std::deque<SPToken>& tokens);
     std::tuple<std::deque<SPToken>, std::deque<SPToken>, std::string> splitExpression(std::deque<SPToken> &expression, TokenType type);
 };
