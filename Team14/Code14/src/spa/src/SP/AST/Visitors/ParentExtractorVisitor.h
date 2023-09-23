@@ -7,7 +7,7 @@ class ParentExtractorVisitor : public DesignExtractorVisitor,
     public StatementListNodeVisitor {
 public:
     /*!
-     * Constructor for FollowsExtractorVisitor.
+     * Constructor for ParentExtractorVisitor.
      * @param pkbWriter A shared ptr to a concrete implementation of PkbWriter class
      */
     ParentExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);

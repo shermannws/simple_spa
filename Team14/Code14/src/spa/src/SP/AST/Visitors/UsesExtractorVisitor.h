@@ -47,8 +47,9 @@ public:
      */
     void visitIfNode(IfNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
 
+
     /*!
-     * Visits a PrintNode and add variable used into PKB.
+     * Visits a WhileNode and add variable used into PKB.
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
      */
