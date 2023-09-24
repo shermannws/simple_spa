@@ -2,7 +2,7 @@
 #include "SP/SP.h"
 #include "SP/SPTokenizer.h"
 #include "SP/SPParser.h"
-#include "SP/SyntacticValidator.h"
+#include "SP/Validators/SyntacticValidator/SyntacticValidator.h"
 
 std::shared_ptr<ProgramNode> ASTGenerator::generate(std::string& input) {
 	//Tokenize the string input
