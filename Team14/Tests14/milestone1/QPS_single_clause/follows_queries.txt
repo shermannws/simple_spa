@@ -108,3 +108,8 @@ stmt s;
 Select s such that Follows(123,124)
 
 5000
+25 - check same synonym Follows(s,s)
+stmt s;
+Select s such that Follows(s,s)
+
+5000
