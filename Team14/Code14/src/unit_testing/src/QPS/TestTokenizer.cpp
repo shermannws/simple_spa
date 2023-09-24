@@ -1,9 +1,7 @@
 
-#include "QPS/Tokenizer.h"
+#include "QPS/Parsers/Tokenizer.h"
 
 #include "catch.hpp"
-
-// TODO: CREATE A MORE COMPREHENSIVE TEST SUITE
 
 TEST_CASE("Tokenizer Test") {
 

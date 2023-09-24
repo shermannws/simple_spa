@@ -1,8 +1,6 @@
 #include <fstream>
 
 #include "TestWrapper.h"
-#include "QPS/PQLParser.h"
-#include "QPS/PQLEvaluator.h"
 #include "PKB/Pkb.h"
 #include "SP/SP.h"
 #include "QPS/QPS.h"

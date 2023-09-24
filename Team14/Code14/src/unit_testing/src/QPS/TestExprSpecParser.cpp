@@ -1,4 +1,4 @@
-#include "QPS/ExprSpecParser.h"
+#include "QPS/Parsers/ExprSpecParser.h"
 
 #include "catch.hpp"
 
@@ -34,7 +34,7 @@ TEST_CASE("extractExpressionSpec") {
         REQUIRE(actual.second == expected);
     }
 
-    SECTION("only var name with brackets") { // BUG when enclosed in bracket
+    SECTION("only var name with brackets") {
         std::string input = "\"(v)\"";
         std::string expected = "(v)";
 
@@ -45,7 +45,7 @@ TEST_CASE("extractExpressionSpec") {
         REQUIRE(actual.second == expected);
     }
 
-    SECTION("only var name with multiple brackets") { // BUG when enclosed in bracket
+    SECTION("only var name with multiple brackets") {
         std::string input = "\"((v))\"";
         std::string expected = "(v)";
 
@@ -89,27 +89,17 @@ TEST_CASE("extractExpressionSpec") {
     }
 
     SECTION("invalid const value") {
-        std::string input = "\"09999\""; // tested ; ()
+        std::string input = "\"09999\"";
         auto tokenizer = std::make_shared<Tokenizer>(input);
         auto parser = std::make_shared<ExprSpecParser>(tokenizer);
         REQUIRE_THROWS_WITH(parser->extractExpressionSpec(), "Invalid expression spec");
     }
 
     SECTION("invalid expressions") {
-        std::string input = "\"x+(y-z\""; // tested ; ()
+        std::string input = "\"x+(y-z\"";
         auto tokenizer = std::make_shared<Tokenizer>(input);
         auto parser = std::make_shared<ExprSpecParser>(tokenizer);
         REQUIRE_THROWS_WITH(parser->extractExpressionSpec(), "not enough factors");
     }
-
-//    SECTION("double wildcard") {
-//        std::string input = "_ _";
-//        auto tokenizer = std::make_shared<Tokenizer>(input);
-//        auto parser = std::make_shared<ExprSpecParser>(tokenizer);
-//        auto actual = parser->extractExpressionSpec();
-//
-//        REQUIRE(actual.first == ExpressionSpecType::Wildcard);
-//        REQUIRE(actual.second.empty());
-//    }
 
 }

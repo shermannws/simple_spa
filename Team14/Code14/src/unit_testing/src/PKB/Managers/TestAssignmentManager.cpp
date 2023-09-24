@@ -37,6 +37,5 @@ TEST_CASE("Test Assignment Retrieval") {
     REQUIRE(assignmentManager.getAssignStmtsByRhs(query, false).empty()); // pattern ("_", "(x+y)")
     REQUIRE(assignmentManager.getAllAssignStmts().size() == 2); // pattern ("_", "_")
 
-    //TODO: More unit tests, especially for synonyms
 
 }
