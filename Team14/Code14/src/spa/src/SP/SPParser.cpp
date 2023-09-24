@@ -180,7 +180,6 @@ std::shared_ptr<WhileNode> SPParser::parseWhileStatement(std::deque<SPToken> &to
     return whileNode;
 }
 
-
 std::shared_ptr<ConditionalExpressionNode> SPParser::parseConditionalExpression(std::deque<SPToken> &tokens) {
     if (tokens.front().getType() == TokenType::ConditionalOperator && tokens.front().getValue() == AppConstants::STRING_NOT) {
         // case: '!' '(' cond_expr ')'
@@ -334,7 +333,6 @@ std::shared_ptr<ExpressionNode> SPParser::parseFactor(std::deque<SPToken>& token
         return parseConstant(tokens);
     }
 }
-
 
 std::shared_ptr<VariableNode> SPParser::parseVariable(std::deque<SPToken>& tokens) {
     assert(tokens.front().getType() == TokenType::Name);

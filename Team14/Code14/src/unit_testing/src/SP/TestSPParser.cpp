@@ -96,7 +96,6 @@ TEST_CASE("Test parse with one procedure, one assign statement") {
     REQUIRE(constantNode->getValue() == "1");
 }
 
-
 TEST_CASE("Test parse with one procedure, one assign statement, different RHS") {
     SPParser parser;
 
@@ -225,6 +224,15 @@ TEST_CASE("Test parse with one procedure, all statement types") {
 TEST_CASE("Tests parse with one procedure, one if statement with one assign statement for each statementlist") {
     SPParser parser;
 
+    /*
+    procedure doMath {
+        if (s + 1 + 2 + t * u % v == x) then {
+            x = v + x * y + z * t;
+        } else {
+            x = 1 / (2 - 3) * w;
+        }
+    }
+     */
     SECTION("Complicated conditional expression 1") {
         std::vector<SPToken> tokens = {
                 SPToken(TokenType::Name, "procedure"),
@@ -291,6 +299,13 @@ TEST_CASE("Tests parse with one procedure, one if statement with one assign stat
 TEST_CASE("Tests parse with one procedure, one while statement with one assign statement") {
     SPParser parser;
 
+    /*
+    procedure doMath {
+        while ((k) > (r)) {
+            a = r;
+        }
+    }
+     */
     SECTION("Complicated conditional expression 1") {
         std::vector<SPToken> tokens = {
                 SPToken(TokenType::Name, "procedure"),
