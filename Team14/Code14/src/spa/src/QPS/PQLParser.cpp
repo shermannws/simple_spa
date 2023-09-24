@@ -73,10 +73,6 @@ Synonym PQLParser::processSelectClause(Query& query) {
         throw SyntaxException("Invalid synonym syntax");
     }
 
-    if (next->isToken(TokenType::Empty)) {
-        throw SyntaxException("Expected synonym but found none");
-    }
-
     return next->getRep();
 }
 
