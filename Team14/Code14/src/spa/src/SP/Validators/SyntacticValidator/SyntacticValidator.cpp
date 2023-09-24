@@ -1,5 +1,5 @@
 #include "SyntacticValidator.h"
-#include "Errors/SyntaxError.h"
+#include "SP/Errors/SyntaxError.h"
 
 SyntacticValidator::SyntacticValidator(const std::vector<SPToken> &tokens) : tokens(tokens), curr(0) {}
 
