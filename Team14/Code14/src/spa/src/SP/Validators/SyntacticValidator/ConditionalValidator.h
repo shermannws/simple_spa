@@ -3,8 +3,8 @@
 #include <vector>
 
 #include "Commons/AppConstants.h"
-#include "SPToken.h"
-#include "Errors/SyntaxError.h"
+#include "SP/SPToken.h"
+#include "SP/Errors/SyntaxError.h"
 
 /**
  * A helper to the SP subcomponent SyntacticValidator to check conditional expressions.

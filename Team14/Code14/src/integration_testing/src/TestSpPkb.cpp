@@ -17,6 +17,9 @@
 #include "PKB/PkbConcreteWriter.h"
 #include "ASTGenerator.h"
 
+/*
+Test the e2e addition through from SPTraverser to PKB stores
+*/
 TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     SPParser parser;
     VariableName varName = "num1";

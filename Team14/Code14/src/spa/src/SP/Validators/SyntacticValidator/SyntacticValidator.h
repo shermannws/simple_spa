@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "ConditionalValidator.h"
-#include "SPToken.h"
+#include "SP/SPToken.h"
 #include "Commons/AppConstants.h"
 
 /**

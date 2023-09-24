@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Strategy.h"
-#include "QPS/SuchThatClause.h"
+#include "QPS/Clauses/SuchThatClause.h"
 
 /**
  * The Strategy class of Follows in SuchThatClause

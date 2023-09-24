@@ -1,8 +1,8 @@
 #pragma once
 
-#include "QueryEntity.h"
+#include "QPS/QueryEntity.h"
 #include "Clause.h"
-#include "Ref.h"
+#include "QPS/Ref.h"
 #include "QPS/Parsers/Token.h"
 #include <string>
 #include <stdexcept>

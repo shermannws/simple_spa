@@ -5,8 +5,8 @@
 #include <unordered_map>
 
 #include "QueryEntity.h"
-#include "SuchThatClause.h"
-#include "PatternClause.h"
+#include "QPS/Clauses/SuchThatClause.h"
+#include "QPS/Clauses/PatternClause.h"
 #include "QPSTypes.h"
 
 /**
