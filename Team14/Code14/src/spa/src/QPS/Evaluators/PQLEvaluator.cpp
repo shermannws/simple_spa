@@ -3,14 +3,14 @@
 #include <unordered_set>
 
 #include "PQLEvaluator.h"
-#include "QueryEntity.h"
-#include "UsesSuchThatStrategy.h"
-#include "FollowsSuchThatStrategy.h"
-#include "QPSTypes.h"
-#include "ModifiesSuchThatStrategy.h"
-#include "FollowsStarSuchThatStrategy.h"
-#include "ParentSuchThatStrategy.h"
-#include "ParentStarSuchThatStrategy.h"
+#include "QPS/QueryEntity.h"
+#include "QPS/Strategies/UsesSuchThatStrategy.h"
+#include "QPS/Strategies/FollowsSuchThatStrategy.h"
+#include "QPS/QPSTypes.h"
+#include "QPS/Strategies/ModifiesSuchThatStrategy.h"
+#include "QPS/Strategies/FollowsStarSuchThatStrategy.h"
+#include "QPS/Strategies/ParentSuchThatStrategy.h"
+#include "QPS/Strategies/ParentStarSuchThatStrategy.h"
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :
     pkbReader(pkbReader),

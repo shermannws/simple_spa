@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Strategy.h"
-#include "PatternClause.h"
+#include "QPS/PatternClause.h"
 
 /**
  * The Strategy class of Assign Pattern clause

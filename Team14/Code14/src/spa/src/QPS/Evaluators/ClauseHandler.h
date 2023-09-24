@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Result.h"
-#include "Query.h"
-#include "Strategy.h"
-#include "AssignPatternStrategy.h"
+#include "QPS/Query.h"
+#include "QPS/Strategies/Strategy.h"
+#include "QPS/Strategies/AssignPatternStrategy.h"
 #include "./PKB/PkbReader.h"
 
 

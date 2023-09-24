@@ -4,14 +4,14 @@
 
 #include "PQLParser.h"
 #include "Tokenizer.h"
-#include "SuchThatClause.h"
-#include "QPS/SemanticValHandler/SynonymHandler.h"
-#include "QPS/SemanticValHandler/StmtrefStmtrefHandler.h"
-#include "QPS/SemanticValHandler/StmtrefEntrefHandler.h"
-#include "QPS/SemanticValHandler/EntrefExprSpecHandler.h"
-#include "QPSUtil.h"
-#include "Exception/SyntaxException.h"
-#include "Exception/SemanticException.h"
+#include "QPS/SuchThatClause.h"
+#include "QPS/SemanticValHandlers/SynonymHandler.h"
+#include "QPS/SemanticValHandlers/StmtrefStmtrefHandler.h"
+#include "QPS/SemanticValHandlers/StmtrefEntrefHandler.h"
+#include "QPS/SemanticValHandlers/EntrefExprSpecHandler.h"
+#include "QPS/QPSUtil.h"
+#include "QPS/Exceptions/SyntaxException.h"
+#include "QPS/Exceptions/SemanticException.h"
 
 
 PQLParser::PQLParser(const std::string& PQLQuery) {

@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "QPS/QPS.h"
 #include "PKB/Pkb.h"
-#include "QPS/PQLParser.h"
+#include "QPS/Parsers/PQLParser.h"
 
 using namespace std;
 

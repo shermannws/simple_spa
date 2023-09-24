@@ -1,10 +1,10 @@
 #include "QPS.h"
 
 #include <utility>
-#include "QPS/PQLParser.h"
-#include "QPS/PQLEvaluator.h"
-#include "Exception/SemanticException.h"
-#include "Exception/SyntaxException.h"
+#include "QPS/Parsers/PQLParser.h"
+#include "QPS/Evaluators/PQLEvaluator.h"
+#include "Exceptions/SemanticException.h"
+#include "Exceptions/SyntaxException.h"
 
 QPS::QPS(std::shared_ptr<PkbReader> pkbReader) : pkbReader(std::move(pkbReader)) {}
 

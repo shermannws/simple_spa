@@ -1,5 +1,5 @@
-#include "QPS/PQLEvaluator.h"
-#include "QPS/PQLParser.h"
+#include "QPS/Evaluators/PQLEvaluator.h"
+#include "QPS/Parsers/PQLParser.h"
 
 #include "catch.hpp"
 #include "Commons/Entities/Variable.h"

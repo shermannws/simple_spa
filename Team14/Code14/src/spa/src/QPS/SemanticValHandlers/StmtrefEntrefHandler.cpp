@@ -1,6 +1,6 @@
 #include "StmtrefEntrefHandler.h"
 #include "../QPSUtil.h"
-#include "../Exception/SemanticException.h"
+#include "../Exceptions/SemanticException.h"
 
 void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
@@ -22,10 +22,8 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
             std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
             QueryEntityType entityType = entity->getType();
             if (!QPSUtil::isOfStmtType(entityType)) {
-                // TODO: change to return SemanticValHandler::handle(query, clause); when Uses(proc,v) is handled
                 throw SemanticException("Invalid LHS synonym, non-statement found");
             }
-//            break;
         }
         case RootType::Integer: {
             RefType leftRefType = RefType::StmtRef;

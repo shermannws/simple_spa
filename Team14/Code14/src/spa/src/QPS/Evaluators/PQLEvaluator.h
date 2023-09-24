@@ -4,11 +4,11 @@
 #include <string>
 
 #include "Result.h"
-#include "Query.h"
+#include "QPS/Query.h"
 #include "ClauseHandler.h"
 #include "ResultHandler.h"
 #include "./PKB/PkbReader.h"
-#include "QPSTypes.h"
+#include "QPS/QPSTypes.h"
 
 /**
  * @brief PQL (Program Query Language) evaluator class.

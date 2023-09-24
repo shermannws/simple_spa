@@ -1,5 +1,5 @@
 #include "ExprSpecParser.h"
-#include "QPS/Exception/SyntaxException.h"
+#include "QPS/Exceptions/SyntaxException.h"
 
 ExprSpecParser::ExprSpecParser(std::shared_ptr<Tokenizer> tokenizer) : tokenizer(tokenizer){}
 

@@ -1,6 +1,6 @@
-#include "QPS/PQLParser.h"
-#include "QPS/Exception/SyntaxException.h"
-#include "QPS/Exception/SemanticException.h"
+#include "QPS/Parsers/PQLParser.h"
+#include "QPS/Exceptions/SyntaxException.h"
+#include "QPS/Exceptions/SemanticException.h"
 
 #include "catch.hpp"
 

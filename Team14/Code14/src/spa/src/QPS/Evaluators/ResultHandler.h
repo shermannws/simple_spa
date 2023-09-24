@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Result.h"
-#include "Query.h"
+#include "QPS/Query.h"
 
 /**
  * @class ResultHandler class generates a result table from the combining two tables

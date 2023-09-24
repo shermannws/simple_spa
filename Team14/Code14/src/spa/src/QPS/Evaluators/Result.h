@@ -4,8 +4,8 @@
 #include <array>
 #include <unordered_map>
 
-#include "../Commons/Entities/Entity.h"
-#include "QPSTypes.h"
+#include "Commons/Entities/Entity.h"
+#include "QPS/QPSTypes.h"
 
 /**
  * @brief Enumeration representing the type of result.

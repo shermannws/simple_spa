@@ -3,7 +3,7 @@
 #include "QueryEntity.h"
 #include "Clause.h"
 #include "Ref.h"
-#include "Token.h"
+#include "QPS/Parsers/Token.h"
 #include <string>
 #include <stdexcept>
 

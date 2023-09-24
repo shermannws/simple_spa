@@ -1,6 +1,6 @@
 #include "StmtrefStmtrefHandler.h"
 #include "../QPSUtil.h"
-#include "../Exception/SemanticException.h"
+#include "../Exceptions/SemanticException.h"
 
 void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);

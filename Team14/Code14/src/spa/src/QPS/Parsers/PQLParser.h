@@ -3,11 +3,11 @@
 #include <string>
 #include <utility>
 
-#include "Query.h"
+#include "QPS/Query.h"
 #include "Tokenizer.h"
-#include "QueryEntity.h"
+#include "QPS/QueryEntity.h"
 #include "ExprSpecParser.h"
-#include "QPSTypes.h"
+#include "QPS/QPSTypes.h"
 
 /**
  * @brief PQLParser class

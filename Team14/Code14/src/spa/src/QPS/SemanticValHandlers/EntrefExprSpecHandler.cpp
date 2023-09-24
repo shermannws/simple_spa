@@ -1,5 +1,5 @@
 #include "EntrefExprSpecHandler.h"
-#include "../Exception/SemanticException.h"
+#include "../Exceptions/SemanticException.h"
 
 
 void EntrefExprSpecHandler::handle(Query &query, std::shared_ptr<Clause> clause) {

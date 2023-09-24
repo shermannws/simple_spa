@@ -1,4 +1,4 @@
-#include "QPS/PQLEvaluator.h"
+#include "QPS/Evaluators/PQLEvaluator.h"
 
 #include <unordered_map>
 
@@ -6,7 +6,7 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
-#include "QPS/PQLParser.h"
+#include "QPS/Parsers/PQLParser.h"
 
 //TEST_CASE("Test Result join") {
 //

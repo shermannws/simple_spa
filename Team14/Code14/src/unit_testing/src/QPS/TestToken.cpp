@@ -1,5 +1,5 @@
 
-#include "QPS/Token.h"
+#include "QPS/Parsers/Token.h"
 
 #include "catch.hpp"
 

@@ -3,7 +3,7 @@
 #include <string>
 #include <stdexcept>
 
-#include "Token.h"
+#include "QPS/Parsers/Token.h"
 #include "QPSTypes.h"
 
 /**

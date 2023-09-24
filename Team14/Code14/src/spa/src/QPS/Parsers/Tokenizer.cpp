@@ -4,7 +4,7 @@
 
 #include "Tokenizer.h"
 #include "Token.h"
-#include "Exception/SyntaxException.h"
+#include "QPS/Exceptions/SyntaxException.h"
 
 
 std::vector<std::string> specials{"(",")",";",",","_","+","-","*","/","%", "\""};

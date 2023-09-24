@@ -5,7 +5,7 @@
 #include <stdexcept>
 
 #include "Tokenizer.h"
-#include "QPSTypes.h"
+#include "QPS/QPSTypes.h"
 
 /**
  * @class ExprSpecParser handles parsing of expr-spec in PQL queries

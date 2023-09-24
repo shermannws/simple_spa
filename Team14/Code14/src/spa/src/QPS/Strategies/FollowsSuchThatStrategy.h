@@ -1,15 +1,15 @@
 #pragma once
 
 #include "Strategy.h"
-#include "SuchThatClause.h"
+#include "QPS/SuchThatClause.h"
 
 /**
- * The Strategy class of Modifies in SuchThatClause
+ * The Strategy class of Follows in SuchThatClause
  */
-class ModifiesSuchThatStrategy : public Strategy {
+class FollowsSuchThatStrategy : public Strategy {
 public:
     /**
-     * @brief Evaluates the clause using pkbReader methods relating to Modifies
+     * @brief Evaluates the clause using pkbReader methods relating to Follows
      * @param clause The shared pointer of the Clause to be evaluated
      * @param pkbReader The pkbReader of which the methods are to be called
      * @return The result of the clause evaluation
