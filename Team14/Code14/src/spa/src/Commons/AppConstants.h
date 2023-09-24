@@ -8,6 +8,7 @@ typedef std::string VariableName;
 typedef int StatementNumber;
 typedef std::string ConstantValue;
 typedef std::string FormattedExpression;
+typedef std::string EntityValue;
 
 class AppConstants {
 public:
