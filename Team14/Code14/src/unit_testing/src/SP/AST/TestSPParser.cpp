@@ -8,7 +8,7 @@
 
 TEST_CASE("Test parse with one procedure, one read statement") {
     SPParser parser;
-    VariableName = "num1";
+    VariableName varName= "num1";
     std::vector<SPToken> tokens = {
             SPToken(TokenType::Name, "procedure"),
             SPToken(TokenType::Name, "doMath"),

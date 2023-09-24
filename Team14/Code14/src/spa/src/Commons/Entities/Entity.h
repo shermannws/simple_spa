@@ -17,14 +17,11 @@ private:
      * @brief The Entity Type of the Entity of enum type `EntityType`
      */
     EntityType entityType;
+
     /**
      * @brief The string value of the entity
      */
     std::shared_ptr<EntityValue> entityValue;
-    /**
-     * @brief True if the entity value is of type int, false otherwise
-     */
-    bool isInt;
 
 public:
     /**
@@ -54,12 +51,6 @@ public:
      * @return The string value of the Entity object
      */
     EntityValue* getEntityValue() const;
-
-    /**
-     * @brief Returns true if the Entity value is of type int, false otherwise
-     * @return True if the Entity value is of type int, false otherwise
-     */
-    bool isEntityOfTypeInt() const;
 
     /**
      * @brief Returns true if the Entity object is equal to the other Entity object, false otherwise
