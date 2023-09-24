@@ -41,7 +41,6 @@ TEST_CASE("SPTokenizer - Valid Tokens") {
 
         REQUIRE(tokens.size() == 4);
 
-        // check each token individually using .at() method
         REQUIRE(tokens.at(0).getType() == TokenType::Name);
         REQUIRE(tokens.at(0).getValue() == "var1");
         REQUIRE(tokens.at(1).getType() == TokenType::Integer);
@@ -56,8 +55,19 @@ TEST_CASE("SPTokenizer - Valid Tokens") {
         std::string input = "1 2 3 456 001 100 100000 1x10";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
-
         REQUIRE(tokens.size() == 9);
+        REQUIRE(tokens.at(0).getType() == TokenType::Integer);
+        REQUIRE(tokens.at(1).getType() == TokenType::Integer);
+        REQUIRE(tokens.at(2).getType() == TokenType::Integer);
+        REQUIRE(tokens.at(3).getType() == TokenType::Integer);
+        REQUIRE(tokens.at(4).getType() == TokenType::Integer);
+        REQUIRE(tokens.at(5).getType() == TokenType::Integer);
+        REQUIRE(tokens.at(6).getType() == TokenType::Integer);
+        REQUIRE(tokens.at(7).getType() == TokenType::Integer);
+        REQUIRE(tokens.at(7).getValue() == "1");
+        REQUIRE(tokens.at(8).getType() == TokenType::Name);
+        REQUIRE(tokens.at(8).getValue() == "x10");
+
     }
 
     SECTION("Parenthesis test") {
@@ -67,18 +77,56 @@ TEST_CASE("SPTokenizer - Valid Tokens") {
 
         REQUIRE(tokens.size() == 11);
 
+        REQUIRE(tokens.at(0).getType() == TokenType::OpenRoundParenthesis);
+        REQUIRE(tokens.at(1).getType() == TokenType::Name);
+        REQUIRE(tokens.at(2).getType() == TokenType::Name);
+        REQUIRE(tokens.at(3).getType() == TokenType::CloseRoundParenthesis);
+        REQUIRE(tokens.at(4).getType() == TokenType::OpenCurlyParenthesis);
+        REQUIRE(tokens.at(5).getType() == TokenType::Integer);
+        REQUIRE(tokens.at(6).getType() == TokenType::CloseCurlyParenthesis);
+        REQUIRE(tokens.at(7).getType() == TokenType::OpenCurlyParenthesis);
+        REQUIRE(tokens.at(8).getType() == TokenType::OpenCurlyParenthesis);
+        REQUIRE(tokens.at(9).getType() == TokenType::CloseCurlyParenthesis);
+        REQUIRE(tokens.at(10).getType() == TokenType::CloseCurlyParenthesis);
+
     }
 
     SECTION("Semicolon and Equals test") {
         std::string input = "(=);{abc 123xyz}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
+
+        REQUIRE(tokens.size() == 9);
+
+        REQUIRE(tokens.at(0).getType() == TokenType::OpenRoundParenthesis);
+        REQUIRE(tokens.at(1).getType() == TokenType::Equals);
+        REQUIRE(tokens.at(2).getType() == TokenType::CloseRoundParenthesis);
+        REQUIRE(tokens.at(3).getType() == TokenType::Semicolon);
+        REQUIRE(tokens.at(4).getType() == TokenType::OpenCurlyParenthesis);
+        REQUIRE(tokens.at(5).getType() == TokenType::Name);
+        REQUIRE(tokens.at(6).getType() == TokenType::Integer);
+        REQUIRE(tokens.at(7).getType() == TokenType::Name);
+        REQUIRE(tokens.at(8).getType() == TokenType::CloseCurlyParenthesis);
     }
 
     SECTION("Arithmetic test") {
         std::string input = "1+2-3*4/5%6";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
+
+        REQUIRE(tokens.size() == 11);
+
+        REQUIRE(tokens.at(1).getType() == TokenType::ArithmeticOperator);
+        REQUIRE(tokens.at(1).getValue() == "+");
+        REQUIRE(tokens.at(3).getType() == TokenType::ArithmeticOperator);
+        REQUIRE(tokens.at(3).getValue() == "-");
+        REQUIRE(tokens.at(5).getType() == TokenType::ArithmeticOperator);
+        REQUIRE(tokens.at(5).getValue() == "*");
+        REQUIRE(tokens.at(7).getType() == TokenType::ArithmeticOperator);
+        REQUIRE(tokens.at(7).getValue() == "/");
+        REQUIRE(tokens.at(9).getType() == TokenType::ArithmeticOperator);
+        REQUIRE(tokens.at(9).getValue() == "%");
+
     }
 
     SECTION("Conditional Not test") {
@@ -87,6 +135,7 @@ TEST_CASE("SPTokenizer - Valid Tokens") {
         std::vector<SPToken> tokens = tokenizer.tokenize();
         REQUIRE(tokens.at(0).getType() == TokenType::ConditionalOperator);
         REQUIRE(tokens.at(0).getValue() == AppConstants::STRING_NOT);
+        REQUIRE(tokens.at(1).getType() == TokenType::OpenRoundParenthesis);
     }
 
     SECTION("Conditional Not complex test") {
