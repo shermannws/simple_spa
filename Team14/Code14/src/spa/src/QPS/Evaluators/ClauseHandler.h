@@ -2,8 +2,8 @@
 
 #include "Result.h"
 #include "QPS/Query.h"
-#include "QPS/Strategies/Strategy.h"
-#include "QPS/Strategies/AssignPatternStrategy.h"
+#include "Strategies/Strategy.h"
+#include "Strategies/AssignPatternStrategy.h"
 #include "./PKB/PkbReader.h"
 
 

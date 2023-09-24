@@ -1,6 +1,6 @@
 #pragma once
 
-#include "QPS/Strategies/Strategy.h"
+#include "Strategy.h"
 #include "QPS/SuchThatClause.h"
 
 /**

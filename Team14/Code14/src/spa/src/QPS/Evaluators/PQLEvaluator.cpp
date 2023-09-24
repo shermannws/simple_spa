@@ -4,13 +4,13 @@
 
 #include "PQLEvaluator.h"
 #include "QPS/QueryEntity.h"
-#include "QPS/Strategies/UsesSuchThatStrategy.h"
-#include "QPS/Strategies/FollowsSuchThatStrategy.h"
+#include "Strategies/UsesSuchThatStrategy.h"
+#include "Strategies/FollowsSuchThatStrategy.h"
 #include "QPS/QPSTypes.h"
-#include "QPS/Strategies/ModifiesSuchThatStrategy.h"
-#include "QPS/Strategies/FollowsStarSuchThatStrategy.h"
-#include "QPS/Strategies/ParentSuchThatStrategy.h"
-#include "QPS/Strategies/ParentStarSuchThatStrategy.h"
+#include "Strategies/ModifiesSuchThatStrategy.h"
+#include "Strategies/FollowsStarSuchThatStrategy.h"
+#include "Strategies/ParentSuchThatStrategy.h"
+#include "Strategies/ParentStarSuchThatStrategy.h"
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :
     pkbReader(pkbReader),
