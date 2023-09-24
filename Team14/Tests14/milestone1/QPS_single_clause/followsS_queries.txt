@@ -68,3 +68,8 @@ stmt s;
 Select s such that Follows*(0,1)
 
 5000
+15 - check same synonym Follows*(s,s)
+while w;
+Select w such that Follows(w,w)
+
+5000
