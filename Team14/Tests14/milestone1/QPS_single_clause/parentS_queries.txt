@@ -83,3 +83,8 @@ assign a;
 Select a such that Parent* (a, _)
 
 5000
+18 - Test same synonym - Parent*(s,s)
+print p;
+Select p such that Parent*(p,p)
+
+5000
