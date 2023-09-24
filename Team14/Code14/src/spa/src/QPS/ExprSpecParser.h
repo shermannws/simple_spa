@@ -7,6 +7,9 @@
 #include "Tokenizer.h"
 #include "QPSTypes.h"
 
+/**
+ * @class ExprSpecParser handles parsing of expr-spec in PQL queries
+ */
 class ExprSpecParser {
 private:
     /**
@@ -46,16 +49,25 @@ private:
     bool validateExprSyntax(std::vector<std::shared_ptr<Token>>& input);
 
     /**
-     * Returns true if the vector of tokens is a valid Expr
-     * @param input vector of Token ptr
-     * @return boolean
+     * Processes the next operator's subexpression and pushes the subexpression to the expression stack
+     * @param operators stack
+     * @param expression stack of strings of expression
      */
     void processSubExpr(std::stack<std::shared_ptr<Token>>& operators, std::stack<std::string>& expression);
 
+    /**
+     * Extracts a valid expression from token stream, throws error if not found
+     * @return the expression as a string
+     */
     Expression extractExpression();
 
 public:
     explicit ExprSpecParser(std::shared_ptr<Tokenizer> tokenizer);
+
+    /**
+     * Extracts a valid expr-spec from token stream, throws error if no valid expr spec
+     * @return the expr-spec as a pair of Expression and expr-spec type
+     */
     ExpressionSpec extractExpressionSpec();
 };
 

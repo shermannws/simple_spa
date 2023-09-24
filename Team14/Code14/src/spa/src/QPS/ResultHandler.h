@@ -7,7 +7,7 @@
 #include "Query.h"
 
 /**
- * The ResultHandler class generates a result table from the combining two tables
+ * @class ResultHandler class generates a result table from the combining two tables
  * and handles result table join operations.
  */
 class ResultHandler {
