@@ -47,8 +47,8 @@ public:
     EntityType getEntityType() const;
 
     /**
-     * @brief Returns the string value of the Entity object
-     * @return The string value of the Entity object
+     * @brief Returns the EntityValue (of type string) of the Entity object
+     * @return The EntityValue (of type string) of the Entity object
      */
     EntityValue* getEntityValue() const;
 
