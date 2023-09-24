@@ -3,8 +3,6 @@
 
 #include "catch.hpp"
 
-// TODO: CREATE A MORE COMPREHENSIVE TEST SUITE
-
 TEST_CASE("Tokenizer Test") {
 
     SECTION("Valid query") {

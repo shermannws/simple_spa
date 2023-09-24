@@ -11,10 +11,6 @@ Result UsesSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, std:
     RootType rightRootType = rightRef.getRootType();
     Result res;
 
-    // TODO: add leftType entRef in the future
-
-    // TODO: CHANGE RETURN TYPE !!!!!
-
     if (leftType == RefType::StmtRef) {
         if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym) { // Uses(a,v)
             std::string leftSyn = leftRef.getRep();

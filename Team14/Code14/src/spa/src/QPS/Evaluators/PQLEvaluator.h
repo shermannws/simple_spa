@@ -76,5 +76,5 @@ public:
     * @param result The result of the PQL query evaluation.
     * @return The formatted result list
     */
-    ResultList formatResult(Query& query, Result& result); // TODO: to set as private in the future
+    ResultList formatResult(Query& query, Result& result);
 };

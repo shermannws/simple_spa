@@ -14,9 +14,6 @@ void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) 
         return SemanticValHandler::handle(query, clause);
     }
 
-    // TODO: to add more checks depending on whether need to handle Uses(proc, v)
-    // TODO: set StmtRef here if correct
-
     switch (leftRootType) {
         case RootType::Synonym: {
             std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());

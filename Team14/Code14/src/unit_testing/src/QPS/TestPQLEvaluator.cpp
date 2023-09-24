@@ -41,7 +41,7 @@ TEST_CASE("Test formatResult") {
         REQUIRE(find(formattedResults.begin(), formattedResults.end(), "my_variable") != formattedResults.end());
         REQUIRE(find(formattedResults.begin(), formattedResults.end(), "another_variable") != formattedResults.end());
     }
-        // TODO: CHANGE THIS
+
     SECTION("Follows query single tuple") {
         PQLParser parser("stmt s; Select s such that Follows(2,s)");
         Query query = parser.parse();

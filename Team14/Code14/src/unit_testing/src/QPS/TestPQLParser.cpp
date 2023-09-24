@@ -4,8 +4,6 @@
 
 #include "catch.hpp"
 
-// TODO refactor unit tests using SECTION()
-
 TEST_CASE("single declaration, single Select") {
     std::string input = "stmt s; Select s";
     PQLParser parser(input);
@@ -66,8 +64,6 @@ TEST_CASE("processDeclarations Errors") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("Select s ", "Expected a declaration but found none");
         testcases.emplace_back("assignment a; Select a", "Expected a declaration but found none");
-        // TODO: add assignment a; variable v;
-        // TODO: add assignment ; variable v;
         testcases.emplace_back("assign a Select s", "Expected ; but found 'Select'");
         testcases.emplace_back("assign a a1; Select a1", "Expected ; but found 'a1'");
         testcases.emplace_back("assign a;", "Expected Select clause but found ''");

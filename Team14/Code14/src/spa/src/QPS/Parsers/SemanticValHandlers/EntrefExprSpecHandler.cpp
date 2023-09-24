@@ -18,7 +18,7 @@ void EntrefExprSpecHandler::handle(Query &query, std::shared_ptr<Clause> clause)
 
     Ref& leftRef = clause->getFirstParam();
     RefType lhsType = RefType::EntRef;
-    leftRef.setType(lhsType); // TODO move this line to constructor and change mtd signature dont take in &
+    leftRef.setType(lhsType);
 
     // validate LHS if it is a Synonym EntRef must be Variable QueryEntity
     if (leftRef.getRootType() == RootType::Synonym && leftRef.getEntityType() != QueryEntityType::Variable) {
