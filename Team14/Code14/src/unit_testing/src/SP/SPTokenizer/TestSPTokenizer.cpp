@@ -200,7 +200,6 @@ TEST_CASE("Relational operator test") {
         REQUIRE(tokens.at(2).getValue() == AppConstants::STRING_DOUBLE_EQUAL);
     }
 
-
     SECTION("Not Equal") {
         std::string input = "(var2!=var1)";
         SPTokenizer tokenizer(input);
@@ -209,37 +208,3 @@ TEST_CASE("Relational operator test") {
         REQUIRE(tokens.at(2).getValue() == AppConstants::STRING_NOT_EQUAL);
     }
 }
-
-
-
-
-//TEST_CASE("File Reading Test", "[file]") {
-//    std::string fileContent;
-//    std::string filePath = "../../../tests/positive_source/Test_source1.txt";
-//    std::ifstream inputFile(filePath);
-//
-//    if (inputFile.is_open()) {
-//        std::string line;
-//        while (std::getline(inputFile, line)) {
-//            fileContent += line + '\n';
-//        }
-//        inputFile.close();
-//    } else {
-//        FAIL("Failed to open file");
-//    }
-//
-//    SPTokenizer tokenizer(fileContent);
-//    std::vector<SPToken> tokens = tokenizer.tokenize();
-
-    // Perform assertions to check the file content
-//    REQUIRE(fileContent == "procedure computeAverage {\n"
-//                           "    read num1;\n"
-//                           "    read num2;\n"
-//                           "    read num3;\n"
-//                           "\n"
-//                           "    sum = num1 + num2 + num3;\n"
-//                           "    ave = sum / 3;\n"
-//                           "\n"
-//                           "    print ave;\n"
-//                           "}");
-//}
