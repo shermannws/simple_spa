@@ -94,7 +94,6 @@ jobs:
     timeout-minutes: 20
     strategy:
       fail-fast: true
-    needs: [build_macos, build_windows]
 
     steps:
       - uses: actions/checkout@v3
