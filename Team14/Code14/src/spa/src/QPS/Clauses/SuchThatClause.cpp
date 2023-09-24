@@ -1,5 +1,5 @@
 #include "SuchThatClause.h"
-#include "Exceptions/SyntaxException.h"
+#include "QPS/Exceptions/SyntaxException.h"
 
 SuchThatClause::SuchThatClause() = default;
 

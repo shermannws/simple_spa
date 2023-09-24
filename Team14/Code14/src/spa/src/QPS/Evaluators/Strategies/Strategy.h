@@ -1,7 +1,7 @@
 #pragma once
 
 #include "QPS/Evaluators/Result.h"
-#include "QPS/Clause.h"
+#include "QPS/Clauses/Clause.h"
 #include "./PKB/PkbReader.h"
 #include "Commons/Entities/StatementType.h"
 

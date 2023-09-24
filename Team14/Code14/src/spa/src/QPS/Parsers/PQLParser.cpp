@@ -4,7 +4,7 @@
 
 #include "PQLParser.h"
 #include "Tokenizer.h"
-#include "QPS/SuchThatClause.h"
+#include "QPS/Clauses/SuchThatClause.h"
 #include "SemanticValHandlers/SynonymHandler.h"
 #include "SemanticValHandlers/StmtrefStmtrefHandler.h"
 #include "SemanticValHandlers/StmtrefEntrefHandler.h"
