@@ -46,10 +46,10 @@ void SP::startSPProcessing(std::string& input) {
         Traverser traverser = Traverser(visitors);
         traverser.traverse(root);
     } catch (const SyntaxError& e) {
-        std::cout << "Terminating program due to invalid SIMPLE code." << std::endl;
+        std::cout << "\n" << e.what() << "\n\n" << "Terminating program due to invalid SIMPLE code." << std::endl;
         std::exit(EXIT_FAILURE); // Exit the program with an error code
     } catch (const SemanticError& e) {
-        std::cout << "Terminating program due to invalid SIMPLE code." << std::endl;
+        std::cout << "\n" << e.what() << "\n\n" << "Terminating program due to invalid SIMPLE code." << std::endl;
         std::exit(EXIT_FAILURE); // Exit the program with an error code
     }
 }
