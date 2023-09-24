@@ -6,6 +6,7 @@ from pathlib import Path
 #
 # load_dotenv()
 
+MACOS = "posix"
 QUERY_TAG = "<query>"
 SUCCESS_TAG = "<passed/>"
 FAILURE_TAG = "</failed>"
@@ -110,8 +111,10 @@ def execute_with_error(key, filepaths, failures_list):
     command = f"{command} > {NULL_DEVICE}"
 
     exit_code = os.system(command)
+    if os.name == MACOS:
+        exit_code = os.WEXITSTATUS(exit_code)
 
-    if os.WEXITSTATUS(exit_code) == EXIT_FAILURE:
+    if exit_code == EXIT_FAILURE:
         print(f"Success: Autotester execution failed for {key} as expected")
     else:
         raise Exception(
