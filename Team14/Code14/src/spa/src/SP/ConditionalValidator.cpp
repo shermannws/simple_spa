@@ -7,10 +7,10 @@ void ConditionalValidator::validate() {
     
     // Check if first is "(" and last is ")"
     if (tokensDeque.front().getType() != TokenType::OpenRoundParenthesis) {
-        throw SyntaxError("Syntax error: Invalid While Condition - Wrap Conditional Expression in \"( )\" ");
+        throw SyntaxError("Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
     }
     if (tokensDeque.back().getType() != TokenType::CloseRoundParenthesis) {
-        throw SyntaxError("Syntax error: Invalid While Condition - Wrap Conditional Expression in \"( )\" ");
+        throw SyntaxError("Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
     }
 
     validateConditionalExpression(tokensDeque);
