@@ -1,7 +1,7 @@
 # System Testing for SPA by Team 14
 
 ## Folder Structure
-The system test files are stored in subdirectories according to milestones (i.e. milestone1, milestone2 and milestone3)
+The system test files are stored in subdirectories according to milestones (i.e. demo1, milestone1, milestone2 and milestone3)
 
 ## milestone1 test cases
 The following are the subdirectories for `/milestone1`.
