@@ -104,6 +104,16 @@ void SyntacticValidator::validateWhile() {
         expression.push_back(popToken());
     }
 
+    // Check if first is "(" and last is ")" and remove them
+    if (expression.front().getType() != TokenType::OpenRoundParenthesis) {
+        throw SyntaxError("Syntax error: Invalid While Condition - Wrap Conditional Expression in \"( )\" ");
+    }
+    if (expression.back().getType() != TokenType::CloseRoundParenthesis) {
+        throw SyntaxError("Syntax error: Invalid While Condition - Wrap Conditional Expression in \"( )\" ");
+    }
+    expression.erase(expression.begin());
+    expression.pop_back();
+
     // Pass expression '(' conditional expr ')' into validator
     ConditionalValidator conditionalValidator(expression);
     conditionalValidator.validate();
