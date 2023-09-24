@@ -1,0 +1,13 @@
+procedure PROCEDURE {
+one = 1 + 2 + 4;
+while (2 != if) {
+	print a3;
+	a4 = a4%a5;
+    if (while == 5) then {
+		a6 = read + print;
+		a7 = love + heart;
+		read read8;} else {
+		else = else9;
+		else = else10;}
+	a11 = a11 * a11;}
+a12 =                     12 + 12 % 12;}

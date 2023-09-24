@@ -1,0 +1,18 @@
+procedure procedure {
+procedure = 1;
+Procedure = 1 + (a*b);
+
+while (while != if) {
+	print a4;
+	read a5;
+	a6 = a4%a5;
+
+	if (while == 7) then {
+		a8 = read + print;
+		a9 = love + heart;
+		read read10;
+	} else {
+		else = else11;
+	}
+}
+}
