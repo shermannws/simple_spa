@@ -88,3 +88,8 @@ assign a;
 Select a such that Parent (3, a)
 
 5000
+19 - Test same synonym - Parent(s,s)
+variable v; assign a;
+Select v such that Parent(a,a)
+
+5000

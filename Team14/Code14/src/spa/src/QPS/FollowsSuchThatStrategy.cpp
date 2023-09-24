@@ -12,7 +12,9 @@ Result FollowsSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, s
     QueryEntityType rightEntityType = rightRef.getEntityType();
     Result res;
 
-    if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym) { // Follows(s1,s2)
+    if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym && leftRef.getRep() == rightRef.getRep()) { // Follows(s,s)
+        res.setBoolResult(false);
+    } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym) { // Follows(s1,s2)
         std::string leftSyn = leftRef.getRep();
         std::string rightSyn = rightRef.getRep();
         res.setTuples(pkbReader->getFollowsPair(stmtMap.at(leftEntityType), stmtMap.at(rightEntityType)));
