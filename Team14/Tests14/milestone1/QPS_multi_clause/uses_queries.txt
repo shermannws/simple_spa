@@ -1,0 +1,70 @@
+1 - test no common syn, 1 syn (Pattern a)
+assign a;
+Select a such that Uses(1, _) pattern a(_, _"b"_)
+1, 3, 8
+5000
+2 - test no common syn, 2 syn (Pattern a, v)
+assign a; variable v;
+Select v such that Uses(1, _) pattern a(v, _"b"_)
+a, d, x
+5000
+3 - test no common syn, 2 syn (Uses arg 2, Pattern a)
+assign a; variable v;
+Select v such that Uses(1, v) pattern a(_, _"b"_)
+b
+5000
+4 - test no common syn, 2 syn (Uses arg 1, Pattern a)
+assign a; print p;
+Select p such that Uses(p, _) pattern a(_, _"3"_)
+none
+5000
+5 - test no common syn, 3 syn (Uses arg1, 2, Pattern a)
+assign a; variable v; if ifs;
+Select ifs such that Uses(ifs, v) pattern a(_, _"b"_)
+5, 15
+5000
+6 - test no common syn, 3 syn (Uses arg1, Pattern a, v)
+assign a; variable v; while while;
+Select while such that Uses(while, _) pattern a(v,_"b"_)
+10, 11
+5000
+7 - test no common syn, 3 syn (Uses arg2, Pattern a, v)
+assign a; variable v1, v2;
+Select v2 such that Uses(1, v1) pattern a(v2,_"b"_)
+a, d, x
+5000
+8 - test no common syn, 4 syn (Uses arg1, 2, Pattern a, v)
+assign a; variable v1, v2; stmt s;
+Select s such that Uses(s, v1) pattern a(v2,_"e"_)
+1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 14, 15, 16, 18
+5000
+9 - test 1 common syn, 1 syn (Uses arg1, Pattern a)
+assign a;
+Select a such that Uses(a, "b") pattern a(_,_"1"_)
+3
+5000
+10 - test 1 common syn, 2 syn (Uses arg2, Pattern a, v)
+assign a; variable v;
+Select a such that Uses(4, v) pattern a(v,_"300"_)
+4
+5000
+11 - test 1 common syn, 2 syn (Uses arg1, Pattern a)
+assign a; variable v;
+Select v such that Uses(a, v) pattern a(_,_"b"_)
+b, g
+5000
+12 - test 1 common syn, 3 syn (Uses arg2, Pattern a, v)
+assign a, a1; variable v;
+Select a1 such that Uses(a1, v) pattern a(v,_"b"_)
+18
+5000
+13 - test 1 common syn, 3 syn (Uses arg1, 2, Pattern a)
+assign a; variable v1, v2;
+Select v1 such that Uses(a, v1) pattern a(v2,_"b"_)
+b, g
+5000
+14 - test 2 common syn, 2 syn (Uses arg1, 2, Pattern a, v)
+assign a; variable v;
+Select a such that Uses(a, v) pattern a(v,_"x"_)
+none
+5000
