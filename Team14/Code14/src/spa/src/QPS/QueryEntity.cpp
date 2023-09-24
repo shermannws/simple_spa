@@ -15,8 +15,6 @@ QueryEntity::QueryEntity(const std::shared_ptr<Token>& designEntity, const std::
         this->type = QueryEntityType::Print;
     } else if (designEntity->isToken("assign")) {
         this->type = QueryEntityType::Assign;
-//    } else if (designEntity->isToken("call")) {
-//        this->type = QueryEntityType::Call;
     } else if (designEntity->isToken("while")) {
         this->type = QueryEntityType::While;
     } else if (designEntity->isToken("if")) {
