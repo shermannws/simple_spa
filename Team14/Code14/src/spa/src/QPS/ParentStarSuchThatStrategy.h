@@ -3,12 +3,12 @@
 #include "Strategy.h"
 #include "SuchThatClause.h"
 
-/*
+/**
  * The Strategy class of Parent* in SuchThatClause
  */
 class ParentStarSuchThatStrategy : public Strategy {
 public:
-    /*
+    /**
      * @brief Evaluates the clause using pkbReader methods relating to Parent*
      * @param clause The shared pointer of the Clause to be evaluated
      * @param pkbReader The pkbReader of which the methods are to be called

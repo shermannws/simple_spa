@@ -7,7 +7,7 @@
 #include "./PKB/PkbReader.h"
 
 
-/*
+/**
  * The Context class in Strategy pattern, maintains a ref to a StrategyObject
  * Strategy Objects can be AssignPatternStrategy, UsesStrategy, FollowsStrategy,etc.
  */

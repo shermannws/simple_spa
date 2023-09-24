@@ -5,12 +5,12 @@
 #include "./PKB/PkbReader.h"
 #include "Commons/Entities/StatementType.h"
 
-/*
+/**
  * Strategy interface for each type of clause e.g. UsesStrategy, FollowsStrategy, AssignPatternStrategy, etc
  */
 class Strategy {
 protected:
-    /*
+    /**
      * The statement map that converts from QueryEntityType to the corresponding StatementType
      */
     std::unordered_map<QueryEntityType, StatementType> stmtMap{
@@ -22,17 +22,17 @@ protected:
             {QueryEntityType::Stmt, StatementType::Stmt}
     };
 public:
-    /*
+    /**
      * @brief The constructor of Strategy
      */
     Strategy() = default;
 
-    /*
+    /**
      * @brief The destructor of Strategy
      */
     virtual ~Strategy() = default;
 
-    /*
+    /**
      * @brief Evaluates the clause using the appropriate pkbReader method
      * @param clause The shared pointer of the Clause to be evaluated
      * @param pkbReader The pkbReader of which the methods are to be called

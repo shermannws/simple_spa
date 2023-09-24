@@ -5,7 +5,7 @@
 #include "QueryEntity.h"
 #include "QPSTypes.h"
 
-/*
+/**
  * @brief The enum class of RefType
  */
 enum class RefType {
@@ -14,7 +14,7 @@ enum class RefType {
     Invalid,
 };
 
-/*
+/**
  * @brief The enum class of RootType
  */
 enum class RootType {
@@ -25,32 +25,32 @@ enum class RootType {
     Invalid
 };
 
-/*
+/**
  * @brief Ref class
  */
 class Ref {
 private:
-    /*
+    /**
      * @brief The string representation of the Ref
      */
     StringRep rep;
 
-    /*
+    /**
      * @brief The RefType of the Ref
      */
     RefType type;
 
-    /*
+    /**
      * @brief The RootType of the Ref
      */
     RootType rootType;
 
-    /*
+    /**
      * @brief The QueryEntityType of the Ref
      */
     QueryEntityType entityType;
 public:
-    /*
+    /**
      * @brief The constructor of Ref
      */
     explicit Ref();
