@@ -839,7 +839,37 @@ TEST_CASE("processPatternClause") {
 
     SECTION("invalid pattern") {
         PQLParser parser("assign a; variable v;\nSelect a pattern a(\"y\",_ _)");
-        REQUIRE_THROWS_WITH(parser.parse(), "expected right parenthesis");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("assign a; variable v;\nSelect a pattern a(1,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("assign a; variable v;\nSelect a pattern a(_, varName)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("assign a; variable v;\nSelect a pattern v(\"y\",_);");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("assign a; variable v;\nSelect a pattern v(\"y\",_");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("assign a; variable v;\nSelect a pattern v(\"y\",_\"\"_");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("assign a; variable v;\nSelect a pattern v(\"y\",\"\"");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("assign a; variable v;\nSelect a pattern v(\"y\" _)"); // should be recognised as Syntax eventho there is Semantic too
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("assign a; variable v;\nSelect a pattern v(_,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("assign a; variable v;\nSelect a pattern a1(_,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("assign a; variable v;\nSelect a pattern a(v1,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
     }
 
 }

@@ -254,6 +254,9 @@ void PQLParser::validatePatternSyntax(std::shared_ptr<PatternClause> clause) {
     }
 
     Ref firstParam = extractRef();
+    if (firstParam.getRootType() == RootType::Integer) {
+        throw SyntaxException("Invalid entRef");
+    }
     clause->setFirstParam(firstParam);
 
     next = tokenizer->popToken();
