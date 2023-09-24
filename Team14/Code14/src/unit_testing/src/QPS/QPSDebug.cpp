@@ -3,7 +3,7 @@
 
 #include "catch.hpp"
 #include "Commons/Entities/Variable.h"
-#include "../IntegrationTesting/TestPkbQps/StubPkbReader.h"
+#include "StubPkbReader.h"
 
 
 TEST_CASE("Debug PQLParser") {
