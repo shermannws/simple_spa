@@ -5,6 +5,7 @@
 
 #include "../HashableKey.h"
 #include "EntityType.h"
+#include "../AppConstants.h"
 
 /**
  * @brief An Entity is an entity in the SIMPLE programming language
@@ -16,14 +17,11 @@ private:
      * @brief The Entity Type of the Entity of enum type `EntityType`
      */
     EntityType entityType;
+
     /**
      * @brief The string value of the entity
      */
-    std::shared_ptr<std::string> entityValue;
-    /**
-     * @brief True if the entity value is of type int, false otherwise
-     */
-    bool isInt;
+    std::shared_ptr<EntityValue> entityValue;
 
 public:
     /**
@@ -33,7 +31,7 @@ public:
      * @param entityType The Entity Type of the Entity of enum type `EntityType`
      * @return A new Entity object
      */
-    Entity(const std::shared_ptr<std::string> entityValue, EntityType entityType);
+    Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType);
 
     /**
      * @brief Destroy the Entity object
@@ -49,16 +47,10 @@ public:
     EntityType getEntityType() const;
 
     /**
-     * @brief Returns the string value of the Entity object
-     * @return The string value of the Entity object
+     * @brief Returns the EntityValue (of type string) of the Entity object
+     * @return The EntityValue (of type string) of the Entity object
      */
-    std::string* getEntityValue() const;
-
-    /**
-     * @brief Returns true if the Entity value is of type int, false otherwise
-     * @return True if the Entity value is of type int, false otherwise
-     */
-    bool isEntityOfTypeInt() const;
+    EntityValue* getEntityValue() const;
 
     /**
      * @brief Returns true if the Entity object is equal to the other Entity object, false otherwise

@@ -1,0 +1,45 @@
+1 - No shared synonym
+while w; assign a;
+Select a such that Parent* (w, 7) pattern a (_, _"b"_)
+7, 8
+5000
+2 - 1 shared synonym,
+assign a;
+Select a such that Parent* (4, a) pattern a (_, _"c"_)
+7, 10, 11
+5000
+3 - Pattern is non-empty, Parent* is false
+assign a;
+Select a such that Parent* (1, 2) pattern a (_, _"b - 1"_)
+
+5000
+4 - Pattern is non-empty, Parent* is true
+if i; assign a;
+Select a such that Parent* (4, 6) pattern a ("b", _)
+8, 10
+5000
+5 - Pattern returns empty, parent returns true
+assign a;
+Select a such that Parent* (4, 6) pattern a ("a", _)
+
+5000
+6 - Double assign synonym
+assign a, a1; if i;
+Select a such that Parent* (i, a) pattern a1 ("b", _)
+7, 8, 10, 11
+5000
+7 - Pattern is non-empty, Parent* is true
+assign a;
+Select a such that Parent* (_, _) pattern a (_, _)
+7, 8, 10, 11
+5000
+8
+while w; assign a;
+Select a such that Parent* (w, a) pattern a (_,_)
+7, 8
+5000
+9
+while i; assign a;
+Select a such that Parent* (i, a) pattern a ("b",_"b"_)
+8
+5000

@@ -1,5 +1,4 @@
-
-#include  <fstream>
+#include <fstream>
 
 #include "TestWrapper.h"
 #include "PKB/Pkb.h"

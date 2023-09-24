@@ -1,4 +1,4 @@
 #include "Variable.h"
 
-Variable::Variable(std::string name)
-	: Entity(std::make_shared<std::string>(name), EntityType::Variable) {}
+Variable::Variable(VariableName name)
+	: Entity(std::make_shared<EntityValue>(name), EntityType::Variable) {}

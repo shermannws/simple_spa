@@ -23,5 +23,5 @@ StatementType StatementTypeFactory::getStatementTypeFrom(StatementNodeType type)
 		break;
 	}
 	//Should never reach here as all statements must be one of the above types
-	throw std::runtime_error("Invalid StatementNodeType");
+	throw std::runtime_error("Invalid StatementNodeType asked to be converted in StatementTypeFactory");
 }

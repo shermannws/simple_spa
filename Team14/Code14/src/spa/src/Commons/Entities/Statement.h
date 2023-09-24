@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "StatementType.h"
+#include "../AppConstants.h"
 
 /**
  * @brief A Statement is a statement in the SIMPLE programming language
@@ -16,11 +17,11 @@ private:
 public:
     /**
      * @brief Construct a new Statement object
-     * @param lineNo The line number of the statement
+     * @param lineNo The line number of the statement as StatementNumber (int)
      * @param statementType The Statement Type of the Statement object of enum type `StatementType`
      * @return A new Statement object
      */
-    Statement(int lineNo, StatementType statementType);
+    Statement(StatementNumber lineNo, StatementType statementType);
 
     /**
      * @brief Returns the Statement Type of the Statement object of enum type `StatementType`
