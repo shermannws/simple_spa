@@ -742,14 +742,6 @@ TEST_CASE("Invalid processSuchThat cases") {
 
     SECTION("Invalid Parent queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("stmt a; variable v;\nSelect v such that Parent(v, a)",
-                               "Invalid LHS synonym, non-statement found");
-        testcases.emplace_back("procedure a; stmt v;\nSelect v such that Parent(v, a)",
-                               "Invalid RHS synonym, non-statement found");
-        testcases.emplace_back("constant a; stmt v;\nSelect v such that Parent(a, v)",
-                               "Invalid LHS synonym, non-statement found");
-        testcases.emplace_back("procedure a; stmt v;\nSelect v such that Parent(hello, a)",
-                               "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("stmt a; print v;\nSelect a such that Parent(\"hello\", v)",
                                "Invalid LHS, stmtRef expected");
         testcases.emplace_back("print a; assign v;\nSelect a such that Parent(a, \"world\")",
@@ -757,20 +749,26 @@ TEST_CASE("Invalid processSuchThat cases") {
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
-            REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+            REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+        }
+
+        std::vector<std::pair<std::string, std::string>> testcases2;
+        testcases2.emplace_back("stmt a; variable v;\nSelect v such that Parent(v, a)",
+                               "Invalid LHS synonym, non-statement found");
+        testcases2.emplace_back("procedure a; stmt v;\nSelect v such that Parent(v, a)",
+                               "Invalid RHS synonym, non-statement found");
+        testcases2.emplace_back("constant a; stmt v;\nSelect v such that Parent(a, v)",
+                               "Invalid LHS synonym, non-statement found");
+        testcases2.emplace_back("procedure a; stmt v;\nSelect v such that Parent(hello, a)",
+                               "Invalid LHS, undeclared synonym found");
+        for (const auto& testcase : testcases2) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_AS(parser.parse(), SemanticException);
         }
     }
 
     SECTION("Invalid Parent* queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("stmt a; variable v;\nSelect v such that Parent*(v, a)",
-                               "Invalid LHS synonym, non-statement found");
-        testcases.emplace_back("procedure a; stmt v;\nSelect v such that Parent*(v, a)",
-                               "Invalid RHS synonym, non-statement found");
-        testcases.emplace_back("constant a; stmt v;\nSelect v such that Parent*(a, v)",
-                               "Invalid LHS synonym, non-statement found");
-        testcases.emplace_back("procedure a; stmt v;\nSelect v such that Parent*(hello, a)",
-                               "Invalid LHS, undeclared synonym found");
         testcases.emplace_back("stmt a; print v;\nSelect a such that Parent*(\"hello\", v)",
                                "Invalid LHS, stmtRef expected");
         testcases.emplace_back("print a; assign v;\nSelect a such that Parent*(a, \"world\")",
@@ -778,7 +776,22 @@ TEST_CASE("Invalid processSuchThat cases") {
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
-            REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+            REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+        }
+
+        std::vector<std::pair<std::string, std::string>> testcases2;
+        testcases2.emplace_back("stmt a; variable v;\nSelect v such that Parent*(v, a)",
+                               "Invalid LHS synonym, non-statement found");
+        testcases2.emplace_back("procedure a; stmt v;\nSelect v such that Parent*(v, a)",
+                               "Invalid RHS synonym, non-statement found");
+        testcases2.emplace_back("constant a; stmt v;\nSelect v such that Parent*(a, v)",
+                               "Invalid LHS synonym, non-statement found");
+        testcases2.emplace_back("procedure a; stmt v;\nSelect v such that Parent*(hello, a)",
+                               "Invalid LHS, undeclared synonym found");
+
+        for (const auto& testcase : testcases2) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_AS(parser.parse(), SemanticException);
         }
     }
 
@@ -923,3 +936,4 @@ TEST_CASE("both clause present") {
     REQUIRE(rightRef1.getRep() == "v");
 
 }
+
