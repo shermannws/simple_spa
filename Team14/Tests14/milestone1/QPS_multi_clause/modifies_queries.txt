@@ -38,7 +38,7 @@ variable v; assign a;
 Select a such that Modifies(a, _) pattern a(v, _"var14"_)
 6, 8
 5000
-9- 1 common synonym - same v - Modifies arg1 stmtnum
+9 - 1 common synonym - same v - Modifies arg1 stmtnum
 variable v; assign a;
 Select v such that Modifies(1, v) pattern a(v, _)
 var1
