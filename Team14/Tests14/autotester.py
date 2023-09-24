@@ -11,7 +11,7 @@ TEST_SETTINGS = {
     "milestone3": False,
 }
 TEST_DIR = "./Tests14"
-AUTOTESTER_PATH = "./Code14/cmake-build-debug/src/autotester/autotester"
+AUTOTESTER_PATH = "./Code14/build/src/autotester/autotester"
 OUTPUT_PATH = "./Tests14/out.xml"
 
 
