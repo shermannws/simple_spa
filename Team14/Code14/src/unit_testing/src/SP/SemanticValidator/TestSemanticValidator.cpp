@@ -2,8 +2,8 @@
 
 #include "catch.hpp"
 #include "SP/SPParser.h"
-#include "SP/SyntacticValidator.h"
-#include "SP/AST/SemanticValidator/SemanticValidator.h"
+#include "SP/Validators/SyntacticValidator/SyntacticValidator.h"
+#include "SP/Validators/SemanticValidator/SemanticValidator.h"
 
 TEST_CASE("SemanticValidator - Valid semantics") {
     SECTION("Valid call chain")  {

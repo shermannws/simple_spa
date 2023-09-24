@@ -1,7 +1,7 @@
 #include <string>
 
 #include "catch.hpp"
-#include "SP/SyntacticValidator.h"
+#include "SP/Validators/SyntacticValidator/SyntacticValidator.h"
 #include "SP/SPTokenizer.h"
 
 TEST_CASE("SyntacticValidator - Valid syntax") {
