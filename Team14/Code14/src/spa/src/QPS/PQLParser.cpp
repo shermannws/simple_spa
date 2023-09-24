@@ -24,9 +24,13 @@ PQLParser::PQLParser(const std::string& PQLQuery) {
 Query PQLParser::parse() {
     Query query = Query();
     processDeclarations(query);
-    processSelectClause(query);
-    processSuchThatClause(query);
-    processPatternClause(query);
+    Synonym select = processSelectClause(query);
+    std::shared_ptr<SuchThatClause> stClause = processSuchThatClause(query);
+    std::shared_ptr<PatternClause> pClause = processPatternClause(query);
+
+    validateSelectSemantics(query, select);
+    validateSuchThatSemantics(query, stClause);
+    validatePatternSemantics(query, pClause);
 
     expect(tokenizer->peekToken()->isToken(TokenType::Empty), "Invalid query syntax");
     return query;
@@ -72,7 +76,7 @@ void PQLParser::processDeclarations(Query& query) {
     }
 }
 
-void PQLParser::processSelectClause(Query& query) {
+Synonym PQLParser::processSelectClause(Query& query) {
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken("Select")) {
         throw SyntaxException("Expected Select clause but found '" + next->getRep() + "'");
@@ -92,39 +96,39 @@ void PQLParser::processSelectClause(Query& query) {
         throw SyntaxException("Expected EOF or clause keyword");
     }
 
-    EntityPtr entity = query.getEntity(next->getRep());
-    if (!entity) {
-        throw SemanticException("Undeclared synonym in Select clause");
-    }
-    query.addSelect(entity);
-
-    // TODO support for multiple synonyms
+    return next->getRep();
 }
 
-void PQLParser::processSuchThatClause(Query& query) {
+std::shared_ptr<SuchThatClause> PQLParser::processSuchThatClause(Query& query) {
     // handle optional
     std::shared_ptr<Token> suchThatToken = tokenizer->peekToken();
     if (!suchThatToken->isToken("such that")) {
-        return;
+        return nullptr;
     }
     tokenizer->popToken();
     std::shared_ptr<Token> absToken = tokenizer->popToken();
     std::shared_ptr<SuchThatClause> clause = std::make_shared<SuchThatClause>(absToken);
     validateSuchThatSyntax(clause);
-    validateSuchThatSemantics(query, clause);
-    query.addSuchThat(clause);
+    return clause;
 }
 
-void PQLParser::processPatternClause(Query& query) {
+std::shared_ptr<PatternClause> PQLParser::processPatternClause(Query& query) {
     std::shared_ptr<Token> patternToken = tokenizer->peekToken();
     if (!patternToken->isToken("pattern")) {
-        return;
+        return nullptr;
     }
     tokenizer->popToken();
     std::shared_ptr<PatternClause> clause = std::make_shared<PatternClause>();
     validatePatternSyntax(clause);
-    validatePatternSemantics(query, clause);
-    query.addPattern(clause);
+    return clause;
+}
+
+void PQLParser::validateSelectSemantics(Query& query, const Synonym& syn) {
+    EntityPtr entity = query.getEntity(syn);
+    if (!entity) {
+        throw SemanticException("Undeclared synonym in Select clause");
+    }
+    query.addSelect(entity);
 }
 
 void PQLParser::validateSuchThatSyntax(std::shared_ptr<SuchThatClause> clause) {
@@ -190,13 +194,16 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> cl
     }
 }
 
-// TODO: generalise this to cater both such that & pattern clauses
 void PQLParser::validateSuchThatSemantics(Query& query, const std::shared_ptr<SuchThatClause> clause) {
+    if (!clause) {
+        return;
+    }
     std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
     std::shared_ptr<StmtrefStmtrefHandler> stmtrefHandler = std::make_shared<StmtrefStmtrefHandler>();
     std::shared_ptr<StmtrefEntrefHandler> stmtEntHandler = std::make_shared<StmtrefEntrefHandler>();
     synonymHandler->setNext(stmtrefHandler)->setNext(stmtEntHandler);
     synonymHandler->handle(query, clause);
+    query.addSuchThat(clause);
 }
 
 std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string& errorMsg) {
@@ -269,8 +276,12 @@ void PQLParser::validatePatternSyntax(std::shared_ptr<PatternClause> clause) {
 }
 
 void PQLParser::validatePatternSemantics(Query& query, const std::shared_ptr<PatternClause> clause) {
+    if (!clause) {
+        return;
+    }
     std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
     std::shared_ptr<EntrefExprSpecHandler> EntExprHandler = std::make_shared<EntrefExprSpecHandler>();
     synonymHandler->setNext(EntExprHandler);
     synonymHandler->handle(query, clause);
+    query.addPattern(clause);
 }

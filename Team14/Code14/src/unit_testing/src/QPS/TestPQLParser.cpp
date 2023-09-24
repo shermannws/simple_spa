@@ -616,7 +616,7 @@ TEST_CASE("Invalid processSuchThat cases") {
     SECTION("Invalid general queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assign a; print d;\nSelect a such",
-                               "Invalid query syntax");
+                               "Expected EOF or clause keyword");
         testcases.emplace_back("assign a; print d;\nSelect a such that random(a",
                                "Invalid token, abstraction expected");
         testcases.emplace_back("assign a; print d;\nSelect a such that Follows* ",
