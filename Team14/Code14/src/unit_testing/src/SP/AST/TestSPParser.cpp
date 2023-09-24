@@ -8,7 +8,7 @@
 
 TEST_CASE("Test parse with one procedure, one read statement") {
     SPParser parser;
-    std::string varName = "num1";
+    VariableName = "num1";
     std::vector<SPToken> tokens = {
             SPToken(TokenType::Name, "procedure"),
             SPToken(TokenType::Name, "doMath"),
@@ -36,7 +36,7 @@ TEST_CASE("Test parse with one procedure, one read statement") {
 
 TEST_CASE("Test parse with one procedure, one print statement") {
     SPParser parser;
-        std::string varName = "num1";
+        VariableName varName = "num1";
     std::vector<SPToken> tokens = {
             SPToken(TokenType::Name, "procedure"),
             SPToken(TokenType::Name, "doMath"),
@@ -64,7 +64,7 @@ TEST_CASE("Test parse with one procedure, one print statement") {
 
 TEST_CASE("Test parse with one procedure, one assign statement") {
     SPParser parser;
-    std::string varName = "sum";
+    VariableName varName = "sum";
     std::vector<SPToken> tokens = {
             SPToken(TokenType::Name, "procedure"),
             SPToken(TokenType::Name, "doMath"),
@@ -192,7 +192,7 @@ TEST_CASE("Test parse with one procedure, one assign statement, different RHS") 
 
 TEST_CASE("Test parse with one procedure, all statement types") {
     SPParser parser;
-    std::string varName = "num1";
+    VariableName varName = "num1";
 
     std::vector<SPToken> tokens = {
             SPToken(TokenType::Name, "procedure"),

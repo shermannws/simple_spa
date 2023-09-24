@@ -26,8 +26,8 @@
 #include "SP/AST/Nodes/BinaryConditionalExpressionType.h"
 
 TEST_CASE("Test ExpressionNode family") {
-    std::string varName1 = "Variable1";
-    std::string varName2 = "Variable2";
+    VariableName varName1 = "Variable1";
+    VariableName varName2 = "Variable2";
     ConstantValue constVal1 = "100";
     ConstantValue constVal2 = "200";
     std::vector<std::shared_ptr<ASTNode>> emptyChildVector;
@@ -160,8 +160,8 @@ TEST_CASE("Test ExpressionNode family") {
 }
 
 TEST_CASE("Test ConditionalExpressionNode family") {
-    std::string varName1 = "Variable1";
-    std::string varName2 = "Variable2";
+    VariableName varName1 = "Variable1";
+    VariableName varName2 = "Variable2";
     ConstantValue constVal1 = "100";
     ConstantValue constVal2 = "200";
 
@@ -239,11 +239,11 @@ TEST_CASE("Test ConditionalExpressionNode family") {
 }
 
 TEST_CASE("Test statement family") {
-    int statementNumber = 1;
+    StatementNumber statementNumber = 1;
     ConstantValue constVal1 = "100";
     ConstantValue constVal2 = "200";
     std::vector<std::shared_ptr<ASTNode>> emptyChildVector;
-    std::string procedureName = "Procedure";
+    ProcedureName procedureName = "Procedure";
     auto varNode = std::make_shared<VariableNode>("variable");
     auto constNode = std::make_shared<ConstantNode>("100");
     auto arithmeticExpressionNode =
@@ -363,9 +363,9 @@ TEST_CASE("Test statement family") {
 }
 
 TEST_CASE("Test AST node getters") {
-    int statementNumber = 1;
+    StatementNumber statementNumber = 1;
 
-    std::string varName = "variable";
+    VariableName varName = "variable";
     auto varNode = std::make_shared<VariableNode>(varName);
     REQUIRE(varNode->getVarName() == varName);
 
@@ -380,17 +380,17 @@ TEST_CASE("Test AST node getters") {
     REQUIRE(arithmeticExpressionNode->getRightExpression() == constNode);
     REQUIRE(arithmeticExpressionNode->getLeftExpression() == varNode);
 
-    int readStatementNumber = statementNumber++;
+    StatementNumber readStatementNumber = statementNumber++;
     auto readNode = std::make_shared<ReadNode>(readStatementNumber, varNode);
     REQUIRE(readNode->getStatementNumber() == readStatementNumber);
     REQUIRE(readNode->getVar() == varNode);
 
-    int printStatementNumber = statementNumber++;
+    StatementNumber printStatementNumber = statementNumber++;
     auto printNode = std::make_shared<PrintNode>(printStatementNumber, varNode);
     REQUIRE(printNode->getStatementNumber() == printStatementNumber);
     REQUIRE(printNode->getVar() == varNode);
 
-    int assignStatementNumber = statementNumber++;
+    StatementNumber assignStatementNumber = statementNumber++;
     auto assignNode = std::make_shared<AssignNode>(assignStatementNumber, varNode, arithmeticExpressionNode);
     REQUIRE(assignNode->getStatementNumber() == assignStatementNumber);
     REQUIRE(assignNode->getVar() == varNode);
@@ -402,7 +402,7 @@ TEST_CASE("Test AST node getters") {
     auto statementListNode = std::make_shared<StatementListNode>(statements);
     REQUIRE(statementListNode->getStatements() == statements);
 
-    std::string procedureName = "Procedure";
+    ProcedureName procedureName = "Procedure";
     auto procedureNode = std::make_shared<ProcedureNode>(procedureName, statementListNode);
     REQUIRE(procedureNode->getProcedureName() == procedureName);
     REQUIRE(procedureNode->getStatementList() == statementListNode);

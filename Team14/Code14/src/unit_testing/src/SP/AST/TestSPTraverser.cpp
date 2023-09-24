@@ -19,7 +19,7 @@
 
 TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     SPParser parser;
-    std::string varName = "num1";
+    VariableName varName = "num1";
     std::vector<SPToken> tokens = {
             SPToken(TokenType::Name, "procedure"),
             SPToken(TokenType::Name, "doMath"),
