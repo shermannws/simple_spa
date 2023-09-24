@@ -28,11 +28,13 @@ Query PQLParser::parse() {
     std::shared_ptr<SuchThatClause> stClause = processSuchThatClause(query);
     std::shared_ptr<PatternClause> pClause = processPatternClause(query);
 
+    std::shared_ptr<Token> endOfQuery = tokenizer->peekToken();
+    expect(endOfQuery->isToken(TokenType::Empty), "Invalid query syntax");
+
     validateSelectSemantics(query, select);
     validateSuchThatSemantics(query, stClause);
     validatePatternSemantics(query, pClause);
 
-    expect(tokenizer->peekToken()->isToken(TokenType::Empty), "Invalid query syntax");
     return query;
 }
 
@@ -83,17 +85,12 @@ Synonym PQLParser::processSelectClause(Query& query) {
     }
     next = tokenizer->popToken();
 
-    if (next->isToken(TokenType::Empty)) {
-        throw SyntaxException("Expected synonym but found none");
+    if (!next->isIdent()) {
+        throw SyntaxException("Invalid synonym syntax");
     }
 
-    //check that peekNext is empty or valid clause keyword
-    std::shared_ptr<Token> following = tokenizer->peekToken();
-    std::string rep = following->getRep(); //must be empty or such that or pattern
-    if (!following->isToken(TokenType::Empty) &&
-            !following->isToken("such that") &&
-            !following->isToken("pattern")) {
-        throw SyntaxException("Expected EOF or clause keyword");
+    if (next->isToken(TokenType::Empty)) {
+        throw SyntaxException("Expected synonym but found none");
     }
 
     return next->getRep();
@@ -247,6 +244,9 @@ Ref PQLParser::extractRef() {
 
 void PQLParser::validatePatternSyntax(std::shared_ptr<PatternClause> clause) {
     std::shared_ptr<Token> patternSyn = tokenizer->popToken();
+    if (!patternSyn->isIdent()) {
+        throw SyntaxException("Invalid synonym syntax");
+    }
     clause->setSyn(patternSyn->getRep());
 
     std::shared_ptr<Token> next = tokenizer->popToken();
