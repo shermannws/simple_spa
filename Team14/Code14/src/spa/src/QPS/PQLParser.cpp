@@ -1,6 +1,5 @@
 
 #include <string>
-#include <stdexcept>
 #include <stack>
 
 #include "PQLParser.h"
@@ -23,14 +22,14 @@ PQLParser::PQLParser(const std::string& PQLQuery) {
 
 Query PQLParser::parse() {
     Query query = Query();
-    processDeclarations(query);
+    std::vector<std::shared_ptr<QueryEntity>> entities = processDeclarations();
     Synonym select = processSelectClause(query);
     std::shared_ptr<SuchThatClause> stClause = processSuchThatClause(query);
     std::shared_ptr<PatternClause> pClause = processPatternClause(query);
-
     std::shared_ptr<Token> endOfQuery = tokenizer->peekToken();
     expect(endOfQuery->isToken(TokenType::Empty), "Invalid query syntax");
 
+    validateDeclarations(query, entities);
     validateSelectSemantics(query, select);
     validateSuchThatSemantics(query, stClause);
     validatePatternSemantics(query, pClause);
@@ -38,44 +37,29 @@ Query PQLParser::parse() {
     return query;
 }
 
-void PQLParser::processDeclarations(Query& query) {
+std::vector<std::shared_ptr<QueryEntity>> PQLParser::processDeclarations() {
+    std::vector<std::shared_ptr<QueryEntity>> entities;
     while(tokenizer->peekToken()->isDesignEntity()) {
         std::shared_ptr<Token> designEntity = tokenizer->popToken();
-
-        std::shared_ptr<Token> synonym = tokenizer->popToken();
-        if (!synonym->isIdent()) {
-            if (synonym->isToken(TokenType::Empty)) {
-                throw SyntaxException("Expected synonym but found none");
-            }
-            throw SyntaxException("Invalid synonym '" + synonym->getRep() + "'");
-        }
-        EntityPtr newEntity = std::make_shared<QueryEntity>(designEntity, synonym->getRep());
-        query.addDeclaration(newEntity);
+        EntityPtr newEntity = extractQueryEntity(designEntity);
+        entities.push_back(newEntity);
 
         while(tokenizer->peekToken()->isToken(TokenType::Comma)) {
             tokenizer->popToken(); //consume comma
-            synonym = tokenizer->popToken();
-            if (!synonym->isIdent()) {
-                if (synonym->isToken(TokenType::Empty)) {
-                    throw SyntaxException("Expected synonym but found none");
-                }
-                throw SyntaxException("Invalid synonym '" + synonym->getRep() + "'");
-            }
-            newEntity = std::make_shared<QueryEntity>(designEntity, synonym->getRep());
-            query.addDeclaration(newEntity);
+            newEntity = extractQueryEntity(designEntity);
+            entities.push_back(newEntity);
         }
 
-        // consume semicolon
-        std::shared_ptr<Token> endToken = tokenizer->popToken();
+        std::shared_ptr<Token> endToken = tokenizer->popToken(); // consume semicolon
         if (!endToken->isToken(TokenType::Semicolon)) {
             throw SyntaxException("Expected ; but found '" + endToken->getRep() + + "'");
         }
     }
 
-    // if no design entity return err
-    if (!query.hasDeclarations()) {
+    if (entities.empty()) {
         throw SyntaxException("Expected a declaration but found none");
     }
+    return entities;
 }
 
 Synonym PQLParser::processSelectClause(Query& query) {
@@ -118,6 +102,16 @@ std::shared_ptr<PatternClause> PQLParser::processPatternClause(Query& query) {
     std::shared_ptr<PatternClause> clause = std::make_shared<PatternClause>();
     validatePatternSyntax(clause);
     return clause;
+}
+
+void PQLParser::validateDeclarations(Query& query, const std::vector<std::shared_ptr<QueryEntity>>& entities) {
+    for (auto & entity : entities) {
+        Synonym currSynonym = entity->getSynonym();
+        if (query.getEntity(currSynonym)){
+            throw SemanticException("Trying to redeclare a synonym");
+        }
+        query.addDeclaration(entity);
+    }
 }
 
 void PQLParser::validateSelectSemantics(Query& query, const Synonym& syn) {
@@ -208,6 +202,15 @@ std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string& errorM
         throw SyntaxException(errorMsg);
     }
     return tokenizer->popToken();
+}
+
+std::shared_ptr<QueryEntity> PQLParser::extractQueryEntity(std::shared_ptr<Token> entityType) {
+    std::shared_ptr<Token> synonym = tokenizer->popToken();
+    if (!synonym->isIdent()) {
+        throw SyntaxException("Invalid synonym");
+    }
+    EntityPtr newEntity = std::make_shared<QueryEntity>(entityType, synonym->getRep());
+    return newEntity;
 }
 
 Ref PQLParser::extractRef() {
