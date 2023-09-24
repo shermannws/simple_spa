@@ -213,6 +213,14 @@ TEST_CASE("SyntacticValidator - Valid WHILE syntax RELATIONAL expr") {
 }
 
 TEST_CASE("SyntacticValidator - Invalid WHILE syntax RELATIONAL expr") {
+    SECTION("No brackets") {
+        std::string input = "procedure testWhile {while !(a > b) { a = r; }}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid While Condition - Wrap Conditional Expression in \"( )\" ");
+    }
+
     SECTION("Nested single relational expr") {
         std::string input = "procedure testWhile {while ((a > b)) { a = r; }}";
         SPTokenizer tokenizer(input);
