@@ -1,7 +1,7 @@
 #pragma once
 
-#include "QueryEntity.h"
-#include "Ref.h"
+#include "QPS/QueryEntity.h"
+#include "QPS/Ref.h"
 #include <string>
 
 /**
