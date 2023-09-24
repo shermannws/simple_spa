@@ -55,8 +55,8 @@ none
 5000
 12 - 2 synonym - Share a (Follows arg1, Pattern a) / Follows arg2
 assign a, a1;
-Select a such that Follows(8, a1) pattern a1("a8", _"read"_)
-none
+Select a1 such that Follows(a1, a) pattern a1("a8", _"read"_)
+8
 5000
 13 - 2 synonym - Share a (Follows arg2, Pattern a) / Follows arg1
 assign a; while w;
@@ -68,22 +68,17 @@ assign a; variable v; read r;
 Select r such that Follows(a, 9) pattern a(v, _"print"_)
 5, 10
 5000
-15 - 2 synonym - Share a (Follows arg1, Pattern a) / Pattern v
-assign a; variable v; read r;
-Select r such that Follows(a, 9) pattern a(v, _"print"_)
-5, 10
-5000
-16 - 2 synonym - Share a (Follows arg2, Pattern a) / Pattern v
+15 - 2 synonym - Share a (Follows arg2, Pattern a) / Pattern v
 assign a; variable v;
 Select v such that Follows(_, a) pattern a(v, _"heart"_)
 a9
 5000
-17 - 3 synonym - Share a (Follows arg1, Pattern a) / Follows arg2 / Pattern v
+16 - 3 synonym - Share a (Follows arg1, Pattern a) / Follows arg2 / Pattern v
 assign a; variable v; stmt s; procedure p;
 Select p such that Follows(a, s) pattern a(v, _"read"_)
 procedure
 5000
-18 - 3 synonym - Share a (Follows arg2, Pattern a) / Follows arg1 / Pattern v
+17 - 3 synonym - Share a (Follows arg2, Pattern a) / Follows arg1 / Pattern v
 assign a; variable v; stmt s; procedure p;
 Select p such that Follows(s, a) pattern a(v, _"heart"_)
 procedure
