@@ -25,26 +25,30 @@ private:
     std::shared_ptr<ExprSpecParser> exprSpecParser;
 
     /**
-     * @brief Parses declarations syntactically
+     * @brief Parses declarations syntactically and extracts the declared entities
      * @return vector of declared entities
      */
     std::vector<std::shared_ptr<QueryEntity>> processDeclarations();
 
     /**
-     * @brief Parses select clause syntactically
+     * @brief Parses select clause syntactically ad extracts the selected synonym
      * @return the selected synonym
      */
     Synonym processSelectClause(Query& query);
 
     /**
-     * @brief TODO
+     * @brief parses the query for any such that clause and extracts the related
+     * information into a such that clause object
      * @param query the Query object
+     * @return a shared pointer to the pattern clause
      */
     std::shared_ptr<SuchThatClause> processSuchThatClause(Query& query);
 
     /**
-     * @brief TODO
+     * @brief parses the query for any pattern clause and extracts the related
+     * information into a pattern clause object
      * @param query the Query object
+     * @return a shared pointer to the pattern clause
      */
     std::shared_ptr<PatternClause> processPatternClause(Query& query);
 
@@ -66,18 +70,33 @@ private:
      */
     void validatePatternSyntax(std::shared_ptr<PatternClause> clause);
 
+    /**
+     * @brief Validates the declarations and stores them in the query object,
+     * otherwise throws a Semantic exception in case of an entity redeclaration
+     * @param query the query object
+     * @param entities the vector of shared pointer to query entities declared
+     */
     void validateDeclarations(Query& query, const std::vector<std::shared_ptr<QueryEntity>>& entities);
+
+    /**
+     * @brief Validates the selected entity and stores them in the query object,
+     * otherwise throws a Semantic exception if not valid
+     * @param query the query object
+     * @param syn the synonym selected in the query
+     */
     void validateSelectSemantics(Query& query, const Synonym& syn);
 
     /**
-     * @brief Validates SuchThatClause semantically, otherwise throws a SemanticException
+     * @brief Validates SuchThatClause semantically, and stores it in the query object
+     * otherwise throws a SemanticException
      * @param query the Query object
      * @param clause the shared pointer of SuchThatClause to validate
      */
     void validateSuchThatSemantics(Query& query, const std::shared_ptr<SuchThatClause> clause);
 
     /**
-     * @brief Validates PatternClause semantically, otherwise throws a SemanticException
+     * @brief Validates PatternClause semantically, and stores it in the query object
+     * otherwise throws a SemanticException
      * @param query the Query object
      * @param clause the shared pointer of PatternClause to validate
      */
