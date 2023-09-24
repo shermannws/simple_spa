@@ -13,7 +13,7 @@
 class SyntacticValidator {
 private:
     /**
-     * A counter to keep track of the current token
+     * A counter to keep track of the current token.
      */
     int curr;
 

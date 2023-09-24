@@ -132,7 +132,7 @@ TEST_CASE("SyntacticValidator - Invalid syntax") {
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
         REQUIRE_THROWS_WITH(validator.validate(),
-                            "Syntax error: Expected TokenType CLOSE_ROUND_PARAN");
+                            "Syntax error: Expected TokenType CloseRoundParenthesis");
     }
 }
 

@@ -15,7 +15,7 @@ void SyntacticValidator::validateProcedure() {
     if (token.getType() == TokenType::Name && token.getValue() == AppConstants::STRING_PROCEDURE ) {
         popToken();
     } else {
-        throw SyntaxError("Syntax error: Expected 'procedure'");
+        throw SyntaxError("Syntax error: Expected '" + AppConstants::STRING_PROCEDURE + "'");
     }
 
     validateName();
@@ -49,7 +49,7 @@ void SyntacticValidator::validateStmtLst() {
                 throw SyntaxError("Syntax error: Invalid Stmt");
             }
         } else {
-            throw SyntaxError("Syntax error: Expected TokenType NAME for statement");
+            throw SyntaxError("Syntax error: Expected TokenType Name for statement");
         }
     }
 }
@@ -160,7 +160,7 @@ void SyntacticValidator::validateName() {
     if (currToken.getType() == TokenType::Name) {
         popToken();
     } else {
-        throw SyntaxError("Syntax error: Expected TokenType NAME");
+        throw SyntaxError("Syntax error: Expected TokenType Name");
     }
 }
 
@@ -168,11 +168,11 @@ void SyntacticValidator::validateInteger() {
     SPToken currToken = peekToken();
     if (currToken.getType() == TokenType::Integer) {
         if (currToken.getValue()[0] == '0' && currToken.getValue().size() != 1) {
-            throw SyntaxError("Syntax error: INTEGER cannot start with 0");
+            throw SyntaxError("Syntax error: Integer cannot start with 0");
         }
         popToken();
     } else {
-        throw SyntaxError("Syntax error: Expected TokenType INTEGER");
+        throw SyntaxError("Syntax error: Expected TokenType Integer");
     }
 }
 
@@ -181,7 +181,7 @@ void SyntacticValidator::validateOpenRoundParen() {
     if (currToken.getType() == TokenType::OpenRoundParenthesis) {
         popToken();
     } else {
-        throw SyntaxError("Syntax error: Expected TokenType OPEN_ROUND_PARAN");
+        throw SyntaxError("Syntax error: Expected TokenType OpenRoundParenthesis");
     }
 }
 
@@ -190,7 +190,7 @@ void SyntacticValidator::validateCloseRoundParen() {
     if (currToken.getType() == TokenType::CloseRoundParenthesis) {
         popToken();
     } else {
-        throw SyntaxError("Syntax error: Expected TokenType CLOSE_ROUND_PARAN");
+        throw SyntaxError("Syntax error: Expected TokenType CloseRoundParenthesis");
     }
 }
 
@@ -199,7 +199,7 @@ void SyntacticValidator::validateOpenCurlyParen() {
     if (currToken.getType() == TokenType::OpenCurlyParenthesis) {
         popToken();
     } else {
-        throw SyntaxError("Syntax error: Expected TokenType OPEN_CURLY_PARAN");
+        throw SyntaxError("Syntax error: Expected TokenType OpenCurlyParenthesis");
     }
 }
 
@@ -208,7 +208,7 @@ void SyntacticValidator::validateCloseCurlyParen() {
     if (currToken.getType() == TokenType::CloseCurlyParenthesis) {
         popToken();
     } else {
-        throw SyntaxError("Syntax error: Expected TokenType CLOSE_CURLY_PARAN");
+        throw SyntaxError("Syntax error: Expected TokenType CloseCurlyParenthesis");
     }
 }
 
@@ -217,7 +217,7 @@ void SyntacticValidator::validateSemicolon() {
     if (currToken.getType() == TokenType::Semicolon) {
         popToken();
     } else {
-        throw SyntaxError("Syntax error: Expected TokenType SEMICOLON");
+        throw SyntaxError("Syntax error: Expected TokenType Semicolon");
     }
 }
 
@@ -226,7 +226,7 @@ void SyntacticValidator::validateEquals() {
     if (currToken.getType() == TokenType::Equals) {
         popToken();
     } else {
-        throw SyntaxError("Syntax error: Expected TokenType EQUALS");
+        throw SyntaxError("Syntax error: Expected TokenType Equals");
     }
 }
 
@@ -235,7 +235,7 @@ void SyntacticValidator::validateArithmeticOperator() {
     if (currToken.getType() == TokenType::ArithmeticOperator) {
         popToken();
     } else {
-        throw SyntaxError("Syntax error: Expected TokenType ARITHMETIC_OPERATOR");
+        throw SyntaxError("Syntax error: Expected TokenType ArithmeticOperator");
     }
 }
 
