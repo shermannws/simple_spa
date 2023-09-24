@@ -35,7 +35,6 @@ TEST_CASE("processDeclarations serial declaration") {
 }
 
 TEST_CASE("processDeclarations multiple declaration") {
-//    std::string input = "procedure p; stmt s; read re; print pr; assign a; \n call c; while w; if i; variable v; constant k; \n Select c";
     std::string input = "procedure p; stmt s; read re; print pr; assign a; \n while w; if i; variable v; constant k; \n Select p";
     PQLParser parser(input);
     Query query = parser.parse();
@@ -45,13 +44,11 @@ TEST_CASE("processDeclarations multiple declaration") {
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(declaration_map.size()==9);
-//    REQUIRE(declaration_map.size()==10);
     REQUIRE(query.getEntity("p"));
     REQUIRE(query.getEntity("s"));
     REQUIRE(query.getEntity("re"));
     REQUIRE(query.getEntity("pr"));
     REQUIRE(query.getEntity("a"));
-//    REQUIRE(query.getEntity("c"));
     REQUIRE(query.getEntity("w"));
     REQUIRE(query.getEntity("i"));
     REQUIRE(query.getEntity("v"));
@@ -74,7 +71,6 @@ TEST_CASE("processDeclarations Errors") {
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
-            //REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
             REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
         }
     }
@@ -85,7 +81,6 @@ TEST_CASE("processDeclarations Errors") {
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
-            //REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
             REQUIRE_THROWS_AS(parser.parse(), SemanticException);
         }
     }
@@ -101,7 +96,6 @@ TEST_CASE("processSelect Errors") {
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
-            //REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
             REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
         }
     }
@@ -112,7 +106,6 @@ TEST_CASE("processSelect Errors") {
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
-            //REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
             REQUIRE_THROWS_AS(parser.parse(), SemanticException);
         }
     }
@@ -136,24 +129,6 @@ TEST_CASE("processSuchThatClause Uses") {
         REQUIRE(rightRef.getEntityType() == QueryEntityType::Variable);
         REQUIRE(rightRef.getRep() == "v");
     }
-
-    // MILESTONE 1: USES(PROC, V) IS NOT INCLUDED, will throw SyntaxError for now
-//    SECTION("Valid Uses query") {
-//        PQLParser parser("assign a;\nSelect a such that Uses(\"main\",\"x\")"); // LHS is procedure
-//        Query query = parser.parse();
-//        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
-//        Ref leftRef = clause->getFirstParam();
-//        Ref rightRef = clause->getSecondParam();
-//        REQUIRE(clause->getType() == ClauseType::Uses);
-//        REQUIRE(leftRef.getType() == RefType::EntRef);
-//        REQUIRE(leftRef.getRootType() == RootType::Ident);
-//        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
-//        REQUIRE(leftRef.getRep() == "main");
-//        REQUIRE(rightRef.getType() == RefType::EntRef);
-//        REQUIRE(rightRef.getRootType() == RootType::Ident);
-//        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
-//        REQUIRE(rightRef.getRep() == "x");
-//    }
 
     SECTION("Valid Uses query") {
         PQLParser parser("assign x;\nSelect x such that Uses(x, \"x\")");
@@ -662,7 +637,7 @@ TEST_CASE("Invalid processSuchThat cases") {
 
     SECTION("Invalid Uses queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("print a; print d;\nSelect a such that Uses(\"y\", d)", // identified as UsesP
+        testcases.emplace_back("print a; print d;\nSelect a such that Uses(\"y\", d)",
                                "Invalid LHS stmtRef");
         testcases.emplace_back("assign a; print d;\nSelect a such that Uses(a, 2)",
                                "Invalid RHS entRef");
@@ -673,7 +648,7 @@ TEST_CASE("Invalid processSuchThat cases") {
         }
 
         std::vector<std::pair<std::string, std::string>> testcases2;
-        testcases2.emplace_back("assign a; variable v;\nSelect a such that Uses(_, v)", //follows grammar
+        testcases2.emplace_back("assign a; variable v;\nSelect a such that Uses(_, v)",
                                "Invalid LHS, wildcard found");
         testcases2.emplace_back("assign a; variable v;\nSelect a such that Uses(v, a)",
                                "Invalid LHS synonym, non-statement found");
@@ -891,7 +866,7 @@ TEST_CASE("processPatternClause") {
         parser = PQLParser("assign a; variable v;\nSelect a pattern v(\"y\",\"\"");
         REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
 
-        parser = PQLParser("assign a; variable v;\nSelect a pattern v(\"y\" _)"); // should be recognised as Syntax eventho there is Semantic too
+        parser = PQLParser("assign a; variable v;\nSelect a pattern v(\"y\" _)");
         REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
 
         parser = PQLParser("assign a; variable v;\nSelect a pattern v(_,_)");
