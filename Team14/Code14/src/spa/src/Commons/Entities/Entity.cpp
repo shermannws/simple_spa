@@ -2,14 +2,14 @@
 
 #include "Entity.h"
 
-Entity::Entity(const std::shared_ptr<std::string> entityValue, EntityType entityType)
+Entity::Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType)
     : entityValue(entityValue), entityType(entityType) {}
 
 EntityType Entity::getEntityType() const {
     return this->entityType;
 }
 
-std::string* Entity::getEntityValue() const {
+EntityValue* Entity::getEntityValue() const {
     return this->entityValue.get();
 }
 

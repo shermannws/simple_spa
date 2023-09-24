@@ -9,8 +9,6 @@
 
 #include "catch.hpp"
 
-using namespace std;
-
 TEST_CASE("Test Entity - Constant") {
 	ConstantValue mockValue = "1";
 	Constant c = Constant(mockValue);
@@ -20,7 +18,7 @@ TEST_CASE("Test Entity - Constant") {
 }
 
 TEST_CASE("Test Entity - Procedure") {
-	string mockName = "mockName";
+	ProcedureName mockName = "mockName";
 	Procedure p = Procedure(mockName);
 
 	REQUIRE(mockName == *p.getEntityValue());
@@ -28,15 +26,15 @@ TEST_CASE("Test Entity - Procedure") {
 }
 
 TEST_CASE("Test Entity - Statement") {
-	int mockLineNo = 1;
+	StatementNumber mockLineNo = 1;
 	Statement s = Statement(mockLineNo, StatementType::Assign);
 
-	REQUIRE(to_string(mockLineNo) == *s.getEntityValue());
+	REQUIRE(std::to_string(mockLineNo) == *s.getEntityValue());
     REQUIRE(s.getEntityType() == EntityType::Statement);
 }
 
 TEST_CASE("Test Entity - Variable") {
-	string mockName = "mockName";
+	VariableName mockName = "mockName";
 	Variable v = Variable(mockName);
 
 	REQUIRE(mockName == *v.getEntityValue());
@@ -45,8 +43,8 @@ TEST_CASE("Test Entity - Variable") {
 
 TEST_CASE("Test Equality of Entities") {
 	ConstantValue mockValue = "1";
-	string mockName = "1";
-	int mockLineNo = 1;
+	VariableName mockName = "1";
+	StatementNumber mockLineNo = 1;
 
 	Constant c1 = Constant(mockValue);
 	Entity c2 = Constant(mockValue);
