@@ -12,11 +12,10 @@
 using namespace std;
 
 TEST_CASE("Test Entity - Constant") {
-	int mockValue = 1;
+	ConstantValue mockValue = "1";
 	Constant c = Constant(mockValue);
 
-	REQUIRE(to_string(mockValue) == *c.getEntityValue());
-	REQUIRE(c.isEntityOfTypeInt() == true);
+	REQUIRE(mockValue == *c.getEntityValue());
     REQUIRE(c.getEntityType() == EntityType::Constant);
 }
 
@@ -25,7 +24,6 @@ TEST_CASE("Test Entity - Procedure") {
 	Procedure p = Procedure(mockName);
 
 	REQUIRE(mockName == *p.getEntityValue());
-	REQUIRE(p.isEntityOfTypeInt() == false);
     REQUIRE(p.getEntityType() == EntityType::Procedure);
 }
 
@@ -34,7 +32,6 @@ TEST_CASE("Test Entity - Statement") {
 	Statement s = Statement(mockLineNo, StatementType::Assign);
 
 	REQUIRE(to_string(mockLineNo) == *s.getEntityValue());
-	REQUIRE(s.isEntityOfTypeInt() == true);
     REQUIRE(s.getEntityType() == EntityType::Statement);
 }
 
@@ -43,12 +40,11 @@ TEST_CASE("Test Entity - Variable") {
 	Variable v = Variable(mockName);
 
 	REQUIRE(mockName == *v.getEntityValue());
-	REQUIRE(v.isEntityOfTypeInt() == false);
     REQUIRE(v.getEntityType() == EntityType::Variable);
 }
 
 TEST_CASE("Test Equality of Entities") {
-	int mockValue = 1;
+	ConstantValue mockValue = "1";
 	string mockName = "1";
 	int mockLineNo = 1;
 
@@ -70,11 +66,11 @@ TEST_CASE("Test Equality of Entities") {
 }
 
 TEST_CASE("Test Hash Function of Entities") {
-	int mockValue = 1;
+	ConstantValue mockValue = "1";
 
 	Constant c1 = Constant(mockValue);
-	Constant c2 = Constant(1);
-	Constant c3 = Constant(2);
+	Constant c2 = Constant("1");
+	Constant c3 = Constant("2");
 
 	std::hash<Entity> entityHasher;
 	std::size_t hashValue1 = entityHasher(c1);

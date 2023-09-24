@@ -1,5 +1,3 @@
-#pragma once
-
 #include "StmtrefStmtrefHandler.h"
 #include "../QPSUtil.h"
 #include "../Exception/SemanticException.h"

@@ -6,7 +6,7 @@
 typedef std::string ProcedureName;
 typedef std::string VariableName;
 typedef int StatementNumber;
-typedef int ConstantValue;
+typedef std::string ConstantValue;
 typedef std::string FormattedExpression;
 
 class AppConstants {
@@ -24,7 +24,6 @@ public:
     inline static const std::string STRING_ELSE = "else";
     inline static const std::string STRING_VARIABLE = "variable";
     inline static const std::string STRING_CONSTANT = "constant";
-
 
     inline static const std::string STRING_INTEGER_REGEX = "^[0-9]+$";
 

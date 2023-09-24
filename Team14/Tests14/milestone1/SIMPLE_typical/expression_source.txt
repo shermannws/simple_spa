@@ -1,7 +1,7 @@
 procedure expression {
 expression = 1;
-expression = a;
-expression = 1+a;
+expression = ((a));
+expression = (1)+a;
 expression = a-1;
 expression = b*2;
 expression = c/d;

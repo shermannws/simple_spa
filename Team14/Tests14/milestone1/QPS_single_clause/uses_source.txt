@@ -1,0 +1,25 @@
+procedure uses {
+    a = b;
+    print c;
+    d = b + 1 % b;
+    e = e * 300;
+    if (x == 0) then {
+        print x;
+        print b;
+        x = b;
+    } else {
+        x = 0;
+    }
+    while (y != 1) {
+        while (a == 0) {
+            print a;
+        }
+    }
+    read x;
+    print x;
+    if (x > 0) then {
+        print x;
+    } else {
+        read x;
+    }
+}

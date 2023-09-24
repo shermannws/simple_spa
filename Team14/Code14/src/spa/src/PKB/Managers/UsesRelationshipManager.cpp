@@ -1,5 +1,3 @@
-#pragma once
-
 #include "UsesRelationshipManager.h"
 
 UsesRelationshipManager::UsesRelationshipManager() : StmtToVarRelationshipManager<UsesRelationshipStore, UsesRelationship>() {};

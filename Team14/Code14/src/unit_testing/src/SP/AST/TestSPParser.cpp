@@ -93,7 +93,7 @@ TEST_CASE("Test parse with one procedure, one assign statement") {
     std::shared_ptr<ExpressionNode> expression = assignStatement->getExpression();
     std::shared_ptr<ConstantNode> constantNode = std::dynamic_pointer_cast<ConstantNode>(expression);
     REQUIRE(constantNode != nullptr);
-    REQUIRE(constantNode->getValue() == 1);
+    REQUIRE(constantNode->getValue() == "1");
 }
 
 

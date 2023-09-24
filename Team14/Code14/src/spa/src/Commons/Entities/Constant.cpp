@@ -1,6 +1,4 @@
-#pragma once
-
 #include "Constant.h"
 
-Constant::Constant(int value)
-	: Entity(std::make_shared<std::string>(std::to_string(value)), true, EntityType::Constant) {}
+Constant::Constant(ConstantValue value)
+	: Entity(std::make_shared<ConstantValue>(value), EntityType::Constant) {}

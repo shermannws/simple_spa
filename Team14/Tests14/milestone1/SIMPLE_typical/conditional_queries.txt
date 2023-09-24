@@ -1,0 +1,69 @@
+1 - check parent (v1)
+procedure p;
+Select p such that Parent(1,2)
+procedure
+5000
+2 - check parent (v2)
+procedure p;
+Select p such that Parent(3,4)
+procedure
+5000
+3 - check parent (v3)
+procedure p;
+Select p such that Parent(5,6)
+procedure
+5000
+4 - check parent (v4)
+procedure p;
+Select p such that Parent(7,8)
+procedure
+5000
+5 - check parent (v5)
+procedure p;
+Select p such that Parent(7,9)
+procedure
+5000
+6 - check parent (v6)
+stmt s; print pn;
+Select s such that Parent*(s,pn)
+1
+5000
+7 - check follows* (negative case)
+procedure p;
+Select p such that Follows*(8,9)
+
+5000
+8 - check variables
+variable v;
+Select v
+a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, s, t, u, v, w, x, y, z
+5000
+9 - check uses (v1)
+print pn; 
+Select pn such that Uses(pn, "c")
+2
+5000
+10 - check uses (v2)
+variable v;
+Select v such that Uses(1, v)
+a, b, c
+5000
+11 - check uses (v3)
+variable v;
+Select v such that Uses(3, v)
+d, e, f, g
+5000
+12 - check uses (v4)
+variable v;
+Select v such that Uses(5, v)
+i, j, k, l, n, o, p, q
+5000
+13 - check uses (v5)
+variable v;
+Select v such that Uses(7, v)
+s, t, u, v, w, z
+5000
+14 - check modifies
+stmt s;
+Select s such that Modifies(s, _)
+3, 4, 5, 6, 7, 8, 9, 10, 11

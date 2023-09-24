@@ -1,5 +1,3 @@
-#pragma once
-
 #include "ParentRelationship.h"
 
 RelationshipType ParentRelationship::relationshipType = RelationshipType::Parent;

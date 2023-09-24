@@ -86,7 +86,7 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     REQUIRE(*(entitiesManager->getStatement(std::make_shared<Statement>(Statement(2, StatementType::Read)))) == *(std::make_shared<Statement>(2, StatementType::Read)));
     REQUIRE(*(entitiesManager->getStatement(std::make_shared<Statement>(Statement(3, StatementType::Print)))) == *(std::make_shared<Statement>(3, StatementType::Print)));
 
-    REQUIRE(*(entitiesManager->getConstant(std::make_shared<Constant>(Constant(1)))) == *(std::make_shared<Constant>(1)));
+    REQUIRE(*(entitiesManager->getConstant(std::make_shared<Constant>(Constant("1")))) == *(std::make_shared<Constant>("1")));
 
     auto VarV = Variable("v");
     auto usesV = usesRelationshipManager->getUsesTypeIdent(StatementType::Assign, VarV);

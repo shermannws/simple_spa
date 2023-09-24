@@ -18,12 +18,14 @@ private:
 
 public:
 	/*!
-	 * Constructor for Traverser which takes in a vector of Visitor Object
+	 * Constructor for Traverser which takes in a vector of Visitor Object.
+	 * @param visitors A vector of DesignExtractorVisitor that will each visit the AST Node as it is being traversed
 	 */
 	Traverser(std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors);
 
 	/*!
-	 * Traverses the AST from the root ProgramNode
+	 * Traverses the AST from the root ProgramNode.
+	 * @param root The root ProgramNode to start traversal from
 	 */
 	void traverse(std::shared_ptr<ProgramNode> root);
 };

@@ -1,5 +1,10 @@
 #pragma once
 
+/**
+ * @brief A struct that represents the hash function for a Relationship
+ * @tparam RelationshipType
+ * @note This hash function is used by the RelationshipStore class
+ */
 template <typename RelationshipType>
 struct RelationshipHash {
 	size_t operator()(const RelationshipType& relationship) const {
@@ -10,6 +15,11 @@ struct RelationshipHash {
 	}
 };
 
+/**
+ * @brief A struct that represents the hash function for a Relationship pointer
+ * @tparam RelationshipType
+ * @note This hash function is used by the RelationshipStore class
+ */
 template <typename RelationshipType>
 struct RelationshipPtrHash {
 	size_t operator()(const std::shared_ptr<RelationshipType> relationshipPtr) const {
@@ -17,6 +27,11 @@ struct RelationshipPtrHash {
 	}
 };
 
+/**
+ * @brief A struct that represents the comparator for a Relationship
+ * @tparam RelationshipType
+ * @note This comparator is used by the RelationshipStore class
+ */
 template <typename RelationshipType>
 struct RelationshipPtrComparator {
 	bool operator()(

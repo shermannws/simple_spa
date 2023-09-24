@@ -1,5 +1,3 @@
-#pragma once
-
 #include "ModifiesRelationshipManager.h"
 
 ModifiesRelationshipManager::ModifiesRelationshipManager() : StmtToVarRelationshipManager<ModifiesRelationshipStore, ModifiesRelationship>() {};

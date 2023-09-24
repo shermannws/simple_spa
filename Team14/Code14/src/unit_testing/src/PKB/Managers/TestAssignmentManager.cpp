@@ -2,8 +2,6 @@
 
 #include "catch.hpp"
 #include "PKB/Managers/AssignmentManager.h"
-#include "PKB/AssignmentPatternStore/Assignment.h"
-#include "Commons/Entities/WildCard.h"
 
 using namespace std;
 
@@ -11,7 +9,6 @@ TEST_CASE("Test Assignment Retrieval") {
     AssignmentManager assignmentManager = AssignmentManager();
 
     // Test a = w + (x + y) + z
-    WildCard wildCard = WildCard();
     shared_ptr<Statement> statement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
     shared_ptr<Statement> statement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
     shared_ptr<Variable> variableA = make_shared<Variable>(Variable("a"));

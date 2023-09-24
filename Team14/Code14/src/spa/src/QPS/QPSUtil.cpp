@@ -1,5 +1,3 @@
-#pragma once
-
 #include "QPSUtil.h"
 
 bool QPSUtil::isOfStmtType(QueryEntityType entityType) {

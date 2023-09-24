@@ -33,9 +33,9 @@ TEST_CASE("Test integration of PKB with QPS - Get all Constants") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Constant> constant1 = make_shared<Constant>(Constant(1));
-    shared_ptr<Constant> constant2 = make_shared<Constant>(Constant(2));
-    shared_ptr<Constant> constant3 = make_shared<Constant>(Constant(3));
+    shared_ptr<Constant> constant1 = make_shared<Constant>(Constant("1"));
+    shared_ptr<Constant> constant2 = make_shared<Constant>(Constant("2"));
+    shared_ptr<Constant> constant3 = make_shared<Constant>(Constant("3"));
 
     pkbWriter->addConstant(constant1);
     pkbWriter->addConstant(constant2);
