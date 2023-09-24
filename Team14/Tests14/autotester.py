@@ -22,15 +22,17 @@ def validate_files(path, source_files, queries_files, error_files, valid_keys, e
     for dir_path, directories, filenames in os.walk(path):
         prefix = dir_path.split(path, 1)[1]
         for filename in filenames:
-            if filename.endswith("_source.txt"):
+            if filename.startswith("error_"):
+                if filename.endswith("_queries.txt"):
+                    continue
+                error_key = prefix + "/" + filename.rsplit("_source.txt", 1)[0]
+                error_files[error_key] = os.path.join(dir_path, filename)
+            elif filename.endswith("_source.txt"):
                 source_key = prefix + "/" + filename.rsplit("_source.txt", 1)[0]
                 source_files[source_key] = os.path.join(dir_path, filename)
             elif filename.endswith("_queries.txt"):
                 queries_key = prefix + "/" + filename.rsplit("_queries.txt", 1)[0]
                 queries_files[queries_key] = os.path.join(dir_path, filename)
-            elif filename.endswith("_error.txt"):
-                error_key = prefix + "/" + filename.rsplit("_error.txt", 1)[0]
-                error_files[error_key] = os.path.join(dir_path, filename)
 
         for key in source_files.keys():
             if key not in queries_files:
@@ -54,14 +56,20 @@ def validate_files(path, source_files, queries_files, error_files, valid_keys, e
 
 
 def run_tests(source_files, queries_files, valid_keys, error_files, error_keys, failures):
+    counter = 0
     for key in valid_keys:
-        print(f"Running Valid System Test {key}...")
+        counter += 1
+        print(f"Test {counter}: Running Valid System Test {key}...")
         execute(key, source_files[key], queries_files[key])
         validate_output(key, failures)
         clean_up()
+
     for key in error_keys:
-        print(f"Running Erroneous System Test {key}...")
+        counter += 1
+        print(f"Test {counter}: Running Erroneous System Test {key}...")
         execute_with_error(key, error_files[key], failures)
+    print(f"{counter} of {len(valid_keys) + len(error_keys)} tests executed")
+
 
 
 def execute(key, source_filepath, query_filepath):
