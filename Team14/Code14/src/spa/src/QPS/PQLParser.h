@@ -34,23 +34,21 @@ private:
      * @brief Parses select clause syntactically ad extracts the selected synonym
      * @return the selected synonym
      */
-    Synonym processSelectClause(Query& query);
+    Synonym processSelectClause();
 
     /**
      * @brief parses the query for any such that clause and extracts the related
      * information into a such that clause object
-     * @param query the Query object
      * @return a shared pointer to the pattern clause
      */
-    std::shared_ptr<SuchThatClause> processSuchThatClause(Query& query);
+    std::shared_ptr<SuchThatClause> processSuchThatClause();
 
     /**
      * @brief parses the query for any pattern clause and extracts the related
      * information into a pattern clause object
-     * @param query the Query object
      * @return a shared pointer to the pattern clause
      */
-    std::shared_ptr<PatternClause> processPatternClause(Query& query);
+    std::shared_ptr<PatternClause> processPatternClause();
 
     /**
      * @brief Validates SuchThatClause syntactically, otherwise throws a SyntaxException

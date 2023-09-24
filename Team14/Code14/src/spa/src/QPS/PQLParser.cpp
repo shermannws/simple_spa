@@ -19,16 +19,15 @@ PQLParser::PQLParser(const std::string& PQLQuery) {
     exprSpecParser = std::make_shared<ExprSpecParser>(tokenizer);
 }
 
-
 Query PQLParser::parse() {
-    Query query = Query();
     std::vector<std::shared_ptr<QueryEntity>> entities = processDeclarations();
-    Synonym select = processSelectClause(query);
-    std::shared_ptr<SuchThatClause> stClause = processSuchThatClause(query);
-    std::shared_ptr<PatternClause> pClause = processPatternClause(query);
+    Synonym select = processSelectClause();
+    std::shared_ptr<SuchThatClause> stClause = processSuchThatClause();
+    std::shared_ptr<PatternClause> pClause = processPatternClause();
     std::shared_ptr<Token> endOfQuery = tokenizer->peekToken();
     expect(endOfQuery->isToken(TokenType::Empty), "Invalid query syntax");
 
+    Query query = Query();
     validateDeclarations(query, entities);
     validateSelectSemantics(query, select);
     validateSuchThatSemantics(query, stClause);
@@ -62,7 +61,7 @@ std::vector<std::shared_ptr<QueryEntity>> PQLParser::processDeclarations() {
     return entities;
 }
 
-Synonym PQLParser::processSelectClause(Query& query) {
+Synonym PQLParser::processSelectClause() {
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken("Select")) {
         throw SyntaxException("Expected Select clause but found '" + next->getRep() + "'");
@@ -76,7 +75,7 @@ Synonym PQLParser::processSelectClause(Query& query) {
     return next->getRep();
 }
 
-std::shared_ptr<SuchThatClause> PQLParser::processSuchThatClause(Query& query) {
+std::shared_ptr<SuchThatClause> PQLParser::processSuchThatClause() {
     // handle optional
     std::shared_ptr<Token> suchThatToken = tokenizer->peekToken();
     if (!suchThatToken->isToken("such that")) {
@@ -89,7 +88,7 @@ std::shared_ptr<SuchThatClause> PQLParser::processSuchThatClause(Query& query) {
     return clause;
 }
 
-std::shared_ptr<PatternClause> PQLParser::processPatternClause(Query& query) {
+std::shared_ptr<PatternClause> PQLParser::processPatternClause() {
     std::shared_ptr<Token> patternToken = tokenizer->peekToken();
     if (!patternToken->isToken("pattern")) {
         return nullptr;
@@ -153,7 +152,7 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> cl
     switch (type) {
         case ClauseType::Uses:
         case ClauseType::Modifies:
-            // check left // TODO: TO DELETE ONCE PROCEDURE IS SUPPORTED
+            // check left
             if (!QPSUtil::isRootOfStmtref(leftRootType)) {
                 throw SyntaxException("Invalid LHS stmtRef");
             }
