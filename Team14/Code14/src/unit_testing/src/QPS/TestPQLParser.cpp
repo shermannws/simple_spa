@@ -100,6 +100,8 @@ TEST_CASE("processSelect Errors") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("stmt s; where s", "Expected Select clause but found 'where'");
         testcases.emplace_back("assign a; Select", "Invalid synonym syntax");
+        testcases.emplace_back("assign a; Select a;", "Invalid synonym syntax");
+        testcases.emplace_back("assign a; Select -a", "Invalid synonym syntax");
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
