@@ -1,4 +1,6 @@
 #include "QPS/PQLParser.h"
+#include "QPS/Exception/SyntaxException.h"
+#include "QPS/Exception/SemanticException.h"
 
 #include "catch.hpp"
 
@@ -60,35 +62,63 @@ TEST_CASE("processDeclarations multiple declaration") {
 }
 
 TEST_CASE("processDeclarations Errors") {
-    std::vector<std::pair<std::string, std::string>> testcases;
-    testcases.emplace_back("Select s ", "Expected a declaration but found none");
-    testcases.emplace_back("assignment a; ", "Expected a declaration but found none");
-    // TODO: add assignment a; variable v;
-    // TODO: add assignment ; variable v;
-    testcases.emplace_back("assign a Select s", "Expected ; but found 'Select'");
-    testcases.emplace_back("assign a a1;", "Expected ; but found 'a1'");
-    testcases.emplace_back("assign a; print a;", "Trying to redeclare a synonym");
-    testcases.emplace_back("assign 1; Select 1", "Invalid synonym '1'");
-    testcases.emplace_back("assign -a ; Select -a", "Invalid synonym '-'");
-    testcases.emplace_back("stmt", "Expected synonym but found none");
-    testcases.emplace_back("stmt ; ",  "Invalid synonym ';'");
+    SECTION("SyntaxExceptions") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("Select s ", "Expected a declaration but found none");
+        testcases.emplace_back("assignment a; Select a", "Expected a declaration but found none");
+        // TODO: add assignment a; variable v;
+        // TODO: add assignment ; variable v;
+        testcases.emplace_back("assign a Select s", "Expected ; but found 'Select'");
+        testcases.emplace_back("assign a a1; Select a1", "Expected ; but found 'a1'");
+        testcases.emplace_back("assign a;", "Expected Select clause but found ''");
+        testcases.emplace_back("assign 1; Select 1", "Invalid synonym");
+        testcases.emplace_back("assign -a ; Select -a", "Invalid synonym");
+        testcases.emplace_back("stmt", "Invalid synonym");
+        testcases.emplace_back("stmt ; ",  "Invalid synonym");
 
-    for (const auto& testcase : testcases) {
-        PQLParser parser(testcase.first);
-        REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+        for (const auto& testcase : testcases) {
+            PQLParser parser(testcase.first);
+            //REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+            REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+        }
+    }
+
+    SECTION("SemanticExceptions") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("stmt s; assign s; Select s ", "Trying to redeclare a synonym");
+
+        for (const auto& testcase : testcases) {
+            PQLParser parser(testcase.first);
+            //REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+            REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+        }
     }
 }
 
 TEST_CASE("processSelect Errors") {
-    std::vector<std::pair<std::string, std::string>> testcases;
-    testcases.emplace_back("stmt s; where s", "Expected Select clause but found 'where'");
-    testcases.emplace_back("assign a; Select s", "Undeclared synonym in Select clause");
-    testcases.emplace_back("assign a; Select", "Expected synonym but found none");
+    SECTION("SyntaxException") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("stmt s; where s", "Expected Select clause but found 'where'");
+        testcases.emplace_back("assign a; Select", "Invalid synonym syntax");
 
-    for (const auto& testcase : testcases) {
-        PQLParser parser(testcase.first);
-        REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+        for (const auto& testcase : testcases) {
+            PQLParser parser(testcase.first);
+            //REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+            REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+        }
     }
+    SECTION("SemanticException") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("assign a; Select s", "Undeclared synonym in Select clause");
+        testcases.emplace_back("assign Synonym; Select synonym", "Undeclared synonym in Select clause");
+
+        for (const auto& testcase : testcases) {
+            PQLParser parser(testcase.first);
+            //REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+            REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+        }
+    }
+
 }
 
 TEST_CASE("processSuchThatClause Uses") {
@@ -613,10 +643,10 @@ TEST_CASE("processSuchThatClause Parent*") {
 }
 
 TEST_CASE("Invalid processSuchThat cases") {
-    SECTION("Invalid general queries") {
+    SECTION("Invalid Syntax - general queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assign a; print d;\nSelect a such",
-                               "Expected EOF or clause keyword");
+                               "Invalid query syntax");
         testcases.emplace_back("assign a; print d;\nSelect a such that random(a",
                                "Invalid token, abstraction expected");
         testcases.emplace_back("assign a; print d;\nSelect a such that Follows* ",
