@@ -12,7 +12,7 @@ Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause, std
     }
     result.setSynIndices(columns);
 
-    if (firstArg.getRootType() == RootType::Wildcard) { // first arg is wildcard
+    if (firstArg.getRootType() == RootType::Wildcard) {
         if (secondArg.first == ExpressionSpecType::Wildcard) {
             auto resultRows = pkbReader->getAllAssign();
             result.setTuples(resultRows);
@@ -20,7 +20,7 @@ Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause, std
             auto resultRows = pkbReader->getAssignStmtsByRhs(secondArg.second,  secondArg.first == ExpressionSpecType::PartialMatch);
             result.setTuples(resultRows);
         }
-    } else if (firstArg.getRootType() == RootType::Synonym) { //Variable synonym
+    } else if (firstArg.getRootType() == RootType::Synonym) {
         if (secondArg.first == ExpressionSpecType::Wildcard) {
             auto resultRows = pkbReader->getAllAssignStmtVarPair();
             result.setTuples(resultRows);
@@ -28,7 +28,7 @@ Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause, std
             auto resultRows = pkbReader->getAssignStmtsVarPairByRhs(secondArg.second, secondArg.first == ExpressionSpecType::PartialMatch);
             result.setTuples(resultRows);
         }
-    } else { // first arg is character strings (ident)
+    } else {
         Variable lhsVariable = Variable(firstArg.getRep());
         if (secondArg.first == ExpressionSpecType::Wildcard) {
             auto resultRows = pkbReader->getAssignStmtsByLhs(lhsVariable);

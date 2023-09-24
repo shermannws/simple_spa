@@ -40,7 +40,6 @@ void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause)
             if (!QPSUtil::isOfStmtType(entityType)) {
                 throw SemanticException("Invalid RHS synonym, non-statement found");
             }
-//            break;
         }
         case RootType::Integer:
         case RootType::Wildcard: {

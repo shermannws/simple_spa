@@ -9,7 +9,6 @@ void EntrefExprSpecHandler::handle(Query &query, std::shared_ptr<Clause> clause)
         return SemanticValHandler::handle(query, clause);
     }
 
-    // validate Entity Synonym is of Valid QueryEntityType
     EntityPtr entity = query.getEntity(patternClause->getSyn());
     if (entity->getType() != QueryEntityType::Assign) {
         throw SemanticException("Unsupported pattern clause, expected an assign synonym");
@@ -20,7 +19,6 @@ void EntrefExprSpecHandler::handle(Query &query, std::shared_ptr<Clause> clause)
     RefType lhsType = RefType::EntRef;
     leftRef.setType(lhsType);
 
-    // validate LHS if it is a Synonym EntRef must be Variable QueryEntity
     if (leftRef.getRootType() == RootType::Synonym && leftRef.getEntityType() != QueryEntityType::Variable) {
         throw SemanticException("Invalid LHS in Pattern, synonym does not represent variable");
     }

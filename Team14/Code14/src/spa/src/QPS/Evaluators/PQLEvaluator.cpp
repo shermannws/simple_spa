@@ -73,7 +73,7 @@ Result PQLEvaluator::evaluate(Query& query) {
     // CASE SYN IN RESULT TABLE, check if synonym in select is in result table
     Synonym syn = query.getSelect()[0]->getSynonym();
     SynonymMap indicesMap = result.getSynIndices();
-    if (indicesMap.find(syn) != indicesMap.end()) { //if yes, return
+    if (indicesMap.find(syn) != indicesMap.end()) {
         return result;
     }
 

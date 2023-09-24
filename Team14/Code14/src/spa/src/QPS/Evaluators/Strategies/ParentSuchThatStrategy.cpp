@@ -22,7 +22,7 @@ Result ParentSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, st
         std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
         res.setSynIndices(indices);
 
-    } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Integer) { // Parent(s,1) // one answer
+    } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Integer) { // Parent(s,1)
         std::string syn = leftRef.getRep();
         Statement s = Statement(stoi(rightRef.getRep()), StatementType::Stmt);
         res.setTuples(pkbReader->getParentTypeStmt(stmtMap.at(leftEntityType), s));

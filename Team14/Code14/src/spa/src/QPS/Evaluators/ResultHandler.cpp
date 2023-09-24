@@ -30,7 +30,6 @@ Result ResultHandler::join(Result& r1, Result& r2) {
     Result final;
     ResultTuples finalTuples;
 
-    // find common columns
     std::unordered_map<int, int> common = getCommonColumns(r1, r2);
     SynonymMap synIndices = buildSynIndices(r1, r2);
     std::vector<Synonym> header = getHeader(synIndices);
@@ -42,17 +41,15 @@ Result ResultHandler::join(Result& r1, Result& r2) {
     for (const auto& row1 : tuples1){
         for (const auto& row2 : tuples2) {
             if (isMatch(row1, row2, common)){
-                //build row and add to final's tuples
                 std::vector<Entity> newRow;
                 auto map1 = r1.getSynIndices();
                 auto map2 = r2.getSynIndices();
                 for (const auto& colName : header) {
-                    if (map1.count(colName)){ //if found in r1, add to vector
+                    if (map1.count(colName)){
                         int index = map1[colName];
                         newRow.push_back(row1[index]);
                         continue;
                     }
-                    //add from r2
                     int index = map2[colName];
                     newRow.push_back(row2[index]);
                 }
@@ -66,7 +63,6 @@ Result ResultHandler::join(Result& r1, Result& r2) {
     return final;
 }
 
-// returns mapping of {index in r1: index in r2} for common cols
 std::unordered_map<int, int> ResultHandler::getCommonColumns(Result& r1, Result& r2) {
     std::unordered_map<int, int> commonIndices;
     auto map1 = r1.getSynIndices();
@@ -82,7 +78,6 @@ std::unordered_map<int, int> ResultHandler::getCommonColumns(Result& r1, Result&
     return commonIndices;
 }
 
-// get combined synIndices
 SynonymMap ResultHandler::buildSynIndices(Result& r1, Result& r2) {
     SynonymMap combined = r1.getSynIndices();
     SynonymMap other = r2.getSynIndices();

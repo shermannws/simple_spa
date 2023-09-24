@@ -182,7 +182,6 @@ void SPTokenizer::tokenizeArithmeticOperator() {
     tokens.push_back(token);
 };
 
-//TODO: Check if they can be separated by a whitespace? e.g. '&  &'
 void SPTokenizer::tokenizeConditionalOperator() {
     std::string tokenValue;
     int currChar = peekChar();
@@ -198,7 +197,7 @@ void SPTokenizer::tokenizeConditionalOperator() {
                 tokenValue.push_back(popChar());
                 tokenValue.push_back(popChar());
             } else {
-                break; //TODO: Throw error
+                break;
             }
 
         default:
