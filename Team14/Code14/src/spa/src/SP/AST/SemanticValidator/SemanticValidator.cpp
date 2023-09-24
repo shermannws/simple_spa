@@ -1,10 +1,6 @@
 #include "SemanticValidator.h"
 #include "CallGraph.h"
-
-class SemanticError : public std::runtime_error {
-public:
-    SemanticError(const std::string& message) : std::runtime_error(message) {}
-};
+#include "SP/Errors/SemanticError.h"
 
 SemanticValidator::SemanticValidator() = default;
 
