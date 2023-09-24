@@ -218,7 +218,7 @@ TEST_CASE("SyntacticValidator - Invalid WHILE syntax RELATIONAL expr") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid While Condition - Wrap Conditional Expression in \"( )\" ");
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
     }
 
     SECTION("Nested single relational expr") {
