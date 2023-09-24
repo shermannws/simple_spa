@@ -1,0 +1,75 @@
+1 - no common synonym - Modifies arg1 stmtnum
+variable v1; variable v2; assign a;
+Select a such that Modifies(1, v1) pattern a(v2, _)
+6, 7, 8, 9, 11, 13
+5000
+2 - no common synonym - Modifies arg1 assign
+variable v1; variable v2; assign a1; assign a2;
+Select a1 such that Modifies(a1, v1) pattern a2(v2, _)
+6, 7, 8, 9, 11, 13
+5000
+3 - no common synonym - Modifies arg1 read
+variable v1; variable v2; assign a; read re;
+Select re such that Modifies(re, v1) pattern a(v2, _)
+1, 5, 15
+5000
+4 - no common synonym - Modifies arg1 if
+variable v1; variable v2; assign a; if if;
+Select if such that Modifies(if, v1) pattern a(v2, _)
+3
+5000
+5 - no common synonym - Modifies arg1 while
+variable v1; variable v2; assign a; while w;
+Select w such that Modifies(w, v1) pattern a(v2, _)
+4, 12
+5000
+6 - no common synonym - Modifies arg1 print
+variable v1; variable v2; assign a; print p;
+Select p such that Modifies(p, v1) pattern a(v2, _)
+none
+5000
+7 - 1 common synonym - same a - Modifies arg2 variable
+variable v1; variable v2; assign a;
+Select a such that Modifies(a, v1) pattern a(v2, _"5"_)
+7, 9, 13
+5000
+8 - 1 common synonym - same a - Modifies arg2 wildcard
+variable v; assign a;
+Select a such that Modifies(a, _) pattern a(v, _"var14"_)
+6, 8
+5000
+9 - 1 common synonym - same v - Modifies arg1 stmtnum
+variable v; assign a;
+Select v such that Modifies(1, v) pattern a(v, _)
+var1
+5000
+10 - 1 common synonym - same v - Modifies arg1 assign
+variable v; assign a1; assign a2;
+Select v such that Modifies(a1, v) pattern a2(v, _)
+var8, var12, var1, var15, var17, var24
+5000
+11 - 1 common synonym - same v - Modifies arg1 read
+variable v; assign a; read re;
+Select v such that Modifies(re, v) pattern a(v, _)
+var1
+5000
+12 - 1 common synonym - same v - Modifies arg1 if
+variable v; assign a; if if;
+Select v such that Modifies(if, v) pattern a(v, _)
+var8, var12, var1, var15
+5000
+13 - 1 common synonym - same v - Modifies arg1 while
+variable v; assign a; while w;
+Select v such that Modifies(w, v) pattern a(v, _)
+var24, var8
+5000
+14 - 1 common synonym - same v - Modifies arg1 print
+variable v; assign a; print p;
+Select v such that Modifies(p, v) pattern a(v, _)
+none
+5000
+15 - 2 common synonym - same a,v
+variable v; assign a;
+Select v such that Modifies(a, v) pattern a(v, _)
+var8, var12, var1, var15, var17, var24
+5000
