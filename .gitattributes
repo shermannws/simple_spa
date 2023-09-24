@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+# Ignore git files in export releases
+.git*           export-ignore
