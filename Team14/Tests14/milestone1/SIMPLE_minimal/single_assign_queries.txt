@@ -1,0 +1,50 @@
+1 - check procedure name
+procedure p;
+Select p
+testAssign
+5000
+2 - check stmt
+stmt s;
+Select s
+1
+5000
+3 - check print stmt
+print pn;
+Select pn
+
+5000
+4 - check var
+variable v;
+Select v
+call, print
+5000
+5 - check assign
+assign a;
+Select a
+1
+5000
+6 - check Uses - stmt synonym
+stmt s;
+Select s such that Uses (s, "print")
+1
+5000
+7 - check Uses - variable synonym
+variable v;
+Select v such that Uses (1, v)
+print
+5000
+8 - check Uses - no synonym
+procedure p;
+Select p such that Uses (1, "print")
+testAssign
+5000
+9 - check Modifies - stmt synonym
+stmt s;
+Select s such that Modifies (s, "call")
+1
+5000
+10 - check Modifies - variable synonym
+variable v;
+Select v such that Modifies (1, v)
+call
+5000

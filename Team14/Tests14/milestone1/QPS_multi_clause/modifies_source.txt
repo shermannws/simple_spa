@@ -1,0 +1,34 @@
+procedure ModifiesMulticlause {
+    read var1;
+    print var2;
+
+    if (var3 > var4) then {
+        while (var5 <= var6) {
+            read var7;
+            var8 = var9 + var10 * var14;
+        }
+        var12 = 5;
+    } else {
+        var1 = var14;
+        var15 = 5;
+        print var16;
+    }
+
+    var17 = var18 / var19 + var20;
+
+    while (var21 == var22 + 23) {
+        var24 = 5;
+        print var26;
+        read var27;
+    }
+
+    if (var28 < var29) then {
+        print var30;
+    } else {
+        print var31;
+    }
+
+    while (var32 <= var33) {
+        print var34;
+    }
+}

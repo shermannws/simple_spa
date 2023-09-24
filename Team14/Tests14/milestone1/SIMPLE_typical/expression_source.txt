@@ -1,0 +1,12 @@
+procedure expression {
+expression = 1;
+expression = ((a));
+expression = (1)+a;
+expression = a-1;
+expression = b*2;
+expression = c/d;
+expression = d%e;
+
+a = a+1*2/3%4-b;
+a = ((a+(((1*2)/3)%4))-b);
+}

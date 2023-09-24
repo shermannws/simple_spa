@@ -1,0 +1,95 @@
+1 - Test valid parent - Parent (INT, INT)
+print p;
+Select p such that Parent (3, 8)
+5, 8
+5000
+2 - Test valid parent - Parent (_, INT)
+read r;
+Select r such that Parent (_, 8)
+1, 9
+5000
+3 - Test valid parent - Parent (INT, _)
+if i ;
+Select i such that Parent (3, _)
+3, 10
+5000
+4 - Test valid parent - Parent (_, _)
+while w;
+Select w such that Parent (_, _)
+4
+5000
+5 - Test valid parent - Parent (SYN, SYN)
+print p; while w;
+Select w such that Parent (w, p)
+4
+5000
+6 - Test valid parent - Parent (SYN, SYN)
+assign a; if i;
+Select a such that Parent (i, a)
+11, 12
+5000
+7 - Test valid parent - Parent (SYN, SYN)
+stmt s; read r;
+Select r such that Parent (s, r)
+9
+5000
+8 - Test valid parent - Parent (SYN, SYN)
+stmt s; if i;
+Select s such that Parent (s, i)
+3
+5000
+9 - Test invalid parent - Assign as Parent - Parent (SYN, SYN)
+stmt s; assign a;
+Select a such that Parent (a, s)
+
+5000
+10 - Test invalid parent - Read as Parent - Parent (SYN, SYN)
+read r; assign a;
+Select a such that Parent (r, a)
+
+5000
+11 - Test valid parent - Parent (SYN, SYN)
+while w; read r;
+Select r such that Parent (r, w)
+
+5000
+12 - Test valid parent - Parent (SYN, _)
+while w;
+Select w such that Parent (w, _)
+4
+5000
+13 - Test valid parent - Parent (SYN, INT)
+if i;
+Select i such that Parent (i,9)
+3
+5000
+14 - Test invalid parent - Read as Parent - Parent (SYN, INT)
+read r;
+Select r such that Parent (r, 5)
+
+5000
+15 - Test valid parent - Parent (_, SYN)
+stmt s;
+Select s such that Parent (_, s)
+4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+16 - Test invalid parent - Indirect parent - Parent (INT, INT)
+print p;
+Select p such that Parent (3, 12)
+
+5000
+17 - Test invalid parent - Indirect parent - Parent (SYN, INT)
+if i;
+Select i such that Parent (i, 6)
+
+5000
+18 - Test invalid parent - Indirect parent - Parent (INT, SYN)
+assign a;
+Select a such that Parent (3, a)
+
+5000
+19 - Test same synonym - Parent(s,s)
+variable v; assign a;
+Select v such that Parent(a,a)
+
+5000

@@ -1,0 +1,86 @@
+procedure nested {
+	while (a == b) {
+		while (c == d) {
+			read k;
+		}
+	}
+
+
+
+	if (a == b) then {
+		if (c == d) then {
+			read k;
+		} else {
+			read else;
+		}
+	} else {
+		if = else + while;
+	}
+
+
+
+	if (a == b) then {
+		if = else + while;
+	} else {
+		 if (c == d) then {
+			 read k;
+		 } else {
+			 read else;
+		 }
+		 
+	}
+
+
+
+	if (a == b) then {
+		while (while != else) {
+			b = 1;
+		}
+	} else {
+		k = a;
+	}
+
+
+
+	if (a == b) then {
+		k = a;
+	} else {
+		while (while != else) {
+			b = 1;
+		}
+	}
+
+
+
+	if (a == b) then {
+		 while (while != else) {
+				print aabb;
+		}
+	} else {
+		k = a;
+	}
+
+
+
+	while (10 != 1) {
+		if (a == 3) then {
+			tks = 5;
+		} else {
+			tks = 2;
+		}
+	
+	}
+
+
+
+	while (1 == 1) {
+		while (2 == 2) {
+			while (3 == 3) {
+				print abcd;
+				read efgh;
+			}
+		}
+	}
+
+
+}
