@@ -34,13 +34,13 @@ public:
     SPToken();
 
     /**
-     * Returns the type of the SPToken.
-     * @return
+     * Gets the type of the SPToken.
+     * @return Type of the SPToken as TokenType
      */
     TokenType getType();
 
     /**
-     * Returns the value of the SPToken.
+     * Gets the value of the SPToken.
      * @return Value as string
      */
     std::string getValue();
