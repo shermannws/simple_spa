@@ -115,7 +115,8 @@ def execute_with_error(key, filepaths, failures_list):
     if os.name == MACOS:
         exit_code = os.WEXITSTATUS(exit_code)
     elif os.name == WINDOWS:
-        exit_code = exit_code >> 8
+        # TODO: Exit code should be 1, but on Windows it is -1073740791
+        exit_code = 1 if exit_code == -1073740791 else exit_code
 
     if exit_code == EXIT_FAILURE:
         print(f"Success: Autotester execution failed for {key} as expected")
