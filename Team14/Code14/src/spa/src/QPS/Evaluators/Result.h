@@ -58,9 +58,9 @@ public:
 
     /**
      * @brief Sets the type of the result.
-     * @param type The type of the result to set (ResultType).
+     * @param ttype The type of the result to set (ResultType).
      */
-    void setType(ResultType& type);
+    void setType(ResultType& ttype);
 
     /**
      * @brief Sets the boolean result for a result of type Boolean.
@@ -76,9 +76,9 @@ public:
 
     /**
      * @brief Sets the synonym indices for the result table.
-     * @param synIndices The map of synonym to index to set as result's synonym indices.
+     * @param ssynIndices The map of synonym to index to set as result's synonym indices.
      */
-    void setSynIndices(SynonymMap & synIndices);
+    void setSynIndices(SynonymMap & ssynIndices);
 
     /**
      * @brief Gets the synonym indices for the result.
