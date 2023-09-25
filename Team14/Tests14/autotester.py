@@ -116,6 +116,7 @@ def execute_with_error(key, filepaths, failures_list):
         exit_code = os.WEXITSTATUS(exit_code)
     elif os.name == WINDOWS:
         # TODO: Exit code should be 1, but on Windows it is -1073740791
+        print(f"WARNING: Exit code should be 1, but on Windows it is -1073740791")
         exit_code = 1 if exit_code == -1073740791 else exit_code
 
     if exit_code == EXIT_FAILURE:
