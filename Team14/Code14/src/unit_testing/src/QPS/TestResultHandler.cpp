@@ -130,7 +130,7 @@ TEST_CASE("Test Result combiner") {
 
         REQUIRE(finalAssociative.getTuples().size() == 1);
         REQUIRE(finalAssociative.getType() == ResultType::Tuples);
-        REQUIRE(find(finalAssociativeTuples.begin(), finalTuples.end(), std::vector<Entity>{a1}) != finalTuples.end());
+        REQUIRE(find(finalAssociativeTuples.begin(), finalAssociativeTuples.end(), std::vector<Entity>{a1}) != finalAssociativeTuples.end());
     }
 
     SECTION("both boolean result") {
