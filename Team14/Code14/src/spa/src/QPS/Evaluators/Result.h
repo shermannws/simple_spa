@@ -60,7 +60,7 @@ public:
      * @brief Sets the type of the result.
      * @param ttype The type of the result to set (ResultType).
      */
-    void setType(ResultType& ttype);
+    void setType(ResultType& type);
 
     /**
      * @brief Sets the boolean result for a result of type Boolean.
@@ -78,7 +78,7 @@ public:
      * @brief Sets the synonym indices for the result table.
      * @param ssynIndices The map of synonym to index to set as result's synonym indices.
      */
-    void setSynIndices(SynonymMap & ssynIndices);
+    void setSynIndices(SynonymMap & synIndices);
 
     /**
      * @brief Gets the synonym indices for the result.
