@@ -6,8 +6,8 @@ ResultType Result::getType() {
     return type;
 }
 
-void Result::setType(ResultType& ttype) {
-    type = ttype;
+void Result::setType(ResultType& type) {
+    this->type = type;
 }
 
 void Result::setBoolResult(bool result) {
@@ -38,6 +38,6 @@ SynonymMap& Result::getSynIndices() {
     return synIndices;
 }
 
-void Result::setSynIndices(SynonymMap &ssynIndices) {
-    synIndices = ssynIndices;
+void Result::setSynIndices(SynonymMap &synIndices) {
+    this->synIndices = synIndices;
 }
