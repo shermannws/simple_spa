@@ -18,7 +18,7 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
 		//pop the current node that is being worked on in this loop
 		frontier.pop();
 
-		//current node to accept all the visitors and do its respective workr
+		//current node to accept all the visitors and do its respective work
 		for (std::shared_ptr<DesignExtractorVisitor> v : visitors) {
 			current->accept(v, parents);
 		}

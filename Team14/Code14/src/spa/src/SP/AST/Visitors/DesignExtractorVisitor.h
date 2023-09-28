@@ -13,6 +13,5 @@ protected:
 
 public:
     // Added to allow this class to be used in dynamic_cast expression
-    // Made pure to prevent instantiation of this class
     virtual ~DesignExtractorVisitor() = default;
 };
