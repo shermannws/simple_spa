@@ -51,10 +51,10 @@ private:
     std::shared_ptr<PatternClause> processPatternClause();
 
     /**
-     * @brief Validates SuchThatClause syntactically, otherwise throws a SyntaxException
-     * @param clause the shared pointer of SuchThatClause to validate
+     * @brief Returns a SuchThatClause if syntax is valid, otherwise throws a SyntaxException
+     * @return clause the shared pointer of SuchThat Clause
      */
-    void validateSuchThatSyntax(std::shared_ptr<SuchThatClause> clause);
+    std::shared_ptr<SuchThatClause> extractSuchThatClause();
 
     /**
     * @brief Validates SuchThatRefType LHS & RHS according to ClauseType
@@ -63,10 +63,10 @@ private:
     void validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause);
 
     /**
-     * @brief Validates PatternClause syntactically, otherwise throws a SyntaxException
-     * @param clause the shared pointer of SuchThatClause to validate
+     * @brief Returns a PatternClause if syntax is valid, otherwise throws a SyntaxException
+     * @param return the shared pointer of Pattern Clause
      */
-    void validatePatternSyntax(std::shared_ptr<PatternClause> clause);
+    std::shared_ptr<PatternClause> extractPatternClause();
 
     /**
      * @brief Validates the declarations and stores them in the query object,

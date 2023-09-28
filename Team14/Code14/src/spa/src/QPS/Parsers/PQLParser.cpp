@@ -82,9 +82,7 @@ std::shared_ptr<SuchThatClause> PQLParser::processSuchThatClause() {
         return nullptr;
     }
     tokenizer->popToken();
-    std::shared_ptr<Token> absToken = tokenizer->popToken();
-    std::shared_ptr<SuchThatClause> clause = std::make_shared<SuchThatClause>(absToken);
-    validateSuchThatSyntax(clause);
+    std::shared_ptr<SuchThatClause> clause = extractSuchThatClause();
     return clause;
 }
 
@@ -94,8 +92,7 @@ std::shared_ptr<PatternClause> PQLParser::processPatternClause() {
         return nullptr;
     }
     tokenizer->popToken();
-    std::shared_ptr<PatternClause> clause = std::make_shared<PatternClause>();
-    validatePatternSyntax(clause);
+    std::shared_ptr<PatternClause> clause = extractPatternClause();
     return clause;
 }
 
@@ -117,7 +114,10 @@ void PQLParser::validateSelectSemantics(Query& query, const Synonym& syn) {
     query.addSelect(entity);
 }
 
-void PQLParser::validateSuchThatSyntax(std::shared_ptr<SuchThatClause> clause) {
+std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
+    std::shared_ptr<Token> absToken = tokenizer->popToken();
+    std::shared_ptr<SuchThatClause> clause = std::make_shared<SuchThatClause>(absToken);
+
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken(TokenType::Lparenthesis)) {
         throw SyntaxException("No left parenthesis");
@@ -140,6 +140,7 @@ void PQLParser::validateSuchThatSyntax(std::shared_ptr<SuchThatClause> clause) {
     }
 
     validateSuchThatRefType(clause);
+    return clause;
 }
 
 void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause) {
@@ -240,7 +241,8 @@ Ref PQLParser::extractRef() {
     return ref;
 }
 
-void PQLParser::validatePatternSyntax(std::shared_ptr<PatternClause> clause) {
+std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
+    std::shared_ptr<PatternClause> clause = std::make_shared<PatternClause>();
     std::shared_ptr<Token> patternSyn = tokenizer->popToken();
     if (!patternSyn->isIdent()) {
         throw SyntaxException("Invalid synonym syntax");
@@ -274,6 +276,7 @@ void PQLParser::validatePatternSyntax(std::shared_ptr<PatternClause> clause) {
     if (!next->isToken(TokenType::Rparenthesis)) {
         throw SyntaxException("expected right parenthesis");
     }
+    return clause;
 }
 
 void PQLParser::validatePatternSemantics(Query& query, const std::shared_ptr<PatternClause> clause) {
