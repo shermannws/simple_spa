@@ -43,18 +43,11 @@ private:
     std::vector<Entity> getAll(const EntityPtr& queryEntity);
 
     /**
-     * @brief Evaluates a such-that clause and updates the result accordingly.
-     * @param clause A shared pointer to the SuchThatClause to evaluate.
+     * @brief Evaluates a clause and updates the result accordingly.
+     * @param clause A shared pointer to the Clause to evaluate.
      * @param result The result object to update.
      */
-    void evaluateSuchThat(const std::shared_ptr<SuchThatClause> clause, Result& result);
-
-    /**
-     * @brief Evaluates a pattern clause and updates the result accordingly.
-     * @param clause A shared pointer to the PatternClause to evaluate.
-     * @param result The result object to update.
-     */
-    void evaluatePattern(const std::shared_ptr<PatternClause> clause, Result& result);
+    void evaluateClause(const std::shared_ptr<Clause> clause, Result& result);
 
 public:
     /**
