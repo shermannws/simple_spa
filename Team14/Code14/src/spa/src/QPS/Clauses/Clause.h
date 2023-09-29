@@ -2,7 +2,10 @@
 
 #include "QPS/QueryEntity.h"
 #include "QPS/Ref.h"
+#include "QPS/Evaluators/Strategies/Strategy.h"
 #include <string>
+
+class Strategy;
 
 /**
  * @brief The enum class of ClassType
@@ -22,7 +25,7 @@ enum class ClauseType {
  * @brief Clause class
  */
 class Clause {
-private:
+protected:
     /**
      * @brief The ClauseType of the Clause
      */
@@ -66,4 +69,6 @@ public:
      * @return The Ref reference of the first parameter
      */
     Ref& getFirstParam();
+
+    virtual std::shared_ptr<Strategy> createStrategy() = 0;
 };

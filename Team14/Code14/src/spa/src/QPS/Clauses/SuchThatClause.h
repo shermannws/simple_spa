@@ -38,4 +38,6 @@ public:
      * @return The Ref reference of the second parameter
      */
     Ref& getSecondParam();
+
+    std::shared_ptr<Strategy> createStrategy() override;
 };

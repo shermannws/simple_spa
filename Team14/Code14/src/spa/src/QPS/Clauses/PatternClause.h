@@ -48,4 +48,6 @@ public:
      * @return The Synonym string of the PatternClause
      */
     Synonym getSyn();
+
+    std::shared_ptr<Strategy> createStrategy() override;
 };
