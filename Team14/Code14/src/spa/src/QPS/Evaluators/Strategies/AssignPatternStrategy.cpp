@@ -7,12 +7,12 @@ Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause, std
 
     Result result;
     std::unordered_map<std::string, int> columns {{patternClause->getSyn(), 0}};
-    if (firstArg.getRootType() == RootType::Synonym) {
+    if (firstArg.isSynonym()) {
         columns.insert({firstArg.getRep(), 1});
     }
     result.setSynIndices(columns);
 
-    if (firstArg.getRootType() == RootType::Wildcard) {
+    if (firstArg.isWildcard()) {
         if (secondArg.first == ExpressionSpecType::Wildcard) {
             auto resultRows = pkbReader->getAllAssign();
             result.setTuples(resultRows);
@@ -20,7 +20,7 @@ Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause, std
             auto resultRows = pkbReader->getAssignStmtsByRhs(secondArg.second,  secondArg.first == ExpressionSpecType::PartialMatch);
             result.setTuples(resultRows);
         }
-    } else if (firstArg.getRootType() == RootType::Synonym) {
+    } else if (firstArg.isSynonym()) {
         if (secondArg.first == ExpressionSpecType::Wildcard) {
             auto resultRows = pkbReader->getAllAssignStmtVarPair();
             result.setTuples(resultRows);
