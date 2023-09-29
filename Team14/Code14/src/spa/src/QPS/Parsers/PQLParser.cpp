@@ -33,11 +33,11 @@ Query PQLParser::parse() {
     query.addSelect(select);
     if (stClause) {
         validateSuchThatSemantics(query, stClause);
-        query.addSuchThat(stClause);
+        query.addClause(stClause);
     }
     if (pClause) {
         validatePatternSemantics(query, pClause);
-        query.addPattern(pClause);
+        query.addClause(pClause);
     }
     return query;
 }

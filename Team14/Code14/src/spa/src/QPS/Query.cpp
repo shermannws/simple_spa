@@ -38,6 +38,15 @@ std::vector<Synonym> Query::getSelect() const {
     return selects;
 }
 
+void Query::addClause(std::shared_ptr<SuchThatClause> clause) {
+    suchThatClauses.push_back(clause);
+}
+
+void Query::addClause(std::shared_ptr<PatternClause> clause) {
+    patternClauses.push_back(clause);
+}
+
+
 void Query::addSuchThat(std::shared_ptr<SuchThatClause> clause) {
     suchThatClauses.push_back(clause);
 }
