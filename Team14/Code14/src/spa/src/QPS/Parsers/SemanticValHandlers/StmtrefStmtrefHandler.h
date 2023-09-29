@@ -12,5 +12,5 @@ public:
      * @param query The Query object
      * @param clause The shared pointer of the Clause
      */
-    void handle(Query &query, std::shared_ptr<Clause> clause) override;
+    void handle(const Query &query, std::shared_ptr<Clause> clause) override;
 };

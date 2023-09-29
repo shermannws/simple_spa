@@ -5,10 +5,10 @@
 
 Query::Query() {
     declarations = DeclarationMap();
-    selects = std::vector<EntityPtr>();
+    selects = std::vector<Synonym>();
 }
 
-std::shared_ptr<QueryEntity> Query::getEntity(const Synonym& syn) {
+std::shared_ptr<QueryEntity> Query::getEntity(const Synonym& syn) const {
     auto it = declarations.find(syn);
 
     if (it != declarations.end()) {
@@ -18,23 +18,23 @@ std::shared_ptr<QueryEntity> Query::getEntity(const Synonym& syn) {
     }
 }
 
-void Query::addSelect(const EntityPtr& entity){
-    selects.push_back(entity);
+void Query::addSelect(const Synonym synonym){
+    selects.push_back(synonym);
 }
 
 void Query::addDeclaration(const EntityPtr& entity){
     declarations.insert({entity->getSynonym(), entity});
 }
 
-bool Query::hasDeclarations() {
+bool Query::hasDeclarations() const {
     return !declarations.empty();
 }
 
-DeclarationMap Query::getDeclarations() {
+DeclarationMap Query::getDeclarations() const {
     return declarations;
 }
 
-std::vector<EntityPtr> Query::getSelect() {
+std::vector<Synonym> Query::getSelect() const {
     return selects;
 }
 
@@ -42,7 +42,7 @@ void Query::addSuchThat(std::shared_ptr<SuchThatClause> clause) {
     suchThatClauses.push_back(clause);
 }
 
-std::vector<std::shared_ptr<SuchThatClause>> Query::getSuchThat() {
+std::vector<std::shared_ptr<SuchThatClause>> Query::getSuchThat() const {
     return suchThatClauses;
 }
 
@@ -50,6 +50,6 @@ void Query::addPattern(std::shared_ptr<PatternClause> clause) {
     patternClauses.push_back(clause);
 }
 
-std::vector<std::shared_ptr<PatternClause>> Query::getPattern() {
+std::vector<std::shared_ptr<PatternClause>> Query::getPattern() const {
     return patternClauses;
 }

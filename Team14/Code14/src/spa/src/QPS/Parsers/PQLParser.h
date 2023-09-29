@@ -60,7 +60,7 @@ private:
     * @brief Validates SuchThatRefType LHS & RHS according to ClauseType
     * @param clause the shared pointer of SuchThatClause to validate
     */
-    void validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause);
+    void setSuchThatRefType(std::shared_ptr<SuchThatClause> clause);
 
     /**
      * @brief Returns a PatternClause if syntax is valid, otherwise throws a SyntaxException
@@ -74,31 +74,28 @@ private:
      * @param query the query object
      * @param entities the vector of shared pointer to query entities declared
      */
-    void validateDeclarations(Query& query, const std::vector<std::shared_ptr<QueryEntity>>& entities);
+    void setDeclarations(Query& query, const std::vector<std::shared_ptr<QueryEntity>>& entities);
 
     /**
-     * @brief Validates the selected entity and stores them in the query object,
-     * otherwise throws a Semantic exception if not valid
+     * @brief Validates the selected entity, throws a Semantic exception if synonym is undeclared
      * @param query the query object
      * @param syn the synonym selected in the query
      */
-    void validateSelectSemantics(Query& query, const Synonym& syn);
+    void validateSelectSemantics(const Query& query, const Synonym& syn);
 
     /**
-     * @brief Validates SuchThatClause semantically, and stores it in the query object
-     * otherwise throws a SemanticException
+     * @brief Validates SuchThatClause semantically, throws a SemanticException if semantically invalid
      * @param query the Query object
      * @param clause the shared pointer of SuchThatClause to validate
      */
-    void validateSuchThatSemantics(Query& query, const std::shared_ptr<SuchThatClause> clause);
+    void validateSuchThatSemantics(const Query& query, std::shared_ptr<SuchThatClause> clause);
 
     /**
-     * @brief Validates PatternClause semantically, and stores it in the query object
-     * otherwise throws a SemanticException
+     * @brief Validates PatternClause semantically, throws a SemanticException if semantically invalid
      * @param query the Query object
      * @param clause the shared pointer of PatternClause to validate
      */
-    void validatePatternSemantics(Query& query, const std::shared_ptr<PatternClause> clause);
+    void validatePatternSemantics(const Query& query, std::shared_ptr<PatternClause> clause);
 
     /**
      * @brief Returns a Token shared pointer if isToken is true, otherwise throws an Exception with errorMsg

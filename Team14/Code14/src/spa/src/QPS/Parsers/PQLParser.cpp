@@ -28,11 +28,17 @@ Query PQLParser::parse() {
     expect(endOfQuery->isToken(TokenType::Empty), "Invalid query syntax");
 
     Query query = Query();
-    validateDeclarations(query, entities);
+    setDeclarations(query, entities);
     validateSelectSemantics(query, select);
-    validateSuchThatSemantics(query, stClause);
-    validatePatternSemantics(query, pClause);
-
+    query.addSelect(select);
+    if (stClause) {
+        validateSuchThatSemantics(query, stClause);
+        query.addSuchThat(stClause);
+    }
+    if (pClause) {
+        validatePatternSemantics(query, pClause);
+        query.addPattern(pClause);
+    }
     return query;
 }
 
@@ -72,7 +78,8 @@ Synonym PQLParser::processSelectClause() {
         throw SyntaxException("Invalid synonym syntax");
     }
 
-    return next->getRep();
+    Synonym syn = next->getRep();
+    return syn;
 }
 
 std::shared_ptr<SuchThatClause> PQLParser::processSuchThatClause() {
@@ -96,7 +103,7 @@ std::shared_ptr<PatternClause> PQLParser::processPatternClause() {
     return clause;
 }
 
-void PQLParser::validateDeclarations(Query& query, const std::vector<std::shared_ptr<QueryEntity>>& entities) {
+void PQLParser::setDeclarations(Query& query, const std::vector<std::shared_ptr<QueryEntity>>& entities) {
     for (auto & entity : entities) {
         Synonym currSynonym = entity->getSynonym();
         if (query.getEntity(currSynonym)){
@@ -106,12 +113,11 @@ void PQLParser::validateDeclarations(Query& query, const std::vector<std::shared
     }
 }
 
-void PQLParser::validateSelectSemantics(Query& query, const Synonym& syn) {
+void PQLParser::validateSelectSemantics(const Query& query, const Synonym& syn) {
     EntityPtr entity = query.getEntity(syn);
     if (!entity) {
         throw SemanticException("Undeclared synonym in Select clause");
     }
-    query.addSelect(entity);
 }
 
 std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
@@ -139,11 +145,11 @@ std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
         throw SyntaxException("No right parenthesis");
     }
 
-    validateSuchThatRefType(clause);
+    setSuchThatRefType(clause);
     return clause;
 }
 
-void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause) {
+void PQLParser::setSuchThatRefType(std::shared_ptr<SuchThatClause> clause) {
     ClauseType type = clause->getType();
     Ref& leftRef = clause->getFirstParam();
     Ref& rightRef = clause->getSecondParam();
@@ -181,7 +187,7 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> cl
     }
 }
 
-void PQLParser::validateSuchThatSemantics(Query& query, const std::shared_ptr<SuchThatClause> clause) {
+void PQLParser::validateSuchThatSemantics(const Query& query, const std::shared_ptr<SuchThatClause> clause) {
     if (!clause) {
         return;
     }
@@ -190,7 +196,6 @@ void PQLParser::validateSuchThatSemantics(Query& query, const std::shared_ptr<Su
     std::shared_ptr<StmtrefEntrefHandler> stmtEntHandler = std::make_shared<StmtrefEntrefHandler>();
     synonymHandler->setNext(stmtrefHandler)->setNext(stmtEntHandler);
     synonymHandler->handle(query, clause);
-    query.addSuchThat(clause);
 }
 
 std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string& errorMsg) {
@@ -279,7 +284,7 @@ std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
     return clause;
 }
 
-void PQLParser::validatePatternSemantics(Query& query, const std::shared_ptr<PatternClause> clause) {
+void PQLParser::validatePatternSemantics(const Query& query, const std::shared_ptr<PatternClause> clause) {
     if (!clause) {
         return;
     }
@@ -287,5 +292,4 @@ void PQLParser::validatePatternSemantics(Query& query, const std::shared_ptr<Pat
     std::shared_ptr<EntrefExprSpecHandler> EntExprHandler = std::make_shared<EntrefExprSpecHandler>();
     synonymHandler->setNext(EntExprHandler);
     synonymHandler->handle(query, clause);
-    query.addPattern(clause);
 }
