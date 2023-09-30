@@ -61,7 +61,7 @@ public:
      * @param query The PQL query to evaluate.
      * @return The result of the PQL query evaluation as a Result object
      */
-    Result evaluate(Query&);
+    Result evaluate(Query& query);
 
     /**
     * @brief Formats the result of a PQL query based on the given query and result table.

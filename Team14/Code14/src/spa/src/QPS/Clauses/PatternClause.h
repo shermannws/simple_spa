@@ -49,5 +49,9 @@ public:
      */
     Synonym getSyn();
 
+    /**
+     * @brief The overriding method of createStrategy in PatternClause
+     * @return The shared pointer of the Strategy created
+     */
     std::shared_ptr<Strategy> createStrategy() override;
 };

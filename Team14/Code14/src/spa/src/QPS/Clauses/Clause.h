@@ -5,6 +5,9 @@
 #include "QPS/Evaluators/Strategies/Strategy.h"
 #include <string>
 
+/**
+ * @brief The forward declaration of Strategy
+ */
 class Strategy;
 
 /**
@@ -70,5 +73,9 @@ public:
      */
     Ref& getFirstParam();
 
+    /**
+     * @brief The factory method of the Strategy for the Clause
+     * @return The shared pointer of the Strategy
+     */
     virtual std::shared_ptr<Strategy> createStrategy() = 0;
 };
