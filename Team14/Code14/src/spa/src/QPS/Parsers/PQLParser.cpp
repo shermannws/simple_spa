@@ -6,10 +6,6 @@
 #include "Tokenizer.h"
 #include "QPS/Clauses/SuchThatClause.h"
 #include "SemanticValidator/PqlSemanticValidator.h"
-#include "SemanticValidator/SynonymHandler.h"
-#include "SemanticValidator/StmtrefStmtrefHandler.h"
-#include "SemanticValidator/StmtrefEntrefHandler.h"
-#include "SemanticValidator/EntrefExprSpecHandler.h"
 #include "QPS/QPSUtil.h"
 #include "QPS/Exceptions/SyntaxException.h"
 #include "QPS/Exceptions/SemanticException.h"
@@ -117,13 +113,6 @@ void PQLParser::setDeclarations(Query& query, const std::vector<std::shared_ptr<
     }
 }
 
-void PQLParser::validateSelectSemantics(const Query& query, const Synonym& syn) {
-    EntityPtr entity = query.getEntity(syn);
-    if (!entity) {
-        throw SemanticException("Undeclared synonym in Select clause");
-    }
-}
-
 std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
     std::shared_ptr<Token> absToken = tokenizer->popToken();
     std::shared_ptr<SuchThatClause> clause = std::make_shared<SuchThatClause>(absToken);
@@ -189,17 +178,6 @@ void PQLParser::setSuchThatRefType(std::shared_ptr<SuchThatClause> clause) {
         default:
             throw SyntaxException("Invalid ClauseType in Such That Clause");
     }
-}
-
-void PQLParser::validateSuchThatSemantics(const Query& query, const std::shared_ptr<SuchThatClause> clause) {
-    if (!clause) {
-        return;
-    }
-    std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
-    std::shared_ptr<StmtrefStmtrefHandler> stmtrefHandler = std::make_shared<StmtrefStmtrefHandler>();
-    std::shared_ptr<StmtrefEntrefHandler> stmtEntHandler = std::make_shared<StmtrefEntrefHandler>();
-    synonymHandler->setNext(stmtrefHandler)->setNext(stmtEntHandler);
-    synonymHandler->handle(query, clause);
 }
 
 std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string& errorMsg) {
@@ -286,14 +264,4 @@ std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
         throw SyntaxException("expected right parenthesis");
     }
     return clause;
-}
-
-void PQLParser::validatePatternSemantics(const Query& query, const std::shared_ptr<PatternClause> clause) {
-    if (!clause) {
-        return;
-    }
-    std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
-    std::shared_ptr<EntrefExprSpecHandler> EntExprHandler = std::make_shared<EntrefExprSpecHandler>();
-    synonymHandler->setNext(EntExprHandler);
-    synonymHandler->handle(query, clause);
 }

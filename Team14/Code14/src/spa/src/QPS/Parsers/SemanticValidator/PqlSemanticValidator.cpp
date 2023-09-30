@@ -7,7 +7,7 @@
 #include "QPS/QPSUtil.h"
 #include "QPS/Exceptions/SemanticException.h"
 
-PqlSemanticValidator::PqlSemanticValidator() {};
+PqlSemanticValidator::PqlSemanticValidator() = default;
 
 void PqlSemanticValidator::validateSelectSemantics(const Query& query, const Synonym& syn) {
     EntityPtr entity = query.getEntity(syn);
@@ -17,9 +17,6 @@ void PqlSemanticValidator::validateSelectSemantics(const Query& query, const Syn
 }
 
 void PqlSemanticValidator::validateClauseSemantics(const Query& query, const std::shared_ptr<SuchThatClause> clause) {
-//    if (!clause) {
-//        return;
-//    }
     std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
     std::shared_ptr<StmtrefStmtrefHandler> stmtrefHandler = std::make_shared<StmtrefStmtrefHandler>();
     std::shared_ptr<StmtrefEntrefHandler> stmtEntHandler = std::make_shared<StmtrefEntrefHandler>();
@@ -28,9 +25,6 @@ void PqlSemanticValidator::validateClauseSemantics(const Query& query, const std
 }
 
 void PqlSemanticValidator::validateClauseSemantics(const Query& query, const std::shared_ptr<PatternClause> clause) {
-//    if (!clause) {
-//        return;
-//    }
     std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
     std::shared_ptr<EntrefExprSpecHandler> EntExprHandler = std::make_shared<EntrefExprSpecHandler>();
     synonymHandler->setNext(EntExprHandler);
