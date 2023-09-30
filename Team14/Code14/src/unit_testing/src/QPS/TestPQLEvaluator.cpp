@@ -90,7 +90,7 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     wildcard.setType(ent);
     patternClause->setFirstParam(wildcard);
     patternClause->setSecondParam(rhs);
-    queryObj.addPattern(patternClause);
+    queryObj.addClause(patternClause);
 
     Result resultObj = evaluator.evaluate(queryObj);
     auto results = evaluator.formatResult(queryObj, resultObj);

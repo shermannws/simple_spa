@@ -58,19 +58,7 @@ public:
      * @brief Adds a such-that clause to the query.
      * @param clause A shared pointer to the SuchThatClause to be added.
      */
-    void addSuchThat(std::shared_ptr<SuchThatClause> clause);
-
-    /**
-     * @brief Adds a such-that clause to the query.
-     * @param clause A shared pointer to the SuchThatClause to be added.
-     */
     void addClause(std::shared_ptr<SuchThatClause> clause);
-
-    /**
-     * @brief Adds a pattern clause to the query.
-     * @param clause A shared pointer to the PatternClause to be added.
-     */
-    void addPattern(std::shared_ptr<PatternClause> clause);
 
     /**
      * @brief Adds a pattern clause to the query.

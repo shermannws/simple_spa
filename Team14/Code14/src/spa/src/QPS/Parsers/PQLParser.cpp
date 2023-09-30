@@ -5,10 +5,11 @@
 #include "PQLParser.h"
 #include "Tokenizer.h"
 #include "QPS/Clauses/SuchThatClause.h"
-#include "SemanticValHandlers/SynonymHandler.h"
-#include "SemanticValHandlers/StmtrefStmtrefHandler.h"
-#include "SemanticValHandlers/StmtrefEntrefHandler.h"
-#include "SemanticValHandlers/EntrefExprSpecHandler.h"
+#include "SemanticValidator/PqlSemanticValidator.h"
+#include "SemanticValidator/SynonymHandler.h"
+#include "SemanticValidator/StmtrefStmtrefHandler.h"
+#include "SemanticValidator/StmtrefEntrefHandler.h"
+#include "SemanticValidator/EntrefExprSpecHandler.h"
 #include "QPS/QPSUtil.h"
 #include "QPS/Exceptions/SyntaxException.h"
 #include "QPS/Exceptions/SemanticException.h"
@@ -22,6 +23,7 @@ PQLParser::PQLParser(const std::string& PQLQuery) {
 Query PQLParser::parse() {
     std::vector<std::shared_ptr<QueryEntity>> entities = processDeclarations();
     Synonym select = processSelectClause();
+    // while not empty, process next clause and add to Clause list
     std::shared_ptr<SuchThatClause> stClause = processSuchThatClause();
     std::shared_ptr<PatternClause> pClause = processPatternClause();
     std::shared_ptr<Token> endOfQuery = tokenizer->peekToken();
@@ -29,14 +31,16 @@ Query PQLParser::parse() {
 
     Query query = Query();
     setDeclarations(query, entities);
-    validateSelectSemantics(query, select);
+    PqlSemanticValidator semanticValidator = PqlSemanticValidator();
+    semanticValidator.validateSelectSemantics(query, select);
     query.addSelect(select);
+    // loop through clause list and validate + add each clause to query
     if (stClause) {
-        validateSuchThatSemantics(query, stClause);
+        semanticValidator.validateClauseSemantics(query, stClause);
         query.addClause(stClause);
     }
     if (pClause) {
-        validatePatternSemantics(query, pClause);
+        semanticValidator.validateClauseSemantics(query, pClause);
         query.addClause(pClause);
     }
     return query;
