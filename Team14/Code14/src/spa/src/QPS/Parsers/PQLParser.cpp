@@ -12,6 +12,7 @@
 #include "QPS/QPSUtil.h"
 #include "QPS/Exceptions/SyntaxException.h"
 #include "QPS/Exceptions/SemanticException.h"
+#include "QPS/Parsers/SemanticValHandlers/EntrefEntrefHandler.h"
 
 
 PQLParser::PQLParser(const std::string& PQLQuery) {
@@ -146,19 +147,12 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> cl
     ClauseType type = clause->getType();
     Ref& leftRef = clause->getFirstParam();
     Ref& rightRef = clause->getSecondParam();
-    RootType leftRootType = leftRef.getRootType();
-    RootType rightRootType = rightRef.getRootType();
 
     switch (type) {
         case ClauseType::Uses:
         case ClauseType::Modifies:
-            // check left
-            if (!QPSUtil::isRootOfStmtref(leftRootType)) {
-                throw SyntaxException("Invalid LHS stmtRef");
-            }
-
             // check right
-            if (!QPSUtil::isRootOfEntref(rightRootType)) {
+            if (!rightRef.isOfEntRef()) {
                 throw SyntaxException("Invalid RHS entRef");
             }
             break;
@@ -167,11 +161,11 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> cl
         case ClauseType::Parent:
         case ClauseType::ParentStar:
             // check left
-            if (!QPSUtil::isRootOfStmtref(leftRootType)) {
+            if (!leftRef.isOfStmtRef()) {
                 throw SyntaxException("Invalid LHS, stmtRef expected");
             }
             // check right
-            if (!QPSUtil::isRootOfStmtref(rightRootType)) {
+            if (!rightRef.isOfStmtRef()) {
                 throw SyntaxException("Invalid RHS, stmtRef expected");
             }
             break;
@@ -187,7 +181,8 @@ void PQLParser::validateSuchThatSemantics(Query& query, const std::shared_ptr<Su
     std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
     std::shared_ptr<StmtrefStmtrefHandler> stmtrefHandler = std::make_shared<StmtrefStmtrefHandler>();
     std::shared_ptr<StmtrefEntrefHandler> stmtEntHandler = std::make_shared<StmtrefEntrefHandler>();
-    synonymHandler->setNext(stmtrefHandler)->setNext(stmtEntHandler);
+    std::shared_ptr<EntrefEntrefHandler> entrefHandler = std::make_shared<EntrefEntrefHandler>();
+    synonymHandler->setNext(stmtrefHandler)->setNext(stmtEntHandler)->setNext(entrefHandler);
     synonymHandler->handle(query, clause);
     query.addSuchThat(clause);
 }
