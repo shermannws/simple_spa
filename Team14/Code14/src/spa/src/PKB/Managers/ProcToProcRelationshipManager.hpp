@@ -32,9 +32,11 @@ std::vector<Entity> ProcToProcRelationshipManager<S, R>::getRelationshipFormer()
     auto matcher = [](R& relationship) {
         return relationship.isDirect();
         };
-    return ManagerUtils::getEntitiesFromRelationshipStore<R>(relationshipStore,
+    auto result = ManagerUtils::getEntitiesFromRelationshipStore<R>(relationshipStore,
         matcher,
         R::getLeftEntityFromRelationship);
+    ManagerUtils::unique(result);
+    return result;
 }
 
 template <typename S, typename R>
@@ -52,9 +54,11 @@ std::vector<Entity> ProcToProcRelationshipManager<S, R>::getRelationshipLatter()
     auto matcher = [](R& relationship) {
         return relationship.isDirect();
         };
-    return ManagerUtils::getEntitiesFromRelationshipStore<R>(relationshipStore,
+    auto result = ManagerUtils::getEntitiesFromRelationshipStore<R>(relationshipStore,
         matcher,
         R::getRightEntityFromRelationship);
+    ManagerUtils::unique(result);
+    return result;
 }
 
 template <typename S, typename R>
