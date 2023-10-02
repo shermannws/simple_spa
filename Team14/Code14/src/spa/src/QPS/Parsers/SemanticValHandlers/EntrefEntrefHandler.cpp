@@ -1,6 +1,5 @@
 
 #include "EntrefEntrefHandler.h"
-#include "QPS/QPSUtil.h"
 #include "QPS/Exceptions/SemanticException.h"
 
 void EntrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
@@ -28,7 +27,7 @@ void EntrefEntrefHandler::handleRefType(Query &query, Ref &leftRef, Ref &rightRe
     switch (leftRootType) {
     case RootType::Synonym: {
         std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-        if (!entity->isProcedure()) {
+        if (!entity->isType(QueryEntityType::Procedure)) {
             throw SemanticException("Invalid LHS synonym, non-procedure found");
         }
     }
@@ -46,7 +45,7 @@ void EntrefEntrefHandler::handleRefType(Query &query, Ref &leftRef, Ref &rightRe
     switch (rightRootType) {
     case RootType::Synonym: {
         std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
-        if (!entity->isVariable()) {
+        if (!entity->isType(QueryEntityType::Variable)) {
             throw SemanticException("Invalid RHS synonym, non-variable found");
         }
     }

@@ -103,13 +103,15 @@ public:
      */
     void setEntityType(QueryEntityType& eentityType);
 
-    bool isWildcard();
+    bool isRootType(RootType rrootType);
 
-    bool isSynonym();
+    bool isOfStmtRef();
 
-    bool isIdent();
+    bool isOfEntRef();
 
-    bool isInteger();
+    bool isStmtRef();
+
+    bool isEntRef();
 
     bool operator==(const Ref& other) const;
 };

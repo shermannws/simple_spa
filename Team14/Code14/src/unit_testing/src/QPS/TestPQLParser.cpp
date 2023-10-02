@@ -637,8 +637,8 @@ TEST_CASE("Invalid processSuchThat cases") {
 
     SECTION("Invalid Uses queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("print a; print d;\nSelect a such that Uses(\"y\", d)",
-                               "Invalid LHS stmtRef");
+        testcases.emplace_back("print a; print d;\nSelect a such that Uses(\"\", d)",
+                               "Identity invalid");
         testcases.emplace_back("assign a; print d;\nSelect a such that Uses(a, 2)",
                                "Invalid RHS entRef");
 
@@ -663,8 +663,8 @@ TEST_CASE("Invalid processSuchThat cases") {
 
     SECTION("Invalid Modifies queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("assign a; constant d;\nSelect a such that Modifies(\"test\", d)",
-                               "Invalid LHS stmtRef");
+        testcases.emplace_back("assign a; constant d;\nSelect a such that Modifies(\"test, d)",
+                               "No right quote");
         testcases.emplace_back("print a; print d;\nSelect a such that Modifies(a, 3)",
                               "Invalid RHS entRef");
 

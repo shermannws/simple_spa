@@ -71,4 +71,8 @@ public:
      * @return query entity type of the query entity
      */
     QueryEntityType getType();
+
+    bool isType(QueryEntityType entityType);
+
+    bool isOfStmtType();
 };

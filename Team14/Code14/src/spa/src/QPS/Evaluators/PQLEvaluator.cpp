@@ -4,10 +4,12 @@
 
 #include "PQLEvaluator.h"
 #include "QPS/QueryEntity.h"
-#include "Strategies/UsesSuchThatStrategy.h"
+#include "Strategies/UsesSSuchThatStrategy.h"
+#include "Strategies/UsesPSuchThatStrategy.h"
 #include "Strategies/FollowsSuchThatStrategy.h"
 #include "QPS/QPSTypes.h"
-#include "Strategies/ModifiesSuchThatStrategy.h"
+#include "Strategies/ModifiesSSuchThatStrategy.h"
+#include "Strategies/ModifiesPSuchThatStrategy.h"
 #include "Strategies/FollowsStarSuchThatStrategy.h"
 #include "Strategies/ParentSuchThatStrategy.h"
 #include "Strategies/ParentStarSuchThatStrategy.h"
@@ -90,10 +92,14 @@ Result PQLEvaluator::evaluate(Query& query) {
 }
 
 void PQLEvaluator::evaluateSuchThat(const std::shared_ptr<SuchThatClause> clause, Result& result) {
-    if (clause->getType() == ClauseType::Uses) {
-        clauseHandler->setStrategy(std::make_shared<UsesSuchThatStrategy>(UsesSuchThatStrategy()));
-    } else if (clause->getType() == ClauseType::Modifies) {
-        clauseHandler->setStrategy(std::make_shared<ModifiesSuchThatStrategy>(ModifiesSuchThatStrategy()));
+    if (clause->getType() == ClauseType::Uses && clause->getFirstParam().isStmtRef()) {
+        clauseHandler->setStrategy(std::make_shared<UsesSSuchThatStrategy>(UsesSSuchThatStrategy()));
+    } else if (clause->getType() == ClauseType::Uses && clause->getFirstParam().isEntRef()) {
+        clauseHandler->setStrategy(std::make_shared<UsesPSuchThatStrategy>(UsesPSuchThatStrategy()));
+    } else if (clause->getType() == ClauseType::Modifies && clause->getFirstParam().isStmtRef()) {
+        clauseHandler->setStrategy(std::make_shared<ModifiesSSuchThatStrategy>(ModifiesSSuchThatStrategy()));
+    } else if (clause->getType() == ClauseType::Modifies && clause->getFirstParam().isEntRef()) {
+        clauseHandler->setStrategy(std::make_shared<ModifiesPSuchThatStrategy>(ModifiesPSuchThatStrategy()));
     } else if (clause->getType() == ClauseType::Follows) {
         clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
     } else if (clause->getType() == ClauseType::FollowsStar) {

@@ -13,4 +13,7 @@ public:
      * @param clause The shared pointer of the Clause
      */
     void handle(Query &query, std::shared_ptr<Clause> clause) override;
+
+    void handleRefType(Query& query, Ref& leftRef, Ref& rightRef);
+
 };

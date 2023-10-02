@@ -4,9 +4,9 @@
 #include "QPS/Clauses/SuchThatClause.h"
 
 /**
- * The Strategy class of Uses in SuchThatClause
+ * The Strategy class of ModifiesS in SuchThatClause
  */
-class UsesSuchThatStrategy : public SuchThatStrategy {
+class ModifiesSSuchThatStrategy : public SuchThatStrategy {
 public:
     Result evaluateSynSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
 

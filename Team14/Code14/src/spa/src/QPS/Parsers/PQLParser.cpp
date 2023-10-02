@@ -9,7 +9,6 @@
 #include "SemanticValHandlers/StmtrefStmtrefHandler.h"
 #include "SemanticValHandlers/StmtrefEntrefHandler.h"
 #include "SemanticValHandlers/EntrefExprSpecHandler.h"
-#include "QPS/QPSUtil.h"
 #include "QPS/Exceptions/SyntaxException.h"
 #include "QPS/Exceptions/SemanticException.h"
 #include "QPS/Parsers/SemanticValHandlers/EntrefEntrefHandler.h"
