@@ -8,7 +8,7 @@
  */
 class StatementStore : public EntityStore<Statement> {
 public:
-    /**
+    /**protected:
      * @brief Construct a new StatementStore object
      * @return A new StatementStore object
      */

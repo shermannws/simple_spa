@@ -13,6 +13,7 @@
 #include "PKB/EntityStores/StatementStore.h"
 #include "Commons/Entities/Variable.h"
 #include "PKB/EntityStores/VariableStore.h"
+#include "PKB/Relationships/CallsRelationship.h"
 
 template std::vector<Entity> ManagerUtils::getEntitiesFromRelationshipStore<FollowsRelationship>(std::shared_ptr<RelationshipStore<FollowsRelationship>> store, std::function<bool(FollowsRelationship&)> matcher, std::function<Entity(FollowsRelationship&)> getter);
 
@@ -42,3 +43,6 @@ template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Statement>
 
 template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Variable>(std::shared_ptr<EntityStore<Variable>> store, std::function<bool(Variable&)> matcher, std::function<Entity(Variable&)> getter);
 
+template std::vector<Entity> ManagerUtils::getEntitiesFromRelationshipStore<CallsRelationship>(std::shared_ptr<RelationshipStore<CallsRelationship>> store, std::function<bool(CallsRelationship&)> matcher, std::function<Entity(CallsRelationship&)> getter);
+
+template std::vector<std::vector<Entity>> ManagerUtils::getEntityPairsFromRelationshipStore<CallsRelationship>(std::shared_ptr<RelationshipStore<CallsRelationship>> store, std::function<bool(CallsRelationship&)> matcher, std::function<std::vector<Entity>(CallsRelationship&)> getter);
