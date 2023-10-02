@@ -19,7 +19,7 @@ public:
      * @param node WhileNode to be visited
      * @param parents Parents of the WhileNode
      */
-    virtual void visitWhileNode(WhileNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
+    virtual void visitWhileNode(WhileNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };
 
 /**
@@ -61,7 +61,7 @@ public:
      */
     std::shared_ptr<StatementListNode> getStatementList();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 
