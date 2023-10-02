@@ -2,7 +2,9 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 
-Result FollowsStarSuchThatStrategy::evaluateSynSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+FollowsStarSuchThatStrategy::FollowsStarSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader) : SuchThatStrategy(std::move(pkbReader)) {}
+
+Result FollowsStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     if (leftRef == rightRef) {
         res.setBoolResult(false);
@@ -19,7 +21,7 @@ Result FollowsStarSuchThatStrategy::evaluateSynSyn(std::shared_ptr<PkbReader> pk
     return res;
 }
 
-Result FollowsStarSuchThatStrategy::evaluateSynInt(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result FollowsStarSuchThatStrategy::evaluateSynInt(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
@@ -32,7 +34,7 @@ Result FollowsStarSuchThatStrategy::evaluateSynInt(std::shared_ptr<PkbReader> pk
     return res;
 }
 
-Result FollowsStarSuchThatStrategy::evaluateSynWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result FollowsStarSuchThatStrategy::evaluateSynWild(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
@@ -43,7 +45,7 @@ Result FollowsStarSuchThatStrategy::evaluateSynWild(std::shared_ptr<PkbReader> p
     return res;
 }
 
-Result FollowsStarSuchThatStrategy::evaluateIntSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result FollowsStarSuchThatStrategy::evaluateIntSyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     auto rightEntityType = rightRef.getEntityType();
@@ -56,7 +58,7 @@ Result FollowsStarSuchThatStrategy::evaluateIntSyn(std::shared_ptr<PkbReader> pk
     return res;
 }
 
-Result FollowsStarSuchThatStrategy::evaluateWildSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result FollowsStarSuchThatStrategy::evaluateWildSyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto rightEntityType = rightRef.getEntityType();
     auto rightSyn = rightRef.getRep();
@@ -67,7 +69,7 @@ Result FollowsStarSuchThatStrategy::evaluateWildSyn(std::shared_ptr<PkbReader> p
     return res;
 }
 
-Result FollowsStarSuchThatStrategy::evaluateIntWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result FollowsStarSuchThatStrategy::evaluateIntWild(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
@@ -75,7 +77,7 @@ Result FollowsStarSuchThatStrategy::evaluateIntWild(std::shared_ptr<PkbReader> p
     return res;
 }
 
-Result FollowsStarSuchThatStrategy::evaluateWildInt(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result FollowsStarSuchThatStrategy::evaluateWildInt(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto rightRep = rightRef.getRep();
     Statement s = Statement(stoi(rightRep), StatementType::Stmt);
@@ -83,7 +85,7 @@ Result FollowsStarSuchThatStrategy::evaluateWildInt(std::shared_ptr<PkbReader> p
     return res;
 }
 
-Result FollowsStarSuchThatStrategy::evaluateIntInt(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result FollowsStarSuchThatStrategy::evaluateIntInt(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     auto rightRep = rightRef.getRep();
@@ -93,7 +95,7 @@ Result FollowsStarSuchThatStrategy::evaluateIntInt(std::shared_ptr<PkbReader> pk
     return res;
 }
 
-Result FollowsStarSuchThatStrategy::evaluateWildWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result FollowsStarSuchThatStrategy::evaluateWildWild(Ref &leftRef, Ref &rightRef) const {
     Result res;
     res.setBoolResult(pkbReader->hasFollowsStar());
     return res;

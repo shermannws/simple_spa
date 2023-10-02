@@ -5,16 +5,17 @@
 
 class UsesPSuchThatStrategy : public SuchThatStrategy {
 public:
-    Result evaluateSynSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    explicit UsesPSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader);
+    Result evaluateSynSyn(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateSynIdent(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateSynIdent(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateSynWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateSynWild(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateIdentSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateIdentSyn(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateIdentIdent(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateIdentIdent(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateIdentWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateIdentWild(Ref &leftRef, Ref &rightRef) const override;
 };
 

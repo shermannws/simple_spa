@@ -1,6 +1,6 @@
 #include "AssignPatternStrategy.h"
 
-Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const {
+Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause) const {
     std::shared_ptr<PatternClause> patternClause = std::dynamic_pointer_cast<PatternClause>(clause);
     Ref firstArg = patternClause->getFirstParam();
     ExpressionSpec secondArg = patternClause->getSecondParam();

@@ -8,15 +8,16 @@
  */
 class ModifiesSSuchThatStrategy : public SuchThatStrategy {
 public:
-    Result evaluateSynSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    explicit ModifiesSSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader);
+    Result evaluateSynSyn(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateSynIdent(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateSynIdent(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateSynWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateSynWild(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateIntSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateIntSyn(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateIntIdent(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateIntIdent(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateIntWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateIntWild(Ref &leftRef, Ref &rightRef) const override;
 };

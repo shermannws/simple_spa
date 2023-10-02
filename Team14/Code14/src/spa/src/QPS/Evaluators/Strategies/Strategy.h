@@ -23,20 +23,10 @@ protected:
     };
 public:
     /**
-     * @brief The constructor of Strategy
-     */
-    Strategy() = default;
-
-    /**
-     * @brief The destructor of Strategy
-     */
-    virtual ~Strategy() = default;
-
-    /**
      * @brief Evaluates the clause using the appropriate pkbReader method
      * @param clause The shared pointer of the Clause to be evaluated
      * @param pkbReader The pkbReader of which the methods are to be called
      * @return The result of the clause evaluation
      */
-    virtual Result evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const = 0;
+    virtual Result evaluateClause(std::shared_ptr<Clause> clause) const = 0;
 };

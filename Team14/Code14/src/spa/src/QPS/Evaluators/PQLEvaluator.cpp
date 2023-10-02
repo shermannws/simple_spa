@@ -93,28 +93,28 @@ Result PQLEvaluator::evaluate(Query& query) {
 
 void PQLEvaluator::evaluateSuchThat(const std::shared_ptr<SuchThatClause> clause, Result& result) {
     if (clause->getType() == ClauseType::Uses && clause->getFirstParam().isStmtRef()) {
-        clauseHandler->setStrategy(std::make_shared<UsesSSuchThatStrategy>(UsesSSuchThatStrategy()));
+        clauseHandler->setStrategy(std::make_shared<UsesSSuchThatStrategy>(UsesSSuchThatStrategy(pkbReader)));
     } else if (clause->getType() == ClauseType::Uses && clause->getFirstParam().isEntRef()) {
-        clauseHandler->setStrategy(std::make_shared<UsesPSuchThatStrategy>(UsesPSuchThatStrategy()));
+        clauseHandler->setStrategy(std::make_shared<UsesPSuchThatStrategy>(UsesPSuchThatStrategy(pkbReader)));
     } else if (clause->getType() == ClauseType::Modifies && clause->getFirstParam().isStmtRef()) {
-        clauseHandler->setStrategy(std::make_shared<ModifiesSSuchThatStrategy>(ModifiesSSuchThatStrategy()));
+        clauseHandler->setStrategy(std::make_shared<ModifiesSSuchThatStrategy>(ModifiesSSuchThatStrategy(pkbReader)));
     } else if (clause->getType() == ClauseType::Modifies && clause->getFirstParam().isEntRef()) {
-        clauseHandler->setStrategy(std::make_shared<ModifiesPSuchThatStrategy>(ModifiesPSuchThatStrategy()));
+        clauseHandler->setStrategy(std::make_shared<ModifiesPSuchThatStrategy>(ModifiesPSuchThatStrategy(pkbReader)));
     } else if (clause->getType() == ClauseType::Follows) {
-        clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy()));
+        clauseHandler->setStrategy(std::make_shared<FollowsSuchThatStrategy>(FollowsSuchThatStrategy(pkbReader)));
     } else if (clause->getType() == ClauseType::FollowsStar) {
-        clauseHandler->setStrategy(std::make_shared<FollowsStarSuchThatStrategy>(FollowsStarSuchThatStrategy()));
+        clauseHandler->setStrategy(std::make_shared<FollowsStarSuchThatStrategy>(FollowsStarSuchThatStrategy(pkbReader)));
     } else if (clause->getType() == ClauseType::Parent) {
-        clauseHandler->setStrategy(std::make_shared<ParentSuchThatStrategy>(ParentSuchThatStrategy()));
+        clauseHandler->setStrategy(std::make_shared<ParentSuchThatStrategy>(ParentSuchThatStrategy(pkbReader)));
     } else if (clause->getType() == ClauseType::ParentStar) {
-        clauseHandler->setStrategy(std::make_shared<ParentStarSuchThatStrategy>(ParentStarSuchThatStrategy()));
+        clauseHandler->setStrategy(std::make_shared<ParentStarSuchThatStrategy>(ParentStarSuchThatStrategy(pkbReader)));
     }
 
     clauseHandler->executeClause(clause, result);
 }
 
 void PQLEvaluator::evaluatePattern(const std::shared_ptr<PatternClause> clause, Result& result) {
-    clauseHandler->setStrategy(std::make_shared<AssignPatternStrategy>(AssignPatternStrategy()));
+    clauseHandler->setStrategy(std::make_shared<AssignPatternStrategy>(AssignPatternStrategy(pkbReader)));
     clauseHandler-> executeClause(clause, result);
 }
 

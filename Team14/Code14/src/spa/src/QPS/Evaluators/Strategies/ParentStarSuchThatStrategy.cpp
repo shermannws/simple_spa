@@ -2,7 +2,10 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 
-Result ParentStarSuchThatStrategy::evaluateSynSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+
+ParentStarSuchThatStrategy::ParentStarSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader) : SuchThatStrategy(std::move(pkbReader)) {}
+
+Result ParentStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     if (leftRef == rightRef) {
         res.setBoolResult(false);
@@ -19,7 +22,7 @@ Result ParentStarSuchThatStrategy::evaluateSynSyn(std::shared_ptr<PkbReader> pkb
     return res;
 }
 
-Result ParentStarSuchThatStrategy::evaluateSynInt(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentStarSuchThatStrategy::evaluateSynInt(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
@@ -32,7 +35,7 @@ Result ParentStarSuchThatStrategy::evaluateSynInt(std::shared_ptr<PkbReader> pkb
     return res;
 }
 
-Result ParentStarSuchThatStrategy::evaluateSynWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentStarSuchThatStrategy::evaluateSynWild(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
@@ -43,7 +46,7 @@ Result ParentStarSuchThatStrategy::evaluateSynWild(std::shared_ptr<PkbReader> pk
     return res;
 }
 
-Result ParentStarSuchThatStrategy::evaluateIntSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentStarSuchThatStrategy::evaluateIntSyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     auto rightEntityType = rightRef.getEntityType();
@@ -56,7 +59,7 @@ Result ParentStarSuchThatStrategy::evaluateIntSyn(std::shared_ptr<PkbReader> pkb
     return res;
 }
 
-Result ParentStarSuchThatStrategy::evaluateWildSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentStarSuchThatStrategy::evaluateWildSyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto rightEntityType = rightRef.getEntityType();
     auto rightSyn = rightRef.getRep();
@@ -67,7 +70,7 @@ Result ParentStarSuchThatStrategy::evaluateWildSyn(std::shared_ptr<PkbReader> pk
     return res;
 }
 
-Result ParentStarSuchThatStrategy::evaluateIntWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentStarSuchThatStrategy::evaluateIntWild(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
@@ -75,7 +78,7 @@ Result ParentStarSuchThatStrategy::evaluateIntWild(std::shared_ptr<PkbReader> pk
     return res;
 }
 
-Result ParentStarSuchThatStrategy::evaluateWildInt(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentStarSuchThatStrategy::evaluateWildInt(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto rightRep = rightRef.getRep();
     Statement s = Statement(stoi(rightRep), StatementType::Stmt);
@@ -83,7 +86,7 @@ Result ParentStarSuchThatStrategy::evaluateWildInt(std::shared_ptr<PkbReader> pk
     return res;
 }
 
-Result ParentStarSuchThatStrategy::evaluateIntInt(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentStarSuchThatStrategy::evaluateIntInt(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     auto rightRep = rightRef.getRep();
@@ -93,7 +96,7 @@ Result ParentStarSuchThatStrategy::evaluateIntInt(std::shared_ptr<PkbReader> pkb
     return res;
 }
 
-Result ParentStarSuchThatStrategy::evaluateWildWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentStarSuchThatStrategy::evaluateWildWild(Ref &leftRef, Ref &rightRef) const {
     Result res;
     res.setBoolResult(pkbReader->hasParentStar());
     return res;

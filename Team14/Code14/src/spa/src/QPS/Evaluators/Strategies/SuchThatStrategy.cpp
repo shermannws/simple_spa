@@ -1,7 +1,11 @@
 #include "SuchThatStrategy.h"
+
+#include <utility>
 #include "QPS/Clauses/SuchThatClause.h"
 
-Result SuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const {
+SuchThatStrategy::SuchThatStrategy(std::shared_ptr<PkbReader> pkbReader) : pkbReader(std::move(pkbReader)) {}
+
+Result SuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause) const {
     std::shared_ptr<SuchThatClause> suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
     Ref leftRef = suchThat->getFirstParam();
     Ref rightRef = suchThat->getSecondParam();
@@ -17,82 +21,83 @@ Result SuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, std::sha
 
     // TODO: make pkbReader a field of Strategies?
     if (isLeftSynonym && isRightSynonym) {
-        res = evaluateSynSyn(pkbReader, leftRef, rightRef);
+        res = evaluateSynSyn(leftRef, rightRef);
     } else if (isLeftSynonym && isRightInt) {
-        res = evaluateSynInt(pkbReader, leftRef, rightRef);
+        res = evaluateSynInt(leftRef, rightRef);
     } else if (isLeftSynonym && isRightWildcard) {
-        res = evaluateSynWild(pkbReader, leftRef, rightRef);
+        res = evaluateSynWild(leftRef, rightRef);
     } else if (isLeftSynonym && isRightIdent) {
-        res = evaluateSynIdent(pkbReader, leftRef, rightRef);
+        res = evaluateSynIdent(leftRef, rightRef);
     } else if (isLeftInt && isRightSynonym) {
-        res = evaluateIntSyn(pkbReader, leftRef, rightRef);
+        res = evaluateIntSyn(leftRef, rightRef);
     } else if (isLeftInt && isRightIdent) {
-        res = evaluateIntIdent(pkbReader, leftRef, rightRef);
+        res = evaluateIntIdent(leftRef, rightRef);
     } else if (isLeftInt && isRightWildcard) {
-        res = evaluateIntWild(pkbReader,leftRef, rightRef);
+        res = evaluateIntWild(leftRef, rightRef);
     } else if (isLeftInt && isRightInt) {
-        res = evaluateIntInt(pkbReader,leftRef, rightRef);
+        res = evaluateIntInt(leftRef, rightRef);
     } else if (isLeftWildcard && isRightInt) {
-        res = evaluateWildInt(pkbReader,leftRef, rightRef);
+        res = evaluateWildInt(leftRef, rightRef);
     } else if (isLeftWildcard && isRightSynonym) {
-        res = evaluateWildSyn(pkbReader,leftRef, rightRef);
+        res = evaluateWildSyn(leftRef, rightRef);
     } else if (isLeftWildcard && isRightWildcard) {
-        res = evaluateWildWild(pkbReader,leftRef, rightRef);
+        res = evaluateWildWild(leftRef, rightRef);
     } else if (isLeftIdent && isRightSynonym) {
-        res = evaluateIdentSyn(pkbReader, leftRef, rightRef);
+        res = evaluateIdentSyn(leftRef, rightRef);
     } else if (isLeftIdent && isRightIdent) {
-        res = evaluateIdentIdent(pkbReader, leftRef, rightRef);
+        res = evaluateIdentIdent(leftRef, rightRef);
     } else if (isLeftIdent && isRightWildcard) {
-        res = evaluateIdentWild(pkbReader, leftRef, rightRef);
+        res = evaluateIdentWild(leftRef, rightRef);
     }
 
     return res;
 }
 
-Result SuchThatStrategy::evaluateSynInt(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateSynInt(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
 
-Result SuchThatStrategy::evaluateIntWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateIntWild(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
 
-Result SuchThatStrategy::evaluateIntInt(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateIntInt(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
 
-Result SuchThatStrategy::evaluateIntSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateIntSyn(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
 
-Result SuchThatStrategy::evaluateWildSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateWildSyn(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
 
-Result SuchThatStrategy::evaluateWildInt(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateWildInt(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
 
-Result SuchThatStrategy::evaluateWildWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateWildWild(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
 
-Result SuchThatStrategy::evaluateIntIdent(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateIntIdent(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
 
-Result SuchThatStrategy::evaluateSynIdent(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateSynIdent(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
 
-Result SuchThatStrategy::evaluateIdentSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateIdentSyn(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
 
-Result SuchThatStrategy::evaluateIdentIdent(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateIdentIdent(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
 
-Result SuchThatStrategy::evaluateIdentWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result SuchThatStrategy::evaluateIdentWild(Ref &leftRef, Ref &rightRef) const {
     return {};
 }
+

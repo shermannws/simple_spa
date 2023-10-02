@@ -2,7 +2,9 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 
-Result ParentSuchThatStrategy::evaluateSynSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+ParentSuchThatStrategy::ParentSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader) : SuchThatStrategy(std::move(pkbReader)) {}
+
+Result ParentSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     if (leftRef == rightRef) {
         res.setBoolResult(false);
@@ -19,7 +21,7 @@ Result ParentSuchThatStrategy::evaluateSynSyn(std::shared_ptr<PkbReader> pkbRead
     return res;
 }
 
-Result ParentSuchThatStrategy::evaluateSynInt(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentSuchThatStrategy::evaluateSynInt(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
@@ -32,7 +34,7 @@ Result ParentSuchThatStrategy::evaluateSynInt(std::shared_ptr<PkbReader> pkbRead
     return res;
 }
 
-Result ParentSuchThatStrategy::evaluateSynWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentSuchThatStrategy::evaluateSynWild(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
@@ -43,7 +45,7 @@ Result ParentSuchThatStrategy::evaluateSynWild(std::shared_ptr<PkbReader> pkbRea
     return res;
 }
 
-Result ParentSuchThatStrategy::evaluateIntSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentSuchThatStrategy::evaluateIntSyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     auto rightEntityType = rightRef.getEntityType();
@@ -56,7 +58,7 @@ Result ParentSuchThatStrategy::evaluateIntSyn(std::shared_ptr<PkbReader> pkbRead
     return res;
 }
 
-Result ParentSuchThatStrategy::evaluateWildSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentSuchThatStrategy::evaluateWildSyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto rightEntityType = rightRef.getEntityType();
     auto rightSyn = rightRef.getRep();
@@ -67,7 +69,7 @@ Result ParentSuchThatStrategy::evaluateWildSyn(std::shared_ptr<PkbReader> pkbRea
     return res;
 }
 
-Result ParentSuchThatStrategy::evaluateIntWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentSuchThatStrategy::evaluateIntWild(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
@@ -75,7 +77,7 @@ Result ParentSuchThatStrategy::evaluateIntWild(std::shared_ptr<PkbReader> pkbRea
     return res;
 }
 
-Result ParentSuchThatStrategy::evaluateWildInt(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentSuchThatStrategy::evaluateWildInt(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto rightRep = rightRef.getRep();
     Statement s = Statement(stoi(rightRep), StatementType::Stmt);
@@ -83,7 +85,7 @@ Result ParentSuchThatStrategy::evaluateWildInt(std::shared_ptr<PkbReader> pkbRea
     return res;
 }
 
-Result ParentSuchThatStrategy::evaluateIntInt(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentSuchThatStrategy::evaluateIntInt(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     auto rightRep = rightRef.getRep();
@@ -93,7 +95,7 @@ Result ParentSuchThatStrategy::evaluateIntInt(std::shared_ptr<PkbReader> pkbRead
     return res;
 }
 
-Result ParentSuchThatStrategy::evaluateWildWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result ParentSuchThatStrategy::evaluateWildWild(Ref &leftRef, Ref &rightRef) const {
     Result res;
     res.setBoolResult(pkbReader->hasParent());
     return res;

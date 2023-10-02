@@ -8,21 +8,22 @@
  */
 class FollowsSuchThatStrategy : public SuchThatStrategy {
 public:
-    Result evaluateSynSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    explicit FollowsSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader);
+    Result evaluateSynSyn(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateSynInt(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateSynInt(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateSynWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateSynWild(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateIntSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateIntSyn(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateWildSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateWildSyn(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateIntWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateIntWild(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateWildInt(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateWildInt(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateIntInt(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateIntInt(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateWildWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateWildWild(Ref &leftRef, Ref &rightRef) const override;
 };

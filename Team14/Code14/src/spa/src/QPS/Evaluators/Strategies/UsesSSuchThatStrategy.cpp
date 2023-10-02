@@ -1,8 +1,9 @@
 #include "UsesSSuchThatStrategy.h"
 #include "Commons/Entities/Entity.h"
 
+UsesSSuchThatStrategy::UsesSSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader) : SuchThatStrategy(std::move(pkbReader)) {}
 
-Result UsesSSuchThatStrategy::evaluateSynSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result UsesSSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
@@ -14,7 +15,7 @@ Result UsesSSuchThatStrategy::evaluateSynSyn(std::shared_ptr<PkbReader> pkbReade
     return res;
 }
 
-Result UsesSSuchThatStrategy::evaluateSynIdent(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result UsesSSuchThatStrategy::evaluateSynIdent(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
@@ -27,7 +28,7 @@ Result UsesSSuchThatStrategy::evaluateSynIdent(std::shared_ptr<PkbReader> pkbRea
     return res;
 }
 
-Result UsesSSuchThatStrategy::evaluateSynWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result UsesSSuchThatStrategy::evaluateSynWild(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
@@ -38,7 +39,7 @@ Result UsesSSuchThatStrategy::evaluateSynWild(std::shared_ptr<PkbReader> pkbRead
     return res;
 }
 
-Result UsesSSuchThatStrategy::evaluateIntSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result UsesSSuchThatStrategy::evaluateIntSyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     auto rightSyn = rightRef.getRep();
@@ -50,7 +51,7 @@ Result UsesSSuchThatStrategy::evaluateIntSyn(std::shared_ptr<PkbReader> pkbReade
     return res;
 }
 
-Result UsesSSuchThatStrategy::evaluateIntIdent(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+Result UsesSSuchThatStrategy::evaluateIntIdent(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     auto rightRep = rightRef.getRep();
@@ -60,7 +61,7 @@ Result UsesSSuchThatStrategy::evaluateIntIdent(std::shared_ptr<PkbReader> pkbRea
     return res;
 }
 
-Result UsesSSuchThatStrategy::evaluateIntWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+Result UsesSSuchThatStrategy::evaluateIntWild(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     Statement s = Statement(stoi(leftRep), StatementType::Stmt);
