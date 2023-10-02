@@ -17,6 +17,7 @@ public:
      * Visits the ReadNode for design extraction.
      * @param node ReadNode to be visited
      * @param parents Parents of the ReadNode
+     * @param proc The procedure that the ReadNode is contained within
      */
     virtual void visitReadNode(ReadNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

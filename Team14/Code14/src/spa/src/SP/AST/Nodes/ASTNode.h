@@ -15,6 +15,7 @@ public:
      * Accepts the DesignExtractorVisitor and calls the visit method for this ASTNode.
      * @param visitor A design extractor visitor which implements the DesignExtractorVisitor interface
      * @param parents The parent nodes of this ASTNode
+     * @param proc The procedure node which this ASTNode belongs to
      */
     virtual void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) = 0;
 

@@ -14,6 +14,7 @@ public:
      * Visits the ConstantNode for design extraction.
      * @param node ConstantNode to be visited
      * @param parents Parents of the ConstantNode
+     * @param proc The procedure that the ConstantNode is in
      */
     virtual void visitConstantNode(ConstantNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

@@ -17,6 +17,7 @@ public:
      * Visits the PrintNode for design extraction.
      * @param node PrintNode to be visited
      * @param parents Parents of the PrintNode
+     * @param proc The procedure that the PrintNode is in
      */
     virtual void visitPrintNode(PrintNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

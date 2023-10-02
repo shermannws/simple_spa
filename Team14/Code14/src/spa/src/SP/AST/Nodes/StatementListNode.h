@@ -16,6 +16,7 @@ public:
      * Visits the StatementListNode for design extraction.
      * @param node StatementListNode to be visited
      * @param parents Parents of the StatementListNode
+     * @param proc Procedure containing the StatementListNode
      */
     virtual void visitStatementListNode(StatementListNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

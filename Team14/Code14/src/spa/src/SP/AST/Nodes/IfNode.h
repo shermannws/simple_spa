@@ -18,6 +18,7 @@ public:
      * Visits the IfNode for design extraction.
      * @param node IfNode to be visited
      * @param parents Parents of the IfNode
+     * @param proc The procedure that the IfNode is in
      */
     virtual void visitIfNode(IfNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

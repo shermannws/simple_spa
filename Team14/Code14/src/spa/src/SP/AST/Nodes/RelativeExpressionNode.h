@@ -18,6 +18,7 @@ public:
      * Visits the RelativeExpressionNode for design extraction.
      * @param node RelativeExpressionNode to be visited
      * @param parents Parents of the RelativeExpressionNode
+     * @param proc Procedure containing the RelativeExpressionNode
      */
     virtual void visitRelativeExpressionNode(RelativeExpressionNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

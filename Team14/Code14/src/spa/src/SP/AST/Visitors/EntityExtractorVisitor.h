@@ -35,6 +35,7 @@ public:
      * Visits a ProcedureNode and adds Procedure to the PKB.
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
+     * @param proc The procedure node which the node is in
      */
     void visitProcedureNode(ProcedureNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const override;
 
@@ -42,6 +43,7 @@ public:
      * Visits an AssignNode and adds the assignment to the PKB and stores the assignment pattern to support pattern query.
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
+     * @param proc The procedure node which the node is in
      */
     void visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const override;
 
@@ -49,6 +51,7 @@ public:
      * Visits a ReadNode and add Read statement into PKB.
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
+     * @param proc The procedure node which the node is in
      */
     void visitReadNode(ReadNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const override;
 
@@ -56,6 +59,7 @@ public:
      * Visits a PrintNode and add Print statement into PKB.
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
+     * @param proc The procedure node which the node is in
      */
     void visitPrintNode(PrintNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const override;
 
@@ -63,6 +67,7 @@ public:
      * Visits a VariableNode and add Variable into PKB.
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
+     * @param proc The procedure node which the node is in
      */
     void visitVariableNode(VariableNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const override;
 
@@ -70,6 +75,7 @@ public:
      * Visits a ConstantNode and add Constant into PKB.
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
+     * @param proc The procedure node which the node is in
      */
     void visitConstantNode(ConstantNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const override;
 
@@ -77,6 +83,7 @@ public:
      * Visits a CallNode and add Call statement into PKB.
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
+     * @param proc The procedure node which the node is in
      */
     void visitCallNode(CallNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const override;
 
@@ -84,6 +91,7 @@ public:
      * Visits an IfNode and add If statement into PKB.
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
+     * @param proc The procedure node which the node is in
      */
     void visitIfNode(IfNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const override;
 
@@ -91,6 +99,7 @@ public:
      * Visits a WhileNode and add While statement into PKB.
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
+     * @param proc The procedure node which the node is in
      */
     void visitWhileNode(WhileNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const override;
 };

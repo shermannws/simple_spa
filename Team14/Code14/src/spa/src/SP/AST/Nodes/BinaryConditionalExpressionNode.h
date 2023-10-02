@@ -17,6 +17,7 @@ public:
      * Visits the BinaryConditionalExpressionNode for design extraction.
      * @param node BinaryConditionalExpressionNode to be visited
      * @param parents Parents of the BinaryConditionalExpressionNode
+     * @param proc Procedure containing the BinaryConditionalExpressionNode
      */
     virtual void visitBinaryConditionalExpressionNode(BinaryConditionalExpressionNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

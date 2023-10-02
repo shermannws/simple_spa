@@ -16,6 +16,7 @@ public:
      * Visits the UnaryConditionalExpressionNode for design extraction.
      * @param node UnaryConditionalExpressionNode to be visited
      * @param parents Parents of the UnaryConditionalExpressionNode
+     * @param proc Procedure containing the UnaryConditionalExpressionNode
      */
     virtual void visitUnaryConditionalExpressionNode(UnaryConditionalExpressionNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

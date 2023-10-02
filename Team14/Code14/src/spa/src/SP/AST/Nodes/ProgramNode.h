@@ -16,6 +16,7 @@ public:
      * Visits the ProgramNode for design extraction.
      * @param node ProgramNode to be visited
      * @param parents Parents of the ProgramNode
+     * @param proc nullptr as ProgramNNode is not contained within a procedure
      */
     virtual void visitProgramNode(ProgramNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

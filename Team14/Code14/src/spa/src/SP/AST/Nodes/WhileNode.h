@@ -18,6 +18,7 @@ public:
      * Visits the WhileNode for design extraction.
      * @param node WhileNode to be visited
      * @param parents Parents of the WhileNode
+     * @param proc Procedure containing the WhileNode
      */
     virtual void visitWhileNode(WhileNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

@@ -18,6 +18,7 @@ public:
      * Visits the AssignNode for design extraction.
      * @param node AssignNode to be visited
      * @param parents Parents of the AssignNode
+     * @param proc Procedure containing the AssignNode
      */
     virtual void visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

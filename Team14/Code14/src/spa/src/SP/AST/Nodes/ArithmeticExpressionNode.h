@@ -17,6 +17,7 @@ public:
      * Visits the ArithmeticExpressionNode for design extraction.
      * @param node ArithmeticExpressionNode to be visited
      * @param parents Parents of the ArithmeticExpressionNode
+     * @param proc Procedure containing the ArithmeticExpressionNode
      */
     virtual void visitArithmeticExpressionNode(ArithmeticExpressionNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };

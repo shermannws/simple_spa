@@ -16,6 +16,7 @@ public:
      * Visits the CallNode for design extraction.
      * @param node CallNode to be visited
      * @param parents Parents of the CallNode
+     * @param proc Procedure containing the CallNode
      */
     virtual void visitCallNode(CallNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };
