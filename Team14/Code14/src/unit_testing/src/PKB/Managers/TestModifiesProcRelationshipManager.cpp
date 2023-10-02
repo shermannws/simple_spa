@@ -16,6 +16,7 @@ TEST_CASE("Test Modifies Procedure-Variable Relationship Retrieval") {
     Procedure procedure2 = Procedure("proc2");
     Procedure procedure3 = Procedure("proc3");
     Procedure procedure4 = Procedure("proc4");
+    Procedure procedure5 = Procedure("proc5");
 
     modifiesProcRelationshipManager.storeModifiesProcRelationship(std::make_shared<Procedure>(procedure1), std::make_shared<Variable>(variableX));
     modifiesProcRelationshipManager.storeModifiesProcRelationship(std::make_shared<Procedure>(procedure2), std::make_shared<Variable>(variableY));
@@ -26,8 +27,8 @@ TEST_CASE("Test Modifies Procedure-Variable Relationship Retrieval") {
 
     REQUIRE(modifiesProcRelationshipManager.getModifiesProcPair().size() == 6);
 
-    REQUIRE(modifiesProcRelationshipManager.getModifiesProcIdent(Variable("x")).size() == 2);
-    auto v = modifiesProcRelationshipManager.getModifiesProcIdent(Variable("x"));
+    REQUIRE(modifiesProcRelationshipManager.getModifiesProcIdent(variableX).size() == 2);
+    auto v = modifiesProcRelationshipManager.getModifiesProcIdent(variableX);
     REQUIRE(find(v.begin(), v.end(), procedure1) != v.end());
     REQUIRE(find(v.begin(), v.end(), procedure4) != v.end());
 
@@ -39,32 +40,32 @@ TEST_CASE("Test Modifies Procedure-Variable Relationship Retrieval") {
     REQUIRE(find(v.begin(), v.end(), procedure3) != v.end());
     REQUIRE(find(v.begin(), v.end(), procedure4) != v.end());
 
-    REQUIRE(modifiesProcRelationshipManager.getModifiesProcVar(Procedure("proc1")).size() == 1);
-    v = modifiesProcRelationshipManager.getModifiesProcVar(Procedure("proc1"));
+    REQUIRE(modifiesProcRelationshipManager.getModifiesProcVar(procedure1).size() == 1);
+    v = modifiesProcRelationshipManager.getModifiesProcVar(procedure1);
     REQUIRE(find(v.begin(), v.end(), variableX) != v.end());
-    REQUIRE(modifiesProcRelationshipManager.getModifiesProcVar(Procedure("proc4")).size() == 3);
-    v = modifiesProcRelationshipManager.getModifiesProcVar(Procedure("proc4"));
+    REQUIRE(modifiesProcRelationshipManager.getModifiesProcVar(procedure4).size() == 3);
+    v = modifiesProcRelationshipManager.getModifiesProcVar(procedure4);
     REQUIRE(find(v.begin(), v.end(), variableX) != v.end());
     REQUIRE(find(v.begin(), v.end(), variableY) != v.end());
     REQUIRE(find(v.begin(), v.end(), variableZ) != v.end());
 
     
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc1"), Variable("x")) == true);
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc1"), Variable("y")) == false);
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc1"), Variable("z")) == false);
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc2"), Variable("x")) == false);
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc2"), Variable("y")) == true);
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc2"), Variable("z")) == false);
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc3"), Variable("x")) == false);
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc3"), Variable("y")) == false);
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc3"), Variable("z")) == true);
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc4"), Variable("x")) == true);
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc4"), Variable("y")) == true);
-    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(Procedure("proc4"), Variable("z")) == true);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure1, variableX) == true);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure1, variableY) == false);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure1, variableZ) == false);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure2, variableX) == false);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure2, variableY) == true);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure2, variableZ) == false);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure3, variableX) == false);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure3, variableY) == false);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure3, variableZ) == true);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure4, variableX) == true);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure4, variableY) == true);
+    REQUIRE(modifiesProcRelationshipManager.isProcModifiesVar(procedure4, variableZ) == true);
 
-    REQUIRE(modifiesProcRelationshipManager.hasProcModifies(Procedure("proc1")) == true);
-    REQUIRE(modifiesProcRelationshipManager.hasProcModifies(Procedure("proc2")) == true);
-    REQUIRE(modifiesProcRelationshipManager.hasProcModifies(Procedure("proc3")) == true);
-    REQUIRE(modifiesProcRelationshipManager.hasProcModifies(Procedure("proc4")) == true);
-    REQUIRE(modifiesProcRelationshipManager.hasProcModifies(Procedure("proc5")) == false);
+    REQUIRE(modifiesProcRelationshipManager.hasProcModifies(procedure1) == true);
+    REQUIRE(modifiesProcRelationshipManager.hasProcModifies(procedure2) == true);
+    REQUIRE(modifiesProcRelationshipManager.hasProcModifies(procedure3) == true);
+    REQUIRE(modifiesProcRelationshipManager.hasProcModifies(procedure4) == true);
+    REQUIRE(modifiesProcRelationshipManager.hasProcModifies(procedure5) == false);
 }
