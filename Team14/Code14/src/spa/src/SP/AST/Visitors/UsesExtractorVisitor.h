@@ -16,9 +16,15 @@ class UsesExtractorVisitor : public DesignExtractorVisitor,
 {
 private:
     /*!
-     * func is a lambda function used to abstract the call to PKB to add Uses relationship.
+     * funcStmt is a lambda function used to abstract the call to PKB to add Uses relationship.
      */
-    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func;
+    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> funcStmt;
+
+    /*!
+     * funcProc is a lambda function used to abstract the call to PKB to add Uses (proc-var) relationship.
+     */
+    std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> funcProc;
+
 public:
     /*!
      * Constructor for UsesExtractorVisitor.

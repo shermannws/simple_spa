@@ -12,9 +12,15 @@ class ModifiesExtractorVisitor : public DesignExtractorVisitor,
 {
 private:
     /*!
-     * func is a lambda function used to abstract the call to PKB to add Modifies relationship.
+     * funcStmt is a lambda function used to abstract the call to PKB to add Modifies (stmt-var) relationship.
      */
-    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func;
+    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> funcStmt;
+
+    /*!
+     * funcProc is a lambda function used to abstract the call to PKB to add Modifies (proc-var) relationship.
+     */
+    std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> funcProc;
+
 public:
     /*!
      * Constructor for ModifiesExtractorVisitor.
