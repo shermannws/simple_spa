@@ -10,14 +10,7 @@ class ModifiesSSuchThatStrategy : public SuchThatStrategy {
 public:
     explicit ModifiesSSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader);
     Result evaluateSynSyn(Ref &leftRef, Ref &rightRef) const override;
-
-    Result evaluateSynIdent(Ref &leftRef, Ref &rightRef) const override;
-
-    Result evaluateSynWild(Ref &leftRef, Ref &rightRef) const override;
-
-    Result evaluateIntSyn(Ref &leftRef, Ref &rightRef) const override;
-
-    Result evaluateIntIdent(Ref &leftRef, Ref &rightRef) const override;
-
-    Result evaluateIntWild(Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateSynAny(Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateAnySyn(Ref &leftRef, Ref &rightRef) const override;
+    Result evaluateBoolean(Ref &leftRef, Ref &rightRef) const override;
 };

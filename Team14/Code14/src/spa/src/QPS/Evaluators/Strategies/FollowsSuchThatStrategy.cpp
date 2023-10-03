@@ -21,83 +21,56 @@ Result FollowsSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) cons
     return res;
 }
 
-Result FollowsSuchThatStrategy::evaluateSynInt(Ref &leftRef, Ref &rightRef) const {
+Result FollowsSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
-    auto rightRep = rightRef.getRep();
-    Statement s = Statement(stoi(rightRep), StatementType::Stmt);
-    res.setTuples(pkbReader->getFollowsTypeStmt(stmtMap.at(leftEntityType), s));
-
+    if (rightRef.isRootType(RootType::Integer)) {
+        auto rightRep = rightRef.getRep();
+        Statement s = Statement(stoi(rightRep), StatementType::Stmt);
+        res.setTuples(pkbReader->getFollowsTypeStmt(stmtMap.at(leftEntityType), s));
+    } else {
+        res.setTuples(pkbReader->getFollowsTypeWildcard(stmtMap.at(leftEntityType)));
+    }
     std::unordered_map<std::string, int> indices{{leftSyn, 0}};
     res.setSynIndices(indices);
     return res;
 }
 
-Result FollowsSuchThatStrategy::evaluateSynWild(Ref &leftRef, Ref &rightRef) const {
+Result FollowsSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
-    auto leftEntityType = leftRef.getEntityType();
-    auto leftSyn = leftRef.getRep();
-    res.setTuples(pkbReader->getFollowsTypeWildcard(stmtMap.at(leftEntityType)));
-
-    std::unordered_map<std::string, int> indices{{leftSyn, 0}};
-    res.setSynIndices(indices);
-    return res;
-}
-
-Result FollowsSuchThatStrategy::evaluateIntSyn(Ref &leftRef, Ref &rightRef) const {
-    Result res;
-    auto leftRep = leftRef.getRep();
     auto rightEntityType = rightRef.getEntityType();
     auto rightSyn = rightRef.getRep();
-    Statement s = Statement(stoi(leftRep), StatementType::Stmt);
-    res.setTuples(pkbReader->getFollowsStmtType(s, stmtMap.at(rightEntityType)));
-
+    if (leftRef.isRootType(RootType::Integer)) {
+        auto leftRep = leftRef.getRep();
+        Statement s = Statement(stoi(leftRep), StatementType::Stmt);
+        res.setTuples(pkbReader->getFollowsStmtType(s, stmtMap.at(rightEntityType)));
+    } else {
+        res.setTuples(pkbReader->getFollowsWildcardType(stmtMap.at(rightEntityType)));
+    }
     std::unordered_map<std::string, int> indices{{rightSyn, 0}};
     res.setSynIndices(indices);
     return res;
 }
 
-Result FollowsSuchThatStrategy::evaluateWildSyn(Ref &leftRef, Ref &rightRef) const {
+Result FollowsSuchThatStrategy::evaluateBoolean(Ref &leftRef, Ref &rightRef) const {
     Result res;
-    auto rightEntityType = rightRef.getEntityType();
-    auto rightSyn = rightRef.getRep();
-    res.setTuples(pkbReader->getFollowsWildcardType(stmtMap.at(rightEntityType)));
-
-    std::unordered_map<std::string, int> indices{{rightSyn, 0}};
-    res.setSynIndices(indices);
-    return res;
-}
-
-Result FollowsSuchThatStrategy::evaluateIntWild(Ref &leftRef, Ref &rightRef) const {
-    Result res;
-    auto leftRep = leftRef.getRep();
-    Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
-    res.setBoolResult(pkbReader->hasLatterStmt(s));
-    return res;
-}
-
-Result FollowsSuchThatStrategy::evaluateWildInt(Ref &leftRef, Ref &rightRef) const {
-    Result res;
-    auto rightRep = rightRef.getRep();
-    Statement s = Statement(stoi(rightRep), StatementType::Stmt);
-    res.setBoolResult(pkbReader->hasFormerStmt(s));
-    return res;
-}
-
-Result FollowsSuchThatStrategy::evaluateIntInt(Ref &leftRef, Ref &rightRef) const {
-    Result res;
+    bool isLeftInt = leftRef.isRootType(RootType::Integer);
+    bool isRightInt = rightRef.isRootType(RootType::Integer);
     auto leftRep = leftRef.getRep();
     auto rightRep = rightRef.getRep();
-    Statement s1 = Statement(stoi(leftRep), StatementType::Stmt);
-    Statement s2 = Statement(stoi(rightRep), StatementType::Stmt);
-    res.setBoolResult(pkbReader->isFollows(s1, s2));
+    if (isLeftInt && isRightInt) {
+        Statement s1 = Statement(stoi(leftRep), StatementType::Stmt);
+        Statement s2 = Statement(stoi(rightRep), StatementType::Stmt);
+        res.setBoolResult(pkbReader->isFollows(s1, s2));
+    } else if (isLeftInt) {
+        Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
+        res.setBoolResult(pkbReader->hasLatterStmt(s));
+    } else if (isRightInt) {
+        Statement s = Statement(stoi(rightRep), StatementType::Stmt);
+        res.setBoolResult(pkbReader->hasFormerStmt(s));
+    } else {
+        res.setBoolResult(pkbReader->hasFollows());
+    }
     return res;
 }
-
-Result FollowsSuchThatStrategy::evaluateWildWild(Ref &leftRef, Ref &rightRef) const {
-    Result res;
-    res.setBoolResult(pkbReader->hasFollows());
-    return res;
-}
-

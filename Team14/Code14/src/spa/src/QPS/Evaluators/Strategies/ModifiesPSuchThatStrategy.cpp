@@ -14,30 +14,22 @@ Result ModifiesPSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) co
     return res;
 }
 
-Result ModifiesPSuchThatStrategy::evaluateSynIdent(Ref &leftRef, Ref &rightRef) const {
+Result ModifiesPSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftSyn = leftRef.getRep();
-    auto rightRep = rightRef.getRep();
-    Variable v = Variable(rightRep);
-//    res.setTuples(pkbReader->getModifiesProcIdent(v));
-
+    if (rightRef.isRootType(RootType::Ident)) { // ident
+        auto rightRep = rightRef.getRep();
+        Variable v = Variable(rightRep);
+//        res.setTuples(pkbReader->getModifiesProcIdent(v));
+    } else { // wildcard
+//        res.setTuples(pkbReader->getModifiesProc());
+    }
     std::unordered_map<std::string, int> indices {{leftSyn, 0}};
     res.setSynIndices(indices);
     return res;
 }
 
-Result ModifiesPSuchThatStrategy::evaluateSynWild(Ref &leftRef, Ref &rightRef) const {
-    Result res;
-    auto leftEntityType = leftRef.getEntityType();
-    auto leftSyn = leftRef.getRep();
-//    res.setTuples(pkbReader->getModifiesProc());
-
-    std::unordered_map<std::string, int> indices{{leftSyn, 0}};
-    res.setSynIndices(indices);
-    return res;
-}
-
-Result ModifiesPSuchThatStrategy::evaluateIdentSyn(Ref &leftRef, Ref &rightRef) const {
+Result ModifiesPSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     auto rightSyn = rightRef.getRep();
@@ -49,20 +41,16 @@ Result ModifiesPSuchThatStrategy::evaluateIdentSyn(Ref &leftRef, Ref &rightRef) 
     return res;
 }
 
-Result ModifiesPSuchThatStrategy::evaluateIdentIdent(Ref &leftRef, Ref &rightRef) const {
-    Result res;
-    auto leftRep = leftRef.getRep();
-    auto rightRep = rightRef.getRep();
-    Procedure p = Procedure(leftRep);
-    Variable v = Variable(rightRep);
-//    res.setBoolResult(pkbReader->isProcModifiesVar(p, v));
-    return res;
-}
-
-Result ModifiesPSuchThatStrategy::evaluateIdentWild(Ref &leftRef, Ref &rightRef) const {
+Result ModifiesPSuchThatStrategy::evaluateBoolean(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     Procedure p = Procedure(leftRep);
-//    res.setBoolResult(pkbReader->hasModifies(p));
+    if (rightRef.isRootType(RootType::Ident)) {
+        auto rightRep = rightRef.getRep();
+        Variable v = Variable(rightRep);
+//        res.setBoolResult(pkbReader->isProcModifiesVar(p, v));
+    } else {
+//        res.setBoolResult(pkbReader->hasModifies(p));
+    }
     return res;
 }

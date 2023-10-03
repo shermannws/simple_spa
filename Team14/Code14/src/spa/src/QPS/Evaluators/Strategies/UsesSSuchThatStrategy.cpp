@@ -15,31 +15,23 @@ Result UsesSSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const 
     return res;
 }
 
-Result UsesSSuchThatStrategy::evaluateSynIdent(Ref &leftRef, Ref &rightRef) const {
+Result UsesSSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
-    auto rightRep = rightRef.getRep();
-    Variable v = Variable(rightRep);
-    res.setTuples(pkbReader->getUsesTypeIdent(stmtMap.at(leftEntityType), v));
-
+    if (rightRef.isRootType(RootType::Ident)) { // ident
+        auto rightRep = rightRef.getRep();
+        Variable v = Variable(rightRep);
+        res.setTuples(pkbReader->getUsesTypeIdent(stmtMap.at(leftEntityType), v));
+    } else { // wildcard
+        res.setTuples(pkbReader->getUsesStmt(stmtMap.at(leftEntityType)));
+    }
     std::unordered_map<std::string, int> indices {{leftSyn, 0}};
     res.setSynIndices(indices);
     return res;
 }
 
-Result UsesSSuchThatStrategy::evaluateSynWild(Ref &leftRef, Ref &rightRef) const {
-    Result res;
-    auto leftEntityType = leftRef.getEntityType();
-    auto leftSyn = leftRef.getRep();
-    res.setTuples(pkbReader->getUsesStmt(stmtMap.at(leftEntityType)));
-
-    std::unordered_map<std::string, int> indices{{leftSyn, 0}};
-    res.setSynIndices(indices);
-    return res;
-}
-
-Result UsesSSuchThatStrategy::evaluateIntSyn(Ref &leftRef, Ref &rightRef) const {
+Result UsesSSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     auto rightSyn = rightRef.getRep();
@@ -51,21 +43,16 @@ Result UsesSSuchThatStrategy::evaluateIntSyn(Ref &leftRef, Ref &rightRef) const 
     return res;
 }
 
-Result UsesSSuchThatStrategy::evaluateIntIdent(Ref &leftRef, Ref &rightRef) const {
-    Result res;
-    auto leftRep = leftRef.getRep();
-    auto rightRep = rightRef.getRep();
-    Statement s = Statement(stoi(leftRep), StatementType::Stmt);
-    Variable v = Variable(rightRep);
-    res.setBoolResult(pkbReader->isStmtUsesVar(s, v));
-    return res;
-}
-
-Result UsesSSuchThatStrategy::evaluateIntWild(Ref &leftRef, Ref &rightRef) const {
+Result UsesSSuchThatStrategy::evaluateBoolean(Ref &leftRef, Ref &rightRef) const {
     Result res;
     auto leftRep = leftRef.getRep();
     Statement s = Statement(stoi(leftRep), StatementType::Stmt);
-    res.setBoolResult(pkbReader->hasUses(s));
+    if (rightRef.isRootType(RootType::Ident)) {
+        auto rightRep = rightRef.getRep();
+        Variable v = Variable(rightRep);
+        res.setBoolResult(pkbReader->isStmtUsesVar(s, v));
+    } else {
+        res.setBoolResult(pkbReader->hasUses(s));
+    }
     return res;
 }
-
