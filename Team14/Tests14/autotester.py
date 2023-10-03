@@ -2,9 +2,14 @@ import os
 from collections import Counter
 from pathlib import Path
 
-# from dotenv import load_dotenv
-#
-# load_dotenv()
+if not os.getenv("AUTOTESTER_PATH"):
+    print("Loading .env file...")
+    from dotenv import load_dotenv
+    if not load_dotenv():
+        raise Exception("ERROR: Missing .env file")
+    print("Environment variables loaded successfully!")
+else:
+    print("Using pre-configured environment variables")
 
 MACOS = "posix"
 WINDOWS = "nt"
