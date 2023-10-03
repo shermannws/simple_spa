@@ -41,8 +41,8 @@ ComparisonOperatorType RelativeExpressionNode::translateComparisonOperatorType(s
     return operatorTypeMap[operatorTypeString];
 }
 
-void RelativeExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) {
+void RelativeExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) {
     if (auto relativeExpressionVisitor = std::dynamic_pointer_cast<RelativeExpressionNodeVisitor>(visitor)) {
-        relativeExpressionVisitor->visitRelativeExpressionNode(this, parents);
+        relativeExpressionVisitor->visitRelativeExpressionNode(this, parents, proc);
     }
 }
