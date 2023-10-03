@@ -13,6 +13,7 @@
 #include "PKB/Managers/MapStoresManagers/ModifiesProcRelationshipManager.h"
 #include "PKB/Managers/MapStoresManagers/UsesProcRelationshipManager.h"
 #include "PKB/PkbTypes.h"
+#include "PKB/Managers/CallsRelationshipManager.h"
 
 /**
  * @brief The class is responsible for writing to the PKB.
@@ -50,6 +51,11 @@ private:
     std::shared_ptr<ParentRelationshipManager> parentRelationshipManager;
 
     /**
+	 * @brief The calls relationship manager.
+	 */
+    std::shared_ptr<CallsRelationshipManager> callsRelationshipManager;
+
+    /**
      * @brief The modifies (proc-variable) relationship manager.
      */
     std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager;
@@ -58,6 +64,7 @@ private:
      * @brief The uses (proc-variable) relationship manager.
      */
     std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager;
+
 public:
     /**
      * @brief Constructs a PkbWriterManager object.
@@ -67,6 +74,7 @@ public:
      * @param usesRelationshipManager The uses relationship manager.
      * @param modifiesRelationshipManager The modifies relationship manager.
      * @param parentRelationshipManager The parent relationship manager.
+     * @param callsRelatioShipManager The calls relationship manager.
      * @param modifiesProcRelationshipManager The modifies procedure relationship manager.
      * @param usesProcRelationshipManager The uses procedure relationship manager.
      */
@@ -77,6 +85,7 @@ public:
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
             std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
             std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
+            std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
             std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
             std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager
     );
@@ -140,6 +149,13 @@ public:
      * @param isDirect A boolean value indicating if the parent relationship is direct.
      */
     void addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect);
+
+    /**
+	 * @brief Adds a calls relationship to the PKB.
+	 * @param s1 The shared pointer to the first statement.
+	 * @param s2 The shared pointer to the second statement.
+	 */
+    void addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2);
 
     /**
      * @brief Adds a modifies procedure relationship to the PKB.

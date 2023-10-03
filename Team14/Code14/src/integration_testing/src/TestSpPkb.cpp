@@ -56,6 +56,7 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
     auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
     auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
+    auto callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
     auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
     auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
 
@@ -66,6 +67,7 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
             usesRelationshipManager,
             modifiesRelationshipManager,
             parentRelationshipManager,
+            callsRelationshipManager,
             modifiesProcRelationshipManager,
             usesProcRelationshipManager
     );
@@ -141,21 +143,23 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceCode);
 
     auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
-    auto entitiesStore = std::make_shared<EntitiesManager>(EntitiesManager());
+    auto entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
     auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
     auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
     auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
+    auto callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
     auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
     auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
         assignmentManager,
-        entitiesStore,
+        entitiesManager,
         followsRelationshipManager,
         usesRelationshipManager,
         modifiesRelationshipManager,
         parentRelationshipManager,
+        callsRelationshipManager,
         modifiesProcRelationshipManager,
         usesProcRelationshipManager
     );
@@ -200,7 +204,7 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     auto varM = Variable("m");
 
     // Check Procedure
-    REQUIRE(*(entitiesStore->getProcedure(std::make_shared<Procedure>(Procedure("kk")))) == *(std::make_shared<Procedure>("kk")));
+    REQUIRE(*(entitiesManager->getProcedure(std::make_shared<Procedure>(Procedure("kk")))) == *(std::make_shared<Procedure>("kk")));
     
     // Check Follows
     auto follows1 = followsRelationshipManager->getFollowsStmtType(stmt1, StatementType::Stmt, true);
@@ -304,6 +308,7 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
     auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
     auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
+    auto callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
     auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
     auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
 
@@ -314,6 +319,7 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
         usesRelationshipManager,
         modifiesRelationshipManager,
         parentRelationshipManager,
+        callsRelationshipManager,
         modifiesProcRelationshipManager,
         usesProcRelationshipManager
     );

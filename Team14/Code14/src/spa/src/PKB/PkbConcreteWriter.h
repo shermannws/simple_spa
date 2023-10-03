@@ -84,6 +84,21 @@ public:
     void addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) override;
 
     /*!
+	 * Adds new Calls Relationship into the PKB
+	 */
+    void addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2) override;
+
+    /*!
+     * Stores a map of procedures to a vector of statements that modifies/uses whatever the procedure modifies/uses
+     */
+    virtual void addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) override;
+
+    /*!
+     * Triggers transitivity calculation for Relationships (Calls*)
+     */
+    virtual void triggerTransitiveCalc() override;
+
+    /*!
      * Adds new Modifies (Procedure-Variable) Relationship into the PKB
      */
     void addModifiesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) override;
@@ -92,4 +107,5 @@ public:
      * Adds new Uses (Procedure-Variable) Relationship into the PKB
      */
     void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) override;
+
 };
