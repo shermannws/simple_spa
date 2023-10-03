@@ -97,4 +97,15 @@ public:
      * Triggers transitivity calculation for Relationships (Calls*)
      */
     virtual void triggerTransitiveCalc() override;
+
+    /*!
+     * Adds new Modifies (Procedure-Variable) Relationship into the PKB
+     */
+    void addModifiesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) override;
+
+    /*!
+     * Adds new Uses (Procedure-Variable) Relationship into the PKB
+     */
+    void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) override;
+
 };

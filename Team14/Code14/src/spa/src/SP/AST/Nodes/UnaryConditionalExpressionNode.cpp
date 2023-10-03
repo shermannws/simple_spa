@@ -13,8 +13,8 @@ std::vector<std::shared_ptr<ASTNode>> UnaryConditionalExpressionNode::getAllChil
     return children;
 }
 
-void UnaryConditionalExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) {
+void UnaryConditionalExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) {
     if (auto uceVisitor = std::dynamic_pointer_cast<UnaryConditionalExpressionNodeVisitor>(visitor)) {
-        uceVisitor->visitUnaryConditionalExpressionNode(this, parents);
+        uceVisitor->visitUnaryConditionalExpressionNode(this, parents, proc);
     }
 }

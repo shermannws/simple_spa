@@ -15,12 +15,16 @@ public:
 	 * @param subtree The node to traverse down to find variable node
 	 * @param s The statement to store that is in direct relationship with the variable
 	 * @param parents A vector of parent ASTNode that has indirect Statement-Variable relationship
-	 * @param func The function to call to store the Statement-Variable relationship
+	 * @param funcStmt The function to call to store the Statement-Variable relationship
+	 * @param proc The procedure node that the subtree is in
+	 * @param funcProc The function to call to store the Procedure-Variable relationship
 	 */
-	static void addAllStatementVariableRelationshipFrom(
+	static void addAllVariableRelationshipFrom(
 		std::shared_ptr<ASTNode> subtree,
 		Statement s,
 		std::vector<std::shared_ptr<ASTNode>> parents,
-		std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func
+		std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> funcStmt,
+		std::shared_ptr<ASTNode> proc,
+		std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> funcProc
 	);
 };

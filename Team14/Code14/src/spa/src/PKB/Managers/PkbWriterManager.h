@@ -10,6 +10,8 @@
 #include "Commons/Entities/Procedure.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
 #include "PKB/Managers/ParentRelationshipManager.h"
+#include "PKB/Managers/MapStoresManagers/ModifiesProcRelationshipManager.h"
+#include "PKB/Managers/MapStoresManagers/UsesProcRelationshipManager.h"
 #include "PKB/PkbTypes.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
 
@@ -52,6 +54,17 @@ private:
 	 * @brief The calls relationship manager.
 	 */
     std::shared_ptr<CallsRelationshipManager> callsRelationshipManager;
+
+    /**
+     * @brief The modifies (proc-variable) relationship manager.
+     */
+    std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager;
+
+    /**
+     * @brief The uses (proc-variable) relationship manager.
+     */
+    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager;
+
 public:
     /**
      * @brief Constructs a PkbWriterManager object.
@@ -61,6 +74,9 @@ public:
      * @param usesRelationshipManager The uses relationship manager.
      * @param modifiesRelationshipManager The modifies relationship manager.
      * @param parentRelationshipManager The parent relationship manager.
+     * @param callsRelatioShipManager The calls relationship manager.
+     * @param modifiesProcRelationshipManager The modifies procedure relationship manager.
+     * @param usesProcRelationshipManager The uses procedure relationship manager.
      */
     PkbWriterManager(
             std::shared_ptr<AssignmentManager> assignmentManager,
@@ -69,7 +85,9 @@ public:
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
             std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
             std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
-            std::shared_ptr<CallsRelationshipManager> callsRelationshipManager
+            std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
+            std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
+            std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager
     );
 
     /**
@@ -138,4 +156,18 @@ public:
 	 * @param s2 The shared pointer to the second statement.
 	 */
     void addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2);
+
+    /**
+     * @brief Adds a modifies procedure relationship to the PKB.
+     * @param p The shared pointer to the procedure.
+     * @param v The shared pointer to the variable.
+     */
+    void addModifiesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v);
+
+    /**
+     * @brief Adds a uses procedure relationship to the PKB.
+     * @param p The shared pointer to the procedure.
+     * @param v The shared pointer to the variable.
+     */
+    void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v);
 };
