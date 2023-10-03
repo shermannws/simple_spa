@@ -13,5 +13,5 @@ public:
     /**
      * @brief A map of ClauseType and its corresponding strategy creator function
      */
-    static std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>, std::shared_ptr<Clause>)>> strategyCreatorMap;
+    static std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>> strategyCreatorMap;
 };

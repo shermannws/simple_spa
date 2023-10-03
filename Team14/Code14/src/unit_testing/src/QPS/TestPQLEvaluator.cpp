@@ -68,19 +68,11 @@ TEST_CASE("Test formatResult") {
     }
 }
 
-TEST_CASE("Test UsesSSuchThatStrategy") {
+TEST_CASE("Test UsesSuchThatStrategy") {
 
 }
 
-TEST_CASE("Test UsesPSuchThatStrategy") {
-
-}
-
-TEST_CASE("Test ModifiesSSuchThatStrategy") {
-
-}
-
-TEST_CASE("Test ModifiesPSuchThatStrategy") {
+TEST_CASE("Test ModifiesSuchThatStrategy") {
 
 }
 
