@@ -4,13 +4,8 @@
 
 #include "PQLEvaluator.h"
 #include "QPS/QueryEntity.h"
-#include "Strategies/UsesSuchThatStrategy.h"
-#include "Strategies/FollowsSuchThatStrategy.h"
 #include "QPS/QPSTypes.h"
-#include "Strategies/ModifiesSuchThatStrategy.h"
-#include "Strategies/FollowsStarSuchThatStrategy.h"
-#include "Strategies/ParentSuchThatStrategy.h"
-#include "Strategies/ParentStarSuchThatStrategy.h"
+#include "QPS/QPSUtil.h"
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :
     pkbReader(pkbReader),
@@ -89,8 +84,9 @@ Result PQLEvaluator::evaluate(Query& query) {
     return selectResult;
 }
 
-void PQLEvaluator::evaluateClause(const std::shared_ptr<Clause> clause, Result& result) {
-    clauseHandler->setStrategy(clause->createStrategy());
+void PQLEvaluator::evaluateClause(const std::shared_ptr<Clause>& clause, Result& result) {
+    std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()]();
+    clauseHandler->setStrategy(strategy);
     clauseHandler->executeClause(clause, result);
 }
 
