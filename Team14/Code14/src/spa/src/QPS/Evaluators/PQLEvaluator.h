@@ -46,7 +46,7 @@ private:
      * @param clause A shared pointer to the Clause to evaluate.
      * @param result The result object to update.
      */
-    void evaluateClause(const std::shared_ptr<Clause>& clause, Result& result);
+    void evaluateClause(const std::shared_ptr<Clause> clause, Result& result);
 
 public:
     /**

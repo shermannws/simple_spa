@@ -84,7 +84,7 @@ Result PQLEvaluator::evaluate(Query& query) {
     return selectResult;
 }
 
-void PQLEvaluator::evaluateClause(const std::shared_ptr<Clause>& clause, Result& result) {
+void PQLEvaluator::evaluateClause(const std::shared_ptr<Clause> clause, Result& result) {
     std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()]();
     clauseHandler->setStrategy(strategy);
     clauseHandler->executeClause(clause, result);

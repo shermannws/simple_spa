@@ -2,13 +2,7 @@
 
 #include "QPS/QueryEntity.h"
 #include "QPS/Ref.h"
-#include "QPS/Evaluators/Strategies/Strategy.h"
 #include <string>
-
-/**
- * @brief The forward declaration of Strategy
- */
-class Strategy;
 
 /**
  * @brief The enum class of ClassType
@@ -72,10 +66,4 @@ public:
      * @return The Ref reference of the first parameter
      */
     Ref& getFirstParam();
-
-    /**
-     * @brief The factory method of the Strategy for the Clause
-     * @return The shared pointer of the Strategy
-     */
-    virtual std::shared_ptr<Strategy> createStrategy() = 0;
 };

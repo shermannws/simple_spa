@@ -3,9 +3,7 @@
 #include "QueryEntity.h"
 #include "Ref.h"
 #include "QPS/Clauses/Clause.h"
-#include <unordered_map>
-#include <functional>
-#include <memory>
+#include "QPS/Evaluators/Strategies/Strategy.h"
 
 /**
  * @brief QPSUtil class

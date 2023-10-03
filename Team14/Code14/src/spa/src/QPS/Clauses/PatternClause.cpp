@@ -20,10 +20,3 @@ void PatternClause::setSyn(Synonym synonym) {
 Synonym PatternClause::getSyn() {
     return syn;
 }
-
-std::shared_ptr<Strategy> PatternClause::createStrategy() {
-    if (type == ClauseType::Assign) {
-        return std::make_shared<AssignPatternStrategy>(AssignPatternStrategy());
-    }
-    return nullptr;
-}

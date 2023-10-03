@@ -6,11 +6,6 @@
 #include "Commons/Entities/StatementType.h"
 
 /**
- * @brief The forward declaration of Clause
- */
-class Clause;
-
-/**
  * Strategy interface for each type of clause e.g. UsesStrategy, FollowsStrategy, AssignPatternStrategy, etc
  */
 class Strategy {

@@ -38,10 +38,4 @@ public:
      * @return The Ref reference of the second parameter
      */
     Ref& getSecondParam();
-
-    /**
-     * @brief The overriding method of createStrategy in SuchThatClause
-     * @return The shared pointer of the Strategy created
-     */
-    std::shared_ptr<Strategy> createStrategy() override;
 };
