@@ -95,6 +95,7 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     queryObj.addSelect(assignInQuery);
     ExpressionSpec rhs = ExpressionSpec{ExpressionSpecType::Wildcard, ""};
     std::shared_ptr<PatternClause> patternClause = std::make_shared<PatternClause>();
+    patternClause->setType(ClauseType::Assign);
     patternClause->setSyn(assignSyn);
     Ref wildcard;
     std::string rep = "_";
