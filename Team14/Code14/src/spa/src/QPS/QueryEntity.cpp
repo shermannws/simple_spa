@@ -39,14 +39,3 @@ std::string QueryEntity::getSynonym() {
 QueryEntityType QueryEntity::getType() {
     return type;
 }
-
-bool QueryEntity::isType(QueryEntityType entityType) {
-    return type == entityType;
-}
-
-bool QueryEntity::isOfStmtType() {
-    return type == QueryEntityType::Stmt || type == QueryEntityType::Assign
-           || type == QueryEntityType::Print || type == QueryEntityType::If
-           || type == QueryEntityType::While || type == QueryEntityType::Read;
-}
-

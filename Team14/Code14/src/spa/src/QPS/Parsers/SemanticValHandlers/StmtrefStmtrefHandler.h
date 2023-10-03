@@ -6,6 +6,12 @@
  * StmtrefStmtrefHandler class that extends from SemanticValHandler
  */
 class StmtrefStmtrefHandler : public SemanticValHandler {
+private:
+    std::unordered_set<ClauseType> clauseTypes {
+        ClauseType::Follows, ClauseType::FollowsStar,
+        ClauseType::Parent, ClauseType::ParentStar
+    };
+
 public:
     /**
      * @brief Handles (stmtRef,stmtRef) semantic validation of the Clause in the Clause
@@ -14,6 +20,6 @@ public:
      */
     void handle(Query &query, std::shared_ptr<Clause> clause) override;
 
-    void handleRefType(Query& query, Ref& leftRef, Ref& rightRef);
+    void handleRefType(Ref& leftRef, Ref& rightRef);
 
 };

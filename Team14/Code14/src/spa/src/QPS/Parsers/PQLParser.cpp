@@ -7,11 +7,10 @@
 #include "QPS/Clauses/SuchThatClause.h"
 #include "SemanticValHandlers/SynonymHandler.h"
 #include "SemanticValHandlers/StmtrefStmtrefHandler.h"
-#include "SemanticValHandlers/StmtrefEntrefHandler.h"
+#include "SemanticValHandlers/StmtrefProcVarHandler.h"
 #include "SemanticValHandlers/EntrefExprSpecHandler.h"
 #include "QPS/Exceptions/SyntaxException.h"
 #include "QPS/Exceptions/SemanticException.h"
-#include "QPS/Parsers/SemanticValHandlers/EntrefEntrefHandler.h"
 
 
 PQLParser::PQLParser(const std::string& PQLQuery) {
@@ -179,9 +178,8 @@ void PQLParser::validateSuchThatSemantics(Query& query, const std::shared_ptr<Su
     }
     std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
     std::shared_ptr<StmtrefStmtrefHandler> stmtrefHandler = std::make_shared<StmtrefStmtrefHandler>();
-    std::shared_ptr<StmtrefEntrefHandler> stmtEntHandler = std::make_shared<StmtrefEntrefHandler>();
-    std::shared_ptr<EntrefEntrefHandler> entrefHandler = std::make_shared<EntrefEntrefHandler>();
-    synonymHandler->setNext(stmtrefHandler)->setNext(stmtEntHandler)->setNext(entrefHandler);
+    std::shared_ptr<StmtrefProcVarHandler> stmtEntHandler = std::make_shared<StmtrefProcVarHandler>();
+    synonymHandler->setNext(stmtrefHandler)->setNext(stmtEntHandler);
     synonymHandler->handle(query, clause);
     query.addSuchThat(clause);
 }

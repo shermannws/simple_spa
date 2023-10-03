@@ -10,23 +10,22 @@ void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause)
     Ref& leftRef = suchThat->getFirstParam();
     Ref& rightRef = suchThat->getSecondParam();
 
-    if (!(type == ClauseType::Follows || type == ClauseType::FollowsStar
-                          || type == ClauseType::Parent || type == ClauseType::ParentStar)) {
+    if (clauseTypes.find(type) == clauseTypes.end()) {
         return SemanticValHandler::handle(query, clause);
     }
 
-    handleRefType(query, leftRef, rightRef);
+    handleRefType(leftRef, rightRef);
 
     return SemanticValHandler::handle(query, clause);
 }
 
-void StmtrefStmtrefHandler::handleRefType(Query& query, Ref& leftRef, Ref& rightRef) {
+void StmtrefStmtrefHandler::handleRefType(Ref& leftRef, Ref& rightRef) {
     RootType leftRootType = leftRef.getRootType();
     RootType rightRootType = rightRef.getRootType();
     switch (leftRootType) {
         case RootType::Synonym: {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-            if (!entity->isOfStmtType()) {
+            QueryEntityType entityType = leftRef.getEntityType();
+            if (stmtRefEntities.find(entityType) == stmtRefEntities.end()) {
                 throw SemanticException("Invalid LHS synonym, non-statement found");
             }
         }
@@ -42,8 +41,8 @@ void StmtrefStmtrefHandler::handleRefType(Query& query, Ref& leftRef, Ref& right
 
     switch (rightRootType) {
         case RootType::Synonym: {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
-            if (!entity->isOfStmtType()) {
+            QueryEntityType entityType = rightRef.getEntityType();
+            if (stmtRefEntities.find(entityType) == stmtRefEntities.end()) {
                 throw SemanticException("Invalid RHS synonym, non-statement found");
             }
         }

@@ -1,35 +1,42 @@
-
-#include "EntrefEntrefHandler.h"
+#include "StmtrefProcVarHandler.h"
 #include "QPS/Exceptions/SemanticException.h"
 
-void EntrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
+void StmtrefProcVarHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
     if (!suchThat) {
         return SemanticValHandler::handle(query, clause);
     }
+
     ClauseType type = suchThat->getType();
     Ref& leftRef = suchThat->getFirstParam();
     Ref& rightRef = suchThat->getSecondParam();
 
-    if (!(type == ClauseType::Uses || type == ClauseType::Modifies) || leftRef.isStmtRef()) {
+    if (clauseTypes.find(type) == clauseTypes.end()) {
         return SemanticValHandler::handle(query, clause);
     }
 
-    handleRefType(query, leftRef, rightRef);
+    handleRefType(leftRef, rightRef);
 
     return SemanticValHandler::handle(query, clause);
 }
 
-void EntrefEntrefHandler::handleRefType(Query &query, Ref &leftRef, Ref &rightRef) {
+void StmtrefProcVarHandler::handleRefType(Ref& leftRef, Ref& rightRef) {
     RootType leftRootType = leftRef.getRootType();
     RootType rightRootType = rightRef.getRootType();
 
     switch (leftRootType) {
     case RootType::Synonym: {
-        std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-        if (!entity->isType(QueryEntityType::Procedure)) {
-            throw SemanticException("Invalid LHS synonym, non-procedure found");
+        QueryEntityType entityType = leftRef.getEntityType();
+        if (entityRefMap.find(entityType) == entityRefMap.end()) {
+            throw SemanticException("Invalid LHS synonym");
         }
+        RefType leftRefType = entityRefMap[entityType];
+        leftRef.setType(leftRefType);
+    }
+    case RootType::Integer: {
+        RefType leftRefType = RefType::StmtRef;
+        leftRef.setType(leftRefType);
+        break;
     }
     case RootType::Ident: {
         RefType leftRefType = RefType::EntRef;
@@ -39,13 +46,13 @@ void EntrefEntrefHandler::handleRefType(Query &query, Ref &leftRef, Ref &rightRe
     case RootType::Wildcard:
         throw SemanticException("Invalid LHS, wildcard found");
     default:
-        throw SemanticException("Invalid LHS entRef");
+        throw SemanticException("Invalid LHS stmtRef");
     }
 
     switch (rightRootType) {
     case RootType::Synonym: {
-        std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
-        if (!entity->isType(QueryEntityType::Variable)) {
+        QueryEntityType entityType = rightRef.getEntityType();
+        if (entityType != QueryEntityType::Variable) {
             throw SemanticException("Invalid RHS synonym, non-variable found");
         }
     }
