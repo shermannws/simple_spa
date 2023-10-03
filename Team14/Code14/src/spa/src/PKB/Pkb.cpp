@@ -9,6 +9,7 @@ Pkb::Pkb() {
     this->usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
     this->modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
     this->parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
+    this->callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
 
 
     this->pkbReaderManager = std::make_shared<PkbReaderManager>(
@@ -28,7 +29,8 @@ Pkb::Pkb() {
                     this->followsRelationshipManager,
                     this->usesRelationshipManager,
                     this->modifiesRelationshipManager,
-                    this->parentRelationshipManager
+                    this->parentRelationshipManager,
+                    this->callsRelationshipManager
             )
     );
 };

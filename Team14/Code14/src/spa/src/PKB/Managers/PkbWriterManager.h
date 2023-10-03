@@ -11,6 +11,7 @@
 #include "PKB/Managers/ModifiesRelationshipManager.h"
 #include "PKB/Managers/ParentRelationshipManager.h"
 #include "PKB/PkbTypes.h"
+#include "PKB/Managers/CallsRelationshipManager.h"
 
 /**
  * @brief The class is responsible for writing to the PKB.
@@ -46,6 +47,11 @@ private:
      * @brief The parent relationship manager.
      */
     std::shared_ptr<ParentRelationshipManager> parentRelationshipManager;
+
+    /**
+	 * @brief The calls relationship manager.
+	 */
+    std::shared_ptr<CallsRelationshipManager> callsRelationshipManager;
 public:
     /**
      * @brief Constructs a PkbWriterManager object.
@@ -62,7 +68,8 @@ public:
             std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
             std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
-            std::shared_ptr<ParentRelationshipManager> parentRelationshipManager
+            std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
+            std::shared_ptr<CallsRelationshipManager> callsRelationshipManager
     );
 
     /**
@@ -124,4 +131,11 @@ public:
      * @param isDirect A boolean value indicating if the parent relationship is direct.
      */
     void addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect);
+
+    /**
+	 * @brief Adds a calls relationship to the PKB.
+	 * @param s1 The shared pointer to the first statement.
+	 * @param s2 The shared pointer to the second statement.
+	 */
+    void addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2);
 };
