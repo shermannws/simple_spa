@@ -6,12 +6,6 @@
  * StmtrefStmtrefHandler class that extends from SemanticValHandler
  */
 class StmtrefStmtrefHandler : public SemanticValHandler {
-private:
-    std::unordered_set<ClauseType> clauseTypes {
-        ClauseType::Follows, ClauseType::FollowsStar,
-        ClauseType::Parent, ClauseType::ParentStar
-    };
-
 public:
     /**
      * @brief Handles (stmtRef,stmtRef) semantic validation of the Clause in the Clause

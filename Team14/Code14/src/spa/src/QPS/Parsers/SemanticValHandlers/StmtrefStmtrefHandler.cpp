@@ -1,5 +1,6 @@
 #include "StmtrefStmtrefHandler.h"
 #include "QPS/Exceptions/SemanticException.h"
+#include "QPS/QPSUtil.h"
 
 void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
@@ -10,7 +11,7 @@ void StmtrefStmtrefHandler::handle(Query &query, std::shared_ptr<Clause> clause)
     Ref& leftRef = suchThat->getFirstParam();
     Ref& rightRef = suchThat->getSecondParam();
 
-    if (clauseTypes.find(type) == clauseTypes.end()) {
+    if (QPSUtil::stmtrefClauseTypes.find(type) == QPSUtil::stmtrefClauseTypes.end()) {
         return SemanticValHandler::handle(query, clause);
     }
 
@@ -25,7 +26,7 @@ void StmtrefStmtrefHandler::handleRefType(Ref& leftRef, Ref& rightRef) {
     switch (leftRootType) {
         case RootType::Synonym: {
             QueryEntityType entityType = leftRef.getEntityType();
-            if (stmtRefEntities.find(entityType) == stmtRefEntities.end()) {
+            if (QPSUtil::stmtRefEntities.find(entityType) == QPSUtil::stmtRefEntities.end()) {
                 throw SemanticException("Invalid LHS synonym, non-statement found");
             }
         }
@@ -42,7 +43,7 @@ void StmtrefStmtrefHandler::handleRefType(Ref& leftRef, Ref& rightRef) {
     switch (rightRootType) {
         case RootType::Synonym: {
             QueryEntityType entityType = rightRef.getEntityType();
-            if (stmtRefEntities.find(entityType) == stmtRefEntities.end()) {
+            if (QPSUtil::stmtRefEntities.find(entityType) == QPSUtil::stmtRefEntities.end()) {
                 throw SemanticException("Invalid RHS synonym, non-statement found");
             }
         }

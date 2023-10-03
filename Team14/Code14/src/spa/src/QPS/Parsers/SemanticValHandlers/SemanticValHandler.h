@@ -14,10 +14,6 @@ private:
      * @brief The shared pointer of the next handler linked to this handler
      */
     std::shared_ptr<SemanticValHandler> nextHandler;
-protected:
-    std::unordered_set<QueryEntityType> stmtRefEntities
-    {QueryEntityType::Stmt, QueryEntityType::Assign, QueryEntityType::Print,
-     QueryEntityType::If, QueryEntityType::While, QueryEntityType::Read};
 public:
     /**
      * The constructor of SemanticValHandler

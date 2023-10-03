@@ -1,5 +1,6 @@
 #include "StmtrefProcVarHandler.h"
 #include "QPS/Exceptions/SemanticException.h"
+#include "QPS/QPSUtil.h"
 
 void StmtrefProcVarHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
@@ -11,7 +12,7 @@ void StmtrefProcVarHandler::handle(Query &query, std::shared_ptr<Clause> clause)
     Ref& leftRef = suchThat->getFirstParam();
     Ref& rightRef = suchThat->getSecondParam();
 
-    if (clauseTypes.find(type) == clauseTypes.end()) {
+    if (QPSUtil::stmtrefProcVarClauseTypes.find(type) == QPSUtil::stmtrefProcVarClauseTypes.end()) {
         return SemanticValHandler::handle(query, clause);
     }
 
@@ -27,10 +28,10 @@ void StmtrefProcVarHandler::handleRefType(Ref& leftRef, Ref& rightRef) {
     switch (leftRootType) {
     case RootType::Synonym: {
         QueryEntityType entityType = leftRef.getEntityType();
-        if (entityRefMap.find(entityType) == entityRefMap.end()) {
+        if (QPSUtil::entityRefMap.find(entityType) == QPSUtil::entityRefMap.end()) {
             throw SemanticException("Invalid LHS synonym");
         }
-        RefType leftRefType = entityRefMap[entityType];
+        RefType leftRefType = QPSUtil::entityRefMap[entityType];
         leftRef.setType(leftRefType);
     }
     case RootType::Integer: {

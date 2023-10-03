@@ -1,6 +1,5 @@
 #include <numeric>
 #include <stdexcept>
-#include <unordered_set>
 
 #include "PQLEvaluator.h"
 #include "QPS/QueryEntity.h"

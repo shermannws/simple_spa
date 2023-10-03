@@ -10,6 +10,13 @@
  */
 class QPSUtil {
 public:
+    static std::unordered_set<ClauseType> stmtrefProcVarClauseTypes;
+
+    static std::unordered_map<QueryEntityType, RefType> entityRefMap;
+
+    static std::unordered_set<ClauseType> stmtrefClauseTypes;
+
+    static std::unordered_set<QueryEntityType> stmtRefEntities;
     /**
      * @brief A map of ClauseType and its corresponding strategy creator function
      */
