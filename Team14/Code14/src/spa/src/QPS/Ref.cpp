@@ -35,3 +35,24 @@ void Ref::setEntityType(QueryEntityType& eentityType) {
 QueryEntityType Ref::getEntityType() {
     return entityType;
 }
+
+bool Ref::isWildcard() {
+    return rootType == RootType::Wildcard;
+}
+
+bool Ref::isSynonym() {
+    return rootType == RootType::Synonym;
+}
+
+bool Ref::isIdent() {
+    return rootType == RootType::Ident;
+}
+
+bool Ref::isInteger() {
+    return rootType == RootType::Integer;
+}
+
+bool Ref::operator==(const Ref& other) const {
+    return (rep == other.rep) && (type == other.type)
+        && (rootType == other.rootType) && (entityType == other.entityType);
+}
