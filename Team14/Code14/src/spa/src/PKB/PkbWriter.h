@@ -14,6 +14,7 @@
 #include "../Commons/Entities/Variable.h"
 #include "../Commons/Entities/Statement.h"
 #include "PKB/Managers/PkbWriterManager.h"
+#include "PKB/PkbTypes.h"
 
 /**
  * @brief The facade abstract class for writing from the PKB
@@ -48,7 +49,7 @@ public:
     /*!
      * Adds new Assign Statement Entity into the PKB
      */
-    virtual void addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<std::string> rhs) = 0;
+    virtual void addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) = 0;
 
     /*!
      * Adds new Follows Relationship into the PKB

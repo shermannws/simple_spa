@@ -26,15 +26,27 @@ public:
 
     std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const override;
 
+    std::vector<std::vector<Entity>> getUsesProcPair() const override;
+
     std::vector<Entity> getUsesTypeIdent(StatementType type, Variable& var) const override;
+
+    std::vector<Entity> getUsesProcIdent(Variable& var) const override;
 
     std::vector<Entity> getUsesStmt(StatementType type) const override;
 
+    std::vector<Entity> getUsesProc() const override;
+
     std::vector<Entity> getUsesVar(Statement& stmt) const override;
+
+    std::vector<Entity> getUsesVar(Procedure& proc) const override;
 
     bool isStmtUsesVar(Statement& stmt, Variable& var) const override;
 
+    bool isProcUsesVar(Procedure& proc, Variable& var) const override;
+
     bool hasUses(Statement& stmt) const override;
+
+    bool hasUses(Procedure& proc) const override;
 
     std::vector<std::vector<Entity>> getFollowsPair(StatementType formerType, StatementType latterType) const override;
 
@@ -74,15 +86,27 @@ public:
 
     std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const override;
 
+    std::vector<std::vector<Entity>> getModifiesProcPair() const override;
+
     std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const override;
+
+    std::vector<Entity> getModifiesProcIdent(Variable& var) const override;
 
     std::vector<Entity> getModifiesStmt(StatementType type) const override;
 
+    std::vector<Entity> getModifiesProc() const override;
+
     std::vector<Entity> getModifiesVar(Statement& stmt) const override;
+
+    std::vector<Entity> getModifiesVar(Procedure& proc) const override;
 
     bool isStmtModifiesVar(Statement& stmt, Variable& var) const override;
 
+    bool isProcModifiesVar(Procedure& proc, Variable& var) const override;
+
     bool hasModifies(Statement& stmt) const override;
+
+    bool hasModifies(Procedure& proc) const override;
 
     // pattern a (_,_)
     std::vector<Entity> getAllAssign() const override;

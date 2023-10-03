@@ -38,23 +38,47 @@ std::vector<std::vector<Entity>> StubPkbReader::getUsesStmtPair(StatementType ty
     return std::vector<std::vector<Entity>>();
 }
 
+std::vector<std::vector<Entity>> StubPkbReader::getUsesProcPair() const {
+    return {};
+}
+
 std::vector<Entity> StubPkbReader::getUsesTypeIdent(StatementType type, Variable& var) const {
     return std::vector<Entity>();
 }
 
+std::vector<Entity> StubPkbReader::getUsesProcIdent(Variable& var) const {
+    return {};
+};
+
 std::vector<Entity> StubPkbReader::getUsesStmt(StatementType type) const {
     return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getUsesProc() const {
+    return {};
 }
 
 std::vector<Entity> StubPkbReader::getUsesVar(Statement& stmt) const {
     return std::vector<Entity>();
 }
 
+std::vector<Entity> StubPkbReader::getUsesVar(Procedure& proc) const {
+    return {};
+}
+
 bool StubPkbReader::isStmtUsesVar(Statement& stmt, Variable& var) const {
     return false;
 }
 
+bool StubPkbReader::isProcUsesVar(Procedure& proc, Variable& var) const {
+    return false;
+}
+
 bool StubPkbReader::hasUses(Statement& stmt) const {
+    return false;
+}
+
+bool StubPkbReader::hasUses(Procedure& proc) const {
     return false;
 }
 
@@ -134,23 +158,47 @@ std::vector<std::vector<Entity>> StubPkbReader::getModifiesStmtPair(StatementTyp
     return std::vector<std::vector<Entity>>();
 }
 
+std::vector<std::vector<Entity>> StubPkbReader::getModifiesProcPair() const {
+    return {};
+}
+
 std::vector<Entity> StubPkbReader::getModifiesTypeIdent(StatementType type, Variable& var) const {
     return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getModifiesProcIdent(Variable& var) const {
+    return {};
 }
 
 std::vector<Entity> StubPkbReader::getModifiesStmt(StatementType type) const {
     return std::vector<Entity>();
 }
 
+std::vector<Entity> StubPkbReader::getModifiesProc() const {
+    return {};
+}
+
 std::vector<Entity> StubPkbReader::getModifiesVar(Statement& stmt) const {
     return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getModifiesVar(Procedure& proc) const {
+    return {};
 }
 
 bool StubPkbReader::isStmtModifiesVar(Statement& stmt, Variable& var) const {
     return false;
 }
 
+bool StubPkbReader::isProcModifiesVar(Procedure& proc, Variable& var) const {
+    return false;
+}
+
 bool StubPkbReader::hasModifies(Statement& stmt) const {
+    return false;
+}
+
+bool StubPkbReader::hasModifies(Procedure& proc) const {
     return false;
 }
 
