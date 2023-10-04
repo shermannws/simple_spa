@@ -56,13 +56,20 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
     auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
     auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
+    auto callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
+    auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
+    auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
+
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager,
             entitiesManager,
             followsRelationshipManager,
             usesRelationshipManager,
             modifiesRelationshipManager,
-            parentRelationshipManager
+            parentRelationshipManager,
+            callsRelationshipManager,
+            modifiesProcRelationshipManager,
+            usesProcRelationshipManager
     );
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
@@ -136,18 +143,25 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceCode);
 
     auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
-    auto entitiesStore = std::make_shared<EntitiesManager>(EntitiesManager());
+    auto entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
     auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
     auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
     auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
+    auto callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
+    auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
+    auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
+
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
         assignmentManager,
-        entitiesStore,
+        entitiesManager,
         followsRelationshipManager,
         usesRelationshipManager,
         modifiesRelationshipManager,
-        parentRelationshipManager
+        parentRelationshipManager,
+        callsRelationshipManager,
+        modifiesProcRelationshipManager,
+        usesProcRelationshipManager
     );
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
@@ -190,7 +204,7 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     auto varM = Variable("m");
 
     // Check Procedure
-    REQUIRE(*(entitiesStore->getProcedure(std::make_shared<Procedure>(Procedure("kk")))) == *(std::make_shared<Procedure>("kk")));
+    REQUIRE(*(entitiesManager->getProcedure(std::make_shared<Procedure>(Procedure("kk")))) == *(std::make_shared<Procedure>("kk")));
     
     // Check Follows
     auto follows1 = followsRelationshipManager->getFollowsStmtType(stmt1, StatementType::Stmt, true);
@@ -269,4 +283,110 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     REQUIRE(parentRelationshipManager->isParent(stmt1, stmt4, false));
     REQUIRE(parentRelationshipManager->isParent(stmt1, stmt5, false));
     REQUIRE(parentRelationshipManager->isParent(stmt1, stmt8, false));
+}
+
+
+TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
+    std::string sourceCode = "\
+        procedure kk { \
+        if (a < b) then { \
+            c = d; \
+        } else { \
+            print e; \
+        } \
+        }\
+        procedure jj { \
+        f = g; \
+        }\
+        ";
+
+    std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceCode);
+
+    auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
+    auto entitiesStore = std::make_shared<EntitiesManager>(EntitiesManager());
+    auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
+    auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
+    auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
+    auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
+    auto callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
+    auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
+    auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
+
+    auto pkbWriterManager = std::make_shared<PkbWriterManager>(
+        assignmentManager,
+        entitiesStore,
+        followsRelationshipManager,
+        usesRelationshipManager,
+        modifiesRelationshipManager,
+        parentRelationshipManager,
+        callsRelationshipManager,
+        modifiesProcRelationshipManager,
+        usesProcRelationshipManager
+    );
+    std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
+
+    std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
+    std::shared_ptr<FollowsExtractorVisitor> followsExtractor = std::make_shared<FollowsExtractorVisitor>(pkbWriter);
+    std::shared_ptr<UsesExtractorVisitor> usesExtractor = std::make_shared<UsesExtractorVisitor>(pkbWriter);
+    std::shared_ptr<ModifiesExtractorVisitor> modifiesExtractor = std::make_shared<ModifiesExtractorVisitor>(pkbWriter);
+    std::shared_ptr<ParentExtractorVisitor> parentExtractor = std::make_shared<ParentExtractorVisitor>(pkbWriter);
+
+    std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = { entityExtractor, followsExtractor, usesExtractor, modifiesExtractor, parentExtractor };
+
+    //Traverse the AST from root node
+    Traverser traverser = Traverser(visitors);
+    traverser.traverse(rootNode);
+
+    // Declare Entities for testing
+    auto proc1 = Procedure("kk");
+    auto proc2 = Procedure("jj");
+
+    auto varA = Variable("a");
+    auto varB = Variable("b");
+    auto varC = Variable("c");
+    auto varD = Variable("d");
+    auto varE = Variable("e");
+    auto varF = Variable("f");
+    auto varG = Variable("g");
+
+    // Check Procedure
+    REQUIRE(*(entitiesStore->getProcedure(std::make_shared<Procedure>(Procedure("kk")))) == *(std::make_shared<Procedure>("kk")));
+    REQUIRE(*(entitiesStore->getProcedure(std::make_shared<Procedure>(Procedure("jj")))) == *(std::make_shared<Procedure>("jj")));
+
+    // Check Modifies with Procedure
+    REQUIRE(modifiesProcRelationshipManager->isProcModifiesVar(proc1, varC));
+    REQUIRE(modifiesProcRelationshipManager->isProcModifiesVar(proc2, varF));
+
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varA));
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varB));
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varD));
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varE));
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varF));
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varG));
+
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varA));
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varB));
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varC));
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varD));
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varE));
+    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varG));
+
+    // Check Uses with Procedure
+    REQUIRE(usesProcRelationshipManager->isProcUsesVar(proc1, varA));
+    REQUIRE(usesProcRelationshipManager->isProcUsesVar(proc1, varB));
+    REQUIRE(usesProcRelationshipManager->isProcUsesVar(proc1, varD));
+    REQUIRE(usesProcRelationshipManager->isProcUsesVar(proc1, varE));
+
+    REQUIRE(usesProcRelationshipManager->isProcUsesVar(proc2, varG));
+
+    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc1, varC));
+    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc1, varF));
+    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc1, varG));
+
+    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varA));
+    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varB));
+    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varC));
+    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varD));
+    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varE));
+    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varF));
 }

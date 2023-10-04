@@ -26,19 +26,6 @@ private:
      * The AssignmentPatternStore that stores all the Assignment objects
      */
     std::shared_ptr<AssignmentPatternStore> assignmentStore;
-public:
-    /**
-     * Constructs an AssignmentManager object
-     * @return An AssignmentManager object
-     */
-    AssignmentManager();
-
-    /**
-     * Stores a new Assignment object into the PKB
-     * @param assignment The Assignment object to be stored
-     * @return True if the Assignment object is successfully stored, else False
-     */
-    bool addAssignment(std::shared_ptr<Assignment> assignment);
 
     /**
      * Matches the expression with the pattern using regex. Returns true if the Expression matches the pattern, else false.
@@ -56,6 +43,19 @@ public:
      * @return The regex object parsed from the pattern
      */
     std::regex parsePattern(Expression& pattern) const;
+public:
+    /**
+     * Constructs an AssignmentManager object
+     * @return An AssignmentManager object
+     */
+    AssignmentManager();
+
+    /**
+     * Stores a new Assignment object into the PKB
+     * @param assignment The Assignment object to be stored
+     * @return True if the Assignment object is successfully stored, else False
+     */
+    bool addAssignment(std::shared_ptr<Assignment> assignment);
 
     /**
      * Returns true if the AssignmentManager contains an Assignment object that references the given Statement object, else false.
@@ -64,8 +64,6 @@ public:
      */
     bool contains(Statement& statement) const;
 
-
-    // Pattern queries i.e. pattern a (...,...)
     /**
      * Returns a vector of Statements from all the Assignment objects in the store. Represents all the Statements that are assignments
      * @return A vector of all the Statement objects

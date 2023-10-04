@@ -1,12 +1,16 @@
 #include "Traverser.h"
 #include "SP/AST/Nodes/IfNode.h"
 #include "SP/AST/Nodes/WhileNode.h"
+#include "SP/AST/Nodes/ProcedureNode.h"
 
 Traverser::Traverser(std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors) : visitors(visitors) {};
 
 void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
 	//DFS Algorithm where frontier is a stack
 	//Execute DFS search algorithm with the program node as the root node
+
+	//currentProcedure is used to keep track of the current procedure node
+	std::shared_ptr<ProcedureNode> currentProcedure = nullptr;
 
 	//Add the first node to the frontier
 	frontier.push({ root,{} });
@@ -18,9 +22,13 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
 		//pop the current node that is being worked on in this loop
 		frontier.pop();
 
+		if (auto currentCasted = std::dynamic_pointer_cast<ProcedureNode>(current)) {
+			currentProcedure = currentCasted;
+		}
+
 		//current node to accept all the visitors and do its respective workr
 		for (std::shared_ptr<DesignExtractorVisitor> v : visitors) {
-			current->accept(v, parents);
+			current->accept(v, parents, currentProcedure);
 		}
 		
 		//update parents vector if current node is a parent node

@@ -1,5 +1,11 @@
 #include "SuchThatClause.h"
 #include "QPS/Exceptions/SyntaxException.h"
+#include "QPS/Evaluators/Strategies/UsesSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/ModifiesSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/FollowsSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/FollowsStarSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/ParentSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/ParentStarSuchThatStrategy.h"
 
 SuchThatClause::SuchThatClause() = default;
 

@@ -53,6 +53,21 @@ private:
     std::shared_ptr<ParentRelationshipManager> parentRelationshipManager;
 
     /**
+	 * @brief The CallsRelationshipManager of the PKB
+	 */
+std::shared_ptr<CallsRelationshipManager> callsRelationshipManager;
+
+	/**
+     * @brief The ModifiesProcRelationshipManager of the PKB
+     */
+    std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager;
+
+    /**
+     * @brief The UsesProcRelationshipManager of the PKB
+     */
+    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager;
+
+    /**
      * @brief The PkbReaderManager of the PKB
      */
     std::shared_ptr<PkbReaderManager> pkbReaderManager;

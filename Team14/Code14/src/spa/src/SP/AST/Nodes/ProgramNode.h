@@ -16,8 +16,9 @@ public:
      * Visits the ProgramNode for design extraction.
      * @param node ProgramNode to be visited
      * @param parents Parents of the ProgramNode
+     * @param proc nullptr as ProgramNNode is not contained within a procedure
      */
-    virtual void visitProgramNode(ProgramNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
+    virtual void visitProgramNode(ProgramNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };
 
 /**
@@ -44,7 +45,7 @@ public:
      */
     std::vector<std::shared_ptr<ProcedureNode>> getProcedures();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

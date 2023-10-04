@@ -8,5 +8,6 @@ enum class RelationshipType {
     Follows,
     Parent,
     Modifies,
-    Uses
+    Uses,
+    Calls
 };

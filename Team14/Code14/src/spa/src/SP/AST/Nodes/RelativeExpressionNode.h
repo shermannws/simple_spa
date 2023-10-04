@@ -18,8 +18,9 @@ public:
      * Visits the RelativeExpressionNode for design extraction.
      * @param node RelativeExpressionNode to be visited
      * @param parents Parents of the RelativeExpressionNode
+     * @param proc Procedure containing the RelativeExpressionNode
      */
-    virtual void visitRelativeExpressionNode(RelativeExpressionNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
+    virtual void visitRelativeExpressionNode(RelativeExpressionNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };
 
 /**
@@ -80,7 +81,7 @@ public:
      */
     static ComparisonOperatorType translateComparisonOperatorType(std::string operatorTypeString);
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };
