@@ -3,7 +3,6 @@
 #include "catch.hpp"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/AssignmentPatternStore/Assignment.h"
-#include "PKB/Relationships/UsesRelationship.h"
 
 using namespace std;
 

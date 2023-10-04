@@ -2,7 +2,6 @@
 
 #include "catch.hpp"
 #include "PKB/Managers/ParentRelationshipManager.h"
-#include "PKB/Relationships/ParentRelationship.h"
 
 using namespace std;
 

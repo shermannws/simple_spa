@@ -23,12 +23,12 @@ std::vector<std::vector<Entity>> ProcToVarRelationshipManager<S>::getRelationshi
 
 template <typename S>
 std::vector<Entity> ProcToVarRelationshipManager<S>::getRelationshipIdent(Variable& var) const {
-    auto store = relationshipStore->getLeftEntitiesOf(std::make_shared<Variable>(var));
-    if  (store == nullptr) {
-		return std::vector<Entity>();
-	}
-    
-    return setToVector<Procedure>(store);
+    auto matcher = [](Procedure& proc) {
+        return true;
+    };
+    return ManagerUtils::getLeftEntitiesFromRightKey<Procedure, Variable>(*relationshipStore,
+                                                    var,
+                                                    matcher);
 }
 
 template <typename S>
@@ -42,11 +42,12 @@ std::vector<Entity> ProcToVarRelationshipManager<S>::getRelationshipProc() const
 
 template <typename S>
 std::vector<Entity> ProcToVarRelationshipManager<S>::getRelationshipVar(Procedure& procedure) const {
-    auto store = relationshipStore->getRightEntitiesOf(std::make_shared<Procedure>(procedure));
-    if (store == nullptr) {
-        return std::vector<Entity>();
-    }
-    return setToVector<Variable>(store);
+    auto matcher = [](Variable& var) {
+        return true;
+    };
+    return ManagerUtils::getRightEntitiesFromLeftKey<Procedure, Variable>(*relationshipStore,
+                                                    procedure,
+                                                    matcher);
 }
 
 template <typename S>
@@ -63,13 +64,4 @@ template <typename S>
 bool ProcToVarRelationshipManager<S>::hasRelationship(Procedure& procedure) const {
     auto got = relationshipStore->getRightEntitiesOf(std::make_shared<Procedure>(procedure));
     return got != nullptr;
-}
-
-template <typename T>
-std::vector<Entity> setToVector(std::shared_ptr<EntityStore<T>> store) {
-    std::vector<Entity> result;
-    for (auto it = store->getBeginIterator(); it != store->getEndIterator(); ++it) {
-		result.push_back(**it);
-	}
-    return result;
 }

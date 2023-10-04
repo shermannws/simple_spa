@@ -2,7 +2,6 @@
 
 #include "catch.hpp"
 #include "PKB/Managers/FollowsRelationshipManager.h"
-#include "PKB/Relationships/FollowsRelationship.h"
 
 using namespace std;
 
