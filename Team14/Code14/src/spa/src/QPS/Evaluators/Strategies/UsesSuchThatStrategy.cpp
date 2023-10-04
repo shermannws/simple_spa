@@ -9,7 +9,7 @@ Result UsesSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     auto leftSyn = leftRef.getRep();
     auto rightSyn = rightRef.getRep();
     if (leftEntityType == QueryEntityType::Procedure) { // Uses(p,v)
-//        res.setTuples(pkbReader->getUsesProcPair();
+        res.setTuples(pkbReader->getUsesProcPair());
     } else { // Uses(s,v)
         res.setTuples(pkbReader->getUsesStmtPair(stmtMap.at(leftEntityType)));
     }
@@ -27,11 +27,11 @@ Result UsesSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
     bool isLeftProc = leftEntityType == QueryEntityType::Procedure;
     bool isRightIdent = rightRef.isRootType(RootType::Ident);
     if (isRightIdent && isLeftProc) { // Uses(p,"var")
-//        res.setTuples(pkbReader->getUsesProcIdent(v));
+        res.setTuples(pkbReader->getUsesProcIdent(v));
     } else if (isRightIdent) { // Uses(s, "var")
         res.setTuples(pkbReader->getUsesTypeIdent(stmtMap.at(leftEntityType), v));
     } else if (isLeftProc) { // Uses(p,_)
-//        res.setTuples(pkbReader->getUsesProc());
+        res.setTuples(pkbReader->getUsesProc());
     } else { // Uses(s,_)
         res.setTuples(pkbReader->getUsesStmt(stmtMap.at(leftEntityType)));
     }
@@ -48,8 +48,8 @@ Result UsesSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
         Statement s = Statement(stoi(leftRep), StatementType::Stmt);
         res.setTuples(pkbReader->getUsesVar(s));
     } else { // Uses("proc",v)
-        Procedure s = Procedure(leftRep);
-//    res.setTuples(pkbReader->getUsesVar(p));
+        Procedure p = Procedure(leftRep);
+        res.setTuples(pkbReader->getUsesVar(p));
     }
 
     std::unordered_map<std::string, int> indices{{rightSyn, 0}};
@@ -66,9 +66,10 @@ Result UsesSuchThatStrategy::evaluateBoolean(Ref &leftRef, Ref &rightRef) const 
     if (isLeftIdent && isRightIdent) { // Uses("proc","var")
         Procedure p = Procedure(leftRep);
         Variable v = Variable(rightRep);
-//        res.setBoolResult(pkbReader->isProcUsesVar(p, v));
+        res.setBoolResult(pkbReader->isProcUsesVar(p, v));
     } else if (isLeftIdent) { // Uses("proc",_)
-//        res.setBoolResult(pkbReader->hasUses(p));
+        Procedure p = Procedure(leftRep);
+        res.setBoolResult(pkbReader->hasUses(p));
     } else if (isRightIdent) { // Uses(int,"var")
         Statement s = Statement(stoi(leftRep), StatementType::Stmt);
         Variable v = Variable(rightRep);
