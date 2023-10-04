@@ -11,13 +11,19 @@ PkbWriterManager::PkbWriterManager(
         std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
         std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
         std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
-        std::shared_ptr<ParentRelationshipManager> parentRelationshipManager)
+        std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
+        std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
+        std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
+        std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager)
     : assignmentManager(assignmentManager),
     entitiesManager(entitiesManager),
     followsRelationshipManager(followsRelationshipManager),
     usesRelationshipManager(usesRelationshipManager),
     modifiesRelationshipManager(modifiesRelationshipManager),
-    parentRelationshipManager(parentRelationshipManager) {}
+    parentRelationshipManager(parentRelationshipManager),
+    callsRelationshipManager(callsRelationshipManager),
+    modifiesProcRelationshipManager(modifiesProcRelationshipManager),
+    usesProcRelationshipManager(usesProcRelationshipManager) {}
 
 void PkbWriterManager::addConstant(std::shared_ptr<Constant> c) {
     this->entitiesManager->storeConstant(c);
@@ -56,4 +62,16 @@ void PkbWriterManager::addModifiesRelationship(std::shared_ptr<Statement> s, std
 
 void PkbWriterManager::addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
     this->parentRelationshipManager->storeParentRelationship(s1, s2, isDirect);
+}
+
+void PkbWriterManager::addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2) {
+    this->callsRelationshipManager->storeCallsRelationship(p1, p2, true);
+}
+
+void PkbWriterManager::addModifiesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {
+	this->modifiesProcRelationshipManager->storeModifiesProcRelationship(p, v);
+}
+
+void PkbWriterManager::addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {
+	this->usesProcRelationshipManager->storeUsesProcRelationship(p, v);
 }

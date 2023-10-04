@@ -89,4 +89,10 @@ public:
     template<typename R>
     static std::vector<std::vector<Entity>>
     getEntityPairsFromRelationshipStore(std::shared_ptr<RelationshipStore<R>> store, std::function<bool(R&)> matcher, std::function<std::vector<Entity>(R&)> getter);
+
+    /**
+     * @brief A function that removes duplicates in a vector of entities
+     * @param v The vector of entities to be modified
+     */
+    static void unique(std::vector<Entity>& v);
 };

@@ -59,3 +59,23 @@ void PkbConcreteWriter::addModifiesRelationship(std::shared_ptr<Statement> s, st
 void PkbConcreteWriter::addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
     this->writerManager->addParentRelationship(s1, s2, isDirect);
 }
+
+void PkbConcreteWriter::addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2) {
+	this->writerManager->addCallsRelationship(p1, p2);
+}
+
+void PkbConcreteWriter::addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) {
+    return;
+}
+
+void PkbConcreteWriter::triggerTransitiveCalc() {
+    return;
+}
+
+void PkbConcreteWriter::addModifiesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {
+	this->writerManager->addModifiesProcRelationship(p, v);
+}
+
+void PkbConcreteWriter::addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {
+	this->writerManager->addUsesProcRelationship(p, v);
+}

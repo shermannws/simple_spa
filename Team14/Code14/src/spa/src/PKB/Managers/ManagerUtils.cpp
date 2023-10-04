@@ -35,3 +35,8 @@ template <typename R>
 std::vector<std::vector<Entity>> ManagerUtils::getEntityPairsFromRelationshipStore(std::shared_ptr<RelationshipStore<R>> store, std::function<bool(R&)> matcher, std::function<std::vector<Entity>(R&)> getter) {
     return getFromStore<std::vector<Entity>, RelationshipStore<R>, R>(store, matcher, getter);
 }
+
+void ManagerUtils::unique(std::vector<Entity>& v) {
+    std::unordered_set<Entity> s(v.begin(), v.end());
+    v.assign(s.begin(), s.end());
+}

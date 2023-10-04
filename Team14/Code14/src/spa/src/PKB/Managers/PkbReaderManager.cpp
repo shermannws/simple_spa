@@ -50,24 +50,54 @@ std::vector<std::vector<Entity>> PkbReaderManager::getUsesStmtPair(StatementType
     return this->usesRelationshipManager->getUsesStmtPair(type);
 }
 
+std::vector<std::vector<Entity>> PkbReaderManager::getUsesProcPair() const {
+    // TODO: Actual implementation
+    return {};
+}
+
 std::vector<Entity> PkbReaderManager::getUsesTypeIdent(StatementType type, Variable& var) const {
     return this->usesRelationshipManager->getUsesTypeIdent(type, var);
+}
+
+std::vector<Entity> PkbReaderManager::getUsesProcIdent(Variable& var) const {
+    // TODO: Actual implementation
+    return {};
 }
 
 std::vector<Entity> PkbReaderManager::getUsesStmt(StatementType type) const {
     return this->usesRelationshipManager->getUsesStmt(type);
 }
 
+std::vector<Entity> PkbReaderManager::getUsesProc() const {
+    // TODO: Actual implementation
+    return {};
+}
+
 std::vector<Entity> PkbReaderManager::getUsesVar(Statement& stmt) const {
     return this->usesRelationshipManager->getUsesVar(stmt);
+}
+
+std::vector<Entity> PkbReaderManager::getUsesVar(Procedure& proc) const {
+    // TODO: Actual implementation
+    return {};
 }
 
 bool PkbReaderManager::isStmtUsesVar(Statement& stmt, Variable& var) const {
     return this->usesRelationshipManager->isStmtUsesVar(stmt, var);
 }
 
+bool PkbReaderManager::isProcUsesVar(Procedure& proc, Variable& var) const {
+    // TODO: Actual implementation
+    return true;
+}
+
 bool PkbReaderManager::hasUses(Statement& stmt) const {
     return this->usesRelationshipManager->hasUses(stmt);
+}
+
+bool PkbReaderManager::hasUses(Procedure& proc) const {
+    // TODO: Actual implementation
+    return true;
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getFollowsPair(StatementType formerType, StatementType latterType) const {
@@ -146,24 +176,54 @@ std::vector<std::vector<Entity>> PkbReaderManager::getModifiesStmtPair(Statement
     return this->modifiesRelationshipManager->getModifiesStmtPair(type);
 }
 
+std::vector<std::vector<Entity>> PkbReaderManager::getModifiesProcPair() const {
+    // TODO: Actual implementation
+    return {};
+}
+
 std::vector<Entity> PkbReaderManager::getModifiesTypeIdent(StatementType type, Variable& var) const {
     return this->modifiesRelationshipManager->getModifiesTypeIdent(type, var);
+}
+
+std::vector<Entity> PkbReaderManager::getModifiesProcIdent(Variable& var) const {
+    // TODO: Actual implementation
+    return {};
 }
 
 std::vector<Entity> PkbReaderManager::getModifiesStmt(StatementType type) const {
     return this->modifiesRelationshipManager->getModifiesStmt(type);
 }
 
+std::vector<Entity> PkbReaderManager::getModifiesProc() const {
+    // TODO: Actual implementation
+    return {};
+}
+
 std::vector<Entity> PkbReaderManager::getModifiesVar(Statement& stmt) const {
     return this->modifiesRelationshipManager->getModifiesVar(stmt);
+}
+
+std::vector<Entity> PkbReaderManager::getModifiesVar(Procedure& proc) const {
+    // TODO: Actual implementation
+    return {};
 }
 
 bool PkbReaderManager::isStmtModifiesVar(Statement& stmt, Variable& var) const {
     return this->modifiesRelationshipManager->isStmtModifiesVar(stmt, var);
 }
 
+bool PkbReaderManager::isProcModifiesVar(Procedure& proc, Variable& var) const {
+    // TODO: Actual implementation
+    return true;
+}
+
 bool PkbReaderManager::hasModifies(Statement& stmt) const {
     return this->modifiesRelationshipManager->hasModifies(stmt);
+}
+
+bool PkbReaderManager::hasModifies(Procedure& proc) const {
+    // TODO: Actual implementation
+    return true;
 }
 
 // Pattern queries i.e. pattern a (...,...)
