@@ -59,7 +59,6 @@ TEST_CASE("processDeclarations multiple declaration") {
 TEST_CASE("processDeclarations Errors") {
     SECTION("SyntaxExceptions") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("Select s ", "Expected a declaration but found none");
         testcases.emplace_back("assignment a; Select a", "Expected a declaration but found none");
         testcases.emplace_back("assign a Select s", "Expected ; but found 'Select'");
         testcases.emplace_back("assign a a1; Select a1", "Expected ; but found 'a1'");
@@ -78,6 +77,7 @@ TEST_CASE("processDeclarations Errors") {
     SECTION("SemanticExceptions") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("stmt s; assign s; Select s ", "Trying to redeclare a synonym");
+        testcases.emplace_back("Select s ", "undeclared synonym");
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
