@@ -9,6 +9,7 @@ void ProcToVarRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedur
 
 template <typename S>
 std::vector<std::vector<Entity>> ProcToVarRelationshipManager<S>::getRelationshipProcPair() const {
+    // TODO: Refactor
     std::vector<std::vector<Entity>> result;
     for (auto it = relationshipStore->getLeftToRightBeginIterator(); it != relationshipStore->getLeftToRightEndIterator(); ++it) {
         auto proc = it->first;
@@ -62,6 +63,5 @@ bool ProcToVarRelationshipManager<S>::isRelationship(Procedure& procedure, Varia
 
 template <typename S>
 bool ProcToVarRelationshipManager<S>::hasRelationship(Procedure& procedure) const {
-    auto got = relationshipStore->getRightEntitiesOf(std::make_shared<Procedure>(procedure));
-    return got != nullptr;
+    return relationshipStore->getRightEntitiesOf(std::make_shared<Procedure>(procedure)) != nullptr;
 }

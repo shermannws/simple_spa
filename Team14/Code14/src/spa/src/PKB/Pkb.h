@@ -3,14 +3,14 @@
 #include <memory>
 
 #include "PKB/Managers/AssignmentManager.h"
-#include "PKB/AssignmentPatternStore/AssignmentPatternStore.h"
 #include "PKB/Managers/EntitiesManager.h"
-#include "PKB/RelationshipStores/FollowsRelationshipStore.h"
-#include "PKB/RelationshipStores/UsesRelationshipStore.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
 #include "PKB/Managers/ParentRelationshipManager.h"
+#include "PKB/Managers/CallsRelationshipManager.h"
+#include "PKB/Managers/ModifiesProcRelationshipManager.h"
+#include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/PkbReaderManager.h"
 #include "PKB/Managers/PkbWriterManager.h"
 #include "PKB/PkbReader.h"
@@ -55,7 +55,7 @@ private:
     /**
 	 * @brief The CallsRelationshipManager of the PKB
 	 */
-std::shared_ptr<CallsRelationshipManager> callsRelationshipManager;
+    std::shared_ptr<CallsRelationshipManager> callsRelationshipManager;
 
 	/**
      * @brief The ModifiesProcRelationshipManager of the PKB
