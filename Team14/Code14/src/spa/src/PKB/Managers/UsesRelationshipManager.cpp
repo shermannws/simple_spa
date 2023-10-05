@@ -1,6 +1,6 @@
 #include "UsesRelationshipManager.h"
 
-UsesRelationshipManager::UsesRelationshipManager() : StmtToVarRelationshipManager<UsesRelationshipStore, UsesRelationship>() {};
+UsesRelationshipManager::UsesRelationshipManager() : StmtToVarRelationshipManager() {};
 
 void UsesRelationshipManager::storeUsesRelationship(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable) {
     return this->storeRelationship(statement, variable);

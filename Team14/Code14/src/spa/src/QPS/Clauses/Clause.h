@@ -22,7 +22,7 @@ enum class ClauseType {
  * @brief Clause class
  */
 class Clause {
-private:
+protected:
     /**
      * @brief The ClauseType of the Clause
      */

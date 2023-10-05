@@ -7,7 +7,7 @@ ParentExtractorVisitor::ParentExtractorVisitor(std::shared_ptr<PkbWriter> writer
 	this->pkbWriter = writer;
 }
 
-void ParentExtractorVisitor::visitStatementListNode(StatementListNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const {
+void ParentExtractorVisitor::visitStatementListNode(StatementListNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
 	auto stmts = node->getStatements();
 
 	bool isDirect = true;
