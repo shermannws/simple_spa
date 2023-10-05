@@ -7,6 +7,9 @@
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
 #include "PKB/Managers/ParentRelationshipManager.h"
+#include "PKB/Managers/CallsRelationshipManager.h"
+#include "PKB/Managers/UsesProcRelationshipManager.h"
+#include "PKB/Managers/ModifiesProcRelationshipManager.h"
 #include "PKB/PkbTypes.h"
 
 /**
@@ -43,6 +46,21 @@ private:
      * @brief The parent relationship manager.
      */
     std::shared_ptr<ParentRelationshipManager> parentRelationshipManager;
+
+    /**
+     * @brief The calls relationship manager.
+     */
+    std::shared_ptr<CallsRelationshipManager> callsRelationshipManager;
+
+    /**
+     * @brief The modifies procedure relationship manager.
+     */
+    std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager;
+
+    /**
+     * @brief The uses procedure relationship manager.
+     */
+    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager;
 public:
     /**
      * @brief Constructs a PkbReaderManager object.
@@ -52,6 +70,9 @@ public:
      * @param usesRelationshipManager The uses relationship manager.
      * @param modifiesRelationshipManager The modifies relationship manager.
      * @param parentRelationshipManager The parent relationship manager.
+     * @param callsRelationshipManager The calls relationship manager.
+     * @param modifiesProcRelationshipManager The modifies procedure relationship manager.
+     * @param usesProcRelationshipManager The uses procedure relationship manager.
      * @return The PkbReaderManager object.
      */
     PkbReaderManager(
@@ -60,7 +81,10 @@ public:
             std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
             std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
-            std::shared_ptr<ParentRelationshipManager> parentRelationshipManager
+            std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
+            std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
+            std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
+            std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager
     );
 
     /**

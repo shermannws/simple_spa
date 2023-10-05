@@ -20,7 +20,10 @@ Pkb::Pkb() {
                     this->followsRelationshipManager,
                     this->usesRelationshipManager,
                     this->modifiesRelationshipManager,
-                    this->parentRelationshipManager
+                    this->parentRelationshipManager,
+                    this->callsRelationshipManager,
+                    this->modifiesProcRelationshipManager,
+                    this->usesProcRelationshipManager
             )
     );
     this->pkbWriterManager = std::make_shared<PkbWriterManager>(

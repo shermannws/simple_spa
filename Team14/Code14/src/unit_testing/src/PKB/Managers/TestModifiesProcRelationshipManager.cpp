@@ -1,7 +1,7 @@
 #include <memory>
 
 #include "catch.hpp"
-#include "PKB/Managers/MapStoresManagers/ModifiesProcRelationshipManager.h"
+#include "PKB/Managers/ModifiesProcRelationshipManager.h"
 
 using namespace std;
 

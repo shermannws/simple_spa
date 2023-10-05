@@ -10,8 +10,8 @@
 #include "Commons/Entities/Procedure.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
 #include "PKB/Managers/ParentRelationshipManager.h"
-#include "PKB/Managers/MapStoresManagers/ModifiesProcRelationshipManager.h"
-#include "PKB/Managers/MapStoresManagers/UsesProcRelationshipManager.h"
+#include "ModifiesProcRelationshipManager.h"
+#include "UsesProcRelationshipManager.h"
 #include "PKB/PkbTypes.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
 
