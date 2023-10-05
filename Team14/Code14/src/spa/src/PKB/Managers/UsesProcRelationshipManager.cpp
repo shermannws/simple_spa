@@ -29,3 +29,7 @@ bool UsesProcRelationshipManager::isProcUsesVar(Procedure& procedure, Variable& 
 bool UsesProcRelationshipManager::hasProcUses(Procedure& procedure) const {
 	return this->hasRelationship(procedure);
 }
+
+void UsesProcRelationshipManager::calculateUsesRelationshipForCallers(std::shared_ptr<CallsRelationshipManager> callManager) {
+	return this->calculateProcVarRelationshipForCallers(callManager);
+}

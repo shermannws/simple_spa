@@ -63,12 +63,13 @@ void PkbConcreteWriter::addCallsRelationship(std::shared_ptr<Procedure> p1, std:
 }
 
 void PkbConcreteWriter::addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) {
-    // TODO: implement
-    return;
+    this->writerManager->addProcedureToStatementsMap(p, s);
 }
 
 void PkbConcreteWriter::triggerTransitiveCalc() {
     this->writerManager->triggerCallsTransitiveCalculation();
+    this->writerManager->triggerProcToVarTransitiveCalculation();
+    this->writerManager->triggerStmtToVarTransitiveCalculation();
 }
 
 void PkbConcreteWriter::addModifiesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {

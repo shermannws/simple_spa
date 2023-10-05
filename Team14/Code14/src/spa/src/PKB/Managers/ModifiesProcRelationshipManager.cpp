@@ -29,3 +29,7 @@ bool ModifiesProcRelationshipManager::isProcModifiesVar(Procedure& procedure, Va
 bool ModifiesProcRelationshipManager::hasProcModifies(Procedure& procedure) const {
 	return this->hasRelationship(procedure);
 }
+
+void ModifiesProcRelationshipManager::calculateModifiesRelationshipForCallers(std::shared_ptr<CallsRelationshipManager> callManager) {
+	return this->calculateProcVarRelationshipForCallers(callManager);
+}

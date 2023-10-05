@@ -112,3 +112,8 @@ void ProcToProcRelationshipManager<S>::calculateTransitiveRelationshipHelper(std
 		calculateTransitiveRelationshipHelper(former, newLatter);
 	}
 }
+
+template <typename S>
+std::shared_ptr<EntityStore<Procedure>> ProcToProcRelationshipManager<S>::getRelationshipFormerStarAsProcedure(Procedure& latterProcedure) const {
+    return starRelationshipStore->getLeftEntitiesOf(std::make_shared<Procedure>(latterProcedure));
+};

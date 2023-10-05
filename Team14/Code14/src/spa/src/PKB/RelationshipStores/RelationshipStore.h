@@ -90,5 +90,7 @@ public:
     typename std::unordered_map<std::shared_ptr<T>, std::shared_ptr<EntityStore<U>>>::iterator getRightToLeftEndIterator();
 
     bool isEmpty() const;
+
+    void clear();
 };
 #include "RelationshipStore.hpp"

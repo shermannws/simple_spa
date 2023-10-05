@@ -70,4 +70,10 @@ public:
      * @return A boolean value indicating if the procedure modifies any variable
      */
     bool hasProcModifies(Procedure& procedure) const;
+
+    /**
+     * Calculates and populate the Modifies (Proc-Var) relationship with the given CallsRelationshipManager
+     * @param callManager The CallsRelationshipManager to be used to calculate the Modifies (Proc-Var) relationship
+     */
+    void calculateModifiesRelationshipForCallers(std::shared_ptr<CallsRelationshipManager> callManager);
 };

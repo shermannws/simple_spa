@@ -70,4 +70,10 @@ public:
      * @return A boolean value indicating if the procedure uses any variable
      */
     bool hasProcUses(Procedure& procedure) const;
+
+    /**
+     * Calculates and populate the Uses (Proc-Var) relationship with the given CallsRelationshipManager
+     * @param callManager The CallsRelationshipManager to be used to calculate the Uses (Proc-Var) relationship
+     */
+    void calculateUsesRelationshipForCallers(std::shared_ptr<CallsRelationshipManager> callManager);
 };

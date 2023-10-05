@@ -77,3 +77,21 @@ void PkbWriterManager::addUsesProcRelationship(std::shared_ptr<Procedure> p, std
 void PkbWriterManager::triggerCallsTransitiveCalculation() {
 	this->callsRelationshipManager->calculateCallsStar();
 }
+
+void PkbWriterManager::addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) {
+    for (auto stmt : s) {
+		this->tempProcedureToStatementsMap.storeRelationship(p, stmt);
+	}
+}
+
+void PkbWriterManager::triggerProcToVarTransitiveCalculation() {
+    this->modifiesProcRelationshipManager->calculateModifiesRelationshipForCallers(this->callsRelationshipManager);
+    this->usesProcRelationshipManager->calculateUsesRelationshipForCallers(this->callsRelationshipManager);
+}
+
+void PkbWriterManager::triggerStmtToVarTransitiveCalculation() {
+    //for every stmt proc relationship in the temp map, stmt uses whatever the proc(s) uses
+    //for every stmt proc relationship in the temp map, stmt modifies whatever the proc(s) modifies
+    this->tempProcedureToStatementsMap.clear();
+    return;
+}
