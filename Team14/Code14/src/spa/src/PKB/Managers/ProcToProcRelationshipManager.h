@@ -14,13 +14,14 @@
  * @tparam S The type of the relationship store
  * @tparam R The type of the relationship
  */
-template <typename S, typename R>
+template <typename S>
 class ProcToProcRelationshipManager {
 private:
     /**
      * @brief The relationship store
      */
     std::shared_ptr<S> relationshipStore;
+    std::shared_ptr<S> starRelationshipStore;
 protected:
     /**
      * @brief Constructs a ProcToProcRelationshipManager object

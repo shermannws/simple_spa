@@ -10,16 +10,15 @@
  * @class StmtToStmtRelationshipManager is responsible for storing and retrieving the relationships
  * between statements and statements.
  * This class is a template class that is inherited by the Relationship Managers
- * @tparam S The type of the relationship store
- * @tparam R The type of the relationship
  */
-template <typename S, typename R>
+template <typename S>
 class StmtToStmtRelationshipManager {
 private:
     /**
      * @brief The relationship store
      */
     std::shared_ptr<S> relationshipStore;
+    std::shared_ptr<S> starRelationshipStore;
 protected:
     /**
      * @brief Constructs a StmtToStmtRelationshipManager object

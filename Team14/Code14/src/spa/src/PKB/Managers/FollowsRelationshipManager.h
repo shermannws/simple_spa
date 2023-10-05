@@ -6,7 +6,6 @@
 
 #include "PKB/RelationshipStores/FollowsRelationshipStore.h"
 #include "Commons/Entities/Statement.h"
-#include "PKB/Relationships/FollowsRelationship.h"
 #include "PKB/Managers/StmtToStmtRelationshipManager.h"
 
 /**
@@ -14,7 +13,7 @@
  * @brief Manages the Follows relationship
  * @note: A Follows relationship is a relationship between two statements where the first statement is executed before the second statement
  */
-class FollowsRelationshipManager : StmtToStmtRelationshipManager<FollowsRelationshipStore, FollowsRelationship> {
+class FollowsRelationshipManager : StmtToStmtRelationshipManager<FollowsRelationshipStore> {
 public:
     /**
      * @brief Constructs a FollowsRelationshipManager object

@@ -56,6 +56,8 @@ public:
      * @return The entity from the EntityStore that is equal to the entity passed in
      */
     std::shared_ptr<Entity> getEntity(std::shared_ptr<T> entity) const;
+
+    bool isEmpty() const;
 };
 
 #include "EntityStore.hpp"

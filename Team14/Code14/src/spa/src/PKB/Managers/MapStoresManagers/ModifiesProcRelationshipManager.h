@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "ProcToVarRelationshipManager.h"
-#include "PKB/RelationshipStores/MapStores/ModifiesProcRelationshipStore.h"
+#include "PKB/RelationshipStores/ModifiesProcRelationshipStore.h"
 #include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Variable.h"
 

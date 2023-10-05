@@ -1,6 +1,6 @@
 #include "FollowsRelationshipManager.h"
 
-FollowsRelationshipManager::FollowsRelationshipManager() : StmtToStmtRelationshipManager<FollowsRelationshipStore, FollowsRelationship>() {};
+FollowsRelationshipManager::FollowsRelationshipManager() : StmtToStmtRelationshipManager() {};
 
 void FollowsRelationshipManager::storeFollowsRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2, bool isDirect) {
     this->storeRelationship(statement1, statement2, isDirect);
