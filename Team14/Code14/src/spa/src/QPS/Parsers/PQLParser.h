@@ -60,7 +60,7 @@ private:
     * @brief Validates SuchThatRefType LHS & RHS according to ClauseType
     * @param clause the shared pointer of SuchThatClause to validate
     */
-    void setSuchThatRefType(std::shared_ptr<SuchThatClause> clause);
+    void validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause);
 
     /**
      * @brief Returns a PatternClause if syntax is valid, otherwise throws a SyntaxException

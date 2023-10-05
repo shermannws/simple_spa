@@ -138,11 +138,11 @@ std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
         throw SyntaxException("No right parenthesis");
     }
 
-    setSuchThatRefType(clause);
+    validateSuchThatRefType(clause);
     return clause;
 }
 
-void PQLParser::setSuchThatRefType(std::shared_ptr<SuchThatClause> clause) {
+void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause) {
     ClauseType type = clause->getType();
     Ref& leftRef = clause->getFirstParam();
     Ref& rightRef = clause->getSecondParam();
