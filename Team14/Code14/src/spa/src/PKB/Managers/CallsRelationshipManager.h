@@ -92,4 +92,9 @@ public:
      * @return True if there exists a procedure that calls the given procedure, false otherwise
      */
     bool hasFormerProc(Procedure& latterProcedure) const;
+
+    /**
+     * Calculates the Calls* relationship and stores it in the PKB.
+	 */
+    void calculateCallsStar();
 };

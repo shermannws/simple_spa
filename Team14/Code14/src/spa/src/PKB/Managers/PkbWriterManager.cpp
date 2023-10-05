@@ -73,3 +73,7 @@ void PkbWriterManager::addModifiesProcRelationship(std::shared_ptr<Procedure> p,
 void PkbWriterManager::addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {
 	this->usesProcRelationshipManager->storeUsesProcRelationship(p, v);
 }
+
+void PkbWriterManager::triggerCallsTransitiveCalculation() {
+	this->callsRelationshipManager->calculateCallsStar();
+}

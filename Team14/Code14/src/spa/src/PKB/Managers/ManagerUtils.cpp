@@ -65,7 +65,8 @@ std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKey(RelationshipStore<
 //    return getFromStore<std::vector<Entity>, RelationshipStore<K, V>, K, V>(store, getter, key, matcher);
 //}
 
-void ManagerUtils::unique(std::vector<Entity>& v) {
-    std::unordered_set<Entity> s(v.begin(), v.end());
+template <typename E>
+void ManagerUtils::unique(std::vector<E>& v) {
+    std::unordered_set<E> s(v.begin(), v.end());
     v.assign(s.begin(), s.end());
 }

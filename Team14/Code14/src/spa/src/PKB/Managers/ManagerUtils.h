@@ -112,8 +112,10 @@ public:
 
 
     /**
-     * @brief A function that removes duplicates in a vector of entities
-     * @param v The vector of entities to be modified
+     * @brief A function that removes duplicates in a vector of object of type E
+     * @tparam E The type stored in the vector to make unique
+     * @param v The vector to be modified
      */
-    static void unique(std::vector<Entity>& v);
+    template<typename E>
+    static void unique(std::vector<E>& v);
 };

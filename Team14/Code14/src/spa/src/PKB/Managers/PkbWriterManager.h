@@ -168,4 +168,10 @@ public:
      * @param v The shared pointer to the variable.
      */
     void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v);
+
+    /**
+     * @brief Triggers transitivity calculation for Calls* relationship.
+     * @note This method should be called after all calls relationships have been added.
+     */
+    void triggerCallsTransitiveCalculation();
 };

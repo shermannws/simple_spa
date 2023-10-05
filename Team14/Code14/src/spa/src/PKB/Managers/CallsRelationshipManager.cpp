@@ -41,3 +41,7 @@
  bool CallsRelationshipManager::hasFormerProc(Procedure& latterProcedure) const {
 	 return this->isLatter(latterProcedure);
  };
+
+ void CallsRelationshipManager::calculateCallsStar() {
+	 this->calculateTransitiveRelationship();
+ };

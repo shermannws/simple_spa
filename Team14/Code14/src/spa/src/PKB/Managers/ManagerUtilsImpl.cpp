@@ -34,3 +34,5 @@ template std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKey<Procedure
 template std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKey<Procedure, Variable>(RelationshipStore<Procedure, Variable>& store, Procedure& key, std::function<bool(Variable&)> matcher);
 
 template std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKey<Procedure, Variable>(RelationshipStore<Procedure, Variable>& store, Variable& key, std::function<bool(Procedure&)> matcher);
+
+template void ManagerUtils::unique<Entity>(std::vector<Entity>& vec);
