@@ -10,6 +10,7 @@
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/ModifiesProcRelationshipManager.h"
+#include "PKB/Managers/AssignmentManager.h"
 #include "PKB/PkbTypes.h"
 
 /**
