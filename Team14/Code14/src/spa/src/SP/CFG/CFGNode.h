@@ -2,6 +2,7 @@
 
 #include <string>
 #include <utility>
+#include <memory>
 #include <vector>
 
 #include "Commons/AppConstants.h"
