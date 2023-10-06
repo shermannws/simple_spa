@@ -75,6 +75,7 @@ CFGBuilder::buildIfSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNod
     auto [thenHeadNode, thenTailNode] = buildStatementListSubgraph(map, ifNode->getThenStatementList());
     auto [elseHeadNode, elseTailNode] = buildStatementListSubgraph(map, ifNode->getElseStatementList());
 
+    // TODO: either incorporate dummytails to all subgraphs and handle it, or find a way to remove this dummytail
     auto dummyTail = std::make_shared<CFGNode>(-1);
 
     // add if to then stmtlst edge
