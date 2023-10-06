@@ -45,6 +45,9 @@ void SP::startSPProcessing(std::string& input) {
         //Traverse the AST from root node
         Traverser traverser = Traverser(visitors);
         traverser.traverse(root);
+
+        //Trigger PKB to do transitivity calculations
+        pkbWriter->triggerTransitiveCalc();
     } catch (const SyntaxError& e) {
         std::cout << "\n" << e.what() << "\n\n" << "Terminating program due to invalid SIMPLE code." << std::endl;
         std::exit(EXIT_FAILURE); // Exit the program with an error code
