@@ -2,6 +2,7 @@
 
 #include "PKB/AssignmentPatternStore/Assignment.h"
 #include "PKB/PkbWriter.h"
+#include "PKB/Managers/ManagerUtils.h"
 
 PkbWriterManager::PkbWriterManager(
         std::shared_ptr<AssignmentManager> assignmentManager,
@@ -90,8 +91,7 @@ void PkbWriterManager::triggerProcToVarTransitiveCalculation() {
 }
 
 void PkbWriterManager::triggerStmtToVarTransitiveCalculation() {
-    //for every stmt proc relationship in the temp map, stmt uses whatever the proc(s) uses
-    //for every stmt proc relationship in the temp map, stmt modifies whatever the proc(s) modifies
+    ManagerUtils::addStmtVarFromProcVar(this->modifiesRelationshipManager, std::make_shared<RelationshipStore<Procedure, Statement>>(this->tempProcedureToStatementsMap), this->modifiesProcRelationshipManager);
+    ManagerUtils::addStmtVarFromProcVar(this->usesRelationshipManager, std::make_shared<RelationshipStore<Procedure, Statement>>(this->tempProcedureToStatementsMap), this->usesProcRelationshipManager);
     this->tempProcedureToStatementsMap.clear();
-    return;
 }

@@ -16,7 +16,7 @@
  * @brief Manages the Modifies relationships
  * @note A Modifies relationship is a relationship between a statement and a variable where the statement modifies the variable
  */
-class ModifiesRelationshipManager : StmtToVarRelationshipManager<ModifiesRelationshipStore> {
+class ModifiesRelationshipManager : public StmtToVarRelationshipManager<ModifiesRelationshipStore> {
 public:
     /**
      * @brief Constructs a ModifiesRelationshipManager object

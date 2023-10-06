@@ -5,7 +5,10 @@
 #include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
-
+#include "PKB/Managers/ModifiesProcRelationshipManager.h"
+#include "PKB/Managers/ModifiesRelationshipManager.h"
+#include "PKB/Managers/UsesProcRelationshipManager.h"
+#include "PKB/Managers/UsesRelationshipManager.h"
 
 template std::vector<Entity> ManagerUtils::getEntitiesFromStore<AssignmentPatternStore, Assignment>(std::shared_ptr<AssignmentPatternStore> store, std::function<bool(Assignment&)> matcher, std::function<Entity(Assignment&)> getter);
 
@@ -36,3 +39,7 @@ template std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKey<Procedure
 template std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKey<Procedure, Variable>(RelationshipStore<Procedure, Variable>& store, Variable& key, std::function<bool(Procedure&)> matcher);
 
 template void ManagerUtils::unique<Entity>(std::vector<Entity>& vec);
+
+template void ManagerUtils::addStmtVarFromProcVar(std::shared_ptr<ModifiesRelationshipManager> stmtVarManager, std::shared_ptr<RelationshipStore<Procedure, Statement>> procStmtStore, std::shared_ptr<ModifiesProcRelationshipManager> procVarManager);
+
+template void ManagerUtils::addStmtVarFromProcVar(std::shared_ptr<UsesRelationshipManager> stmtVarManager, std::shared_ptr<RelationshipStore<Procedure, Statement>> procStmtStore, std::shared_ptr<UsesProcRelationshipManager> procVarManager);

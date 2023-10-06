@@ -82,4 +82,9 @@ void ProcToVarRelationshipManager<S>::calculateProcVarRelationshipForCallers(std
             }
         }
     }
+}
+
+template <typename S>
+std::shared_ptr<EntityStore<Variable>> ProcToVarRelationshipManager<S>::getRightVariablesOf(std::shared_ptr<Procedure> left) const {
+    return relationshipStore->getRightEntitiesOf(left);
 };

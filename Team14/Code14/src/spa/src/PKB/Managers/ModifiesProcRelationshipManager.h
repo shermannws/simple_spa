@@ -15,7 +15,7 @@
  * @brief Manages the Modifies (Procedure) relationships
  * @note A Modifies relationship is a relationship between a procedure and a variable where the procedure modifies the variable
  */
-class ModifiesProcRelationshipManager : ProcToVarRelationshipManager<ModifiesProcRelationshipStore> {
+class ModifiesProcRelationshipManager : public ProcToVarRelationshipManager<ModifiesProcRelationshipStore> {
 public:
     /**
      * @brief Constructs a ModifiesProcRelationshipManager object

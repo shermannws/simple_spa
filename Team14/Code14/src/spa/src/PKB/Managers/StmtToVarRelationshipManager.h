@@ -22,19 +22,21 @@ private:
      * @brief The relationship store
      */
     std::shared_ptr<S> relationshipStore;
-protected:
-    /**
-     * @brief Constructs a StmtToVarRelationshipManager object
-     * @return A StmtToVarRelationshipManager object
-     */
-    StmtToVarRelationshipManager();
 
+public:
     /**
      * Stores a new relationship into PKB via the Manager
      * @param statement The statement that is related to the variable
      * @param variable The variable that is related to the statement
      */
     void storeRelationship(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable);
+
+protected:
+    /**
+     * @brief Constructs a StmtToVarRelationshipManager object
+     * @return A StmtToVarRelationshipManager object
+     */
+    StmtToVarRelationshipManager();
 
     /**
      * Returns a vector of Statement, Variable pair where the statement is related to the variable. Retrieves the relationship where the statement is of the given type

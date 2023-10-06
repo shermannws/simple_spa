@@ -16,7 +16,7 @@
  * @brief Manages the Uses relationships
  * @note A Uses relationship is a relationship between a statement and a variable where the statement uses the variable
  */
-class UsesRelationshipManager : StmtToVarRelationshipManager<UsesRelationshipStore> {
+class UsesRelationshipManager : public StmtToVarRelationshipManager<UsesRelationshipStore> {
 public:
     /**
      * @brief Constructs a UsesRelationshipManager object

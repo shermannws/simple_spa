@@ -7,6 +7,8 @@
 #include "Commons/Entities/Entity.h"
 #include "PKB/RelationshipStores/RelationshipStore.h"
 #include "PKB/EntityStores/EntityStore.h"
+#include "Commons/Entities/Procedure.h"
+#include "Commons/Entities/Statement.h"
 
 /**
  * @brief A class that contains utility functions for the Managers
@@ -26,7 +28,7 @@ public:
      */
     template<typename E, typename S, typename R>
     static std::vector<E>
-    getFromSetStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<E(R&)> getter);
+        getFromSetStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<E(R&)> getter);
 
     /**
      * @brief A function that retrieves entities from a set-based store based on a matcher and getter function
@@ -39,7 +41,7 @@ public:
      */
     template<typename S, typename R>
     static std::vector<Entity>
-    getEntitiesFromStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<Entity(R&)> getter);
+        getEntitiesFromStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<Entity(R&)> getter);
 
     /**
      * @brief A function that retrieves entities from an entity store based on a matcher and getter function
@@ -51,7 +53,7 @@ public:
      */
     template<typename E>
     static std::vector<Entity>
-    getEntitiesFromEntityStore(std::shared_ptr<EntityStore<E>> store, std::function<bool(E&)> matcher, std::function<Entity(E&)> getter);
+        getEntitiesFromEntityStore(std::shared_ptr<EntityStore<E>> store, std::function<bool(E&)> matcher, std::function<Entity(E&)> getter);
 
 
     /**
@@ -65,7 +67,7 @@ public:
      */
     template<typename S, typename R>
     static std::vector<std::vector<Entity>>
-    getEntityPairsFromStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<std::vector<Entity>(R&)> getter);
+        getEntityPairsFromStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<std::vector<Entity>(R&)> getter);
 
     /**
      * @brief A function that retrieves objects from a map-based store based on a matcher and getter function
@@ -81,7 +83,7 @@ public:
      // TODO: Documentation
     template <typename E, typename S, typename K, typename V, typename R>
     static std::vector<R>
-    getFromMapStore(S& store, std::function<std::shared_ptr<E>(S&, K&)> getter, K& key, std::function<bool(V&)> matcher);
+        getFromMapStore(S& store, std::function<std::shared_ptr<E>(S&, K&)> getter, K& key, std::function<bool(V&)> matcher);
 
 
     /**
@@ -95,7 +97,7 @@ public:
      // TODO: Documentation
     template <typename L, typename R>
     static std::vector<Entity>
-    getRightEntitiesFromLeftKey(RelationshipStore<L, R>& store, L& key, std::function<bool(R&)> matcher);
+        getRightEntitiesFromLeftKey(RelationshipStore<L, R>& store, L& key, std::function<bool(R&)> matcher);
 
     /**
      * @brief A function that retrieves entity pairs from a relationship store based on a matcher and getter function
@@ -108,7 +110,7 @@ public:
      // TODO: Documentation
     template <typename L, typename R>
     static std::vector<Entity>
-    getLeftEntitiesFromRightKey(RelationshipStore<L, R>& store, R& key, std::function<bool(L&)> matcher);
+        getLeftEntitiesFromRightKey(RelationshipStore<L, R>& store, R& key, std::function<bool(L&)> matcher);
 
 
     /**
@@ -118,4 +120,12 @@ public:
      */
     template<typename E>
     static void unique(std::vector<E>& v);
+
+    /**
+     * @brief A function that adds to stmtVarManager (s,v) given the the (s,p) pairs in procStmtStore such that (p,v) is in procVarManager
+     * @tparam S The type of the statement variable manager
+     * @tparam P The type of the procedure variable manager
+     */
+    template<typename S, typename P>
+    static void addStmtVarFromProcVar(std::shared_ptr<S> stmtVarManager, std::shared_ptr<RelationshipStore<Procedure, Statement>> procStmtStore, std::shared_ptr<P> procVarManager);
 };

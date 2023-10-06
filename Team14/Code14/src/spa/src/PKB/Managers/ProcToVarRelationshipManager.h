@@ -85,6 +85,9 @@ protected:
      * @param callManager The CallsRelationshipManager
 	 */
     void calculateProcVarRelationshipForCallers(std::shared_ptr<CallsRelationshipManager> callManager);
+
+public:
+    std::shared_ptr<EntityStore<Variable>> getRightVariablesOf(std::shared_ptr<Procedure> left) const;
 };
 
 #include "ProcToVarRelationshipManager.hpp"
