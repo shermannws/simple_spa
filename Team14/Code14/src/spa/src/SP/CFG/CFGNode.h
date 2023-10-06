@@ -1,7 +1,10 @@
 #pragma once
 
 #include <string>
+#include <vector>
+
 #include "Commons/AppConstants.h"
+#include "Commons/Entities/StatementType.h"
 
 /**
  * CFGNode to represent a single statement in the CFG.
@@ -23,7 +26,18 @@ private:
      */
     std::vector<std::shared_ptr<CFGNode>> children;
 
+    /**
+     * The type of the statement.
+     */
+    StatementType statementType;
+
 public:
+    /**
+     * Creates and initialises a CFGNode.
+     * @param statementNumber The statement number of the node
+     */
+    explicit CFGNode(StatementNumber statementNumber);
+
     /**
      * Creates and initialises a CFGNode.
      * @param statementNumber The statement number of the node
@@ -50,4 +64,22 @@ public:
      * @return Vector of CFGNodes
      */
     std::vector<std::shared_ptr<CFGNode>> getChildrenNodes();
+
+    /**
+     * Adds a parent node to this CFGNode.
+     * @param parent CFGNode to be added as a parent of this CFGNode
+     */
+    void addParentNode(const std::shared_ptr<CFGNode>& parent);
+
+    /**
+     * Adds a child node to this CFGNode.
+     * @param child CFGNode to be added as a child of this CFGNode
+     */
+    void addChildNode(const std::shared_ptr<CFGNode>& child);
+
+    /**
+     * Returns the statement type of this CFGNode
+     * @return Statement type of the CFGNode
+     */
+    StatementType getStatementType();
 };
