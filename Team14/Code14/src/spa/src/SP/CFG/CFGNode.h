@@ -1,6 +1,9 @@
 #pragma once
 
 #include <string>
+#include <utility>
+#include <vector>
+
 #include "Commons/AppConstants.h"
 
 /**
