@@ -19,18 +19,40 @@ template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Statement>
 
 template std::vector<Entity> ManagerUtils::getEntitiesFromEntityStore<Variable>(std::shared_ptr<EntityStore<Variable>> store, std::function<bool(Variable&)> matcher, std::function<Entity(Variable&)> getter);
 
-template std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKey<Statement, Statement>(RelationshipStore<Statement, Statement>& store, Statement& key, std::function<bool(Statement&)> matcher);
+template std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKeyStmtMatch<Statement>(RelationshipStore<Statement, Statement>& store, Statement& key, StatementType type);
 
-template std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKey<Statement, Statement>(RelationshipStore<Statement, Statement>& store, Statement& key, std::function<bool(Statement&)> matcher);
+template std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch<Statement>(RelationshipStore<Statement, Statement>& store, Statement& key, StatementType type);
 
-template std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKey<Statement, Variable>(RelationshipStore<Statement, Variable>& store, Statement& key, std::function<bool(Variable&)> matcher);
+template std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch<Variable>(RelationshipStore<Statement, Variable>& store, Variable& key, StatementType type);
 
-template std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKey<Statement, Variable>(RelationshipStore<Statement, Variable>& store, Variable& key, std::function<bool(Statement&)> matcher);
+template std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKeyNoMatch<Statement, Variable>(RelationshipStore<Statement, Variable>& store, Statement& key);
 
-template std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKey<Procedure, Procedure>(RelationshipStore<Procedure, Procedure>& store, Procedure& key, std::function<bool(Procedure&)> matcher);
+template std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKeyNoMatch<Procedure, Procedure>(RelationshipStore<Procedure, Procedure>& store, Procedure& key);
 
-template std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKey<Procedure, Procedure>(RelationshipStore<Procedure, Procedure>& store, Procedure& key, std::function<bool(Procedure&)> matcher);
+template std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKeyNoMatch<Procedure, Procedure>(RelationshipStore<Procedure, Procedure>& store, Procedure& key);
 
-template std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKey<Procedure, Variable>(RelationshipStore<Procedure, Variable>& store, Procedure& key, std::function<bool(Variable&)> matcher);
+template std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKeyNoMatch<Procedure, Variable>(RelationshipStore<Procedure, Variable>& store, Procedure& key);
 
-template std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKey<Procedure, Variable>(RelationshipStore<Procedure, Variable>& store, Variable& key, std::function<bool(Procedure&)> matcher);
+template std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKeyNoMatch<Procedure, Variable>(RelationshipStore<Procedure, Variable>& store, Variable& key);
+
+
+template std::vector<Entity> ManagerUtils::getLeftKeysStmtMatch<Variable>(RelationshipStore<Statement, Variable> &store,StatementType type);
+
+template std::vector<Entity> ManagerUtils::getLeftKeysStmtMatch<Statement>(RelationshipStore<Statement, Statement> &store,StatementType type);
+
+template std::vector<Entity> ManagerUtils::getRightKeysStmtMatch<Statement>(RelationshipStore<Statement, Statement> &store, StatementType type);
+
+template std::vector<Entity> ManagerUtils::getLeftKeysNoMatch<Procedure, Variable>(RelationshipStore<Procedure, Variable> &store);
+
+template std::vector<Entity> ManagerUtils::getLeftKeysNoMatch<Procedure, Procedure>(RelationshipStore<Procedure, Procedure> &store);
+
+template std::vector<Entity> ManagerUtils::getRightKeysNoMatch<Procedure, Procedure>(RelationshipStore<Procedure, Procedure> &store);
+
+
+template bool ManagerUtils::mapContains<Statement, Variable>(RelationshipStore<Statement, Variable> &store,Statement &key,Variable &value);
+
+template bool ManagerUtils::mapContains<Statement, Statement>(RelationshipStore<Statement, Statement> &store,Statement &key,Statement &value);
+
+template bool ManagerUtils::mapContains<Procedure, Procedure>(RelationshipStore<Procedure, Procedure> &store,Procedure &key,Procedure &value);
+
+template bool ManagerUtils::mapContains<Procedure, Variable>(RelationshipStore<Procedure, Variable> &store,Procedure &key,Variable &value);

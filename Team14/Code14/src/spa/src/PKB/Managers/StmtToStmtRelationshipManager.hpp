@@ -31,58 +31,30 @@ std::vector<std::vector<Entity>> StmtToStmtRelationshipManager<S>::getRelationsh
 
 template <typename S>
 std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeStmt(StatementType type, Statement& statement, bool requireDirect) const {
-    auto matcher = [type](Statement& stmt) {
-        return stmt.isStatementType(type);
-    };
-
-    return ManagerUtils::getLeftEntitiesFromRightKey<Statement, Statement>(
-                                                    requireDirect ? *relationshipStore : *starRelationshipStore,
-                                                     statement,
-                                                     matcher);
+    return ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch<Statement>(requireDirect ? *relationshipStore : *starRelationshipStore, statement, type);
 }
 
 template <typename S>
 std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type) const { // Same for Follows and Follows* since Follows* is a superset of Follows
-    std::vector<Entity> result;
-    std::for_each(relationshipStore->getLeftToRightBeginIterator(), relationshipStore->getLeftToRightEndIterator(), [&result, type](const auto pair) {
-        if (pair.first->isStatementType(type)) {
-            result.push_back(*pair.first);
-        }
-    });
-    return result;
+    return ManagerUtils::getLeftKeysStmtMatch<Statement>(*relationshipStore, type);
 }
 
 template <typename S>
 std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipStmtType(Statement& statement, StatementType type, bool requireDirect) const {
-    auto matcher = [type](Statement& stmt) {
-        return stmt.isStatementType(type);
-    };
-
-    return ManagerUtils::getRightEntitiesFromLeftKey<Statement, Statement>(
-                                                    requireDirect ? *relationshipStore : *starRelationshipStore,
+    return ManagerUtils::getRightEntitiesFromLeftKeyStmtMatch<Statement>(requireDirect ? *relationshipStore : *starRelationshipStore,
                                                      statement,
-                                                     matcher);
+                                                     type);
 }
 
 template <typename S>
 std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipWildcardType(StatementType type) const { // Same for Follows and Follows* since Follows* is a superset of Follows
-    std::vector<Entity> result;
-    std::for_each(relationshipStore->getRightToLeftBeginIterator(), relationshipStore->getRightToLeftEndIterator(), [&result, type](const auto pair) {
-        if (pair.first->isStatementType(type)) {
-            result.push_back(*pair.first);
-        }
-    });
-    return result;
+    return ManagerUtils::getRightKeysStmtMatch<Statement>(*relationshipStore, type);
 }
 
 template <typename S>
 bool StmtToStmtRelationshipManager<S>::isRelationship(Statement& statement1, Statement& statement2, bool requireDirect) const {
-    auto store = requireDirect ? relationshipStore : starRelationshipStore;
-    auto stmtStore = store->getRightEntitiesOf(std::make_shared<Statement>(statement1));
-    if (stmtStore == nullptr) {
-        return false;
-    }
-    return stmtStore->getEntity(std::make_shared<Statement>(statement2)) != nullptr;
+    return ManagerUtils::mapContains<Statement, Statement>(requireDirect ? *relationshipStore : *starRelationshipStore, statement1,
+                                     statement2);
 }
 
 template <typename S>

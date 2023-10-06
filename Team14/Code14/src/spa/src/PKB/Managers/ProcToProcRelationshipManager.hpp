@@ -26,50 +26,28 @@ std::vector<std::vector<Entity>> ProcToProcRelationshipManager<S>::getRelationsh
 
 template <typename S>
 std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipFormer(Procedure& latterProcedure, bool requireDirect) const {
-    auto matcher = [](Procedure& procedure) {
-        return true;
-    };
-    return ManagerUtils::getLeftEntitiesFromRightKey<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore,
-        latterProcedure,
-        matcher);
+    return ManagerUtils::getLeftEntitiesFromRightKeyNoMatch<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore, latterProcedure);
 }
 
 template <typename S>
 std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipFormer() const { // Same for Calls and Calls* since Calls* is a superset of Follows
-    std::vector<Entity> result;
-    std::for_each(relationshipStore->getLeftToRightBeginIterator(), relationshipStore->getLeftToRightEndIterator(), [&result](const auto pair) {
-        result.push_back(*pair.first);
-        });
-    return result;
+    return ManagerUtils::getLeftKeysNoMatch<Procedure, Procedure>(*relationshipStore);
 }
 
 template <typename S>
 std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipLatter(Procedure& formerProcedure, bool requireDirect) const {
-    auto matcher = [](Procedure& procedure) {
-        return true;
-        };
-    return ManagerUtils::getRightEntitiesFromLeftKey<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore,
-        formerProcedure,
-        matcher);
+    return ManagerUtils::getRightEntitiesFromLeftKeyNoMatch<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore, formerProcedure);
 }
 
 template <typename S>
 std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipLatter() const { // Same for Calls and Calls* since Calls* is a superset of Follows
-    std::vector<Entity> result;
-    std::for_each(relationshipStore->getRightToLeftBeginIterator(), relationshipStore->getRightToLeftEndIterator(), [&result](const auto pair) {
-        result.push_back(*pair.first);
-    });
-    return result;
+    return ManagerUtils::getRightKeysNoMatch<Procedure, Procedure>(*relationshipStore);
 }
 
 template <typename S>
 bool ProcToProcRelationshipManager<S>::isRelationship(Procedure& procedure1, Procedure& procedure2, bool requireDirect) const {
-    auto store = requireDirect ? relationshipStore : starRelationshipStore;
-    auto procStore = store->getRightEntitiesOf(std::make_shared<Procedure>(procedure1));
-    if (procStore == nullptr) {
-        return false;
-    }
-    return procStore->getEntity(std::make_shared<Procedure>(procedure2)) != nullptr;
+    return ManagerUtils::mapContains<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore, procedure1,
+        procedure2);
 }
 
 template <typename S>
