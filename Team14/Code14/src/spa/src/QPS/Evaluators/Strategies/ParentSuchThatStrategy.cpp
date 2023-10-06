@@ -1,6 +1,7 @@
 #include "ParentSuchThatStrategy.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
+#include "QPS/QPSUtil.h"
 
 ParentSuchThatStrategy::ParentSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader) : SuchThatStrategy(std::move(pkbReader)) {}
 
@@ -14,7 +15,8 @@ Result ParentSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const
     auto rightEntityType = rightRef.getEntityType();
     auto leftSyn = leftRef.getRep();
     auto rightSyn = rightRef.getRep();
-    res.setTuples(pkbReader->getParentPair(stmtMap.at(leftEntityType), stmtMap.at(rightEntityType)));
+    res.setTuples(pkbReader->getParentPair(QPSUtil::entityToStmtMap.at(leftEntityType),
+                                           QPSUtil::entityToStmtMap.at(rightEntityType)));
 
     std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
     res.setSynIndices(indices);
@@ -28,9 +30,9 @@ Result ParentSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const
     if (rightRef.isRootType(RootType::Integer)) {
         auto rightRep = rightRef.getRep();
         Statement s = Statement(stoi(rightRep), StatementType::Stmt);
-        res.setTuples(pkbReader->getParentTypeStmt(stmtMap.at(leftEntityType), s));
+        res.setTuples(pkbReader->getParentTypeStmt(QPSUtil::entityToStmtMap.at(leftEntityType), s));
     } else {
-        res.setTuples(pkbReader->getParentTypeWildcard(stmtMap.at(leftEntityType)));
+        res.setTuples(pkbReader->getParentTypeWildcard(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
     std::unordered_map<std::string, int> indices{{leftSyn, 0}};
     res.setSynIndices(indices);
@@ -44,9 +46,9 @@ Result ParentSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const
     if (leftRef.isRootType(RootType::Integer)) {
         auto leftRep = leftRef.getRep();
         Statement s = Statement(stoi(leftRep), StatementType::Stmt);
-        res.setTuples(pkbReader->getParentStmtType(s, stmtMap.at(rightEntityType)));
+        res.setTuples(pkbReader->getParentStmtType(s, QPSUtil::entityToStmtMap.at(rightEntityType)));
     } else {
-        res.setTuples(pkbReader->getParentWildcardType(stmtMap.at(rightEntityType)));
+        res.setTuples(pkbReader->getParentWildcardType(QPSUtil::entityToStmtMap.at(rightEntityType)));
     }
     std::unordered_map<std::string, int> indices{{rightSyn, 0}};
     res.setSynIndices(indices);

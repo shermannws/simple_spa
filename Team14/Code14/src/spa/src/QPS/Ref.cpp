@@ -52,12 +52,3 @@ bool Ref::isOfStmtRef() {
 bool Ref::isOfEntRef() {
     return isRootType(RootType::Synonym) || isRootType(RootType::Wildcard) || isRootType(RootType::Ident);
 }
-
-bool Ref::isStmtRef() {
-    return type == RefType::StmtRef;
-}
-
-bool Ref::isEntRef() {
-    return type == RefType::StmtRef;
-}
-

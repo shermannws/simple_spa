@@ -9,18 +9,6 @@
  * Strategy interface for each type of clause e.g. UsesStrategy, FollowsStrategy, AssignPatternStrategy, etc
  */
 class Strategy {
-protected:
-    /**
-     * The statement map that converts from QueryEntityType to the corresponding StatementType
-     */
-    std::unordered_map<QueryEntityType, StatementType> stmtMap{
-            {QueryEntityType::Assign, StatementType::Assign},
-            {QueryEntityType::Print, StatementType::Print},
-            {QueryEntityType::Read, StatementType::Read},
-            {QueryEntityType::If, StatementType::If},
-            {QueryEntityType::While, StatementType::While},
-            {QueryEntityType::Stmt, StatementType::Stmt}
-    };
 public:
     /**
      * @brief Evaluates the clause using the appropriate pkbReader method

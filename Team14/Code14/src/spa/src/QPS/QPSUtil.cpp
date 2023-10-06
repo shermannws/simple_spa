@@ -12,8 +12,8 @@ std::unordered_set<ClauseType> QPSUtil::stmtrefClauseTypes = {
     ClauseType::Parent, ClauseType::ParentStar
 };
 
-
 std::unordered_set<ClauseType> QPSUtil::stmtrefProcVarClauseTypes = {ClauseType::Uses, ClauseType::Modifies};
+
 std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
     {QueryEntityType::Stmt, RefType::StmtRef},
     {QueryEntityType::Assign, RefType::StmtRef},
@@ -39,5 +39,12 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
     {ClauseType::Assign, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<AssignPatternStrategy>(pkbReader);}},
 };
 
-
+std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
+        {QueryEntityType::Assign, StatementType::Assign},
+        {QueryEntityType::Print, StatementType::Print},
+        {QueryEntityType::Read, StatementType::Read},
+        {QueryEntityType::If, StatementType::If},
+        {QueryEntityType::While, StatementType::While},
+        {QueryEntityType::Stmt, StatementType::Stmt}
+};
 

@@ -1,6 +1,7 @@
 #include "FollowsStarSuchThatStrategy.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
+#include "QPS/QPSUtil.h"
 
 FollowsStarSuchThatStrategy::FollowsStarSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader) : SuchThatStrategy(std::move(pkbReader)) {}
 
@@ -14,7 +15,8 @@ Result FollowsStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) 
     auto rightEntityType = rightRef.getEntityType();
     auto leftSyn = leftRef.getRep();
     auto rightSyn = rightRef.getRep();
-    res.setTuples(pkbReader->getFollowsStarPair(stmtMap.at(leftEntityType), stmtMap.at(rightEntityType)));
+    res.setTuples(pkbReader->getFollowsStarPair(QPSUtil::entityToStmtMap.at(leftEntityType),
+                                                QPSUtil::entityToStmtMap.at(rightEntityType)));
 
     std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
     res.setSynIndices(indices);
@@ -28,9 +30,9 @@ Result FollowsStarSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) 
     if (rightRef.isRootType(RootType::Integer)) {
         auto rightRep = rightRef.getRep();
         Statement s = Statement(stoi(rightRep), StatementType::Stmt);
-        res.setTuples(pkbReader->getFollowsStarTypeStmt(stmtMap.at(leftEntityType), s));
+        res.setTuples(pkbReader->getFollowsStarTypeStmt(QPSUtil::entityToStmtMap.at(leftEntityType), s));
     } else {
-        res.setTuples(pkbReader->getFollowsStarTypeWildcard(stmtMap.at(leftEntityType)));
+        res.setTuples(pkbReader->getFollowsStarTypeWildcard(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
     std::unordered_map<std::string, int> indices{{leftSyn, 0}};
     res.setSynIndices(indices);
@@ -44,9 +46,9 @@ Result FollowsStarSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) 
     if (leftRef.isRootType(RootType::Integer)) {
         auto leftRep = leftRef.getRep();
         Statement s = Statement(stoi(leftRep), StatementType::Stmt);
-        res.setTuples(pkbReader->getFollowsStarStmtType(s, stmtMap.at(rightEntityType)));
+        res.setTuples(pkbReader->getFollowsStarStmtType(s, QPSUtil::entityToStmtMap.at(rightEntityType)));
     } else {
-        res.setTuples(pkbReader->getFollowsStarWildcardType(stmtMap.at(rightEntityType)));
+        res.setTuples(pkbReader->getFollowsStarWildcardType(QPSUtil::entityToStmtMap.at(rightEntityType)));
     }
     std::unordered_map<std::string, int> indices{{rightSyn, 0}};
     res.setSynIndices(indices);

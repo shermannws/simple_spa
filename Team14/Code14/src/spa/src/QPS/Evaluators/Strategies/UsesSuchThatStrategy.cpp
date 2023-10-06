@@ -1,5 +1,6 @@
 #include "UsesSuchThatStrategy.h"
 #include "Commons/Entities/Entity.h"
+#include "QPS/QPSUtil.h"
 
 UsesSuchThatStrategy::UsesSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader) : SuchThatStrategy(std::move(pkbReader)) {}
 
@@ -11,7 +12,7 @@ Result UsesSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     if (leftEntityType == QueryEntityType::Procedure) { // Uses(p,v)
         res.setTuples(pkbReader->getUsesProcPair());
     } else { // Uses(s,v)
-        res.setTuples(pkbReader->getUsesStmtPair(stmtMap.at(leftEntityType)));
+        res.setTuples(pkbReader->getUsesStmtPair(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
     std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
     res.setSynIndices(indices);
@@ -29,11 +30,11 @@ Result UsesSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
     if (isRightIdent && isLeftProc) { // Uses(p,"var")
         res.setTuples(pkbReader->getUsesProcIdent(v));
     } else if (isRightIdent) { // Uses(s, "var")
-        res.setTuples(pkbReader->getUsesTypeIdent(stmtMap.at(leftEntityType), v));
+        res.setTuples(pkbReader->getUsesTypeIdent(QPSUtil::entityToStmtMap.at(leftEntityType), v));
     } else if (isLeftProc) { // Uses(p,_)
         res.setTuples(pkbReader->getUsesProc());
     } else { // Uses(s,_)
-        res.setTuples(pkbReader->getUsesStmt(stmtMap.at(leftEntityType)));
+        res.setTuples(pkbReader->getUsesStmt(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
     std::unordered_map<std::string, int> indices {{leftSyn, 0}};
     res.setSynIndices(indices);
