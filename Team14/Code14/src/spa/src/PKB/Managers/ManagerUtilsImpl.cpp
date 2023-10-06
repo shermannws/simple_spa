@@ -1,6 +1,6 @@
 #include "PKB/Managers/ManagerUtils.cpp"
-#include "PKB/AssignmentPatternStore/Assignment.h"
-#include "PKB/AssignmentPatternStore/AssignmentPatternStore.h"
+#include "PKB/Commons/Assignment.h"
+#include "PKB/PatternStore/AssignmentPatternStore.h"
 #include "Commons/Entities/Constant.h"
 #include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Statement.h"
