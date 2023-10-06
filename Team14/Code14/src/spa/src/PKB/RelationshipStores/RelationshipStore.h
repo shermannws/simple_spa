@@ -1,67 +1,94 @@
 #pragma once
 
-#include <unordered_set>
+#include <unordered_map>
 #include <memory>
 
-#include "../Relationships/Relationship.h"
-#include "../Relationships/RelationshipHash.h"
+#include "Commons/Entities/Entity.h"
+#include "PKB/EntityStores/EntityStore.h"
 
 /**
- * @brief A class that stores all the Relationships in the SIMPLE source program
- * @details This class is a template class that takes in a Relationship as a template parameter
- * This class is the superclass of all RelationshipStores
- * @tparam T The type of Relationship that the RelationshipStore stores
+ * @brief A class that stores Relationships in the SIMPLE source program using two Hashmaps as the underlying data structure
+ * @details This class is a template class that takes in two Entity subclasses as a template parameter
+ * This class is the superclass of ModifiesProcStores, UsesProcStores
+ * @tparam T The type of Entity that the EntityMapStore stores on the left
+ * @tparam U The type of Entity that the EntityMapStore stores on the right
  */
-template <typename T>
+template <typename T, typename U>
 class RelationshipStore {
 private:
     /**
-     * @brief The unordered_set that stores all the Relationships
+     * @brief The unordered_map that stores all the Relationships of Entity Pairs (T, U)
      */
-    std::unordered_set<
-        std::shared_ptr<T>,
-        RelationshipPtrHash<T>,
-        RelationshipPtrComparator<T>
-    > relationshipStore;
+    std::unordered_map<
+            std::shared_ptr<T>,
+            std::shared_ptr<EntityStore<U>>,
+            std::hash<std::shared_ptr<Entity>>,
+            std::equal_to<std::shared_ptr<Entity>>
+    > leftToRightStore;
+
+    /**
+     * @brief The unordered_map that stores all the Relationships of Entity Pairs (U, T)
+     */
+    std::unordered_map<
+            std::shared_ptr<U>,
+            std::shared_ptr<EntityStore<T>>,
+            std::hash<std::shared_ptr<Entity>>,
+            std::equal_to<std::shared_ptr<Entity>>
+    > rightToLeftStore;
 
 public:
     /**
-     * @brief Construct a new RelationshipStore object
-     * @return A new RelationshipStore object
+     * @brief Construct a new EntityMapStore object
+     * @return A new EntityMapStore object
      */
     RelationshipStore();
 
     /**
-     * @brief Adds a Relationship object to the store
-     * @param relationship The Relationship object to be added
+     * @brief Adds an Entity pair to the store
+     * @param left The left entity object to be added
+     * @param right The right entity object to be added
      * @return None
      */
-    void storeRelationship(std::shared_ptr<T> relationship);
+    void storeRelationship(std::shared_ptr<T> left, std::shared_ptr<U> right);
 
     /**
-     * @brief Returns the Relationship from the RelationshipStore that is equal to the Relationship passed in
-     * @param relationship The Relationship to be compared against
-     * @return The Relationship from the RelationshipStore that is equal to the Relationship passed in
+     * @brief Return the EntityStore which the entity `left` maps to
+     * @param left The left entity object used as key
+     * @return The EntityStore which the entity `left` maps to
      */
-    std::shared_ptr<T> getRelationship(std::shared_ptr<T> relationship) const;
+    std::shared_ptr<EntityStore<U>> getRightEntitiesOf(std::shared_ptr<T> left) const;
 
     /**
-     * @brief Returns true if the RelationshipStore is empty, false otherwise
-     * @return True if the RelationshipStore is empty, false otherwise
+     * @brief Return the EntityStore which the entity `right` maps to
+     * @param right The right entity object used as key
+     * @return The EntityStore which the entity `right` maps to
      */
+    std::shared_ptr<EntityStore<T>> getLeftEntitiesOf(std::shared_ptr<U> right) const;
+
+    /**
+     * @brief Returns the start iterator to the leftToRight store
+     * @return The start iterator to the leftToRight store
+     */
+    typename std::unordered_map<std::shared_ptr<T>, std::shared_ptr<EntityStore<U>>>::iterator getLeftToRightBeginIterator();
+
+    /**
+     * @brief Returns the end iterator to the leftToRight store
+     * @return The end iterator to the leftToRight store
+     */
+    typename std::unordered_map<std::shared_ptr<T>, std::shared_ptr<EntityStore<U>>>::iterator getLeftToRightEndIterator();
+
+    /**
+     * @brief Returns the start iterator to the rightToLeft store
+     * @return The start iterator to the rightToLeft store
+     */
+    typename std::unordered_map<std::shared_ptr<T>, std::shared_ptr<EntityStore<U>>>::iterator getRightToLeftBeginIterator();
+
+    /**
+     * @brief Returns the end iterator to the rightToLeft store
+     * @return The end iterator to the rightToLeft store
+     */
+    typename std::unordered_map<std::shared_ptr<T>, std::shared_ptr<EntityStore<U>>>::iterator getRightToLeftEndIterator();
+
     bool isEmpty() const;
-
-    /**
-     * @brief Returns an iterator to the beginning of the store
-     * @return An iterator to the beginning of the store
-     */
-    typename std::unordered_set<std::shared_ptr<T>>::iterator getBeginIterator();
-
-    /**
-     * @brief Returns an iterator to the end of the store
-     * @return An iterator to the end of the store
-     */
-    typename std::unordered_set<std::shared_ptr<T>>::iterator getEndIterator();
 };
-
 #include "RelationshipStore.hpp"

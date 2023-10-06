@@ -1,7 +1,5 @@
 #include "catch.hpp"
 #include "PKB/PkbWriter.h"
-#include "PKB/Relationships/FollowsRelationship.h"
-#include "PKB/Relationships/UsesRelationship.h"
 #include "PKB/Pkb.h"
 
 using namespace std;

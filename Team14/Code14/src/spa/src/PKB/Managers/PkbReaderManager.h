@@ -7,6 +7,10 @@
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
 #include "PKB/Managers/ParentRelationshipManager.h"
+#include "PKB/Managers/CallsRelationshipManager.h"
+#include "PKB/Managers/UsesProcRelationshipManager.h"
+#include "PKB/Managers/ModifiesProcRelationshipManager.h"
+#include "PKB/Managers/AssignmentManager.h"
 #include "PKB/PkbTypes.h"
 
 /**
@@ -43,6 +47,21 @@ private:
      * @brief The parent relationship manager.
      */
     std::shared_ptr<ParentRelationshipManager> parentRelationshipManager;
+
+    /**
+     * @brief The calls relationship manager.
+     */
+    std::shared_ptr<CallsRelationshipManager> callsRelationshipManager;
+
+    /**
+     * @brief The modifies procedure relationship manager.
+     */
+    std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager;
+
+    /**
+     * @brief The uses procedure relationship manager.
+     */
+    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager;
 public:
     /**
      * @brief Constructs a PkbReaderManager object.
@@ -52,6 +71,9 @@ public:
      * @param usesRelationshipManager The uses relationship manager.
      * @param modifiesRelationshipManager The modifies relationship manager.
      * @param parentRelationshipManager The parent relationship manager.
+     * @param callsRelationshipManager The calls relationship manager.
+     * @param modifiesProcRelationshipManager The modifies procedure relationship manager.
+     * @param usesProcRelationshipManager The uses procedure relationship manager.
      * @return The PkbReaderManager object.
      */
     PkbReaderManager(
@@ -60,7 +82,10 @@ public:
             std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
             std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
-            std::shared_ptr<ParentRelationshipManager> parentRelationshipManager
+            std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
+            std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
+            std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
+            std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager
     );
 
     /**
@@ -119,12 +144,25 @@ public:
     std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const;
 
     /**
+     * Returns a vector of Procedure, Variable pair where the procedure uses the variable.
+     * @return A vector of Procedure, Variable pair stored in a vector
+     */
+    std::vector<std::vector<Entity>> getUsesProcPair() const;
+
+    /**
      * Returns a vector of statements of StatementType type which uses the given variable
      * @param type The type of the statement to be retrieved
      * @param var The variable that is used by the statements
      * @return A vector of statements
     */
     std::vector<Entity> getUsesTypeIdent(StatementType type, Variable& var) const;
+
+    /**
+     * Returns a vector of procedures which uses the given variable
+     * @param var The variable that is used by the statements
+     * @return A vector of procedures
+    */
+    std::vector<Entity> getUsesProcIdent(Variable& var) const;
 
     /**
      * Returns a vector of statements of the given statement type which uses any variable
@@ -134,11 +172,24 @@ public:
     std::vector<Entity> getUsesStmt(StatementType type) const;
 
     /**
+     * Returns a vector of procedures which uses any variable
+     * @return A vector of procedures
+     */
+    std::vector<Entity> getUsesProc() const;
+
+    /**
      * Returns a vector of variables which is used by the given statement
      * @param stmt The statement that uses the variables
      * @return A vector of variables
      */
     std::vector<Entity> getUsesVar(Statement& stmt) const;
+
+    /**
+     * Returns a vector of variables which is used by the given procedure
+     * @param proc The procedure that uses the variables
+     * @return A vector of variables
+     */
+    std::vector<Entity> getUsesVar(Procedure& proc) const;
 
     /**
      * Returns a boolean value indicating if the given statement uses the given variable
@@ -149,11 +200,26 @@ public:
     bool isStmtUsesVar(Statement& stmt, Variable& var) const;
 
     /**
+     * Returns a boolean value indicating if the given procedure uses the given variable
+     * @param proc The procedure that uses the variable
+     * @param var The variable that is used by the procedure
+     * @return True if the procedure uses the variable, else false
+     */
+    bool isProcUsesVar(Procedure& proc, Variable& var) const;
+
+    /**
      * Returns a boolean value indicating if the given statement uses any variable
      * @param stmt The statement that uses the variable
      * @return True if the statement uses any variable, else false
      */
     bool hasUses(Statement& stmt) const;
+
+    /**
+     * Returns a boolean value indicating if the given procedure uses any variable
+     * @param proc The procedure to check
+     * @return True if the statement uses any variable, else false
+     */
+    bool hasUses(Procedure& proc) const;
 
     /**
      * Returns a vector of Statement, Statement pair where the first statement follows the second statement DIRECTLY. Retrieves the relationship where the first and second statement are both of the given type
@@ -295,6 +361,12 @@ public:
     std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const;
 
     /**
+    * Returns a vector of Procedure, Variable pair where the procedure modifies the variable.
+    * @return A vector of Procedure, Variable pair stored in a vector
+    */
+    std::vector<std::vector<Entity>> getModifiesProcPair() const;
+
+    /**
      * Returns a vector of statements of StatementType type which modifies the given variable
      * @param type The type of the statement to be retrieved
      * @param var The variable that is modified by the statements
@@ -303,11 +375,24 @@ public:
     std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable& var) const;
 
     /**
+     * Returns a vector of procedures which modifies the given variable
+     * @param var The variable that is modified by the procedure
+     * @return A vector of procedures
+     */
+    std::vector<Entity> getModifiesProcIdent(Variable& var) const;
+
+    /**
      * Returns a vector of statements of the given statement type which modifies any variable
      * @param type The type of the statement to be retrieved
      * @return A vector of statements
      */
     std::vector<Entity> getModifiesStmt(StatementType type) const;
+
+    /**
+     * Returns a vector of procedures which modifies any variable
+     * @return A vector of procedures
+     */
+    std::vector<Entity> getModifiesProc() const;
 
     /**
      * Returns a vector of variables which is modified by the given statement
@@ -318,6 +403,13 @@ public:
     std::vector<Entity> getModifiesVar(Statement& stmt) const;
 
     /**
+     * Returns a vector of variables which is modified by the given procedure
+     * @param proc The procedure that modifies the variables
+     * @return A vector of variables
+     */
+    std::vector<Entity> getModifiesVar(Procedure& proc) const;
+
+    /**
      * Returns a boolean value indicating if the given statement modifies the given variable
      * @param stmt The statement that modifies the variable
      * @param var The variable that is modified by the statement
@@ -326,11 +418,26 @@ public:
     bool isStmtModifiesVar(Statement& stmt, Variable& var) const;
 
     /**
+     * Returns a boolean value indicating if the given procedure modifies the given variable
+     * @param proc The procedure that modifies the variable
+     * @param var The variable that is modified by the procedure
+     * @return A boolean value indicating if the procedure modifies the variable
+     */
+    bool isProcModifiesVar(Procedure& proc, Variable& var) const;
+
+    /**
      * Returns a boolean value indicating if the given statement modifies any variable
      * @param stmt The statement to be checked
      * @return A boolean value indicating if the statement modifies any variable
      */
     bool hasModifies(Statement& stmt) const;
+
+    /**
+     * Returns a boolean value indicating if the given procedure modifies any variable
+     * @param stmt The procedure to be checked
+     * @return A boolean value indicating if the procedure modifies any variable
+     */
+    bool hasModifies(Procedure& proc) const;
 
     /**
      * Returns a vector of Statements from all the Assignment objects in the store. Represents all the Statements that are assignments

@@ -42,24 +42,48 @@ std::vector<std::vector<Entity>> PkbConcreteReader::getUsesStmtPair(StatementTyp
     return this->readerManager->getUsesStmtPair(type);
 }
 
+std::vector<std::vector<Entity>> PkbConcreteReader::getUsesProcPair() const {
+    return this->readerManager->getUsesProcPair();
+}
+
 std::vector<Entity> PkbConcreteReader::getUsesTypeIdent(StatementType type, Variable& var) const {
     return this->readerManager->getUsesTypeIdent(type, var);
 }
 
+std::vector<Entity> PkbConcreteReader::getUsesProcIdent(Variable& var) const {
+    return this->readerManager->getUsesProcIdent(var);
+};
+
 std::vector<Entity> PkbConcreteReader::getUsesStmt(StatementType type) const {
     return this->readerManager->getUsesStmt(type);
+}
+
+std::vector<Entity> PkbConcreteReader::getUsesProc() const {
+    return this->readerManager->getUsesProc();
 }
 
 std::vector<Entity> PkbConcreteReader::getUsesVar(Statement& stmt) const {
     return this->readerManager->getUsesVar(stmt);
 }
 
+std::vector<Entity> PkbConcreteReader::getUsesVar(Procedure& proc) const {
+    return this->readerManager->getUsesVar(proc);
+}
+
 bool PkbConcreteReader::isStmtUsesVar(Statement& stmt, Variable& var) const {
     return this->readerManager->isStmtUsesVar(stmt, var);
 }
 
+bool PkbConcreteReader::isProcUsesVar(Procedure& proc, Variable& var) const {
+    return this->readerManager->isProcUsesVar(proc, var);
+}
+
 bool PkbConcreteReader::hasUses(Statement& stmt) const {
     return this->readerManager->hasUses(stmt);
+}
+
+bool PkbConcreteReader::hasUses(Procedure& proc) const {
+    return this->readerManager->hasUses(proc);
 }
 
 std::vector<std::vector<Entity>> PkbConcreteReader::getFollowsPair(StatementType formerType, StatementType latterType) const {
@@ -138,24 +162,48 @@ std::vector<std::vector<Entity>> PkbConcreteReader::getModifiesStmtPair(Statemen
     return this->readerManager->getModifiesStmtPair(type);
 }
 
+std::vector<std::vector<Entity>> PkbConcreteReader::getModifiesProcPair() const {
+    return this->readerManager->getModifiesProcPair();
+}
+
 std::vector<Entity> PkbConcreteReader::getModifiesTypeIdent(StatementType type, Variable& var) const {
     return this->readerManager->getModifiesTypeIdent(type, var);
+}
+
+std::vector<Entity> PkbConcreteReader::getModifiesProcIdent(Variable& var) const {
+    return this->readerManager->getModifiesProcIdent(var);
 }
 
 std::vector<Entity> PkbConcreteReader::getModifiesStmt(StatementType type) const {
     return this->readerManager->getModifiesStmt(type);
 }
 
+std::vector<Entity> PkbConcreteReader::getModifiesProc() const {
+    return this->readerManager->getModifiesProc();
+}
+
 std::vector<Entity> PkbConcreteReader::getModifiesVar(Statement& stmt) const {
     return this->readerManager->getModifiesVar(stmt);
+}
+
+std::vector<Entity> PkbConcreteReader::getModifiesVar(Procedure& proc) const {
+    return this->readerManager->getModifiesVar(proc);
 }
 
 bool PkbConcreteReader::isStmtModifiesVar(Statement& stmt, Variable& var) const {
     return this->readerManager->isStmtModifiesVar(stmt, var);
 }
 
+bool PkbConcreteReader::isProcModifiesVar(Procedure& proc, Variable& var) const {
+    return this->readerManager->isProcModifiesVar(proc, var);
+}
+
 bool PkbConcreteReader::hasModifies(Statement& stmt) const {
     return this->readerManager->hasModifies(stmt);
+}
+
+bool PkbConcreteReader::hasModifies(Procedure& proc) const {
+    return this->readerManager->hasModifies(proc);
 }
 
 // pattern a (_,_)

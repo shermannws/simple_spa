@@ -1,58 +1,68 @@
 #include "ModifiesSuchThatStrategy.h"
 #include "Commons/Entities/Entity.h"
 
-Result ModifiesSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const {
-    std::shared_ptr<SuchThatClause> suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
-    Ref leftRef = suchThat->getFirstParam();
-    RefType leftType = leftRef.getType();
-    QueryEntityType leftEntityType = leftRef.getEntityType();
-    RootType leftRootType = leftRef.getRootType();
-    Ref rightRef = suchThat->getSecondParam();
-    RootType rightRootType = rightRef.getRootType();
+Result ModifiesSuchThatStrategy::evaluateSynSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
     Result res;
+    auto leftEntityType = leftRef.getEntityType();
+    auto leftSyn = leftRef.getRep();
+    auto rightSyn = rightRef.getRep();
+    res.setTuples(pkbReader->getModifiesStmtPair(stmtMap.at(leftEntityType)));
 
-    if (leftType == RefType::StmtRef) {
-        if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym) { // Modifies(a,v)
-            std::string leftSyn = leftRef.getRep();
-            std::string rightSyn = rightRef.getRep();
-            res.setTuples(pkbReader->getModifiesStmtPair(stmtMap.at(leftEntityType)));
+    std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
+    res.setSynIndices(indices);
+    return res;
+}
 
-            std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
-            res.setSynIndices(indices);
+Result ModifiesSuchThatStrategy::evaluateSynIdent(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+    Result res;
+    auto leftEntityType = leftRef.getEntityType();
+    auto leftSyn = leftRef.getRep();
+    auto rightRep = rightRef.getRep();
+    Variable v = Variable(rightRep);
+    res.setTuples(pkbReader->getModifiesTypeIdent(stmtMap.at(leftEntityType), v));
 
-        } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Ident) { // Modifies(a,"x")
-            std::string syn = leftRef.getRep();
-            Variable v = Variable(rightRef.getRep());
-            res.setTuples(pkbReader->getModifiesTypeIdent(stmtMap.at(leftEntityType), v));
+    std::unordered_map<std::string, int> indices {{leftSyn, 0}};
+    res.setSynIndices(indices);
+    return res;
+}
 
-            std::unordered_map<std::string, int> indices {{syn, 0}};
-            res.setSynIndices(indices);
+Result ModifiesSuchThatStrategy::evaluateSynWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+    Result res;
+    auto leftEntityType = leftRef.getEntityType();
+    auto leftSyn = leftRef.getRep();
+    res.setTuples(pkbReader->getModifiesStmt(stmtMap.at(leftEntityType)));
 
-        } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Wildcard) { // Modifies(a,_)
-            std::string syn = leftRef.getRep();
-            res.setTuples(pkbReader->getModifiesStmt(stmtMap.at(leftEntityType)));
+    std::unordered_map<std::string, int> indices{{leftSyn, 0}};
+    res.setSynIndices(indices);
+    return res;
+}
 
-            std::unordered_map<std::string, int> indices {{syn, 0}};
-            res.setSynIndices(indices);
+Result ModifiesSuchThatStrategy::evaluateIntSyn(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+    Result res;
+    auto leftRep = leftRef.getRep();
+    auto rightSyn = rightRef.getRep();
+    Statement s = Statement(stoi(leftRep), StatementType::Stmt);
+    res.setTuples(pkbReader->getModifiesVar(s));
 
-        } else if (leftRootType == RootType::Integer && rightRootType == RootType::Synonym) { // Modifies(1,v)
-            Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
-            std::string syn = rightRef.getRep();
-            res.setTuples(pkbReader->getModifiesVar(s));
+    std::unordered_map<std::string, int> indices{{rightSyn, 0}};
+    res.setSynIndices(indices);
+    return res;
+}
 
-            std::unordered_map<std::string, int> indices{{syn, 0}};
-            res.setSynIndices(indices);
+Result ModifiesSuchThatStrategy::evaluateIntIdent(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const {
+    Result res;
+    auto leftRep = leftRef.getRep();
+    auto rightRep = rightRef.getRep();
+    Statement s = Statement(stoi(leftRep), StatementType::Stmt);
+    Variable v = Variable(rightRep);
+    res.setBoolResult(pkbReader->isStmtModifiesVar(s, v));
+    return res;
+}
 
-        } else if (leftRootType == RootType::Integer && rightRootType == RootType::Wildcard) { // Modifies(1,_)
-            Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
-            res.setBoolResult(pkbReader->hasModifies(s));
-
-        } else if (leftRootType == RootType::Integer && rightRootType == RootType::Ident) { // Modifies(1,"x")
-            Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
-            Variable v = Variable(rightRef.getRep());
-            res.setBoolResult(pkbReader->isStmtModifiesVar(s, v));
-        }
-    }
-
+Result ModifiesSuchThatStrategy::evaluateIntWild(std::shared_ptr<PkbReader> pkbReader, Ref& leftRef, Ref& rightRef) const {
+    Result res;
+    auto leftRep = leftRef.getRep();
+    Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
+    res.setBoolResult(pkbReader->hasModifies(s));
     return res;
 }
