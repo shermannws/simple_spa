@@ -9,17 +9,7 @@ void ProcToVarRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedur
 
 template <typename S>
 std::vector<std::vector<Entity>> ProcToVarRelationshipManager<S>::getRelationshipProcPair() const {
-    // TODO: Refactor
-    std::vector<std::vector<Entity>> result;
-    for (auto it = relationshipStore->getLeftToRightBeginIterator(); it != relationshipStore->getLeftToRightEndIterator(); ++it) {
-        auto proc = it->first;
-        auto variableSet = it->second;
-        for (auto it2 = variableSet->getBeginIterator(); it2 != variableSet->getEndIterator(); ++it2) {
-            auto variable = *it2;
-            result.push_back(std::vector<Entity>{*proc, *variable});
-        }
-    }
-    return result;
+    return ManagerUtils::getPairNoMatch<Procedure, Variable>(*relationshipStore);
 }
 
 template <typename S>

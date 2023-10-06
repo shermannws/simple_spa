@@ -9,19 +9,15 @@ void StmtToVarRelationshipManager<S>::storeRelationship(std::shared_ptr<Statemen
 
 template <typename S>
 std::vector<std::vector<Entity>> StmtToVarRelationshipManager<S>::getRelationshipStmtPair(StatementType type) const {
-    // TODO: Maybe refactor to ManagerUtils
-    std::vector<std::vector<Entity>> result;
-    for (auto it = relationshipStore->getLeftToRightBeginIterator(); it != relationshipStore->getLeftToRightEndIterator(); ++it) {
-        auto stmt = it->first;
-        auto variableSet = it->second;
-        if (stmt->isStatementType(type)) {
-            for (auto it2 = variableSet->getBeginIterator(); it2 != variableSet->getEndIterator(); ++it2) {
-                auto variable = *it2;
-                result.push_back(std::vector<Entity>{*stmt, *variable});
-            }
-        }
-    }
-    return result;
+    auto leftMatcher = [type](Statement& stmt) {
+        return stmt.isStatementType(type);
+    };
+
+    auto rightMatcher = [](Variable& var) {
+        return true;
+    };
+
+    return ManagerUtils::getPair<Entity, RelationshipStore<Statement, Variable>, Statement, Variable>(*relationshipStore, leftMatcher, rightMatcher);
 }
 
 template <typename S>

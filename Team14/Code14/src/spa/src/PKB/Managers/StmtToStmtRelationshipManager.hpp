@@ -12,21 +12,15 @@ void StmtToStmtRelationshipManager<S>::storeRelationship(std::shared_ptr<Stateme
 
 template <typename S>
 std::vector<std::vector<Entity>> StmtToStmtRelationshipManager<S>::getRelationshipPair(StatementType formerType, StatementType latterType, bool requireDirect) const {
-    std::vector<std::vector<Entity>> result;
-    auto store = requireDirect ? relationshipStore : starRelationshipStore;
-    for (auto it = store->getLeftToRightBeginIterator(); it != store->getLeftToRightEndIterator(); ++it) {
-        auto former = it->first;
-        auto latterSet = it->second;
-        if (former->isStatementType(formerType)) {
-            for (auto it2 = latterSet->getBeginIterator(); it2 != latterSet->getEndIterator(); ++it2) {
-                auto latter = *it2;
-                if (latter->isStatementType(latterType)) {
-                    result.push_back(std::vector<Entity>{*former, *latter});
-                }
-            }
-        }
-    }
-    return result;
+    auto leftMatcher = [formerType](Statement& stmt) {
+        return stmt.isStatementType(formerType);
+    };
+
+    auto rightMatcher = [latterType](Statement& stmt) {
+        return stmt.isStatementType(latterType);
+    };
+
+    return ManagerUtils::getPair<Entity, RelationshipStore<Statement, Statement>, Statement, Statement>(requireDirect ? *relationshipStore : *starRelationshipStore, leftMatcher, rightMatcher);
 }
 
 template <typename S>

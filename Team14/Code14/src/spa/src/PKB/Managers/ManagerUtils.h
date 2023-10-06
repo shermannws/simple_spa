@@ -32,30 +32,56 @@ private:
 
     /**
      * @brief A function that retrieves objects from a map-based store based on a matcher and getter function
-     * @tparam V The type of the object to be retrieved
+     * @tparam E The type of set-based store used to store the values in the map
      * @tparam S The type of the store to be retrieved from
-     * @tparam K The type of the key stored in the store
-     * @tparam E The entity store retrieved from the map
+     * @tparam K The type of the left object stored in the store
+     * @tparam V The type of the right object stored in the store
+     * @tparam R The type of the object to be retrieved
      * @param store The store to be retrieved from
      * @param matcher The matcher function that returns a boolean value indicating if the object matches the criteria
      * @param getter The getter function that returns the object
      * @return A vector of entities
      */
-    // TODO: Documentation
     template <typename E, typename S, typename K, typename V, typename R>
     static std::vector<R>
     getFromMapStore(S& store, std::function<std::shared_ptr<E>(S&, K&)> getter, K& key, std::function<bool(V&)> matcher);
 
 
+    /**
+     * @brief A function that retrieves keys from a map-based store based on a matcher function
+     * @tparam K The type of the left object stored in the store
+     * @tparam V The type of the right object stored in the store
+     * @tparam R The type of the object to be retrieved
+     * @param beginItr The iterator pointing to the beginning of the map
+     * @param endItr The iterator pointing to the end of the map
+     * @param matcher The matcher function that returns a boolean value indicating if the object matches the criteria
+     * @return A vector of keys from the map
+     */
     template<typename K, typename V, typename R>
     static std::vector<R> getKeys(typename std::unordered_map<std::shared_ptr<K>, std::shared_ptr<EntityStore<V>>>::iterator beginItr,
                                   typename std::unordered_map<std::shared_ptr<K>, std::shared_ptr<EntityStore<V>>>::iterator endItr,
                                   std::function<bool(K &)> matcher);
 
+    /**
+     * @brief A function that retrieves keys from a map-based store when no matcher function is required
+     * @tparam K The type of the left object stored in the store
+     * @tparam V The type of the right object stored in the store
+     * @param beginItr The iterator pointing to the beginning of the map
+     * @param endItr The iterator pointing to the end of the map
+     * @return A vector of keys from the map
+     */
     template <typename K, typename V>
     static std::vector<Entity> getKeysNoMatch(typename std::unordered_map<std::shared_ptr<K>, std::shared_ptr<EntityStore<V>>>::iterator beginItr,
                                               typename std::unordered_map<std::shared_ptr<K>, std::shared_ptr<EntityStore<V>>>::iterator endItr);
 
+    /**
+     * @brief A function that retrieves keys from a map-based store when a matcher function for statement type is required
+     * @tparam V The type of the right object stored in the store
+     * @param beginItr The iterator pointing to the beginning of the map
+     * @param endItr The iterator pointing to the end of the map
+     * @param type The type of the statement to be retrieved from the keys
+     * @return A vector of keys from the map that matches the statement type
+     */
     template <typename V>
     static std::vector<Entity> getKeysStmtMatch(typename std::unordered_map<std::shared_ptr<Statement>, std::shared_ptr<EntityStore<V>>>::iterator beginItr,
                                                 typename std::unordered_map<std::shared_ptr<Statement>, std::shared_ptr<EntityStore<V>>>::iterator endItr,
@@ -76,7 +102,7 @@ public:
     getEntitiesFromStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<Entity(R&)> getter);
 
     /**
-     * @brief A function that retrieves entities from an entity store based on a matcher and getter function
+     * @brief A function that retrieves entities from an set-based entity store based on a matcher and getter function
      * @tparam E The type of the entity to be retrieved
      * @param store The store to be retrieved from
      * @param matcher The matcher function that returns a boolean value indicating if the entity matches the criteria
@@ -102,73 +128,126 @@ public:
     getEntityPairsFromStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<std::vector<Entity>(R&)> getter);
 
     /**
-     * @brief A function that retrieves entity pairs from a relationship store based on a matcher and getter function
-     * @tparam R The type of the relationship stored in the store
+     * @brief A function that retrieves right entities based on a left key when no matcher function is required
+     * @tparam L The type of the left object stored in the store
+     * @tparam R The type of the right object stored in the store
      * @param store The store to be retrieved from
-     * @param matcher The matcher function that returns a boolean value indicating if the relationship matches the criteria
-     * @param getter The getter function that returns the entity pair
-     * @return A vector of entity pairs
+     * @param key The left key to be used to retrieve the right entities
+     * @return A vector of right entities
      */
-     // TODO: Documentation
     template <typename L, typename R>
     static std::vector<Entity>
     getRightEntitiesFromLeftKeyNoMatch(RelationshipStore<L, R>& store, L& key);
 
     /**
-     * @brief A function that retrieves entity pairs from a relationship store based on a matcher and getter function
-     * @tparam R The type of the relationship stored in the store
+     * @brief A function that retrieves left entities based on a right key when no matcher function is required
+     * @tparam L The type of the left object stored in the store
+     * @tparam R The type of the right object stored in the store
      * @param store The store to be retrieved from
-     * @param matcher The matcher function that returns a boolean value indicating if the relationship matches the criteria
-     * @param getter The getter function that returns the entity pair
-     * @return A vector of entity pairs
+     * @param key The right key to be used to retrieve the left entities
+     * @return A vector of left entities
      */
-     // TODO: Documentation
     template <typename L, typename R>
     static std::vector<Entity>
     getLeftEntitiesFromRightKeyNoMatch(RelationshipStore<L, R>& store, R& key);
 
     /**
-     * @brief A function that retrieves entity pairs from a relationship store based on a matcher and getter function
-     * @tparam R The type of the relationship stored in the store
+     * @brief A function that retrieves right entities based on a left key when a matcher function for statement type is required
+     * @tparam L The type of the left object stored in the store
      * @param store The store to be retrieved from
-     * @param matcher The matcher function that returns a boolean value indicating if the relationship matches the criteria
-     * @param getter The getter function that returns the entity pair
-     * @return A vector of entity pairs
+     * @param key The left key to be used to retrieve the right entities
+     * @param type The type of the statement to be retrieved from the right entities
+     * @return A vector of right entities that matches the statement type
      */
-    // TODO: Documentation
     template <typename L>
     static std::vector<Entity>
     getRightEntitiesFromLeftKeyStmtMatch(RelationshipStore<L, Statement>& store, L& key, StatementType type);
 
     /**
-     * @brief A function that retrieves entity pairs from a relationship store based on a matcher and getter function
-     * @tparam R The type of the relationship stored in the store
+     * @brief A function that retrieves left entities based on a right key when a matcher function for statement type is required
+     * @tparam R The type of the right object stored in the store
      * @param store The store to be retrieved from
-     * @param matcher The matcher function that returns a boolean value indicating if the relationship matches the criteria
-     * @param getter The getter function that returns the entity pair
-     * @return A vector of entity pairs
+     * @param key The right key to be used to retrieve the left entities
+     * @param type The type of the statement to be retrieved from the left entities
+     * @return A vector of left entities that matches the statement type
      */
-    // TODO: Documentation
     template <typename R>
     static std::vector<Entity>
     getLeftEntitiesFromRightKeyStmtMatch(RelationshipStore<Statement, R>& store, R& key, StatementType type);
 
     /**
-     * @brief A function that removes duplicates in a vector of entities
-     * @param v The vector of entities to be modified
+     * @brief A function that checks if the map-based store contains the key-value pair
+     * @tparam L The type of the left object stored in the store
+     * @tparam R The type of the right object stored in the store
+     * @param store The store to be checked
+     * @param key The left key to be checked
+     * @param value The right value to be checked
+     * @return True if the map-based store contains the key-value pair, false otherwise
      */
     template <typename L, typename R>
     static bool mapContains(RelationshipStore<L, R>& store, L& key, R& value);
 
+    /**
+     * @brief A function that retrieves left keys from a double map-based store when no matcher function is required
+     * @tparam K The type of the left object stored in the store
+     * @tparam V The type of the right object stored in the store
+     * @param store The store to be retrieved from
+     * @return A vector of left keys from the map
+     */
     template <typename K, typename V>
     static std::vector<Entity> getLeftKeysNoMatch(RelationshipStore<K, V>& store);
 
+    /**
+     * @brief A function that retrieves right keys from a double map-based store when no matcher function is required
+     * @tparam K The type of the left object stored in the store
+     * @tparam V The type of the right object stored in the store
+     * @param store The store to be retrieved from
+     * @return A vector of right keys from the map
+     */
     template <typename K, typename V>
     static std::vector<Entity> getRightKeysNoMatch(RelationshipStore<K, V>& store);
 
+    /**
+     * @brief A function that retrieves left keys from a double map-based store when a matcher function for statement type is required
+     * @tparam V The type of the right object stored in the store
+     * @param store The store to be retrieved from
+     * @param type The type of the statement to be retrieved from the keys
+     * @return A vector of left keys from the map that matches the statement type
+     */
     template <typename V>
     static std::vector<Entity> getLeftKeysStmtMatch(RelationshipStore<Statement, V>& store, StatementType type);
 
+    /**
+     * @brief A function that retrieves right keys from a double map-based store when a matcher function for statement type is required
+     * @tparam V The type of the right object stored in the store
+     * @param store The store to be retrieved from
+     * @param type The type of the statement to be retrieved from the keys
+     * @return A vector of right keys from the map that matches the statement type
+     */
     template <typename K>
     static std::vector<Entity> getRightKeysStmtMatch(RelationshipStore<K, Statement>& store, StatementType type);
+
+    /**
+     * @brief A function that retrieves key-value pairs from a map-based store
+     * @tparam R The type of object to be returned
+     * @tparam S The type of the store to be retrieved from
+     * @tparam K The type of the left object stored in the store
+     * @tparam V The type of the right object stored in the store
+     * @param store The store to be retrieved from
+     * @param leftMatcher The matcher function that returns a boolean value indicating if the left object matches the criteria
+     * @param rightMatcher The matcher function that returns a boolean value indicating if the right object matches the criteria
+     * @return A vector of key-value pairs from the map
+     */
+    template <typename R, typename S, typename K, typename V>
+    static std::vector<std::vector<R>> getPair(S& store, std::function<bool(K &)> leftMatcher, std::function<bool(V &)> rightMatcher);
+
+    /**
+     * @brief A function that retrieves key-value pairs from a map-based store when no matcher function is required
+     * @tparam K The type of the left object stored in the store
+     * @tparam V The type of the right object stored in the store
+     * @param store The store to be retrieved from
+     * @return A vector of key-value pairs from the map
+     */
+    template <typename K, typename V>
+    static std::vector<std::vector<Entity>> getPairNoMatch(RelationshipStore<K, V>& store);
 };

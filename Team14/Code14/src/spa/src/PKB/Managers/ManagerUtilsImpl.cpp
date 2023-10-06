@@ -56,3 +56,12 @@ template bool ManagerUtils::mapContains<Statement, Statement>(RelationshipStore<
 template bool ManagerUtils::mapContains<Procedure, Procedure>(RelationshipStore<Procedure, Procedure> &store,Procedure &key,Procedure &value);
 
 template bool ManagerUtils::mapContains<Procedure, Variable>(RelationshipStore<Procedure, Variable> &store,Procedure &key,Variable &value);
+
+
+template std::vector<std::vector<Entity>> ManagerUtils::getPair<Entity, RelationshipStore<Statement, Statement>, Statement, Statement>(RelationshipStore<Statement, Statement> &store, std::function<bool(Statement &)> leftMatcher, std::function<bool(Statement &)> rightMatcher);
+
+template std::vector<std::vector<Entity>> ManagerUtils::getPair<Entity, RelationshipStore<Statement, Variable>, Statement, Variable>(RelationshipStore<Statement, Variable> &store, std::function<bool(Statement &)> leftMatcher, std::function<bool(Variable &)> rightMatcher);
+
+template std::vector<std::vector<Entity>> ManagerUtils::getPairNoMatch<Procedure, Procedure>(RelationshipStore<Procedure, Procedure> &store);
+
+template std::vector<std::vector<Entity>> ManagerUtils::getPairNoMatch<Procedure, Variable>(RelationshipStore<Procedure, Variable> &store);

@@ -11,17 +11,7 @@ void ProcToProcRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedu
 
 template <typename S>
 std::vector<std::vector<Entity>> ProcToProcRelationshipManager<S>::getRelationshipPair(bool requireDirect) const {
-    std::vector<std::vector<Entity>> result;
-    auto store = requireDirect ? relationshipStore : starRelationshipStore;
-    for (auto it = store->getLeftToRightBeginIterator(); it != store->getLeftToRightEndIterator(); ++it) {
-        auto former = it->first;
-        auto latterSet = it->second;
-        for (auto it2 = latterSet->getBeginIterator(); it2 != latterSet->getEndIterator(); ++it2) {
-            auto latter = *it2;
-            result.push_back(std::vector<Entity>{*former, *latter});
-        }
-    }
-    return result;
+    return ManagerUtils::getPairNoMatch<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore);
 }
 
 template <typename S>

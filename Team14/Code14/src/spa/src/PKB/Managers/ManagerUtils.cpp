@@ -85,14 +85,6 @@ std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch(Relations
     return getFromMapStore<EntityStore<Statement>, RelationshipStore<Statement, R>, R, Statement, Entity>(store, getter, key, matcher);
 }
 
-//template <typename K, typename V>
-//std::vector<std::vector<Entity>> ManagerUtils::getEntityPairsFromKey(RelationshipStore<K, V>& store, std::shared_ptr<K> key, std::function<bool(V&)> matcher) {
-//    auto getter = [](RelationshipStore<K, V>& store, std::shared_ptr<K> key) {
-//        return store->getLeftRightEntityPairsFromLeftKey(key);
-//    };
-//    return getFromStore<std::vector<Entity>, RelationshipStore<K, V>, K, V>(store, getter, key, matcher);
-//}
-
 template <typename L, typename R>
 bool ManagerUtils::mapContains(RelationshipStore<L, R>& store, L& key, R& value) {
     auto valueStore = store.getRightEntitiesOf(std::make_shared<L>(key));
@@ -159,4 +151,33 @@ template <typename K>
 std::vector<Entity>
 ManagerUtils::getRightKeysStmtMatch(RelationshipStore<K, Statement>& store, StatementType type) {
     return getKeysStmtMatch<K>(store.getRightToLeftBeginIterator(), store.getRightToLeftEndIterator(), type);
+}
+
+template <typename R, typename S, typename K, typename V>
+std::vector<std::vector<R>> ManagerUtils::getPair(S& store, std::function<bool(K &)> leftMatcher, std::function<bool(V &)> rightMatcher) {
+    std::vector<std::vector<R>> result;
+    for (auto it = store.getLeftToRightBeginIterator(); it != store.getLeftToRightEndIterator(); ++it) {
+        auto former = it->first;
+        auto latterSet = it->second;
+        if (leftMatcher(*former)) {
+            for (auto it2 = latterSet->getBeginIterator(); it2 != latterSet->getEndIterator(); ++it2) {
+                auto latter = *it2;
+                if (rightMatcher(*latter)) {
+                    result.push_back(std::vector<R>{*former, *latter});
+                }
+            }
+        }
+    }
+    return result;
+}
+
+template <typename K, typename V>
+std::vector<std::vector<Entity>> ManagerUtils::getPairNoMatch(RelationshipStore<K, V>& store) {
+    auto leftMatcher = [](K& entity) {
+        return true;
+    };
+    auto rightMatcher = [](V& entity) {
+        return true;
+    };
+    return getPair<Entity, RelationshipStore<K, V>, K, V>(store, leftMatcher, rightMatcher);
 }
