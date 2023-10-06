@@ -7,53 +7,53 @@ ASTPrinterVisitor::ASTPrinterVisitor(std::shared_ptr<PkbWriter> pkbWriter) {
     this->pkbWriter = pkbWriter;
 }
 
-void ASTPrinterVisitor::visitProgramNode(ProgramNode *node, std::vector<std::shared_ptr<ASTNode>> parents) const {
+void ASTPrinterVisitor::visitProgramNode(ProgramNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << "main:program\n";
 }
 
-void ASTPrinterVisitor::visitProcedureNode(ProcedureNode *node, std::vector<std::shared_ptr<ASTNode>> parents) const {
+void ASTPrinterVisitor::visitProcedureNode(ProcedureNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << node->getProcedureName() + ":proc\n";
 }
 
 void ASTPrinterVisitor::visitStatementListNode(StatementListNode *node,
-                                               std::vector<std::shared_ptr<ASTNode>> parents) const {
+                                               std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << ":stmtLst\n";
 }
 
-void ASTPrinterVisitor::visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<ASTNode>> parents) const {
+void ASTPrinterVisitor::visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << ":assign\n";
 }
 
-void ASTPrinterVisitor::visitReadNode(ReadNode *node, std::vector<std::shared_ptr<ASTNode>> parents) const {
+void ASTPrinterVisitor::visitReadNode(ReadNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << ":read\n";
 }
 
-void ASTPrinterVisitor::visitPrintNode(PrintNode *node, std::vector<std::shared_ptr<ASTNode>> parents) const {
+void ASTPrinterVisitor::visitPrintNode(PrintNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << ":print\n";
 }
 
-void ASTPrinterVisitor::visitVariableNode(VariableNode *node, std::vector<std::shared_ptr<ASTNode>> parents) const {
+void ASTPrinterVisitor::visitVariableNode(VariableNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << node->getVarName() + ":var\n";
 }
 
-void ASTPrinterVisitor::visitConstantNode(ConstantNode *node, std::vector<std::shared_ptr<ASTNode>> parents) const {
+void ASTPrinterVisitor::visitConstantNode(ConstantNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << node->getValue() + ":const\n";
 }
 
-void ASTPrinterVisitor::visitCallNode(CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents) const {
+void ASTPrinterVisitor::visitCallNode(CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << node->getProcedureName() + ":call\n";
 }
 
-void ASTPrinterVisitor::visitIfNode(IfNode *node, std::vector<std::shared_ptr<ASTNode>> parents) const {
+void ASTPrinterVisitor::visitIfNode(IfNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << ":if\n";
 }
 
-void ASTPrinterVisitor::visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<ASTNode>> parents) const {
+void ASTPrinterVisitor::visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << ":while\n";
 }
 
 void ASTPrinterVisitor::visitArithmeticExpressionNode(ArithmeticExpressionNode *node,
-                                                      std::vector<std::shared_ptr<ASTNode>> parents) const {
+                                                      std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::unordered_map<ArithmeticOperatorType, std::string> stringMap = {
             {ArithmeticOperatorType::Plus, ":plus"},
             {ArithmeticOperatorType::Minus, ":minus"},
@@ -66,18 +66,18 @@ void ASTPrinterVisitor::visitArithmeticExpressionNode(ArithmeticExpressionNode *
 }
 
 void ASTPrinterVisitor::visitBinaryConditionalExpressionNode(BinaryConditionalExpressionNode *node,
-                                                             std::vector<std::shared_ptr<ASTNode>> parents) const {
+                                                             std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout <<
     (node->getBinaryConditionalExpressionType() == BinaryConditionalExpressionType::And ? ":and" : ":or") << "\n";
 }
 
 void ASTPrinterVisitor::visitUnaryConditionalExpressionNode(UnaryConditionalExpressionNode *node,
-                                                            std::vector<std::shared_ptr<ASTNode>> parents) const {
+                                                            std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::cout << ":not\n";
 }
 
 void ASTPrinterVisitor::visitRelativeExpressionNode(RelativeExpressionNode *node,
-                                                    std::vector<std::shared_ptr<ASTNode>> parents) const {
+                                                    std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
     std::unordered_map<ComparisonOperatorType, std::string> stringMap = {
             {ComparisonOperatorType::GreaterThan, ":greater"},
             {ComparisonOperatorType::GreaterThanEqual, ":greaterEqual"},

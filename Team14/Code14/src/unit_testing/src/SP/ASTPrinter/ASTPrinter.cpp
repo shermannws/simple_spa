@@ -29,7 +29,7 @@ void ASTPrinter::traverseAndPrint(std::shared_ptr<ProgramNode> root) {
         std::string endSymbol = (!frontier.empty() && indentLevel <= frontier.top().second.size()) ? "├──" : "└──";
         std::cout << endSymbol;
 		//current node to accept visitor
-        current->accept(visitor, parents);
+        current->accept(visitor, parents, nullptr);
 
 		std::vector<std::shared_ptr<ASTNode>> newParents = parents;
         newParents.emplace_back(current);
