@@ -74,8 +74,6 @@ CFGBuilder::buildIfSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNod
     auto cfgNode = std::make_shared<CFGNode>(ifNode->getStatementNumber());
     map[ifStatement] = cfgNode;
 
-    auto [cfgNode, _] = buildNonContainerStatementSubgraph(map, ifNode);
-
     auto [thenHeadNode, thenTailNode] = buildStatementListSubgraph(map, ifNode->getThenStatementList());
     auto [elseHeadNode, elseTailNode] = buildStatementListSubgraph(map, ifNode->getElseStatementList());
 
