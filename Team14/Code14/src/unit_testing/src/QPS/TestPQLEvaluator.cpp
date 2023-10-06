@@ -102,101 +102,7 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("Test integration of PKB with QPS - Get all Assign") {
-    Pkb pkb = Pkb();
-    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-
-    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
-    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
-    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
-
-    pkbWriter->addAssignStatement(assignStatement1, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement2, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement3, nullptr, nullptr);
-
-    PQLParser parser("assign a; Select a");
-    Query queryObj = parser.parse();
-    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-    Result resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-
-    REQUIRE(results.size() == 3);
-    REQUIRE(find(results.begin(), results.end(), "1") != results.end());
-    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
-    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
-}
-
-TEST_CASE("Test integration of PKB with QPS - Get all Assign - No Assign") {
-    Pkb pkb = Pkb();
-    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-
-    PQLParser parser("assign a; Select a");
-    Query queryObj = parser.parse();
-    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-    Result resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-
-    REQUIRE(results.size() == 0);
-}
-
-TEST_CASE("Test integration of PKB with QPS - Assign With Pattern") {
-    Pkb pkb = Pkb();
-    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-
-    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
-    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
-    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
-
-    pkbWriter->addAssignStatement(assignStatement1, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement2, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement3, nullptr, nullptr);
-
-    PQLParser parser("assign a; Select a pattern a(_, _)");
-    Query queryObj = parser.parse();
-    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-    Result resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-
-    REQUIRE(results.size() == 3);
-    REQUIRE(find(results.begin(), results.end(), "1") != results.end());
-    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
-    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
-}
-
-TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no result") {
-    Pkb pkb = Pkb();
-    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-
-    shared_ptr<Statement> printStatement1 = make_shared<Statement>(Statement(1, StatementType::Print));
-    shared_ptr<Statement> printStatement2 = make_shared<Statement>(Statement(2, StatementType::Print));
-    shared_ptr<Statement> printStatement3 = make_shared<Statement>(Statement(3, StatementType::Print));
-
-    pkbWriter->addPrintStatement(printStatement1);
-    pkbWriter->addPrintStatement(printStatement2);
-    pkbWriter->addPrintStatement(printStatement3);
-
-    PQLParser parser("assign a; Select a pattern a(_, _)");
-    Query queryObj = parser.parse();
-    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-    Result resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-
-    REQUIRE(results.size() == 0);
-}
-
-TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no result, no stmts in pkb") {
-    Pkb pkb = Pkb();
-
-    PQLParser parser("assign a; Select a pattern a(_, _)");
-    Query queryObj = parser.parse();
-    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-    Result resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-
-    REQUIRE(results.size() == 0);
-}
-
-TEST_CASE("pattern a(wildcard , expr-spec)") { //getAssignStmtsByRhs
+TEST_CASE("pattern a(wildcard , expr-spec)") { //getAssignStmtsByRhs, hasRhsWildCard == false
     PQLParser parser("assign a; Select a pattern a(_, \"x   + y\")");
     Query queryObj = parser.parse();
 
@@ -209,8 +115,21 @@ TEST_CASE("pattern a(wildcard , expr-spec)") { //getAssignStmtsByRhs
     REQUIRE(find(results.begin(), results.end(), "5") != results.end());
 }
 
+TEST_CASE("pattern a(wildcard , _expr-spec_)") { //getAssignStmtsByRhs, hasRhsWildCard == true
+    PQLParser parser("assign a; Select a pattern a(_, _\"a/(b+c)\"_)");
+    Query queryObj = parser.parse();
+
+    auto stubReader = make_shared<StubPkbReader>();
+    PQLEvaluator evaluator = PQLEvaluator(stubReader);
+    auto resultObj = evaluator.evaluate(queryObj);
+    auto results = evaluator.formatResult(queryObj, resultObj);
+    REQUIRE(results.size() == 2);
+    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+}
+
 TEST_CASE("pattern a(var_synonym, wildcard)") { //getAllAssignStmtVarPair()
-    PQLParser parser("assign a; variable v; Select a pattern a(v, _\"(a-b)+c\"_)");
+    PQLParser parser("assign a; variable v; Select a pattern a(v, _)");
     Query queryObj = parser.parse();
 
     auto stubReader = make_shared<StubPkbReader>();
@@ -222,8 +141,21 @@ TEST_CASE("pattern a(var_synonym, wildcard)") { //getAllAssignStmtVarPair()
     REQUIRE(find(results.begin(), results.end(), "2") != results.end());
 }
 
-TEST_CASE("pattern a(var_synonym, expr-spec)") { //getAssignStmtsVarPairByRhs
-    PQLParser parser("assign a; variable v; Select v pattern a(v, _\"(a-b)+c\"_)");
+TEST_CASE("pattern a(var_synonym, _expr-spec_)") { //getAssignStmtsVarPairByRhs, hasWildCard == true
+    PQLParser parser("assign a; variable v; Select a pattern a(v, _\"(a-b)+c\"_)");
+    Query queryObj = parser.parse();
+
+    auto stubReader = make_shared<StubPkbReader>();
+    PQLEvaluator evaluator = PQLEvaluator(stubReader);
+    auto resultObj = evaluator.evaluate(queryObj);
+    auto results = evaluator.formatResult(queryObj, resultObj);
+    REQUIRE(results.size() == 2);
+    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+}
+
+TEST_CASE("pattern a(var_synonym, expr-spec)") { //getAssignStmtsVarPairByRhs, hasWildcard == false
+    PQLParser parser("assign a; variable v; Select v pattern a(v, \"a-b*c\")");
     Query queryObj = parser.parse();
 
     auto stubReader = make_shared<StubPkbReader>();
@@ -248,7 +180,7 @@ TEST_CASE("pattern a(char_string , wildcard)") { //getAssignStmtsByLhs
     REQUIRE(find(results.begin(), results.end(), "6") != results.end());
 }
 
-TEST_CASE("pattern a(char_string , expr-spec)") { //getAssignStmtsByLhsRhs
+TEST_CASE("pattern a(char_string , expr-spec)") { //getAssignStmtsByLhsRhs, hasRhsWildcard = true
     PQLParser parser("assign a; Select a pattern a(\"x\", _\"(a-b)\"_)");
     Query queryObj = parser.parse();
 
@@ -261,7 +193,7 @@ TEST_CASE("pattern a(char_string , expr-spec)") { //getAssignStmtsByLhsRhs
     REQUIRE(find(results.begin(), results.end(), "100000") != results.end());
 }
 
-TEST_CASE("pattern, select synonym not in clause ") { //getAssignStmtsByLhsRhs
+TEST_CASE("pattern, select synonym not in clause ") { //getAssignStmtsByLhsRhs, hasRhsWildcard = false
     PQLParser parser("assign a; variable v; Select v pattern a(\"noneCase\", \"(a-b)\")");
     Query queryObj = parser.parse();
 
