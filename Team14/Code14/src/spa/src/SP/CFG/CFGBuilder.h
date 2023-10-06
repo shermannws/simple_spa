@@ -31,12 +31,12 @@ private:
             std::unordered_map<Statement, std::shared_ptr<CFGNode>>& map, const std::shared_ptr<StatementListNode>& statementListNode);
 
     /**
-     * Builds a CFG subgraph for non-container statement (assign, call, print, read).
+     * Builds a CFG subgraph for a statement (assign, call, print, read, if, while).
      * @param map Unordered map of each procedure to a map of Statement to CFGNode
      * @param statementNode The root (ASTNode) of the statement subtree to create a CFG subtree for
      * @return The head and tail nodes of this subgraph
      */
-    std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildNonContainerStatementSubgraph(
+    std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildStatementSubgraph(
             std::unordered_map<Statement, std::shared_ptr<CFGNode>>& map, const std::shared_ptr<StatementNode>& statementNode);
 
     /**

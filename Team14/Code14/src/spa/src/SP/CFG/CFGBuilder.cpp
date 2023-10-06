@@ -38,7 +38,7 @@ CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared
         } else if (statementNode->getStatementType() == StatementNodeType::While) {
             std::tie(childHead, childTail) = buildWhileSubgraph(map, std::dynamic_pointer_cast<WhileNode>(statementNode));
         } else {
-            std::tie(childHead, childTail) = buildNonContainerStatementSubgraph(map, statementNode);
+            std::tie(childHead, childTail) = buildStatementSubgraph(map, statementNode);
         }
 
         // attach previous tail with (current) child head
@@ -58,7 +58,7 @@ CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared
 }
 
 std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
-CFGBuilder::buildNonContainerStatementSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNode>> &map,
+CFGBuilder::buildStatementSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNode>> &map,
                                                const std::shared_ptr<StatementNode> &statementNode) {
     StatementType statementType = StatementTypeFactory::getStatementTypeFrom(statementNode->getStatementType());
     Statement statement = Statement(statementNode->getStatementNumber(), statementType);
@@ -70,9 +70,7 @@ CFGBuilder::buildNonContainerStatementSubgraph(std::unordered_map<Statement, std
 std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
 CFGBuilder::buildIfSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNode>> &map,
                             const std::shared_ptr<IfNode> &ifNode) {
-    Statement ifStatement = Statement(ifNode->getStatementNumber(), StatementType::If);
-    auto cfgNode = std::make_shared<CFGNode>(ifNode->getStatementNumber());
-    map[ifStatement] = cfgNode;
+    auto [cfgNode, _] = buildStatementSubgraph(map, ifNode);
 
     auto [thenHeadNode, thenTailNode] = buildStatementListSubgraph(map, ifNode->getThenStatementList());
     auto [elseHeadNode, elseTailNode] = buildStatementListSubgraph(map, ifNode->getElseStatementList());
@@ -101,9 +99,7 @@ CFGBuilder::buildIfSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNod
 std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
 CFGBuilder::buildWhileSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNode>> &map,
                                const std::shared_ptr<WhileNode> &whileNode) {
-    Statement whileStatement = Statement(whileNode->getStatementNumber(), StatementType::While);
-    auto cfgNode = std::make_shared<CFGNode>(whileNode->getStatementNumber());
-    map[whileStatement] = cfgNode;
+    auto [cfgNode, _] = buildStatementSubgraph(map, whileNode);
 
     auto [headNode, tailNode] = buildStatementListSubgraph(map, whileNode->getStatementList());
 
