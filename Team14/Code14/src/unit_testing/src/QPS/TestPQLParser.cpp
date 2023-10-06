@@ -10,12 +10,12 @@ TEST_CASE("single declaration, single Select") {
     Query query = parser.parse();
     QueryEntity expectedEntity = QueryEntity(QueryEntityType::Stmt, "s");
     std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("s");
-    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
+    Synonym selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(query.getEntity("s"));
     REQUIRE(*declarationEntity == expectedEntity);
-    REQUIRE(declarationEntity == selectEntity);
+    REQUIRE(declarationEntity == query.getEntity(selectEntity));
 }
 
 TEST_CASE("processDeclarations serial declaration") {
@@ -24,14 +24,14 @@ TEST_CASE("processDeclarations serial declaration") {
     Query query = parser.parse();
     auto declaration_map = query.getDeclarations();
     std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("v");
-    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
+    Synonym selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(declaration_map.size()==3);
     REQUIRE(query.getEntity("v"));
     REQUIRE(query.getEntity("v1"));
     REQUIRE(query.getEntity("v2"));
-    REQUIRE(declarationEntity == selectEntity);
+    REQUIRE(declarationEntity == query.getEntity(selectEntity));
 }
 
 TEST_CASE("processDeclarations multiple declaration") {
@@ -40,7 +40,7 @@ TEST_CASE("processDeclarations multiple declaration") {
     Query query = parser.parse();
     auto declaration_map = query.getDeclarations();
     std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("p");
-    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
+    Synonym selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(declaration_map.size()==9);
@@ -53,7 +53,7 @@ TEST_CASE("processDeclarations multiple declaration") {
     REQUIRE(query.getEntity("i"));
     REQUIRE(query.getEntity("v"));
     REQUIRE(query.getEntity("k"));
-    REQUIRE(declarationEntity == selectEntity);
+    REQUIRE(declarationEntity == query.getEntity(selectEntity));
 }
 
 TEST_CASE("processDeclarations Errors") {

@@ -77,7 +77,7 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     Synonym assignSyn = "a";
     std::shared_ptr<QueryEntity> assignInQuery = std::make_shared<QueryEntity>(QueryEntityType::Assign, assignSyn);
     queryObj.addDeclaration(assignInQuery);
-    queryObj.addSelect(assignInQuery);
+    queryObj.addSelect(assignInQuery->getSynonym());
     ExpressionSpec rhs = ExpressionSpec{ExpressionSpecType::Wildcard, ""};
     std::shared_ptr<PatternClause> patternClause = std::make_shared<PatternClause>();
     patternClause->setType(ClauseType::Assign);
@@ -91,7 +91,7 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     wildcard.setType(ent);
     patternClause->setFirstParam(wildcard);
     patternClause->setSecondParam(rhs);
-    queryObj.addPattern(patternClause);
+    queryObj.addClause(patternClause);
 
     Result resultObj = evaluator.evaluate(queryObj);
     auto results = evaluator.formatResult(queryObj, resultObj);
