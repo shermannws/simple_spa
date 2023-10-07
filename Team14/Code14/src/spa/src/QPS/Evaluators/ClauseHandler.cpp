@@ -10,7 +10,7 @@ void ClauseHandler::setStrategy(std::shared_ptr<Strategy> strategy) {
 
 void ClauseHandler::executeClause(std::shared_ptr<Clause> clause, Result& result) const {
     if (strategy) {
-        result = strategy->evaluateClause(clause, pkbReader);
+        result = strategy->evaluateClause(clause);
     } else {
         throw std::runtime_error("No strategy set for clause handler");
     }
