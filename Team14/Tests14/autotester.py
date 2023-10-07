@@ -23,7 +23,7 @@ QUERIES_SUFFIX = "_queries.txt"
 ERROR_PREFIX = "error_"
 TEST_SETTINGS = {
     "milestone1": True,
-    "milestone2": False,
+    "milestone2": True,
     "milestone3": False,
 }
 
