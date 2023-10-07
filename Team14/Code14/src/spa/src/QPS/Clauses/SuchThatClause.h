@@ -22,6 +22,7 @@ public:
      * @brief The constructor of SuchThatClause
      */
     SuchThatClause();
+
     /*
      * @brief The constructor of SuchThatClause that takes in a Token shared pointer
      */
@@ -38,4 +39,6 @@ public:
      * @return The Ref reference of the second parameter
      */
     Ref& getSecondParam();
+
+    bool operator==(const Clause& other) const override;
 };

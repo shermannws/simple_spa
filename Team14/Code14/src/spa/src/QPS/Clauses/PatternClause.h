@@ -48,4 +48,6 @@ public:
      * @return The Synonym string of the PatternClause
      */
     Synonym getSyn();
+
+    bool operator==(const Clause& other) const override;
 };

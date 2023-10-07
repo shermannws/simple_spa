@@ -66,4 +66,6 @@ public:
      * @return The Ref reference of the first parameter
      */
     Ref& getFirstParam();
+
+    virtual bool operator==(const Clause& other) const = 0;
 };
