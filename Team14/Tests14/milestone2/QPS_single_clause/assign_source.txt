@@ -1,0 +1,32 @@
+procedure pattern {
+    b = a - b / 3;
+    a = a - b / 3 + 2;
+    if (a == 3) then {
+        a = b + a - b / 3;
+    } else {
+        b = a + b + c;
+        while (b < a) {
+            a = a + b;
+        }
+        if (a > 3) then {
+            b = a + b % 3;
+            a = a + b / 3;
+        } else {
+            c = 3;
+        }
+    }
+    b = a - b % c;
+    e = a + b * (a * 3);
+    while (a != 1) {
+        a = a + b / (a + b);
+        b = c + (a + b / (a + b));
+        c = a + b / (a + b) % 2;
+        if (b == b) then {
+            c = a - b + 3;
+        } else {
+            d = 3 * a;
+        }
+    }
+    c = c - (a + b) + b * a;
+    read a;
+}

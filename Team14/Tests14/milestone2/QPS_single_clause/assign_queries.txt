@@ -1,0 +1,75 @@
+1 -
+assign a;
+Select a pattern a(_, _"a-b/3"_)
+1, 2
+5000
+2 -
+assign a; variable v;
+Select a pattern a(v, "a+b")
+7
+5000
+3 -
+assign a; variable v;
+Select v pattern a(v, _"a+b/(a+b)"_)
+a, b
+5000
+4 -
+assign a; variable v;
+Select v pattern a(v, _"3"_)
+a, b, c, d, e
+5000
+5 -
+assign a; variable v; while w;
+Select w pattern a("c", _"a-b"_)
+6, 14
+5000
+51 -
+assign a; variable v; while w;
+Select a pattern a("c", _"a-b"_)
+19
+5000
+52 -
+assign a; variable v; while w;
+Select a pattern a(_, _"a-b"_)
+19
+5000
+6 -
+assign a; variable v; stmt s;
+Select s pattern a(v, "a*3")
+
+5000
+7 -
+assign a; if ifs;
+Select ifs pattern a(_, _"a+b*(a*3)"_)
+3, 8, 18
+5000
+8 -
+assign a, a1;
+Select a pattern a1(_, "a+b%3")
+1,2,4,5,7,9,10,11,12,13,15,16,17,19,20,21
+5000
+9 -
+assign a; variable v;
+Select a pattern a(v, _"a-b%c"_)
+12
+5000
+10 -
+assign a; variable v;
+Select a pattern a(v, "a-b*(a*3)")
+
+5000
+11 -
+assign a;
+Select a pattern a(_,_"b*a"_)
+21
+5000
+12 -
+assign a;
+Select a pattern a("b", "a+b/3")
+
+5000
+13 -
+assign a; variable v;
+Select v pattern a(v, _"a+b%3"_)
+b
+5000
