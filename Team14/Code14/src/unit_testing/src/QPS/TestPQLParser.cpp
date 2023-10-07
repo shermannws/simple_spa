@@ -618,6 +618,248 @@ TEST_CASE("processSuchThatClause Parent*") {
     }
 }
 
+TEST_CASE("processSuchThatClause Next") {
+    SECTION("Valid Next(s1,s2)") {
+        PQLParser parser("print s1, s2;\nSelect s1 such that Next (s1,s2)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Next);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Print);
+        REQUIRE(leftRef.getRep() == "s1");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Print);
+        REQUIRE(rightRef.getRep() == "s2");
+    }
+
+    SECTION("Valid Next(s,integer)") {
+        PQLParser parser("print pr;\nSelect pr  such  that  Next(pr,1)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Next);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Print);
+        REQUIRE(leftRef.getRep() == "pr");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "1");
+    }
+
+    SECTION("Valid Next(s,_)") {
+        PQLParser parser("if ifs;\nSelect ifs such that Next(ifs,_)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Next);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::If);
+        REQUIRE(leftRef.getRep() == "ifs");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+
+    SECTION("Valid Next(integer,s)") {
+        PQLParser parser("while w;\nSelect w such  that  Next(1,w)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Next);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "1");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::While);
+        REQUIRE(rightRef.getRep() == "w");
+    }
+
+    SECTION("Valid Next(_,s)") {
+        PQLParser parser("assign a;\nSelect a such that Next(_,a)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Next);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(rightRef.getRep() == "a");
+    }
+
+    SECTION("Valid Next(integer,integer)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Next(2,3)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Next);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "2");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "3");
+    }
+
+    SECTION("Valid Next(_,_)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Next(_,_)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Next);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+}
+
+TEST_CASE("processSuchThatClause Next*") {
+    SECTION("Valid Next*(s1,s2)") {
+        PQLParser parser("read s1, s2;\nSelect s1 such that Next* (s1,s2)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::NextStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Read);
+        REQUIRE(leftRef.getRep() == "s1");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Read);
+        REQUIRE(rightRef.getRep() == "s2");
+    }
+
+    SECTION("Valid Next*(s,integer)") {
+        PQLParser parser("assign assign;\nSelect assign such that  Next*(assign,3)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::NextStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(leftRef.getRep() == "assign");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "3");
+    }
+
+    SECTION("Valid Next*(s,_)") {
+        PQLParser parser("read hello;\nSelect hello such that Next*(hello,_)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::NextStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Read);
+        REQUIRE(leftRef.getRep() == "hello");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+
+    SECTION("Valid Next*(integer,s)") {
+        PQLParser parser("stmt read;\nSelect read such  that  Next*(1,read)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::NextStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "1");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Stmt);
+        REQUIRE(rightRef.getRep() == "read");
+    }
+
+    SECTION("Valid Next*(_,s)") {
+        PQLParser parser("while while;\nSelect while such that Next*(_,while)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::NextStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::While);
+        REQUIRE(rightRef.getRep() == "while");
+    }
+
+    SECTION("Valid Next*(integer,integer)") {
+        PQLParser parser("stmt s1; stmt s2;\nSelect s1  such  that  Next*(2,3)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::NextStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "2");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "3");
+    }
+
+    SECTION("Valid Next*(_,_)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Next*(_,_)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::NextStar);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+}
+
 TEST_CASE("Invalid processSuchThat cases") {
     SECTION("Invalid Syntax - general queries") {
         std::vector<std::pair<std::string, std::string>> testcases;

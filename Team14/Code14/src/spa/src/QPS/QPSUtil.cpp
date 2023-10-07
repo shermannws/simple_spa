@@ -7,9 +7,21 @@
 #include "QPS/Evaluators/Strategies/ParentStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
 
+std::unordered_map<StringRep, ClauseType> QPSUtil::repClauseTypeMap = {
+        {"Uses", ClauseType::Uses},
+        {"Modifies", ClauseType::Modifies},
+        {"Follows", ClauseType::Follows},
+        {"Follows*", ClauseType::FollowsStar},
+        {"Parent", ClauseType::Parent},
+        {"Parent*", ClauseType::ParentStar},
+        {"Next", ClauseType::Next},
+        {"Next*", ClauseType::NextStar},
+};
+
 std::unordered_set<ClauseType> QPSUtil::stmtrefClauseTypes = {
     ClauseType::Follows, ClauseType::FollowsStar,
-    ClauseType::Parent, ClauseType::ParentStar
+    ClauseType::Parent, ClauseType::ParentStar,
+    ClauseType::Next, ClauseType::NextStar,
 };
 
 std::unordered_set<ClauseType> QPSUtil::stmtrefProcVarClauseTypes = {ClauseType::Uses, ClauseType::Modifies};

@@ -10,6 +10,7 @@
  */
 class QPSUtil {
 public:
+    static std::unordered_map<StringRep, ClauseType> repClauseTypeMap;
     /**
      * @brief An unordered set of clause types that follow the pattern (stmtref/proc, var)
      */

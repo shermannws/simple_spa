@@ -14,6 +14,8 @@ enum class ClauseType {
     FollowsStar,
     Parent,
     ParentStar,
+    Next,
+    NextStar,
     Assign,
     Invalid
 };
