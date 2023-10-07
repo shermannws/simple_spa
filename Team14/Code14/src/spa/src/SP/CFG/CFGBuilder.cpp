@@ -63,7 +63,7 @@ CFGBuilder::buildStatementSubgraph(std::unordered_map<Statement, std::shared_ptr
                                                const std::shared_ptr<StatementNode> &statementNode) {
     StatementType statementType = StatementTypeFactory::getStatementTypeFrom(statementNode->getStatementType());
     Statement statement = Statement(statementNode->getStatementNumber(), statementType);
-    auto cfgNode = std::make_shared<CFGNode>(statementNode->getStatementNumber());
+    auto cfgNode = std::make_shared<CFGNode>(statementNode->getStatementNumber(), statementType);
     map[statement] = cfgNode;
     return {cfgNode, cfgNode};
 }

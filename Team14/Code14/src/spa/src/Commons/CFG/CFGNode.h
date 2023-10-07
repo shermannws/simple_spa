@@ -43,6 +43,13 @@ public:
     /**
      * Creates and initialises a CFGNode.
      * @param statementNumber The statement number of the node
+     * @param statementType The type of the statement represented by the node
+     */
+    CFGNode(StatementNumber statementNumber, StatementType statementType);
+
+    /**
+     * Creates and initialises a CFGNode.
+     * @param statementNumber The statement number of the node
      * @param parent A vector of parent nodes
      * @param children A vector of children nodes
      */
