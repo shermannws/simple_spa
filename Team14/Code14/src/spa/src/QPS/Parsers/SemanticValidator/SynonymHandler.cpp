@@ -1,7 +1,7 @@
 #include "SynonymHandler.h"
 #include "QPS/Exceptions/SemanticException.h"
 
-void SynonymHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
+void SynonymHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
     Ref& leftRef = clause->getFirstParam();
     RootType leftRootType = leftRef.getRootType();
 

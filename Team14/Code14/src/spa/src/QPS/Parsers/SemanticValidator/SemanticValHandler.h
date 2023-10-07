@@ -37,5 +37,5 @@ public:
      * @param query The Query object
      * @param clause The shared pointer of the Clause
      */
-    virtual void handle(Query& query, std::shared_ptr<Clause> clause) = 0;
+    virtual void handle(const Query& query, std::shared_ptr<Clause> clause) = 0;
 };

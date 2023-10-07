@@ -195,7 +195,7 @@ TEST_CASE("Valid program to test conditional expressions") {
                 SPToken(TokenType::Name, "procedure"),
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
                 SPToken(TokenType::Name, "while"),
-                // Conditional expression
+                // Conditional expression (...)
                 SPToken(TokenType::OpenRoundParenthesis, "("),
                 SPToken(TokenType::Name, "a"),
                 SPToken(TokenType::RelationalOperator, ">"),
@@ -220,7 +220,7 @@ TEST_CASE("Valid program to test conditional expressions") {
                 SPToken(TokenType::Name, "procedure"),
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
                 SPToken(TokenType::Name, "while"),
-                // Conditional expression
+                // Conditional expression (!(...))
                 SPToken(TokenType::OpenRoundParenthesis, "("),
                 SPToken(TokenType::ConditionalOperator, "!"),
                 SPToken(TokenType::OpenRoundParenthesis, "("),
@@ -248,7 +248,7 @@ TEST_CASE("Valid program to test conditional expressions") {
                 SPToken(TokenType::Name, "procedure"),
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
                 SPToken(TokenType::Name, "while"),
-                // Conditional expression
+                // Conditional expression ((...)&&(...))
                 SPToken(TokenType::OpenRoundParenthesis, "("),
                 SPToken(TokenType::OpenRoundParenthesis, "("),
                 SPToken(TokenType::Name, "a"),
@@ -275,294 +275,757 @@ TEST_CASE("Valid program to test conditional expressions") {
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
 
-    SECTION("Nested unary cond_expr, !(simple_unary)") {
-        std::vector<SPToken> tokens = {
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "while"),
-                // Conditional expression
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::ConditionalOperator, "!"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::ConditionalOperator, "!"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, "!="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                // statement list
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::Equals, "="),
-                SPToken(TokenType::Name, "r"),
-                SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}"),
+    SECTION("Nest unary cond_expr") {
+        SECTION("Nested unary cond_expr, !(simple_unary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression (!(!(...)))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "!="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
-        REQUIRE_NOTHROW(parser.parse(tokens));
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
+
+        SECTION("Nested unary cond_expr, !(simple_binary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression (!((...)&&(...)))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
+
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
+
+        SECTION("Nested unary cond_expr, !(nested_unary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression (!(!((...)&&(...))))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
+
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
+
+        SECTION("Nested unary cond_expr, !(nested_binary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression (!((!(...))&&(!(...))))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
+
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
     }
 
-    SECTION("Nested unary cond_expr, !(simple_binary)") {
-        std::vector<SPToken> tokens = {
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "while"),
-                // Conditional expression
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::ConditionalOperator, "!"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, ">="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, "<="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                // statement list
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::Equals, "="),
-                SPToken(TokenType::Name, "r"),
-                SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}"),
+    SECTION("Nest binary cond_expr") {
+        SECTION("Nested binary cond_expr, (simple_unary) (simple_unary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression ((!(...))&&(!(...)))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
-        REQUIRE_NOTHROW(parser.parse(tokens));
-    }
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
 
-    SECTION("Nested binary cond_expr, (simple_unary) (simple_unary)") {
-        std::vector<SPToken> tokens = {
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "while"),
-                // Conditional expression ((!(...))&&(!(...)))
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::ConditionalOperator, "!"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, ">="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::ConditionalOperator, "!"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, "<="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                // statement list
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::Equals, "="),
-                SPToken(TokenType::Name, "r"),
-                SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}"),
+        SECTION("Nested binary cond_expr, (simple_binary) (simple_unary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression (((...)&&(...))||(!(...)))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "||"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
-        REQUIRE_NOTHROW(parser.parse(tokens));
-    }
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
 
-    SECTION("Nested binary cond_expr, (simple_binary) (simple_binary)") {
-        std::vector<SPToken> tokens = {
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "while"),
-                // Conditional expression (((...)&&(...))&&((...)&&(...)))
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, ">="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, "<="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, ">="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, "<="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                // statement list
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::Equals, "="),
-                SPToken(TokenType::Name, "r"),
-                SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}"),
+        SECTION("Nested binary cond_expr, (simple_unary) (simple_binary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression ((!(...))||((...)&&(...)))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "||"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
-        REQUIRE_NOTHROW(parser.parse(tokens));
-    }
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
 
-    SECTION("Nested binary cond_expr, (nested_binary) (nested_binary)") {
-        std::vector<SPToken> tokens = {
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "while"),
-                // Conditional expression ((((...)&&(...))&&((...)&&(...)))||(((...)&&(...))&&((...)&&(...))))
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, ">="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, "<="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, ">="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, "<="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "||"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, ">="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, "<="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, ">="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, "<="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                // statement list
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::Equals, "="),
-                SPToken(TokenType::Name, "r"),
-                SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}"),
+        SECTION("Nested binary cond_expr, (simple_binary) (simple_binary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression (((...)&&(...))&&((...)&&(...)))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
-        REQUIRE_NOTHROW(parser.parse(tokens));
-    }
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
 
-    SECTION("Nested binary cond_expr, (nested_unary) (nested_unary)") {
-        std::vector<SPToken> tokens = {
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::Name, "procedure"),
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "while"),
-                // Conditional expression ((!((...)&&(...)))||(!((...)&&(...))))
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::ConditionalOperator, "!"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, ">="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, "<="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "||"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::ConditionalOperator, "!"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, ">="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::ConditionalOperator, "&&"),
-                SPToken(TokenType::OpenRoundParenthesis, "("),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::RelationalOperator, "<="),
-                SPToken(TokenType::Name, "b"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                SPToken(TokenType::CloseRoundParenthesis, ")"),
-                // statement list
-                SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::Equals, "="),
-                SPToken(TokenType::Name, "r"),
-                SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}"),
+        SECTION("Nested binary cond_expr, (rel_expr) (simple_binary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression ((...)&&((...)&&(...)))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
-        REQUIRE_NOTHROW(parser.parse(tokens));
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
+
+        SECTION("Nested binary cond_expr, (rel_expr) (simple_unary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression ((...)&&(!(...)))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
+
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
+
+        SECTION("Nested binary cond_expr, (simple_binary) (rel_expr)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression (((...)&&(...))||(...))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "||"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
+
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
+
+        SECTION("Nested binary cond_expr, (simple_binary) (rel_expr)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression ((!(...))||(...))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "||"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
+
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
+
+        SECTION("Nested binary cond_expr, (nested_binary) (nested_binary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression ((((...)&&(...))&&((...)&&(...)))||(((...)&&(...))&&((...)&&(...))))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "||"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
+
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
+
+        SECTION("Nested binary cond_expr, (nested_unary) (nested_unary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression ((!((...)&&(...)))||(!((...)&&(...))))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "||"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
+
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
+
+        SECTION("Nested binary cond_expr, (nested_binary) (nested_unary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression ((((...)&&(...))&&((...)&&(...)))||(!((...)&&(...))))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "||"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
+
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
+
+        SECTION("Nested binary cond_expr, (nested_unary) (nested_binary)") {
+            std::vector<SPToken> tokens = {
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::Name, "procedure"),
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "while"),
+                    // Conditional expression ((!((...)&&(...)))||(((...)&&(...))&&((...)&&(...))))
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::ConditionalOperator, "!"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "||"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, ">="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::ConditionalOperator, "&&"),
+                    SPToken(TokenType::OpenRoundParenthesis, "("),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::RelationalOperator, "<="),
+                    SPToken(TokenType::Name, "b"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    SPToken(TokenType::CloseRoundParenthesis, ")"),
+                    // statement list
+                    SPToken(TokenType::OpenCurlyParenthesis, "{"),
+                    SPToken(TokenType::Name, "a"),
+                    SPToken(TokenType::Equals, "="),
+                    SPToken(TokenType::Name, "r"),
+                    SPToken(TokenType::Semicolon, ";"),
+                    SPToken(TokenType::CloseCurlyParenthesis, "}"),
+
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
+            REQUIRE_NOTHROW(parser.parse(tokens));
+        }
     }
 }

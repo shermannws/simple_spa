@@ -2,7 +2,7 @@
 #include "QPS/QPSUtil.h"
 #include "QPS/Exceptions/SemanticException.h"
 
-void StmtrefEntrefHandler::handle(Query &query, std::shared_ptr<Clause> clause) {
+void StmtrefEntrefHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
     ClauseType type = suchThat->getType();
     Ref& leftRef = suchThat->getFirstParam();
