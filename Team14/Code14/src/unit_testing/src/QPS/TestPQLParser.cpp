@@ -4,6 +4,8 @@
 
 #include "catch.hpp"
 
+// TODO remove usage of emplace_back
+
 TEST_CASE("single declaration, single Select") {
     std::string input = "stmt s; Select s";
     PQLParser parser(input);
@@ -908,5 +910,49 @@ TEST_CASE("both clause present") {
     REQUIRE(rightRef1.getEntityType() == QueryEntityType::Variable);
     REQUIRE(rightRef1.getRep() == "v");
 
+}
+
+TEST_CASE("multi-clause queries") {
+    SECTION("invalid multi-clause queries - Syntax Errors") {
+        // Use and between different clause types
+        PQLParser parser("assign a; variable v; Select v such that Modifies(a,v) and pattern a(_,_) ");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        // Use both `and` & clause keyword (such that)
+        parser = PQLParser("assign a; variable v; Select v such that Modifies(a,v) and such that Follows(1, 2)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        // Use both `and` & clause keyword (pattern)
+        parser = PQLParser("assign a; variable v; Select a pattern a(_,_) and pattern a(v,_)"); // do this "assign a; variable v; Select a pattern a(_,_) and pattern (v,_)"
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        // Trailing `and`
+        parser = PQLParser("assign a; variable v; Select a pattern v(\"y\",_) and ");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+    }
+
+    SECTION("use AND in such that") {
+        PQLParser parser("assign a; variable v; Select v such that Modifies(a,v) and Follows*(1,2) and Uses(a,v)");
+        Query query = parser.parse();
+
+        auto stClauses = query.getSuchThat();
+        REQUIRE(stClauses.size() == 3);
+
+        auto pClauses = query.getPattern();
+        REQUIRE(pClauses.empty());
+    }
+
+    SECTION("use AND in pattern") {
+        PQLParser parser(R"(assign a,pattern; variable v; assign a1; Select a pattern a(_,_) and pattern (v,_) and a1("y","1"))");
+        Query query = parser.parse();
+
+        auto stClauses = query.getSuchThat();
+        REQUIRE(stClauses.empty());
+
+        auto pClauses = query.getPattern();
+        REQUIRE(pClauses.size() == 3);
+    }
+
+    // TO CHECK use `and` as a synonym
 }
 
