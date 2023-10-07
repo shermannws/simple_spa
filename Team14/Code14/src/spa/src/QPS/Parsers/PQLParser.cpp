@@ -59,10 +59,6 @@ std::vector<std::shared_ptr<QueryEntity>> PQLParser::processDeclarations() {
             throw SyntaxException("Expected ; but found '" + endToken->getRep() + + "'");
         }
     }
-
-    if (entities.empty()) {
-        throw SyntaxException("Expected a declaration but found none");
-    }
     return entities;
 }
 
