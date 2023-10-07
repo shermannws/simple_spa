@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-#include "CFGNode.h"
+#include "Commons/CFG/CFGNode.h"
 #include "Commons/AppConstants.h"
 #include "Commons/Entities/Statement.h"
 #include "SP/AST/Nodes/ProgramNode.h"
