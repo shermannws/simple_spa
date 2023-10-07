@@ -389,8 +389,10 @@ TEST_CASE("Test ASTPrinter") {
             SPToken(TokenType::Name, "a"),
             SPToken(TokenType::ArithmeticOperator, "-"),
             SPToken(TokenType::Name, "b"),
-            SPToken(TokenType::ArithmeticOperator, "+"),
+            SPToken(TokenType::ArithmeticOperator, "/"),
             SPToken(TokenType::Integer, "3"),
+            SPToken(TokenType::ArithmeticOperator, "+"),
+            SPToken(TokenType::Integer, "2"),
             SPToken(TokenType::Semicolon, ";"),
             SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
