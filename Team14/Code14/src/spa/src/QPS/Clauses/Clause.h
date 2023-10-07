@@ -67,5 +67,12 @@ public:
      */
     Ref& getFirstParam();
 
+    /**
+    * @brief returns the list of synonyms present in the clause, used for
+    * defining the corresponding Result table header of the clause
+    * @return vector of Synonyms
+    */
+    virtual std::vector<Synonym> getSynonyms() const = 0;
+
     virtual bool operator==(const Clause& other) const = 0;
 };

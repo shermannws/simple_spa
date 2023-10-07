@@ -40,5 +40,12 @@ public:
      */
     Ref& getSecondParam();
 
+    /**
+    * @brief returns the list of synonyms present in the such that clause, used for
+    * defining the corresponding Result table header of the clause
+    * @return vector of Synonyms
+    */
+    std::vector<Synonym> getSynonyms() const override;
+
     bool operator==(const Clause& other) const override;
 };
