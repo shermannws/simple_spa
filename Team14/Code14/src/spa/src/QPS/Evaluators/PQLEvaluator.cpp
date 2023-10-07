@@ -43,21 +43,28 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
     return list_results;
 }
 
-Result PQLEvaluator::evaluate(Query& query) { //TODO handle multiclause
-
-    auto sResult = std::make_shared<Result>();
-    if (!query.getSuchThat().empty()) {
-        sResult = evaluateClause(query.getSuchThat()[0]);
+Result PQLEvaluator::evaluate(Query& query) {
+    std::vector<std::shared_ptr<Result>> results;
+    for (const auto& clause : query.getSuchThat()) {
+        results.push_back(evaluateClause(clause));
+    }
+    for (const auto& clause : query.getPattern()) {
+        results.push_back(evaluateClause(clause));
     }
 
-    auto pResult = std::make_shared<Result>();
-    if (!query.getPattern().empty()) {
-        pResult = evaluateClause(query.getPattern()[0]);
+    if (results.empty()) {
+        auto result = evaluateSelect(query.getEntity(query.getSelect()[0]));
+        return *result;
     }
 
-    auto result = resultHandler->getCombined(sResult, pResult);
+    auto result = results[0]; // Initialize with the first element
 
-    // CASE FALSE OR EMPTY
+    // Iterate through the vector & combine starting from the second element
+    for (size_t i = 1; i < results.size(); ++i) {
+        result = resultHandler->getCombined(result, results[i]);
+    }
+
+    // CASE FALSE OR EMPTY RESULT TABLE
     if ((result->getType()==ResultType::Boolean && !result->getBoolResult()) ||
         (result->getType()==ResultType::Tuples && result->getTuples().empty()) ){
         return *result;
@@ -70,21 +77,24 @@ Result PQLEvaluator::evaluate(Query& query) { //TODO handle multiclause
         return *result;
     }
 
-    // CASE TRUE OR NON-EMPTY TABLE OR INVALID, evaluate select independently
-    auto selectResult = resultHandler->getCombined(sResult, pResult);
-    EntityPtr entity = query.getEntity(syn);
-    std::vector<Entity> entities = getAll(entity);
-    selectResult->setTuples(entities);
-    SynonymMap map {{entity->getSynonym(), 0}};
-    selectResult->setSynIndices(map);
-
-    return *selectResult;
+    // CASE TRUE OR NON-EMPTY TABLE, evaluate select independently
+    result = evaluateSelect(query.getEntity(syn));
+    return *result;
 }
 
 std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Clause> clause) {
     std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()](pkbReader);
     clauseHandler->setStrategy(strategy);
     std::shared_ptr<Result> result = clauseHandler->executeClause(clause);
+    return result;
+}
+
+std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const EntityPtr entity) {
+    std::shared_ptr<Result> result = std::make_shared<Result>();
+    std::vector<Entity> entities = getAll(entity);
+    result->setTuples(entities);
+    SynonymMap map {{entity->getSynonym(), 0}};
+    result->setSynIndices(map);
     return result;
 }
 

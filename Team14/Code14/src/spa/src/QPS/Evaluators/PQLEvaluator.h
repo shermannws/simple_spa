@@ -44,9 +44,16 @@ private:
     /**
      * @brief Evaluates a clause and updates the result accordingly.
      * @param clause A shared pointer to the Clause to evaluate.
-     * @return  shared pointer to result object
+     * @return shared pointer to result object
      */
     std::shared_ptr<Result> evaluateClause(const std::shared_ptr<Clause> clause);
+
+    /**
+     * @brief Evaluates the select clause of a query.
+     * @param entity shared pointer to the selected query entity
+     * @return shared pointer to result object
+     */
+    std::shared_ptr<Result> evaluateSelect(const EntityPtr entity);
 
 public:
     /**
