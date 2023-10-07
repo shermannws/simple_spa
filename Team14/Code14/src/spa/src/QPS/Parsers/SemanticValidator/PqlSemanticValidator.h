@@ -21,12 +21,19 @@ public:
     void validateDeclarations(const std::vector<Synonym>& synonyms);
 
     /**
-     * @brief Validates the selected entity, throws a Semantic exception if synonym is undeclared
+     * @brief Validates the result clause semantically, throws a Semantic exception if synonym is undeclared
      * @param query the query object
      * @param syn the synonym selected in the query
      */
-    void validateSelectSemantics(const Query& query, const Synonym& syn);
+    void validateResultClause(const Query& query, const Synonym& syn);
 
+    /**
+     * @brief Validates all the clauses in the given query
+     * @param query the query object
+     */
+    void validateConstraintClauses(const Query& query);
+
+private:
     /**
      * @brief Validates SuchThatClause semantically, throws a SemanticException if semantically invalid
      * @param query the Query object

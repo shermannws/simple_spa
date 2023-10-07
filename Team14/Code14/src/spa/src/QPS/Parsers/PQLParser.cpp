@@ -23,13 +23,8 @@ Query PQLParser::parse() {
 
     PqlSemanticValidator semanticValidator = PqlSemanticValidator();
     semanticValidator.validateDeclarations(declarations);
-    semanticValidator.validateSelectSemantics(query, select);
-    for (const auto& clause : query.getSuchThat()) {
-        semanticValidator.validateClauseSemantics(query, clause);
-    }
-    for (const auto& clause : query.getPattern()) {
-        semanticValidator.validateClauseSemantics(query, clause);
-    }
+    semanticValidator.validateResultClause(query, select);
+    semanticValidator.validateConstraintClauses(query);
     return query;
 }
 
@@ -62,6 +57,7 @@ Synonym PQLParser::parseResultClause(Query& query) {
     if (!next->isIdent()) {
         throw SyntaxException("Invalid synonym syntax");
     }
+
     Synonym syn = next->getRep();
     query.addSelect(next->getRep());
     return syn;
@@ -75,9 +71,10 @@ void PQLParser::parseClauses(Query& query) {
 
     while(!tokenizer->peekToken()->isToken(TokenType::Empty)) {
         std::string clauseConnector = tokenizer->peekToken()->getRep();
-        if (clauseExtractorMap.find(clauseConnector) == clauseExtractorMap.end()) {
+        if (clauseExtractorMap.find(clauseConnector) == clauseExtractorMap.end()) { //check if valid clause keyword
             throw SyntaxException("invalid clause connector");
         }
+
         do {
             tokenizer->popToken(); //consume connector
             clauseExtractorMap[clauseConnector](query);
@@ -200,13 +197,6 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> cl
     }
 }
 
-std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string& errorMsg) {
-    if (!isToken) {
-        throw SyntaxException(errorMsg);
-    }
-    return tokenizer->popToken();
-}
-
 std::shared_ptr<QueryEntity> PQLParser::extractQueryEntity(std::shared_ptr<Token> entityType) {
     std::shared_ptr<Token> synonym = tokenizer->popToken();
     if (!synonym->isIdent()) {
@@ -248,3 +238,9 @@ Ref PQLParser::extractRef() {
     return ref;
 }
 
+std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string& errorMsg) {
+    if (!isToken) {
+        throw SyntaxException(errorMsg);
+    }
+    return tokenizer->popToken();
+}

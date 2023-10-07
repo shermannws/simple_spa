@@ -17,10 +17,19 @@ void PqlSemanticValidator::validateDeclarations(const std::vector<Synonym>& syno
     }
 }
 
-void PqlSemanticValidator::validateSelectSemantics(const Query& query, const Synonym& syn) {
+void PqlSemanticValidator::validateResultClause(const Query& query, const Synonym& syn) {
     EntityPtr entity = query.getEntity(syn);
     if (!entity) {
         throw SemanticException("Undeclared synonym in Select clause");
+    }
+}
+
+void PqlSemanticValidator::validateConstraintClauses(const Query& query) {
+    for (const auto& clause : query.getSuchThat()) {
+        validateClauseSemantics(query, clause);
+    }
+    for (const auto& clause : query.getPattern()) {
+        validateClauseSemantics(query, clause);
     }
 }
 
