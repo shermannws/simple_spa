@@ -10,7 +10,7 @@
 class StmtrefProcVarHandler : public SemanticValHandler {
 public:
     /**
-     * @brief Handles (stmtRef/proc, entRef) semantic validation of the Clause in the Query
+     * @brief Handles (stmtRef/proc, var) semantic validation of the Clause in the Query
      * @param query The Query object
      * @param clause The shared pointer of the Clause
      */

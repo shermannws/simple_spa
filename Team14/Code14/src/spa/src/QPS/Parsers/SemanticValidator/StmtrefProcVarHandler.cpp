@@ -47,7 +47,7 @@ void StmtrefProcVarHandler::handleRefType(Ref& leftRef, Ref& rightRef) {
     case RootType::Wildcard:
         throw SemanticException("Invalid LHS, wildcard found");
     default:
-        throw SemanticException("Invalid LHS stmtRef");
+        throw SemanticException("Invalid LHS RootType");
     }
 
     switch (rightRootType) {
