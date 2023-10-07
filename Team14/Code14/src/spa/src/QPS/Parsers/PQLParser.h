@@ -37,18 +37,14 @@ private:
     Synonym processSelectClause();
 
     /**
-     * @brief parses the query for any such that clause and extracts the related
-     * information into a such that clause object
-     * @return a shared pointer to the pattern clause
+     * @brief parses a chain of such that clause and adds the clauses to the query
      */
-    std::shared_ptr<SuchThatClause> processSuchThatClause();
+    void processSuchThatClause(Query& query);
 
     /**
-     * @brief parses the query for any pattern clause and extracts the related
-     * information into a pattern clause object
-     * @return a shared pointer to the pattern clause
+     * @brief parses a chain of pattern clause and adds the clauses to the query
      */
-    std::shared_ptr<PatternClause> processPatternClause();
+    void processPatternClause(Query& query);
 
     /**
      * @brief Returns a SuchThatClause if syntax is valid, otherwise throws a SyntaxException

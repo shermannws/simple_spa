@@ -17,28 +17,62 @@ PQLParser::PQLParser(const std::string& PQLQuery) {
 }
 
 Query PQLParser::parse() {
+
     std::vector<std::shared_ptr<QueryEntity>> entities = processDeclarations();
     Synonym select = processSelectClause();
-    // while not empty, process next clause and add to Clause list
-    std::shared_ptr<SuchThatClause> stClause = processSuchThatClause();
-    std::shared_ptr<PatternClause> pClause = processPatternClause();
+    Query query = Query();
+
+    //V1
+//    using func = std::function<std::shared_ptr<Clause>()>;
+//    std::unordered_map<std::string, func> clauseExtractorMap;
+//    clauseExtractorMap["such that"] = [&] () -> std::shared_ptr<SuchThatClause> {return extractSuchThatClause();};
+//    clauseExtractorMap["pattern"] = [&] () -> std::shared_ptr<PatternClause> {return extractPatternClause();};
+//
+//    while(!tokenizer->peekToken()->isToken(TokenType::Empty)) {
+//        std::string clauseConnector = tokenizer->peekToken()->getRep();
+//        if (clauseExtractorMap.find(clauseConnector) == clauseExtractorMap.end()) {
+//            throw SyntaxException("invalid clause connector");
+//        }
+//        do {
+//            tokenizer->popToken(); //consume connector
+//            auto clause = clauseExtractorMap[clauseConnector]();
+//            query.addClause(clause); // implement addClause with Clause arg
+//        } while (tokenizer->peekToken()->isToken("and"));
+
+
+    using func = std::function<void(Query& query)>;
+    std::unordered_map<std::string, func> clauseExtractorMap;
+    clauseExtractorMap["such that"] = [&] (Query& query) {return processSuchThatClause(query);}; //TODO implement extract with add inside
+    clauseExtractorMap["pattern"] = [&] (Query& query) {return processPatternClause(query);}; //TODO implement extract with add inside
+
+
+    while(!tokenizer->peekToken()->isToken(TokenType::Empty)) {
+        std::string clauseConnector = tokenizer->peekToken()->getRep();
+        if (clauseExtractorMap.find(clauseConnector) == clauseExtractorMap.end()) {
+            throw SyntaxException("invalid clause connector");
+        }
+        do {
+            tokenizer->popToken(); //consume connector
+            clauseExtractorMap[clauseConnector](query);
+        } while (tokenizer->peekToken()->isToken("and"));
+
+    }
+
     std::shared_ptr<Token> endOfQuery = tokenizer->peekToken();
     expect(endOfQuery->isToken(TokenType::Empty), "Invalid query syntax");
 
-    Query query = Query();
     setDeclarations(query, entities);
     PqlSemanticValidator semanticValidator = PqlSemanticValidator();
     semanticValidator.validateSelectSemantics(query, select);
     query.addSelect(select);
-    // loop through clause list and validate + add each clause to query
-    if (stClause) {
-        semanticValidator.validateClauseSemantics(query, stClause);
-        query.addClause(stClause);
+
+    for (const auto& clause : query.getSuchThat()) {
+        semanticValidator.validateClauseSemantics(query, clause);
     }
-    if (pClause) {
-        semanticValidator.validateClauseSemantics(query, pClause);
-        query.addClause(pClause);
+    for (const auto& clause : query.getPattern()) {
+        semanticValidator.validateClauseSemantics(query, clause);
     }
+
     return query;
 }
 
@@ -82,25 +116,14 @@ Synonym PQLParser::processSelectClause() {
     return syn;
 }
 
-std::shared_ptr<SuchThatClause> PQLParser::processSuchThatClause() {
-    // handle optional
-    std::shared_ptr<Token> suchThatToken = tokenizer->peekToken();
-    if (!suchThatToken->isToken("such that")) {
-        return nullptr;
-    }
-    tokenizer->popToken();
+void PQLParser::processSuchThatClause(Query& query) {
     std::shared_ptr<SuchThatClause> clause = extractSuchThatClause();
-    return clause;
+    query.addClause(clause);
 }
 
-std::shared_ptr<PatternClause> PQLParser::processPatternClause() {
-    std::shared_ptr<Token> patternToken = tokenizer->peekToken();
-    if (!patternToken->isToken("pattern")) {
-        return nullptr;
-    }
-    tokenizer->popToken();
+void PQLParser::processPatternClause(Query& query) {
     std::shared_ptr<PatternClause> clause = extractPatternClause();
-    return clause;
+    query.addClause(clause);
 }
 
 void PQLParser::setDeclarations(Query& query, const std::vector<std::shared_ptr<QueryEntity>>& entities) {

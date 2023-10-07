@@ -631,7 +631,7 @@ TEST_CASE("Invalid processSuchThat cases") {
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
-            REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+            REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
         }
     }
 
