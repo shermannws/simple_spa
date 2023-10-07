@@ -2,7 +2,6 @@
 
 #include "catch.hpp"
 #include "PKB/Managers/CallsRelationshipManager.h"
-#include "PKB/Relationships/CallsRelationship.h"
 
 using namespace std;
 

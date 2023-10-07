@@ -10,12 +10,12 @@ TEST_CASE("single declaration, single Select") {
     Query query = parser.parse();
     QueryEntity expectedEntity = QueryEntity(QueryEntityType::Stmt, "s");
     std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("s");
-    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
+    Synonym selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(query.getEntity("s"));
     REQUIRE(*declarationEntity == expectedEntity);
-    REQUIRE(declarationEntity == selectEntity);
+    REQUIRE(declarationEntity == query.getEntity(selectEntity));
 }
 
 TEST_CASE("processDeclarations serial declaration") {
@@ -24,14 +24,14 @@ TEST_CASE("processDeclarations serial declaration") {
     Query query = parser.parse();
     auto declaration_map = query.getDeclarations();
     std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("v");
-    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
+    Synonym selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(declaration_map.size()==3);
     REQUIRE(query.getEntity("v"));
     REQUIRE(query.getEntity("v1"));
     REQUIRE(query.getEntity("v2"));
-    REQUIRE(declarationEntity == selectEntity);
+    REQUIRE(declarationEntity == query.getEntity(selectEntity));
 }
 
 TEST_CASE("processDeclarations multiple declaration") {
@@ -40,7 +40,7 @@ TEST_CASE("processDeclarations multiple declaration") {
     Query query = parser.parse();
     auto declaration_map = query.getDeclarations();
     std::shared_ptr<QueryEntity> declarationEntity = query.getEntity("p");
-    std::shared_ptr<QueryEntity> selectEntity = query.getSelect()[0];
+    Synonym selectEntity = query.getSelect()[0];
 
     REQUIRE(query.hasDeclarations());
     REQUIRE(declaration_map.size()==9);
@@ -53,13 +53,12 @@ TEST_CASE("processDeclarations multiple declaration") {
     REQUIRE(query.getEntity("i"));
     REQUIRE(query.getEntity("v"));
     REQUIRE(query.getEntity("k"));
-    REQUIRE(declarationEntity == selectEntity);
+    REQUIRE(declarationEntity == query.getEntity(selectEntity));
 }
 
 TEST_CASE("processDeclarations Errors") {
     SECTION("SyntaxExceptions") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("Select s ", "Expected a declaration but found none");
         testcases.emplace_back("assignment a; Select a", "Expected a declaration but found none");
         testcases.emplace_back("assign a Select s", "Expected ; but found 'Select'");
         testcases.emplace_back("assign a a1; Select a1", "Expected ; but found 'a1'");
@@ -78,6 +77,7 @@ TEST_CASE("processDeclarations Errors") {
     SECTION("SemanticExceptions") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("stmt s; assign s; Select s ", "Trying to redeclare a synonym");
+        testcases.emplace_back("Select s ", "undeclared synonym");
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
@@ -637,8 +637,8 @@ TEST_CASE("Invalid processSuchThat cases") {
 
     SECTION("Invalid Uses queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("print a; print d;\nSelect a such that Uses(\"y\", d)",
-                               "Invalid LHS stmtRef");
+        testcases.emplace_back("print a; print d;\nSelect a such that Uses(\"\", d)",
+                               "Identity invalid");
         testcases.emplace_back("assign a; print d;\nSelect a such that Uses(a, 2)",
                                "Invalid RHS entRef");
 
@@ -663,8 +663,8 @@ TEST_CASE("Invalid processSuchThat cases") {
 
     SECTION("Invalid Modifies queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("assign a; constant d;\nSelect a such that Modifies(\"test\", d)",
-                               "Invalid LHS stmtRef");
+        testcases.emplace_back("assign a; constant d;\nSelect a such that Modifies(\"test, d)",
+                               "No right quote");
         testcases.emplace_back("print a; print d;\nSelect a such that Modifies(a, 3)",
                               "Invalid RHS entRef");
 

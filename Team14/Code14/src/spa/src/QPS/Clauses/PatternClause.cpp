@@ -1,9 +1,10 @@
 #include "PatternClause.h"
-#include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
 
 #include <utility>
 
-PatternClause::PatternClause() : Clause() {};
+PatternClause::PatternClause() : Clause() {
+    this->setType(ClauseType::Assign);
+};
 
 void PatternClause::setSecondParam(ExpressionSpec & expr) {
     secondParam = expr;

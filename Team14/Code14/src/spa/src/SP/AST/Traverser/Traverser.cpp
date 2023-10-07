@@ -26,7 +26,7 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
 			currentProcedure = currentCasted;
 		}
 
-		//current node to accept all the visitors and do its respective workr
+		//current node to accept all the visitors and do its respective work
 		for (std::shared_ptr<DesignExtractorVisitor> v : visitors) {
 			current->accept(v, parents, currentProcedure);
 		}

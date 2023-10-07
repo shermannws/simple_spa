@@ -14,10 +14,8 @@
  * This class is a template class that is inherited by the Relationship Managers
  * @brief Manages the relationships
  * @note A relationship is a relationship between a statement and a variable
- * @tparam S The type of the relationship store
- * @tparam R The type of the relationship
  */
-template <typename S, typename R>
+template <typename S>
 class StmtToVarRelationshipManager {
 private:
     /**

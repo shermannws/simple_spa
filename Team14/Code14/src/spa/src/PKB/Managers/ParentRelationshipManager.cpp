@@ -1,6 +1,6 @@
 #include "ParentRelationshipManager.h"
 
-ParentRelationshipManager::ParentRelationshipManager() : StmtToStmtRelationshipManager<ParentRelationshipStore, ParentRelationship>() {};
+ParentRelationshipManager::ParentRelationshipManager() : StmtToStmtRelationshipManager() {};
 
 void ParentRelationshipManager::storeParentRelationship(std::shared_ptr<Statement> parentStatement, std::shared_ptr<Statement> childStatement, bool isDirect) {
     this->storeRelationship(parentStatement, childStatement, isDirect);

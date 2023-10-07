@@ -1,6 +1,6 @@
  #include "CallsRelationshipManager.h"
 
- CallsRelationshipManager::CallsRelationshipManager() : ProcToProcRelationshipManager<CallsRelationshipStore, CallsRelationship>() {};
+ CallsRelationshipManager::CallsRelationshipManager() : ProcToProcRelationshipManager() {};
 
  void CallsRelationshipManager::storeCallsRelationship(std::shared_ptr<Procedure> procedure1, std::shared_ptr<Procedure> procedure2, bool isDirect) {
 	 this->storeRelationship(procedure1, procedure2, isDirect);

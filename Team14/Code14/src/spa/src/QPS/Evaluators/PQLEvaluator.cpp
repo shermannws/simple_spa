@@ -1,6 +1,5 @@
 #include <numeric>
 #include <stdexcept>
-#include <unordered_set>
 
 #include "PQLEvaluator.h"
 #include "QPS/QueryEntity.h"
@@ -13,7 +12,7 @@ PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :
     resultHandler(std::make_shared<ResultHandler>()) {}
 
 ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
-    std::vector<EntityPtr> selects = query.getSelect();
+    std::vector<Synonym> selects = query.getSelect();
     ResultSet results;
 
     if (result.getType() == ResultType::Tuples) {
@@ -22,8 +21,7 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
             if (tuple.empty()) {
                 continue;
             }
-            for (EntityPtr & entity : selects) {
-                Synonym syn = entity->getSynonym();
+            for (Synonym & syn : selects) {
                 SynonymMap indicesMap = result.getSynIndices();
                 if (indicesMap.find(syn) != indicesMap.end()) {
                     int idx = indicesMap.at(syn);
@@ -66,7 +64,7 @@ Result PQLEvaluator::evaluate(Query& query) {
     }
 
     // CASE SYN IN RESULT TABLE, check if synonym in select is in result table
-    Synonym syn = query.getSelect()[0]->getSynonym();
+    Synonym syn = query.getSelect()[0];
     SynonymMap indicesMap = result.getSynIndices();
     if (indicesMap.find(syn) != indicesMap.end()) {
         return result;
@@ -75,7 +73,7 @@ Result PQLEvaluator::evaluate(Query& query) {
     // CASE TRUE OR NON-EMPTY TABLE OR INVALID, evaluate select independently
 
     Result selectResult;
-    EntityPtr entity = query.getSelect()[0];
+    EntityPtr entity = query.getEntity(syn);
     std::vector<Entity> entities = getAll(entity);
     selectResult.setTuples(entities);
     SynonymMap map {{entity->getSynonym(), 0}};
@@ -85,7 +83,7 @@ Result PQLEvaluator::evaluate(Query& query) {
 }
 
 void PQLEvaluator::evaluateClause(const std::shared_ptr<Clause> clause, Result& result) {
-    std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()]();
+    std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()](pkbReader);
     clauseHandler->setStrategy(strategy);
     clauseHandler->executeClause(clause, result);
 }

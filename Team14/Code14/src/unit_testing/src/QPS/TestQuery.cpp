@@ -26,11 +26,11 @@ TEST_CASE("Query class tests") {
 
     SECTION("Test addSelect") {
         REQUIRE(query.getSelect().empty());
-        query.addSelect(entity1);
+        query.addSelect("v");
 
-        std::vector<std::shared_ptr<QueryEntity>> select = query.getSelect();
+        std::vector<Synonym> select = query.getSelect();
         REQUIRE(select.size() == 1);
-        REQUIRE(select[0] == entity1);
+        REQUIRE(select[0] == "v");
 
     }
 

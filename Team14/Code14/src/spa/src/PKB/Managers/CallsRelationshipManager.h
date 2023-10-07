@@ -6,7 +6,6 @@
 
 #include "PKB/RelationshipStores/CallsRelationshipStore.h"
 #include "Commons/Entities/Procedure.h"
-#include "PKB/Relationships/CallsRelationship.h"
 #include "PKB/Managers/ProcToProcRelationshipManager.h"
 
 /**
@@ -14,7 +13,7 @@
  * @brief Manages the Calls relationship
  * @note: A Calls relationship is a relationship between two procedures where the first procedure cakks the second procedure
  */
-class CallsRelationshipManager : ProcToProcRelationshipManager<CallsRelationshipStore, CallsRelationship> {
+class CallsRelationshipManager : ProcToProcRelationshipManager<CallsRelationshipStore> {
 public:
     /**
      * @brief Constructs a CallsRelationshipManager object

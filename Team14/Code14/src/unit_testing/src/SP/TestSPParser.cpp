@@ -5,6 +5,7 @@
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
 #include "SP/AST/Nodes/ProgramNode.h"
+#include "ASTPrinter/ASTPrinter.h"
 
 TEST_CASE("Test parse with one procedure, one read statement") {
     SPParser parser;
@@ -335,4 +336,65 @@ TEST_CASE("Tests parse with one procedure, one while statement with one assign s
         };
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
+}
+
+TEST_CASE("Test ASTPrinter") {
+    SPParser parser;
+    VariableName varName= "num1";
+    std::vector<SPToken> tokens = {
+            SPToken(TokenType::Name, "procedure"),
+            SPToken(TokenType::Name, "procedure"),
+            SPToken(TokenType::OpenCurlyParenthesis, "{"),
+            SPToken(TokenType::Name, "while"),
+            // Conditional expression ((!((...)&&(...)))||(!((...)&&(...))))
+            SPToken(TokenType::OpenRoundParenthesis, "("),
+            SPToken(TokenType::OpenRoundParenthesis, "("),
+            SPToken(TokenType::ConditionalOperator, "!"),
+            SPToken(TokenType::OpenRoundParenthesis, "("),
+            SPToken(TokenType::OpenRoundParenthesis, "("),
+            SPToken(TokenType::Name, "a"),
+            SPToken(TokenType::RelationalOperator, ">="),
+            SPToken(TokenType::Name, "b"),
+            SPToken(TokenType::CloseRoundParenthesis, ")"),
+            SPToken(TokenType::ConditionalOperator, "&&"),
+            SPToken(TokenType::OpenRoundParenthesis, "("),
+            SPToken(TokenType::Name, "a"),
+            SPToken(TokenType::RelationalOperator, "<="),
+            SPToken(TokenType::Name, "b"),
+            SPToken(TokenType::CloseRoundParenthesis, ")"),
+            SPToken(TokenType::CloseRoundParenthesis, ")"),
+            SPToken(TokenType::CloseRoundParenthesis, ")"),
+            SPToken(TokenType::ConditionalOperator, "||"),
+            SPToken(TokenType::OpenRoundParenthesis, "("),
+            SPToken(TokenType::ConditionalOperator, "!"),
+            SPToken(TokenType::OpenRoundParenthesis, "("),
+            SPToken(TokenType::OpenRoundParenthesis, "("),
+            SPToken(TokenType::Name, "a"),
+            SPToken(TokenType::RelationalOperator, ">="),
+            SPToken(TokenType::Name, "b"),
+            SPToken(TokenType::CloseRoundParenthesis, ")"),
+            SPToken(TokenType::ConditionalOperator, "&&"),
+            SPToken(TokenType::OpenRoundParenthesis, "("),
+            SPToken(TokenType::Name, "a"),
+            SPToken(TokenType::RelationalOperator, "<="),
+            SPToken(TokenType::Name, "b"),
+            SPToken(TokenType::CloseRoundParenthesis, ")"),
+            SPToken(TokenType::CloseRoundParenthesis, ")"),
+            SPToken(TokenType::CloseRoundParenthesis, ")"),
+            SPToken(TokenType::CloseRoundParenthesis, ")"),
+            // statement list
+            SPToken(TokenType::OpenCurlyParenthesis, "{"),
+            SPToken(TokenType::Name, "a"),
+            SPToken(TokenType::Equals, "="),
+            SPToken(TokenType::Name, "r"),
+            SPToken(TokenType::Semicolon, ";"),
+            SPToken(TokenType::CloseCurlyParenthesis, "}"),
+
+            SPToken(TokenType::CloseCurlyParenthesis, "}")
+    };
+
+    std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
+    ASTPrinter printerTraverser;
+
+    printerTraverser.traverseAndPrint(rootNode);
 }

@@ -1,7 +1,5 @@
 #include "CFGNode.h"
 
-#include <utility>
-
 CFGNode::CFGNode(StatementNumber statementNumber) : statementNumber(std::move(statementNumber)) {}
 
 CFGNode::CFGNode(StatementNumber statementNumber, std::vector<std::shared_ptr<CFGNode>> parents, std::vector<std::shared_ptr<CFGNode>> children)

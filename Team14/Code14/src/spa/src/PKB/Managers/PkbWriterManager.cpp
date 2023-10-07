@@ -1,7 +1,5 @@
 #include "PkbWriterManager.h"
 
-#include "PKB/Relationships/FollowsRelationship.h"
-#include "PKB/Relationships/UsesRelationship.h"
 #include "PKB/AssignmentPatternStore/Assignment.h"
 #include "PKB/PkbWriter.h"
 

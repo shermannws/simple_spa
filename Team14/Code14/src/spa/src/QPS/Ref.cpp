@@ -36,23 +36,19 @@ QueryEntityType Ref::getEntityType() {
     return entityType;
 }
 
-bool Ref::isWildcard() {
-    return rootType == RootType::Wildcard;
-}
-
-bool Ref::isSynonym() {
-    return rootType == RootType::Synonym;
-}
-
-bool Ref::isIdent() {
-    return rootType == RootType::Ident;
-}
-
-bool Ref::isInteger() {
-    return rootType == RootType::Integer;
+bool Ref::isRootType(RootType rrootType) {
+    return rootType == rrootType;
 }
 
 bool Ref::operator==(const Ref& other) const {
     return (rep == other.rep) && (type == other.type)
         && (rootType == other.rootType) && (entityType == other.entityType);
+}
+
+bool Ref::isOfStmtRef() {
+    return isRootType(RootType::Synonym) || isRootType(RootType::Wildcard) || isRootType(RootType::Integer);
+}
+
+bool Ref::isOfEntRef() {
+    return isRootType(RootType::Synonym) || isRootType(RootType::Wildcard) || isRootType(RootType::Ident);
 }
