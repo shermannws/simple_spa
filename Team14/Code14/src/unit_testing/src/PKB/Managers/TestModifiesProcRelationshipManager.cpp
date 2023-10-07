@@ -83,8 +83,10 @@ TEST_CASE("Test Modifies Procedure-Variable Transitive Relationship Calculations
         Procedure procedure3 = Procedure("proc3");
         Variable variableX = Variable("x");
 
-        callRelationshipManager.storeCallsRelationship(std::make_shared<Procedure>(procedure1), std::make_shared<Procedure>(procedure2), false);
-        callRelationshipManager.storeCallsRelationship(std::make_shared<Procedure>(procedure2), std::make_shared<Procedure>(procedure3), false);
+        // 1 --> 2 --> 3
+        callRelationshipManager.storeCallsRelationship(std::make_shared<Procedure>(procedure1), std::make_shared<Procedure>(procedure2), true);
+        callRelationshipManager.storeCallsRelationship(std::make_shared<Procedure>(procedure2), std::make_shared<Procedure>(procedure3), true);
+        callRelationshipManager.calculateCallsStar();
 
         modifiesProcRelationshipManager.storeModifiesProcRelationship(std::make_shared<Procedure>(procedure3), std::make_shared<Variable>(variableX));
 
