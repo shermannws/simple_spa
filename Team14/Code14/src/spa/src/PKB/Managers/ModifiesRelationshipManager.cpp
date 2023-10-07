@@ -1,6 +1,6 @@
 #include "ModifiesRelationshipManager.h"
 
-ModifiesRelationshipManager::ModifiesRelationshipManager() : StmtToVarRelationshipManager<ModifiesRelationshipStore, ModifiesRelationship>() {};
+ModifiesRelationshipManager::ModifiesRelationshipManager() : StmtToVarRelationshipManager() {};
 
 void ModifiesRelationshipManager::storeModifiesRelationship(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable) {
     return this->storeRelationship(statement, variable);

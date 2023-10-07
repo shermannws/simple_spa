@@ -8,7 +8,6 @@
 #include "PKB/Managers/AssignmentManager.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
-#include "PKB/Relationships/ModifiesRelationship.h"
 #include "PKB/Managers/StmtToVarRelationshipManager.h"
 
 /**
@@ -17,7 +16,7 @@
  * @brief Manages the Modifies relationships
  * @note A Modifies relationship is a relationship between a statement and a variable where the statement modifies the variable
  */
-class ModifiesRelationshipManager : StmtToVarRelationshipManager<ModifiesRelationshipStore, ModifiesRelationship> {
+class ModifiesRelationshipManager : StmtToVarRelationshipManager<ModifiesRelationshipStore> {
 public:
     /**
      * @brief Constructs a ModifiesRelationshipManager object

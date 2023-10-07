@@ -6,14 +6,12 @@
 #include "PKB/Managers/EntitiesManager.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
-#include "Commons/Entities/Constant.h"
-#include "Commons/Entities/Procedure.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
 #include "PKB/Managers/ParentRelationshipManager.h"
-#include "PKB/Managers/MapStoresManagers/ModifiesProcRelationshipManager.h"
-#include "PKB/Managers/MapStoresManagers/UsesProcRelationshipManager.h"
-#include "PKB/PkbTypes.h"
+#include "PKB/Managers/ModifiesProcRelationshipManager.h"
+#include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
+#include "PKB/PkbTypes.h"
 
 /**
  * @brief The class is responsible for writing to the PKB.

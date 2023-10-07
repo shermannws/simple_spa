@@ -24,3 +24,8 @@ std::shared_ptr<Entity> EntityStore<T>::getEntity(std::shared_ptr<T> entity) con
     }
     return *got;
 }
+
+template <typename T>
+bool EntityStore<T>::isEmpty() const {
+    return this->entityStore.empty();
+}

@@ -5,7 +5,6 @@
 
 #include "PKB/RelationshipStores/ParentRelationshipStore.h"
 #include "Commons/Entities/Statement.h"
-#include "PKB/Relationships/ParentRelationship.h"
 #include "PKB/Managers/StmtToStmtRelationshipManager.h"
 
 /**
@@ -14,7 +13,7 @@
  * @brief Manages the Parent relationships
  * @note A Parent relationship is a relationship between two statements where the first statement is the parent of the second statement
  */
-class ParentRelationshipManager : public StmtToStmtRelationshipManager<ParentRelationshipStore, ParentRelationship> {
+class ParentRelationshipManager : public StmtToStmtRelationshipManager<ParentRelationshipStore> {
 public:
     /**
      * @brief Constructs a ParentRelationshipManager object
