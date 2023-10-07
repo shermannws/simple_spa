@@ -2,6 +2,7 @@
 
 #include <string>
 #include <utility>
+#include <functional>
 
 #include "QPS/Query.h"
 #include "QPS/QueryEntity.h"
