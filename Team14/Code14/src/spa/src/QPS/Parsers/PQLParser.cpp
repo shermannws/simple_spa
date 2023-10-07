@@ -33,20 +33,16 @@ Query PQLParser::parse() {
     return query;
 }
 
-std::vector<Synonym> PQLParser::parseDeclarations(Query& query) { //TODO DRY
+std::vector<Synonym> PQLParser::parseDeclarations(Query& query) {
     std::vector<Synonym> synonyms;
     while(tokenizer->peekToken()->isDesignEntity()) {
-        std::shared_ptr<Token> designEntity = tokenizer->popToken();
-        EntityPtr newEntity = extractQueryEntity(designEntity);
-        query.addDeclaration(newEntity);
-        synonyms.push_back(newEntity->getSynonym());
-
-        while(tokenizer->peekToken()->isToken(TokenType::Comma)) {
-            tokenizer->popToken(); //consume comma
-            newEntity = extractQueryEntity(designEntity);
+        std::shared_ptr<Token> designEntity = tokenizer->peekToken();
+        do {
+            tokenizer->popToken(); //consume designEntity or comma
+            EntityPtr newEntity = extractQueryEntity(designEntity);
             query.addDeclaration(newEntity);
             synonyms.push_back(newEntity->getSynonym());
-        }
+        } while (tokenizer->peekToken()->isToken(TokenType::Comma));
 
         std::shared_ptr<Token> endToken = tokenizer->popToken(); // consume semicolon
         if (!endToken->isToken(TokenType::Semicolon)) {
