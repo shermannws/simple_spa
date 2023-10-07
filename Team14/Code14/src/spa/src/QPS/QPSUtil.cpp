@@ -14,6 +14,8 @@ std::unordered_set<ClauseType> QPSUtil::stmtrefClauseTypes = {
 
 std::unordered_set<ClauseType> QPSUtil::stmtrefProcVarClauseTypes = {ClauseType::Uses, ClauseType::Modifies};
 
+std::unordered_set<ClauseType> QPSUtil::procRefClauseTypes = {ClauseType::Calls, ClauseType::CallsStar};
+
 std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
     {QueryEntityType::Stmt, RefType::StmtRef},
     {QueryEntityType::Assign, RefType::StmtRef},
