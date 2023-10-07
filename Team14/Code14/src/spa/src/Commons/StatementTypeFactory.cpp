@@ -1,27 +1,15 @@
 #include "StatementTypeFactory.h"
 
-// Helper method to translate from AST StatementNodeType into PKB StatementType
+
+std::unordered_map<StatementNodeType, std::function<StatementType(void)>> StatementTypeFactory::functionMap = {
+	{StatementNodeType::Assign, [&]() -> StatementType { return StatementType::Assign; }},
+	{StatementNodeType::Print, [&]() -> StatementType { return StatementType::Print; }},
+	{StatementNodeType::Read, [&]() -> StatementType { return StatementType::Read; }},
+	{StatementNodeType::Call, [&]() -> StatementType { return StatementType::Call; }},
+	{StatementNodeType::While, [&]() -> StatementType { return StatementType::While; }},
+	{StatementNodeType::If, [&]() -> StatementType { return StatementType::If; }}
+};
+
 StatementType StatementTypeFactory::getStatementTypeFrom(StatementNodeType type) {
-	switch (type) {
-	case StatementNodeType::Assign:
-		return StatementType::Assign;
-		break;
-	case StatementNodeType::Print:
-		return StatementType::Print;
-		break;
-	case StatementNodeType::Read:
-		return StatementType::Read;
-		break;
-	case StatementNodeType::Call:
-		return StatementType::Call;
-		break;
-	case StatementNodeType::While:
-		return StatementType::While;
-		break;
-	case StatementNodeType::If:
-		return StatementType::If;
-		break;
-	}
-	//Should never reach here as all statements must be one of the above types
-	throw std::runtime_error("Invalid StatementNodeType asked to be converted in StatementTypeFactory");
+	return StatementTypeFactory::functionMap[type]();
 }
