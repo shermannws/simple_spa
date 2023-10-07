@@ -1,5 +1,4 @@
 #include "PatternClause.h"
-#include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
 
 #include <utility>
 

@@ -30,7 +30,6 @@ TEST_CASE("Syntax Errors") {
             "assign a; Select a such that Parent(a _)",
             "assign a; Select a such that Parent*(a, )",
             "assign a; Select a such that Parent*(a, 1",
-            "print p; Select p such that Uses(\"test\",_)",
             "stmt s; Select s such that Follows(\"hi\", 1)",
             "variable v; Select v such that Follows(v,\"x\")", // SemanticError of v is handled after SyntaxError
         };

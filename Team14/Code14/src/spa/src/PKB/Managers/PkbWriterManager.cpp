@@ -1,6 +1,5 @@
 #include "PkbWriterManager.h"
 
-#include "PKB/AssignmentPatternStore/Assignment.h"
 #include "PKB/PkbWriter.h"
 
 PkbWriterManager::PkbWriterManager(
