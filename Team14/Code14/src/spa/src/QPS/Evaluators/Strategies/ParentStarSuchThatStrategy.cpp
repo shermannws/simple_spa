@@ -19,8 +19,6 @@ std::shared_ptr<Result> ParentStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef,
     res->setTuples(pkbReader->getParentStarPair(QPSUtil::entityToStmtMap.at(leftEntityType),
                                                QPSUtil::entityToStmtMap.at(rightEntityType)));
 
-    std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
-    res->setSynIndices(indices);
     return res;
 }
 
@@ -35,8 +33,6 @@ std::shared_ptr<Result> ParentStarSuchThatStrategy::evaluateSynAny(Ref &leftRef,
     } else {
         res->setTuples(pkbReader->getParentStarTypeWildcard(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
-    std::unordered_map<std::string, int> indices{{leftSyn, 0}};
-    res->setSynIndices(indices);
     return res;
 }
 
@@ -51,8 +47,6 @@ std::shared_ptr<Result> ParentStarSuchThatStrategy::evaluateAnySyn(Ref &leftRef,
     } else {
         res->setTuples(pkbReader->getParentStarWildcardType(QPSUtil::entityToStmtMap.at(rightEntityType)));
     }
-    std::unordered_map<std::string, int> indices{{rightSyn, 0}};
-    res->setSynIndices(indices);
     return res;
 }
 

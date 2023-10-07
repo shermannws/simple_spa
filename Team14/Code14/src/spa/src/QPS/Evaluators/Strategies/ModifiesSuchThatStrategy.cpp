@@ -14,8 +14,6 @@ std::shared_ptr<Result> ModifiesSuchThatStrategy::evaluateSynSyn(Ref &leftRef, R
     } else { // Modifies(s,v)
         res->setTuples(pkbReader->getModifiesStmtPair(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
-    std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
-    res->setSynIndices(indices);
     return res;
 }
 
@@ -36,8 +34,6 @@ std::shared_ptr<Result> ModifiesSuchThatStrategy::evaluateSynAny(Ref &leftRef, R
     } else { // Modifies(s,_)
         res->setTuples(pkbReader->getModifiesStmt(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
-    std::unordered_map<std::string, int> indices {{leftSyn, 0}};
-    res->setSynIndices(indices);
     return res;
 }
 
@@ -52,9 +48,6 @@ std::shared_ptr<Result> ModifiesSuchThatStrategy::evaluateAnySyn(Ref &leftRef, R
         Procedure p = Procedure(leftRep);
         res->setTuples(pkbReader->getModifiesVar(p));
     }
-
-    std::unordered_map<std::string, int> indices{{rightSyn, 0}};
-    res->setSynIndices(indices);
     return res;
 }
 
