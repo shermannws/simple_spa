@@ -2,9 +2,7 @@
 #include "QPS/Clauses/SuchThatClause.h"
 #include "SynonymHandler.h"
 #include "StmtrefStmtrefHandler.h"
-#include "StmtrefEntrefHandler.h"
 #include "EntrefExprSpecHandler.h"
-#include "QPS/QPSUtil.h"
 #include "QPS/Exceptions/SemanticException.h"
 #include "StmtrefProcVarHandler.h"
 
