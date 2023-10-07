@@ -7,7 +7,6 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
-#include "PKB/Pkb.h"
 #include "StubPkbReader.h"
 
 
@@ -69,6 +68,320 @@ TEST_CASE("Test formatResult") {
     }
 }
 
+TEST_CASE("Test UsesSuchThatStrategy") {
+    // USES(STMTREF, ENTREF)
+    SECTION("getUsesStmtPair") {
+        PQLParser parser("assign a; variable v; Select a such that Uses(a, v)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+    }
+
+    SECTION ("getUsesTypeIdent") {
+        PQLParser parser("if ifs; Select ifs such that Uses(ifs, \"hello\")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "4") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "5") != results.end());
+    }
+
+    SECTION ("getUsesStmt") {
+        PQLParser parser("stmt s; Select s such that Uses(s,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+    }
+
+    SECTION ("getUsesVar(s)") {
+        PQLParser parser("stmt s; variable v; Select v such that Uses(3,v)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "name") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "asdfghjkl") != results.end());
+    }
+
+    SECTION ("isStmtUsesVar") {
+        PQLParser parser("while w; Select w such that Uses(3,\"var\")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "10") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "13") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "15") != results.end());
+    }
+
+    SECTION ("hasUses(s)") {
+        PQLParser parser("assign a; Select a such that Uses(3,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    // USES(ENTREF, ENTREF)
+    SECTION("getUsesProcPair") {
+        PQLParser parser("procedure p; variable v; Select v such that Uses(p, v)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "hello123") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "hello321") != results.end());
+    }
+
+    SECTION ("getUsesProcIdent") {
+        PQLParser parser("procedure p; Select p such that Uses(p, \"hello\")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "ProcedureName") != results.end());
+    }
+
+    SECTION ("getUsesProc") {
+        PQLParser parser("procedure p; Select p such that Uses(p,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("getUsesVar(p)") {
+        PQLParser parser("stmt s; variable v; Select v such that Uses(\"proc\",v)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "proc") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "anotherVar") != results.end());
+    }
+
+    SECTION ("isProcUsesVar") {
+        PQLParser parser(R"(while w; Select w such that Uses("proc","var"))");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("hasUses(p)") {
+        PQLParser parser("assign a; Select a such that Uses(\"proc\",_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+    }
+}
+
+TEST_CASE("Test ModifiesSuchThatStrategy") {
+    // MODIFIES(STMTREF, ENTREF)
+    SECTION("getModifiesStmtPair") {
+        PQLParser parser("stmt s; variable v; Select s such that Modifies(s, v)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+    }
+
+    SECTION ("getModifiesTypeIdent") {
+        PQLParser parser("read r; Select r such that Modifies(r, \"hello\")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "15") != results.end());
+    }
+
+    SECTION ("getModifiesStmt") {
+        PQLParser parser("while w; Select w such that Modifies(w,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "34") != results.end());
+    }
+
+    SECTION ("getModifiesVar(s)") {
+        PQLParser parser("variable v; Select v such that Modifies(34,v)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "myVar") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "anotherVar") != results.end());
+    }
+
+    SECTION ("isStmtModifiesVar") {
+        PQLParser parser("while w; Select w such that Modifies(3,\"var\")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("hasModifies(s)") {
+        PQLParser parser("assign a; Select a such that Modifies(3,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+    }
+
+    // MODIFIES(ENTREF, ENTREF)
+    SECTION("getModifiesProcPair") {
+        PQLParser parser("procedure p; variable v; Select p such that Modifies(p, v)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 4);
+        REQUIRE(find(results.begin(), results.end(), "first") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "second") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "third") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "fourth") != results.end());
+    }
+
+    SECTION ("getModifiesProcIdent") {
+        PQLParser parser("procedure p; Select p such that Modifies(p, \"test\")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "Procedure") != results.end());
+    }
+
+    SECTION ("getModifiesProc") {
+        PQLParser parser("procedure p; Select p such that Modifies(p,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "first") != results.end());
+    }
+
+    SECTION ("getModifiesVar(p)") {
+        PQLParser parser("stmt s; variable v; Select v such that Modifies(\"proc\",v)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("isProcModifiesVar") {
+        PQLParser parser(R"(stmt s; Select s such that Modifies("proc","var"))");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 5);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "4") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "5") != results.end());
+    }
+
+    SECTION ("hasModifies(p)") {
+        PQLParser parser("assign a; Select a such that Modifies(\"proc\",_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+}
+
 TEST_CASE("Test QPS Flow - Assign With Pattern") {
     PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
 
@@ -100,100 +413,6 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     REQUIRE(find(results.begin(), results.end(), "1") != results.end());
     REQUIRE(find(results.begin(), results.end(), "2") != results.end());
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
-}
-
-TEST_CASE("Test integration of PKB with QPS - Get all Assign") {
-    Pkb pkb = Pkb();
-    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-
-    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
-    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
-    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
-
-    pkbWriter->addAssignStatement(assignStatement1, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement2, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement3, nullptr, nullptr);
-
-    PQLParser parser("assign a; Select a");
-    Query queryObj = parser.parse();
-    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-    Result resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-
-    REQUIRE(results.size() == 3);
-    REQUIRE(find(results.begin(), results.end(), "1") != results.end());
-    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
-    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
-}
-
-TEST_CASE("Test integration of PKB with QPS - Get all Assign - No Assign") {
-    Pkb pkb = Pkb();
-    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-
-    PQLParser parser("assign a; Select a");
-    Query queryObj = parser.parse();
-    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-    Result resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-
-    REQUIRE(results.size() == 0);
-}
-
-TEST_CASE("Test integration of PKB with QPS - Assign With Pattern") {
-    Pkb pkb = Pkb();
-    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-
-    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
-    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
-    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
-
-    pkbWriter->addAssignStatement(assignStatement1, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement2, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement3, nullptr, nullptr);
-
-    PQLParser parser("assign a; Select a pattern a(_, _)");
-    Query queryObj = parser.parse();
-    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-    Result resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-
-    REQUIRE(results.size() == 3);
-    REQUIRE(find(results.begin(), results.end(), "1") != results.end());
-    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
-    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
-}
-
-TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no result") {
-    Pkb pkb = Pkb();
-    shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
-
-    shared_ptr<Statement> printStatement1 = make_shared<Statement>(Statement(1, StatementType::Print));
-    shared_ptr<Statement> printStatement2 = make_shared<Statement>(Statement(2, StatementType::Print));
-    shared_ptr<Statement> printStatement3 = make_shared<Statement>(Statement(3, StatementType::Print));
-
-    pkbWriter->addPrintStatement(printStatement1);
-    pkbWriter->addPrintStatement(printStatement2);
-    pkbWriter->addPrintStatement(printStatement3);
-
-    PQLParser parser("assign a; Select a pattern a(_, _)");
-    Query queryObj = parser.parse();
-    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-    Result resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-
-    REQUIRE(results.size() == 0);
-}
-
-TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no result, no stmts in pkb") {
-    Pkb pkb = Pkb();
-
-    PQLParser parser("assign a; Select a pattern a(_, _)");
-    Query queryObj = parser.parse();
-    PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
-    Result resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-
-    REQUIRE(results.size() == 0);
 }
 
 TEST_CASE("pattern a(wildcard , expr-spec)") { //getAssignStmtsByRhs

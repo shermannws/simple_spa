@@ -1,6 +1,5 @@
 #include <numeric>
 #include <stdexcept>
-#include <unordered_set>
 
 #include "PQLEvaluator.h"
 #include "QPS/QueryEntity.h"
@@ -84,7 +83,7 @@ Result PQLEvaluator::evaluate(Query& query) {
 }
 
 void PQLEvaluator::evaluateClause(const std::shared_ptr<Clause> clause, Result& result) {
-    std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()]();
+    std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()](pkbReader);
     clauseHandler->setStrategy(strategy);
     clauseHandler->executeClause(clause, result);
 }

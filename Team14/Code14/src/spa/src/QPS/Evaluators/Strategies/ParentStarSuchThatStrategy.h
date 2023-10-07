@@ -8,21 +8,41 @@
  */
 class ParentStarSuchThatStrategy : public SuchThatStrategy {
 public:
-    Result evaluateSynSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    /**
+     * @brief Explicit constructor of ParentStarSuchThatStrategy
+     * @param pkbReader The shared pointer to the PKB reader
+     */
+    explicit ParentStarSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader);
 
-    Result evaluateSynInt(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    /**
+     * @brief Evaluates SuchThatClause that follows the syntax Parent*(s,s)
+     * @param leftRef The first parameter of the SuchThatClause to evaluate
+     * @param rightRef The second parameter of the SuchThatClause to evaluate
+     * @return The result of the SuchThatClause evaluation as a Result object
+     */
+    Result evaluateSynSyn(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateSynWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    /**
+     * @brief Evaluates SuchThatClause that follows the syntax Parent*(s, )
+     * @param leftRef The first parameter of the SuchThatClause to evaluate
+     * @param rightRef The second parameter of the SuchThatClause to evaluate
+     * @return The result of the SuchThatClause evaluation as a Result object
+     */
+    Result evaluateSynAny(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateIntSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    /**
+     * @brief Evaluates SuchThatClause that follows the syntax Parent*( , s)
+     * @param leftRef The first parameter of the SuchThatClause to evaluate
+     * @param rightRef The second parameter of the SuchThatClause to evaluate
+     * @return The result of the SuchThatClause evaluation as a Result object
+     */
+    Result evaluateAnySyn(Ref &leftRef, Ref &rightRef) const override;
 
-    Result evaluateWildSyn(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
-
-    Result evaluateIntWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
-
-    Result evaluateWildInt(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
-
-    Result evaluateIntInt(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
-
-    Result evaluateWildWild(std::shared_ptr<PkbReader> pkbReader, Ref &leftRef, Ref &rightRef) const override;
+    /**
+     * @brief Evaluates SuchThatClause that results in boolean
+     * @param leftRef The first parameter of the SuchThatClause to evaluate
+     * @param rightRef The second parameter of the SuchThatClause to evaluate
+     * @return The result of the SuchThatClause evaluation as a Result object
+     */
+    Result evaluateBoolean(Ref &leftRef, Ref &rightRef) const override;
 };

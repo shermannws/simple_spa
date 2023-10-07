@@ -138,12 +138,7 @@ assign a;
 Select a such that Modifies(7, 8)
 SyntaxError
 5000
-29 - check Modifies(varname, varname) - negative case
-if i;
-Select i such that Modifies("var2", "var10")
-SyntaxError
-5000
-30 - check Modifies(var synonym, varname) - negative case
+29 - check Modifies(var synonym, varname) - negative case
 variable v;
 Select v such that Modifies(v, "var6")
 SemanticError

@@ -7,30 +7,44 @@
 #include "QPS/Evaluators/Strategies/ParentStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
 
-std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>()>> QPSUtil::strategyCreatorMap = {
-    {ClauseType::Uses, []() -> std::shared_ptr<Strategy> { return std::make_shared<UsesSuchThatStrategy>();}},
-    {ClauseType::Modifies, []() -> std::shared_ptr<Strategy> { return std::make_shared<ModifiesSuchThatStrategy>();}},
-    {ClauseType::Follows, []() -> std::shared_ptr<Strategy> { return std::make_shared<FollowsSuchThatStrategy>();}},
-    {ClauseType::FollowsStar, []() -> std::shared_ptr<Strategy> { return std::make_shared<FollowsStarSuchThatStrategy>();}},
-    {ClauseType::Parent, []() -> std::shared_ptr<Strategy> { return std::make_shared<ParentSuchThatStrategy>();}},
-    {ClauseType::ParentStar, []() -> std::shared_ptr<Strategy> { return std::make_shared<ParentStarSuchThatStrategy>();}},
-    {ClauseType::Assign, []() -> std::shared_ptr<Strategy> { return std::make_shared<AssignPatternStrategy>();}},
+std::unordered_set<ClauseType> QPSUtil::stmtrefClauseTypes = {
+    ClauseType::Follows, ClauseType::FollowsStar,
+    ClauseType::Parent, ClauseType::ParentStar
 };
 
-bool QPSUtil::isOfStmtType(QueryEntityType entityType) {
-    return entityType == QueryEntityType::Stmt || entityType == QueryEntityType::Assign
-           || entityType == QueryEntityType::Print || entityType == QueryEntityType::If
-           || entityType == QueryEntityType::While || entityType == QueryEntityType::Read;
-}
+std::unordered_set<ClauseType> QPSUtil::stmtrefProcVarClauseTypes = {ClauseType::Uses, ClauseType::Modifies};
 
-bool QPSUtil::isRootOfEntref(RootType rootType) {
-    return rootType == RootType::Synonym || rootType == RootType::Wildcard
-           || rootType == RootType::Ident;
-}
+std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
+    {QueryEntityType::Stmt, RefType::StmtRef},
+    {QueryEntityType::Assign, RefType::StmtRef},
+    {QueryEntityType::Print, RefType::StmtRef},
+    {QueryEntityType::If, RefType::StmtRef},
+    {QueryEntityType::While, RefType::StmtRef},
+    {QueryEntityType::Read, RefType::StmtRef},
+    {QueryEntityType::Procedure, RefType::EntRef}
+};
 
-bool QPSUtil::isRootOfStmtref(RootType rootType) {
-    return rootType == RootType::Synonym || rootType == RootType::Wildcard
-           || rootType == RootType::Integer;
-}
+std::unordered_set<QueryEntityType> QPSUtil::stmtRefEntities = {
+    QueryEntityType::Stmt, QueryEntityType::Assign, QueryEntityType::Print,
+    QueryEntityType::If, QueryEntityType::While, QueryEntityType::Read
+};
 
+std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>> QPSUtil::strategyCreatorMap = {
+    {ClauseType::Uses, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<UsesSuchThatStrategy>(pkbReader);}},
+    {ClauseType::Modifies, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<ModifiesSuchThatStrategy>(pkbReader);}},
+    {ClauseType::Follows, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<FollowsSuchThatStrategy>(pkbReader);}},
+    {ClauseType::FollowsStar, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<FollowsStarSuchThatStrategy>(pkbReader);}},
+    {ClauseType::Parent, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<ParentSuchThatStrategy>(pkbReader);}},
+    {ClauseType::ParentStar, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<ParentStarSuchThatStrategy>(pkbReader);}},
+    {ClauseType::Assign, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<AssignPatternStrategy>(pkbReader);}},
+};
+
+std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
+        {QueryEntityType::Assign, StatementType::Assign},
+        {QueryEntityType::Print, StatementType::Print},
+        {QueryEntityType::Read, StatementType::Read},
+        {QueryEntityType::If, StatementType::If},
+        {QueryEntityType::While, StatementType::While},
+        {QueryEntityType::Stmt, StatementType::Stmt}
+};
 
