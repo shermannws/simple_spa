@@ -1,9 +1,9 @@
 #include "SPParser.h"
 
-SPParser::SPParser() {}
+SPParser::SPParser() : runningStatementNumber(AppConstants::STARTING_STATEMENT_NUMBER) {}
 
 std::shared_ptr<ProgramNode> SPParser::parse(std::vector<SPToken> tokens) {
-    runningStatementNumber = 1;
+    runningStatementNumber = AppConstants::STARTING_STATEMENT_NUMBER;
     // std::deque is an adapter that wraps the underlying std::deque container
     std::deque<SPToken> tokensQueue(tokens.begin(), tokens.end());
     std::vector<std::shared_ptr<ProcedureNode>> procedures;

@@ -66,7 +66,3 @@ public:
     std::unordered_map<ProcedureName, std::unordered_map<Statement,
     std::shared_ptr<CFGNode>>> buildAllCFG(const std::shared_ptr<ProgramNode>& ASTRootNode);
 };
-
-// statementlistnode
-// ifnode
-// whilenode
