@@ -1,0 +1,38 @@
+procedure A {
+	A = 1;
+	two = TWO + 2 / two;
+	if (line3 == 3) {
+		call b;
+	} else {
+		print five;
+	}
+
+	while (line6 == 0) {
+		while (line7 == lineNot7) {
+			call a;
+		}
+		call call;
+	}
+}
+
+procedure a {
+	print a;
+	read call;
+	twelve = 12;
+}
+
+procedure b {
+	call call;
+}
+
+procedure call {
+	read modified;
+	call blah;
+}
+
+procedure blah {
+	print nothing;
+	while (x != k) {
+		print nothing again;
+	}
+}
