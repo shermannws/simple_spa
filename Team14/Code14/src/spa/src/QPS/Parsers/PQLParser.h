@@ -25,16 +25,19 @@ private:
     std::shared_ptr<ExprSpecParser> exprSpecParser;
 
     /**
-     * @brief Parses declarations syntactically and extracts the declared entities
-     * @return vector of declared entities
+     * @brief parses declarations and adds the declared entities to the query object
      */
-    std::vector<std::shared_ptr<QueryEntity>> processDeclarations();
+    std::vector<Synonym> parseDeclarations(Query& query);
 
     /**
-     * @brief Parses select clause syntactically ad extracts the selected synonym
-     * @return the selected synonym
+     * @brief parses result clause and adds the selected synonyms to the query object
      */
-    Synonym processSelectClause();
+    Synonym parseResultClause(Query& query);
+
+    /**
+     * @brief parses the chain of constraint clause and adds the clauses to the query object
+     */
+    void parseClauses(Query& query);
 
     /**
      * @brief parses a chain of such that clause and adds the clauses to the query
@@ -53,31 +56,16 @@ private:
     std::shared_ptr<SuchThatClause> extractSuchThatClause();
 
     /**
+   * @brief Returns a PatternClause if syntax is valid, otherwise throws a SyntaxException
+   * @param return the shared pointer of Pattern Clause
+   */
+    std::shared_ptr<PatternClause> extractPatternClause();
+
+    /**
     * @brief Validates SuchThatRefType LHS & RHS according to ClauseType
     * @param clause the shared pointer of SuchThatClause to validate
     */
     void validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause);
-
-    /**
-     * @brief Returns a PatternClause if syntax is valid, otherwise throws a SyntaxException
-     * @param return the shared pointer of Pattern Clause
-     */
-    std::shared_ptr<PatternClause> extractPatternClause();
-
-    /**
-     * @brief Validates the declarations and stores them in the query object,
-     * otherwise throws a Semantic exception in case of an entity redeclaration
-     * @param query the query object
-     * @param entities the vector of shared pointer to query entities declared
-     */
-    void setDeclarations(Query& query, const std::vector<std::shared_ptr<QueryEntity>>& entities);
-
-    /**
-     * @brief Returns a Token shared pointer if isToken is true, otherwise throws an Exception with errorMsg
-     * @param isToken the token boolean check
-     * @param errorMsg the error message of the thrown exception
-     */
-    std::shared_ptr<Token> expect(bool isToken, const std::string& errorMsg);
 
     /**
      * @brief Returns the next token as Ref if it is Integer, Identity, Wildcard or Synonym,
@@ -93,6 +81,13 @@ private:
     * @return a shared ptr to a QueryEntity
     */
     std::shared_ptr<QueryEntity> extractQueryEntity(std::shared_ptr<Token> entityType);
+
+    /**
+     * @brief Returns a Token shared pointer if isToken is true, otherwise throws an Exception with errorMsg
+     * @param isToken the token boolean check
+     * @param errorMsg the error message of the thrown exception
+     */
+    std::shared_ptr<Token> expect(bool isToken, const std::string& errorMsg);
 
 public:
     /**

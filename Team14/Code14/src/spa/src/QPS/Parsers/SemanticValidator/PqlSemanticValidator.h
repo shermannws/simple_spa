@@ -13,6 +13,14 @@ public:
     explicit PqlSemanticValidator();
 
     /**
+     * @brief Validates the declarations in the query, throws a Semantic exception in case of
+     * a synonym redeclaration
+     * @param query the query object
+     * @param synonyms the vector of declared synonyms
+     */
+    void validateDeclarations(const std::vector<Synonym>& synonyms);
+
+    /**
      * @brief Validates the selected entity, throws a Semantic exception if synonym is undeclared
      * @param query the query object
      * @param syn the synonym selected in the query

@@ -9,6 +9,14 @@
 
 PqlSemanticValidator::PqlSemanticValidator() = default;
 
+void PqlSemanticValidator::validateDeclarations(const std::vector<Synonym>& synonyms) {
+    std::unordered_set<Synonym> declared;
+    for (const Synonym& syn : synonyms) {
+        if (!declared.insert(syn).second)
+            throw SemanticException("Trying to redeclare a synonym");
+    }
+}
+
 void PqlSemanticValidator::validateSelectSemantics(const Query& query, const Synonym& syn) {
     EntityPtr entity = query.getEntity(syn);
     if (!entity) {
