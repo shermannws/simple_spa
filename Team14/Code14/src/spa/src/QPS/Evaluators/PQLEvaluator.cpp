@@ -44,24 +44,10 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
 }
 
 Result PQLEvaluator::evaluate(Query& query) {
-    std::vector<std::shared_ptr<Result>> results;
-    for (const auto& clause : query.getSuchThat()) {
-        results.push_back(evaluateClause(clause));
-    }
-    for (const auto& clause : query.getPattern()) {
-        results.push_back(evaluateClause(clause));
-    }
-
-    if (results.empty()) {
-        auto result = evaluateSelect(query.getEntity(query.getSelect()[0]));
+    std::shared_ptr<Result> result = evaluateConstraintClauses(query);
+    if (!result) {
+        result = evaluateSelect(query);
         return *result;
-    }
-
-    auto result = results[0]; // Initialize with the first element
-
-    // Iterate through the vector & combine starting from the second element
-    for (size_t i = 1; i < results.size(); ++i) {
-        result = resultHandler->getCombined(result, results[i]);
     }
 
     // CASE FALSE OR EMPTY RESULT TABLE
@@ -78,7 +64,7 @@ Result PQLEvaluator::evaluate(Query& query) {
     }
 
     // CASE TRUE OR NON-EMPTY TABLE, evaluate select independently
-    result = evaluateSelect(query.getEntity(syn));
+    result = evaluateSelect(query);
     return *result;
 }
 
@@ -89,12 +75,36 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
     return result;
 }
 
-std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const EntityPtr entity) {
+std::shared_ptr<Result> PQLEvaluator::evaluateConstraintClauses(const Query& query) {
+    if (query.getSuchThat().empty() && query.getPattern().empty()) {
+        return nullptr;
+    }
+
+    std::vector<std::shared_ptr<Result>> results;
+    for (const auto& clause : query.getSuchThat()) {
+        results.push_back(evaluateClause(clause));
+    }
+    for (const auto& clause : query.getPattern()) {
+        results.push_back(evaluateClause(clause));
+    }
+    auto result = results[0]; // Initialize with the first element
+    for (size_t i = 1; i < results.size(); ++i) { // Combine with next until end of list
+        result = resultHandler->getCombined(result, results[i]);
+    }
+    return result;
+}
+
+std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const Query& query) {
     std::shared_ptr<Result> result = std::make_shared<Result>();
+
+    Synonym selectSyn = query.getSelect()[0];
+    SynonymMap map {{selectSyn, 0}};
+    result->setSynIndices(map);
+
+    std::shared_ptr<QueryEntity> entity = query.getEntity(selectSyn);
     std::vector<Entity> entities = getAll(entity);
     result->setTuples(entities);
-    SynonymMap map {{entity->getSynonym(), 0}};
-    result->setSynIndices(map);
+
     return result;
 }
 
