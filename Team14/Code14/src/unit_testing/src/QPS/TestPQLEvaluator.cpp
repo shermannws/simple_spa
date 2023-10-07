@@ -1,5 +1,6 @@
 #include "QPS/Evaluators/PQLEvaluator.h"
 #include "QPS/Parsers/PQLParser.h"
+#include "QPSTestUtil.h"
 
 #include <unordered_map>
 
@@ -489,6 +490,46 @@ TEST_CASE("pattern, select synonym not in clause ") { //getAssignStmtsByLhsRhs
     auto resultObj = evaluator.evaluate(queryObj);
     auto results = evaluator.formatResult(queryObj, resultObj);
     REQUIRE(results.size() == 0);
+}
+
+TEST_CASE("multiclause query, synonym in result table") {
+    // assign a, a1; variable v; Select a such that Follows*(a,20) pattern a (v,_"1+multiclauseTest"_) and a1(v,_) such that Parent(1,10)
+
+    auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
+                                                RootType::Synonym, "v",
+                                                ExpressionSpecType::PartialMatch, "((1)+(multiclauseTest))");
+    auto pc2 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a1",
+                                                RootType::Synonym, "v",
+                                                ExpressionSpecType::Wildcard, "");
+    auto sc1 = QPSTestUtil::createSuchThatClause(ClauseType::FollowsStar,
+                                                 RefType::StmtRef, RootType::Synonym, QueryEntityType::Assign, "a",
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "20");
+    auto sc2 = QPSTestUtil::createSuchThatClause(ClauseType::Parent,
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "10");
+
+    Query queryObj;
+    queryObj.addSelect("a");
+    queryObj.addClause(pc1); // returns a,v of 1 var1, 1 var2, 2 var3, 3 var4, 4 var3
+    queryObj.addClause(pc2); // returns a1,v of 1 var1, 1 var2, 2 var3
+    queryObj.addClause(sc2); // returns  true
+    std::vector<std::shared_ptr<QueryEntity>> decl = {
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, "a"),
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
+            std::make_shared<QueryEntity>(QueryEntityType::Variable, "v")
+    };
+    queryObj.addDeclaration(decl[0]);
+    queryObj.addDeclaration(decl[1]);
+    queryObj.addDeclaration(decl[2]);
+
+    auto stubReader = make_shared<StubPkbReader>();
+    PQLEvaluator evaluator = PQLEvaluator(stubReader);
+    auto resultObj = evaluator.evaluate(queryObj);
+    auto results = evaluator.formatResult(queryObj, resultObj);
+    REQUIRE(results.size() == 3);
+    REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "4") != results.end());
 }
 
 

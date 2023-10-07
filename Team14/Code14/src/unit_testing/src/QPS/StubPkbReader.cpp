@@ -277,6 +277,11 @@ std::vector<std::vector<Entity>> StubPkbReader::getAssignStmtsVarPairByRhs(std::
     std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var1")};
     std::vector<Entity> pair2 = {Statement(1, StatementType::Assign), Variable("var2")};
     std::vector<Entity> pair3 = {Statement(2, StatementType::Assign), Variable("var3")};
+    std::vector<Entity> pair4 = {Statement(3, StatementType::Assign), Variable("var4")};
+    std::vector<Entity> pair5 = {Statement(4, StatementType::Assign), Variable("var3")};
+    if (rhs == "((1)+(multiclauseTest))") {
+        return std::vector<std::vector<Entity>>({pair1, pair2, pair3, pair4, pair5});
+    }
     return std::vector<std::vector<Entity>>({pair1, pair2, pair3});
 }
 
@@ -335,7 +340,7 @@ std::vector<Entity> StubPkbReader::getParentStarWildcardType(StatementType type)
 }
 
 bool StubPkbReader::isParent(Statement& statement1, Statement& statement2) const {
-    return false;
+    return true;
 }
 
 bool StubPkbReader::isParentStar(Statement& statement1, Statement& statement2) const  {
