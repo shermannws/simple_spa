@@ -8,7 +8,7 @@ FollowsSuchThatStrategy::FollowsSuchThatStrategy(std::shared_ptr<PkbReader> pkbR
 std::shared_ptr<Result> FollowsSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     if (leftRef == rightRef) {
-        res->setBoolResult(false);
+        res->setTuples(std::vector<Entity>{});
         return res;
     }
     auto leftEntityType = leftRef.getEntityType();

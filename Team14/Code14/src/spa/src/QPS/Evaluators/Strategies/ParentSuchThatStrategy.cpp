@@ -8,7 +8,7 @@ ParentSuchThatStrategy::ParentSuchThatStrategy(std::shared_ptr<PkbReader> pkbRea
 std::shared_ptr<Result> ParentSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     if (leftRef == rightRef) {
-        res->setBoolResult(false);
+        res->setTuples(std::vector<Entity>{});
         return res;
     }
     auto leftEntityType = leftRef.getEntityType();
