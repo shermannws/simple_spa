@@ -106,6 +106,8 @@ std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& que
             return pkbReader->getAllRead();
         case QueryEntityType::Print:
             return pkbReader->getAllPrint();
+        case QueryEntityType::Call:
+            return pkbReader->getAllCall();
         default:
             throw std::runtime_error("Not supported entity type in query select clause");
     }

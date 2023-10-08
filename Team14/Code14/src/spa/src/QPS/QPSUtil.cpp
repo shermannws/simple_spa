@@ -25,7 +25,8 @@ std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
     {QueryEntityType::If, RefType::StmtRef},
     {QueryEntityType::While, RefType::StmtRef},
     {QueryEntityType::Read, RefType::StmtRef},
-    {QueryEntityType::Procedure, RefType::EntRef}
+    {QueryEntityType::Call, RefType::StmtRef},
+    {QueryEntityType::Procedure, RefType::EntRef},
 };
 
 std::unordered_set<QueryEntityType> QPSUtil::stmtRefEntities = {
@@ -51,6 +52,7 @@ std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
         {QueryEntityType::Read, StatementType::Read},
         {QueryEntityType::If, StatementType::If},
         {QueryEntityType::While, StatementType::While},
-        {QueryEntityType::Stmt, StatementType::Stmt}
+        {QueryEntityType::Stmt, StatementType::Stmt},
+        {QueryEntityType::Call, StatementType::Call}
 };
 
