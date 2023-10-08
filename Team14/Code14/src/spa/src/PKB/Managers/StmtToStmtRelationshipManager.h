@@ -19,7 +19,7 @@ private:
      */
     std::shared_ptr<S> relationshipStore;
     std::shared_ptr<S> starRelationshipStore;
-protected:
+public:
     /**
      * @brief Constructs a StmtToStmtRelationshipManager object
      * @return A StmtToStmtRelationshipManager object
