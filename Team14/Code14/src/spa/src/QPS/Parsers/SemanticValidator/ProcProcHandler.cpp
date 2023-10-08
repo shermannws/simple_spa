@@ -1,6 +1,6 @@
-#include "ProcrefProcrefHandler.h"
+#include "ProcProcHandler.h"
 
-void ProcrefProcrefHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
+void ProcProcHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
     if (!suchThat) {
         return SemanticValHandler::handle(query, clause);
@@ -18,7 +18,7 @@ void ProcrefProcrefHandler::handle(const Query &query, std::shared_ptr<Clause> c
     return SemanticValHandler::handle(query, clause);
 }
 
-void ProcrefProcrefHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
+void ProcProcHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
     auto refType = RefType::EntRef;
     leftRef.setType(refType);
     rightRef.setType(refType);

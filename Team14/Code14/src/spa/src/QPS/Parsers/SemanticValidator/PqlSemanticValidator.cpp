@@ -5,7 +5,7 @@
 #include "EntrefExprSpecHandler.h"
 #include "QPS/Exceptions/SemanticException.h"
 #include "StmtrefProcVarHandler.h"
-#include "ProcrefProcrefHandler.h"
+#include "ProcProcHandler.h"
 
 PqlSemanticValidator::PqlSemanticValidator() = default;
 
@@ -33,11 +33,11 @@ void PqlSemanticValidator::validateConstraintClauses(const Query& query) {
     }
 }
 
-void PqlSemanticValidator::validateClauseSemantics(const Query& query, const std::shared_ptr<SuchThatClause> clause) { //TODO add new handler for Calls
+void PqlSemanticValidator::validateClauseSemantics(const Query& query, const std::shared_ptr<SuchThatClause> clause) {
     std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
     std::shared_ptr<StmtrefStmtrefHandler> stmtrefHandler = std::make_shared<StmtrefStmtrefHandler>();
     std::shared_ptr<StmtrefProcVarHandler> stmtProcVarHandler = std::make_shared<StmtrefProcVarHandler>();
-    std::shared_ptr<ProcrefProcrefHandler> ProcrefHandler = std::make_shared<ProcrefProcrefHandler>();
+    std::shared_ptr<ProcProcHandler> ProcrefHandler = std::make_shared<ProcProcHandler>();
     synonymHandler->setNext(stmtrefHandler)->setNext(stmtProcVarHandler)->setNext(ProcrefHandler);
     synonymHandler->handle(query, clause);
 }

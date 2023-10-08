@@ -7,9 +7,9 @@
 #include "QPS/Exceptions/SemanticException.h"
 
 /**
- * ProcrefProcrefHandler class that extends from SemanticValHandler
+ * ProcProcHandler class that extends from SemanticValHandler
  */
-class ProcrefProcrefHandler : public SemanticValHandler{
+class ProcProcHandler : public SemanticValHandler{
 public:
     /**
    * @brief Handles the Refs of the clause by checking the semantics and setting the appropriate RefType
