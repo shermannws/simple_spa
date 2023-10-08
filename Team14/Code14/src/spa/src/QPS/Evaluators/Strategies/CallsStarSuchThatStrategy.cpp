@@ -18,7 +18,7 @@ std::shared_ptr<Result> CallsStarSuchThatStrategy::evaluateSynAny(Ref &leftRef, 
         res->setTuples(pkbReader->getCallersStar());
     }
     if (rightRef.isRootType(RootType::Ident)) {
-        Procedure callee = Procedure(leftRef.getRep());
+        Procedure callee = Procedure(rightRef.getRep());
         res->setTuples(pkbReader->getCallersStar(callee));
     }
     return res;
@@ -46,7 +46,7 @@ std::shared_ptr<Result> CallsStarSuchThatStrategy::evaluateBoolean(Ref &leftRef,
         res->setBoolResult(pkbReader->isCallsStar(lhs, rhs));
     }
     else if (isLeftIdent) {
-        Procedure p = Procedure(rightRef.getRep());
+        Procedure p = Procedure(leftRef.getRep());
         res->setBoolResult(pkbReader->isCallerStar(p));
     }
     else if (isRightIdent) {

@@ -17,7 +17,7 @@ std::shared_ptr<Result> CallsSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref 
         res->setTuples(pkbReader->getCallers());
     }
     if (rightRef.isRootType(RootType::Ident)) {
-        Procedure callee = Procedure(leftRef.getRep());
+        Procedure callee = Procedure(rightRef.getRep());
         res->setTuples(pkbReader->getCallers(callee));
     }
     return res;
