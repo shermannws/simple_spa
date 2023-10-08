@@ -21,7 +21,7 @@ Select call such that Modifies(call, v)
 5 - check Modifies(call, wildcard)
 call c, c1;
 Select c such that Modifies(c, _)
-4, 8, 9, 13, 15
+4, 8, 9, 13
 5000
 6 - check Modifies(call, varname)
 call c, c1;
