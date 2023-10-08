@@ -52,6 +52,10 @@ std::vector<Entity> PkbReaderManager::getAllIf() const {
     return this->entityManager->getAllIf();
 }
 
+std::vector<Entity> PkbReaderManager::getAllCall() const {
+    return this->entityManager->getAllCall();
+}
+
 std::vector<std::vector<Entity>> PkbReaderManager::getUsesStmtPair(StatementType type) const {
     return this->usesRelationshipManager->getUsesStmtPair(type);
 }
@@ -323,3 +327,169 @@ bool PkbReaderManager::hasParentStarStmt(Statement& statement) const {
     return this->parentRelationshipManager->hasParentStmt(statement);
 }
 
+bool PkbReaderManager::hasCalls() const {
+    return this->callsRelationshipManager->hasCalls();
+}
+
+bool PkbReaderManager::hasCallsStar() const {
+    return this->callsRelationshipManager->hasCalls();
+}
+
+bool PkbReaderManager::isCallee(Procedure& proc) const {
+    return this->callsRelationshipManager->hasFormerProc(proc);
+}
+
+bool PkbReaderManager::isCalleeStar(Procedure& proc) const {
+    return this->callsRelationshipManager->hasFormerProc(proc);
+}
+
+bool PkbReaderManager::isCaller(Procedure& proc) const {
+    return this->callsRelationshipManager->hasLatterProc(proc);
+}
+
+bool PkbReaderManager::isCallerStar(Procedure& proc) const {
+    return this->callsRelationshipManager->hasLatterProc(proc);
+}
+
+bool PkbReaderManager::isCalls(Procedure& caller, Procedure& callee) const {
+    return this->callsRelationshipManager->isCalls(caller, callee, true);
+}
+
+bool PkbReaderManager::isCallsStar(Procedure& caller, Procedure& callee) const {
+    return this->callsRelationshipManager->isCalls(caller, callee, false);
+}
+
+std::vector<Entity> PkbReaderManager::getCallees() const {
+    return this->callsRelationshipManager->getCallsLatter();
+}
+
+std::vector<Entity> PkbReaderManager::getCalleesStar() const {
+    return this->callsRelationshipManager->getCallsLatter();
+}
+
+std::vector<Entity> PkbReaderManager::getCallers() const {
+    return this->callsRelationshipManager->getCallsFormer();
+}
+
+std::vector<Entity> PkbReaderManager::getCallersStar() const {
+    return this->callsRelationshipManager->getCallsFormer();
+}
+
+std::vector<std::vector<Entity>> PkbReaderManager::getCallsPair() const {
+    return this->callsRelationshipManager->getCallsPair(true);
+}
+
+std::vector<std::vector<Entity>> PkbReaderManager::getCallsStarPair() const {
+    return this->callsRelationshipManager->getCallsPair(false);
+}
+
+std::vector<Entity> PkbReaderManager::getCallers(Procedure& callee) const {
+    return this->callsRelationshipManager->getCallsFormer(callee, true);
+}
+
+std::vector<Entity> PkbReaderManager::getCallersStar(Procedure& callee) const {
+    return this->callsRelationshipManager->getCallsFormer(callee, false);
+}
+
+std::vector<Entity> PkbReaderManager::getCallees(Procedure& caller) const {
+    return this->callsRelationshipManager->getCallsLatter(caller, true);
+}
+
+std::vector<Entity> PkbReaderManager::getCalleesStar(Procedure& caller) const {
+    return this->callsRelationshipManager->getCallsLatter(caller, false);
+}
+
+std::vector<std::vector<Entity>> PkbReaderManager::getNextPair(StatementType formerType, StatementType latterType) const {
+    // TODO: Implement this
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<std::vector<Entity>> PkbReaderManager::getNextStarPair(StatementType formerType, StatementType latterType) const {
+    // TODO: Implement this
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextStarSameStmt(StatementType stmtType) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextTypeStmt(StatementType type, Statement& statement) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextStarTypeStmt(StatementType type, Statement& statement) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextTypeWildcard(StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextStarTypeWildcard(StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextStmtType(Statement& statement, StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextStarStmtType(Statement& statement, StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextWildcardType(StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextStarWildcardType(StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+bool PkbReaderManager::isNext(Statement& statement1, Statement& statement2) const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::isNextStar(Statement& statement1, Statement& statement2) const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasNext() const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasNextStar() const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasBeforeStmt(Statement& statement) const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasBeforeStarStmt(Statement& statement) const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasAfterStmt(Statement& statement) const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasAfterStarStmt(Statement& statement) const {
+    // TODO: Implement this
+    return false;
+}
