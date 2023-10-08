@@ -54,3 +54,9 @@ template <typename T, typename U>
 bool RelationshipStore<T, U>::isEmpty() const {
     return this->leftToRightStore.empty() && this->rightToLeftStore.empty();
 }
+
+template <typename T, typename U>
+void RelationshipStore<T, U>::clear() {
+	this->leftToRightStore.clear();
+	this->rightToLeftStore.clear();
+}

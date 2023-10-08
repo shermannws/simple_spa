@@ -22,6 +22,14 @@ private:
      */
     std::shared_ptr<S> relationshipStore;
     std::shared_ptr<S> starRelationshipStore;
+
+    /**
+     * @brief Helper function that is to be recursively called to populate the starRelationshipStore
+     * @param former The former procedure
+     * @param latter The latter procedure
+     */
+    void calculateTransitiveRelationshipHelper(std::shared_ptr<Procedure> former, std::shared_ptr<Procedure> latter);
+
 public:
     /**
      * @brief Constructs a ProcToProcRelationshipManager object
@@ -100,6 +108,18 @@ public:
      * @return True if there exists a relationship where the given procedure is the latter procedure, false otherwise
      */
     bool isLatter(Procedure& procedure) const;
+
+    /**
+     * Populates the starRelationshipStore based on transitivity calculation of the relationshipStore.
+     */
+    void calculateTransitiveRelationship();
+
+    /**
+     * Returns a set of procedures which is related to the given procedure i.e. the given procedure is the latter procedure.
+     * @param latterProcedure The procedure that is the latter procedure.
+     * @return A set of procedures that are the former procedures
+     */
+    std::shared_ptr<EntityStore<Procedure>> getRelationshipFormerStarAsProcedure(Procedure& latterProcedure) const;
 };
 
 #include "ProcToProcRelationshipManager.hpp"

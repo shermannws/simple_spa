@@ -1,1 +1,7 @@
-PROCEDURE
+procedure procedure {
+    x = 1;
+}
+
+procedure procedure {
+    y = 2;
+}

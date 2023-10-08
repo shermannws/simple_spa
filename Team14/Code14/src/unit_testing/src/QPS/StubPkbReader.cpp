@@ -264,6 +264,10 @@ std::vector<Entity> StubPkbReader::getAllAssign() const {
 
 // pattern a (_, "x")
 std::vector<Entity> StubPkbReader::getAssignStmtsByRhs(std::string& rhs, bool hasRhsWildCard) const {
+    if (hasRhsWildCard) {
+        return std::vector<Entity>{Statement(2, StatementType::Assign),
+                                   Statement(3, StatementType::Assign)};
+    }
     return std::vector<Entity>{Statement(4, StatementType::Assign),
                                Statement(5, StatementType::Assign)};
 }
@@ -278,6 +282,11 @@ std::vector<std::vector<Entity>> StubPkbReader::getAllAssignStmtVarPair() const 
 
 // pattern a (v, "x")
 std::vector<std::vector<Entity>> StubPkbReader::getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const {
+    if (hasWildCard) {
+        std::vector<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var2")};
+        std::vector<Entity> pair3 = {Statement(3, StatementType::Assign), Variable("var3")};
+        return std::vector<std::vector<Entity>>({pair2, pair3});
+    }
     std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var1")};
     std::vector<Entity> pair2 = {Statement(1, StatementType::Assign), Variable("var2")};
     std::vector<Entity> pair3 = {Statement(2, StatementType::Assign), Variable("var3")};
@@ -291,7 +300,7 @@ std::vector<Entity> StubPkbReader::getAssignStmtsByLhs(Variable& lhs) const {
 
 // pattern a ("x", "x")
 std::vector<Entity> StubPkbReader::getAssignStmtsByLhsRhs(Variable& lhs, std::string& rhs, bool hasRhsWildCard) const {
-    if (lhs == Variable("noneCase")) {
+    if (lhs == Variable("noneCase") && !hasRhsWildCard) {
         return std::vector<Entity>();
     }
     return std::vector<Entity>{Statement(100, StatementType::Assign),

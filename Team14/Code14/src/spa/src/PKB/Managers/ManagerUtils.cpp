@@ -74,6 +74,29 @@ std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKeyStmtMatch(Relations
     return getFromMapStore<EntityStore<Statement>, RelationshipStore<L, Statement>, L, Statement, Entity>(store, getter, key, matcher);
 }
 
+template <typename E>
+void ManagerUtils::unique(std::vector<E>& v) {
+    std::unordered_set<E> s(v.begin(), v.end());
+    v.assign(s.begin(), s.end());
+}
+
+template<typename S, typename P>
+void ManagerUtils::addStmtVarFromProcVar(std::shared_ptr<S> stmtVarManager, std::shared_ptr<RelationshipStore<Procedure, Statement>> procStmtStore, std::shared_ptr<P> procVarManager) {
+    for (auto it = procStmtStore->getLeftToRightBeginIterator(); it != procStmtStore->getLeftToRightEndIterator(); it++) {
+        auto proc = it->first;
+        auto stmtsStore = it->second;
+        auto vars = procVarManager->getRhsVarAsVariables(proc);
+        if (vars == nullptr) {
+            continue;
+        }
+        for (auto it2 = stmtsStore->getBeginIterator(); it2 != stmtsStore->getEndIterator(); it2++) {
+            for (auto it3 = vars->getBeginIterator(); it3 != vars->getEndIterator(); it3++) {
+                stmtVarManager->storeRelationship(*it2, *it3);
+            }
+        }
+    }
+}
+
 template <typename R>
 std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch(RelationshipStore<Statement, R>& store, R& key, StatementType type) {
     auto getter = [](RelationshipStore<Statement, R>& store, R& key) {

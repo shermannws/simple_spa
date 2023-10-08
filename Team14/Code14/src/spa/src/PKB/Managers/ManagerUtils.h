@@ -7,6 +7,7 @@
 #include "Commons/Entities/Entity.h"
 #include "PKB/RelationshipStores/RelationshipStore.h"
 #include "PKB/EntityStores/EntityStore.h"
+#include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 
@@ -28,7 +29,7 @@ private:
      */
     template<typename E, typename S, typename R>
     static std::vector<E>
-    getFromSetStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<E(R&)> getter);
+        getFromSetStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<E(R&)> getter);
 
     /**
      * @brief A function that retrieves objects from a map-based store based on a matcher and getter function
@@ -99,7 +100,7 @@ public:
      */
     template<typename S, typename R>
     static std::vector<Entity>
-    getEntitiesFromStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<Entity(R&)> getter);
+        getEntitiesFromStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<Entity(R&)> getter);
 
     /**
      * @brief A function that retrieves entities from an set-based entity store based on a matcher and getter function
@@ -111,7 +112,7 @@ public:
      */
     template<typename E>
     static std::vector<Entity>
-    getEntitiesFromEntityStore(std::shared_ptr<EntityStore<E>> store, std::function<bool(E&)> matcher, std::function<Entity(E&)> getter);
+        getEntitiesFromEntityStore(std::shared_ptr<EntityStore<E>> store, std::function<bool(E&)> matcher, std::function<Entity(E&)> getter);
 
 
     /**
@@ -125,7 +126,7 @@ public:
      */
     template<typename S, typename R>
     static std::vector<std::vector<Entity>>
-    getEntityPairsFromStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<std::vector<Entity>(R&)> getter);
+        getEntityPairsFromStore(std::shared_ptr<S> store, std::function<bool(R&)> matcher, std::function<std::vector<Entity>(R&)> getter);
 
     /**
      * @brief A function that retrieves right entities based on a left key when no matcher function is required
@@ -250,4 +251,20 @@ public:
      */
     template <typename K, typename V>
     static std::vector<std::vector<Entity>> getPairNoMatch(RelationshipStore<K, V>& store);
+
+    /**
+     * @brief A function that removes duplicates in a vector of object of type E
+     * @tparam E The type stored in the vector to make unique
+     * @param v The vector to be modified
+     */
+    template<typename E>
+    static void unique(std::vector<E>& v);
+
+    /**
+     * @brief A function that adds to stmtVarManager (s,v) given the the (s,p) pairs in procStmtStore such that (p,v) is in procVarManager
+     * @tparam S The type of the statement variable manager
+     * @tparam P The type of the procedure variable manager
+     */
+    template<typename S, typename P>
+    static void addStmtVarFromProcVar(std::shared_ptr<S> stmtVarManager, std::shared_ptr<RelationshipStore<Procedure, Statement>> procStmtStore, std::shared_ptr<P> procVarManager);
 };
