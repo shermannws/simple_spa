@@ -1,0 +1,43 @@
+procedure main {
+    a = 1;
+    h = b;
+}
+
+procedure caller {
+    call modifies;
+    call secondary;
+}
+
+procedure secondary {
+    while (s == 0) {
+        c = 10;
+        d = 10 + z;
+    }
+    call final;
+}
+
+procedure modifies {
+    a = y;
+    print z;
+    c = 100 % 5;
+    d = s + z + y;
+    e = e * 300;
+    if (x == 0) then {
+        read g;
+        print t;
+        e = x;
+    } else {
+        e = y + x;
+    }
+    while (y != 1) {
+        while (a == 0) {
+            print t;
+        }
+    }
+
+    read b;
+}
+
+procedure final {
+    read i;
+}
