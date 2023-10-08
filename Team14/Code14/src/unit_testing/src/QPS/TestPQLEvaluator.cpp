@@ -552,7 +552,40 @@ TEST_CASE("Calls and Calls* clauses") {
 
     SECTION ("Calls(*) pair results") {
         // Calls(p,q) - getCallsPair()
-        // TODO test equal synonym Calls(p, p) shd be empty Result?
+        SECTION ("pair results, Calls (p,q)") {
+            PQLParser parser("procedure p, q; Select p such that Calls(p,q)");
+            Query queryObj = parser.parse();
+
+            auto stubReader = make_shared<StubPkbReader>();
+            PQLEvaluator evaluator = PQLEvaluator(stubReader);
+            auto resultObj = evaluator.evaluate(queryObj);
+            auto results = evaluator.formatResult(queryObj, resultObj);
+            REQUIRE(results.size() == 1);
+            REQUIRE(find(results.begin(), results.end(), "procedureLHS") != results.end());
+        }
+
+        SECTION ("pair results, Calls (p,p)") {
+            PQLParser parser("procedure p; Select p such that Calls(p,p)");
+            Query queryObj = parser.parse();
+
+            auto stubReader = make_shared<StubPkbReader>();
+            PQLEvaluator evaluator = PQLEvaluator(stubReader);
+            auto resultObj = evaluator.evaluate(queryObj);
+            auto results = evaluator.formatResult(queryObj, resultObj);
+            REQUIRE(results.size() == 0);
+        }
+
+        SECTION ("pair results, Calls* (p,p)") {
+            PQLParser parser("procedure p; assign a; Select a such that Calls*(p,p)");
+            Query queryObj = parser.parse();
+
+            auto stubReader = make_shared<StubPkbReader>();
+            PQLEvaluator evaluator = PQLEvaluator(stubReader);
+            auto resultObj = evaluator.evaluate(queryObj);
+            auto results = evaluator.formatResult(queryObj, resultObj);
+            REQUIRE(results.size() == 0);
+        }
+
     }
 
     SECTION ("Calls(*) procedure singles results") {
@@ -614,3 +647,4 @@ TEST_CASE("Calls and Calls* clauses") {
     }
 
 }
+

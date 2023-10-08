@@ -428,7 +428,9 @@ std::vector<Entity> StubPkbReader::getCallersStar() const {
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getCallsPair() const {
-    return std::vector<std::vector<Entity>>();
+    auto proc1 = Procedure("procedureLHS");
+    auto proc2 = Procedure("procedureRHS");
+    return std::vector<std::vector<Entity>>({{proc1, proc2}});
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getCallsStarPair() const {

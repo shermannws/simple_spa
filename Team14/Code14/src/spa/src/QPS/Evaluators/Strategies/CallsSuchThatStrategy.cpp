@@ -4,6 +4,9 @@ CallsSuchThatStrategy::CallsSuchThatStrategy(std::shared_ptr<PkbReader> pkbReade
 
 std::shared_ptr<Result> CallsSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
+    if (leftRef == rightRef) {
+        return res;
+    }
     std::unordered_map<std::string, int> indices {{leftRef.getRep(), 0}, {rightRef.getRep(), 1}};
     res->setSynIndices(indices);
     res->setTuples(pkbReader->getCallsPair());
