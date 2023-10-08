@@ -26,8 +26,8 @@ private:
 
 public:
     /**
-     * @brief Construct a new DoubleMapStore object
-     * @return A new DoubleMapStore object
+     * @brief Construct a new MapStore object
+     * @return A new MapStore object
      */
     MapStore();
 
@@ -59,4 +59,4 @@ public:
     typename std::unordered_map<std::shared_ptr<K>, std::shared_ptr<V>>::iterator getEndIterator();
 
 };
-#include "DoubleMapStore.hpp"
+#include "MapStore.hpp"
