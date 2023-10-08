@@ -200,4 +200,40 @@ public:
 
     std::vector<Entity> getCalleesStar(Procedure& caller) const override;
 
+    std::vector<std::vector<Entity>> getNextPair(StatementType formerType, StatementType latterType) const override;
+
+    std::vector<std::vector<Entity>> getNextStarPair(StatementType formerType, StatementType latterType) const override;
+
+    std::vector<Entity> getNextTypeStmt(StatementType type, Statement& statement) const override;
+
+    std::vector<Entity> getNextStarTypeStmt(StatementType type, Statement& statement) const override;
+
+    std::vector<Entity> getNextTypeWildcard(StatementType type) const override;
+
+    std::vector<Entity> getNextStarTypeWildcard(StatementType type) const override;
+
+    std::vector<Entity> getNextStmtType(Statement& statement, StatementType type) const override;
+
+    std::vector<Entity> getNextStarStmtType(Statement& statement, StatementType type) const override;
+
+    std::vector<Entity> getNextWildcardType(StatementType type) const override;
+
+    std::vector<Entity> getNextStarWildcardType(StatementType type) const override;
+
+    bool isNext(Statement& statement1, Statement& statement2) const override;
+
+    bool isNextStar(Statement& statement1, Statement& statement2) const override;
+
+    bool hasNext() const override;
+
+    bool hasNextStar() const override;
+
+    bool hasBeforeStmt(Statement& statement) const override;
+
+    bool hasBeforeStarStmt(Statement& statement) const override;
+
+    bool hasAfterStmt(Statement& statement) const override;
+
+    bool hasAfterStarStmt(Statement& statement) const override;
+
 };

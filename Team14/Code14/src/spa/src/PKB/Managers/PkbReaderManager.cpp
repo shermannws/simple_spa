@@ -398,3 +398,93 @@ std::vector<Entity> PkbReaderManager::getCallees(Procedure& caller) const {
 std::vector<Entity> PkbReaderManager::getCalleesStar(Procedure& caller) const {
     return this->callsRelationshipManager->getCallsLatter(caller, false);
 }
+
+std::vector<std::vector<Entity>> PkbReaderManager::getNextPair(StatementType formerType, StatementType latterType) const {
+    // TODO: Implement this
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<std::vector<Entity>> PkbReaderManager::getNextStarPair(StatementType formerType, StatementType latterType) const {
+    // TODO: Implement this
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextTypeStmt(StatementType type, Statement& statement) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextStarTypeStmt(StatementType type, Statement& statement) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextTypeWildcard(StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextStarTypeWildcard(StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextStmtType(Statement& statement, StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextStarStmtType(Statement& statement, StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextWildcardType(StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> PkbReaderManager::getNextStarWildcardType(StatementType type) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
+bool PkbReaderManager::isNext(Statement& statement1, Statement& statement2) const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::isNextStar(Statement& statement1, Statement& statement2) const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasNext() const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasNextStar() const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasBeforeStmt(Statement& statement) const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasBeforeStarStmt(Statement& statement) const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasAfterStmt(Statement& statement) const {
+    // TODO: Implement this
+    return false;
+}
+
+bool PkbReaderManager::hasAfterStarStmt(Statement& statement) const {
+    // TODO: Implement this
+    return false;
+}

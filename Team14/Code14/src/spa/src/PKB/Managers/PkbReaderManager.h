@@ -747,4 +747,136 @@ public:
      */
     std::vector<Entity> getCalleesStar(Procedure& caller) const;
 
+    /**
+     * Returns a vector of Statement, Statement pair where the first statement is is executed IMMEDIATELY before second statement. Retrieves the relationship where the first and second statement are both of the given type
+     * @param formerType The type of the former statement
+     * @param latterType The type of the latter statement
+     * @return A vector of Statement, Statement pair stored in a vector
+     */
+    std::vector<std::vector<Entity>> getNextPair(StatementType formerType, StatementType latterType) const;
+
+    /**
+     * Returns a vector of Statement, Statement pair where the first statement is executed before of the second statement, either immediately or after some execution sequence. Retrieves the relationship where the first and second statement are both of the given type
+     * @param formerType The type of the former statement
+     * @param latterType The type of the latter statement
+     * @return A vector of Statement, Statement pair stored in a vector
+     */
+    std::vector<std::vector<Entity>> getNextStarPair(StatementType formerType, StatementType latterType) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which is executed IMMEDIATELY before the given statement
+     * @param type The type of the statement to be retrieved
+     * @param statement The statement that executed IMMEDIATELY after the statements to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getNextTypeStmt(StatementType type, Statement& statement) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which is executed before the given statement, either immediately or after some execution sequence
+     * @param type The type of the statement to be retrieved
+     * @param statement The statement that is executed after the statements to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getNextStarTypeStmt(StatementType type, Statement& statement) const;
+
+    /**
+     * Returns a vector of statements of the given statement type that is executed IMMEDIATELY before any statement
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getNextTypeWildcard(StatementType type) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which is executed before any statement, either immediately or after some execution sequence
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getNextStarTypeWildcard(StatementType type) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which is executed IMMEDIATELY after the given statement
+     * @param statement The statement that is executed IMMEDIATELY before the statements to be retrieved
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getNextStmtType(Statement& statement, StatementType type) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which is executed after the given statement, either immediately or after some execution sequence
+     * @param statement The statement that is executed after the statements to be retrieved
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getNextStarStmtType(Statement& statement, StatementType type) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which is executed IMMEDIATELY after any statement
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getNextWildcardType(StatementType type) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which is executed after any statement, either immediately or after some execution sequence
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getNextStarWildcardType(StatementType type) const;
+
+    /**
+     * Returns a boolean value indicating if the first statement is executed IMMEDIATELY before the second statement
+     * @param statement1 The parent statement
+     * @param statement2 The child statement
+     * @return True if the first statement is executed IMMEDIATELY before the second statement, false otherwise
+     */
+    bool isNext(Statement& statement1, Statement& statement2) const;
+
+    /**
+     * Returns a boolean value indicating if the first statement is executed before the second statement, either immediately or after some execution sequence
+     * @param statement1 The parent statement
+     * @param statement2 The child statement
+     * @return True if the first statement is executed before the second statement, false otherwise
+     */
+    bool isNextStar(Statement& statement1, Statement& statement2) const;
+
+    /**
+     * Returns a boolean value indicating if there exists a Next relationship
+     * @return True if there exists a Next relationship, false otherwise
+     */
+    bool hasNext() const;
+
+    /**
+     * Returns a boolean value indicating if there exists a Next Star relationship
+     * @return True if there exists a Next Star relationship, false otherwise
+     */
+    bool hasNextStar() const;
+
+    /**
+     * Returns a boolean value indicating if the given statement is executed IMMEDIATELY after any statement
+     * @param statement The statement to be checked
+     * @return True if the given statement is executed IMMEDIATELY after any statement, false otherwise
+     */
+    bool hasBeforeStmt(Statement& statement) const;
+
+    /**
+     * Returns a boolean value indicating if the given statement is executed after any statement, either immediately or after some execution sequence
+     * @param statement The statement to be checked
+     * @return True if the given statement is executed after any statement, false otherwise
+     */
+    bool hasBeforeStarStmt(Statement& statement) const;
+
+    /**
+     * Returns a boolean value indicating if the given statement is executed IMMEDIATELY before any statement
+     * @param statement The statement to be checked
+     * @return True if the given statement is executed IMMEDIATELY before any statement, false otherwise
+     */
+    bool hasAfterStmt(Statement& statement) const;
+
+    /**
+     * Returns a boolean value indicating if the given statement is executed before any statement, either immediately or after some execution sequence
+     * @param statement The statement to be checked
+     * @return True if the given statement is executed before any statement, false otherwise
+     */
+    bool hasAfterStarStmt(Statement& statement) const;
+
 };

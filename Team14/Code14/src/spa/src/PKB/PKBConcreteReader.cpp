@@ -383,3 +383,75 @@ std::vector<Entity> PkbConcreteReader::getCallees(Procedure& caller) const {
 std::vector<Entity> PkbConcreteReader::getCalleesStar(Procedure& caller) const {
     return this->readerManager->getCalleesStar(caller);
 }
+
+std::vector<std::vector<Entity>> PkbConcreteReader::getNextPair(StatementType formerType, StatementType latterType) const {
+    return this->readerManager->getNextPair(formerType, latterType);
+}
+
+std::vector<std::vector<Entity>> PkbConcreteReader::getNextStarPair(StatementType formerType, StatementType latterType) const {
+    return this->readerManager->getNextStarPair(formerType, latterType);
+}
+
+std::vector<Entity> PkbConcreteReader::getNextTypeStmt(StatementType type, Statement& statement) const {
+    return this->readerManager->getNextTypeStmt(type, statement);
+}
+
+std::vector<Entity> PkbConcreteReader::getNextStarTypeStmt(StatementType type, Statement& statement) const {
+    return this->readerManager->getNextStarTypeStmt(type, statement);
+}
+
+std::vector<Entity> PkbConcreteReader::getNextTypeWildcard(StatementType type) const {
+    return this->readerManager->getNextTypeWildcard(type);
+}
+
+std::vector<Entity> PkbConcreteReader::getNextStarTypeWildcard(StatementType type) const {
+    return this->readerManager->getNextStarTypeWildcard(type);
+}
+
+std::vector<Entity> PkbConcreteReader::getNextStmtType(Statement& statement, StatementType type) const {
+    return this->readerManager->getNextStmtType(statement, type);
+}
+
+std::vector<Entity> PkbConcreteReader::getNextStarStmtType(Statement& statement, StatementType type) const {
+    return this->readerManager->getNextStarStmtType(statement, type);
+}
+
+std::vector<Entity> PkbConcreteReader::getNextWildcardType(StatementType type) const {
+    return this->readerManager->getNextWildcardType(type);
+}
+
+std::vector<Entity> PkbConcreteReader::getNextStarWildcardType(StatementType type) const {
+    return this->readerManager->getNextStarWildcardType(type);
+}
+
+bool PkbConcreteReader::isNext(Statement& statement1, Statement& statement2) const {
+    return this->readerManager->isNext(statement1, statement2);
+}
+
+bool PkbConcreteReader::isNextStar(Statement& statement1, Statement& statement2) const {
+    return this->readerManager->isNextStar(statement1, statement2);
+}
+
+bool PkbConcreteReader::hasNext() const {
+    return this->readerManager->hasNext();
+}
+
+bool PkbConcreteReader::hasNextStar() const {
+    return this->readerManager->hasNextStar();
+}
+
+bool PkbConcreteReader::hasBeforeStmt(Statement& statement) const {
+    return this->readerManager->hasBeforeStmt(statement);
+}
+
+bool PkbConcreteReader::hasBeforeStarStmt(Statement& statement) const {
+    return this->readerManager->hasBeforeStarStmt(statement);
+}
+
+bool PkbConcreteReader::hasAfterStmt(Statement& statement) const {
+    return this->readerManager->hasAfterStmt(statement);
+}
+
+bool PkbConcreteReader::hasAfterStarStmt(Statement& statement) const {
+    return this->readerManager->hasAfterStarStmt(statement);
+}

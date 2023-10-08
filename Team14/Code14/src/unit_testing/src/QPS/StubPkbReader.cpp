@@ -441,3 +441,75 @@ std::vector<Entity> StubPkbReader::getCallees(Procedure& caller) const {
 std::vector<Entity> StubPkbReader::getCalleesStar(Procedure& caller) const {
     return std::vector<Entity>();
 }
+
+std::vector<std::vector<Entity>> StubPkbReader::getNextPair(StatementType formerType, StatementType latterType) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<std::vector<Entity>> StubPkbReader::getNextStarPair(StatementType formerType, StatementType latterType) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<Entity> StubPkbReader::getNextTypeStmt(StatementType type, Statement& statement) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextStarTypeStmt(StatementType type, Statement& statement) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextTypeWildcard(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextStarTypeWildcard(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextStmtType(Statement& statement, StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextStarStmtType(Statement& statement, StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextWildcardType(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextStarWildcardType(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+bool StubPkbReader::isNext(Statement& statement1, Statement& statement2) const {
+    return false;
+}
+
+bool StubPkbReader::isNextStar(Statement& statement1, Statement& statement2) const {
+    return false;
+}
+
+bool StubPkbReader::hasNext() const {
+    return false;
+}
+
+bool StubPkbReader::hasNextStar() const {
+    return false;
+}
+
+bool StubPkbReader::hasBeforeStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasBeforeStarStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasAfterStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasAfterStarStmt(Statement& statement) const {
+    return false;
+}
