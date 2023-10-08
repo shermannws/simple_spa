@@ -293,7 +293,7 @@ std::shared_ptr<ExpressionNode> SPParser::parseExpression(std::deque<SPToken> &t
         ArithmeticOperatorType arithmeticOperator =
                 ArithmeticExpressionNode::translateOperatorTypeString(tokens.front().getValue());
         tokens.pop_front(); // consume "+" or "-"
-        auto nextExpression = parseExpression(tokens);
+        auto nextExpression = parseTerm(tokens);
         leftExpression =
                 std::make_shared<ArithmeticExpressionNode>(
                         arithmeticOperator, leftExpression, nextExpression);
@@ -310,7 +310,7 @@ std::shared_ptr<ExpressionNode> SPParser::parseTerm(std::deque<SPToken>& tokens)
         ArithmeticOperatorType arithmeticOperator =
                 ArithmeticExpressionNode::translateOperatorTypeString(tokens.front().getValue());
         tokens.pop_front(); // consume "*", "/" or "%"
-        auto nextExpression = parseTerm(tokens);
+        auto nextExpression = parseFactor(tokens);
         leftExpression =
                 std::make_shared<ArithmeticExpressionNode>(
                         arithmeticOperator, leftExpression, nextExpression);
