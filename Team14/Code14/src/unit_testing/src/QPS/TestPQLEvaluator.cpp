@@ -382,6 +382,275 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
     }
 }
 
+TEST_CASE("Test NextSuchThatStrategy") {
+    // evaluateSynSyn
+    SECTION("leftRef == rightRef") { // false
+        PQLParser parser("stmt s; Select s such that Next(s,s)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("getNextPair") {
+        PQLParser parser("assign a; read r; Select r such that Next(a, r)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "4") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "6") != results.end());
+    }
+
+    // evaluateSynAny
+    SECTION ("getNextTypeStmt") {
+        PQLParser parser("stmt s; Select s such that Next(s,14)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "13") != results.end());
+    }
+
+    SECTION ("getNextTypeWildcard") {
+        PQLParser parser("while w; Select w such that Next(w,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "11") != results.end());
+    }
+
+    // evaluateAnySyn
+    SECTION ("getNextStmtType") {
+        PQLParser parser("if ifs; Select ifs such that Next(23, ifs)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "24") != results.end());
+    }
+
+    SECTION ("getNextWildcardType") {
+        PQLParser parser("read read; Select read such that Next(_,read)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "10") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "12") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "15") != results.end());
+    }
+
+    // evaluateBoolean
+    SECTION("isNext") {
+        PQLParser parser("if if; Select if such that Next(1,2)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "101") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "102") != results.end());
+    }
+
+    SECTION ("hasAfterStmt") {
+        PQLParser parser("stmt s; Select s such that Next(1,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("hasBeforeStmt") {
+        PQLParser parser("stmt s; Select s such that Next(_,1)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("hasNext") {
+        PQLParser parser("stmt s; Select s such that Next(_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 5);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "4") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "5") != results.end());
+    }
+}
+
+TEST_CASE("Test NextStarSuchThatStrategy") {
+    // evaluateSynSyn
+    SECTION("leftRef == rightRef, getNextStarSameStmt") {
+        PQLParser parser("assign a; Select a such that Next*(a,a)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "102") != results.end());
+    }
+
+    SECTION ("getNextStarPair") {
+        PQLParser parser("read read; if if; Select read such that Next*(read, if)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "11") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "21") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "31") != results.end());
+    }
+
+        // evaluateSynAny
+    SECTION ("getNextStarTypeStmt") {
+        PQLParser parser("stmt s; Select s such that Next*(s,15)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "5") != results.end());
+    }
+
+    SECTION ("getNextStarTypeWildcard") {
+        PQLParser parser("while w; Select w such that Next*(w,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "20") != results.end());
+    }
+
+        // evaluateAnySyn
+    SECTION ("getNextStarStmtType") {
+        PQLParser parser("if ifs; Select ifs such that Next*(23, ifs)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "26") != results.end());
+    }
+
+    SECTION ("getNextStarWildcardType") {
+        PQLParser parser("read read; Select read such that Next*(_,read)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "10") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "12") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "15") != results.end());
+    }
+
+        // evaluateBoolean
+    SECTION("isNextStar") {
+        PQLParser parser("if if; Select if such that Next*(1,2)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("hasAfterStarStmt") {
+        PQLParser parser("stmt s; Select s such that Next*(1,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 5);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "4") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "5") != results.end());
+    }
+
+    SECTION ("hasBeforeStarStmt") {
+        PQLParser parser("stmt s; Select s such that Next*(_,1)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("hasNextStar") {
+        PQLParser parser("read r; Select r such that Next*(_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 4);
+        REQUIRE(find(results.begin(), results.end(), "88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "14") != results.end());
+    }
+}
+
 TEST_CASE("Test QPS Flow - Assign With Pattern") {
     PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
 
