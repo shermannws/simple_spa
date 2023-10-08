@@ -34,7 +34,8 @@ std::vector<Synonym> SuchThatClause::getSynonyms() const {
     if (firstParam.getRootType() == RootType::Synonym) {
         synonyms.push_back(firstParam.getRep());
     }
-    if (secondParam.getRootType() == RootType::Synonym) {
+    // only add RHS synonym if it is different from LHS
+    if (secondParam.getRootType() == RootType::Synonym && !(firstParam == secondParam)) {
         synonyms.push_back(secondParam.getRep());
     }
     return synonyms;

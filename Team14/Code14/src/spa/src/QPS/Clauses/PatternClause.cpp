@@ -24,7 +24,7 @@ Synonym PatternClause::getSyn() {
 
 std::vector<Synonym> PatternClause::getSynonyms() const{
     std::vector<Synonym> synonyms = {syn};
-    if (firstParam.getRootType() == RootType::Synonym) {
+    if (firstParam.getRootType() == RootType::Synonym && firstParam.getRep() != syn) {
         synonyms.push_back(firstParam.getRep());
     }
     return synonyms;
