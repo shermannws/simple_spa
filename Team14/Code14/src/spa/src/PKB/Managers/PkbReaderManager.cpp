@@ -328,75 +328,75 @@ bool PkbReaderManager::hasParentStarStmt(Statement& statement) const {
 }
 
 bool PkbReaderManager::hasCalls() const {
-    return this->callsRelationshipManager->hasCalls();
+    return this->callsRelationshipManager->hasRelationship();
 }
 
 bool PkbReaderManager::hasCallsStar() const {
-    return this->callsRelationshipManager->hasCalls();
+    return this->callsRelationshipManager->hasRelationship();
 }
 
 bool PkbReaderManager::isCallee(Procedure& proc) const {
-    return this->callsRelationshipManager->hasFormerProc(proc);
+    return this->callsRelationshipManager->isLatter(proc);
 }
 
 bool PkbReaderManager::isCalleeStar(Procedure& proc) const {
-    return this->callsRelationshipManager->hasFormerProc(proc);
+    return this->callsRelationshipManager->isLatter(proc);
 }
 
 bool PkbReaderManager::isCaller(Procedure& proc) const {
-    return this->callsRelationshipManager->hasLatterProc(proc);
+    return this->callsRelationshipManager->isFormer(proc);
 }
 
 bool PkbReaderManager::isCallerStar(Procedure& proc) const {
-    return this->callsRelationshipManager->hasLatterProc(proc);
+    return this->callsRelationshipManager->isFormer(proc);
 }
 
 bool PkbReaderManager::isCalls(Procedure& caller, Procedure& callee) const {
-    return this->callsRelationshipManager->isCalls(caller, callee, true);
+    return this->callsRelationshipManager->isRelationship(caller, callee, true);
 }
 
 bool PkbReaderManager::isCallsStar(Procedure& caller, Procedure& callee) const {
-    return this->callsRelationshipManager->isCalls(caller, callee, false);
+    return this->callsRelationshipManager->isRelationship(caller, callee, false);
 }
 
 std::vector<Entity> PkbReaderManager::getCallees() const {
-    return this->callsRelationshipManager->getCallsLatter();
+    return this->callsRelationshipManager->getRelationshipLatter();
 }
 
 std::vector<Entity> PkbReaderManager::getCalleesStar() const {
-    return this->callsRelationshipManager->getCallsLatter();
+    return this->callsRelationshipManager->getRelationshipLatter();
 }
 
 std::vector<Entity> PkbReaderManager::getCallers() const {
-    return this->callsRelationshipManager->getCallsFormer();
+    return this->callsRelationshipManager->getRelationshipFormer();
 }
 
 std::vector<Entity> PkbReaderManager::getCallersStar() const {
-    return this->callsRelationshipManager->getCallsFormer();
+    return this->callsRelationshipManager->getRelationshipFormer();
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getCallsPair() const {
-    return this->callsRelationshipManager->getCallsPair(true);
+    return this->callsRelationshipManager->getRelationshipPair(true);
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getCallsStarPair() const {
-    return this->callsRelationshipManager->getCallsPair(false);
+    return this->callsRelationshipManager->getRelationshipPair(false);
 }
 
 std::vector<Entity> PkbReaderManager::getCallers(Procedure& callee) const {
-    return this->callsRelationshipManager->getCallsFormer(callee, true);
+    return this->callsRelationshipManager->getRelationshipFormer(callee, true);
 }
 
 std::vector<Entity> PkbReaderManager::getCallersStar(Procedure& callee) const {
-    return this->callsRelationshipManager->getCallsFormer(callee, false);
+    return this->callsRelationshipManager->getRelationshipFormer(callee, false);
 }
 
 std::vector<Entity> PkbReaderManager::getCallees(Procedure& caller) const {
-    return this->callsRelationshipManager->getCallsLatter(caller, true);
+    return this->callsRelationshipManager->getRelationshipLatter(caller, true);
 }
 
 std::vector<Entity> PkbReaderManager::getCalleesStar(Procedure& caller) const {
-    return this->callsRelationshipManager->getCallsLatter(caller, false);
+    return this->callsRelationshipManager->getRelationshipLatter(caller, false);
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getNextPair(StatementType formerType, StatementType latterType) const {

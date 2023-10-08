@@ -62,7 +62,7 @@ void PkbWriterManager::addParentRelationship(std::shared_ptr<Statement> s1, std:
 }
 
 void PkbWriterManager::addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2) {
-    this->callsRelationshipManager->storeCallsRelationship(p1, p2, true);
+    this->callsRelationshipManager->storeRelationship(p1, p2, true);
 }
 
 void PkbWriterManager::addModifiesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {

@@ -22,7 +22,7 @@ private:
      */
     std::shared_ptr<S> relationshipStore;
     std::shared_ptr<S> starRelationshipStore;
-protected:
+public:
     /**
      * @brief Constructs a ProcToProcRelationshipManager object
      * @return A ProcToProcRelationshipManager object
