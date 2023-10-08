@@ -614,4 +614,3 @@ TEST_CASE("Calls and Calls* clauses") {
     }
 
 }
-
