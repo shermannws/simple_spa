@@ -409,6 +409,11 @@ std::vector<std::vector<Entity>> PkbReaderManager::getNextStarPair(StatementType
     return std::vector<std::vector<Entity>>();
 }
 
+std::vector<Entity> PkbReaderManager::getNextStarSameStmt(StatementType stmtType) const {
+    // TODO: Implement this
+    return std::vector<Entity>();
+}
+
 std::vector<Entity> PkbReaderManager::getNextTypeStmt(StatementType type, Statement& statement) const {
     // TODO: Implement this
     return std::vector<Entity>();

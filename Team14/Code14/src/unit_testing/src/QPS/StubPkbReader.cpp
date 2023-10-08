@@ -450,6 +450,10 @@ std::vector<std::vector<Entity>> StubPkbReader::getNextStarPair(StatementType fo
     return std::vector<std::vector<Entity>>();
 }
 
+std::vector<Entity> StubPkbReader::getNextStarSameStmt(StatementType stmtType) const {
+    return std::vector<Entity>();
+}
+
 std::vector<Entity> StubPkbReader::getNextTypeStmt(StatementType type, Statement& statement) const {
     return std::vector<Entity>();
 }

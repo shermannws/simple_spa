@@ -392,6 +392,10 @@ std::vector<std::vector<Entity>> PkbConcreteReader::getNextStarPair(StatementTyp
     return this->readerManager->getNextStarPair(formerType, latterType);
 }
 
+std::vector<Entity> PkbConcreteReader::getNextStarSameStmt(StatementType stmtType) const {
+    return this->readerManager->getNextStarSameStmt(stmtType);
+}
+
 std::vector<Entity> PkbConcreteReader::getNextTypeStmt(StatementType type, Statement& statement) const {
     return this->readerManager->getNextTypeStmt(type, statement);
 }

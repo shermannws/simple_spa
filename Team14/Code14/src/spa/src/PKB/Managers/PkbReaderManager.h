@@ -764,6 +764,13 @@ public:
     std::vector<std::vector<Entity>> getNextStarPair(StatementType formerType, StatementType latterType) const;
 
     /**
+     * Returns a vector of statements of the given statement type which is executed again after it has been executed
+     * @param stmtType The type of statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getNextStarSameStmt(StatementType stmtType) const;
+
+    /**
      * Returns a vector of statements of the given statement type which is executed IMMEDIATELY before the given statement
      * @param type The type of the statement to be retrieved
      * @param statement The statement that executed IMMEDIATELY after the statements to be retrieved

@@ -204,6 +204,8 @@ public:
 
     std::vector<std::vector<Entity>> getNextStarPair(StatementType formerType, StatementType latterType) const override;
 
+    std::vector<Entity> getNextStarSameStmt(StatementType stmtType) const override;
+
     std::vector<Entity> getNextTypeStmt(StatementType type, Statement& statement) const override;
 
     std::vector<Entity> getNextStarTypeStmt(StatementType type, Statement& statement) const override;
