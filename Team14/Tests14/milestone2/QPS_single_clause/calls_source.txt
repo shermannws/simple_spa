@@ -18,7 +18,6 @@ procedure Proc1 {
         xyz = x * y * z;
         call Proc7;
     }
-    call Proc8;
 }
 
 procedure Proc2 {
@@ -48,6 +47,7 @@ procedure Proc6 {
 
 procedure Proc7 {
     x = 1;
+    call Proc8;
 }
 
 procedure Proc8 {
