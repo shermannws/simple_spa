@@ -7,8 +7,8 @@
 #include <regex>
 #include <algorithm>
 
-#include "PKB/AssignmentPatternStore/AssignmentPatternStore.h"
-#include "PKB/AssignmentPatternStore/Assignment.h"
+#include "PKB/PatternStore/AssignmentPatternStore.h"
+#include "PKB/Commons/Assignment.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "Commons/AppConstants.h"
@@ -53,16 +53,8 @@ public:
     /**
      * Stores a new Assignment object into the PKB
      * @param assignment The Assignment object to be stored
-     * @return True if the Assignment object is successfully stored, else False
      */
-    bool addAssignment(std::shared_ptr<Assignment> assignment);
-
-    /**
-     * Returns true if the AssignmentManager contains an Assignment object that references the given Statement object, else false.
-     * @param statement The Statement object to be checked against
-     * @return True if the AssignmentManager contains an Assignment object that references the given Statement object, else false.
-     */
-    bool contains(Statement& statement) const;
+    void addAssignment(std::shared_ptr<Assignment> assignment);
 
     /**
      * Returns a vector of Statements from all the Assignment objects in the store. Represents all the Statements that are assignments
@@ -104,7 +96,6 @@ public:
      */
     std::vector<Entity> getAssignStmtsByLhs(Variable& lhs) const;
 
-    // pattern a ("x", "x")
     /**
      * Returns a vector of Statement objects from Assignment objects in the store where the Variable that is assigned matches the given Variable and the Expression matches the given pattern.
      * @param lhs The Variable to be matched against

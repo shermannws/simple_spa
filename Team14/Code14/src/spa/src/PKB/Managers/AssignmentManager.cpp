@@ -3,8 +3,8 @@
 AssignmentManager::AssignmentManager()
     : assignmentStore(std::make_shared<AssignmentPatternStore>(AssignmentPatternStore())) {}
 
-bool AssignmentManager::addAssignment(std::shared_ptr<Assignment> assignment) {
-    return this->assignmentStore->addAssignment(std::move(assignment));
+void AssignmentManager::addAssignment(std::shared_ptr<Assignment> assignment) {
+    this->assignmentStore->addAssignment(std::move(assignment));
 }
 
 std::regex AssignmentManager::parsePattern(Expression& pattern) const {
@@ -25,10 +25,6 @@ bool AssignmentManager::matchExpression(Expression& expression, std::regex& patt
     }
     // Case where pattern is "x"
     return std::regex_match(expression, std::regex(pattern));
-}
-
-bool AssignmentManager::contains(Statement& statement) const {
-    return assignmentStore->contains(statement);
 }
 
 // Pattern queries i.e. pattern a (...,...)
