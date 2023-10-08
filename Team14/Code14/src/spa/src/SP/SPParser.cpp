@@ -36,9 +36,9 @@ std::shared_ptr<StatementListNode> SPParser::parseStatementList(std::deque<SPTok
     std::unordered_map<std::string, std::function<std::shared_ptr<StatementNode>(std::deque<SPToken>&)>> parseFunctionMap;
     parseFunctionMap["read"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<ReadNode> { return parseReadStatement(tokens); };
     parseFunctionMap["print"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<PrintNode> { return parsePrintStatement(tokens); };
-    parseFunctionMap["call"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<CallNode> { return parseCallStatement(tokens); };;
-    parseFunctionMap["if"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<IfNode> { return parseIfStatement(tokens); };;
-    parseFunctionMap["while"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<WhileNode> { return parseWhileStatement(tokens); };;
+    parseFunctionMap["call"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<CallNode> { return parseCallStatement(tokens); };
+    parseFunctionMap["if"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<IfNode> { return parseIfStatement(tokens); };
+    parseFunctionMap["while"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<WhileNode> { return parseWhileStatement(tokens); };
 
     std::vector<std::shared_ptr<StatementNode>> statements;
     while (tokens.front().getType() != TokenType::CloseCurlyParenthesis) {
