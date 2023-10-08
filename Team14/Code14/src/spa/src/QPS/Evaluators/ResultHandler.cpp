@@ -33,7 +33,7 @@ std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1, std::sha
     std::unordered_map<int, int> common = getCommonColumns(r1, r2);
     SynonymMap synIndices = buildSynIndices(r1, r2);
     std::vector<Synonym> header = getHeader(synIndices);
-    final->setSynIndices(synIndices);
+    final->setType(header);
 
     auto tuples1 = r1->getTuples();
     auto tuples2 = r2->getTuples();
@@ -58,8 +58,6 @@ std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1, std::sha
         }
     }
     final->setTuples(finalTuples);
-    ResultType type = ResultType::Tuples;
-    final->setType(type);
     return final;
 }
 
