@@ -46,7 +46,7 @@ void PkbWriterManager::addAssignStatement(std::shared_ptr<Statement> s, std::sha
 }
 
 void PkbWriterManager::addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
-    this->followsRelationshipManager->storeFollowsRelationship(s1, s2, isDirect);
+    this->followsRelationshipManager->storeRelationship(s1, s2, isDirect);
 }
 
 void PkbWriterManager::addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
@@ -58,7 +58,7 @@ void PkbWriterManager::addModifiesRelationship(std::shared_ptr<Statement> s, std
 }
 
 void PkbWriterManager::addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
-    this->parentRelationshipManager->storeParentRelationship(s1, s2, isDirect);
+    this->parentRelationshipManager->storeRelationship(s1, s2, isDirect);
 }
 
 void PkbWriterManager::addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2) {

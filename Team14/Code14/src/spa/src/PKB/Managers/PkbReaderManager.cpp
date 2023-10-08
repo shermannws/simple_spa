@@ -105,75 +105,75 @@ bool PkbReaderManager::hasUses(Procedure& proc) const {
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getFollowsPair(StatementType formerType, StatementType latterType) const {
-    return this->followsRelationshipManager->getFollowsPair(formerType, latterType, true);
+    return this->followsRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getFollowsStarPair(StatementType formerType, StatementType latterType) const {
-    return this->followsRelationshipManager->getFollowsPair(formerType, latterType, false);
+    return this->followsRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
 std::vector<Entity> PkbReaderManager::getFollowsTypeStmt(StatementType type, Statement& statement) const {
-    return this->followsRelationshipManager->getFollowsTypeStmt(type, statement, true);
+    return this->followsRelationshipManager->getRelationshipTypeStmt(type, statement, true);
 }
 
 std::vector<Entity> PkbReaderManager::getFollowsStarTypeStmt(StatementType type, Statement& statement) const {
-    return this->followsRelationshipManager->getFollowsTypeStmt(type, statement, false);
+    return this->followsRelationshipManager->getRelationshipTypeStmt(type, statement, false);
 }
 
 std::vector<Entity> PkbReaderManager::getFollowsTypeWildcard(StatementType type) const {
-    return this->followsRelationshipManager->getFollowsTypeWildcard(type);
+    return this->followsRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
 std::vector<Entity> PkbReaderManager::getFollowsStarTypeWildcard(StatementType type) const {
-    return this->followsRelationshipManager->getFollowsTypeWildcard(type);
+    return this->followsRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
 std::vector<Entity> PkbReaderManager::getFollowsStmtType(Statement& statement, StatementType type) const {
-    return this->followsRelationshipManager->getFollowsStmtType(statement, type, true);
+    return this->followsRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
 std::vector<Entity> PkbReaderManager::getFollowsStarStmtType(Statement& statement, StatementType type) const {
-    return this->followsRelationshipManager->getFollowsStmtType(statement, type, false);
+    return this->followsRelationshipManager->getRelationshipStmtType(statement, type, false);
 }
 
 std::vector<Entity> PkbReaderManager::getFollowsWildcardType(StatementType type) const {
-    return this->followsRelationshipManager->getFollowsWildcardType(type);
+    return this->followsRelationshipManager->getRelationshipWildcardType(type);
 }
 
 std::vector<Entity> PkbReaderManager::getFollowsStarWildcardType(StatementType type) const {
-    return this->followsRelationshipManager->getFollowsWildcardType(type);
+    return this->followsRelationshipManager->getRelationshipWildcardType(type);
 }
 
 bool PkbReaderManager::isFollows(Statement& statement1, Statement& statement2) const {
-    return this->followsRelationshipManager->isFollows(statement1, statement2, true);
+    return this->followsRelationshipManager->isRelationship(statement1, statement2, true);
 }
 
 bool PkbReaderManager::isFollowsStar(Statement& statement1, Statement& statement2) const {
-    return this->followsRelationshipManager->isFollows(statement1, statement2, false);
+    return this->followsRelationshipManager->isRelationship(statement1, statement2, false);
 }
 
 bool PkbReaderManager::hasFollows() const {
-    return this->followsRelationshipManager->hasFollows();
+    return this->followsRelationshipManager->hasRelationship();
 }
 
 bool PkbReaderManager::hasFollowsStar() const {
-    return this->followsRelationshipManager->hasFollows();
+    return this->followsRelationshipManager->hasRelationship();
 }
 
 bool PkbReaderManager::hasLatterStmt(Statement& statement) const {
-    return this->followsRelationshipManager->hasLatterStmt(statement);
+    return this->followsRelationshipManager->isFormer(statement);
 }
 
 bool PkbReaderManager::hasFormerStmt(Statement& statement) const {
-    return this->followsRelationshipManager->hasFormerStmt(statement);
+    return this->followsRelationshipManager->isLatter(statement);
 }
 
 bool PkbReaderManager::hasLatterStarStmt(Statement& statement) const {
-    return this->followsRelationshipManager->hasLatterStmt(statement);
+    return this->followsRelationshipManager->isFormer(statement);
 }
 
 bool PkbReaderManager::hasFormerStarStmt(Statement& statement) const {
-    return this->followsRelationshipManager->hasFormerStmt(statement);
+    return this->followsRelationshipManager->isLatter(statement);
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getModifiesStmtPair(StatementType type) const {
@@ -256,75 +256,75 @@ std::vector<Entity> PkbReaderManager::getAssignStmtsByLhsRhs(Variable& lhs, Expr
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getParentPair(StatementType formerType, StatementType latterType) const {
-    return this->parentRelationshipManager->getParentPair(formerType, latterType, true);
+    return this->parentRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getParentStarPair(StatementType formerType, StatementType latterType) const {
-    return this->parentRelationshipManager->getParentPair(formerType, latterType, false);
+    return this->parentRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
 std::vector<Entity> PkbReaderManager::getParentTypeStmt(StatementType type, Statement& statement) const {
-    return this->parentRelationshipManager->getParentTypeStmt(type, statement, true);
+    return this->parentRelationshipManager->getRelationshipTypeStmt(type, statement, true);
 }
 
 std::vector<Entity> PkbReaderManager::getParentStarTypeStmt(StatementType type, Statement& statement) const {
-    return this->parentRelationshipManager->getParentTypeStmt(type, statement, false);
+    return this->parentRelationshipManager->getRelationshipTypeStmt(type, statement, false);
 }
 
 std::vector<Entity> PkbReaderManager::getParentTypeWildcard(StatementType type) const {
-    return this->parentRelationshipManager->getParentTypeWildcard(type);
+    return this->parentRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
 std::vector<Entity> PkbReaderManager::getParentStarTypeWildcard(StatementType type) const {
-    return this->parentRelationshipManager->getParentTypeWildcard(type);
+    return this->parentRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
 std::vector<Entity> PkbReaderManager::getParentStmtType(Statement& statement, StatementType type) const {
-    return this->parentRelationshipManager->getParentStmtType(statement, type, true);
+    return this->parentRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
 std::vector<Entity> PkbReaderManager::getParentStarStmtType(Statement& statement, StatementType type) const {
-    return this->parentRelationshipManager->getParentStmtType(statement, type, false);
+    return this->parentRelationshipManager->getRelationshipStmtType(statement, type, false);
 }
 
 std::vector<Entity> PkbReaderManager::getParentWildcardType(StatementType type) const {
-    return this->parentRelationshipManager->getParentWildcardType(type);
+    return this->parentRelationshipManager->getRelationshipWildcardType(type);
 }
 
 std::vector<Entity> PkbReaderManager::getParentStarWildcardType(StatementType type) const {
-    return this->parentRelationshipManager->getParentWildcardType(type);
+    return this->parentRelationshipManager->getRelationshipWildcardType(type);
 }
 
 bool PkbReaderManager::isParent(Statement& statement1, Statement& statement2) const {
-    return this->parentRelationshipManager->isParent(statement1, statement2, true);
+    return this->parentRelationshipManager->isRelationship(statement1, statement2, true);
 }
 
 bool PkbReaderManager::isParentStar(Statement& statement1, Statement& statement2) const {
-    return this->parentRelationshipManager->isParent(statement1, statement2, false);
+    return this->parentRelationshipManager->isRelationship(statement1, statement2, false);
 }
 
 bool PkbReaderManager::hasParent() const {
-    return this->parentRelationshipManager->hasParent();
+    return this->parentRelationshipManager->hasRelationship();
 }
 
 bool PkbReaderManager::hasParentStar() const {
-    return this->parentRelationshipManager->hasParent();
+    return this->parentRelationshipManager->hasRelationship();
 }
 
 bool PkbReaderManager::hasChildStmt(Statement& statement) const {
-    return this->parentRelationshipManager->hasChildStmt(statement);
+    return this->parentRelationshipManager->isFormer(statement);
 }
 
 bool PkbReaderManager::hasChildStarStmt(Statement& statement) const {
-    return this->parentRelationshipManager->hasChildStmt(statement);
+    return this->parentRelationshipManager->isFormer(statement);
 }
 
 bool PkbReaderManager::hasParentStmt(Statement& statement) const {
-    return this->parentRelationshipManager->hasParentStmt(statement);
+    return this->parentRelationshipManager->isLatter(statement);
 }
 
 bool PkbReaderManager::hasParentStarStmt(Statement& statement) const {
-    return this->parentRelationshipManager->hasParentStmt(statement);
+    return this->parentRelationshipManager->isLatter(statement);
 }
 
 bool PkbReaderManager::hasCalls() const {
