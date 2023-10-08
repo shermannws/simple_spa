@@ -38,6 +38,10 @@ std::vector<Entity> PkbConcreteReader::getAllIf() const {
     return this->readerManager->getAllIf();
 }
 
+std::vector<Entity> PkbConcreteReader::getAllCall() const {
+    return this->readerManager->getAllCall();
+}
+
 std::vector<std::vector<Entity>> PkbConcreteReader::getUsesStmtPair(StatementType type) const {
     return this->readerManager->getUsesStmtPair(type);
 }
@@ -306,4 +310,76 @@ bool PkbConcreteReader::hasChildStmt(Statement& statement) const {
 
 bool PkbConcreteReader::hasChildStarStmt(Statement& statement) const {
     return this->readerManager->hasChildStarStmt(statement);
+}
+
+bool PkbConcreteReader::hasCalls() const {
+    return this->readerManager->hasCalls();
+}
+
+bool PkbConcreteReader::hasCallsStar() const {
+    return this->readerManager->hasCallsStar();
+}
+
+bool PkbConcreteReader::isCallee(Procedure& proc) const {
+    return this->readerManager->isCallee(proc);
+}
+
+bool PkbConcreteReader::isCalleeStar(Procedure& proc) const {
+    return this->readerManager->isCalleeStar(proc);
+}
+
+bool PkbConcreteReader::isCaller(Procedure& proc) const {
+    return this->readerManager->isCaller(proc);
+}
+
+bool PkbConcreteReader::isCallerStar(Procedure& proc) const {
+    return this->readerManager->isCallerStar(proc);
+}
+
+bool PkbConcreteReader::isCalls(Procedure& caller, Procedure& callee) const {
+    return this->readerManager->isCalls(caller, callee);
+}
+
+bool PkbConcreteReader::isCallsStar(Procedure& caller, Procedure& callee) const {
+    return this->readerManager->isCallsStar(caller, callee);
+}
+
+std::vector<Entity> PkbConcreteReader::getCallees() const {
+    return this->readerManager->getCallees();
+}
+
+std::vector<Entity> PkbConcreteReader::getCalleesStar() const {
+    return this->readerManager->getCalleesStar();
+}
+
+std::vector<Entity> PkbConcreteReader::getCallers() const {
+    return this->readerManager->getCallers();
+}
+
+std::vector<Entity> PkbConcreteReader::getCallersStar() const {
+    return this->readerManager->getCallersStar();
+}
+
+std::vector<std::vector<Entity>> PkbConcreteReader::getCallsPair() const {
+    return this->readerManager->getCallsPair();
+}
+
+std::vector<std::vector<Entity>> PkbConcreteReader::getCallsStarPair() const {
+    return this->readerManager->getCallsStarPair();
+}
+
+std::vector<Entity> PkbConcreteReader::getCallers(Procedure& callee) const {
+    return this->readerManager->getCallers(callee);
+}
+
+std::vector<Entity> PkbConcreteReader::getCallersStar(Procedure& callee) const {
+    return this->readerManager->getCallersStar(callee);
+}
+
+std::vector<Entity> PkbConcreteReader::getCallees(Procedure& caller) const {
+    return this->readerManager->getCallees(caller);
+}
+
+std::vector<Entity> PkbConcreteReader::getCalleesStar(Procedure& caller) const {
+    return this->readerManager->getCalleesStar(caller);
 }

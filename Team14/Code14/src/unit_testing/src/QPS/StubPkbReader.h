@@ -24,6 +24,8 @@ public:
 
     std::vector<Entity> getAllIf() const override;
 
+    std::vector<Entity> getAllCall() const override;
+
     std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const override;
 
     std::vector<std::vector<Entity>> getUsesProcPair() const override;
@@ -161,5 +163,41 @@ public:
     bool hasChildStmt(Statement& statement) const override;
 
     bool hasChildStarStmt(Statement& statement) const override;
+
+    bool hasCalls() const override;
+
+    bool hasCallsStar() const override;
+
+    bool isCallee(Procedure& proc) const override;
+
+    bool isCalleeStar(Procedure& proc) const override;
+
+    bool isCaller(Procedure& proc) const override;
+
+    bool isCallerStar(Procedure& proc) const override;
+
+    bool isCalls(Procedure& caller, Procedure& callee) const override;
+
+    bool isCallsStar(Procedure& caller, Procedure& callee) const override;
+
+    std::vector<Entity> getCallees() const override;
+
+    std::vector<Entity> getCalleesStar() const override;
+
+    std::vector<Entity> getCallers() const override;
+
+    std::vector<Entity> getCallersStar() const override;
+
+    std::vector<std::vector<Entity>> getCallsPair() const override;
+
+    std::vector<std::vector<Entity>> getCallsStarPair() const override;
+
+    std::vector<Entity> getCallers(Procedure& callee) const override;
+
+    std::vector<Entity> getCallersStar(Procedure& callee) const override;
+
+    std::vector<Entity> getCallees(Procedure& caller) const override;
+
+    std::vector<Entity> getCalleesStar(Procedure& caller) const override;
 
 };

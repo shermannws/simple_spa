@@ -137,6 +137,12 @@ public:
     std::vector<Entity> getAllIf() const;
 
     /**
+     * @brief Returns all the call statements in the SIMPLE program.
+     * @return A vector of call statements.
+     */
+    std::vector<Entity> getAllCall() const;
+
+    /**
      * Returns a vector of Statement, Variable pair where the statement uses the variable. Retrieves the relationship where the statement is of the given type
      * @param type The type of the statement
      * @return A vector of Statement, Variable pair stored in a vector
@@ -620,5 +626,125 @@ public:
      * @return True if the given statement is the parent of any statement, false otherwise
      */
     bool hasChildStarStmt(Statement& statement) const;
+
+    /**
+     * Returns a boolean value indicating if there exists a Calls relationship
+     * @return True if there exists a Calls relationship, false otherwise
+     */
+    bool hasCalls() const;
+
+    /**
+     * Returns a boolean value indicating if there exists a Calls Star relationship
+     * @return True if there exists a Calls Star relationship, false otherwise
+     */
+    bool hasCallsStar() const;
+
+    /**
+     * Returns a boolean value indicating if the given procedure is called directly by any other procedure
+     * @param proc The procedure to be checked
+     * @return True if the given procedure is called directly by any other procedure, false otherwise
+     */
+    bool isCallee(Procedure& proc) const;
+
+    /**
+     * Returns a boolean value indicating if the given procedure is called directly or indirectly by any other procedure
+     * @param proc The procedure to be checked
+     * @return True if the given procedure is called directly or indirectly by any other procedure, false otherwise
+     */
+    bool isCalleeStar(Procedure& proc) const;
+
+    /**
+     * Returns a boolean value indicating if the given procedure calls any other procedure directly
+     * @param proc The procedure to be checked
+     * @return True if the given procedure calls any other procedure directly, false otherwise
+     */
+    bool isCaller(Procedure& proc) const;
+
+    /**
+     * Returns a boolean value indicating if the given procedure calls any other procedure directly or indirectly
+     * @param proc The procedure to be checked
+     * @return True if the given procedure calls any other procedure directly or indirectly, false otherwise
+     */
+    bool isCallerStar(Procedure& proc) const;
+
+    /**
+     * Returns a boolean value indicating if the first procedure calls the second procedure directly
+     * @param caller The calling procedure
+     * @param callee The called procedure
+     * @return True if the first procedure calls the second procedure directly, false otherwise
+     */
+    bool isCalls(Procedure& caller, Procedure& callee) const;
+
+    /**
+     * Returns a boolean value indicating if the first procedure calls the second procedure directly or indirectly
+     * @param caller The calling procedure
+     * @param callee The called procedure
+     * @return True if the first procedure calls the second procedure directly or indirectly, false otherwise
+     */
+    bool isCallsStar(Procedure& caller, Procedure& callee) const;
+
+    /**
+     * Returns a vector of procedures which is called directly by any other procedure
+     * @return A vector of procedures
+     */
+    std::vector<Entity> getCallees() const;
+
+    /**
+     * Returns a vector of procedures which is called directly or indirectly by any other procedure
+     * @return A vector of procedures
+     */
+    std::vector<Entity> getCalleesStar() const;
+
+    /**
+     * Returns a vector of procedures which calls any other procedure directly
+     * @return A vector of procedures
+     */
+    std::vector<Entity> getCallers() const;
+
+    /**
+     * Returns a vector of procedures which calls any other procedure directly or indirectly
+     * @return A vector of procedures
+     */
+    std::vector<Entity> getCallersStar() const;
+
+    /**
+     * Returns a vector of Procedure, Procedure pair where the first procedure calls the second procedure DIRECTLY
+     * @return A vector of Procedure, Procedure pair stored in a vector
+     */
+    std::vector<std::vector<Entity>> getCallsPair() const;
+
+    /**
+     * Returns a vector of Procedure, Procedure pair where the first procedure calls the second procedure DIRECTLY or INDIRECTLY
+     * @return A vector of Procedure, Procedure pair stored in a vector
+     */
+    std::vector<std::vector<Entity>> getCallsStarPair() const;
+
+    /**
+     * Returns a vector of procedures which calls the given procedure DIRECTLY
+     * @param callee The procedure that is called by the procedures to be retrieved
+     * @return A vector of procedures
+     */
+    std::vector<Entity> getCallers(Procedure& callee) const;
+
+    /**
+     * Returns a vector of procedures which calls the given procedure DIRECTLY or INDIRECTLY
+     * @param callee The procedure that is called by the procedures to be retrieved
+     * @return A vector of procedures
+     */
+    std::vector<Entity> getCallersStar(Procedure& callee) const;
+
+    /**
+     * Returns a vector of procedures which is called DIRECTLY by the given procedure
+     * @param caller The procedure that calls the procedures to be retrieved
+     * @return A vector of procedures
+     */
+    std::vector<Entity> getCallees(Procedure& caller) const;
+
+    /**
+     * Returns a vector of procedures which is called DIRECTLY or INDIRECTLY by the given procedure
+     * @param caller The procedure that calls the procedures to be retrieved
+     * @return A vector of procedures
+     */
+    std::vector<Entity> getCalleesStar(Procedure& caller) const;
 
 };
