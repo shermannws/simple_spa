@@ -57,51 +57,51 @@ std::vector<Entity> PkbReaderManager::getAllCall() const {
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getUsesStmtPair(StatementType type) const {
-    return this->usesRelationshipManager->getUsesStmtPair(type);
+    return this->usesRelationshipManager->getRelationshipStmtPair(type);
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getUsesProcPair() const {
-    return this->usesProcRelationshipManager->getUsesProcPair();
+    return this->usesProcRelationshipManager->getRelationshipProcPair();
 }
 
 std::vector<Entity> PkbReaderManager::getUsesTypeIdent(StatementType type, Variable& var) const {
-    return this->usesRelationshipManager->getUsesTypeIdent(type, var);
+    return this->usesRelationshipManager->getRelationshipTypeIdent(type, var);
 }
 
 std::vector<Entity> PkbReaderManager::getUsesProcIdent(Variable& var) const {
-    return this->usesProcRelationshipManager->getUsesProcIdent(var);
+    return this->usesProcRelationshipManager->getRelationshipIdent(var);
 }
 
 std::vector<Entity> PkbReaderManager::getUsesStmt(StatementType type) const {
-    return this->usesRelationshipManager->getUsesStmt(type);
+    return this->usesRelationshipManager->getRelationshipStmt(type);
 }
 
 std::vector<Entity> PkbReaderManager::getUsesProc() const {
-    return this->usesProcRelationshipManager->getUsesProc();
+    return this->usesProcRelationshipManager->getRelationshipProc();
 }
 
 std::vector<Entity> PkbReaderManager::getUsesVar(Statement& stmt) const {
-    return this->usesRelationshipManager->getUsesVar(stmt);
+    return this->usesRelationshipManager->getRelationshipVar(stmt);
 }
 
 std::vector<Entity> PkbReaderManager::getUsesVar(Procedure& proc) const {
-    return this->usesProcRelationshipManager->getUsesProcVar(proc);
+    return this->usesProcRelationshipManager->getRelationshipVar(proc);
 }
 
 bool PkbReaderManager::isStmtUsesVar(Statement& stmt, Variable& var) const {
-    return this->usesRelationshipManager->isStmtUsesVar(stmt, var);
+    return this->usesRelationshipManager->isRelationship(stmt, var);
 }
 
 bool PkbReaderManager::isProcUsesVar(Procedure& proc, Variable& var) const {
-    return this->usesProcRelationshipManager->isProcUsesVar(proc, var);
+    return this->usesProcRelationshipManager->isRelationship(proc, var);
 }
 
 bool PkbReaderManager::hasUses(Statement& stmt) const {
-    return this->usesRelationshipManager->hasUses(stmt);
+    return this->usesRelationshipManager->hasRelationship(stmt);
 }
 
 bool PkbReaderManager::hasUses(Procedure& proc) const {
-    return this->usesProcRelationshipManager->hasProcUses(proc);
+    return this->usesProcRelationshipManager->hasRelationship(proc);
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getFollowsPair(StatementType formerType, StatementType latterType) const {

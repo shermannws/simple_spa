@@ -50,7 +50,7 @@ void PkbWriterManager::addFollowsRelationship(std::shared_ptr<Statement> s1, std
 }
 
 void PkbWriterManager::addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
-    this->usesRelationshipManager->storeUsesRelationship(s, v);
+    this->usesRelationshipManager->storeRelationship(s, v);
 }
 
 void PkbWriterManager::addModifiesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
@@ -70,5 +70,5 @@ void PkbWriterManager::addModifiesProcRelationship(std::shared_ptr<Procedure> p,
 }
 
 void PkbWriterManager::addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {
-	this->usesProcRelationshipManager->storeUsesProcRelationship(p, v);
+	this->usesProcRelationshipManager->storeRelationship(p, v);
 }
