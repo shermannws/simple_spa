@@ -86,8 +86,12 @@ public:
 	 */
     void calculateProcVarRelationshipForCallers(std::shared_ptr<CallsRelationshipManager> callManager);
 
-public:
-    std::shared_ptr<EntityStore<Variable>> getRightVariablesOf(std::shared_ptr<Procedure> left) const;
+    /**
+     * Returns an EntityStore of variables which is related to the given procedure
+     * @param left The procedure on the left that is related to the variables
+     * @returns An EntityStore of variables that is on the right of the given procedure
+     */
+    std::shared_ptr<EntityStore<Variable>> getRhsVarAsVariables(std::shared_ptr<Procedure> left) const;
 };
 
 #include "ProcToVarRelationshipManager.hpp"

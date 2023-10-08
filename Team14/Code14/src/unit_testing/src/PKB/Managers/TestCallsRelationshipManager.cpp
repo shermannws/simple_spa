@@ -71,7 +71,7 @@ TEST_CASE("Test Calls Transitivity Calculation") {
 
         callsRelationshipManager.storeRelationship(procedure1, procedure2, true);
         callsRelationshipManager.storeRelationship(procedure2, procedure3, true);
-        callsRelationshipManager.calculateCallsStar();
+        callsRelationshipManager.calculateTransitiveRelationship();
 
         REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure2, false) == true);
         REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure3, false) == true);
@@ -101,7 +101,7 @@ TEST_CASE("Test Calls Transitivity Calculation") {
 
         callsRelationshipManager.storeRelationship(procedure1, procedure2, true);
         callsRelationshipManager.storeRelationship(procedure1, procedure3, true);
-        callsRelationshipManager.calculateCallsStar();
+        callsRelationshipManager.calculateTransitiveRelationship();
 
         REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure2, false) == true);
         REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure3, false) == true);
@@ -134,7 +134,7 @@ TEST_CASE("Test Calls Transitivity Calculation") {
         callsRelationshipManager.storeRelationship(procedure1, procedure2, true);
         callsRelationshipManager.storeRelationship(procedure3, procedure4, true);
         callsRelationshipManager.storeRelationship(procedure4, procedure2, true);
-        callsRelationshipManager.calculateCallsStar();
+        callsRelationshipManager.calculateTransitiveRelationship();
 
         REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure1, false) == false);
         REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure2, false) == true);
@@ -174,7 +174,7 @@ TEST_CASE("Test Calls Transitivity Calculation") {
         callsRelationshipManager.storeRelationship(procedure2, procedure1, true);
         callsRelationshipManager.storeRelationship(procedure3, procedure4, true);
         callsRelationshipManager.storeRelationship(procedure4, procedure2, true);
-        callsRelationshipManager.calculateCallsStar();
+        callsRelationshipManager.calculateTransitiveRelationship();
 
         REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure1, false) == false);
         REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure2, false) == false);
@@ -228,7 +228,7 @@ TEST_CASE("Test Calls Transitivity Calculation") {
 
         REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure10, false) == false);
 
-        callsRelationshipManager.calculateCallsStar();
+        callsRelationshipManager.calculateTransitiveRelationship();
 
         REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure10, false) == true);
     }

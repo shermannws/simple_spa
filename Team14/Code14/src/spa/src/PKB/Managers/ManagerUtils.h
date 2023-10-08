@@ -250,7 +250,7 @@ public:
      * @return A vector of key-value pairs from the map
      */
     template <typename K, typename V>
-    static std::vector<std::vector<Entity>> getPairNoMatch(RelationshipStore<K, V>&store);
+    static std::vector<std::vector<Entity>> getPairNoMatch(RelationshipStore<K, V>& store);
 
     /**
      * @brief A function that removes duplicates in a vector of object of type E

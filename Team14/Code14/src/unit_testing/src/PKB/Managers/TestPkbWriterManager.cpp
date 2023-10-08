@@ -5,7 +5,7 @@
 
 using namespace std;
 
-TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation") {
+TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation through triggerTransitiveCalc") {
 
     SECTION("Test Modifes(s,v) and Uses - v1") {
         auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
@@ -129,7 +129,7 @@ TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation
         REQUIRE(usesRelationshipManager->isRelationship(statement4, variableY) == false);
         REQUIRE(usesRelationshipManager->isRelationship(statement4, variableZ) == false);
 
-        pkbWriterManager.triggerStmtToVarTransitiveCalculation();
+        pkbWriterManager.triggerTransitiveCalc();
 
         //AFTER STATE - Modifies
         REQUIRE(modifiesRelationshipManager->isRelationship(statement1, variableA) == true);

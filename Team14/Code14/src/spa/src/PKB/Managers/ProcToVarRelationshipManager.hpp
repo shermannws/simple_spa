@@ -42,7 +42,7 @@ void ProcToVarRelationshipManager<S>::calculateProcVarRelationshipForCallers(std
     for (auto it = relationshipStore->getLeftToRightBeginIterator(); it != relationshipStore->getLeftToRightEndIterator(); ++it) {
         auto proc = it->first;
         auto variableSet = it->second;
-        auto callersOfProc = callManager->getCallsFormerAsProcedure(*proc);
+        auto callersOfProc = callManager->getRelationshipFormerStarAsProcedure(*proc);
         if (callersOfProc == nullptr) {
             continue;
         }
@@ -56,6 +56,6 @@ void ProcToVarRelationshipManager<S>::calculateProcVarRelationshipForCallers(std
 }
 
 template <typename S>
-std::shared_ptr<EntityStore<Variable>> ProcToVarRelationshipManager<S>::getRightVariablesOf(std::shared_ptr<Procedure> left) const {
+std::shared_ptr<EntityStore<Variable>> ProcToVarRelationshipManager<S>::getRhsVarAsVariables(std::shared_ptr<Procedure> left) const {
     return relationshipStore->getRightEntitiesOf(left);
 };

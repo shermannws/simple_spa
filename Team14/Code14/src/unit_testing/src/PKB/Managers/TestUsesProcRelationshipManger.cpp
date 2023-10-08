@@ -85,7 +85,7 @@ TEST_CASE("Test Uses Procedure-Variable Transitive Relationship Calculations") {
         // 1-->2-->3
         callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure1), std::make_shared<Procedure>(procedure2), true);
         callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure2), std::make_shared<Procedure>(procedure3), true);
-        callRelationshipManager.calculateCallsStar();
+        callRelationshipManager.calculateTransitiveRelationship();
 
         usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure3), std::make_shared<Variable>(variableX));
 
@@ -128,7 +128,7 @@ TEST_CASE("Test Uses Procedure-Variable Transitive Relationship Calculations") {
         usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure4), std::make_shared<Variable>(variableA));
         usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure5), std::make_shared<Variable>(variableB));
 
-        callRelationshipManager.calculateCallsStar();
+        callRelationshipManager.calculateTransitiveRelationship();
 
         REQUIRE(usesProcRelationshipManager.isRelationship(procedure1, variableX) == true);
         REQUIRE(usesProcRelationshipManager.isRelationship(procedure2, variableY) == true);

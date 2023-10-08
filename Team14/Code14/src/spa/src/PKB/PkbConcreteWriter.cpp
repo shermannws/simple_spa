@@ -65,10 +65,7 @@ void PkbConcreteWriter::addProcedureToStatementsMap(std::shared_ptr<Procedure> p
 }
 
 void PkbConcreteWriter::triggerTransitiveCalc() {
-    //The order of these 3 calls are important, as each transitivity calculation depends on the previous one
-    this->writerManager->triggerCallsTransitiveCalculation();
-    this->writerManager->triggerProcToVarTransitiveCalculation();
-    this->writerManager->triggerStmtToVarTransitiveCalculation();
+    this->writerManager->triggerTransitiveCalc();
 }
 
 void PkbConcreteWriter::addModifiesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {

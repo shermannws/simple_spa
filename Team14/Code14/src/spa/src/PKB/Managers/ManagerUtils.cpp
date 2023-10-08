@@ -85,7 +85,7 @@ void ManagerUtils::addStmtVarFromProcVar(std::shared_ptr<S> stmtVarManager, std:
     for (auto it = procStmtStore->getLeftToRightBeginIterator(); it != procStmtStore->getLeftToRightEndIterator(); it++) {
         auto proc = it->first;
         auto stmtsStore = it->second;
-        auto vars = procVarManager->getRightVariablesOf(proc);
+        auto vars = procVarManager->getRhsVarAsVariables(proc);
         if (vars == nullptr) {
             continue;
         }

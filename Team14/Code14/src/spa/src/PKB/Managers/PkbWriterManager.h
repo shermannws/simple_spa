@@ -70,6 +70,22 @@ private:
 	 */
     RelationshipStore<Procedure, Statement> tempProcedureToStatementsMap;
 
+    /**
+     * @brief Triggers transitivity calculation for Calls* relationship.
+     * @note This method should be called after all calls relationships have been added.
+     */
+    void triggerCallsTransitiveCalculation();
+
+    /**
+     * @brief Triggers transitivity calculation for Modifies and Uses (proc-var relationships)
+     */
+    void triggerProcToVarTransitiveCalculation();
+
+    /**
+     * @brief Triggers transitivity calculation for Modifies and Uses (stmt-var relationships) arising from call statements
+     */
+    void triggerStmtToVarTransitiveCalculation();
+
 public:
     /**
      * @brief Constructs a PkbWriterManager object.
@@ -177,12 +193,6 @@ public:
     void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v);
 
     /**
-     * @brief Triggers transitivity calculation for Calls* relationship.
-     * @note This method should be called after all calls relationships have been added.
-     */
-    void triggerCallsTransitiveCalculation();
-
-    /**
      * @brief Adds procedure to statements map into tempProcedureStatementMap.
      * @param p The procedure.
      * @param s The statements to be added.
@@ -190,12 +200,7 @@ public:
     void addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s);
 
     /**
-     * @brief Triggers transitivity calculation for Modifies and Uses (proc-var relationships)
+     * @brief Triggers transitivity calculation for Relationships
      */
-    void triggerProcToVarTransitiveCalculation();
-
-    /**
-     * @brief Triggers transitivity calculation for Modifies and Uses (stmt-var relationships) arising from call statements
-     */
-    void triggerStmtToVarTransitiveCalculation();
+    void triggerTransitiveCalc();
 };

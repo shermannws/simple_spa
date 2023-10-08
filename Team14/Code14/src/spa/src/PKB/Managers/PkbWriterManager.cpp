@@ -75,7 +75,7 @@ void PkbWriterManager::addUsesProcRelationship(std::shared_ptr<Procedure> p, std
 }
 
 void PkbWriterManager::triggerCallsTransitiveCalculation() {
-	this->callsRelationshipManager->calculateCallsStar();
+	this->callsRelationshipManager->calculateTransitiveRelationship();
 }
 
 void PkbWriterManager::addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) {
@@ -93,4 +93,11 @@ void PkbWriterManager::triggerStmtToVarTransitiveCalculation() {
     ManagerUtils::addStmtVarFromProcVar(this->modifiesRelationshipManager, std::make_shared<RelationshipStore<Procedure, Statement>>(this->tempProcedureToStatementsMap), this->modifiesProcRelationshipManager);
     ManagerUtils::addStmtVarFromProcVar(this->usesRelationshipManager, std::make_shared<RelationshipStore<Procedure, Statement>>(this->tempProcedureToStatementsMap), this->usesProcRelationshipManager);
     this->tempProcedureToStatementsMap.clear();
+}
+
+void PkbWriterManager::triggerTransitiveCalc() {
+    //The order of these 3 calls are important, as each transitivity calculation depends on the previous one
+    triggerCallsTransitiveCalculation();
+    triggerProcToVarTransitiveCalculation();
+    triggerStmtToVarTransitiveCalculation();
 }
