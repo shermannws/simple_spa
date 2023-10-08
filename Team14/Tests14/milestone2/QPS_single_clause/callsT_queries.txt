@@ -1,104 +1,104 @@
-1 - check Calls*(syn, syn) - first param DONE
+1 - check Calls*(syn, syn) - first param
 procedure p, q;
 Select p such that Calls*(p,q)
 Proc1, Proc2, Proc3, Proc4, Proc6
 5000
-2 - check Calls*(syn, syn) - second param DONE
+2 - check Calls*(syn, syn) - second param
 procedure p, q;
 Select q such that Calls*(p,q)
 Proc2, Proc3, Proc4, Proc5, Proc6, Proc7
 5000
-3 - check Calls*(syn, syn) - both params DONE
+3 - check Calls*(syn, syn) - both params
 procedure p, q;
 Select <p,q> such that Calls*(p,q)
 Proc1 Proc2, Proc1 Proc3, Proc1 Proc4, Proc1 Proc5, Proc1 Proc6, Proc1 Proc7, Proc2 Proc3, Proc2 Proc4, Proc2 Proc5, Proc3 Proc4, Proc3 Proc5, Proc4 Proc5, Proc6 Proc7
 5000
-4 - check Calls*(syn, syn) - same syn DONE
+4 - check Calls*(syn, syn) - same syn
 procedure p;
 Select p such that Calls*(p,p)
 
 5000
-5a - check Calls*(syn, procName) - procName is called DONE
+5a - check Calls*(syn, procName) - procName is called
 procedure p;
 Select p such that Calls*(p,"Proc4")
 Proc1, Proc2, Proc3
 5000
-5b - check Calls*(syn, procName) - procName is called DONE
+5b - check Calls*(syn, procName) - procName is called
 procedure p;
 Select p such that Calls*(p,"Proc5")
 Proc1, Proc2, Proc3, Proc4
 5000
-5c - check Calls*(syn, procName) - procName is called DONE
+5c - check Calls*(syn, procName) - procName is called
 procedure p;
 Select p such that Calls*(p,"Proc7")
 Proc1, Proc6
 5000
-6 - check Calls*(syn, procName) - procName is not called DONE
+6 - check Calls*(syn, procName) - procName is not called
 procedure p;
 Select p such that Calls*(p,"Proc1")
 
 5000
-7 - check Calls*(syn, wildcard) DONE
+7 - check Calls*(syn, wildcard)
 procedure p;
 Select p such that Calls*(p,_)
 Proc1, Proc2, Proc3, Proc4, Proc6
 5000
-8 - check Calls*(wildcard, wildcard) DONE
+8 - check Calls*(wildcard, wildcard)
 procedure p;
 Select p such that Calls*(_,_)
 Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8
 5000
-9 - check Calls*(wildcard, syn) DONE
+9 - check Calls*(wildcard, syn)
 procedure q;
 Select q such that Calls*(_, q)
 Proc2, Proc3, Proc4, Proc5, Proc6, Proc7
 5000
-10 - check Calls*(wildcard, procName) - procName is called DONE
+10 - check Calls*(wildcard, procName) - procName is called
 procedure p;
 Select p such that Calls*(_,"Proc3")
 Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8
 5000
-11 - check Calls*(wildcard, procName) - procName is not called DONE
+11 - check Calls*(wildcard, procName) - procName is not called
 procedure p;
 Select p such that Calls*(_,"Proc8")
 
 5000
-12 - check Calls*(procName, procName) - combination exists DONE
+12 - check Calls*(procName, procName) - combination exists
 procedure p;
 Select p such that Calls*("Proc1","Proc5")
 Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8
 5000
-13 - check Calls*(procName, procName) - combination does not exist DONE
+13 - check Calls*(procName, procName) - combination does not exist
 procedure p;
 Select p such that Calls*("Proc1","Proc8")
 
 5000
-14 - check Calls*(procName, wildcard) - procName calls another procedure DONE
+14 - check Calls*(procName, wildcard) - procName calls another procedure
 procedure p;
 Select p such that Calls*("Proc1",_)
 Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8
 5000
-15 - check Calls*(procName, wildcard) - procName does not call another procedure DONE
+15 - check Calls*(procName, wildcard) - procName does not call another procedure
 procedure p;
 Select p such that Calls*("Proc7",_)
 
 5000
-16a - check Calls*(procName, syn) - procName calls another procedure DONE
+16a - check Calls*(procName, syn) - procName calls another procedure
 procedure q;
 Select q such that Calls*("Proc1",q)
 Proc2, Proc3, Proc4, Proc5, Proc6, Proc7
 5000
-16b - check Calls*(procName, syn) - procName calls another procedure DONE
+16b - check Calls*(procName, syn) - procName calls another procedure
 procedure q;
 Select q such that Calls*("Proc2",q)
 Proc3, Proc4, Proc5
 5000
-16c - check Calls*(procName, syn) - procName calls another procedure DONE
+16c - check Calls*(procName, syn) - procName calls another procedure
 procedure q;
 Select q such that Calls*("Proc6",q)
 Proc7
 5000
-17 - check Calls*(procName, syn) - procName does not call another procedure DONE
+17 - check Calls*(procName, syn) - procName does not call another procedure
 procedure q;
 Select q such that Calls*("Proc5",q)
 
