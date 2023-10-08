@@ -75,12 +75,6 @@ public:
     bool getBoolResult();
 
     /**
-     * @brief Sets the synonym indices for the result table.
-     * @param synIndices The map of synonym to index to set as result's synonym indices.
-     */
-    void setSynIndices(SynonymMap & synIndices);
-
-    /**
      * @brief Gets the synonym indices for the result.
      * @return The synonym indices (SynonymMap).
      */

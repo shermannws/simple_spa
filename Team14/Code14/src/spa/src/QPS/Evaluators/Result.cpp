@@ -44,7 +44,3 @@ ResultTuples& Result::getTuples() {
 SynonymMap& Result::getSynIndices() {
     return synIndices;
 }
-
-void Result::setSynIndices(SynonymMap &synIndices) {
-    this->synIndices = synIndices;
-}

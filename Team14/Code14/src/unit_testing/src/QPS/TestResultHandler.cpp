@@ -16,18 +16,12 @@ TEST_CASE("Test Result combiner") {
         ResultType type = ResultType::Tuples;
 
         std::shared_ptr<Result> r = std::make_shared<Result>();
-        r->setType(std::vector<Synonym>{});
-        std::unordered_map<std::string, int> map{{"a", 0},
-                                                 {"x", 1}};
-        r->setSynIndices(map);
+        r->setType(std::vector<Synonym>{"a", "x"});
         std::vector<std::vector<Entity>> tuples{v1, v2};
         r->setTuples(tuples);
 
         std::shared_ptr<Result> r1 =  std::make_shared<Result>();
-        r1->setType(std::vector<Synonym> {});
-        std::unordered_map<std::string, int> map1{{"a", 0},
-                                                  {"x", 1}};
-        r1->setSynIndices(map1);
+        r1->setType(std::vector<Synonym> {"a", "x"});
         std::vector<std::vector<Entity>> tuples1{v1, v2, v3};
         r1->setTuples(tuples1);
 
@@ -164,13 +158,9 @@ TEST_CASE("Test Result combiner") {
 
         std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
         std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
-        ResultType tupleType = ResultType::Tuples;
 
         std::shared_ptr<Result> rTuple = std::make_shared<Result>();
-        rTuple->setType(std::vector<Synonym> {});
-        std::unordered_map<std::string, int> map{{"a", 0},
-                                                 {"x", 1}};
-        rTuple->setSynIndices(map);
+        rTuple->setType(std::vector<Synonym> {"a", "x"});
         std::vector<std::vector<Entity>> tuples{v1, v2};
         rTuple->setTuples(tuples);
 
