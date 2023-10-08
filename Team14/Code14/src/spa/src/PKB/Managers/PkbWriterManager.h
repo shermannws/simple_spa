@@ -12,6 +12,7 @@
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/PkbTypes.h"
+#include "PKB/RelationshipStores/RelationshipStore.h"
 
 /**
  * @brief The class is responsible for writing to the PKB.
@@ -62,6 +63,28 @@ private:
      * @brief The uses (proc-variable) relationship manager.
      */
     std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager;
+
+    /**
+	 * @brief The map of procedure to statements where statements modifies/uses whatever modifies/uses by the procedure.
+     * @note This will be cleared after the transitive calculation is done.
+	 */
+    RelationshipStore<Procedure, Statement> tempProcedureToStatementsMap;
+
+    /**
+     * @brief Triggers transitivity calculation for Calls* relationship.
+     * @note This method should be called after all calls relationships have been added.
+     */
+    void triggerCallsTransitiveCalculation();
+
+    /**
+     * @brief Triggers transitivity calculation for Modifies and Uses (proc-var relationships)
+     */
+    void triggerProcToVarTransitiveCalculation();
+
+    /**
+     * @brief Triggers transitivity calculation for Modifies and Uses (stmt-var relationships) arising from call statements
+     */
+    void triggerStmtToVarTransitiveCalculation();
 
 public:
     /**
@@ -168,4 +191,16 @@ public:
      * @param v The shared pointer to the variable.
      */
     void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v);
+
+    /**
+     * @brief Adds procedure to statements map into tempProcedureStatementMap.
+     * @param p The procedure.
+     * @param s The statements to be added.
+     */
+    void addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s);
+
+    /**
+     * @brief Triggers transitivity calculation for Relationships
+     */
+    void triggerTransitiveCalc();
 };

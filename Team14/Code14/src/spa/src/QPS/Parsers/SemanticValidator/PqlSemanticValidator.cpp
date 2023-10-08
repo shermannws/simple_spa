@@ -2,18 +2,33 @@
 #include "QPS/Clauses/SuchThatClause.h"
 #include "SynonymHandler.h"
 #include "StmtrefStmtrefHandler.h"
-#include "StmtrefEntrefHandler.h"
 #include "EntrefExprSpecHandler.h"
-#include "QPS/QPSUtil.h"
 #include "QPS/Exceptions/SemanticException.h"
 #include "StmtrefProcVarHandler.h"
 
 PqlSemanticValidator::PqlSemanticValidator() = default;
 
-void PqlSemanticValidator::validateSelectSemantics(const Query& query, const Synonym& syn) {
+void PqlSemanticValidator::validateDeclarations(const std::vector<Synonym>& synonyms) {
+    std::unordered_set<Synonym> declared;
+    for (const Synonym& syn : synonyms) {
+        if (!declared.insert(syn).second)
+            throw SemanticException("Trying to redeclare a synonym");
+    }
+}
+
+void PqlSemanticValidator::validateResultClause(const Query& query, const Synonym& syn) {
     EntityPtr entity = query.getEntity(syn);
     if (!entity) {
         throw SemanticException("Undeclared synonym in Select clause");
+    }
+}
+
+void PqlSemanticValidator::validateConstraintClauses(const Query& query) {
+    for (const auto& clause : query.getSuchThat()) {
+        validateClauseSemantics(query, clause);
+    }
+    for (const auto& clause : query.getPattern()) {
+        validateClauseSemantics(query, clause);
     }
 }
 

@@ -138,6 +138,12 @@ public:
     std::vector<Entity> getAllIf() const;
 
     /**
+     * @brief Returns all the call statements in the SIMPLE source program
+     * @return A vector of call statements
+     */
+    std::vector<Entity> getAllCall() const;
+
+    /**
      * @brief Returns the Statement object from the StatementStore that is equal to the Statement object passed in
      * @param s The Statement object to be compared against
      * @return The Statement object from the StatementStore that is equal to the Statement object passed in
