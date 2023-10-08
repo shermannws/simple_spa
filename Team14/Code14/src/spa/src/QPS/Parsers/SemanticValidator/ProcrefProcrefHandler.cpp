@@ -20,7 +20,6 @@ void ProcrefProcrefHandler::handle(const Query &query, std::shared_ptr<Clause> c
 
 void ProcrefProcrefHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
     auto refType = RefType::EntRef;
-    //auto entityType = QueryEntityType::Procedure;
     leftRef.setType(refType);
     rightRef.setType(refType);
 
@@ -28,12 +27,10 @@ void ProcrefProcrefHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
             leftRef.getEntityType() != QueryEntityType::Procedure) {
         throw SemanticException("Invalid LHS, non-procedure synonym");
     }
-    //leftRef.setEntityType(entityType);
 
     if (rightRef.getRootType() == RootType::Synonym &&
         rightRef.getEntityType() != QueryEntityType::Procedure) {
         throw SemanticException("Invalid RHS, non-procedure synonym");
     }
-    //rightRef.setEntityType(entityType);
 
 }

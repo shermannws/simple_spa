@@ -8,16 +8,12 @@ std::shared_ptr<Result> CallsStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef, 
     if (leftRef == rightRef) {
         return res;
     }
-    std::unordered_map<std::string, int> indices {{leftRef.getRep(), 0}, {rightRef.getRep(), 1}};
-    res->setSynIndices(indices);
     res->setTuples(pkbReader->getCallsStarPair());
     return res;
 }
 
 std::shared_ptr<Result> CallsStarSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
-    std::unordered_map<std::string, int> indices {{leftRef.getRep(), 0}};
-    res->setSynIndices(indices);
     if (rightRef.isRootType(RootType::Wildcard)) {
         res->setTuples(pkbReader->getCallersStar());
     }
@@ -30,8 +26,6 @@ std::shared_ptr<Result> CallsStarSuchThatStrategy::evaluateSynAny(Ref &leftRef, 
 
 std::shared_ptr<Result> CallsStarSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
-    std::unordered_map<std::string, int> indices {{rightRef.getRep(), 0}};
-    res->setSynIndices(indices);
     if (leftRef.isRootType(RootType::Wildcard)) {
         res->setTuples(pkbReader->getCalleesStar());
     }
