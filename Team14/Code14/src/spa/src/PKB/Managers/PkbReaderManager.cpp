@@ -177,51 +177,51 @@ bool PkbReaderManager::hasFormerStarStmt(Statement& statement) const {
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getModifiesStmtPair(StatementType type) const {
-    return this->modifiesRelationshipManager->getModifiesStmtPair(type);
+    return this->modifiesRelationshipManager->getRelationshipStmtPair(type);
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getModifiesProcPair() const {
-    return this->modifiesProcRelationshipManager->getModifiesProcPair();
+    return this->modifiesProcRelationshipManager->getRelationshipProcPair();
 }
 
 std::vector<Entity> PkbReaderManager::getModifiesTypeIdent(StatementType type, Variable& var) const {
-    return this->modifiesRelationshipManager->getModifiesTypeIdent(type, var);
+    return this->modifiesRelationshipManager->getRelationshipTypeIdent(type, var);
 }
 
 std::vector<Entity> PkbReaderManager::getModifiesProcIdent(Variable& var) const {
-    return this->modifiesProcRelationshipManager->getModifiesProcIdent(var);
+    return this->modifiesProcRelationshipManager->getRelationshipIdent(var);
 }
 
 std::vector<Entity> PkbReaderManager::getModifiesStmt(StatementType type) const {
-    return this->modifiesRelationshipManager->getModifiesStmt(type);
+    return this->modifiesRelationshipManager->getRelationshipStmt(type);
 }
 
 std::vector<Entity> PkbReaderManager::getModifiesProc() const {
-    return this->modifiesProcRelationshipManager->getModifiesProc();
+    return this->modifiesProcRelationshipManager->getRelationshipProc();
 }
 
 std::vector<Entity> PkbReaderManager::getModifiesVar(Statement& stmt) const {
-    return this->modifiesRelationshipManager->getModifiesVar(stmt);
+    return this->modifiesRelationshipManager->getRelationshipVar(stmt);
 }
 
 std::vector<Entity> PkbReaderManager::getModifiesVar(Procedure& proc) const {
-    return this->modifiesProcRelationshipManager->getModifiesProcVar(proc);
+    return this->modifiesProcRelationshipManager->getRelationshipVar(proc);
 }
 
 bool PkbReaderManager::isStmtModifiesVar(Statement& stmt, Variable& var) const {
-    return this->modifiesRelationshipManager->isStmtModifiesVar(stmt, var);
+    return this->modifiesRelationshipManager->isRelationship(stmt, var);
 }
 
 bool PkbReaderManager::isProcModifiesVar(Procedure& proc, Variable& var) const {
-    return this->modifiesProcRelationshipManager->isProcModifiesVar(proc, var);
+    return this->modifiesProcRelationshipManager->isRelationship(proc, var);
 }
 
 bool PkbReaderManager::hasModifies(Statement& stmt) const {
-    return this->modifiesRelationshipManager->hasModifies(stmt);
+    return this->modifiesRelationshipManager->hasRelationship(stmt);
 }
 
 bool PkbReaderManager::hasModifies(Procedure& proc) const {
-    return this->modifiesProcRelationshipManager->hasProcModifies(proc);
+    return this->modifiesProcRelationshipManager->hasRelationship(proc);
 }
 
 // Pattern queries i.e. pattern a (...,...)
