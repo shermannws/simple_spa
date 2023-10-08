@@ -7,7 +7,7 @@ std::shared_ptr<Result> CallsStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef, 
     std::shared_ptr<Result> res = std::make_shared<Result>();
     std::unordered_map<std::string, int> indices {{leftRef.getRep(), 0}, {rightRef.getRep(), 1}};
     res->setSynIndices(indices);
-    //res->setTuples(pkbReader->getCallsStar());
+    //res->setTuples(pkbReader->getCallsStarPair());
     return res;
 }
 
@@ -19,7 +19,8 @@ std::shared_ptr<Result> CallsStarSuchThatStrategy::evaluateSynAny(Ref &leftRef, 
         //res->setTuples(pkbReader->getCallersStar());
     }
     if (rightRef.isRootType(RootType::Ident)) {
-        //res->setTuples(pkbReader->getCallersStar(rightRef.getRep()));
+        Procedure callee = Procedure(leftRef.getRep());
+        //res->setTuples(pkbReader->getCallersStar(callee));
     }
     return res;
 }
@@ -32,7 +33,8 @@ std::shared_ptr<Result> CallsStarSuchThatStrategy::evaluateAnySyn(Ref &leftRef, 
         //res->setTuples(pkbReader->getCalleesStar());
     }
     if (leftRef.isRootType(RootType::Ident)) {
-        //res->setTuples(pkbReader->getCalleesStar(rightRef.getRep()));
+        Procedure caller = Procedure(leftRef.getRep());
+        //res->setTuples(pkbReader->getCalleesStar(caller));
     }
     return res;
 }
@@ -42,13 +44,17 @@ std::shared_ptr<Result> CallsStarSuchThatStrategy::evaluateBoolean(Ref &leftRef,
     bool isLeftIdent = leftRef.isRootType(RootType::Ident);
     bool isRightIdent = rightRef.isRootType(RootType::Ident);
     if (isLeftIdent && isRightIdent) {
-        //res->setBoolResult(pkbReader->CallsStar(leftRef.getRep(), rightRef.getRep()));
+        Procedure lhs = Procedure(leftRef.getRep());
+        Procedure rhs = Procedure(rightRef.getRep());
+        //res->setBoolResult(pkbReader->isCallsStar(lhs, rhs));
     }
     else if (isLeftIdent) {
-        //res->setBoolResult(pkbReader->isCallerStar(leftRef.getRep()));
+        Procedure p = Procedure(rightRef.getRep());
+        //res->setBoolResult(pkbReader->isCallerStar(p));
     }
     else if (isRightIdent) {
-        //res->setBoolResult(pkbReader->isCalleeStar(rightRef.getRep()));
+        Procedure p = Procedure(rightRef.getRep());
+        //res->setBoolResult(pkbReader->isCalleeStar(p));
     } else {
         //res->setBoolResult(pkbReader->hasCallsStar());
     }
