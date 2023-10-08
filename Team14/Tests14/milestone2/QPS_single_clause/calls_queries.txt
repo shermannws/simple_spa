@@ -8,10 +8,10 @@ procedure p, q;
 Select q such that Calls(p,q)
 Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8
 5000
-3 - check Calls(syn, syn) - both params TODO
+3 - check Calls(syn, syn) - both params
 procedure p, q;
 Select <p,q> such that Calls(p,q)
-
+Proc1 Proc2, Proc1 Proc3, Proc1 Proc4, Proc1 Proc5, Proc1 Proc6, Proc1 Proc7, Proc1 Proc8, Proc2 Proc3, Proc2 Proc4, Proc3 Proc4, Proc5 Proc4, Proc6 Proc4
 5000
 4 - check Calls(syn, syn) - same syn
 procedure p;
