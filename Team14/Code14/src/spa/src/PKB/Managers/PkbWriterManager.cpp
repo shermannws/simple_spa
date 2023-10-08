@@ -1,6 +1,7 @@
 #include "PkbWriterManager.h"
 
 #include "PKB/PkbWriter.h"
+#include "PKB/Managers/ManagerUtils.h"
 
 PkbWriterManager::PkbWriterManager(
         std::shared_ptr<AssignmentManager> assignmentManager,
@@ -70,5 +71,33 @@ void PkbWriterManager::addModifiesProcRelationship(std::shared_ptr<Procedure> p,
 }
 
 void PkbWriterManager::addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {
-	this->usesProcRelationshipManager->storeRelationship(p, v);
+    this->usesProcRelationshipManager->storeRelationship(p, v);
+}
+
+void PkbWriterManager::triggerCallsTransitiveCalculation() {
+	this->callsRelationshipManager->calculateTransitiveRelationship();
+}
+
+void PkbWriterManager::addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) {
+    for (auto stmt : s) {
+		this->tempProcedureToStatementsMap.storeRelationship(p, stmt);
+	}
+}
+
+void PkbWriterManager::triggerProcToVarTransitiveCalculation() {
+    this->modifiesProcRelationshipManager->calculateProcVarRelationshipForCallers(this->callsRelationshipManager);
+    this->usesProcRelationshipManager->calculateProcVarRelationshipForCallers(this->callsRelationshipManager);
+}
+
+void PkbWriterManager::triggerStmtToVarTransitiveCalculation() {
+    ManagerUtils::addStmtVarFromProcVar(this->modifiesRelationshipManager, std::make_shared<RelationshipStore<Procedure, Statement>>(this->tempProcedureToStatementsMap), this->modifiesProcRelationshipManager);
+    ManagerUtils::addStmtVarFromProcVar(this->usesRelationshipManager, std::make_shared<RelationshipStore<Procedure, Statement>>(this->tempProcedureToStatementsMap), this->usesProcRelationshipManager);
+    this->tempProcedureToStatementsMap.clear();
+}
+
+void PkbWriterManager::triggerTransitiveCalc() {
+    //The order of these 3 calls are important, as each transitivity calculation depends on the previous one
+    triggerCallsTransitiveCalculation();
+    triggerProcToVarTransitiveCalculation();
+    triggerStmtToVarTransitiveCalculation();
 }
