@@ -409,7 +409,7 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("pattern a(wildcard , expr-spec)") { //getAssignStmtsByRhs
+TEST_CASE("pattern a(wildcard , expr-spec)") { //getAssignStmtsByRhs, hasRhsWildCard == false
     PQLParser parser("assign a; Select a pattern a(_, \"x   + y\")");
     Query queryObj = parser.parse();
 
@@ -422,8 +422,21 @@ TEST_CASE("pattern a(wildcard , expr-spec)") { //getAssignStmtsByRhs
     REQUIRE(find(results.begin(), results.end(), "5") != results.end());
 }
 
+TEST_CASE("pattern a(wildcard , _expr-spec_)") { //getAssignStmtsByRhs, hasRhsWildCard == true
+    PQLParser parser("assign a; Select a pattern a(_, _\"a/(b+c)\"_)");
+    Query queryObj = parser.parse();
+
+    auto stubReader = make_shared<StubPkbReader>();
+    PQLEvaluator evaluator = PQLEvaluator(stubReader);
+    auto resultObj = evaluator.evaluate(queryObj);
+    auto results = evaluator.formatResult(queryObj, resultObj);
+    REQUIRE(results.size() == 2);
+    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+}
+
 TEST_CASE("pattern a(var_synonym, wildcard)") { //getAllAssignStmtVarPair()
-    PQLParser parser("assign a; variable v; Select a pattern a(v, _\"(a-b)+c\"_)");
+    PQLParser parser("assign a; variable v; Select a pattern a(v, _)");
     Query queryObj = parser.parse();
 
     auto stubReader = make_shared<StubPkbReader>();
@@ -435,8 +448,21 @@ TEST_CASE("pattern a(var_synonym, wildcard)") { //getAllAssignStmtVarPair()
     REQUIRE(find(results.begin(), results.end(), "2") != results.end());
 }
 
-TEST_CASE("pattern a(var_synonym, expr-spec)") { //getAssignStmtsVarPairByRhs
-    PQLParser parser("assign a; variable v; Select v pattern a(v, _\"(a-b)+c\"_)");
+TEST_CASE("pattern a(var_synonym, _expr-spec_)") { //getAssignStmtsVarPairByRhs, hasWildCard == true
+    PQLParser parser("assign a; variable v; Select a pattern a(v, _\"(a-b)+c\"_)");
+    Query queryObj = parser.parse();
+
+    auto stubReader = make_shared<StubPkbReader>();
+    PQLEvaluator evaluator = PQLEvaluator(stubReader);
+    auto resultObj = evaluator.evaluate(queryObj);
+    auto results = evaluator.formatResult(queryObj, resultObj);
+    REQUIRE(results.size() == 2);
+    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+}
+
+TEST_CASE("pattern a(var_synonym, expr-spec)") { //getAssignStmtsVarPairByRhs, hasWildcard == false
+    PQLParser parser("assign a; variable v; Select v pattern a(v, \"a-b*c\")");
     Query queryObj = parser.parse();
 
     auto stubReader = make_shared<StubPkbReader>();
@@ -461,7 +487,7 @@ TEST_CASE("pattern a(char_string , wildcard)") { //getAssignStmtsByLhs
     REQUIRE(find(results.begin(), results.end(), "6") != results.end());
 }
 
-TEST_CASE("pattern a(char_string , expr-spec)") { //getAssignStmtsByLhsRhs
+TEST_CASE("pattern a(char_string , expr-spec)") { //getAssignStmtsByLhsRhs, hasRhsWildcard = true
     PQLParser parser("assign a; Select a pattern a(\"x\", _\"(a-b)\"_)");
     Query queryObj = parser.parse();
 
@@ -474,7 +500,7 @@ TEST_CASE("pattern a(char_string , expr-spec)") { //getAssignStmtsByLhsRhs
     REQUIRE(find(results.begin(), results.end(), "100000") != results.end());
 }
 
-TEST_CASE("pattern, select synonym not in clause ") { //getAssignStmtsByLhsRhs
+TEST_CASE("pattern, select synonym not in clause ") { //getAssignStmtsByLhsRhs, hasRhsWildcard = false
     PQLParser parser("assign a; variable v; Select v pattern a(\"noneCase\", \"(a-b)\")");
     Query queryObj = parser.parse();
 
@@ -485,4 +511,160 @@ TEST_CASE("pattern, select synonym not in clause ") { //getAssignStmtsByLhsRhs
     REQUIRE(results.size() == 0);
 }
 
+TEST_CASE("Calls and Calls* clauses") {
+    SECTION ("boolean results, Calls (_,_)") {
+        // Calls(_,_) - hasCalls()
+        PQLParser parser("assign a; Select a such that Calls(_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj); // hasCalls return true
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+
+    }
+
+    SECTION ("boolean result, Calls (_,ident)") {
+        // Calls (_, procName) - isCallee(procName)
+        PQLParser parser("assign a; Select a such that Calls(_,\"testIdent\")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj); // isCallee return false
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("boolean result, Calls*(ident, _)") {
+        // isCallerStar(procName)
+        PQLParser parser("constant c; Select c such that Calls*(\"testIdent\",_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj); // isCallerStar(procName) return true
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("boolean result, Calls*(ident, ident)") {
+        //  isCallsStar(procName, procName)
+        PQLParser parser("stmt s; Select s such that  Calls*(\"testIdent\", \"testIdent2\")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj); // isCallsStar(procName, procName) return true
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 5);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "4") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "5") != results.end());
+
+    }
+
+    SECTION ("Calls(*) pair results") {
+        // Calls(p,q) - getCallsPair()
+        SECTION ("pair results, Calls (p,q)") {
+            PQLParser parser("procedure p, q; Select p such that Calls(p,q)");
+            Query queryObj = parser.parse();
+
+            auto stubReader = make_shared<StubPkbReader>();
+            PQLEvaluator evaluator = PQLEvaluator(stubReader);
+            auto resultObj = evaluator.evaluate(queryObj);
+            auto results = evaluator.formatResult(queryObj, resultObj);
+            REQUIRE(results.size() == 1);
+            REQUIRE(find(results.begin(), results.end(), "procedureLHS") != results.end());
+        }
+
+        SECTION ("pair results, Calls (p,p)") {
+            PQLParser parser("procedure p; Select p such that Calls(p,p)");
+            Query queryObj = parser.parse();
+
+            auto stubReader = make_shared<StubPkbReader>();
+            PQLEvaluator evaluator = PQLEvaluator(stubReader);
+            auto resultObj = evaluator.evaluate(queryObj);
+            auto results = evaluator.formatResult(queryObj, resultObj);
+            REQUIRE(results.size() == 0);
+        }
+
+        SECTION ("pair results, Calls* (p,p)") {
+            PQLParser parser("procedure p; assign a; Select a such that Calls*(p,p)");
+            Query queryObj = parser.parse();
+
+            auto stubReader = make_shared<StubPkbReader>();
+            PQLEvaluator evaluator = PQLEvaluator(stubReader);
+            auto resultObj = evaluator.evaluate(queryObj);
+            auto results = evaluator.formatResult(queryObj, resultObj);
+            REQUIRE(results.size() == 0);
+        }
+
+    }
+
+    SECTION ("Calls(*) procedure singles results") {
+        // Calls(_, syn) - getCallees() returns non-empty
+        SECTION ("single results, Calls (_,syn)") {
+            PQLParser parser("procedure procedure; Select procedure such that Calls(_,procedure)");
+            Query queryObj = parser.parse();
+
+            auto stubReader = make_shared<StubPkbReader>();
+            PQLEvaluator evaluator = PQLEvaluator(stubReader);
+            auto resultObj = evaluator.evaluate(queryObj);
+            auto results = evaluator.formatResult(queryObj, resultObj);
+            REQUIRE(results.size() == 2);
+            REQUIRE(find(results.begin(), results.end(), "procedure1") != results.end());
+            REQUIRE(find(results.begin(), results.end(), "procedure2") != results.end());
+        }
+
+        // Calls(syn, procName) -  - getCallers(procName) returns empty
+        SECTION ("single results, Calls (syn, ident)") {
+            PQLParser parser("procedure procedure; stmt s; Select s such that Calls(procedure, \"procName\")");
+            Query queryObj = parser.parse();
+
+            auto stubReader = make_shared<StubPkbReader>();
+            PQLEvaluator evaluator = PQLEvaluator(stubReader);
+            auto resultObj = evaluator.evaluate(queryObj);
+            auto results = evaluator.formatResult(queryObj, resultObj);
+            REQUIRE(results.size() == 0);
+        }
+
+        // Calls*(procName, syn) - getCalleesStar(procName) returns empty
+        SECTION ("single results, Calls* (ident, syn)") {
+            PQLParser parser("procedure procedure; Select procedure such that Calls*(\"procName\",procedure)");
+            Query queryObj = parser.parse();
+
+            auto stubReader = make_shared<StubPkbReader>();
+            PQLEvaluator evaluator = PQLEvaluator(stubReader);
+            auto resultObj = evaluator.evaluate(queryObj);
+            auto results = evaluator.formatResult(queryObj, resultObj);
+            REQUIRE(results.size() == 0);
+
+        }
+
+        // Calls*(syn, _)  - getCallersStar() returns non-empty
+        SECTION ("single results, Calls* (syn,_)") {
+            PQLParser parser("procedure p; assign a; Select a such that Calls*(p,_)");
+            Query queryObj = parser.parse();
+
+            auto stubReader = make_shared<StubPkbReader>();
+            PQLEvaluator evaluator = PQLEvaluator(stubReader);
+            auto resultObj = evaluator.evaluate(queryObj);
+            auto results = evaluator.formatResult(queryObj, resultObj);
+            REQUIRE(results.size() == 3);
+            REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+            REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+            REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+
+        }
+
+    }
+
+}
 

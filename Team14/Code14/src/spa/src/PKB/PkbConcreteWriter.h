@@ -94,7 +94,7 @@ public:
     virtual void addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) override;
 
     /*!
-     * Triggers transitivity calculation for Relationships (Calls*)
+     * Triggers transitivity calculation for Relationships
      */
     virtual void triggerTransitiveCalc() override;
 

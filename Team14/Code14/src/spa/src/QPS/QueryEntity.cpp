@@ -23,6 +23,8 @@ QueryEntity::QueryEntity(const std::shared_ptr<Token>& designEntity, const std::
         this->type = QueryEntityType::Variable;
     } else if (designEntity->isToken("constant")) {
         this->type = QueryEntityType::Constant;
+    } else if (designEntity->isToken("call")) {
+        this->type = QueryEntityType::Call;
     } else {
         throw std::runtime_error("Invalid design entity");
     }

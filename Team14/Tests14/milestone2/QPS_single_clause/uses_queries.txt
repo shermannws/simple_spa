@@ -1,0 +1,135 @@
+1 - test syn-assign, wildcard
+assign a;
+Select a such that Uses(a,_)
+5, 10, 11 , 12
+5000
+2 - test syn-assign, var-name
+assign a;
+Select a such that Uses(a,"varGG")
+11
+5000
+3 - test syn-assign, var-syn
+assign a; variable v;
+Select v such that Uses(a,v)
+varDD, varFF, varGG, varJJ
+5000
+4 - test syn-print, wildcard
+print print;
+Select print such that Uses(print,_)
+13
+5000
+5 - test syn-print, var-name
+print p;
+Select p such that Uses(p,"x")
+none
+5000
+6 - test syn-print, var-syn
+print p; variable v;
+Select v such that Uses(p,v)
+varH
+5000
+7 - test syn-if, wildcard
+if ifs;
+Select ifs such that Uses(ifs, _)
+1, 9
+5000
+8 - test syn-if, var-name
+if ifs;
+Select ifs such that Uses(ifs,"varGG")
+1, 9
+5000
+9 - test syn-if, var-syn
+if ifs; variable v;
+Select v such that Uses(ifs, v)
+varA, varB, varBB, varDD, varE, varEE, varFF, varGG, varJJ
+5000
+10 - test syn-while, wildcard
+while w;
+Select w such that Uses(w,_)
+2
+5000
+11 - test syn-while, var-name
+while w;
+Select w such that Uses(w,"varJJ")
+2
+5000
+12 - test syn-while, var-syn
+while w; variable v;
+Select v such that Uses(w, v)
+varB, varBB, varE, varEE, varFF, varGG, varJJ
+5000
+13 - test syn-stmt, wildcard
+stmt s;
+Select s such that Uses(s,_)
+1, 2, 3, 5, 6, 9, 10, 11, 12, 13
+5000
+14 - test syn-stmt, var-name
+stmt s;
+Select s such that Uses(s, "varH")
+6, 13
+5000
+15 - test syn-stmt, var-syn
+stmt s; variable v;
+Select s such that Uses(s, v)
+1, 2, 3, 5, 6, 9, 10, 11, 12, 13
+5000
+16 - test int , wildcard
+call c;
+Select c such that Uses(3,_)
+3, 6, 8
+5000
+17 - test int , var-name
+procedure p;
+Select p such that Uses(1,"varGG")
+a, b, c, d
+5000
+18 - test int , var-syn
+variable v;
+Select v such that Uses(7,v)
+none
+5000
+19 - test read , wildcard
+read re;
+Select re such that Uses(re,_)
+none
+5000
+20 - test read , var-name
+read re;
+Select re such that Uses(re,"varI")
+none
+5000
+21 - test read , var-syn
+read re; variable v;
+Select v such that Uses(re,v)
+none
+5000
+22 - test call , wildcard
+call call;
+Select call such that Uses(call,_)
+3, 6
+5000
+23 - test call , var-name
+call call;
+Select call such that Uses(call,"varH")
+6
+5000
+24 - test call , var-syn
+call call, call1; variable v;
+Select call1 such that Uses(call,v)
+3, 6, 8
+5000
+25 - test int , var-syn , line no doesnt exist
+assign a;
+Select a such that Uses(1000000,"varA")
+none
+5000
+26 - invalid query, _ in LHS
+assign a;
+Select a such that Uses(_,"varDD")
+SemanticError
+5000
+27 - invalid query, integer in RHS
+assign a;
+Select a such that Uses(a, 1)
+SyntaxError
+5000

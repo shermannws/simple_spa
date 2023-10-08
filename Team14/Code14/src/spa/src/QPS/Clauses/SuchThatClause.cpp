@@ -16,6 +16,10 @@ SuchThatClause::SuchThatClause(const std::shared_ptr<Token>& absToken) {
         this->setType(ClauseType::Parent);
     } else if (absToken->isToken("Parent*")) {
         this->setType(ClauseType::ParentStar);
+    } else if (absToken->isToken("Calls")) {
+        this->setType(ClauseType::Calls);
+    } else if (absToken->isToken("Calls*")) {
+        this->setType(ClauseType::CallsStar);
     } else {
         throw SyntaxException("Invalid token, abstraction expected");
     }
