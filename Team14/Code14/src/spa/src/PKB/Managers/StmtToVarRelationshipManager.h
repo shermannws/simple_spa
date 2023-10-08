@@ -22,7 +22,7 @@ private:
      * @brief The relationship store
      */
     std::shared_ptr<S> relationshipStore;
-protected:
+public:
     /**
      * @brief Constructs a StmtToVarRelationshipManager object
      * @return A StmtToVarRelationshipManager object
