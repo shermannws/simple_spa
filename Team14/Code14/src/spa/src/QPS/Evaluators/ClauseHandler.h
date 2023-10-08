@@ -39,5 +39,5 @@ public:
      * @param clause the clause to be evaluated
      * @param result the Result table to be populated with the results of the clause execution
      */
-    void executeClause(std::shared_ptr<Clause> clause, Result& result) const;
+    std::shared_ptr<Result> executeClause(std::shared_ptr<Clause> clause) const;
 };

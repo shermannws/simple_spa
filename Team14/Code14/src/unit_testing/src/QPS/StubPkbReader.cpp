@@ -380,7 +380,7 @@ bool StubPkbReader::hasChildStarStmt(Statement& statement) const {
 }
 
 bool StubPkbReader::hasCalls() const {
-    return false;
+    return true;
 }
 
 bool StubPkbReader::hasCallsStar() const {
@@ -388,6 +388,9 @@ bool StubPkbReader::hasCallsStar() const {
 }
 
 bool StubPkbReader::isCallee(Procedure& proc) const {
+    if (proc == Procedure("testIdent")) {
+        return false;
+    }
     return false;
 }
 
@@ -400,6 +403,9 @@ bool StubPkbReader::isCaller(Procedure& proc) const {
 }
 
 bool StubPkbReader::isCallerStar(Procedure& proc) const {
+    if (proc == Procedure("testIdent")) {
+        return false;
+    }
     return false;
 }
 
@@ -408,11 +414,14 @@ bool StubPkbReader::isCalls(Procedure& caller, Procedure& callee) const {
 }
 
 bool StubPkbReader::isCallsStar(Procedure& caller, Procedure& callee) const {
+    if (caller == Procedure("testIdent") && callee == Procedure("testIdent2") ) {
+        return true;
+    }
     return false;
 }
 
 std::vector<Entity> StubPkbReader::getCallees() const {
-    return std::vector<Entity>();
+    return std::vector<Entity>({Procedure("procedure1"), Procedure("procedure2")});
 }
 
 std::vector<Entity> StubPkbReader::getCalleesStar() const {
@@ -424,11 +433,13 @@ std::vector<Entity> StubPkbReader::getCallers() const {
 }
 
 std::vector<Entity> StubPkbReader::getCallersStar() const {
-    return std::vector<Entity>();
+    return std::vector<Entity>({Procedure("procName")});
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getCallsPair() const {
-    return std::vector<std::vector<Entity>>();
+    auto proc1 = Procedure("procedureLHS");
+    auto proc2 = Procedure("procedureRHS");
+    return std::vector<std::vector<Entity>>({{proc1, proc2}});
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getCallsStarPair() const {
@@ -436,6 +447,9 @@ std::vector<std::vector<Entity>> StubPkbReader::getCallsStarPair() const {
 }
 
 std::vector<Entity> StubPkbReader::getCallers(Procedure& callee) const {
+    if (callee == Procedure("procName")) {
+        return std::vector<Entity>();
+    }
     return std::vector<Entity>();
 }
 
@@ -448,6 +462,9 @@ std::vector<Entity> StubPkbReader::getCallees(Procedure& caller) const {
 }
 
 std::vector<Entity> StubPkbReader::getCalleesStar(Procedure& caller) const {
+    if (caller == Procedure("procName")) {
+        return std::vector<Entity>();
+    }
     return std::vector<Entity>();
 }
 

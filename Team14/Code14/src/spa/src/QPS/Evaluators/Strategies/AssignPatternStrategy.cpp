@@ -1,41 +1,36 @@
 #include "AssignPatternStrategy.h"
 
-Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause) const {
+std::shared_ptr<Result> AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause) const {
     std::shared_ptr<PatternClause> patternClause = std::dynamic_pointer_cast<PatternClause>(clause);
     Ref firstArg = patternClause->getFirstParam();
     ExpressionSpec secondArg = patternClause->getSecondParam();
 
-    Result result;
-    std::unordered_map<std::string, int> columns {{patternClause->getSyn(), 0}};
-    if (firstArg.isRootType(RootType::Synonym)) {
-        columns.insert({firstArg.getRep(), 1});
-    }
-    result.setSynIndices(columns);
+    std::shared_ptr<Result> result = std::make_shared<Result>();
 
     if (firstArg.isRootType(RootType::Wildcard)) {
         if (secondArg.first == ExpressionSpecType::Wildcard) {
             auto resultRows = pkbReader->getAllAssign();
-            result.setTuples(resultRows);
+            result->setTuples(resultRows);
         } else {
             auto resultRows = pkbReader->getAssignStmtsByRhs(secondArg.second,  secondArg.first == ExpressionSpecType::PartialMatch);
-            result.setTuples(resultRows);
+            result->setTuples(resultRows);
         }
     } else if (firstArg.isRootType(RootType::Synonym)) {
         if (secondArg.first == ExpressionSpecType::Wildcard) {
             auto resultRows = pkbReader->getAllAssignStmtVarPair();
-            result.setTuples(resultRows);
+            result->setTuples(resultRows);
         } else {
             auto resultRows = pkbReader->getAssignStmtsVarPairByRhs(secondArg.second, secondArg.first == ExpressionSpecType::PartialMatch);
-            result.setTuples(resultRows);
+            result->setTuples(resultRows);
         }
     } else {
         Variable lhsVariable = Variable(firstArg.getRep());
         if (secondArg.first == ExpressionSpecType::Wildcard) {
             auto resultRows = pkbReader->getAssignStmtsByLhs(lhsVariable);
-            result.setTuples(resultRows);
+            result->setTuples(resultRows);
         } else {
             auto resultRows = pkbReader->getAssignStmtsByLhsRhs(lhsVariable, secondArg.second, secondArg.first == ExpressionSpecType::PartialMatch);
-            result.setTuples(resultRows);
+            result->setTuples(resultRows);
         }
     }
 

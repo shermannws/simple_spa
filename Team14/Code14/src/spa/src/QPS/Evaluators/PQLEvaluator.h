@@ -44,9 +44,9 @@ private:
     /**
      * @brief Evaluates a clause and updates the result accordingly.
      * @param clause A shared pointer to the Clause to evaluate.
-     * @param result The result object to update.
+     * @return  shared pointer to result object
      */
-    void evaluateClause(const std::shared_ptr<Clause> clause, Result& result);
+    std::shared_ptr<Result> evaluateClause(const std::shared_ptr<Clause> clause);
 
 public:
     /**
