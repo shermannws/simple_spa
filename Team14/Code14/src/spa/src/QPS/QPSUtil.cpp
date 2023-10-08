@@ -31,7 +31,7 @@ std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
 
 std::unordered_set<QueryEntityType> QPSUtil::stmtRefEntities = {
     QueryEntityType::Stmt, QueryEntityType::Assign, QueryEntityType::Print,
-    QueryEntityType::If, QueryEntityType::While, QueryEntityType::Read
+    QueryEntityType::If, QueryEntityType::While, QueryEntityType::Read, QueryEntityType::Call
 };
 
 std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>> QPSUtil::strategyCreatorMap = {
