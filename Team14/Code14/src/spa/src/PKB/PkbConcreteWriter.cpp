@@ -1,7 +1,5 @@
 #include "PkbConcreteWriter.h"
 
-#include "PKB/AssignmentPatternStore/Assignment.h"
-
 PkbConcreteWriter::PkbConcreteWriter(
     std::shared_ptr<PkbWriterManager> writerManager
 ) : writerManager(writerManager) {}

@@ -8,7 +8,7 @@ FollowsStarSuchThatStrategy::FollowsStarSuchThatStrategy(std::shared_ptr<PkbRead
 std::shared_ptr<Result> FollowsStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     if (leftRef == rightRef) {
-        res->setBoolResult(false);
+        res->setTuples(std::vector<Entity>{});
         return res;
     }
     auto leftEntityType = leftRef.getEntityType();
@@ -17,9 +17,6 @@ std::shared_ptr<Result> FollowsStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef
     auto rightSyn = rightRef.getRep();
     res->setTuples(pkbReader->getFollowsStarPair(QPSUtil::entityToStmtMap.at(leftEntityType),
                                                 QPSUtil::entityToStmtMap.at(rightEntityType)));
-
-    std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
-    res->setSynIndices(indices);
     return res;
 }
 
@@ -34,8 +31,6 @@ std::shared_ptr<Result> FollowsStarSuchThatStrategy::evaluateSynAny(Ref &leftRef
     } else {
         res->setTuples(pkbReader->getFollowsStarTypeWildcard(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
-    std::unordered_map<std::string, int> indices{{leftSyn, 0}};
-    res->setSynIndices(indices);
     return res;
 }
 
@@ -50,8 +45,6 @@ std::shared_ptr<Result> FollowsStarSuchThatStrategy::evaluateAnySyn(Ref &leftRef
     } else {
         res->setTuples(pkbReader->getFollowsStarWildcardType(QPSUtil::entityToStmtMap.at(rightEntityType)));
     }
-    std::unordered_map<std::string, int> indices{{rightSyn, 0}};
-    res->setSynIndices(indices);
     return res;
 }
 

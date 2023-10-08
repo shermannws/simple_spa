@@ -59,25 +59,25 @@ public:
      * @brief The getter of the string representation of the Ref
      * @return The StringRep of the Ref
      */
-    StringRep getRep();
+    StringRep getRep() const;
 
     /**
      * @brief The getter of the RefType of the Ref
      * @return The RefType of the Ref
      */
-    RefType getType();
+    RefType getType() const;
 
     /**
      * @brief The getter of the RoofType of the Ref
      * @param The RootType of the Ref
      */
-    RootType getRootType();
+    RootType getRootType() const;
 
     /**
      * @brief The getter of the QueryEntityType of the Ref
      * @param The QueryEntityType of the Ref
      */
-    QueryEntityType getEntityType();
+    QueryEntityType getEntityType() const;
 
     /**
      * @brief The setter of the string representation of the Ref
