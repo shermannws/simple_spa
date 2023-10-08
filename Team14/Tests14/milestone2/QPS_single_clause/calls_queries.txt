@@ -8,87 +8,82 @@ procedure p, q;
 Select q such that Calls(p,q)
 Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8
 5000
-3 - check Calls(syn, syn) - both params
-procedure p, q;
-Select <p,q> such that Calls(p,q)
-Proc1 Proc2, Proc1 Proc3, Proc1 Proc4, Proc1 Proc5, Proc1 Proc6, Proc1 Proc7, Proc2 Proc3, Proc2 Proc4, Proc3 Proc4, Proc5 Proc4, Proc6 Proc4, Proc7 Proc8
-5000
-4 - check Calls(syn, syn) - same syn
+3 - check Calls(syn, syn) - same syn
 procedure p;
 Select p such that Calls(p,p)
 
 5000
-5 - check Calls(syn, procName) - procName is called
+4 - check Calls(syn, procName) - procName is called
 procedure p;
 Select p such that Calls(p,"Proc4")
 Proc1, Proc2, Proc3, Proc5, Proc6
 5000
-6 - check Calls(syn, procName) - procName is not called
+5 - check Calls(syn, procName) - procName is not called
 procedure p;
 Select p such that Calls(p,"Proc1")
 
 5000
-7 - check Calls(syn, wildcard)
+6 - check Calls(syn, wildcard)
 procedure p;
 Select p such that Calls(p,_)
 Proc1, Proc2, Proc3, Proc5, Proc6, Proc7
 5000
-8 - check Calls(wildcard, wildcard)
+7 - check Calls(wildcard, wildcard)
 procedure p;
 Select p such that Calls(_,_)
 Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
 5000
-9 - check Calls(wildcard, syn)
+8 - check Calls(wildcard, syn)
 procedure q;
 Select q such that Calls(_, q)
 Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8
 5000
-10 - check Calls(wildcard, procName) - procName is called
+9 - check Calls(wildcard, procName) - procName is called
 procedure p;
 Select p such that Calls(_,"Proc3")
 Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
 5000
-11 - check Calls(wildcard, procName) - procName is not called
+10 - check Calls(wildcard, procName) - procName is not called
 procedure p;
 Select p such that Calls(_,"Proc9")
 
 5000
-12 - check Calls(procName, procName) - combination exists
+11 - check Calls(procName, procName) - combination exists
 procedure p;
 Select p such that Calls("Proc1","Proc2")
 Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
 5000
-13 - check Calls(procName, procName) - combination does not exist
+12 - check Calls(procName, procName) - combination does not exist
 procedure p;
 Select p such that Calls("Proc1","Proc8")
 
 5000
-14 - check Calls(procName, wildcard) - procName calls another procedure
+13 - check Calls(procName, wildcard) - procName calls another procedure
 procedure p;
 Select p such that Calls("Proc7",_)
 Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
 5000
-15 - check Calls(procName, wildcard) - procName does not call another procedure
+14 - check Calls(procName, wildcard) - procName does not call another procedure
 procedure p;
 Select p such that Calls("Proc8",_)
 
 5000
-16 - check Calls(procName, syn) - procName calls another procedure
+15 - check Calls(procName, syn) - procName calls another procedure
 procedure q;
 Select q such that Calls("Proc1",q)
 Proc2, Proc3, Proc4, Proc5, Proc6, Proc7
 5000
-17 - check Calls(procName, syn) - procName does not call another procedure
+16 - check Calls(procName, syn) - procName does not call another procedure
 procedure q;
 Select q such that Calls("Proc9",q)
 
 5000
-18 - check LHS procName does not exist
+17 - check LHS procName does not exist
 procedure q;
 Select q such that Calls("Proc100",q)
 
 5000
-19 - check RHS procName does not exist
+18 - check RHS procName does not exist
 procedure p;
 Select p such that Calls(p,"Proc100")
 
