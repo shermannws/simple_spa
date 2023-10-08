@@ -11,7 +11,6 @@ void Result::setType(ResultType& type) {
 }
 
 void Result::setBoolResult(bool result) {
-    type = ResultType::Boolean;
     boolResult = result;
 }
 bool Result::getBoolResult() {
@@ -36,6 +35,20 @@ ResultTuples& Result::getTuples() {
 
 SynonymMap& Result::getSynIndices() {
     return synIndices;
+}
+
+void Result::setSynIndices(std::vector<Synonym> synonyms) {
+    int i = 0;
+    for (const auto& syn: synonyms) {
+        synIndices[syn] = i;
+        i++;
+    }
+
+    if (synIndices.empty()) {
+        type = ResultType::Boolean;
+    } else {
+        type = ResultType::Tuples;
+    }
 }
 
 void Result::setSynIndices(SynonymMap &synIndices) {

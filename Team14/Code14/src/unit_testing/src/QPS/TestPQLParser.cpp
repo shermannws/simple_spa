@@ -618,6 +618,91 @@ TEST_CASE("processSuchThatClause Parent*") {
     }
 }
 
+TEST_CASE("processSuchThatClause Calls") {
+    SECTION("Valid Calls(_, _)") {
+        PQLParser parser("print s1; Select s1 such that Calls (_,_)");
+        Query query = parser.parse();
+        auto expectedClause = QPSTestUtil::createSuchThatClause(ClauseType::Calls,
+                                                        RefType::EntRef, RootType::Wildcard, QueryEntityType::Invalid, "_",
+                                                        RefType::EntRef, RootType::Wildcard, QueryEntityType::Invalid, "_");
+        REQUIRE(*query.getSuchThat()[0] == *expectedClause);
+    }
+
+    SECTION("Valid Calls(p, procName)") {
+        PQLParser parser("procedure procedure; Select procedure such that Calls (procedure, \"procName\")");
+        Query query = parser.parse();
+        auto expectedClause = QPSTestUtil::createSuchThatClause(ClauseType::Calls,
+                                                                RefType::EntRef, RootType::Synonym, QueryEntityType::Procedure, "procedure",
+                                                                RefType::EntRef, RootType::Ident, QueryEntityType::Invalid, "procName");
+        REQUIRE(*query.getSuchThat()[0] == *expectedClause);
+    }
+
+    SECTION("Valid Calls(procName, _)") {
+        PQLParser parser("procedure procedure; Select procedure such that Calls (\"procedure\", _)");
+        Query query = parser.parse();
+        auto expectedClause = QPSTestUtil::createSuchThatClause(ClauseType::Calls,
+                                                                RefType::EntRef, RootType::Ident, QueryEntityType::Invalid, "procedure",
+                                                                RefType::EntRef, RootType::Wildcard, QueryEntityType::Invalid, "_");
+        REQUIRE(*query.getSuchThat()[0] == *expectedClause);
+    }
+
+    SECTION("Valid Calls(procName, p)") {
+        PQLParser parser("procedure procedure, q; Select procedure such that Calls (\"procedure\", q)");
+        Query query = parser.parse();
+        auto expectedClause = QPSTestUtil::createSuchThatClause(ClauseType::Calls,
+                                                                RefType::EntRef, RootType::Ident, QueryEntityType::Invalid, "procedure",
+                                                                RefType::EntRef, RootType::Synonym, QueryEntityType::Procedure, "q");
+        REQUIRE(*query.getSuchThat()[0] == *expectedClause);
+    }
+}
+
+TEST_CASE("processSuchThatClause Calls*") {
+    SECTION("Valid Calls*(_, p)") {
+        PQLParser parser("print s1; procedure q; Select s1 such that Calls* (_,q)");
+        Query query = parser.parse();
+        auto expectedClause = QPSTestUtil::createSuchThatClause(ClauseType::CallsStar,
+                                                                RefType::EntRef, RootType::Wildcard, QueryEntityType::Invalid, "_",
+                                                                RefType::EntRef, RootType::Synonym, QueryEntityType::Procedure, "q");
+        REQUIRE(*query.getSuchThat()[0] == *expectedClause);
+    }
+
+    SECTION("Valid Calls*(_, procName)") {
+        PQLParser parser("procedure procedure; Select procedure such that Calls* (_, \"procName\")");
+        Query query = parser.parse();
+        auto expectedClause = QPSTestUtil::createSuchThatClause(ClauseType::CallsStar,
+                                                                RefType::EntRef, RootType::Wildcard, QueryEntityType::Invalid, "_",
+                                                                RefType::EntRef, RootType::Ident, QueryEntityType::Invalid, "procName");
+        REQUIRE(*query.getSuchThat()[0] == *expectedClause);
+    }
+
+    SECTION("Valid Calls*(procName, procName)") {
+        PQLParser parser("procedure procedure; Select procedure such that Calls (\"procedure\", \"procedure\")");
+        Query query = parser.parse();
+        auto expectedClause = QPSTestUtil::createSuchThatClause(ClauseType::Calls,
+                                                                RefType::EntRef, RootType::Ident, QueryEntityType::Invalid, "procedure",
+                                                                RefType::EntRef, RootType::Ident, QueryEntityType::Invalid, "procedure");
+        REQUIRE(*query.getSuchThat()[0] == *expectedClause);
+    }
+
+    SECTION("Valid Calls*(p,_)") {
+        PQLParser parser("procedure procedure, q; Select procedure such that Calls (q,_)");
+        Query query = parser.parse();
+        auto expectedClause = QPSTestUtil::createSuchThatClause(ClauseType::Calls,
+                                                                RefType::EntRef, RootType::Synonym, QueryEntityType::Procedure, "q",
+                                                                RefType::EntRef, RootType::Wildcard, QueryEntityType::Invalid, "_");
+        REQUIRE(*query.getSuchThat()[0] == *expectedClause);
+    }
+
+    SECTION("Valid Calls*(p,q)") {
+        PQLParser parser("procedure procedure, q; Select procedure such that Calls (procedure, q)");
+        Query query = parser.parse();
+        auto expectedClause = QPSTestUtil::createSuchThatClause(ClauseType::Calls,
+                                                                RefType::EntRef, RootType::Synonym, QueryEntityType::Procedure, "procedure",
+                                                                RefType::EntRef, RootType::Synonym, QueryEntityType::Procedure, "q");
+        REQUIRE(*query.getSuchThat()[0] == *expectedClause);
+    }
+}
+
 TEST_CASE("Invalid processSuchThat cases") {
     SECTION("Invalid Syntax - general queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
@@ -769,6 +854,20 @@ TEST_CASE("Invalid processSuchThat cases") {
             PQLParser parser(testcase.first);
             REQUIRE_THROWS_AS(parser.parse(), SemanticException);
         }
+    }
+
+    SECTION("Invalid Calls/Calls* queries"){
+        PQLParser parser("assign a; variable v; Select a such that Calls(1,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("assign a; variable v; procedure p;Select a such that Calls*(p, 1)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("assign a; variable v; Select a such that Calls(v,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("assign a; variable v; procedure p;Select a such that Calls*(p, a)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
     }
 
 }

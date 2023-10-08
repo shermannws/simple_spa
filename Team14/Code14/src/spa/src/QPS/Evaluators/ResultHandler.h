@@ -18,7 +18,7 @@ private:
      * @param r2 second result table
      * @return the resultant table from the join
      */
-    Result join(Result& r1, Result& r2);
+    std::shared_ptr<Result> join(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 
     /**
      * Gets a map of indices of the common synonyms between two tables
@@ -26,7 +26,7 @@ private:
      * @param r2 second result table
      * @return map of index of common synonyms in table 1 to index in table 2
      */
-    std::unordered_map<int, int> getCommonColumns(Result& r1, Result& r2);
+    std::unordered_map<int, int> getCommonColumns(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 
     /**
      * Builds a map of synonym to index for the resultant combined table
@@ -34,7 +34,7 @@ private:
      * @param r2 second result table
      * @return map of synonym to index
      */
-    SynonymMap buildSynIndices(Result& r1, Result& r2);
+    SynonymMap buildSynIndices(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 
     /**
      * Creates a vector of the synonyms in the order of their index in map
@@ -64,7 +64,7 @@ public:
      * @param r2 second result table
      * @return the resultant table
      */
-    Result getCombined(Result& r1, Result& r2);
+    std::shared_ptr<Result> getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 };
 
 

@@ -14,6 +14,8 @@ enum class ClauseType {
     FollowsStar,
     Parent,
     ParentStar,
+    Calls,
+    CallsStar,
     Assign,
     Invalid
 };
@@ -66,6 +68,13 @@ public:
      * @return The Ref reference of the first parameter
      */
     Ref& getFirstParam();
+
+    /**
+    * @brief returns the list of synonyms present in the clause, used for
+    * defining the corresponding Result table header of the clause
+    * @return vector of Synonyms
+    */
+    virtual std::vector<Synonym> getSynonyms() const = 0;
 
     /**
      * @brief Returns true if the Clause object is equal to the other Clause object, false otherwise

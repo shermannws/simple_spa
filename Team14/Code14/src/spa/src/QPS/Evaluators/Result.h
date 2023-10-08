@@ -46,7 +46,7 @@ private:
 
 public:
     /**
-     * @brief Default constructor for the Result class.
+     * @brief Default constructor for the Result class, returns uninitialized Result object.
      */
     Result();
 
@@ -79,6 +79,12 @@ public:
      * @param synIndices The map of synonym to index to set as result's synonym indices.
      */
     void setSynIndices(SynonymMap & synIndices);
+
+    /**
+     * @brief Sets the synonym indices for the result table.
+     * @param synonyms vector of synonyms in order of the Result synonym map
+     */
+    void setSynIndices(std::vector<Synonym> synonyms);
 
     /**
      * @brief Gets the synonym indices for the result.
