@@ -5,6 +5,8 @@
 #include "QPS/Evaluators/Strategies/FollowsStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/ParentSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/ParentStarSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/NextSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/NextStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
 
 std::unordered_map<StringRep, ClauseType> QPSUtil::repClauseTypeMap = {
@@ -48,6 +50,8 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
     {ClauseType::FollowsStar, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<FollowsStarSuchThatStrategy>(pkbReader);}},
     {ClauseType::Parent, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<ParentSuchThatStrategy>(pkbReader);}},
     {ClauseType::ParentStar, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<ParentStarSuchThatStrategy>(pkbReader);}},
+    {ClauseType::Next, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<NextSuchThatStrategy>(pkbReader);}},
+    {ClauseType::NextStar, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<NextStarSuchThatStrategy>(pkbReader);}},
     {ClauseType::Assign, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<AssignPatternStrategy>(pkbReader);}},
 };
 
