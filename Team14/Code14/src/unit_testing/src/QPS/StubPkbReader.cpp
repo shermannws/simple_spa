@@ -15,7 +15,13 @@ std::vector<Entity> StubPkbReader::getAllProcedures() const {
 }
 
 std::vector<Entity> StubPkbReader::getAllStatements() const {
-    return std::vector<Entity>();
+    return std::vector<Entity>{
+        Statement(1, StatementType::If),
+        Statement(2, StatementType::While),
+        Statement(3, StatementType::Call),
+        Statement(4, StatementType::Assign),
+        Statement(5, StatementType::Read),
+    };
 }
 
 std::vector<Entity> StubPkbReader::getAllRead() const {
@@ -27,31 +33,52 @@ std::vector<Entity> StubPkbReader::getAllPrint() const {
 }
 
 std::vector<Entity> StubPkbReader::getAllWhile() const {
-    return std::vector<Entity>();
+    return std::vector<Entity>{
+        Statement(10, StatementType::While),
+        Statement(13, StatementType::While),
+        Statement(15, StatementType::While),
+    };
 }
 
 std::vector<Entity> StubPkbReader::getAllIf() const {
     return std::vector<Entity>();
 }
 
+std::vector<Entity> StubPkbReader::getAllCall() const {
+    return std::vector<Entity>();
+}
+
 std::vector<std::vector<Entity>> StubPkbReader::getUsesStmtPair(StatementType type) const {
-    return std::vector<std::vector<Entity>>();
+    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var")};
+    std::vector<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var")};
+    return std::vector<std::vector<Entity>>({pair1, pair2});
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getUsesProcPair() const {
-    return {};
+    std::vector<Entity> pair1 = {Procedure("ProcedureName"), Variable("hello123")};
+    std::vector<Entity> pair2 = {Procedure("ProcedureName2"), Variable("hello321")};
+    return std::vector<std::vector<Entity>>({pair1, pair2});
 }
 
 std::vector<Entity> StubPkbReader::getUsesTypeIdent(StatementType type, Variable& var) const {
-    return std::vector<Entity>();
+    return std::vector<Entity>{
+        Statement(2, StatementType::If),
+        Statement(4, StatementType::If),
+        Statement(5, StatementType::If),
+    };
 }
 
 std::vector<Entity> StubPkbReader::getUsesProcIdent(Variable& var) const {
-    return {};
+    return std::vector<Entity>{
+            Procedure("ProcedureName")
+    };
 };
 
 std::vector<Entity> StubPkbReader::getUsesStmt(StatementType type) const {
-    return std::vector<Entity>();
+    return std::vector<Entity>{
+            Statement(1, StatementType::Assign),
+            Statement(3, StatementType::Call),
+    };
 }
 
 std::vector<Entity> StubPkbReader::getUsesProc() const {
@@ -59,15 +86,21 @@ std::vector<Entity> StubPkbReader::getUsesProc() const {
 }
 
 std::vector<Entity> StubPkbReader::getUsesVar(Statement& stmt) const {
-    return std::vector<Entity>();
+    return std::vector<Entity>{
+        Variable("name"),
+        Variable("asdfghjkl")
+    };
 }
 
 std::vector<Entity> StubPkbReader::getUsesVar(Procedure& proc) const {
-    return {};
+    return std::vector<Entity>{
+        Variable("proc"),
+        Variable("anotherVar")
+    };
 }
 
 bool StubPkbReader::isStmtUsesVar(Statement& stmt, Variable& var) const {
-    return false;
+    return true;
 }
 
 bool StubPkbReader::isProcUsesVar(Procedure& proc, Variable& var) const {
@@ -79,7 +112,7 @@ bool StubPkbReader::hasUses(Statement& stmt) const {
 }
 
 bool StubPkbReader::hasUses(Procedure& proc) const {
-    return false;
+    return true;
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getFollowsPair(StatementType formerType, StatementType latterType) const {
@@ -155,31 +188,50 @@ bool StubPkbReader::hasFormerStarStmt(Statement& statement) const {
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getModifiesStmtPair(StatementType type) const {
-    return std::vector<std::vector<Entity>>();
+    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var1")};
+    std::vector<Entity> pair2 = {Statement(3, StatementType::Call), Variable("var2")};
+    std::vector<Entity> pair3 = {Statement(2, StatementType::While), Variable("var3")};
+    return std::vector<std::vector<Entity>>({pair1, pair2, pair3});
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getModifiesProcPair() const {
-    return {};
+    std::vector<Entity> pair1 = {Procedure("first"), Variable("one")};
+    std::vector<Entity> pair2 = {Procedure("second"), Variable("two")};
+    std::vector<Entity> pair3 = {Procedure("third"), Variable("three")};
+    std::vector<Entity> pair4 = {Procedure("fourth"), Variable("four")};
+    return std::vector<std::vector<Entity>>({pair1, pair2, pair3, pair4});
 }
 
 std::vector<Entity> StubPkbReader::getModifiesTypeIdent(StatementType type, Variable& var) const {
-    return std::vector<Entity>();
+    return std::vector<Entity>{
+        Statement(14, StatementType::Read),
+        Statement(15, StatementType::Read),
+    };
 }
 
 std::vector<Entity> StubPkbReader::getModifiesProcIdent(Variable& var) const {
-    return {};
+    return std::vector<Entity>{
+            Procedure("Procedure")
+    };
 }
 
 std::vector<Entity> StubPkbReader::getModifiesStmt(StatementType type) const {
-    return std::vector<Entity>();
+    return std::vector<Entity>{
+        Statement(34, StatementType::While),
+    };
 }
 
 std::vector<Entity> StubPkbReader::getModifiesProc() const {
-    return {};
+    return std::vector<Entity> {
+        Procedure("first"),
+    };
 }
 
 std::vector<Entity> StubPkbReader::getModifiesVar(Statement& stmt) const {
-    return std::vector<Entity>();
+    return std::vector<Entity>{
+        Variable("myVar"),
+        Variable("anotherVar")
+    };
 }
 
 std::vector<Entity> StubPkbReader::getModifiesVar(Procedure& proc) const {
@@ -191,11 +243,11 @@ bool StubPkbReader::isStmtModifiesVar(Statement& stmt, Variable& var) const {
 }
 
 bool StubPkbReader::isProcModifiesVar(Procedure& proc, Variable& var) const {
-    return false;
+    return true;
 }
 
 bool StubPkbReader::hasModifies(Statement& stmt) const {
-    return false;
+    return true;
 }
 
 bool StubPkbReader::hasModifies(Procedure& proc) const {
@@ -315,5 +367,153 @@ bool StubPkbReader::hasChildStmt(Statement& statement) const {
 }
 
 bool StubPkbReader::hasChildStarStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasCalls() const {
+    return false;
+}
+
+bool StubPkbReader::hasCallsStar() const {
+    return false;
+}
+
+bool StubPkbReader::isCallee(Procedure& proc) const {
+    return false;
+}
+
+bool StubPkbReader::isCalleeStar(Procedure& proc) const {
+    return false;
+}
+
+bool StubPkbReader::isCaller(Procedure& proc) const {
+    return false;
+}
+
+bool StubPkbReader::isCallerStar(Procedure& proc) const {
+    return false;
+}
+
+bool StubPkbReader::isCalls(Procedure& caller, Procedure& callee) const {
+    return false;
+}
+
+bool StubPkbReader::isCallsStar(Procedure& caller, Procedure& callee) const {
+    return false;
+}
+
+std::vector<Entity> StubPkbReader::getCallees() const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getCalleesStar() const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getCallers() const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getCallersStar() const {
+    return std::vector<Entity>();
+}
+
+std::vector<std::vector<Entity>> StubPkbReader::getCallsPair() const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<std::vector<Entity>> StubPkbReader::getCallsStarPair() const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<Entity> StubPkbReader::getCallers(Procedure& callee) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getCallersStar(Procedure& callee) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getCallees(Procedure& caller) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getCalleesStar(Procedure& caller) const {
+    return std::vector<Entity>();
+}
+
+std::vector<std::vector<Entity>> StubPkbReader::getNextPair(StatementType formerType, StatementType latterType) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<std::vector<Entity>> StubPkbReader::getNextStarPair(StatementType formerType, StatementType latterType) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<Entity> StubPkbReader::getNextStarSameStmt(StatementType stmtType) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextTypeStmt(StatementType type, Statement& statement) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextStarTypeStmt(StatementType type, Statement& statement) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextTypeWildcard(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextStarTypeWildcard(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextStmtType(Statement& statement, StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextStarStmtType(Statement& statement, StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextWildcardType(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getNextStarWildcardType(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+bool StubPkbReader::isNext(Statement& statement1, Statement& statement2) const {
+    return false;
+}
+
+bool StubPkbReader::isNextStar(Statement& statement1, Statement& statement2) const {
+    return false;
+}
+
+bool StubPkbReader::hasNext() const {
+    return false;
+}
+
+bool StubPkbReader::hasNextStar() const {
+    return false;
+}
+
+bool StubPkbReader::hasBeforeStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasBeforeStarStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasAfterStmt(Statement& statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasAfterStarStmt(Statement& statement) const {
     return false;
 }

@@ -384,9 +384,15 @@ TEST_CASE("Test ASTPrinter") {
             SPToken(TokenType::CloseRoundParenthesis, ")"),
             // statement list
             SPToken(TokenType::OpenCurlyParenthesis, "{"),
-            SPToken(TokenType::Name, "a"),
-            SPToken(TokenType::Equals, "="),
             SPToken(TokenType::Name, "r"),
+            SPToken(TokenType::Equals, "="),
+            SPToken(TokenType::Name, "a"),
+            SPToken(TokenType::ArithmeticOperator, "-"),
+            SPToken(TokenType::Name, "b"),
+            SPToken(TokenType::ArithmeticOperator, "/"),
+            SPToken(TokenType::Integer, "3"),
+            SPToken(TokenType::ArithmeticOperator, "+"),
+            SPToken(TokenType::Integer, "2"),
             SPToken(TokenType::Semicolon, ";"),
             SPToken(TokenType::CloseCurlyParenthesis, "}"),
 

@@ -1,18 +1,18 @@
 #include "AssignPatternStrategy.h"
 
-Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const {
+Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause) const {
     std::shared_ptr<PatternClause> patternClause = std::dynamic_pointer_cast<PatternClause>(clause);
     Ref firstArg = patternClause->getFirstParam();
     ExpressionSpec secondArg = patternClause->getSecondParam();
 
     Result result;
     std::unordered_map<std::string, int> columns {{patternClause->getSyn(), 0}};
-    if (firstArg.isSynonym()) {
+    if (firstArg.isRootType(RootType::Synonym)) {
         columns.insert({firstArg.getRep(), 1});
     }
     result.setSynIndices(columns);
 
-    if (firstArg.isWildcard()) {
+    if (firstArg.isRootType(RootType::Wildcard)) {
         if (secondArg.first == ExpressionSpecType::Wildcard) {
             auto resultRows = pkbReader->getAllAssign();
             result.setTuples(resultRows);
@@ -20,7 +20,7 @@ Result AssignPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause, std
             auto resultRows = pkbReader->getAssignStmtsByRhs(secondArg.second,  secondArg.first == ExpressionSpecType::PartialMatch);
             result.setTuples(resultRows);
         }
-    } else if (firstArg.isSynonym()) {
+    } else if (firstArg.isRootType(RootType::Synonym)) {
         if (secondArg.first == ExpressionSpecType::Wildcard) {
             auto resultRows = pkbReader->getAllAssignStmtVarPair();
             result.setTuples(resultRows);

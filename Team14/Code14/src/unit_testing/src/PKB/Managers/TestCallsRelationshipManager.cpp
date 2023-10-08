@@ -8,50 +8,50 @@ using namespace std;
 TEST_CASE("Test Calls Relationship Retrieval") {
     CallsRelationshipManager callsRelationshipManager = CallsRelationshipManager();
 
-    REQUIRE(callsRelationshipManager.hasCalls() == false);
+    REQUIRE(callsRelationshipManager.hasRelationship() == false);
 
     shared_ptr<Procedure> procedure1 = make_shared<Procedure>(Procedure("First"));
     shared_ptr<Procedure> procedure2 = make_shared<Procedure>(Procedure("Second"));
     shared_ptr<Procedure> procedure3 = make_shared<Procedure>(Procedure("Third"));
     shared_ptr<Procedure> procedure4 = make_shared<Procedure>(Procedure("Four"));
 
-    callsRelationshipManager.storeCallsRelationship(procedure1, procedure2, true);
-    callsRelationshipManager.storeCallsRelationship(procedure2, procedure3, true);
-    callsRelationshipManager.storeCallsRelationship(procedure1, procedure3, false);
-    callsRelationshipManager.storeCallsRelationship(procedure1, procedure4, true);
+    callsRelationshipManager.storeRelationship(procedure1, procedure2, true);
+    callsRelationshipManager.storeRelationship(procedure2, procedure3, true);
+    callsRelationshipManager.storeRelationship(procedure1, procedure3, false);
+    callsRelationshipManager.storeRelationship(procedure1, procedure4, true);
 
-    REQUIRE(callsRelationshipManager.getCallsPair(true).size() == 3);
-    REQUIRE(callsRelationshipManager.getCallsPair(false).size() == 4);
-    REQUIRE(callsRelationshipManager.getCallsFormer(*procedure3, true).size() == 1);
-    REQUIRE(callsRelationshipManager.getCallsFormer(*procedure3, false).size() == 2);
-    REQUIRE(callsRelationshipManager.getCallsFormer().size() == 2);
-    REQUIRE(callsRelationshipManager.getCallsLatter(*procedure1, true).size() == 2);
-    REQUIRE(callsRelationshipManager.getCallsLatter(*procedure1, false).size() == 3);
-    REQUIRE(callsRelationshipManager.getCallsLatter().size() == 3);
+    REQUIRE(callsRelationshipManager.getRelationshipPair(true).size() == 3);
+    REQUIRE(callsRelationshipManager.getRelationshipPair(false).size() == 4);
+    REQUIRE(callsRelationshipManager.getRelationshipFormer(*procedure3, true).size() == 1);
+    REQUIRE(callsRelationshipManager.getRelationshipFormer(*procedure3, false).size() == 2);
+    REQUIRE(callsRelationshipManager.getRelationshipFormer().size() == 2);
+    REQUIRE(callsRelationshipManager.getRelationshipLatter(*procedure1, true).size() == 2);
+    REQUIRE(callsRelationshipManager.getRelationshipLatter(*procedure1, false).size() == 3);
+    REQUIRE(callsRelationshipManager.getRelationshipLatter().size() == 3);
 
-    REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure2, true) == true);
-    REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure2, false) == true);
-    REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure3, true) == false);
-    REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure3, false) == true);
-    REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure3, false) == true);
-    REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure3, true) == true);
-    REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure3, false) == false);
-    REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure4, true) == true);
-    REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure4, false) == true);
-    REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure4, false) == false);
-    REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure4, false) == false);
+    REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure2, true) == true);
+    REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure2, false) == true);
+    REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure3, true) == false);
+    REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure3, false) == true);
+    REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure3, false) == true);
+    REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure3, true) == true);
+    REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure3, false) == false);
+    REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure4, true) == true);
+    REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure4, false) == true);
+    REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure4, false) == false);
+    REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure4, false) == false);
     
-    REQUIRE(callsRelationshipManager.hasCalls() == true);
+    REQUIRE(callsRelationshipManager.hasRelationship() == true);
 
-    REQUIRE(callsRelationshipManager.hasLatterProc(*procedure1) == true);
-    REQUIRE(callsRelationshipManager.hasLatterProc(*procedure2) == true);
-    REQUIRE(callsRelationshipManager.hasLatterProc(*procedure3) == false);
-    REQUIRE(callsRelationshipManager.hasLatterProc(*procedure4) == false);
+    REQUIRE(callsRelationshipManager.isFormer(*procedure1) == true);
+    REQUIRE(callsRelationshipManager.isFormer(*procedure2) == true);
+    REQUIRE(callsRelationshipManager.isFormer(*procedure3) == false);
+    REQUIRE(callsRelationshipManager.isFormer(*procedure4) == false);
 
-    REQUIRE(callsRelationshipManager.hasFormerProc(*procedure1) == false);
-    REQUIRE(callsRelationshipManager.hasFormerProc(*procedure2) == true);
-    REQUIRE(callsRelationshipManager.hasFormerProc(*procedure3) == true);
-    REQUIRE(callsRelationshipManager.hasFormerProc(*procedure4) == true);
+    REQUIRE(callsRelationshipManager.isLatter(*procedure1) == false);
+    REQUIRE(callsRelationshipManager.isLatter(*procedure2) == true);
+    REQUIRE(callsRelationshipManager.isLatter(*procedure3) == true);
+    REQUIRE(callsRelationshipManager.isLatter(*procedure4) == true);
 }
 
 
@@ -63,27 +63,27 @@ TEST_CASE("Test Calls Transitivity Calculation") {
         */
         CallsRelationshipManager callsRelationshipManager = CallsRelationshipManager();
 
-        REQUIRE(callsRelationshipManager.hasCalls() == false);
+        REQUIRE(callsRelationshipManager.hasRelationship() == false);
 
         shared_ptr<Procedure> procedure1 = make_shared<Procedure>(Procedure("First"));
         shared_ptr<Procedure> procedure2 = make_shared<Procedure>(Procedure("Second"));
         shared_ptr<Procedure> procedure3 = make_shared<Procedure>(Procedure("Third"));
 
-        callsRelationshipManager.storeCallsRelationship(procedure1, procedure2, true);
-        callsRelationshipManager.storeCallsRelationship(procedure2, procedure3, true);
+        callsRelationshipManager.storeRelationship(procedure1, procedure2, true);
+        callsRelationshipManager.storeRelationship(procedure2, procedure3, true);
         callsRelationshipManager.calculateCallsStar();
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure2, false) == true);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure3, false) == true);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure3, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure2, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure3, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure3, false) == true);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure1, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure2, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure3, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure1, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure2, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure3, false) == false);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure1, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure1, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure2, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure1, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure1, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure2, false) == false);
     }
 
     SECTION("Calls* Test 2") {
@@ -93,28 +93,28 @@ TEST_CASE("Test Calls Transitivity Calculation") {
         */
         CallsRelationshipManager callsRelationshipManager = CallsRelationshipManager();
 
-        REQUIRE(callsRelationshipManager.hasCalls() == false);
+        REQUIRE(callsRelationshipManager.hasRelationship() == false);
 
         shared_ptr<Procedure> procedure1 = make_shared<Procedure>(Procedure("First"));
         shared_ptr<Procedure> procedure2 = make_shared<Procedure>(Procedure("Second"));
         shared_ptr<Procedure> procedure3 = make_shared<Procedure>(Procedure("Third"));
 
-        callsRelationshipManager.storeCallsRelationship(procedure1, procedure2, true);
-        callsRelationshipManager.storeCallsRelationship(procedure1, procedure3, true);
+        callsRelationshipManager.storeRelationship(procedure1, procedure2, true);
+        callsRelationshipManager.storeRelationship(procedure1, procedure3, true);
         callsRelationshipManager.calculateCallsStar();
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure2, false) == true);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure3, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure2, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure3, false) == true);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure3, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure3, false) == false);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure1, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure2, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure3, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure1, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure2, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure3, false) == false);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure1, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure1, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure2, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure1, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure1, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure2, false) == false);
     }
 
     SECTION("Calls* Test 3") {
@@ -124,37 +124,37 @@ TEST_CASE("Test Calls Transitivity Calculation") {
         */
         CallsRelationshipManager callsRelationshipManager = CallsRelationshipManager();
 
-        REQUIRE(callsRelationshipManager.hasCalls() == false);
+        REQUIRE(callsRelationshipManager.hasRelationship() == false);
 
         shared_ptr<Procedure> procedure1 = make_shared<Procedure>(Procedure("First"));
         shared_ptr<Procedure> procedure2 = make_shared<Procedure>(Procedure("Second"));
         shared_ptr<Procedure> procedure3 = make_shared<Procedure>(Procedure("Third"));
         shared_ptr<Procedure> procedure4 = make_shared<Procedure>(Procedure("Fourth"));
 
-        callsRelationshipManager.storeCallsRelationship(procedure1, procedure2, true);
-        callsRelationshipManager.storeCallsRelationship(procedure3, procedure4, true);
-        callsRelationshipManager.storeCallsRelationship(procedure4, procedure2, true);
+        callsRelationshipManager.storeRelationship(procedure1, procedure2, true);
+        callsRelationshipManager.storeRelationship(procedure3, procedure4, true);
+        callsRelationshipManager.storeRelationship(procedure4, procedure2, true);
         callsRelationshipManager.calculateCallsStar();
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure1, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure2, false) == true);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure3, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure4, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure1, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure2, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure3, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure4, false) == false);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure1, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure2, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure3, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure4, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure1, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure2, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure3, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure4, false) == false);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure1, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure2, false) == true);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure3, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure4, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure1, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure2, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure3, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure4, false) == true);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure4, *procedure1, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure4, *procedure2, false) == true);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure4, *procedure3, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure4, *procedure4, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure4, *procedure1, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure4, *procedure2, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure4, *procedure3, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure4, *procedure4, false) == false);
     }
 
     SECTION("Calls* Test 4") {
@@ -164,37 +164,37 @@ TEST_CASE("Test Calls Transitivity Calculation") {
         */
         CallsRelationshipManager callsRelationshipManager = CallsRelationshipManager();
 
-        REQUIRE(callsRelationshipManager.hasCalls() == false);
+        REQUIRE(callsRelationshipManager.hasRelationship() == false);
 
         shared_ptr<Procedure> procedure1 = make_shared<Procedure>(Procedure("First"));
         shared_ptr<Procedure> procedure2 = make_shared<Procedure>(Procedure("Second"));
         shared_ptr<Procedure> procedure3 = make_shared<Procedure>(Procedure("Third"));
         shared_ptr<Procedure> procedure4 = make_shared<Procedure>(Procedure("Fourth"));
 
-        callsRelationshipManager.storeCallsRelationship(procedure2, procedure1, true);
-        callsRelationshipManager.storeCallsRelationship(procedure3, procedure4, true);
-        callsRelationshipManager.storeCallsRelationship(procedure4, procedure2, true);
+        callsRelationshipManager.storeRelationship(procedure2, procedure1, true);
+        callsRelationshipManager.storeRelationship(procedure3, procedure4, true);
+        callsRelationshipManager.storeRelationship(procedure4, procedure2, true);
         callsRelationshipManager.calculateCallsStar();
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure1, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure2, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure3, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure4, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure1, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure2, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure3, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure4, false) == false);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure1, false) == true);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure2, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure3, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure2, *procedure4, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure1, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure2, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure3, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure4, false) == false);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure1, false) == true);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure2, false) == true);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure3, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure3, *procedure4, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure1, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure2, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure3, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure4, false) == true);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure4, *procedure1, false) == true);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure4, *procedure2, false) == true);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure4, *procedure3, false) == false);
-        REQUIRE(callsRelationshipManager.isCalls(*procedure4, *procedure4, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure4, *procedure1, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure4, *procedure2, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure4, *procedure3, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure4, *procedure4, false) == false);
     }
 
     SECTION("Calls* Test 5") {
@@ -203,7 +203,7 @@ TEST_CASE("Test Calls Transitivity Calculation") {
         */
         CallsRelationshipManager callsRelationshipManager = CallsRelationshipManager();
 
-        REQUIRE(callsRelationshipManager.hasCalls() == false);
+        REQUIRE(callsRelationshipManager.hasRelationship() == false);
 
         shared_ptr<Procedure> procedure1 = make_shared<Procedure>(Procedure("First"));
         shared_ptr<Procedure> procedure2 = make_shared<Procedure>(Procedure("Second"));
@@ -216,20 +216,20 @@ TEST_CASE("Test Calls Transitivity Calculation") {
         shared_ptr<Procedure> procedure9 = make_shared<Procedure>(Procedure("Ninth"));
         shared_ptr<Procedure> procedure10 = make_shared<Procedure>(Procedure("Tenth"));
 
-        callsRelationshipManager.storeCallsRelationship(procedure1, procedure2, true);
-        callsRelationshipManager.storeCallsRelationship(procedure2, procedure3, true);
-        callsRelationshipManager.storeCallsRelationship(procedure3, procedure4, true);
-        callsRelationshipManager.storeCallsRelationship(procedure4, procedure5, true);
-        callsRelationshipManager.storeCallsRelationship(procedure5, procedure6, true);
-        callsRelationshipManager.storeCallsRelationship(procedure6, procedure7, true);
-        callsRelationshipManager.storeCallsRelationship(procedure7, procedure8, true);
-        callsRelationshipManager.storeCallsRelationship(procedure8, procedure9, true);
-        callsRelationshipManager.storeCallsRelationship(procedure9, procedure10, true);
+        callsRelationshipManager.storeRelationship(procedure1, procedure2, true);
+        callsRelationshipManager.storeRelationship(procedure2, procedure3, true);
+        callsRelationshipManager.storeRelationship(procedure3, procedure4, true);
+        callsRelationshipManager.storeRelationship(procedure4, procedure5, true);
+        callsRelationshipManager.storeRelationship(procedure5, procedure6, true);
+        callsRelationshipManager.storeRelationship(procedure6, procedure7, true);
+        callsRelationshipManager.storeRelationship(procedure7, procedure8, true);
+        callsRelationshipManager.storeRelationship(procedure8, procedure9, true);
+        callsRelationshipManager.storeRelationship(procedure9, procedure10, true);
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure10, false) == false);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure10, false) == false);
 
         callsRelationshipManager.calculateCallsStar();
 
-        REQUIRE(callsRelationshipManager.isCalls(*procedure1, *procedure10, false) == true);
+        REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure10, false) == true);
     }
 }

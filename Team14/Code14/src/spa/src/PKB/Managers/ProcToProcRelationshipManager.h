@@ -29,7 +29,8 @@ private:
      * @param latter The latter procedure
      */
     void calculateTransitiveRelationshipHelper(std::shared_ptr<Procedure> former, std::shared_ptr<Procedure> latter);
-protected:
+
+public:
     /**
      * @brief Constructs a ProcToProcRelationshipManager object
      * @return A ProcToProcRelationshipManager object

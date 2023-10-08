@@ -1,18 +1,19 @@
 #pragma once
 
+#include <stdexcept>
+
 #include "SemanticValHandler.h"
 
 /**
- * StmtrefStmtrefHandler class that extends from SemanticValHandler
+ * StmtrefProcVarHandler class that extends SemanticValHandler
  */
-class StmtrefStmtrefHandler : public SemanticValHandler {
+class StmtrefProcVarHandler : public SemanticValHandler {
 public:
     /**
-     * @brief Handles (stmtRef,stmtRef) semantic validation of the Clause in the Clause
+     * @brief Handles (stmtRef/proc, var) semantic validation of the Clause in the Query
      * @param query The Query object
      * @param clause The shared pointer of the Clause
      */
-
     void handle(const Query &query, std::shared_ptr<Clause> clause) override;
 
     /**
