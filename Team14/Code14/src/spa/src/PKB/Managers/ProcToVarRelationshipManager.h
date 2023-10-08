@@ -8,6 +8,7 @@
 #include "PKB/Managers/EntitiesManager.h"
 #include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Variable.h"
+#include "PKB/Managers/CallsRelationshipManager.h"
 
 /**
  * @class ProcToVarRelationshipManager is responsible for storing and retrieving the relationships
@@ -78,6 +79,19 @@ public:
      * @return True if the procedure is related to any variable, else false
      */
     bool hasRelationship(Procedure& procedure) const;
+
+    /**
+     * Calculates and populate the ProcToVarRelationship relationshipStore with the given CallsRelationshipManager
+     * @param callManager The CallsRelationshipManager
+	 */
+    void calculateProcVarRelationshipForCallers(std::shared_ptr<CallsRelationshipManager> callManager);
+
+    /**
+     * Returns an EntityStore of variables which is related to the given procedure
+     * @param left The procedure on the left that is related to the variables
+     * @returns An EntityStore of variables that is on the right of the given procedure
+     */
+    std::shared_ptr<EntityStore<Variable>> getRhsVarAsVariables(std::shared_ptr<Procedure> left) const;
 };
 
 #include "ProcToVarRelationshipManager.hpp"
