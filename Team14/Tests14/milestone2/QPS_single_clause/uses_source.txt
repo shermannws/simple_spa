@@ -14,7 +14,7 @@ procedure a {
 	}
 }
 
-proceudre b {
+procedure b {
 	if (!(varE != varEE)) then {
 		varF = varFF * 1;
 	} else {

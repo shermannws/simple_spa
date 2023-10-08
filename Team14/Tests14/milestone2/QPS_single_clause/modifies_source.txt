@@ -1,7 +1,7 @@
 procedure A {
 	A = 1;
 	two = TWO + 2 / two;
-	if (line3 == 3) {
+	if (line3 == 3) then {
 		call b;
 	} else {
 		print five;
@@ -33,6 +33,6 @@ procedure call {
 procedure blah {
 	print nothing;
 	while (x != k) {
-		print nothing again;
+		print nothingAgain;
 	}
 }
