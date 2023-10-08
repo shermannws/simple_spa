@@ -9,56 +9,27 @@ void ProcToVarRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedur
 
 template <typename S>
 std::vector<std::vector<Entity>> ProcToVarRelationshipManager<S>::getRelationshipProcPair() const {
-    // TODO: Refactor
-    std::vector<std::vector<Entity>> result;
-    for (auto it = relationshipStore->getLeftToRightBeginIterator(); it != relationshipStore->getLeftToRightEndIterator(); ++it) {
-        auto proc = it->first;
-        auto variableSet = it->second;
-        for (auto it2 = variableSet->getBeginIterator(); it2 != variableSet->getEndIterator(); ++it2) {
-            auto variable = *it2;
-            result.push_back(std::vector<Entity>{*proc, *variable});
-        }
-    }
-    return result;
+    return ManagerUtils::getPairNoMatch<Procedure, Variable>(*relationshipStore);
 }
 
 template <typename S>
 std::vector<Entity> ProcToVarRelationshipManager<S>::getRelationshipIdent(Variable& var) const {
-    auto matcher = [](Procedure& proc) {
-        return true;
-    };
-    return ManagerUtils::getLeftEntitiesFromRightKey<Procedure, Variable>(*relationshipStore,
-                                                    var,
-                                                    matcher);
+    return ManagerUtils::getLeftEntitiesFromRightKeyNoMatch<Procedure, Variable>(*relationshipStore, var);
 }
 
 template <typename S>
 std::vector<Entity> ProcToVarRelationshipManager<S>::getRelationshipProc() const {
-    std::vector<Entity> result;
-    for (auto it = relationshipStore->getLeftToRightBeginIterator(); it != relationshipStore->getLeftToRightEndIterator(); ++it) {
-		result.push_back(*(it->first));
-	}
-    return result;
+    return ManagerUtils::getLeftKeysNoMatch<Procedure, Variable>(*relationshipStore);
 }
 
 template <typename S>
 std::vector<Entity> ProcToVarRelationshipManager<S>::getRelationshipVar(Procedure& procedure) const {
-    auto matcher = [](Variable& var) {
-        return true;
-    };
-    return ManagerUtils::getRightEntitiesFromLeftKey<Procedure, Variable>(*relationshipStore,
-                                                    procedure,
-                                                    matcher);
+    return ManagerUtils::getRightEntitiesFromLeftKeyNoMatch<Procedure, Variable>(*relationshipStore, procedure);
 }
 
 template <typename S>
 bool ProcToVarRelationshipManager<S>::isRelationship(Procedure& procedure, Variable& var) const {
-    auto varStore = relationshipStore->getRightEntitiesOf(std::make_shared<Procedure>(procedure));
-    if (varStore == nullptr) {
-        return false;
-    }
-
-    return varStore->getEntity(std::make_shared<Variable>(var)) != nullptr;
+    return ManagerUtils::mapContains<Procedure, Variable>(*relationshipStore, procedure, var);
 }
 
 template <typename S>
