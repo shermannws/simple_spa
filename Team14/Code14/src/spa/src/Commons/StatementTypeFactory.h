@@ -8,6 +8,12 @@
  * @details A factory class for StatementType
  */
 class StatementTypeFactory {
+private:
+    /**
+     * @brief A map of StatementNodeType to a function that returns a StatementNode object
+     */
+	static std::unordered_map<StatementNodeType, std::function<StatementType(void)>> functionMap;
+
 public:
     /**
      * @brief Returns the StatementType of the StatementNode object
