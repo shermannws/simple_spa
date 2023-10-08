@@ -65,6 +65,10 @@ std::vector<Entity> EntitiesManager::getAllIf() const {
     return this->getEntities<Statement>(this->statementStore, [](Statement& statement) { return statement.isStatementType(StatementType::If); });
 }
 
+std::vector<Entity> EntitiesManager::getAllCall() const {
+    return this->getEntities<Statement>(this->statementStore, [](Statement& statement) { return statement.isStatementType(StatementType::Call); });
+}
+
 std::shared_ptr<Entity> EntitiesManager::getStatement(std::shared_ptr<Statement> s) const {
     return this->statementStore->getEntity(s);
 }
