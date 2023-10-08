@@ -1,8 +1,10 @@
 #include "QPS/Parsers/PQLParser.h"
 #include "QPS/Exceptions/SyntaxException.h"
 #include "QPS/Exceptions/SemanticException.h"
+#include "QPSTestUtil.h"
 
 #include "catch.hpp"
+
 
 TEST_CASE("single declaration, single Select") {
     std::string input = "stmt s; Select s";
@@ -76,6 +78,7 @@ TEST_CASE("processDeclarations Errors") {
 
     SECTION("SemanticExceptions") {
         std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("Select s ", "Undeclared synonym in Select clause");
         testcases.emplace_back("stmt s; assign s; Select s ", "Trying to redeclare a synonym");
         testcases.emplace_back("Select s ", "undeclared synonym");
 
@@ -631,7 +634,7 @@ TEST_CASE("Invalid processSuchThat cases") {
 
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
-            REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
+            REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
         }
     }
 
@@ -910,3 +913,109 @@ TEST_CASE("both clause present") {
 
 }
 
+TEST_CASE("invalid multi-clause queries") {
+    SECTION("Syntax Errors") {
+        // Use and between different clause types
+        PQLParser parser("assign a; variable v; Select v such that Modifies(a,v) and pattern a(_,_) ");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        // Use both `and` & clause keyword (such that)
+        parser = PQLParser("assign a; variable v; Select v such that Modifies(a,v) and such that Follows(1, 2)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        // Use both `and` & clause keyword (pattern)
+        parser = PQLParser("assign a; variable v; Select a pattern a(_,_) and pattern a(v,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        // Trailing `and`
+        parser = PQLParser("assign a; variable v; Select a pattern v(\"y\",_) and ");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+    }
+}
+
+TEST_CASE("valid multi-clause queries") {
+
+    SECTION("use AND in such that") {
+        PQLParser parser("assign a; variable v; Select v such that Modifies(a,v) and Follows*(1,2) and Uses(a,v)");
+        Query query = parser.parse();
+
+        auto stClauses = query.getSuchThat();
+        REQUIRE(stClauses.size() == 3);
+
+        auto pClauses = query.getPattern();
+        REQUIRE(pClauses.empty());
+
+        auto c1 = QPSTestUtil::createSuchThatClause(ClauseType::Modifies,
+                                                    RefType::StmtRef, RootType::Synonym, QueryEntityType::Assign, "a",
+                                                    RefType::EntRef, RootType::Synonym, QueryEntityType::Variable, "v");
+        auto c2 = QPSTestUtil::createSuchThatClause(ClauseType::FollowsStar,
+                                                    RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
+                                                    RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "2");
+        auto c3 = QPSTestUtil::createSuchThatClause(ClauseType::Uses,
+                                                    RefType::StmtRef, RootType::Synonym, QueryEntityType::Assign, "a",
+                                                    RefType::EntRef, RootType::Synonym, QueryEntityType::Variable, "v");
+        REQUIRE(*stClauses[0] == *c1);
+        REQUIRE(*stClauses[1] == *c2);
+        REQUIRE(*stClauses[2] == *c3);
+
+    }
+
+    SECTION("use AND in pattern") {
+        PQLParser parser(R"(assign a,pattern; variable v; assign a1; Select a pattern a(_,_) and pattern (v,_) and a1("y","1"))");
+        Query query = parser.parse();
+
+        auto stClauses = query.getSuchThat();
+        REQUIRE(stClauses.empty());
+
+        auto pClauses = query.getPattern();
+        REQUIRE(pClauses.size() == 3);
+
+        auto c1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
+                                                   RootType::Wildcard, "_",
+                                                   ExpressionSpecType::Wildcard, "" );
+        auto c2 = QPSTestUtil::createPatternClause(ClauseType::Assign, "pattern",
+                                                   RootType::Synonym, "v",
+                                                   ExpressionSpecType::Wildcard, "");
+        auto c3 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a1",
+                                                   RootType::Ident, "y",
+                                                   ExpressionSpecType::ExactMatch, "(1)");
+        REQUIRE(*pClauses[0] == *c1);
+        REQUIRE(*pClauses[1] == *c2);
+        REQUIRE(*pClauses[2] == *c3);
+
+    }
+
+    SECTION("use AND with all clause types") {
+        PQLParser parser(R"(assign a; assign and, such; variable v; Select and pattern a(_,_) and and (v,_"1+x"_) such that  Follows(1,2) pattern such(v,_) such that Parent*(1,10))");
+        Query query = parser.parse();
+
+        auto stClauses = query.getSuchThat();
+        REQUIRE(stClauses.size() == 2);
+
+        auto pClauses = query.getPattern();
+        REQUIRE(pClauses.size() == 3);
+
+        auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
+                                                   RootType::Wildcard, "_",
+                                                   ExpressionSpecType::Wildcard, "" );
+        auto pc2 = QPSTestUtil::createPatternClause(ClauseType::Assign, "and",
+                                                   RootType::Synonym, "v",
+                                                   ExpressionSpecType::PartialMatch, "((1)+(x))");
+        auto pc3 = QPSTestUtil::createPatternClause(ClauseType::Assign, "such",
+                                                   RootType::Synonym, "v",
+                                                   ExpressionSpecType::Wildcard, "");
+        auto sc1 = QPSTestUtil::createSuchThatClause(ClauseType::Follows,
+                                                    RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
+                                                    RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "2");
+        auto sc2 = QPSTestUtil::createSuchThatClause(ClauseType::ParentStar,
+                                                    RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
+                                                    RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "10");
+
+        REQUIRE(*pClauses[0] == *pc1);
+        REQUIRE(*pClauses[1] == *pc2);
+        REQUIRE(*pClauses[2] == *pc3);
+
+        REQUIRE(*stClauses[0] == *sc1);
+        REQUIRE(*stClauses[1] == *sc2);
+    }
+}

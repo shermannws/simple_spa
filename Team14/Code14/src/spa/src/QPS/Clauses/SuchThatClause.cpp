@@ -28,3 +28,14 @@ void SuchThatClause::setSecondParam(Ref& ref) {
 Ref& SuchThatClause::getSecondParam() {
     return secondParam;
 }
+
+bool SuchThatClause::operator==(const Clause& other) const {
+    try {
+        const auto& otherPattern = dynamic_cast<const SuchThatClause&>(other);
+        return (type == otherPattern.type) &&
+               (firstParam == otherPattern.firstParam) &&
+               (secondParam==otherPattern.secondParam);
+    } catch (std::bad_cast& e) {
+        return false;
+    }
+}
