@@ -16,5 +16,5 @@ public:
      * @param pkbReader The pkbReader of which the methods are to be called
      * @return The result of the clause evaluation
      */
-    virtual Result evaluateClause(std::shared_ptr<Clause> clause) const = 0;
+    virtual std::shared_ptr<Result> evaluateClause(std::shared_ptr<Clause> clause) const = 0;
 };

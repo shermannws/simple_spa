@@ -186,6 +186,15 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> cl
                 throw SyntaxException("Invalid RHS, stmtRef expected");
             }
             break;
+        case ClauseType::Calls:
+        case ClauseType::CallsStar:
+            if (!leftRef.isOfEntRef()) {
+                throw SyntaxException("Invalid RHS entRef");
+            }
+            if (!rightRef.isOfEntRef()) {
+                throw SyntaxException("Invalid RHS entRef");
+            }
+            break;
         default:
             throw SyntaxException("Invalid ClauseType in Such That Clause");
     }

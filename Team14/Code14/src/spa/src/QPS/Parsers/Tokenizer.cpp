@@ -8,7 +8,7 @@
 
 
 std::vector<std::string> specials{"(",")",";",",","_","+","-","*","/","%", "\""};
-std::vector<std::string> stars{"Follows", "Parent", "Next"};
+std::vector<std::string> stars{"Follows", "Parent", "Next", "Calls"};
 
 Tokenizer::Tokenizer(const std::string& input) : curr(0) {
     this->input = input;

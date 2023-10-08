@@ -20,6 +20,18 @@ Ref& SuchThatClause::getSecondParam() {
     return secondParam;
 }
 
+std::vector<Synonym> SuchThatClause::getSynonyms() const {
+    std::vector<Synonym> synonyms;
+    if (firstParam.getRootType() == RootType::Synonym) {
+        synonyms.push_back(firstParam.getRep());
+    }
+    // only add RHS synonym if it is different from LHS
+    if (secondParam.getRootType() == RootType::Synonym && !(firstParam == secondParam)) {
+        synonyms.push_back(secondParam.getRep());
+    }
+    return synonyms;
+}
+
 bool SuchThatClause::operator==(const Clause& other) const {
     try {
         const auto& otherPattern = dynamic_cast<const SuchThatClause&>(other);
