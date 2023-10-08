@@ -1,0 +1,59 @@
+procedure Proc1 {
+    call Proc2;
+
+    if (x == 1) then {
+        read x;
+        call Proc3;
+        print y;
+    } else {
+        b = 5;
+        call Proc4;
+        call Proc5;
+        a = b + c * 2;
+    }
+
+    call Proc6;
+
+    while (x == 2) {
+        xyz = x * y * z;
+        call Proc7;
+    }
+    call Proc8;
+}
+
+procedure Proc2 {
+    call Proc3;
+    call Proc4;
+}
+
+procedure Proc3 {
+    print var;
+    call Proc4;
+}
+
+procedure Proc4 {
+    x = 1;
+    read var;
+}
+
+procedure Proc5 {
+    read var1;
+    call Proc4;
+    print var1;
+}
+
+procedure Proc6 {
+    call Proc4;
+}
+
+procedure Proc7 {
+    x = 1;
+}
+
+procedure Proc8 {
+    x = 1;
+}
+
+procedure Proc9 {
+    x = 1;
+}
