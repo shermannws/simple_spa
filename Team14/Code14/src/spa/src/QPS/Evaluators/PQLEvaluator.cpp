@@ -72,7 +72,7 @@ Result PQLEvaluator::evaluate(Query& query) { //TODO handle multiclause
 
     // CASE TRUE OR NON-EMPTY TABLE OR INVALID, evaluate select independently
     auto selectResult = std::make_shared<Result>();
-    selectResult->setSynIndices(query.getSelect());
+    selectResult->setType(query.getSelect());
     EntityPtr entity = query.getEntity(syn);
     selectResult->setTuples(getAll(entity));
     return *selectResult;
