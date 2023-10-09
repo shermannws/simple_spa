@@ -1,7 +1,7 @@
 #include "PkbWriterManager.h"
 
-#include "PKB/AssignmentPatternStore/Assignment.h"
 #include "PKB/PkbWriter.h"
+#include "PKB/Managers/ManagerUtils.h"
 
 PkbWriterManager::PkbWriterManager(
         std::shared_ptr<AssignmentManager> assignmentManager,
@@ -47,29 +47,57 @@ void PkbWriterManager::addAssignStatement(std::shared_ptr<Statement> s, std::sha
 }
 
 void PkbWriterManager::addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
-    this->followsRelationshipManager->storeFollowsRelationship(s1, s2, isDirect);
+    this->followsRelationshipManager->storeRelationship(s1, s2, isDirect);
 }
 
 void PkbWriterManager::addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
-    this->usesRelationshipManager->storeUsesRelationship(s, v);
+    this->usesRelationshipManager->storeRelationship(s, v);
 }
 
 void PkbWriterManager::addModifiesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) {
-    this->modifiesRelationshipManager->storeModifiesRelationship(s, v);
+    this->modifiesRelationshipManager->storeRelationship(s, v);
 }
 
 void PkbWriterManager::addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
-    this->parentRelationshipManager->storeParentRelationship(s1, s2, isDirect);
+    this->parentRelationshipManager->storeRelationship(s1, s2, isDirect);
 }
 
 void PkbWriterManager::addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2) {
-    this->callsRelationshipManager->storeCallsRelationship(p1, p2, true);
+    this->callsRelationshipManager->storeRelationship(p1, p2, true);
 }
 
 void PkbWriterManager::addModifiesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {
-	this->modifiesProcRelationshipManager->storeModifiesProcRelationship(p, v);
+	this->modifiesProcRelationshipManager->storeRelationship(p, v);
 }
 
 void PkbWriterManager::addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {
-	this->usesProcRelationshipManager->storeUsesProcRelationship(p, v);
+    this->usesProcRelationshipManager->storeRelationship(p, v);
+}
+
+void PkbWriterManager::triggerCallsTransitiveCalculation() {
+	this->callsRelationshipManager->calculateTransitiveRelationship();
+}
+
+void PkbWriterManager::addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) {
+    for (auto stmt : s) {
+		this->tempProcedureToStatementsMap.storeRelationship(p, stmt);
+	}
+}
+
+void PkbWriterManager::triggerProcToVarTransitiveCalculation() {
+    this->modifiesProcRelationshipManager->calculateProcVarRelationshipForCallers(this->callsRelationshipManager);
+    this->usesProcRelationshipManager->calculateProcVarRelationshipForCallers(this->callsRelationshipManager);
+}
+
+void PkbWriterManager::triggerStmtToVarTransitiveCalculation() {
+    ManagerUtils::addStmtVarFromProcVar(this->modifiesRelationshipManager, std::make_shared<RelationshipStore<Procedure, Statement>>(this->tempProcedureToStatementsMap), this->modifiesProcRelationshipManager);
+    ManagerUtils::addStmtVarFromProcVar(this->usesRelationshipManager, std::make_shared<RelationshipStore<Procedure, Statement>>(this->tempProcedureToStatementsMap), this->usesProcRelationshipManager);
+    this->tempProcedureToStatementsMap.clear();
+}
+
+void PkbWriterManager::triggerTransitiveCalc() {
+    //The order of these 3 calls are important, as each transitivity calculation depends on the previous one
+    triggerCallsTransitiveCalculation();
+    triggerProcToVarTransitiveCalculation();
+    triggerStmtToVarTransitiveCalculation();
 }

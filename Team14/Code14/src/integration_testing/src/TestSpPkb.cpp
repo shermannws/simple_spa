@@ -99,22 +99,22 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     REQUIRE(*(entitiesManager->getConstant(std::make_shared<Constant>(Constant("1")))) == *(std::make_shared<Constant>("1")));
 
     auto VarV = Variable("v");
-    auto usesV = usesRelationshipManager->getUsesTypeIdent(StatementType::Assign, VarV);
+    auto usesV = usesRelationshipManager->getRelationshipTypeIdent(StatementType::Assign, VarV);
     REQUIRE(usesV.size() == 1);
     REQUIRE(usesV.at(0) == Statement(1, StatementType::Assign));
 
     auto VarY = Variable("y");
-    auto usesY = usesRelationshipManager->getUsesTypeIdent(StatementType::Assign, VarY);
+    auto usesY = usesRelationshipManager->getRelationshipTypeIdent(StatementType::Assign, VarY);
     REQUIRE(usesY.size() == 1);
     REQUIRE(usesY.at(0) == Statement(1, StatementType::Assign));
 
     auto Stmt1 = Statement(1, StatementType::Assign);
-    auto followsRS = followsRelationshipManager->getFollowsStmtType(Stmt1, StatementType::Stmt, true);
+    auto followsRS = followsRelationshipManager->getRelationshipStmtType(Stmt1, StatementType::Stmt, true);
     REQUIRE(followsRS.size() == 1);
     REQUIRE(followsRS.at(0) == Statement(2, StatementType::Read));
 
     auto Stmt2 = Statement(2, StatementType::Read);
-    auto followsRS2 = followsRelationshipManager->getFollowsStmtType(Stmt2, StatementType::Stmt, true);
+    auto followsRS2 = followsRelationshipManager->getRelationshipStmtType(Stmt2, StatementType::Stmt, true);
     REQUIRE(followsRS2.size() == 1);
     REQUIRE(followsRS2.at(0) == Statement(3, StatementType::Print));
 }
@@ -207,82 +207,82 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     REQUIRE(*(entitiesManager->getProcedure(std::make_shared<Procedure>(Procedure("kk")))) == *(std::make_shared<Procedure>("kk")));
     
     // Check Follows
-    auto follows1 = followsRelationshipManager->getFollowsStmtType(stmt1, StatementType::Stmt, true);
+    auto follows1 = followsRelationshipManager->getRelationshipStmtType(stmt1, StatementType::Stmt, true);
     REQUIRE(follows1.size() == 1);
     REQUIRE(follows1.at(0) == stmt9);
-    auto follows3 = followsRelationshipManager->getFollowsStmtType(stmt3, StatementType::Stmt, true);
+    auto follows3 = followsRelationshipManager->getRelationshipStmtType(stmt3, StatementType::Stmt, true);
     REQUIRE(follows3.size() == 1);
     REQUIRE(follows3.at(0) == Statement(4, StatementType::Assign));
 
     
     // Check Follows*
-    auto follows1star = followsRelationshipManager->getFollowsStmtType(stmt1, StatementType::Stmt, false);
+    auto follows1star = followsRelationshipManager->getRelationshipStmtType(stmt1, StatementType::Stmt, false);
     REQUIRE(follows1star.size() == 2);
     REQUIRE(std::find(follows1star.begin(), follows1star.end(), stmt9) != follows1star.end());
     REQUIRE(std::find(follows1star.begin(), follows1star.end(), stmt10) != follows1star.end());
     
     // Check Uses exhaustively
-    REQUIRE(usesRelationshipManager->getUsesStmtPair(StatementType::Stmt).size() == 17);
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varA));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varB));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varC));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varD));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varF));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varI));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varJ));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varK));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varC));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varD));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt1, varF));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt3, varF));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt6, varI));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt7, varJ));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt7, varK));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt10, varX));
-    REQUIRE(usesRelationshipManager->isStmtUsesVar(stmt10, varC));
+    REQUIRE(usesRelationshipManager->getRelationshipStmtPair(StatementType::Stmt).size() == 17);
+    REQUIRE(usesRelationshipManager->isRelationship(stmt1, varA));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt1, varB));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt1, varC));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt1, varD));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt1, varF));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt1, varI));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt1, varJ));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt1, varK));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt1, varC));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt1, varD));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt1, varF));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt3, varF));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt6, varI));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt7, varJ));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt7, varK));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt10, varX));
+    REQUIRE(usesRelationshipManager->isRelationship(stmt10, varC));
     
-    REQUIRE(!usesRelationshipManager->isStmtUsesVar(stmt5, varH));
-    REQUIRE(!usesRelationshipManager->isStmtUsesVar(stmt8, varA));
-    REQUIRE(!usesRelationshipManager->isStmtUsesVar(stmt10, varM));
+    REQUIRE(!usesRelationshipManager->isRelationship(stmt5, varH));
+    REQUIRE(!usesRelationshipManager->isRelationship(stmt8, varA));
+    REQUIRE(!usesRelationshipManager->isRelationship(stmt10, varM));
 
     
     // Check Modifies
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt1, varE));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt1, varG));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt1, varH));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt1, varA));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt1, varE));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt1, varG));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt1, varH));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt1, varA));
 
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt2, varE));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt2, varG));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt2, varH));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt2, varE));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt2, varG));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt2, varH));
 
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt3, varE));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt4, varG));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt5, varH));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt3, varE));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt4, varG));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt5, varH));
 
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt7, varA));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt8, varA));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt7, varA));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt8, varA));
 
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt9, varJ));
-    REQUIRE(modifiesRelationshipManager->isStmtModifiesVar(stmt10, varM));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt9, varJ));
+    REQUIRE(modifiesRelationshipManager->isRelationship(stmt10, varM));
 
-    REQUIRE(!modifiesRelationshipManager->isStmtModifiesVar(stmt1, varB));
-    REQUIRE(!modifiesRelationshipManager->isStmtModifiesVar(stmt10, varX));
+    REQUIRE(!modifiesRelationshipManager->isRelationship(stmt1, varB));
+    REQUIRE(!modifiesRelationshipManager->isRelationship(stmt10, varX));
  
     // Check Parent
-    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt2, true));
-    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt6, true));
-    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt7, true));
-    REQUIRE(parentRelationshipManager->isParent(stmt2, stmt3, true));
-    REQUIRE(parentRelationshipManager->isParent(stmt2, stmt4, true));
-    REQUIRE(parentRelationshipManager->isParent(stmt2, stmt5, true));
-    REQUIRE(parentRelationshipManager->isParent(stmt7, stmt8, true));
+    REQUIRE(parentRelationshipManager->isRelationship(stmt1, stmt2, true));
+    REQUIRE(parentRelationshipManager->isRelationship(stmt1, stmt6, true));
+    REQUIRE(parentRelationshipManager->isRelationship(stmt1, stmt7, true));
+    REQUIRE(parentRelationshipManager->isRelationship(stmt2, stmt3, true));
+    REQUIRE(parentRelationshipManager->isRelationship(stmt2, stmt4, true));
+    REQUIRE(parentRelationshipManager->isRelationship(stmt2, stmt5, true));
+    REQUIRE(parentRelationshipManager->isRelationship(stmt7, stmt8, true));
 
     // Check Parent*
-    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt3, false));
-    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt4, false));
-    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt5, false));
-    REQUIRE(parentRelationshipManager->isParent(stmt1, stmt8, false));
+    REQUIRE(parentRelationshipManager->isRelationship(stmt1, stmt3, false));
+    REQUIRE(parentRelationshipManager->isRelationship(stmt1, stmt4, false));
+    REQUIRE(parentRelationshipManager->isRelationship(stmt1, stmt5, false));
+    REQUIRE(parentRelationshipManager->isRelationship(stmt1, stmt8, false));
 }
 
 
@@ -354,39 +354,39 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
     REQUIRE(*(entitiesStore->getProcedure(std::make_shared<Procedure>(Procedure("jj")))) == *(std::make_shared<Procedure>("jj")));
 
     // Check Modifies with Procedure
-    REQUIRE(modifiesProcRelationshipManager->isProcModifiesVar(proc1, varC));
-    REQUIRE(modifiesProcRelationshipManager->isProcModifiesVar(proc2, varF));
+    REQUIRE(modifiesProcRelationshipManager->isRelationship(proc1, varC));
+    REQUIRE(modifiesProcRelationshipManager->isRelationship(proc2, varF));
 
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varA));
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varB));
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varD));
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varE));
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varF));
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc1, varG));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varA));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varB));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varD));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varE));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varF));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varG));
 
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varA));
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varB));
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varC));
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varD));
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varE));
-    REQUIRE(!modifiesProcRelationshipManager->isProcModifiesVar(proc2, varG));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varA));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varB));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varC));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varD));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varE));
+    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varG));
 
     // Check Uses with Procedure
-    REQUIRE(usesProcRelationshipManager->isProcUsesVar(proc1, varA));
-    REQUIRE(usesProcRelationshipManager->isProcUsesVar(proc1, varB));
-    REQUIRE(usesProcRelationshipManager->isProcUsesVar(proc1, varD));
-    REQUIRE(usesProcRelationshipManager->isProcUsesVar(proc1, varE));
+    REQUIRE(usesProcRelationshipManager->isRelationship(proc1, varA));
+    REQUIRE(usesProcRelationshipManager->isRelationship(proc1, varB));
+    REQUIRE(usesProcRelationshipManager->isRelationship(proc1, varD));
+    REQUIRE(usesProcRelationshipManager->isRelationship(proc1, varE));
 
-    REQUIRE(usesProcRelationshipManager->isProcUsesVar(proc2, varG));
+    REQUIRE(usesProcRelationshipManager->isRelationship(proc2, varG));
 
-    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc1, varC));
-    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc1, varF));
-    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc1, varG));
+    REQUIRE(!usesProcRelationshipManager->isRelationship(proc1, varC));
+    REQUIRE(!usesProcRelationshipManager->isRelationship(proc1, varF));
+    REQUIRE(!usesProcRelationshipManager->isRelationship(proc1, varG));
 
-    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varA));
-    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varB));
-    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varC));
-    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varD));
-    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varE));
-    REQUIRE(!usesProcRelationshipManager->isProcUsesVar(proc2, varF));
+    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varA));
+    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varB));
+    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varC));
+    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varD));
+    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varE));
+    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varF));
 }

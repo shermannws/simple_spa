@@ -96,14 +96,11 @@ std::shared_ptr<Result> PQLEvaluator::evaluateConstraintClauses(const Query& que
 
 std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const Query& query) {
     std::shared_ptr<Result> result = std::make_shared<Result>();
+    result->setType(query.getSelect());
 
     Synonym selectSyn = query.getSelect()[0];
-    SynonymMap map {{selectSyn, 0}};
-    result->setSynIndices(map);
-
     std::shared_ptr<QueryEntity> entity = query.getEntity(selectSyn);
-    std::vector<Entity> entities = getAll(entity);
-    result->setTuples(entities);
+    result->setTuples(getAll(entity));
 
     return result;
 }
@@ -129,6 +126,8 @@ std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& que
             return pkbReader->getAllRead();
         case QueryEntityType::Print:
             return pkbReader->getAllPrint();
+        case QueryEntityType::Call:
+            return pkbReader->getAllCall();
         default:
             throw std::runtime_error("Not supported entity type in query select clause");
     }

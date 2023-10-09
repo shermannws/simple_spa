@@ -121,17 +121,17 @@ SemanticError
 25 - check Modifies(call, synonym) - negative case
 call c; variable v;
 Select c such that Modifies(c, v)
-SyntaxError
+none
 5000
 26 - check Modifies(call, wildcard) - negative case
 call c;
 Select c such that Modifies(c, _)
-SyntaxError
+none
 5000
 27 - check Modifies(call, varname) - negative case
 call c;
 Select c such that Modifies(c, "var1")
-SyntaxError
+none
 5000
 28 - check Modifies(stmtnum, stmtnum) - negative case
 assign a;

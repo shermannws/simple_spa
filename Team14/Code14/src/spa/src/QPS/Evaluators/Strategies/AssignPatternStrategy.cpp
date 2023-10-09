@@ -6,11 +6,6 @@ std::shared_ptr<Result> AssignPatternStrategy::evaluateClause(std::shared_ptr<Cl
     ExpressionSpec secondArg = patternClause->getSecondParam();
 
     std::shared_ptr<Result> result = std::make_shared<Result>();
-    std::unordered_map<std::string, int> columns {{patternClause->getSyn(), 0}};
-    if (firstArg.isRootType(RootType::Synonym)) {
-        columns.insert({firstArg.getRep(), 1});
-    }
-    result->setSynIndices(columns);
 
     if (firstArg.isRootType(RootType::Wildcard)) {
         if (secondArg.first == ExpressionSpecType::Wildcard) {

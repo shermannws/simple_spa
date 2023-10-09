@@ -1,0 +1,55 @@
+1 - test syn-proc, wildcard
+procedure p;
+Select p such that Modifies(p,_)
+main, caller, secondary, modifies, final
+5000
+2 - test syn-proc, var-name, no procedure
+procedure p;
+Select p such that Modifies(p,"s")
+none
+5000
+3 - test syn-proc, var-name, one procedure
+procedure p;
+Select p such that Modifies(p,"h")
+main
+5000
+4 - test syn-proc, var-name, two procedures
+procedure p;
+Select p such that Modifies(p,"e")
+caller, modifies
+5000
+5 - test syn-proc, var-name, three procedures via call
+procedure p;
+Select p such that Modifies(p,"d")
+caller, modifies, secondary
+5000
+6 - test syn-proc, var-name, three procedures via nested calls
+procedure p;
+Select p such that Modifies(p,"i")
+caller, secondary, final
+5000
+7 - test syn-proc, var-syn
+procedure p; variable v;
+Select v such that Modifies(p,v)
+a, b, c, d, e, h, g, i
+5000
+8 - test syn-proc , var-syn , line no does not exist
+procedure p;
+Select p such that Modifies(1000000,"g")
+none
+5000
+9 - invalid query, wrong procedure terminal
+Procedure p;
+Select p such that Modifies(_,"i")
+SyntaxError
+5000
+10 - invalid query, _ in LHS
+procedure p;
+Select p such that Modifies(_,"j")
+SemanticError
+5000
+11 - invalid query, integer in RHS
+procedure p;
+Select p such that Modifies(a, 1)
+SyntaxError
+5000

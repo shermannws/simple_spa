@@ -1,7 +1,5 @@
 #include "PkbConcreteWriter.h"
 
-#include "PKB/AssignmentPatternStore/Assignment.h"
-
 PkbConcreteWriter::PkbConcreteWriter(
     std::shared_ptr<PkbWriterManager> writerManager
 ) : writerManager(writerManager) {}
@@ -63,11 +61,11 @@ void PkbConcreteWriter::addCallsRelationship(std::shared_ptr<Procedure> p1, std:
 }
 
 void PkbConcreteWriter::addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) {
-    return;
+    this->writerManager->addProcedureToStatementsMap(p, s);
 }
 
 void PkbConcreteWriter::triggerTransitiveCalc() {
-    return;
+    this->writerManager->triggerTransitiveCalc();
 }
 
 void PkbConcreteWriter::addModifiesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {

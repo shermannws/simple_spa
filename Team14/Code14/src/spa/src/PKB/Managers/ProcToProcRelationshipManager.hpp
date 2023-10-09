@@ -11,65 +11,33 @@ void ProcToProcRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedu
 
 template <typename S>
 std::vector<std::vector<Entity>> ProcToProcRelationshipManager<S>::getRelationshipPair(bool requireDirect) const {
-    std::vector<std::vector<Entity>> result;
-    auto store = requireDirect ? relationshipStore : starRelationshipStore;
-    for (auto it = store->getLeftToRightBeginIterator(); it != store->getLeftToRightEndIterator(); ++it) {
-        auto former = it->first;
-        auto latterSet = it->second;
-        for (auto it2 = latterSet->getBeginIterator(); it2 != latterSet->getEndIterator(); ++it2) {
-            auto latter = *it2;
-            result.push_back(std::vector<Entity>{*former, *latter});
-        }
-    }
-    return result;
+    return ManagerUtils::getPairNoMatch<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore);
 }
 
 template <typename S>
 std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipFormer(Procedure& latterProcedure, bool requireDirect) const {
-    auto matcher = [](Procedure& procedure) {
-        return true;
-    };
-    return ManagerUtils::getLeftEntitiesFromRightKey<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore,
-        latterProcedure,
-        matcher);
+    return ManagerUtils::getLeftEntitiesFromRightKeyNoMatch<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore, latterProcedure);
 }
 
 template <typename S>
 std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipFormer() const { // Same for Calls and Calls* since Calls* is a superset of Follows
-    std::vector<Entity> result;
-    std::for_each(relationshipStore->getLeftToRightBeginIterator(), relationshipStore->getLeftToRightEndIterator(), [&result](const auto pair) {
-        result.push_back(*pair.first);
-        });
-    return result;
+    return ManagerUtils::getLeftKeysNoMatch<Procedure, Procedure>(*relationshipStore);
 }
 
 template <typename S>
 std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipLatter(Procedure& formerProcedure, bool requireDirect) const {
-    auto matcher = [](Procedure& procedure) {
-        return true;
-        };
-    return ManagerUtils::getRightEntitiesFromLeftKey<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore,
-        formerProcedure,
-        matcher);
+    return ManagerUtils::getRightEntitiesFromLeftKeyNoMatch<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore, formerProcedure);
 }
 
 template <typename S>
 std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipLatter() const { // Same for Calls and Calls* since Calls* is a superset of Follows
-    std::vector<Entity> result;
-    std::for_each(relationshipStore->getRightToLeftBeginIterator(), relationshipStore->getRightToLeftEndIterator(), [&result](const auto pair) {
-        result.push_back(*pair.first);
-    });
-    return result;
+    return ManagerUtils::getRightKeysNoMatch<Procedure, Procedure>(*relationshipStore);
 }
 
 template <typename S>
 bool ProcToProcRelationshipManager<S>::isRelationship(Procedure& procedure1, Procedure& procedure2, bool requireDirect) const {
-    auto store = requireDirect ? relationshipStore : starRelationshipStore;
-    auto procStore = store->getRightEntitiesOf(std::make_shared<Procedure>(procedure1));
-    if (procStore == nullptr) {
-        return false;
-    }
-    return procStore->getEntity(std::make_shared<Procedure>(procedure2)) != nullptr;
+    return ManagerUtils::mapContains<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore, procedure1,
+        procedure2);
 }
 
 template <typename S>
@@ -86,3 +54,34 @@ template <typename S>
 bool ProcToProcRelationshipManager<S>::isLatter(Procedure& procedure) const {
     return relationshipStore->getLeftEntitiesOf(std::make_shared<Procedure>(procedure)) != nullptr;
 }
+
+template <typename S>
+void ProcToProcRelationshipManager<S>::calculateTransitiveRelationship() {
+    for (auto it = relationshipStore->getLeftToRightBeginIterator(); it != relationshipStore->getLeftToRightEndIterator(); ++it) {
+        auto former = it->first;
+        auto latterSet = it->second;
+        for (auto it2 = latterSet->getBeginIterator(); it2 != latterSet->getEndIterator(); ++it2) {
+            auto latter = *it2;
+            starRelationshipStore->storeRelationship(former, latter);
+            calculateTransitiveRelationshipHelper(former, latter);
+        }
+    }
+}
+
+template <typename S>
+void ProcToProcRelationshipManager<S>::calculateTransitiveRelationshipHelper(std::shared_ptr<Procedure> former, std::shared_ptr<Procedure> latter) {
+	auto latterChildren = relationshipStore->getRightEntitiesOf(latter);
+	if (latterChildren == nullptr) {
+		return;
+	}
+	for (auto it = latterChildren->getBeginIterator(); it != latterChildren->getEndIterator(); ++it) {
+		auto newLatter = *it;
+		starRelationshipStore->storeRelationship(former, newLatter);
+		calculateTransitiveRelationshipHelper(former, newLatter);
+	}
+}
+
+template <typename S>
+std::shared_ptr<EntityStore<Procedure>> ProcToProcRelationshipManager<S>::getRelationshipFormerStarAsProcedure(Procedure& latterProcedure) const {
+    return starRelationshipStore->getLeftEntitiesOf(std::make_shared<Procedure>(latterProcedure));
+};
