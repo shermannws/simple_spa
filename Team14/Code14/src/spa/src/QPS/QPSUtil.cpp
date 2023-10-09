@@ -5,6 +5,8 @@
 #include "QPS/Evaluators/Strategies/FollowsStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/ParentSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/ParentStarSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/CallsSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/CallsStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
 
 std::unordered_set<ClauseType> QPSUtil::stmtrefClauseTypes = {
@@ -14,6 +16,8 @@ std::unordered_set<ClauseType> QPSUtil::stmtrefClauseTypes = {
 
 std::unordered_set<ClauseType> QPSUtil::stmtrefProcVarClauseTypes = {ClauseType::Uses, ClauseType::Modifies};
 
+std::unordered_set<ClauseType> QPSUtil::procRefClauseTypes = {ClauseType::Calls, ClauseType::CallsStar};
+
 std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
     {QueryEntityType::Stmt, RefType::StmtRef},
     {QueryEntityType::Assign, RefType::StmtRef},
@@ -21,12 +25,13 @@ std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
     {QueryEntityType::If, RefType::StmtRef},
     {QueryEntityType::While, RefType::StmtRef},
     {QueryEntityType::Read, RefType::StmtRef},
-    {QueryEntityType::Procedure, RefType::EntRef}
+    {QueryEntityType::Call, RefType::StmtRef},
+    {QueryEntityType::Procedure, RefType::EntRef},
 };
 
 std::unordered_set<QueryEntityType> QPSUtil::stmtRefEntities = {
     QueryEntityType::Stmt, QueryEntityType::Assign, QueryEntityType::Print,
-    QueryEntityType::If, QueryEntityType::While, QueryEntityType::Read
+    QueryEntityType::If, QueryEntityType::While, QueryEntityType::Read, QueryEntityType::Call
 };
 
 std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>> QPSUtil::strategyCreatorMap = {
@@ -36,6 +41,8 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
     {ClauseType::FollowsStar, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<FollowsStarSuchThatStrategy>(pkbReader);}},
     {ClauseType::Parent, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<ParentSuchThatStrategy>(pkbReader);}},
     {ClauseType::ParentStar, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<ParentStarSuchThatStrategy>(pkbReader);}},
+    {ClauseType::Calls, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<CallsSuchThatStrategy>(pkbReader);}},
+    {ClauseType::CallsStar, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<CallsStarSuchThatStrategy>(pkbReader);}},
     {ClauseType::Assign, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<AssignPatternStrategy>(pkbReader);}},
 };
 
@@ -45,6 +52,7 @@ std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
         {QueryEntityType::Read, StatementType::Read},
         {QueryEntityType::If, StatementType::If},
         {QueryEntityType::While, StatementType::While},
-        {QueryEntityType::Stmt, StatementType::Stmt}
+        {QueryEntityType::Stmt, StatementType::Stmt},
+        {QueryEntityType::Call, StatementType::Call}
 };
 
