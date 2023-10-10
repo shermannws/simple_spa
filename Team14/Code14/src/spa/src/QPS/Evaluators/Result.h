@@ -89,4 +89,16 @@ public:
      * @return The result tuples (ResultTuples).
      */
     ResultTuples& getTuples();
+
+    /**
+     * @brief returns true if a Result object represents a True boolean Result
+     * @return true if the result object is a True Boolean Result
+     */
+    bool isTrue();
+
+    /**
+    * @brief returns true if a Result object represents a False boolean Result
+    * @return true if the result object is a False Boolean Result
+    */
+    bool isFalse();
 };

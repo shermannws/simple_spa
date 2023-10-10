@@ -11,17 +11,11 @@ std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1, s
     if (r2->getType() == ResultType::Invalid) {
         return r1;
     }
-    if (r1->getType() == ResultType::Boolean && !r1->getBoolResult()) {
+    if (r1->isFalse() || r2->isTrue()) {
         return r1;
     }
-    if (r2->getType() == ResultType::Boolean && !r2->getBoolResult()) {
+    if (r2->isFalse() || r1->isTrue()) {
         return r2;
-    }
-    if (r1->getType() == ResultType::Boolean && r1->getBoolResult()) {
-        return r2;
-    }
-    if (r2->getType() == ResultType::Boolean && r2->getBoolResult()) {
-        return r1;
     }
     return join(r1, r2);
 }

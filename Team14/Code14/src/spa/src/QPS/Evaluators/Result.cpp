@@ -44,3 +44,13 @@ ResultTuples& Result::getTuples() {
 SynonymMap& Result::getSynIndices() {
     return synIndices;
 }
+
+bool Result::isTrue() {
+    return (type == ResultType::Boolean && boolResult);
+}
+
+bool Result::isFalse() {
+    return (type == ResultType::Boolean && !boolResult);
+}
+
+
