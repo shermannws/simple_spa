@@ -12,6 +12,10 @@ std::string Ref::getRep() const{
     return rep;
 }
 
+std::string Ref::getAttrName() const{
+    return attrName;
+}
+
 void Ref::setType(RefType& rrefType) {
     type = rrefType;
 }
@@ -51,4 +55,12 @@ bool Ref::isOfStmtRef() {
 
 bool Ref::isOfEntRef() {
     return isRootType(RootType::Synonym) || isRootType(RootType::Wildcard) || isRootType(RootType::Ident);
+}
+
+bool Ref::isOfWithRef() {
+    return isRootType(RootType::Ident) || isRootType(RootType::Integer) || isRootType(RootType::AttrRef);
+}
+
+void Ref::setAttrName(std::string name) {
+    attrName = name;
 }

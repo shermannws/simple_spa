@@ -7,6 +7,7 @@
 #include "QueryEntity.h"
 #include "QPS/Clauses/SuchThatClause.h"
 #include "QPS/Clauses/PatternClause.h"
+#include "QPS/Clauses/WithClause.h"
 #include "QPSTypes.h"
 
 /**
@@ -36,6 +37,11 @@ private:
      * Vector of pattern clauses
      */
     std::vector<std::shared_ptr<PatternClause>> patternClauses;
+
+    /**
+     * Vector of with clauses
+     */
+    std::vector<std::shared_ptr<WithClause>> withClauses;
 public:
     /**
      * @brief Default constructor for the Query class.
@@ -65,6 +71,13 @@ public:
      * @param clause A shared pointer to the PatternClause to be added.
      */
     void addClause(std::shared_ptr<PatternClause> clause);
+
+
+    /**
+     * @brief Adds a pattern clause to the query.
+     * @param clause A shared pointer to the PatternClause to be added.
+     */
+    void addClause(std::shared_ptr<WithClause> clause);
 
     /**
      * @brief Checks if there are any declarations in the query.
@@ -103,4 +116,9 @@ public:
     */
     std::vector<std::shared_ptr<PatternClause>> getPattern() const;
 
+    /**
+    * @brief Retrieves the vector of pattern clauses in the query.
+    * @return A vector of shared pointers to the PatternClauses.
+    */
+    std::vector<std::shared_ptr<WithClause>> getWith() const;
 };

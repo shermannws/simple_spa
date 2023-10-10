@@ -11,6 +11,7 @@
 enum class RefType {
     StmtRef,
     EntRef,
+    WithRef,
     Invalid,
 };
 
@@ -18,10 +19,11 @@ enum class RefType {
  * @brief The enum class of RootType
  */
 enum class RootType {
-    Integer, // StmtRef
+    Integer, // StmtRef & WithRef
     Wildcard, // StmtRef & EntRef
     Synonym, // StmtRef & EntRef
-    Ident, // EntRef
+    Ident, // EntRef & WithRef
+    AttrRef, // WithRef
     Invalid
 };
 
@@ -34,6 +36,8 @@ private:
      * @brief The string representation of the Ref
      */
     StringRep rep;
+
+    std::string attrName; // if any
 
     /**
      * @brief The RefType of the Ref
@@ -61,6 +65,8 @@ public:
      */
     StringRep getRep() const;
 
+    std::string getAttrName() const;
+
     /**
      * @brief The getter of the RefType of the Ref
      * @return The RefType of the Ref
@@ -84,6 +90,8 @@ public:
      * @param rrep The StringRep reference
      */
     void setRep(StringRep& rrep);
+
+    void setAttrName(std::string name);
 
     /**
      * @brief The setter of the RefType of the Ref
@@ -121,6 +129,12 @@ public:
      * @return Returns true if the rootType is of entRef, otherwise false
      */
     bool isOfEntRef();
+
+    /**
+     * Checks if the rootType of the Ref is of WithRef
+     * @return Returns true if the rootType is of WithRef, otherwise false
+     */
+    bool isOfWithRef();
 
     /**
      * @brief Checks if this Ref is equal to other by comparing their rep, type, rootType and entityType

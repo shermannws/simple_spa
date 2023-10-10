@@ -17,6 +17,7 @@ enum class ClauseType {
     Calls,
     CallsStar,
     Assign,
+    With,
     Invalid
 };
 

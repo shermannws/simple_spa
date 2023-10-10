@@ -22,6 +22,7 @@ std::unordered_map<std::string, TokenType> QPSUtil::repToTokenTypeMap = {
         {"\"", TokenType::Quote},
         {"_", TokenType::Underscore},
         {".", TokenType::Dot},
+        {"=", TokenType::Equal},
 };
 
 std::unordered_set<std::string> QPSUtil::attrNames = {

@@ -24,6 +24,7 @@ enum class TokenType {
     Quote,
     Underscore,
     Dot,
+    Equal,
 
     // alphanumeric letter(s)
     Word,
@@ -85,6 +86,8 @@ public:
      * @return The result of the check in boolean
      */
     bool isDesignEntity();
+
+    bool isAttrName();
 
     /**
      * @brief Checks if the string representation matches the pattern of an INTEGER
