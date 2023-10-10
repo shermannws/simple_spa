@@ -9,6 +9,25 @@
 #include "QPS/Evaluators/Strategies/CallsStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
 
+std::unordered_map<std::string, TokenType> QPSUtil::repToTokenTypeMap = {
+        {"(", TokenType::Lparenthesis},
+        {")", TokenType::Rparenthesis},
+        {"+", TokenType::Plus},
+        {"-", TokenType::Minus},
+        {"*", TokenType::Asterisk},
+        {"/", TokenType::Slash},
+        {"%", TokenType::Percent},
+        {";", TokenType::Semicolon},
+        {",", TokenType::Comma},
+        {"\"", TokenType::Quote},
+        {"_", TokenType::Underscore},
+        {".", TokenType::Dot},
+};
+
+std::unordered_set<std::string> QPSUtil::attrNames = {
+        "procName", "varName", "value", "stmt#"
+};
+
 std::unordered_set<ClauseType> QPSUtil::stmtrefClauseTypes = {
     ClauseType::Follows, ClauseType::FollowsStar,
     ClauseType::Parent, ClauseType::ParentStar

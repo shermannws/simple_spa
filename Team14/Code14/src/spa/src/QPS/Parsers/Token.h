@@ -23,6 +23,7 @@ enum class TokenType {
     Comma,
     Quote,
     Underscore,
+    Dot,
 
     // alphanumeric letter(s)
     Word,

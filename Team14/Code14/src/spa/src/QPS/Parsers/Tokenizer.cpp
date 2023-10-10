@@ -7,8 +7,9 @@
 #include "QPS/Exceptions/SyntaxException.h"
 
 
-std::vector<std::string> specials{"(",")",";",",","_","+","-","*","/","%", "\""};
+std::vector<std::string> specials{"(",")",";",",","_","+","-","*","/","%", "\"", "."};
 std::vector<std::string> stars{"Follows", "Parent", "Calls"};
+std::vector<std::string> hashtags{"stmt"};
 
 Tokenizer::Tokenizer(const std::string& input) : curr(0) {
     this->input = input;
@@ -74,6 +75,15 @@ std::shared_ptr<Token> Tokenizer::popToken() {
             std::string temp = peekString();
             auto it_star = std::find(stars.begin(), stars.end(), res);
             if (it_star != stars.end()) {
+                res += popString();
+            }
+        }
+
+        // handle star abstraction as one token
+        if (isCurrValid() && peekString() == "#") {
+            std::string temp = peekString();
+            auto it_star = std::find(hashtags.begin(), hashtags.end(), res);
+            if (it_star != hashtags.end()) {
                 res += popString();
             }
         }

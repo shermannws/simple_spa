@@ -1,4 +1,5 @@
 #include "Token.h"
+#include "QPS/QPSUtil.h"
 
 #include <string>
 #include <regex>
@@ -14,28 +15,8 @@ std::unordered_map<TokenType, int> operatorPrecedence = {
 
 Token::Token(const std::string& input) {
     this->rep = input;
-    if (rep == "(") {
-        this->type = TokenType::Lparenthesis;
-    } else if (rep == ")") {
-        this->type = TokenType::Rparenthesis;
-    } else if (rep == "+") {
-        this->type = TokenType::Plus;
-    } else if (rep == "-") {
-        this->type = TokenType::Minus;
-    } else if (rep == "*") {
-        this->type = TokenType::Asterisk;
-    } else if (rep == "/") {
-        this->type = TokenType::Slash;
-    } else if (rep == "%") {
-        this->type = TokenType::Percent;
-    } else if (rep == ";") {
-        this->type = TokenType::Semicolon;
-    } else if (rep == ",") {
-        this->type = TokenType::Comma;
-    } else if (rep == "\"") {
-        this->type = TokenType::Quote;
-    } else if (rep == "_") {
-        this->type = TokenType::Underscore;
+    if (QPSUtil::repToTokenTypeMap.find(rep) != QPSUtil::repToTokenTypeMap.end()) {
+        this->type = QPSUtil::repToTokenTypeMap[rep];
     } else if (!rep.empty()){
         this->type = TokenType::Word;
     } else {

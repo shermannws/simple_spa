@@ -10,6 +10,10 @@
  */
 class QPSUtil {
 public:
+    static std::unordered_map<std::string, TokenType> repToTokenTypeMap;
+
+    static std::unordered_set<std::string> attrNames;
+
     /**
      * @brief An unordered map that maps QueryEntityType to the corresponding RefType
      */
