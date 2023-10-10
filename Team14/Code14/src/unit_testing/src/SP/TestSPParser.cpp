@@ -5,7 +5,7 @@
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
 #include "SP/AST/Nodes/ProgramNode.h"
-#include "ASTPrinter/ASTPrinter.h"
+#include "TestingUtilities/ASTPrinter/ASTPrinter.h"
 
 TEST_CASE("Test parse with one procedure, one read statement") {
     SPParser parser;
