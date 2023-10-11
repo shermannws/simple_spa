@@ -21,13 +21,10 @@ TEST_CASE("Test formatResult") {
         Query query = parser.parse();
         ResultType type = ResultType::Tuples;
         Result r = Result();
-        r.setType(type);
+        r.setType(std::vector<Synonym>{"a", "x"});
 
         std::vector<Entity> v1 {Statement(1, StatementType::Assign), Variable("my_variable")};
         std::vector<Entity> v2 {Statement(5, StatementType::Stmt), Variable("another_variable")};
-
-        std::unordered_map<std::string, int> map {{"a", 0}, {"x", 1}};
-        r.setSynIndices(map);
 
         std::vector<std::vector<Entity>> tuples {v1, v2};
         r.setTuples(tuples);
@@ -46,14 +43,11 @@ TEST_CASE("Test formatResult") {
         Query query = parser.parse();
         ResultType type = ResultType::Tuples;
         Result r = Result();
-        r.setType(type);
+        r.setType(std::vector<Synonym>{"s"});
 
         std::vector<Entity> v1 {Statement(1, StatementType::Stmt)};
         std::vector<Entity> v2 {Statement(2, StatementType::Stmt)};
 
-
-        std::unordered_map<std::string, int> map {{"s", 0}};
-        r.setSynIndices(map);
 
         std::vector<std::vector<Entity>> tuples{v1, v2};
         r.setTuples(tuples);
