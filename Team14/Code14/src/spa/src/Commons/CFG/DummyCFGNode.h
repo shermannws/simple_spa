@@ -4,6 +4,8 @@
 
 /**
  * CFGNode subclass representing a dummy node.
+ * Only used when creating CFG.
+ * Should not be present in the final CFG.
  */
 class DummyCFGNode : public CFGNode {
 private:
