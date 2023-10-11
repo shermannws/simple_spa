@@ -13,19 +13,14 @@ std::shared_ptr<Result> NextSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &
     }
     auto leftEntityType = leftRef.getEntityType();
     auto rightEntityType = rightRef.getEntityType();
-    auto leftSyn = leftRef.getRep();
-    auto rightSyn = rightRef.getRep();
     res->setTuples(pkbReader->getNextPair(QPSUtil::entityToStmtMap.at(leftEntityType),
                                             QPSUtil::entityToStmtMap.at(rightEntityType)));
-
-    std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
     return res;
 }
 
 std::shared_ptr<Result> NextSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     auto leftEntityType = leftRef.getEntityType();
-    auto leftSyn = leftRef.getRep();
     if (rightRef.isRootType(RootType::Integer)) {
         auto rightRep = rightRef.getRep();
         Statement s = Statement(stoi(rightRep), StatementType::Stmt);
@@ -33,14 +28,12 @@ std::shared_ptr<Result> NextSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &
     } else {
         res->setTuples(pkbReader->getNextTypeWildcard(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
-    std::unordered_map<std::string, int> indices{{leftSyn, 0}};
     return res;
 }
 
 std::shared_ptr<Result> NextSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     auto rightEntityType = rightRef.getEntityType();
-    auto rightSyn = rightRef.getRep();
     if (leftRef.isRootType(RootType::Integer)) {
         auto leftRep = leftRef.getRep();
         Statement s = Statement(stoi(leftRep), StatementType::Stmt);
@@ -48,7 +41,6 @@ std::shared_ptr<Result> NextSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &
     } else {
         res->setTuples(pkbReader->getNextWildcardType(QPSUtil::entityToStmtMap.at(rightEntityType)));
     }
-    std::unordered_map<std::string, int> indices{{rightSyn, 0}};
     return res;
 }
 
@@ -63,7 +55,7 @@ std::shared_ptr<Result> NextSuchThatStrategy::evaluateBoolean(Ref &leftRef, Ref 
         Statement s2 = Statement(stoi(rightRep), StatementType::Stmt);
         res->setBoolResult(pkbReader->isNext(s1, s2));
     } else if (isLeftInt) {
-        Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
+        Statement s = Statement(stoi(leftRep), StatementType::Stmt);
         res->setBoolResult(pkbReader->hasAfterStmt(s));
     } else if (isRightInt) {
         Statement s = Statement(stoi(rightRep), StatementType::Stmt);

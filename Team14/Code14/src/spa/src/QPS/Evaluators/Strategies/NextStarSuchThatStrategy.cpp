@@ -7,16 +7,12 @@ NextStarSuchThatStrategy::NextStarSuchThatStrategy(std::shared_ptr<PkbReader> pk
 
 std::shared_ptr<Result> NextStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
+    auto leftEntityType = leftRef.getEntityType();
     if (leftRef == rightRef) {
-        auto leftEntityType = leftRef.getEntityType();
-        auto leftSyn = leftRef.getRep();
         res->setTuples(pkbReader->getNextStarSameStmt(QPSUtil::entityToStmtMap.at(leftEntityType)));
         return res;
     }
-    auto leftEntityType = leftRef.getEntityType();
     auto rightEntityType = rightRef.getEntityType();
-    auto leftSyn = leftRef.getRep();
-    auto rightSyn = rightRef.getRep();
     res->setTuples(pkbReader->getNextStarPair(QPSUtil::entityToStmtMap.at(leftEntityType),
                                          QPSUtil::entityToStmtMap.at(rightEntityType)));
     return res;
@@ -25,7 +21,6 @@ std::shared_ptr<Result> NextStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef, R
 std::shared_ptr<Result> NextStarSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     auto leftEntityType = leftRef.getEntityType();
-    auto leftSyn = leftRef.getRep();
     if (rightRef.isRootType(RootType::Integer)) {
         auto rightRep = rightRef.getRep();
         Statement s = Statement(stoi(rightRep), StatementType::Stmt);
@@ -33,14 +28,12 @@ std::shared_ptr<Result> NextStarSuchThatStrategy::evaluateSynAny(Ref &leftRef, R
     } else {
         res->setTuples(pkbReader->getNextStarTypeWildcard(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
-    std::unordered_map<std::string, int> indices{{leftSyn, 0}};
     return res;
 }
 
 std::shared_ptr<Result> NextStarSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     auto rightEntityType = rightRef.getEntityType();
-    auto rightSyn = rightRef.getRep();
     if (leftRef.isRootType(RootType::Integer)) {
         auto leftRep = leftRef.getRep();
         Statement s = Statement(stoi(leftRep), StatementType::Stmt);
@@ -48,7 +41,6 @@ std::shared_ptr<Result> NextStarSuchThatStrategy::evaluateAnySyn(Ref &leftRef, R
     } else {
         res->setTuples(pkbReader->getNextStarWildcardType(QPSUtil::entityToStmtMap.at(rightEntityType)));
     }
-    std::unordered_map<std::string, int> indices{{rightSyn, 0}};
     return res;
 }
 
@@ -63,7 +55,7 @@ std::shared_ptr<Result> NextStarSuchThatStrategy::evaluateBoolean(Ref &leftRef, 
         Statement s2 = Statement(stoi(rightRep), StatementType::Stmt);
         res->setBoolResult(pkbReader->isNextStar(s1, s2));
     } else if (isLeftInt) {
-        Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
+        Statement s = Statement(stoi(leftRep), StatementType::Stmt);
         res->setBoolResult(pkbReader->hasAfterStarStmt(s));
     } else if (isRightInt) {
         Statement s = Statement(stoi(rightRep), StatementType::Stmt);
