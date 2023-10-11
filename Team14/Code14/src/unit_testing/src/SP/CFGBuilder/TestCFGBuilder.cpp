@@ -280,7 +280,7 @@ TEST_CASE("Test multiple procedures") {
     }
 }
 
-TEST_CASE("Test nested ifs") {
+TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // 12 stmts
     std::string sourceProgram =
             "procedure Proc1 { "
@@ -465,6 +465,144 @@ TEST_CASE("Test nested ifs") {
     REQUIRE(node12->getChildrenNodes().empty());
 }
 
-TEST_CASE("Test nested whiles") {
+TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
+    // Repeat of previous test case but without the last assign statement,
+    // so there is no common last statement in the CFG.
+    // The last statement depends on which branches are taken.
+    // This test case only tests the leaf CFG nodes that previously pointed to the common last statement
+    // but that now have no children
+    // 11 stmts
+    std::string sourceProgram =
+            "procedure Proc1 { "
+            "   if (z > 1) then { "                 // 1
+            "       if (z > 1) then { "             // 2
+            "           print p; "                  // 3
+            "       } else { "
+            "           if (z > 1) then { "         // 4
+            "               print p; "              // 5
+            "           } else { "
+            "               if (z > 1) then { "     // 6
+            "                   print p; "          // 7
+            "               } else { "
+            "                   read r; "           // 8
+            "               } "
+            "           }"
+            "       }"
+            "   } else { "
+            "       if (z > 1) then { "             // 9
+            "           print p; "                  // 10
+            "       } else { "
+            "           read r; "                   // 11
+            "       }"
+            "   } "
+            "}";
+    SPTokenizer tokenizer = SPTokenizer(sourceProgram);
+    auto tokens = tokenizer.tokenize();
+    SPParser parser;
+    auto rootNode = parser.parse(tokens);
 
+    CFGBuilder builder;
+    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
+            cfgs = builder.buildAllCFG(rootNode);
+    REQUIRE(cfgs.size() == 1);
+
+    REQUIRE(cfgs.count("Proc1") == 1);
+    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
+    REQUIRE(proc1CFG.size() == 11);
+
+    // stmt 3
+    auto stmt3 = Statement(3, StatementType::Print);
+    REQUIRE(proc1CFG.count(stmt3) == 1);
+    auto node3 = proc1CFG[stmt3];
+    REQUIRE(node3->getStatementType() == StatementType::Print);
+    REQUIRE(node3->getStatementNumber() == 3);
+    REQUIRE(node3->getParentNodes().size() == 1);
+    REQUIRE(node3->getParentNodes().front()->getStatementNumber() == 2);
+    REQUIRE(node3->getChildrenNodes().empty());
+
+    // stmt 5
+    auto stmt5 = Statement(5, StatementType::Print);
+    REQUIRE(proc1CFG.count(stmt5) == 1);
+    auto node5 = proc1CFG[stmt5];
+    REQUIRE(node5->getStatementType() == StatementType::Print);
+    REQUIRE(node5->getStatementNumber() == 5);
+    REQUIRE(node5->getParentNodes().size() == 1);
+    REQUIRE(node5->getParentNodes().front()->getStatementNumber() == 4);
+    REQUIRE(node5->getChildrenNodes().empty());
+
+    // stmt 7
+    auto stmt7 = Statement(7, StatementType::Print);
+    REQUIRE(proc1CFG.count(stmt7) == 1);
+    auto node7 = proc1CFG[stmt7];
+    REQUIRE(node7->getStatementType() == StatementType::Print);
+    REQUIRE(node7->getStatementNumber() == 7);
+    REQUIRE(node7->getParentNodes().size() == 1);
+    REQUIRE(node7->getParentNodes().front()->getStatementNumber() == 6);
+    REQUIRE(node7->getChildrenNodes().empty());
+
+    // stmt 8
+    auto stmt8 = Statement(8, StatementType::Read);
+    REQUIRE(proc1CFG.count(stmt8) == 1);
+    auto node8 = proc1CFG[stmt8];
+    REQUIRE(node8->getStatementType() == StatementType::Read);
+    REQUIRE(node8->getStatementNumber() == 8);
+    REQUIRE(node8->getParentNodes().size() == 1);
+    REQUIRE(node8->getParentNodes().front()->getStatementNumber() == 6);
+    REQUIRE(node8->getChildrenNodes().empty());
+
+    // stmt 10
+    auto stmt10 = Statement(10, StatementType::Print);
+    REQUIRE(proc1CFG.count(stmt10) == 1);
+    auto node10 = proc1CFG[stmt10];
+    REQUIRE(node10->getStatementType() == StatementType::Print);
+    REQUIRE(node10->getStatementNumber() == 10);
+    REQUIRE(node10->getParentNodes().size() == 1);
+    REQUIRE(node10->getParentNodes().front()->getStatementNumber() == 9);
+    REQUIRE(node10->getChildrenNodes().empty());
+
+    // stmt 11
+    auto stmt11 = Statement(11, StatementType::Read);
+    REQUIRE(proc1CFG.count(stmt11) == 1);
+    auto node11 = proc1CFG[stmt11];
+    REQUIRE(node11->getStatementType() == StatementType::Read);
+    REQUIRE(node11->getStatementNumber() == 11);
+    REQUIRE(node11->getParentNodes().size() == 1);
+    REQUIRE(node11->getParentNodes().front()->getStatementNumber() == 9);
+    REQUIRE(node11->getChildrenNodes().empty());
+}
+
+TEST_CASE("Test nested whiles") {
+    std::string sourceProgram =
+            "procedure Proc1 { "
+            "   while (z > 1) { "                   // 1
+            "       while (z > 1) { "               // 2
+            "           print p; "                  // 3
+            "           while (z > 1) { "           // 4
+            "               print p; "              // 5
+            "               while (z > 1) { "       // 6
+            "                   print p; "          // 7
+            "                   read r; "           // 8
+            "               } "
+            "           }"
+            "           x = 1;"                     // 9
+            "       }"
+            "       while (z > 1) { "               // 10
+            "           print p; "                  // 11
+            "           read r; "                   // 12
+            "       }"
+            "   } "
+            "}";
+    SPTokenizer tokenizer = SPTokenizer(sourceProgram);
+    auto tokens = tokenizer.tokenize();
+    SPParser parser;
+    auto rootNode = parser.parse(tokens);
+
+    CFGBuilder builder;
+    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
+            cfgs = builder.buildAllCFG(rootNode);
+    REQUIRE(cfgs.size() == 1);
+
+    REQUIRE(cfgs.count("Proc1") == 1);
+    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
+    REQUIRE(proc1CFG.size() == 12);
 }
