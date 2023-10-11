@@ -86,8 +86,8 @@ TEST_CASE("Test Next Relationship Retrieval") {
 }
 
 
-TEST_CASE("Test Next* Relationship Retrieval") {
-    SECTION("Test same stmt type") {
+TEST_CASE("Test NNext/Next* Relationship Retrieval") {
+    SECTION("Test simple loop") {
         NextRelationshipManager nextRelationshipManager = NextRelationshipManager();
 
         REQUIRE(nextRelationshipManager.hasRelationship() == false);
