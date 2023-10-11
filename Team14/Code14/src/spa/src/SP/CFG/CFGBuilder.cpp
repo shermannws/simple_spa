@@ -17,8 +17,15 @@ CFGBuilder::buildAllCFG(const std::shared_ptr<ProgramNode>& ASTRootNode) {
 std::unordered_map<Statement, std::shared_ptr<CFGNode>>
 CFGBuilder::buildCFGForProcedure(const std::shared_ptr<ProcedureNode>& procedureNode) {
     std::unordered_map<Statement, std::shared_ptr<CFGNode>> statementToCFGNodeMap;
-    buildStatementListSubgraph(statementToCFGNodeMap, procedureNode->getStatementList());
+    auto [head, tail] = buildStatementListSubgraph(statementToCFGNodeMap, procedureNode->getStatementList());
 
+    // remove dummy tail if the last statement of the procedure is an if statement
+    if (auto dummyTail = std::dynamic_pointer_cast<DummyCFGNode>(tail)) {
+        for (const auto& parent : dummyTail->getParentNodes()) {
+            // delete dummyTail from parent
+            parent->removeChildNode(dummyTail);
+        }
+    }
     return statementToCFGNodeMap;
 }
 
@@ -64,6 +71,7 @@ CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared
         tail = childTail;
     }
 
+    // TODO: Handle possible dummyNode return value as tail
     return {head, tail};
 }
 
@@ -87,21 +95,39 @@ CFGBuilder::buildIfSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNod
 
     auto dummyTail = std::make_shared<DummyCFGNode>();
 
-    // add if to then stmtlst edge
+    // connect if to then stmtlst
     cfgNode->addChildNode(thenHeadNode);
     thenHeadNode->addParentNode(cfgNode);
 
-    // add if to else stmtlst edge
+    // connect if to else stmtlst
     cfgNode->addChildNode(elseHeadNode);
     elseHeadNode->addParentNode(cfgNode);
 
-    // add end of then stmtlst to dummy tail edge
-    thenTailNode->addChildNode(dummyTail);
-    dummyTail->addParentNode(thenTailNode);
+    // connect end of then stmtlst to dummy tail
+    if (auto dummyThenTail = std::dynamic_pointer_cast<DummyCFGNode>(thenTailNode)) {
+        for (const auto& parent : dummyThenTail->getParentNodes()) {
+            dummyTail->addParentNode(parent);
+            parent->addChildNode(dummyTail);
+            // delete dummyTail from parent
+            parent->removeChildNode(dummyThenTail);
+        }
+    } else {
+        thenTailNode->addChildNode(dummyTail);
+        dummyTail->addParentNode(thenTailNode);
+    }
 
-    // add end of else stmtlst to dummy tail edge
-    elseTailNode->addChildNode(dummyTail);
-    dummyTail->addParentNode(elseTailNode);
+    // connect end of else stmtlst to dummy tail
+    if (auto dummyElseTail = std::dynamic_pointer_cast<DummyCFGNode>(elseTailNode)) {
+        for (const auto& parent : dummyElseTail->getParentNodes()) {
+            dummyTail->addParentNode(parent);
+            parent->addChildNode(dummyTail);
+            // delete dummyTail from parent
+            parent->removeChildNode(dummyElseTail);
+        }
+    } else {
+        elseTailNode->addChildNode(dummyTail);
+        dummyTail->addParentNode(elseTailNode);
+    }
 
     return {cfgNode, dummyTail};
 }
@@ -113,13 +139,22 @@ CFGBuilder::buildWhileSubgraph(std::unordered_map<Statement, std::shared_ptr<CFG
 
     auto [headNode, tailNode] = buildStatementListSubgraph(map, whileNode->getStatementList());
 
-    // add while to stmtlst edge
+    // connect while to head of stmtlst
     cfgNode->addChildNode(headNode);
     headNode->addParentNode(cfgNode);
 
-    // add end of stmtlst to while edge
-    tailNode->addChildNode(cfgNode);
-    cfgNode->addParentNode(tailNode);
+    // connect end of stmtlst to while
+    if (auto dummyTail = std::dynamic_pointer_cast<DummyCFGNode>(tailNode)) {
+        for (const auto& parent : dummyTail->getParentNodes()) {
+            cfgNode->addParentNode(parent);
+            parent->addChildNode(cfgNode);
+            // delete dummyTail from parent
+            parent->removeChildNode(dummyTail);
+        }
+    } else {
+        tailNode->addChildNode(cfgNode);
+        cfgNode->addParentNode(tailNode);
+    }
 
     return {cfgNode, cfgNode};
 }
