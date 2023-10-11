@@ -42,10 +42,19 @@ CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared
             std::tie(childHead, childTail) = buildStatementSubgraph(map, statementNode);
         }
 
-        // attach previous tail with (current) child head
         if (tail) {
-            tail->addChildNode(childHead);
-            childHead->addParentNode(tail);
+            // if previous tail was a dummy tail, merge it with current childhead
+            if (auto dummyTail = std::dynamic_pointer_cast<DummyCFGNode>(tail)) {
+                for (const auto& parent : dummyTail->getParentNodes()) {
+                    childHead->addParentNode(parent);
+                    parent->addChildNode(childHead);
+                    // delete dummyTail from parent
+                    parent->removeChildNode(dummyTail);
+                }
+            } else { // else, attach previous tail with (current) child head
+                tail->addChildNode(childHead);
+                childHead->addParentNode(tail);
+            }
         }
 
         // update head and tails
@@ -84,7 +93,7 @@ CFGBuilder::buildIfSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNod
 
     // add if to else stmtlst edge
     cfgNode->addChildNode(elseHeadNode);
-    elseHeadNode->addParentNode(thenHeadNode);
+    elseHeadNode->addParentNode(cfgNode);
 
     // add end of then stmtlst to dummy tail edge
     thenTailNode->addChildNode(dummyTail);
@@ -104,8 +113,6 @@ CFGBuilder::buildWhileSubgraph(std::unordered_map<Statement, std::shared_ptr<CFG
 
     auto [headNode, tailNode] = buildStatementListSubgraph(map, whileNode->getStatementList());
 
-    auto dummyTail = std::make_shared<DummyCFGNode>();
-
     // add while to stmtlst edge
     cfgNode->addChildNode(headNode);
     headNode->addParentNode(cfgNode);
@@ -114,9 +121,5 @@ CFGBuilder::buildWhileSubgraph(std::unordered_map<Statement, std::shared_ptr<CFG
     tailNode->addChildNode(cfgNode);
     cfgNode->addParentNode(tailNode);
 
-    // add while to dummyTail edge
-    cfgNode->addChildNode(dummyTail);
-    dummyTail->addParentNode(cfgNode);
-
-    return {cfgNode, dummyTail};
+    return {cfgNode, cfgNode};
 }

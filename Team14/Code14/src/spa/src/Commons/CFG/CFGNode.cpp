@@ -27,6 +27,12 @@ void CFGNode::addChildNode(const std::shared_ptr<CFGNode>& child) {
     this->children.push_back(child);
 }
 
+void CFGNode::removeChildNode(const std::shared_ptr<CFGNode> &child) {
+    this->children.erase(
+            std::remove(this->children.begin(), this->children.end(), child),
+            this->children.end());
+}
+
 StatementType CFGNode::getStatementType() {
     return this->statementType;
 }

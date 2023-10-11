@@ -34,6 +34,8 @@ private:
     StatementType statementType;
 
 public:
+    // Added to allow this class to be used in dynamic_cast expression
+    virtual ~CFGNode() = default;
     /**
      * Creates and initialises a CFGNode.
      * @param statementNumber The statement number of the node
@@ -85,6 +87,12 @@ public:
      * @param child CFGNode to be added as a child of this CFGNode
      */
     void addChildNode(const std::shared_ptr<CFGNode>& child);
+
+    /**
+     * Removes a child node from this CFGNode by reference. Used in CFG building.
+     * @param child CFGNode to be removed as a child of this CFGNode
+     */
+    void removeChildNode(const std::shared_ptr<CFGNode>& child);
 
     /**
      * Returns the statement type of this CFGNode
