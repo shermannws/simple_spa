@@ -24,15 +24,18 @@ std::unordered_map<StringRep, ClauseType> QPSUtil::repClauseTypeMap = {
         {"Next*", ClauseType::NextStar},
 };
 
-std::unordered_set<ClauseType> QPSUtil::stmtrefClauseTypes = {
-    ClauseType::Follows, ClauseType::FollowsStar,
-    ClauseType::Parent, ClauseType::ParentStar,
-    ClauseType::Next, ClauseType::NextStar,
+std::unordered_map<ClauseType, ClauseArgType> QPSUtil::typeToArgTypeMap = {
+    {ClauseType::Uses, StmtrefProcVar},
+    {ClauseType::Modifies, StmtrefProcVar},
+    {ClauseType::Follows, StmtrefStmtref},
+    {ClauseType::FollowsStar, StmtrefStmtref},
+    {ClauseType::Parent, StmtrefStmtref},
+    {ClauseType::ParentStar, StmtrefStmtref},
+    {ClauseType::Next, StmtrefStmtref},
+    {ClauseType::NextStar, StmtrefStmtref},
+    {ClauseType::Calls, ProcProc},
+    {ClauseType::CallsStar, ProcProc},
 };
-
-std::unordered_set<ClauseType> QPSUtil::stmtrefProcVarClauseTypes = {ClauseType::Uses, ClauseType::Modifies};
-
-std::unordered_set<ClauseType> QPSUtil::procRefClauseTypes = {ClauseType::Calls, ClauseType::CallsStar};
 
 std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
     {QueryEntityType::Stmt, RefType::StmtRef},
