@@ -39,13 +39,13 @@ TEST_CASE("Test Next Relationship Retrieval") {
     REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::Assign, *statement3, false).size() == 1);
     REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::Assign, *statement3, true).size() == 0);
 
-    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Stmt).size() == 2);
-    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Assign).size() == 0);
-    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Print).size() == 1);
-    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Call).size() == 1);
-    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::If).size() == 0);
-    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::While).size() == 0);
-    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Read).size() == 0);
+    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Stmt, true).size() == 2);
+    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Assign, true).size() == 0);
+    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Print, true).size() == 1);
+    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Call, true).size() == 1);
+    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::If, true).size() == 0);
+    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::While, true).size() == 0);
+    REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Read, true).size() == 0);
 
     REQUIRE(nextRelationshipManager.getRelationshipStmtType(*statement1, StatementType::Stmt, true).size() == 1);
     REQUIRE(nextRelationshipManager.getRelationshipStmtType(*statement1, StatementType::Stmt, false).size() == 2);
@@ -58,10 +58,10 @@ TEST_CASE("Test Next Relationship Retrieval") {
     REQUIRE(nextRelationshipManager.getRelationshipStmtType(*statement2, StatementType::Assign, true).size() == 0);
     REQUIRE(nextRelationshipManager.getRelationshipStmtType(*statement2, StatementType::Assign, false).size() == 0);
 
-    REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Stmt).size() == 2);
-    REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Assign).size() == 1);
-    REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Print).size() == 0);
-    REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Call).size() == 1);
+    REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Stmt, true).size() == 2);
+    REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Assign, true).size() == 1);
+    REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Print, true).size() == 0);
+    REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Call, true).size() == 1);
 
     REQUIRE(nextRelationshipManager.isRelationship(*statement1, *statement2, true) == true);
     REQUIRE(nextRelationshipManager.isRelationship(*statement1, *statement2, false) == true);
@@ -112,12 +112,12 @@ TEST_CASE("Test NNext/Next* Relationship Retrieval") {
         REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::Call, *statement1, true).size() == 1);
         REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::Call, *statement1, false).size() == 1);
 
-        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Stmt).size() == 2);
-        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::While).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Call).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::If).size() == 0);
-        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Print).size() == 0);
-        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Read).size() == 0);
+        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Stmt, true).size() == 2);
+        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::While, true).size() == 1);
+        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Call, true).size() == 1);
+        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::If, true).size() == 0);
+        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Print, true).size() == 0);
+        REQUIRE(nextRelationshipManager.getRelationshipWildcardType(StatementType::Read, true).size() == 0);
 
         REQUIRE(nextRelationshipManager.getRelationshipStmtType(*statement1, StatementType::Stmt, true).size() == 1);
         REQUIRE(nextRelationshipManager.getRelationshipStmtType(*statement1, StatementType::Stmt, false).size() == 2);
@@ -127,11 +127,11 @@ TEST_CASE("Test NNext/Next* Relationship Retrieval") {
         REQUIRE(nextRelationshipManager.getRelationshipStmtType(*statement1, StatementType::Print, true).size() == 0);
         REQUIRE(nextRelationshipManager.getRelationshipStmtType(*statement1, StatementType::Print, false).size() == 0);
 
-        REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Stmt).size() == 2);
-        REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Assign).size() == 0);
-        REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Print).size() == 0);
-        REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Call).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::While).size() == 1);
+        REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Stmt, true).size() == 2);
+        REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Assign, true).size() == 0);
+        REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Print, true).size() == 0);
+        REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::Call, true).size() == 1);
+        REQUIRE(nextRelationshipManager.getRelationshipTypeWildcard(StatementType::While, true).size() == 1);
 
         REQUIRE(nextRelationshipManager.isRelationship(*statement1, *statement2, true) == true);
         REQUIRE(nextRelationshipManager.isRelationship(*statement1, *statement2, false) == true);

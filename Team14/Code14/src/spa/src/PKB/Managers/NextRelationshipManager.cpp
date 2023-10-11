@@ -9,3 +9,55 @@ std::vector<Entity> NextRelationshipManager::getNextStarSameStmt(StatementType s
 
     return ManagerUtils::getLeftKeysMatchRight<Statement>(*starRelationshipStore, leftMatcher);
 }
+
+std::vector<std::vector<Entity>> NextRelationshipManager::getRelationshipPair(StatementType formerType, StatementType latterType, bool requireDirect) const {
+    if (!requireDirect && !this->isNextStarCalculated) {
+		this->calculateNextStar();
+	}   
+    return StmtToStmtRelationshipManager::getRelationshipPair(formerType, latterType, requireDirect);
+}
+
+std::vector<Entity> NextRelationshipManager::getRelationshipTypeStmt(StatementType type, Statement& statement, bool requireDirect) const {
+    if (!requireDirect && !this->isNextStarCalculated) {
+        this->calculateNextStar();
+    }
+    return StmtToStmtRelationshipManager::getRelationshipTypeStmt(type, statement, requireDirect);
+}
+
+std::vector<Entity> NextRelationshipManager::getRelationshipTypeWildcard(StatementType type, bool requireDirect) const {
+    if (!requireDirect && !this->isNextStarCalculated) {
+        this->calculateNextStar();
+    }
+    return StmtToStmtRelationshipManager::getRelationshipTypeWildcard(type, requireDirect);
+}
+
+std::vector<Entity> NextRelationshipManager::getRelationshipStmtType(Statement& statement, StatementType type, bool requireDirect) const {
+    if (!requireDirect && !this->isNextStarCalculated) {
+        this->calculateNextStar();
+    }
+    return StmtToStmtRelationshipManager::getRelationshipStmtType(statement, type, requireDirect);
+}
+
+std::vector<Entity> NextRelationshipManager::getRelationshipWildcardType(StatementType type, bool requireDirect) const {
+    if (!requireDirect && !this->isNextStarCalculated) {
+        this->calculateNextStar();
+    }
+    return StmtToStmtRelationshipManager::getRelationshipWildcardType(type, requireDirect);
+}
+
+bool NextRelationshipManager::isRelationship(Statement& statement1, Statement& statement2, bool requireDirect) const {
+    if (!requireDirect && !this->isNextStarCalculated) {
+        this->calculateNextStar();
+    }
+    return StmtToStmtRelationshipManager::isRelationship(statement1, statement2, requireDirect);
+}
+
+void NextRelationshipManager::clearNextStarStore() { //TODO: Someone need to invoke this function after each query
+	this->starRelationshipStore->clear();
+    this->isNextStarCalculated = false;
+}
+
+void NextRelationshipManager::calculateNextStar() const {
+    //TODO: Calculate Next* relationship
+    this->isNextStarCalculated = true;
+}
