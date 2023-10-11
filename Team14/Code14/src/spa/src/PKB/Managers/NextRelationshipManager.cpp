@@ -1,8 +1,14 @@
 #include "NextRelationshipManager.h"
 
-NextRelationshipManager::NextRelationshipManager() : StmtToStmtRelationshipManager() {};
+NextRelationshipManager::NextRelationshipManager() : StmtToStmtRelationshipManager() {
+    this->isNextStarCalculated = false;
+};
 
 std::vector<Entity> NextRelationshipManager::getNextStarSameStmt(StatementType stmtType) const {
+    if (!this->isNextStarCalculated) {
+        this->calculateNextStar();
+    }
+
     auto leftMatcher = [stmtType](Statement& stmt) {
         return stmt.isStatementType(stmtType);
         };
@@ -58,6 +64,31 @@ void NextRelationshipManager::clearNextStarStore() { //TODO: Someone need to inv
 }
 
 void NextRelationshipManager::calculateNextStar() const {
-    //TODO: Calculate Next* relationship
+    for (auto it = relationshipStore->getLeftToRightBeginIterator(); it != relationshipStore->getLeftToRightEndIterator(); ++it) {
+        auto former = it->first;
+        auto latterSet = it->second;
+        for (auto it2 = latterSet->getBeginIterator(); it2 != latterSet->getEndIterator(); ++it2) {
+            auto latter = *it2;
+            starRelationshipStore->storeRelationship(former, latter);
+            calculateNextStarHelper(former, latter);
+        }
+    }
+
     this->isNextStarCalculated = true;
+}
+
+void NextRelationshipManager::calculateNextStarHelper(std::shared_ptr<Statement> former, std::shared_ptr<Statement> latter) const {
+    auto latterChildren = relationshipStore->getRightEntitiesOf(latter);
+    if (latterChildren == nullptr) {
+        return;
+    }
+    for (auto it = latterChildren->getBeginIterator(); it != latterChildren->getEndIterator(); ++it) {
+        auto newLatter = *it;
+        auto rightOfFormer = starRelationshipStore->getRightEntitiesOf(former);
+        if (rightOfFormer != nullptr && rightOfFormer->get(newLatter) != nullptr) {
+            continue;
+        }
+        starRelationshipStore->storeRelationship(former, newLatter);
+        calculateNextStarHelper(former, newLatter);
+    }
 }

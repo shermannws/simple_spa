@@ -24,6 +24,12 @@ private:
      * @brief Calculates the Next* relationship
      */
     void calculateNextStar() const;
+
+    /**
+     * @brief Helper function to calculate the Next* relationship
+     */
+    void calculateNextStarHelper(std::shared_ptr<Statement> former, std::shared_ptr<Statement> latter) const;
+
 public:
     /**
      * @brief Constructs a NextRelationshipManager object
