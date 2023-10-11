@@ -5,10 +5,10 @@
 ResultHandler::ResultHandler(){};
 
 std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
-    if (r1->getType() == ResultType::Invalid) {
+    if (r1->isInvalid()) {
         return r2;
     }
-    if (r2->getType() == ResultType::Invalid) {
+    if (r2->isInvalid()) {
         return r1;
     }
     if (r1->isFalse() || r2->isTrue()) {

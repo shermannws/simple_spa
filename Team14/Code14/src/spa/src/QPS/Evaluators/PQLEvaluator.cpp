@@ -51,8 +51,7 @@ Result PQLEvaluator::evaluate(Query& query) {
     }
 
     // CASE FALSE OR EMPTY RESULT TABLE
-    if ((result->getType()==ResultType::Boolean && !result->getBoolResult()) ||
-        (result->getType()==ResultType::Tuples && result->getTuples().empty()) ){
+    if (result->isFalse() || result->isEmpty()){
         return *result;
     }
 

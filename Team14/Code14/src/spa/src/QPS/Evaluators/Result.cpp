@@ -53,4 +53,11 @@ bool Result::isFalse() {
     return (type == ResultType::Boolean && !boolResult);
 }
 
+bool Result::isEmpty() {
+    return (type == ResultType::Tuples && tuples.empty());
+}
+
+bool Result::isInvalid() {
+    return type == ResultType::Invalid;
+}
 

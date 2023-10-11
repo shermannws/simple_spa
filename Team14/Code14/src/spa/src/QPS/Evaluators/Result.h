@@ -101,4 +101,16 @@ public:
     * @return true if the result object is a False Boolean Result
     */
     bool isFalse();
+
+    /**
+    * @brief returns true if a Result object represents a Empty Tuple Result
+    * @return true if the result object is a Empty Tuple Result
+    */
+    bool isEmpty();
+
+    /**
+    * @brief returns true if a Result object's type is Invalid
+    * @return true if the result object is Invalid
+    */
+    bool isInvalid();
 };
