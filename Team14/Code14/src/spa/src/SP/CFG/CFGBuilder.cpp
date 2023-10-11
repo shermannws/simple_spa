@@ -71,7 +71,6 @@ CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared
         tail = childTail;
     }
 
-    // TODO: Handle possible dummyNode return value as tail
     return {head, tail};
 }
 
