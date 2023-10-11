@@ -477,10 +477,13 @@ std::vector<Entity> StubPkbReader::getCalleesStar(Procedure& caller) const {
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getNextPair(StatementType formerType, StatementType latterType) const {
-    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Statement(2, StatementType::Read)};
-    std::vector<Entity> pair2 = {Statement(3, StatementType::Assign), Statement(4, StatementType::Read)};
-    std::vector<Entity> pair3 = {Statement(5, StatementType::Assign), Statement(6, StatementType::Read)};
-    return std::vector<std::vector<Entity>>({pair1, pair2, pair3});
+    if (formerType == StatementType::Assign && latterType == StatementType::Read) {
+        std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Statement(2, StatementType::Read)};
+        std::vector<Entity> pair2 = {Statement(3, StatementType::Assign), Statement(4, StatementType::Read)};
+        std::vector<Entity> pair3 = {Statement(5, StatementType::Assign), Statement(6, StatementType::Read)};
+        return std::vector<std::vector<Entity>>({pair1, pair2, pair3});
+    }
+    return std::vector<std::vector<Entity>>();
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getNextStarPair(StatementType formerType, StatementType latterType) const {
@@ -504,9 +507,12 @@ std::vector<Entity> StubPkbReader::getNextStarSameStmt(StatementType stmtType) c
 }
 
 std::vector<Entity> StubPkbReader::getNextTypeStmt(StatementType type, Statement& statement) const {
-    return std::vector<Entity>({
-        Statement(13, StatementType::Call)
-    });
+    if (type == StatementType::Stmt && statement == Statement(14, StatementType::Stmt)) {
+        return std::vector<Entity>({
+            Statement(13, StatementType::Call)
+        });
+    }
+    return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextStarTypeStmt(StatementType type, Statement& statement) const {
@@ -521,9 +527,12 @@ std::vector<Entity> StubPkbReader::getNextStarTypeStmt(StatementType type, State
 }
 
 std::vector<Entity> StubPkbReader::getNextTypeWildcard(StatementType type) const {
-    return std::vector<Entity>({
-        Statement(11, StatementType::While),
-    });
+    if (type == StatementType::If) {
+        return std::vector<Entity>({
+            Statement(11, StatementType::If),
+        });
+    }
+    return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextStarTypeWildcard(StatementType type) const {
@@ -536,9 +545,12 @@ std::vector<Entity> StubPkbReader::getNextStarTypeWildcard(StatementType type) c
 }
 
 std::vector<Entity> StubPkbReader::getNextStmtType(Statement& statement, StatementType type) const {
-    return std::vector<Entity>({
-        Statement(24, StatementType::If)
-    });
+    if (statement == Statement(23, StatementType::Stmt) && type == StatementType::Call) {
+        return std::vector<Entity>({
+            Statement(24, StatementType::Call)
+        });
+    }
+    return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextStarStmtType(Statement& statement, StatementType type) const {
@@ -551,11 +563,14 @@ std::vector<Entity> StubPkbReader::getNextStarStmtType(Statement& statement, Sta
 }
 
 std::vector<Entity> StubPkbReader::getNextWildcardType(StatementType type) const {
-    return std::vector<Entity>({
-        Statement(10, StatementType::Read),
-        Statement(12, StatementType::Read),
-        Statement(15, StatementType::Read),
-    });
+    if (type == StatementType::Assign) {
+        return std::vector<Entity>({
+            Statement(10, StatementType::Assign),
+            Statement(12, StatementType::Assign),
+            Statement(13, StatementType::Assign),
+        });
+    }
+    return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextStarWildcardType(StatementType type) const {

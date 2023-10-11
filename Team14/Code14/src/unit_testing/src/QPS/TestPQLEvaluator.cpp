@@ -392,7 +392,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
         PQLEvaluator evaluator = PQLEvaluator(stubReader);
         auto resultObj = evaluator.evaluate(queryObj);
         auto results = evaluator.formatResult(queryObj, resultObj);
-        REQUIRE(results.size() == 0);
+        REQUIRE(results.empty());
     }
 
     SECTION ("getNextPair") {
@@ -423,7 +423,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
     }
 
     SECTION ("getNextTypeWildcard") {
-        PQLParser parser("while w; Select w such that Next(w,_)");
+        PQLParser parser("if if; Select if such that Next(if,_)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -436,7 +436,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
 
     // evaluateAnySyn
     SECTION ("getNextStmtType") {
-        PQLParser parser("if ifs; Select ifs such that Next(23, ifs)");
+        PQLParser parser("call call; Select call such that Next(23, call)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -448,7 +448,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
     }
 
     SECTION ("getNextWildcardType") {
-        PQLParser parser("read read; Select read such that Next(_,read)");
+        PQLParser parser("assign assign; Select assign such that Next(_,assign)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -458,7 +458,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
         REQUIRE(results.size() == 3);
         REQUIRE(find(results.begin(), results.end(), "10") != results.end());
         REQUIRE(find(results.begin(), results.end(), "12") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "15") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "13") != results.end());
     }
 
     // evaluateBoolean
