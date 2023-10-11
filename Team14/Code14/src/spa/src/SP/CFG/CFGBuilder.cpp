@@ -35,9 +35,9 @@ CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared
 
     for (const auto& statementNode : statementListNode->getStatements()) {
         if (statementNode->getStatementType() == StatementNodeType::If) {
-            std::tie(childHead, childTail) = buildIfSubgraph(map, std::dynamic_pointer_cast<IfNode>(statementNode));
+            std::tie(childHead, childTail) = buildIfSubgraph(map, std::static_pointer_cast<IfNode>(statementNode));
         } else if (statementNode->getStatementType() == StatementNodeType::While) {
-            std::tie(childHead, childTail) = buildWhileSubgraph(map, std::dynamic_pointer_cast<WhileNode>(statementNode));
+            std::tie(childHead, childTail) = buildWhileSubgraph(map, std::static_pointer_cast<WhileNode>(statementNode));
         } else {
             std::tie(childHead, childTail) = buildStatementSubgraph(map, statementNode);
         }
