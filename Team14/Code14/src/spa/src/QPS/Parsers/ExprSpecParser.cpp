@@ -61,7 +61,7 @@ Expression ExprSpecParser::extractExpression() {
                 }
                 processSubExpr(operators, expression);
             }
-            if (!operators.top()->isToken(TokenType::Lparenthesis)){ // pop Lparentheses
+            if (operators.empty() || !operators.top()->isToken(TokenType::Lparenthesis)){ // pop Lparentheses
                 throw SyntaxException("Invalid expression spec");
             }
             operators.pop();

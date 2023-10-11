@@ -54,3 +54,34 @@ template <typename S>
 bool ProcToProcRelationshipManager<S>::isLatter(Procedure& procedure) const {
     return relationshipStore->getLeftEntitiesOf(std::make_shared<Procedure>(procedure)) != nullptr;
 }
+
+template <typename S>
+void ProcToProcRelationshipManager<S>::calculateTransitiveRelationship() {
+    for (auto it = relationshipStore->getLeftToRightBeginIterator(); it != relationshipStore->getLeftToRightEndIterator(); ++it) {
+        auto former = it->first;
+        auto latterSet = it->second;
+        for (auto it2 = latterSet->getBeginIterator(); it2 != latterSet->getEndIterator(); ++it2) {
+            auto latter = *it2;
+            starRelationshipStore->storeRelationship(former, latter);
+            calculateTransitiveRelationshipHelper(former, latter);
+        }
+    }
+}
+
+template <typename S>
+void ProcToProcRelationshipManager<S>::calculateTransitiveRelationshipHelper(std::shared_ptr<Procedure> former, std::shared_ptr<Procedure> latter) {
+	auto latterChildren = relationshipStore->getRightEntitiesOf(latter);
+	if (latterChildren == nullptr) {
+		return;
+	}
+	for (auto it = latterChildren->getBeginIterator(); it != latterChildren->getEndIterator(); ++it) {
+		auto newLatter = *it;
+		starRelationshipStore->storeRelationship(former, newLatter);
+		calculateTransitiveRelationshipHelper(former, newLatter);
+	}
+}
+
+template <typename S>
+std::shared_ptr<EntityStore<Procedure>> ProcToProcRelationshipManager<S>::getRelationshipFormerStarAsProcedure(Procedure& latterProcedure) const {
+    return starRelationshipStore->getLeftEntitiesOf(std::make_shared<Procedure>(latterProcedure));
+};

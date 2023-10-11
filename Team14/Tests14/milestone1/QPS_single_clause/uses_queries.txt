@@ -118,8 +118,8 @@ assign a;
 Select a such that Uses(a, 1)
 SyntaxError
 5000
-25 - invalid query, use of procedure call
+25 - negative testcase (updated in M2), use of procedure call
 call c;
 Select c such that Uses(c, _)
-SyntaxError
+none
 5000

@@ -22,5 +22,4 @@ public:
      * @return A ModifiesProcRelationshipManager object
      */
     ModifiesProcRelationshipManager();
-
 };

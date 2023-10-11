@@ -8,7 +8,7 @@ void Ref::setRep(StringRep & rrep) {
     rep = rrep;
 }
 
-std::string Ref::getRep() {
+std::string Ref::getRep() const{
     return rep;
 }
 
@@ -16,7 +16,7 @@ void Ref::setType(RefType& rrefType) {
     type = rrefType;
 }
 
-RefType Ref::getType() {
+RefType Ref::getType() const{
     return type;
 }
 
@@ -24,7 +24,7 @@ void Ref::setRootType(RootType& rrootType) {
     rootType = rrootType;
 }
 
-RootType Ref::getRootType() {
+RootType Ref::getRootType() const {
     return rootType;
 }
 
@@ -32,7 +32,7 @@ void Ref::setEntityType(QueryEntityType& eentityType) {
     entityType = eentityType;
 }
 
-QueryEntityType Ref::getEntityType() {
+QueryEntityType Ref::getEntityType() const{
     return entityType;
 }
 

@@ -43,49 +43,46 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
     return list_results;
 }
 
-Result PQLEvaluator::evaluate(Query& query) {
+Result PQLEvaluator::evaluate(Query& query) { //TODO handle multiclause
 
-    Result sResult;
+    auto sResult = std::make_shared<Result>();
     if (!query.getSuchThat().empty()) {
-        evaluateClause(query.getSuchThat()[0], sResult);
+        sResult = evaluateClause(query.getSuchThat()[0]);
     }
 
-    Result pResult;
+    auto pResult = std::make_shared<Result>();
     if (!query.getPattern().empty()) {
-        evaluateClause(query.getPattern()[0], pResult);
+        pResult = evaluateClause(query.getPattern()[0]);
     }
 
-    Result result = resultHandler->getCombined(sResult, pResult);
+    auto result = resultHandler->getCombined(sResult, pResult);
 
     // CASE FALSE OR EMPTY
-    if ((result.getType()==ResultType::Boolean && !result.getBoolResult()) ||
-        (result.getType()==ResultType::Tuples && result.getTuples().empty()) ){
-        return result;
+    if ((result->getType()==ResultType::Boolean && !result->getBoolResult()) ||
+        (result->getType()==ResultType::Tuples && result->getTuples().empty()) ){
+        return *result;
     }
 
     // CASE SYN IN RESULT TABLE, check if synonym in select is in result table
     Synonym syn = query.getSelect()[0];
-    SynonymMap indicesMap = result.getSynIndices();
+    SynonymMap indicesMap = result->getSynIndices();
     if (indicesMap.find(syn) != indicesMap.end()) {
-        return result;
+        return *result;
     }
 
     // CASE TRUE OR NON-EMPTY TABLE OR INVALID, evaluate select independently
-
-    Result selectResult;
+    auto selectResult = std::make_shared<Result>();
+    selectResult->setType(query.getSelect());
     EntityPtr entity = query.getEntity(syn);
-    std::vector<Entity> entities = getAll(entity);
-    selectResult.setTuples(entities);
-    SynonymMap map {{entity->getSynonym(), 0}};
-    selectResult.setSynIndices(map);
-
-    return selectResult;
+    selectResult->setTuples(getAll(entity));
+    return *selectResult;
 }
 
-void PQLEvaluator::evaluateClause(const std::shared_ptr<Clause> clause, Result& result) {
+std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Clause> clause) {
     std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()](pkbReader);
     clauseHandler->setStrategy(strategy);
-    clauseHandler->executeClause(clause, result);
+    std::shared_ptr<Result> result = clauseHandler->executeClause(clause);
+    return result;
 }
 
 std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& queryEntity) {
@@ -109,6 +106,8 @@ std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& que
             return pkbReader->getAllRead();
         case QueryEntityType::Print:
             return pkbReader->getAllPrint();
+        case QueryEntityType::Call:
+            return pkbReader->getAllCall();
         default:
             throw std::runtime_error("Not supported entity type in query select clause");
     }
