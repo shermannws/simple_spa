@@ -57,10 +57,10 @@ public:
     ResultType getType();
 
     /**
-     * @brief Sets the type of the result.
-     * @param type The type of the result to set (ResultType).
+     * @brief Sets the type of the result based on the list of Synonyms
+     * @param synonyms vector of synonyms
      */
-    void setType(ResultType& type);
+    void setType(std::vector<Synonym> synonyms);
 
     /**
      * @brief Sets the boolean result for a result of type Boolean.
@@ -73,18 +73,6 @@ public:
      * @return The boolean result.
      */
     bool getBoolResult();
-
-    /**
-     * @brief Sets the synonym indices for the result table.
-     * @param synIndices The map of synonym to index to set as result's synonym indices.
-     */
-    void setSynIndices(SynonymMap & synIndices);
-
-    /**
-     * @brief Sets the synonym indices for the result table.
-     * @param synonyms vector of synonyms in order of the Result synonym map
-     */
-    void setSynIndices(std::vector<Synonym> synonyms);
 
     /**
      * @brief Gets the synonym indices for the result.
