@@ -20,4 +20,11 @@ public:
      * @return A NextRelationshipManager object
      */
     NextRelationshipManager();
+
+    /**
+     * @brief Get all the statements of the given stmtType that executes after itself in some execution sequence
+     * @param stmtType The type of statement to retrieve
+     * @return A vector of statements that executes after itself in some execution sequence
+     */
+    std::vector<Entity> getNextStarSameStmt(StatementType stmtType) const;
 };

@@ -13,7 +13,7 @@
  */
 template <typename S>
 class StmtToStmtRelationshipManager {
-private:
+protected:
     /**
      * @brief The relationship store
      */
@@ -60,6 +60,14 @@ public:
     std::vector<Entity> getRelationshipTypeWildcard(StatementType type) const;
 
     /**
+     * Returns a vector of statements of the given statement type which is related to any statement. The statements retrieved are the former statements
+     * @param type The type of the statement to be retrieved
+     * @param requireDirect A boolean value indicating if a direct relationship is required
+     * @return A vector of statements
+     */
+    std::vector<Entity> getRelationshipTypeWildcard(StatementType type, bool requireDirect) const;
+
+    /**
      * Returns a vector of statements of the given statement type which is related to the given statement. The statement given is the former statement
      * @param statement The statement that is related to the statements to be retrieved
      * @param type The type of the statement to be retrieved
@@ -74,6 +82,14 @@ public:
      * @return A vector of statements
      */
     std::vector<Entity> getRelationshipWildcardType(StatementType type) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which is related to any statement. The statements retrieved are the latter statements
+     * @param type The type of the statement to be retrieved
+     * @param requireDirect A boolean value indicating if a direct relationship is required
+     * @return A vector of statements
+     */
+    std::vector<Entity> getRelationshipWildcardType(StatementType type, bool requireDirect) const;
 
     /**
      * Returns true if statement1 is related to statement2, false otherwise

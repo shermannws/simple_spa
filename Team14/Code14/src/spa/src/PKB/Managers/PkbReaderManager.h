@@ -11,6 +11,7 @@
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/ModifiesProcRelationshipManager.h"
 #include "PKB/Managers/AssignmentManager.h"
+#include "PKB/Managers/NextRelationshipManager.h"
 #include "PKB/PkbTypes.h"
 
 /**
@@ -62,6 +63,11 @@ private:
      * @brief The uses procedure relationship manager.
      */
     std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager;
+
+    /**
+     * @brief The next relationship manager.
+     */
+    std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
 public:
     /**
      * @brief Constructs a PkbReaderManager object.
@@ -74,6 +80,7 @@ public:
      * @param callsRelationshipManager The calls relationship manager.
      * @param modifiesProcRelationshipManager The modifies procedure relationship manager.
      * @param usesProcRelationshipManager The uses procedure relationship manager.
+     * @param nextRelationshipManager The next relationship manager.
      * @return The PkbReaderManager object.
      */
     PkbReaderManager(
@@ -85,7 +92,8 @@ public:
             std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
             std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
             std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
-            std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager
+            std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
+            std::shared_ptr<NextRelationshipManager> nextRelationshipManager
     );
 
     /**

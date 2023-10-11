@@ -9,7 +9,8 @@ PkbReaderManager::PkbReaderManager(
     std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
     std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
     std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
-    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager)
+    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
+    std::shared_ptr<NextRelationshipManager> nextRelationshipManager)
     : assignmentManager(assignmentManager),
     entityManager(entityManager),
     followsRelationshipManager(followsRelationshipManager),
@@ -18,7 +19,8 @@ PkbReaderManager::PkbReaderManager(
     parentRelationshipManager(parentRelationshipManager),
     callsRelationshipManager(callsRelationshipManager),
     modifiesProcRelationshipManager(modifiesProcRelationshipManager),
-    usesProcRelationshipManager(usesProcRelationshipManager) {};
+    usesProcRelationshipManager(usesProcRelationshipManager),
+    nextRelationshipManager(nextRelationshipManager) {};
 
 std::vector<Entity> PkbReaderManager::getAllVariables() const {
     return this->entityManager->getAllVariables();
@@ -400,96 +402,77 @@ std::vector<Entity> PkbReaderManager::getCalleesStar(Procedure& caller) const {
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getNextPair(StatementType formerType, StatementType latterType) const {
-    // TODO: Implement this
-    return std::vector<std::vector<Entity>>();
+    return this->nextRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getNextStarPair(StatementType formerType, StatementType latterType) const {
-    // TODO: Implement this
-    return std::vector<std::vector<Entity>>();
+    return this->nextRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
 std::vector<Entity> PkbReaderManager::getNextStarSameStmt(StatementType stmtType) const {
-    // TODO: Implement this
-    return std::vector<Entity>();
+    return this->nextRelationshipManager->getNextStarSameStmt(stmtType);
 }
 
 std::vector<Entity> PkbReaderManager::getNextTypeStmt(StatementType type, Statement& statement) const {
-    // TODO: Implement this
-    return std::vector<Entity>();
+    return this->nextRelationshipManager->getRelationshipTypeStmt(type, statement, true);
 }
 
 std::vector<Entity> PkbReaderManager::getNextStarTypeStmt(StatementType type, Statement& statement) const {
-    // TODO: Implement this
-    return std::vector<Entity>();
+    return this->nextRelationshipManager->getRelationshipTypeStmt(type, statement, false);
 }
 
 std::vector<Entity> PkbReaderManager::getNextTypeWildcard(StatementType type) const {
-    // TODO: Implement this
-    return std::vector<Entity>();
+    return this->nextRelationshipManager->getRelationshipTypeWildcard(type, true);
 }
 
 std::vector<Entity> PkbReaderManager::getNextStarTypeWildcard(StatementType type) const {
-    // TODO: Implement this
-    return std::vector<Entity>();
+    return this->nextRelationshipManager->getRelationshipTypeWildcard(type, false);
 }
 
 std::vector<Entity> PkbReaderManager::getNextStmtType(Statement& statement, StatementType type) const {
-    // TODO: Implement this
-    return std::vector<Entity>();
+    return this->nextRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
 std::vector<Entity> PkbReaderManager::getNextStarStmtType(Statement& statement, StatementType type) const {
-    // TODO: Implement this
-    return std::vector<Entity>();
+    return this->nextRelationshipManager->getRelationshipStmtType(statement, type, false);
 }
 
 std::vector<Entity> PkbReaderManager::getNextWildcardType(StatementType type) const {
-    // TODO: Implement this
-    return std::vector<Entity>();
+    return this->nextRelationshipManager->getRelationshipWildcardType(type, true);
 }
 
 std::vector<Entity> PkbReaderManager::getNextStarWildcardType(StatementType type) const {
-    // TODO: Implement this
-    return std::vector<Entity>();
+    return this->nextRelationshipManager->getRelationshipWildcardType(type, false);
 }
 
 bool PkbReaderManager::isNext(Statement& statement1, Statement& statement2) const {
-    // TODO: Implement this
-    return false;
+    return this->nextRelationshipManager->isRelationship(statement1, statement2, true);
 }
 
 bool PkbReaderManager::isNextStar(Statement& statement1, Statement& statement2) const {
-    // TODO: Implement this
-    return false;
+    return this->nextRelationshipManager->isRelationship(statement1, statement2, false);
 }
 
 bool PkbReaderManager::hasNext() const {
-    // TODO: Implement this
-    return false;
+    return this->nextRelationshipManager->hasRelationship();
 }
 
 bool PkbReaderManager::hasNextStar() const {
-    // TODO: Implement this
-    return false;
+    return this->nextRelationshipManager->hasRelationship();
 }
 
 bool PkbReaderManager::hasBeforeStmt(Statement& statement) const {
-    // TODO: Implement this
-    return false;
+    return this->nextRelationshipManager->isLatter(statement);
 }
 
 bool PkbReaderManager::hasBeforeStarStmt(Statement& statement) const {
-    // TODO: Implement this
-    return false;
+    return this->nextRelationshipManager->isLatter(statement);
 }
 
 bool PkbReaderManager::hasAfterStmt(Statement& statement) const {
-    // TODO: Implement this
-    return false;
+    return this->nextRelationshipManager->isFormer(statement);
 }
 
 bool PkbReaderManager::hasAfterStarStmt(Statement& statement) const {
-    // TODO: Implement this
-    return false;
+    return this->nextRelationshipManager->isFormer(statement);
 }
