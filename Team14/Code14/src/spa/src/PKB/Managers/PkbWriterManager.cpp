@@ -12,7 +12,8 @@ PkbWriterManager::PkbWriterManager(
         std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
         std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
         std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
-        std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager)
+        std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
+        std::shared_ptr<NextRelationshipManager> nextRelationshipManager)
     : assignmentManager(assignmentManager),
     entitiesManager(entitiesManager),
     followsRelationshipManager(followsRelationshipManager),
@@ -21,7 +22,8 @@ PkbWriterManager::PkbWriterManager(
     parentRelationshipManager(parentRelationshipManager),
     callsRelationshipManager(callsRelationshipManager),
     modifiesProcRelationshipManager(modifiesProcRelationshipManager),
-    usesProcRelationshipManager(usesProcRelationshipManager) {}
+    usesProcRelationshipManager(usesProcRelationshipManager),
+    nextRelationshipManager(nextRelationshipManager) {}
 
 void PkbWriterManager::addConstant(std::shared_ptr<Constant> c) {
     this->entitiesManager->storeConstant(c);
@@ -100,4 +102,8 @@ void PkbWriterManager::triggerTransitiveCalc() {
     triggerCallsTransitiveCalculation();
     triggerProcToVarTransitiveCalculation();
     triggerStmtToVarTransitiveCalculation();
+}
+
+void PkbWriterManager::addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) {
+    this->nextRelationshipManager->storeRelationship(s1, s2, true);
 }

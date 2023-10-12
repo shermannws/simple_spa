@@ -204,3 +204,18 @@ std::vector<std::vector<Entity>> ManagerUtils::getPairNoMatch(RelationshipStore<
     };
     return getPair<Entity, RelationshipStore<K, V>, K, V>(store, leftMatcher, rightMatcher);
 }
+
+template <typename K>
+std::vector<Entity> ManagerUtils::getLeftKeysMatchRight(RelationshipStore<K, K>& store, std::function<bool(K&)> leftMatcher) {
+    std::vector<Entity> result;
+    for (auto it = store.getLeftToRightBeginIterator(); it != store.getLeftToRightEndIterator(); ++it) {
+        auto former = it->first;
+        auto latterSet = it->second;
+        if (leftMatcher(*former)) {
+            if (latterSet->getEntity(former) != nullptr) {
+				result.push_back(*former);
+			}
+        }
+    }
+    return result;
+}
