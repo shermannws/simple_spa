@@ -50,8 +50,8 @@ Result PQLEvaluator::evaluate(Query& query) {
         return *result;
     }
 
-    // CASE FALSE OR EMPTY RESULT TABLE
-    if (result->isFalse() || result->isEmpty()){
+    // CASE FALSE
+    if (result->isFalse()){
         return *result;
     }
 
@@ -86,7 +86,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateConstraintClauses(const Query& que
     for (const auto& clause : query.getPattern()) {
         results.push_back(evaluateClause(clause));
     }
-    auto result = results[0]; // Initialize with the first element
+    auto result = resultHandler->cast(results[0]); // Initialize with the first element
     for (size_t i = 1; i < results.size(); ++i) { // Combine with next until end of list
         result = resultHandler->getCombined(result, results[i]);
     }

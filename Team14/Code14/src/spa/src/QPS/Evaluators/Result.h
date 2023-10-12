@@ -51,6 +51,12 @@ public:
     Result();
 
     /**
+     * @brief Constructor for a boolean Result instance, returns a Result object with Type Boolean and boolResult of value
+     * @param value boolean value of the result
+     */
+    Result(bool value);
+
+    /**
      * @brief Gets the type of the result.
      * @return The type of the result (ResultType).
      */
