@@ -60,6 +60,7 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
     auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
     auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
+    auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager,
@@ -72,7 +73,8 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
             modifiesProcRelationshipManager,
             usesProcRelationshipManager,
             ifPatternManager,
-            whilePatternManager
+            whilePatternManager,
+            nextRelationshipManager
     );
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
@@ -156,6 +158,7 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
     auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
     auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
+    auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
         assignmentManager,
@@ -168,7 +171,8 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
         modifiesProcRelationshipManager,
         usesProcRelationshipManager,
         ifPatternManager,
-        whilePatternManager
+        whilePatternManager,
+        nextRelationshipManager
     );
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
@@ -320,6 +324,7 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
     auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
     auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
     auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
+    auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
         assignmentManager,
@@ -332,7 +337,8 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
         modifiesProcRelationshipManager,
         usesProcRelationshipManager,
         ifPatternManager,
-        whilePatternManager
+        whilePatternManager,
+        nextRelationshipManager
     );
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 

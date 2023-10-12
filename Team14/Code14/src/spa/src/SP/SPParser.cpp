@@ -1,6 +1,12 @@
 #include "SPParser.h"
 
-SPParser::SPParser() {}
+SPParser::SPParser() {
+    parseFunctionMap[AppConstants::STRING_READ] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<ReadNode> { return parseReadStatement(tokens); };
+    parseFunctionMap[AppConstants::STRING_PRINT] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<PrintNode> { return parsePrintStatement(tokens); };
+    parseFunctionMap[AppConstants::STRING_CALL] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<CallNode> { return parseCallStatement(tokens); };
+    parseFunctionMap[AppConstants::STRING_IF] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<IfNode> { return parseIfStatement(tokens); };
+    parseFunctionMap[AppConstants::STRING_WHILE] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<WhileNode> { return parseWhileStatement(tokens); };
+}
 
 std::shared_ptr<ProgramNode> SPParser::parse(std::vector<SPToken> tokens) {
     runningStatementNumber = 1;
@@ -33,13 +39,6 @@ std::shared_ptr<ProcedureNode> SPParser::parseProcedure(std::deque<SPToken>& tok
 }
 
 std::shared_ptr<StatementListNode> SPParser::parseStatementList(std::deque<SPToken>& tokens) {
-    std::unordered_map<std::string, std::function<std::shared_ptr<StatementNode>(std::deque<SPToken>&)>> parseFunctionMap;
-    parseFunctionMap["read"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<ReadNode> { return parseReadStatement(tokens); };
-    parseFunctionMap["print"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<PrintNode> { return parsePrintStatement(tokens); };
-    parseFunctionMap["call"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<CallNode> { return parseCallStatement(tokens); };;
-    parseFunctionMap["if"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<IfNode> { return parseIfStatement(tokens); };;
-    parseFunctionMap["while"] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<WhileNode> { return parseWhileStatement(tokens); };;
-
     std::vector<std::shared_ptr<StatementNode>> statements;
     while (tokens.front().getType() != TokenType::CloseCurlyParenthesis) {
         assert(tokens.front().getType() == TokenType::Name);

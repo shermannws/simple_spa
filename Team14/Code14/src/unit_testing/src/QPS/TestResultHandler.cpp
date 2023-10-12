@@ -16,18 +16,12 @@ TEST_CASE("Test Result combiner") {
         ResultType type = ResultType::Tuples;
 
         std::shared_ptr<Result> r = std::make_shared<Result>();
-        r->setType(type);
-        std::unordered_map<std::string, int> map{{"a", 0},
-                                                 {"x", 1}};
-        r->setSynIndices(map);
+        r->setType(std::vector<Synonym>{"a", "x"});
         std::vector<std::vector<Entity>> tuples{v1, v2};
         r->setTuples(tuples);
 
         std::shared_ptr<Result> r1 =  std::make_shared<Result>();
-        r1->setType(type);
-        std::unordered_map<std::string, int> map1{{"a", 0},
-                                                  {"x", 1}};
-        r1->setSynIndices(map1);
+        r1->setType(std::vector<Synonym> {"a", "x"});
         std::vector<std::vector<Entity>> tuples1{v1, v2, v3};
         r1->setTuples(tuples1);
 
@@ -47,17 +41,12 @@ TEST_CASE("Test Result combiner") {
         ResultType type = ResultType::Tuples;
 
         std::shared_ptr<Result> r = std::make_shared<Result>();
-        r->setType(type);
-        std::unordered_map<std::string, int> map{{"a", 0},
-                                                 {"x", 1}};
-        r->setSynIndices(map);
+        r->setType(std::vector<Synonym> {"a", "x"});
         std::vector<std::vector<Entity>> tuples{v1, v2};
         r->setTuples(tuples);
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
-        r1->setType(type);
-        std::unordered_map<std::string, int> map1{{"v", 0}};
-        r1->setSynIndices(map1);
+        r1->setType(std::vector<Synonym> {"v"});
 
         ResultHandler evaluator = ResultHandler();
         std::shared_ptr<Result> final = evaluator.getCombined(r, r1);
@@ -73,16 +62,12 @@ TEST_CASE("Test Result combiner") {
         Entity a2 = Statement(2, StatementType::Assign);
         Entity a3 = Statement(3, StatementType::Assign);
 
-        ResultType booltype = ResultType::Boolean;
         std::shared_ptr<Result> r = std::make_shared<Result>();
-        r->setType(booltype);
+        r->setType(std::vector<Synonym> {});
         r->setBoolResult(false);
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
-        ResultType type = ResultType::Tuples;
-        r1->setType(type);
-        std::unordered_map<std::string, int> map1{{"b", 0}};
-        r1->setSynIndices(map1);
+        r1->setType(std::vector<Synonym> {"b"});
         std::vector<std::vector<Entity>> tuples1{{a1},
                                                  {a2},
                                                  {a3}};
@@ -104,16 +89,12 @@ TEST_CASE("Test Result combiner") {
     SECTION("TRUE boolean result x tuple result") {
         Entity a1 = Statement(1, StatementType::Assign);
 
-        ResultType booltype = ResultType::Boolean;
         std::shared_ptr<Result> r = std::make_shared<Result>();
-        r->setType(booltype);
+        r->setType(std::vector<Synonym> {});
         r->setBoolResult(true);
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
-        ResultType type = ResultType::Tuples;
-        r1->setType(type);
-        std::unordered_map<std::string, int> map1{{"b", 0}};
-        r1->setSynIndices(map1);
+        r1->setType(std::vector<Synonym> {"b"});
         std::vector<std::vector<Entity>> tuples1{{a1}};
         r1->setTuples(tuples1);
 
@@ -134,13 +115,12 @@ TEST_CASE("Test Result combiner") {
     }
 
     SECTION("both boolean result") {
-        ResultType boolType = ResultType::Boolean;
         std::shared_ptr<Result> rTrue = std::make_shared<Result>();
-        rTrue->setType(boolType);
+        rTrue->setType(std::vector<Synonym> {});
         rTrue->setBoolResult(true);
 
         std::shared_ptr<Result> rFalse = std::make_shared<Result>();
-        rFalse->setType(boolType);
+        rFalse->setType(std::vector<Synonym> {});
         rFalse->setBoolResult(false);
 
         ResultHandler evaluator = ResultHandler();
@@ -169,22 +149,18 @@ TEST_CASE("Test Result combiner") {
     SECTION("one invalid result") {
         ResultType boolType = ResultType::Boolean;
         std::shared_ptr<Result> rTrue = std::make_shared<Result>();
-        rTrue->setType(boolType);
+        rTrue->setType(std::vector<Synonym> {});
         rTrue->setBoolResult(true);
 
         std::shared_ptr<Result> rFalse = std::make_shared<Result>();
-        rFalse->setType(boolType);
+        rFalse->setType(std::vector<Synonym> {});
         rFalse->setBoolResult(false);
 
         std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
         std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
-        ResultType tupleType = ResultType::Tuples;
 
         std::shared_ptr<Result> rTuple = std::make_shared<Result>();
-        rTuple->setType(tupleType);
-        std::unordered_map<std::string, int> map{{"a", 0},
-                                                 {"x", 1}};
-        rTuple->setSynIndices(map);
+        rTuple->setType(std::vector<Synonym> {"a", "x"});
         std::vector<std::vector<Entity>> tuples{v1, v2};
         rTuple->setTuples(tuples);
 

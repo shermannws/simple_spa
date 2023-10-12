@@ -292,4 +292,16 @@ public:
      */
     template<typename S, typename P>
     static void addStmtVarFromProcVar(std::shared_ptr<S> stmtVarManager, std::shared_ptr<RelationshipStore<Procedure, Statement>> procStmtStore, std::shared_ptr<P> procVarManager);
+
+
+    /**
+     * @brief A function that retrieves left keys from a double map-based store when a matcher function for statement type is required
+     * and the left key also appears on the right of the store
+     * @tparam K The type of the left and right object stored in the store
+     * @param store The store to be retrieved from
+     * @param type The type of the statement to be retrieved from the left keys
+     * @return A vector of left keys from the map that matches the statement type and also appears on the rhs of the map
+     */
+    template <typename K>
+    static std::vector<Entity> getLeftKeysMatchRight(RelationshipStore<K, K>& store, std::function<bool(K&)> leftMatcher);
 };

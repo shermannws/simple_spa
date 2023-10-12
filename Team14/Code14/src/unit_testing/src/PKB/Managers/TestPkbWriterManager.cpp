@@ -19,6 +19,7 @@ TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation
         auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
         auto ifPatternManager = std::make_shared<IfPatternManager>();
         auto whilePatternManager = std::make_shared<WhilePatternManager>();
+        auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
 
         PkbWriterManager pkbWriterManager = PkbWriterManager(
             assignmentManager,
@@ -31,7 +32,8 @@ TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation
             modifiesProcRelationshipManager,
             usesProcRelationshipManager,
             ifPatternManager,
-            whilePatternManager
+            whilePatternManager,
+            nextRelationshipManager
         );
 
         // A -> modifies a, b, c

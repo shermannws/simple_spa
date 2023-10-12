@@ -13,6 +13,7 @@
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/IfPatternManager.h"
 #include "PKB/Managers/WhilePatternManager.h"
+#include "PKB/Managers/NextRelationshipManager.h"
 #include "PKB/PkbTypes.h"
 #include "PKB/RelationshipStores/RelationshipStore.h"
 
@@ -77,6 +78,11 @@ private:
     std::shared_ptr<WhilePatternManager> whilePatternManager;
 
     /**
+     * @brief The next relationship manager.
+     */
+    std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
+
+    /**
 	 * @brief The map of procedure to statements where statements modifies/uses whatever modifies/uses by the procedure.
      * @note This will be cleared after the transitive calculation is done.
 	 */
@@ -112,6 +118,7 @@ public:
      * @param usesProcRelationshipManager The uses procedure relationship manager.
      * @param ifPatternManager The if pattern manager.
      * @param whilePatternManager The while pattern manager.
+     * @param nextRelationshipManager The next relationship manager.
      */
     PkbWriterManager(
             std::shared_ptr<AssignPatternManager> assignmentManager,
@@ -124,7 +131,8 @@ public:
             std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
             std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
             std::shared_ptr<IfPatternManager> ifPatternManager,
-            std::shared_ptr<WhilePatternManager> whilePatternManager
+            std::shared_ptr<WhilePatternManager> whilePatternManager,
+            std::shared_ptr<NextRelationshipManager> nextRelationshipManager
     );
 
     /**
@@ -233,4 +241,11 @@ public:
      * @brief Triggers transitivity calculation for Relationships
      */
     void triggerTransitiveCalc();
+
+    /**
+     * @brief Adds a direct next relationship to the PKB.
+     * @param s1 The shared pointer to the first statement.
+     * @param s2 The shared pointer to the second statement.
+     */
+    void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2);
 };

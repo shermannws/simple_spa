@@ -75,3 +75,6 @@ template void ManagerUtils::unique<Entity>(std::vector<Entity>& vec);
 template void ManagerUtils::addStmtVarFromProcVar(std::shared_ptr<ModifiesRelationshipManager> stmtVarManager, std::shared_ptr<RelationshipStore<Procedure, Statement>> procStmtStore, std::shared_ptr<ModifiesProcRelationshipManager> procVarManager);
 
 template void ManagerUtils::addStmtVarFromProcVar(std::shared_ptr<UsesRelationshipManager> stmtVarManager, std::shared_ptr<RelationshipStore<Procedure, Statement>> procStmtStore, std::shared_ptr<UsesProcRelationshipManager> procVarManager);
+
+
+template std::vector<Entity> ManagerUtils::getLeftKeysMatchRight(RelationshipStore<Statement, Statement>& store, std::function<bool(Statement &)> leftMatcher);

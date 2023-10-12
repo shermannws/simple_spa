@@ -13,6 +13,7 @@
 #include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/Managers/IfPatternManager.h"
 #include "PKB/Managers/WhilePatternManager.h"
+#include "PKB/Managers/NextRelationshipManager.h"
 #include "PKB/PkbTypes.h"
 
 /**
@@ -74,6 +75,11 @@ private:
      * @brief The while pattern manager.
      */
     std::shared_ptr<WhilePatternManager> whilePatternManager;
+
+    /**
+     * @brief The next relationship manager.
+     */
+    std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
 public:
     /**
      * @brief Constructs a PkbReaderManager object.
@@ -88,6 +94,7 @@ public:
      * @param usesProcRelationshipManager The uses procedure relationship manager.
      * @param ifPatternManager The if pattern manager.
      * @param whilePatternManager The while pattern manager.
+     * @param nextRelationshipManager The next relationship manager.
      * @return The PkbReaderManager object.
      */
     PkbReaderManager(
@@ -101,7 +108,8 @@ public:
             std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
             std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
             std::shared_ptr<IfPatternManager> ifPatternManager,
-            std::shared_ptr<WhilePatternManager> whilePatternManager
+            std::shared_ptr<WhilePatternManager> whilePatternManager,
+            std::shared_ptr<NextRelationshipManager> nextRelationshipManager
     );
 
     /**
@@ -903,10 +911,10 @@ public:
     bool hasAfterStarStmt(Statement& statement) const;
 
     /**
- * Returns a vector of If Statements with the given variable as a control variable
- * @param var The variable to be checked
- * @return A vector of If Statements
- */
+     * Returns a vector of If Statements with the given variable as a control variable
+     * @param var The variable to be checked
+     * @return A vector of If Statements
+     */
     std::vector<Entity> getIfStmtsByVar(Variable& var) const;
 
     /**
