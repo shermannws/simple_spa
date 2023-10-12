@@ -63,6 +63,27 @@ std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKeyNoMatch(Relationshi
     return getFromMapStore<EntityStore<L>, RelationshipStore<L, R>, R, L, Entity>(store, getter, key, matcher);
 }
 
+std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKeyNoMatch(ConditionPatternStore& store, Variable& key) {
+    auto getter = [](ConditionPatternStore& store, Variable& key) {
+        return store.getLeftEntitiesOf(std::make_shared<Variable>(key));
+    };
+    auto matcher = [](Statement& entity) {
+        return true;
+    };
+    return getFromMapStore<EntityStore<Statement>, ConditionPatternStore, Variable, Statement, Entity>(store, getter, key, matcher);
+}
+
+template <typename R>
+std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch(RelationshipStore<Statement, R>& store, R& key, StatementType type) {
+    auto getter = [](RelationshipStore<Statement, R>& store, R& key) {
+        return store.getLeftEntitiesOf(std::make_shared<R>(key));
+    };
+    auto matcher = [type](Statement& stmt) {
+        return stmt.isStatementType(type);
+    };
+    return getFromMapStore<EntityStore<Statement>, RelationshipStore<Statement, R>, R, Statement, Entity>(store, getter, key, matcher);
+}
+
 template <typename L>
 std::vector<Entity> ManagerUtils::getRightEntitiesFromLeftKeyStmtMatch(RelationshipStore<L, Statement>& store, L& key, StatementType type) {
     auto getter = [](RelationshipStore<L, Statement>& store, L& key) {
@@ -95,17 +116,6 @@ void ManagerUtils::addStmtVarFromProcVar(std::shared_ptr<S> stmtVarManager, std:
             }
         }
     }
-}
-
-template <typename R>
-std::vector<Entity> ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch(RelationshipStore<Statement, R>& store, R& key, StatementType type) {
-    auto getter = [](RelationshipStore<Statement, R>& store, R& key) {
-        return store.getLeftEntitiesOf(std::make_shared<R>(key));
-    };
-    auto matcher = [type](Statement& stmt) {
-        return stmt.isStatementType(type);
-    };
-    return getFromMapStore<EntityStore<Statement>, RelationshipStore<Statement, R>, R, Statement, Entity>(store, getter, key, matcher);
 }
 
 template <typename L, typename R>
@@ -145,6 +155,11 @@ template <typename K, typename V>
 std::vector<Entity>
 ManagerUtils::getLeftKeysNoMatch(RelationshipStore<K, V>& store) {
     return getKeysNoMatch<K, V>(store.getLeftToRightBeginIterator(), store.getLeftToRightEndIterator());
+}
+
+std::vector<Entity>
+ManagerUtils::getLeftKeysNoMatch(ConditionPatternStore& store) {
+    return getKeysNoMatch<Statement, Variable>(store.getLeftToRightBeginIterator(), store.getLeftToRightEndIterator());
 }
 
 template <typename K, typename V>
@@ -203,4 +218,14 @@ std::vector<std::vector<Entity>> ManagerUtils::getPairsNoMatch(RelationshipStore
         return true;
     };
     return getPairs<Entity, RelationshipStore<K, V>, K, V>(store, leftMatcher, rightMatcher);
+}
+
+std::vector<std::vector<Entity>> ManagerUtils::getPairsNoMatch(ConditionPatternStore &store) {
+    auto leftMatcher = [](Statement& entity) {
+        return true;
+    };
+    auto rightMatcher = [](Variable& entity) {
+        return true;
+    };
+    return getPairs<Entity, ConditionPatternStore, Statement, Variable>(store, leftMatcher, rightMatcher);
 }

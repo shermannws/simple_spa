@@ -75,3 +75,11 @@ void PkbConcreteWriter::addModifiesProcRelationship(std::shared_ptr<Procedure> p
 void PkbConcreteWriter::addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {
 	this->writerManager->addUsesProcRelationship(p, v);
 }
+
+void PkbConcreteWriter::addIfPattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) {
+    this->writerManager->addIfPattern(s, v);
+}
+
+void PkbConcreteWriter::addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) {
+    this->writerManager->addWhilePattern(s, v);
+}

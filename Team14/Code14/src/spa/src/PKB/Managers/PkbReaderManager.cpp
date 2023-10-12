@@ -9,7 +9,9 @@ PkbReaderManager::PkbReaderManager(
     std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
     std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
     std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
-    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager)
+    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
+    std::shared_ptr<IfPatternManager> ifPatternManager,
+    std::shared_ptr<WhilePatternManager> whilePatternManager)
     : assignmentManager(assignmentManager),
     entityManager(entityManager),
     followsRelationshipManager(followsRelationshipManager),
@@ -18,7 +20,9 @@ PkbReaderManager::PkbReaderManager(
     parentRelationshipManager(parentRelationshipManager),
     callsRelationshipManager(callsRelationshipManager),
     modifiesProcRelationshipManager(modifiesProcRelationshipManager),
-    usesProcRelationshipManager(usesProcRelationshipManager) {};
+    usesProcRelationshipManager(usesProcRelationshipManager),
+    ifPatternManager(ifPatternManager),
+    whilePatternManager(whilePatternManager) {}
 
 std::vector<Entity> PkbReaderManager::getAllVariables() const {
     return this->entityManager->getAllVariables();
@@ -45,11 +49,11 @@ std::vector<Entity> PkbReaderManager::getAllPrint() const {
 }
 
 std::vector<Entity> PkbReaderManager::getAllWhile() const {
-    return this->entityManager->getAllWhile();
+    return this->whilePatternManager->getAllStmts();
 }
 
 std::vector<Entity> PkbReaderManager::getAllIf() const {
-    return this->entityManager->getAllIf();
+    return this->ifPatternManager->getAllStmts();
 }
 
 std::vector<Entity> PkbReaderManager::getAllCall() const {
@@ -492,4 +496,20 @@ bool PkbReaderManager::hasAfterStmt(Statement& statement) const {
 bool PkbReaderManager::hasAfterStarStmt(Statement& statement) const {
     // TODO: Implement this
     return false;
+}
+
+std::vector<Entity> PkbReaderManager::getIfStmtsByVar(Variable& var) const {
+    return this->ifPatternManager->getStmtsByVar(var);
+};
+
+std::vector<std::vector<Entity>> PkbReaderManager::getAllIfStmtVarPair() const {
+    return this->ifPatternManager->getAllStmtVarPair();
+}
+
+std::vector<Entity> PkbReaderManager::getWhileStmtsByVar(Variable& var) const {
+    return this->whilePatternManager->getStmtsByVar(var);
+}
+
+std::vector<std::vector<Entity>> PkbReaderManager::getAllWhileStmtVarPair() const {
+    return this->whilePatternManager->getAllStmtVarPair();
 }

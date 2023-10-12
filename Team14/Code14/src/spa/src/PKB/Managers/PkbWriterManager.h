@@ -11,6 +11,8 @@
 #include "PKB/Managers/ModifiesProcRelationshipManager.h"
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
+#include "PKB/Managers/IfPatternManager.h"
+#include "PKB/Managers/WhilePatternManager.h"
 #include "PKB/PkbTypes.h"
 #include "PKB/RelationshipStores/RelationshipStore.h"
 
@@ -65,6 +67,16 @@ private:
     std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager;
 
     /**
+     * @brief The if pattern manager.
+     */
+    std::shared_ptr<IfPatternManager> ifPatternManager;
+
+    /**
+     * @brief The while pattern manager.
+     */
+    std::shared_ptr<WhilePatternManager> whilePatternManager;
+
+    /**
 	 * @brief The map of procedure to statements where statements modifies/uses whatever modifies/uses by the procedure.
      * @note This will be cleared after the transitive calculation is done.
 	 */
@@ -98,6 +110,8 @@ public:
      * @param callsRelatioShipManager The calls relationship manager.
      * @param modifiesProcRelationshipManager The modifies procedure relationship manager.
      * @param usesProcRelationshipManager The uses procedure relationship manager.
+     * @param ifPatternManager The if pattern manager.
+     * @param whilePatternManager The while pattern manager.
      */
     PkbWriterManager(
             std::shared_ptr<AssignPatternManager> assignmentManager,
@@ -108,7 +122,9 @@ public:
             std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
             std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
             std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
-            std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager
+            std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
+            std::shared_ptr<IfPatternManager> ifPatternManager,
+            std::shared_ptr<WhilePatternManager> whilePatternManager
     );
 
     /**
@@ -191,6 +207,20 @@ public:
      * @param v The shared pointer to the variable.
      */
     void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v);
+
+    /**
+     * @brief Adds an if pattern to the PKB.
+     * @param s The shared pointer to the statement.
+     * @param v The shared pointer to the vector of variables.
+     */
+    void addIfPattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v);
+
+    /**
+     * @brief Adds a while pattern to the PKB.
+     * @param s The shared pointer to the statement.
+     * @param v The shared pointer to the vector of variables.
+     */
+    void addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v);
 
     /**
      * @brief Adds procedure to statements map into tempProcedureStatementMap.

@@ -110,4 +110,14 @@ public:
      * Adds new Uses (Procedure-Variable) Relationship into the PKB
      */
     virtual void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) = 0;
+
+    /*!
+     * Adds new If Pattern into the PKB
+     */
+    virtual void addIfPattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) = 0;
+
+    /*!
+     * Adds new While Pattern into the PKB
+     */
+    virtual void addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) = 0;
 };

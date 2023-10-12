@@ -89,6 +89,16 @@ public:
     void addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2) override;
 
     /*!
+     * Adds new If Pattern into the PKB
+     */
+    void addIfPattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) override;
+
+    /*!
+     * Adds new While Pattern into the PKB
+     */
+    void addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) override;
+
+    /*!
      * Stores a map of procedures to a vector of statements that modifies/uses whatever the procedure modifies/uses
      */
     virtual void addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) override;

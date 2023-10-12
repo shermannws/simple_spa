@@ -808,4 +808,30 @@ public:
      */
     virtual bool hasAfterStarStmt(Statement& statement) const = 0;
 
+    /**
+     * Returns a vector of If Statements with the given variable as a control variable
+     * @param var The variable to be checked
+     * @return A vector of If Statements
+     */
+    virtual std::vector<Entity> getIfStmtsByVar(Variable& var) const = 0;
+
+    /**
+     * Returns a vector of vectors containing If Statement and Variable pairs where the variable is the control variable of the If Statement
+     * @return A vector of vectors containing If Statement and Variable pairs
+     */
+    virtual std::vector<std::vector<Entity>> getAllIfStmtVarPair() const = 0;
+
+    /**
+     * Returns a vector of While Statements with the given variable as a control variable
+     * @param var The variable to be checked
+     * @return A vector of While Statements
+     */
+    virtual std::vector<Entity> getWhileStmtsByVar(Variable& var) const = 0;
+
+    /**
+     * Returns a vector of vectors containing While Statement and Variable pairs where the variable is the control variable of the While Statement
+     * @return A vector of vectors containing While Statement and Variable pairs
+     */
+    virtual std::vector<std::vector<Entity>> getAllWhileStmtVarPair() const = 0;
+
 };

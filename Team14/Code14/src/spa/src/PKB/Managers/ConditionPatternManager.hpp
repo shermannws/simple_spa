@@ -11,12 +11,12 @@ void ConditionPatternManager<S>::storePattern(std::shared_ptr<Statement> stateme
 
 template <typename S>
 std::vector<Entity> ConditionPatternManager<S>::getAllStmts() const {
-    return ManagerUtils::getLeftKeysNoMatch<Statement, Variable>(*patternStore);
+    return ManagerUtils::getLeftKeysNoMatch(*patternStore);
 }
 
 template <typename S>
 std::vector<Entity> ConditionPatternManager<S>::getStmtsByVar(Variable& var) const {
-    return ManagerUtils::getLeftEntitiesFromRightKeyNoMatch<Statement, Variable>(*patternStore, var);
+    return ManagerUtils::getLeftEntitiesFromRightKeyNoMatch(*patternStore, var);
 }
 
 template <typename S>

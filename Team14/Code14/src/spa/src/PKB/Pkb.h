@@ -11,6 +11,8 @@
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/ModifiesProcRelationshipManager.h"
 #include "PKB/Managers/UsesProcRelationshipManager.h"
+#include "PKB/Managers/IfPatternManager.h"
+#include "PKB/Managers/WhilePatternManager.h"
 #include "PKB/Managers/PkbReaderManager.h"
 #include "PKB/Managers/PkbWriterManager.h"
 #include "PKB/PkbReader.h"
@@ -66,6 +68,16 @@ private:
      * @brief The UsesProcRelationshipManager of the PKB
      */
     std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager;
+
+    /**
+     * @brief The IfPatternManager of the PKB
+     */
+    std::shared_ptr<IfPatternManager> ifPatternManager;
+
+    /**
+     * @brief The WhilePatternManager of the PKB
+     */
+    std::shared_ptr<WhilePatternManager> whilePatternManager;
 
     /**
      * @brief The PkbReaderManager of the PKB
