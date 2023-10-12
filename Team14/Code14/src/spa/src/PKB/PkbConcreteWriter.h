@@ -108,4 +108,14 @@ public:
      */
     void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) override;
 
+    /*!
+     * Adds new Next Relationship into the PKB
+     */
+    virtual void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) override;
+
+    /*!
+     * Clears any Cache in the PKB that is used for Query Processing
+     *
+     */
+    virtual void clearCache() override;
 };

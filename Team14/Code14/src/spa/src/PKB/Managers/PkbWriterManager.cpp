@@ -107,3 +107,7 @@ void PkbWriterManager::triggerTransitiveCalc() {
 void PkbWriterManager::addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) {
     this->nextRelationshipManager->storeRelationship(s1, s2, true);
 }
+
+void PkbWriterManager::clearCache() {
+	this->nextRelationshipManager->clearNextStarStore();
+}

@@ -47,4 +47,5 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
   // each result must be a string.
    QPS qps = QPS(this->pkb.createPkbReader());
    qps.evaluate(query, results);
+   this->pkb.createPkbWriter()->clearCache();
 }
