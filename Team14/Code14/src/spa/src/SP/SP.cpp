@@ -1,4 +1,5 @@
 #include <iostream>
+#include <utility>
 
 #include "SP.h"
 #include "SPTokenizer.h"
@@ -13,23 +14,24 @@
 #include "SP/AST/Visitors/CallsExtractorVisitor.h"
 #include "SP/AST/Traverser/Traverser.h"
 #include "SP/CFG/CFGBuilder.h"
+#include "SP/CFG/CFGExtractor.h"
 #include "SP/Errors/SyntaxError.h"
 #include "SP/Errors/SemanticError.h"
 
-SP::SP(std::shared_ptr<PkbWriter> pkbWriter) : pkbWriter(pkbWriter) {}
+SP::SP(std::shared_ptr<PkbWriter> pkbWriter) : pkbWriter(std::move(pkbWriter)) {}
 
 void SP::startSPProcessing(std::string& input) {
     try {
         //Tokenize the string input
-        SPTokenizer tokenizer = SPTokenizer(input);
+        SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
 
         //Syntactic Validator takes in tokens
-        SyntacticValidator syntacticValidator = SyntacticValidator(tokens);
+        SyntacticValidator syntacticValidator(tokens);
         syntacticValidator.validate();
 
         //Parse the tokens
-        SPParser parser = SPParser();
+        SPParser parser;
         std::shared_ptr<ProgramNode> root = parser.parse(tokens);
 
         //Semantically validate from the root node
@@ -46,7 +48,7 @@ void SP::startSPProcessing(std::string& input) {
         std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = { entityExtractor, followsExtractor, usesExtractor, modifiesExtractor, parentExtractor, callsExtractor };
 
         //Traverse the AST from root node
-        Traverser traverser = Traverser(visitors);
+        Traverser traverser(visitors);
         traverser.traverse(root);
 
         //Trigger PKB to do transitivity calculations
@@ -55,6 +57,10 @@ void SP::startSPProcessing(std::string& input) {
         // Build CFGs
         std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
                 CFGBuilder::buildAllCFG(root);
+
+        // Handle CFG-related relationships and save CFG to PKB
+        CFGExtractor cfgExtractor(pkbWriter);
+        cfgExtractor.extractRelationships(cfgs);
     } catch (const SyntaxError& e) {
         std::cout << "\n" << e.what() << "\n\n" << "Terminating program due to invalid SIMPLE code." << std::endl;
         std::exit(EXIT_FAILURE); // Exit the program with an error code
