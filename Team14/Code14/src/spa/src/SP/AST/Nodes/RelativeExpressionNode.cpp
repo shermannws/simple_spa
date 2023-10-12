@@ -1,6 +1,3 @@
-#include <unordered_map>
-
-#include "Commons/AppConstants.h"
 #include "RelativeExpressionNode.h"
 
 RelativeExpressionNode::RelativeExpressionNode(
@@ -28,17 +25,9 @@ std::vector<std::shared_ptr<ASTNode>> RelativeExpressionNode::getAllChildNodes()
     return children;
 }
 
-ComparisonOperatorType RelativeExpressionNode::translateComparisonOperatorType(std::string operatorTypeString) {
-    std::unordered_map<std::string, ComparisonOperatorType> operatorTypeMap = {
-            { AppConstants::STRING_GREATER_THAN, ComparisonOperatorType::GreaterThan },
-            { AppConstants::STRING_GREATER_EQUAL, ComparisonOperatorType::GreaterThanEqual },
-            { AppConstants::STRING_LESS_THAN, ComparisonOperatorType::LessThan },
-            { AppConstants::STRING_LESS_EQUAL, ComparisonOperatorType::LessThanEqual },
-            { AppConstants::STRING_DOUBLE_EQUAL, ComparisonOperatorType::Equal },
-            { AppConstants::STRING_NOT_EQUAL, ComparisonOperatorType::NotEqual }
-    };
-    assert(operatorTypeMap.find(operatorTypeString) != operatorTypeMap.end());
-    return operatorTypeMap[operatorTypeString];
+ComparisonOperatorType RelativeExpressionNode::translateComparisonOperatorType(const std::string& operatorTypeString) {
+    assert(stringToOperatorTypeMap.find(operatorTypeString) != stringToOperatorTypeMap.end());
+    return stringToOperatorTypeMap.at(operatorTypeString);
 }
 
 void RelativeExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) {
