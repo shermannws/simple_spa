@@ -1,7 +1,5 @@
-#include <unordered_map>
 #include <utility>
 
-#include "Commons/AppConstants.h"
 #include "ArithmeticExpressionNode.h"
 
 ArithmeticExpressionNode::ArithmeticExpressionNode(ArithmeticOperatorType operatorType,
@@ -23,16 +21,9 @@ std::shared_ptr<ExpressionNode> ArithmeticExpressionNode::getRightExpression() {
     return rightExpression;
 }
 
-ArithmeticOperatorType ArithmeticExpressionNode::translateOperatorTypeString(std::string operatorTypeString) {
-    std::unordered_map<std::string, ArithmeticOperatorType> operatorTypeMap = {
-            { AppConstants::STRING_PLUS, ArithmeticOperatorType::Plus },
-            { AppConstants::STRING_MINUS, ArithmeticOperatorType::Minus },
-            { AppConstants::STRING_TIMES, ArithmeticOperatorType::Times },
-            { AppConstants::STRING_DIVIDE, ArithmeticOperatorType::Divide },
-            { AppConstants::STRING_MODULO, ArithmeticOperatorType::Modulo }
-    };
-    assert(operatorTypeMap.find(operatorTypeString) != operatorTypeMap.end());
-    return operatorTypeMap[operatorTypeString];
+ArithmeticOperatorType ArithmeticExpressionNode::translateOperatorTypeString(const std::string& operatorTypeString) {
+    assert(stringToOperatorTypeMap.find(operatorTypeString) != stringToOperatorTypeMap.end());
+    return stringToOperatorTypeMap.at(operatorTypeString);
 }
 std::vector<std::shared_ptr<ASTNode>> ArithmeticExpressionNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children { leftExpression, rightExpression };
@@ -46,17 +37,9 @@ void ArithmeticExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> vi
 }
 
 std::string ArithmeticExpressionNode::toString() {
-    std::unordered_map<ArithmeticOperatorType, std::string> operatorTypeToStringMap = {
-            { ArithmeticOperatorType::Plus, AppConstants::STRING_PLUS },
-            { ArithmeticOperatorType::Minus, AppConstants::STRING_MINUS },
-            { ArithmeticOperatorType::Times, AppConstants::STRING_TIMES },
-            { ArithmeticOperatorType::Divide, AppConstants::STRING_DIVIDE },
-            { ArithmeticOperatorType::Modulo, AppConstants::STRING_MODULO }
-    };
-
     return "(" +
         this->getLeftExpression()->toString() +
-        operatorTypeToStringMap[operatorType] +
+        operatorTypeToStringMap.at(operatorType) +
         this->getRightExpression()->toString() +
         ")";
 }

@@ -1,7 +1,9 @@
 #pragma once
 
-#include "memory"
+#include <memory>
+#include <unordered_map>
 
+#include "Commons/AppConstants.h"
 #include "ConditionalExpressionNode.h"
 #include "ComparisonOperatorType.h"
 #include "ExpressionNode.h"
@@ -44,6 +46,18 @@ private:
      * */
     std::shared_ptr<ExpressionNode> rightExpression;
 
+    /**
+     * Map of comparison operator string to ComparisonOperatorType.
+     */
+    inline static const std::unordered_map<std::string, ComparisonOperatorType> stringToOperatorTypeMap = {
+            { AppConstants::STRING_GREATER_THAN, ComparisonOperatorType::GreaterThan },
+            { AppConstants::STRING_GREATER_EQUAL, ComparisonOperatorType::GreaterThanEqual },
+            { AppConstants::STRING_LESS_THAN, ComparisonOperatorType::LessThan },
+            { AppConstants::STRING_LESS_EQUAL, ComparisonOperatorType::LessThanEqual },
+            { AppConstants::STRING_DOUBLE_EQUAL, ComparisonOperatorType::Equal },
+            { AppConstants::STRING_NOT_EQUAL, ComparisonOperatorType::NotEqual }
+    };
+
 public:
     /**
      * Creates and initializes a RelativeExpressionNode.
@@ -79,7 +93,7 @@ public:
      * @param operatorTypeString The string representing a comparison operator
      * @return The ComparisonOperatorType value corresponding to the string
      */
-    static ComparisonOperatorType translateComparisonOperatorType(std::string operatorTypeString);
+    static ComparisonOperatorType translateComparisonOperatorType(const std::string& operatorTypeString);
 
     void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) override;
 
