@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "PKB/Managers/AssignmentManager.h"
+#include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/Managers/EntitiesManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
@@ -23,9 +23,9 @@
 class Pkb {
 private:
     /**
-     * @brief The AssignmentManager of the PKB
+     * @brief The AssignPatternManager of the PKB
      */
-    std::shared_ptr<AssignmentManager> assignmentManager;
+    std::shared_ptr<AssignPatternManager> assignmentManager;
 
     /**
      * @brief The EntitiesManager of the PKB

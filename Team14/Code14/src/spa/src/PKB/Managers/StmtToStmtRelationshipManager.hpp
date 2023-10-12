@@ -20,7 +20,8 @@ std::vector<std::vector<Entity>> StmtToStmtRelationshipManager<S>::getRelationsh
         return stmt.isStatementType(latterType);
     };
 
-    return ManagerUtils::getPair<Entity, RelationshipStore<Statement, Statement>, Statement, Statement>(requireDirect ? *relationshipStore : *starRelationshipStore, leftMatcher, rightMatcher);
+    return ManagerUtils::getPairs<Entity, RelationshipStore<Statement, Statement>, Statement, Statement>(
+            requireDirect ? *relationshipStore : *starRelationshipStore, leftMatcher, rightMatcher);
 }
 
 template <typename S>

@@ -50,7 +50,7 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
 
     std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
 
-    auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
+    auto assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());
     auto entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
     auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
@@ -142,7 +142,7 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
 
     std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceCode);
 
-    auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
+    auto assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());
     auto entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
     auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
@@ -302,7 +302,7 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
 
     std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceCode);
 
-    auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
+    auto assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());
     auto entitiesStore = std::make_shared<EntitiesManager>(EntitiesManager());
     auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();

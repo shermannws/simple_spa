@@ -3,7 +3,7 @@
 #include "PKB/PkbConcreteWriter.h"
 
 Pkb::Pkb() {
-    this->assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
+    this->assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());
     this->entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
     this->followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     this->usesRelationshipManager = std::make_shared<UsesRelationshipManager>();

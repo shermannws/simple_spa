@@ -17,7 +17,8 @@ std::vector<std::vector<Entity>> StmtToVarRelationshipManager<S>::getRelationshi
         return true;
     };
 
-    return ManagerUtils::getPair<Entity, RelationshipStore<Statement, Variable>, Statement, Variable>(*relationshipStore, leftMatcher, rightMatcher);
+    return ManagerUtils::getPairs<Entity, RelationshipStore<Statement, Variable>, Statement, Variable>(
+            *relationshipStore, leftMatcher, rightMatcher);
 }
 
 template <typename S>

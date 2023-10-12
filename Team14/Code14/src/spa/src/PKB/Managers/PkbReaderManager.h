@@ -10,7 +10,7 @@
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/ModifiesProcRelationshipManager.h"
-#include "PKB/Managers/AssignmentManager.h"
+#include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/PkbTypes.h"
 
 /**
@@ -21,7 +21,7 @@ private:
     /**
      * @brief The assignment manager.
      */
-    std::shared_ptr<AssignmentManager> assignmentManager;
+    std::shared_ptr<AssignPatternManager> assignmentManager;
 
     /**
      * @brief The entities manager.
@@ -77,7 +77,7 @@ public:
      * @return The PkbReaderManager object.
      */
     PkbReaderManager(
-            std::shared_ptr<AssignmentManager> assignmentManager,
+            std::shared_ptr<AssignPatternManager> assignmentManager,
             std::shared_ptr<EntitiesManager> entityManager,
             std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,

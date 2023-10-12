@@ -4,7 +4,7 @@
 #include "PKB/Managers/ManagerUtils.h"
 
 PkbWriterManager::PkbWriterManager(
-        std::shared_ptr<AssignmentManager> assignmentManager,
+        std::shared_ptr<AssignPatternManager> assignmentManager,
         std::shared_ptr<EntitiesManager> entitiesManager,
         std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
         std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
@@ -43,7 +43,7 @@ void PkbWriterManager::addAssignStatement(std::shared_ptr<Statement> s, std::sha
     this->entitiesManager->storeStatement(s);
 
     std::shared_ptr<Assignment> assignStmt = std::make_shared<Assignment>(s, lhs, rhs);
-    this->assignmentManager->addAssignment(assignStmt);
+    this->assignmentManager->storeAssignPattern(assignStmt);
 }
 
 void PkbWriterManager::addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {

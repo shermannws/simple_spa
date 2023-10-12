@@ -240,7 +240,7 @@ public:
      * @return A vector of key-value pairs from the map
      */
     template <typename R, typename S, typename K, typename V>
-    static std::vector<std::vector<R>> getPair(S& store, std::function<bool(K &)> leftMatcher, std::function<bool(V &)> rightMatcher);
+    static std::vector<std::vector<R>> getPairs(S& store, std::function<bool(K &)> leftMatcher, std::function<bool(V &)> rightMatcher);
 
     /**
      * @brief A function that retrieves key-value pairs from a map-based store when no matcher function is required
@@ -250,7 +250,7 @@ public:
      * @return A vector of key-value pairs from the map
      */
     template <typename K, typename V>
-    static std::vector<std::vector<Entity>> getPairNoMatch(RelationshipStore<K, V>& store);
+    static std::vector<std::vector<Entity>> getPairsNoMatch(RelationshipStore<K, V> &store);
 
     /**
      * @brief A function that removes duplicates in a vector of object of type E

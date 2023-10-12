@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "PKB/Managers/AssignmentManager.h"
+#include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/Managers/EntitiesManager.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
@@ -22,7 +22,7 @@ private:
     /**
      * @brief The assignment manager.
      */
-    std::shared_ptr<AssignmentManager> assignmentManager;
+    std::shared_ptr<AssignPatternManager> assignmentManager;
 
     /**
      * @brief The entities manager.
@@ -100,7 +100,7 @@ public:
      * @param usesProcRelationshipManager The uses procedure relationship manager.
      */
     PkbWriterManager(
-            std::shared_ptr<AssignmentManager> assignmentManager,
+            std::shared_ptr<AssignPatternManager> assignmentManager,
             std::shared_ptr<EntitiesManager> entitiesManager,
             std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,

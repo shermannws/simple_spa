@@ -177,7 +177,7 @@ ManagerUtils::getRightKeysStmtMatch(RelationshipStore<K, Statement>& store, Stat
 }
 
 template <typename R, typename S, typename K, typename V>
-std::vector<std::vector<R>> ManagerUtils::getPair(S& store, std::function<bool(K &)> leftMatcher, std::function<bool(V &)> rightMatcher) {
+std::vector<std::vector<R>> ManagerUtils::getPairs(S& store, std::function<bool(K &)> leftMatcher, std::function<bool(V &)> rightMatcher) {
     std::vector<std::vector<R>> result;
     for (auto it = store.getLeftToRightBeginIterator(); it != store.getLeftToRightEndIterator(); ++it) {
         auto former = it->first;
@@ -195,12 +195,12 @@ std::vector<std::vector<R>> ManagerUtils::getPair(S& store, std::function<bool(K
 }
 
 template <typename K, typename V>
-std::vector<std::vector<Entity>> ManagerUtils::getPairNoMatch(RelationshipStore<K, V>& store) {
+std::vector<std::vector<Entity>> ManagerUtils::getPairsNoMatch(RelationshipStore<K, V> &store) {
     auto leftMatcher = [](K& entity) {
         return true;
     };
     auto rightMatcher = [](V& entity) {
         return true;
     };
-    return getPair<Entity, RelationshipStore<K, V>, K, V>(store, leftMatcher, rightMatcher);
+    return getPairs<Entity, RelationshipStore<K, V>, K, V>(store, leftMatcher, rightMatcher);
 }

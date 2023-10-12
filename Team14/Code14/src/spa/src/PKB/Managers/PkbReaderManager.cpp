@@ -1,7 +1,7 @@
 #include "PkbReaderManager.h"
 
 PkbReaderManager::PkbReaderManager(
-    std::shared_ptr<AssignmentManager> assignmentManager,
+    std::shared_ptr<AssignPatternManager> assignmentManager,
     std::shared_ptr<EntitiesManager> entityManager,
     std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
     std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
