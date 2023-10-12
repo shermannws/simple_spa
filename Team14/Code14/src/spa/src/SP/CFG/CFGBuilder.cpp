@@ -4,9 +4,9 @@
 #include "SP/AST/Nodes/StatementNode.h"
 
 std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-CFGBuilder::buildAllCFG(const std::shared_ptr<ProgramNode>& ASTRootNode) {
+CFGBuilder::buildAllCFG(const std::shared_ptr<ProgramNode>& astRootNode) {
     std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> procedureToCFGMap;
-    for (auto& procedureNode : ASTRootNode->getProcedures()) {
+    for (auto& procedureNode : astRootNode->getProcedures()) {
         ProcedureName procedureName = procedureNode->getProcedureName();
         procedureToCFGMap[procedureName] = buildCFGForProcedure(procedureNode);
     }
