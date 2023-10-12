@@ -115,7 +115,6 @@ public:
 
     /*!
      * Clears any Cache in the PKB that is used for Query Processing
-     *
      */
     virtual void clearCache() override;
 };
