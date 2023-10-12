@@ -51,11 +51,15 @@ std::vector<Entity> PkbReaderManager::getAllPrint() const {
 }
 
 std::vector<Entity> PkbReaderManager::getAllWhile() const {
-    return this->whilePatternManager->getAllStmts();
+    return this-> entityManager->getAllWhile();
+    // TODO: Change to whilePatternManager & delete getAllWhile() from EntityManager
+    // return this->whilePatternManager->getAllStmts();
 }
 
 std::vector<Entity> PkbReaderManager::getAllIf() const {
-    return this->ifPatternManager->getAllStmts();
+    return this->entityManager->getAllIf();
+    // TODO: Change to ifPatternManager & delete getAllIf() from EntityManager
+    // return this->ifPatternManager->getAllStmts();
 }
 
 std::vector<Entity> PkbReaderManager::getAllCall() const {
