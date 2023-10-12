@@ -25,7 +25,6 @@ TEST_CASE("Test Next/Next* Relationship Retrieval") {
         REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Call, false).size() == 1);
         REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Print, true).size() == 0);
         REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Print, false).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Print, true).size() == 0);
 
         REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::Stmt, *statement1, false).size() == 0);
         REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::Stmt, *statement2, true).size() == 1);
