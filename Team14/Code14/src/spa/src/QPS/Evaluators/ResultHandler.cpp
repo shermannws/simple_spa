@@ -17,7 +17,7 @@ std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1, s
     if (r2->isFalse() || r2->isEmpty() || r1->isTrue()) {
         return cast(r2);
     }
-    return join(r1, r2); // case 2 non-empty Tuple Result
+    return cast(join(r1, r2)); // case 2 non-empty Tuple Result
 }
 
 std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
