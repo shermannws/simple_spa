@@ -24,8 +24,12 @@ void PkbConcreteWriter::addReadStatement(std::shared_ptr<Statement> s) {
     this->writerManager->addStatement(s);
 }
 
-void PkbConcreteWriter::addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) {
-    this->writerManager->addAssignStatement(s, lhs, rhs);
+void PkbConcreteWriter::addAssignStatement(std::shared_ptr<Statement> s) {
+    this->writerManager->addStatement(s);
+}
+
+void PkbConcreteWriter::addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) {
+    this->writerManager->addAssignPattern(s, lhs, rhs);
 }
 
 void PkbConcreteWriter::addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {

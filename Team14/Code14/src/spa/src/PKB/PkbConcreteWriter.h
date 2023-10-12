@@ -46,7 +46,12 @@ public:
     /*!
      * Adds new Assign Statement Entity into the PKB
      */
-    void addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) override;
+    void addAssignStatement(std::shared_ptr<Statement> s) override;
+
+    /*!
+     * Add new Assign Pattern into the PKB 
+     */
+    void addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) override;
 
     /*!
      * Adds new Follows Relationship into the PKB
