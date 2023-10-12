@@ -7,7 +7,7 @@
 #include "QPS/Exceptions/SyntaxException.h"
 
 
-std::vector<std::string> specials{"(",")",";",",","_","+","-","*","/","%", "\""};
+std::vector<std::string> specials{"(",")",";",",","_","+","-","*","/","%", "\"", "<", ">", "."};
 std::vector<std::string> stars{"Follows", "Parent", "Calls"};
 
 Tokenizer::Tokenizer(const std::string& input) : curr(0) {

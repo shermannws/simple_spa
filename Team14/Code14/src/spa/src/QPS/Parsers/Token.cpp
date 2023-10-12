@@ -36,6 +36,12 @@ Token::Token(const std::string& input) {
         this->type = TokenType::Quote;
     } else if (rep == "_") {
         this->type = TokenType::Underscore;
+    } else if (rep == ".") {
+        this->type = TokenType::Dot;
+    } else if (rep == "<") {
+        this->type = TokenType::Ltuple;
+    } else if (rep == ">") {
+        this->type = TokenType::Rtuple;
     } else if (!rep.empty()){
         this->type = TokenType::Word;
     } else {
