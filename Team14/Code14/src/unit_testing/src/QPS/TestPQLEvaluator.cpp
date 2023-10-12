@@ -696,11 +696,8 @@ TEST_CASE("multiclause, pattern only - synonym in empty result table") {
     PQLEvaluator evaluator = PQLEvaluator(stubReader);
     auto resultObj = evaluator.evaluate(queryObj); // no intersection of v, no a returned
     auto results = evaluator.formatResult(queryObj, resultObj);
-    REQUIRE(resultObj.getType() == ResultType::Tuples);
-    REQUIRE(resultObj.getSynIndices()["a"] == 0);
-    REQUIRE(resultObj.getSynIndices()["v"] == 1);
-    REQUIRE(resultObj.getSynIndices()["v1"] == 2);
-    REQUIRE(resultObj.getTuples().empty());
+    REQUIRE(resultObj.getType() == ResultType::Boolean);
+    REQUIRE(resultObj.getBoolResult() == false);
     REQUIRE(results.size() == 0);
 }
 
