@@ -18,7 +18,7 @@ private:
      * @param procedureNode The root (ASTNode) of the procedure subtree to create a CFG for
      * @return Unordered map of Statement to CFGNode
      */
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> buildCFGForProcedure(
+    static std::unordered_map<Statement, std::shared_ptr<CFGNode>> buildCFGForProcedure(
             const std::shared_ptr<ProcedureNode>& procedureNode);
 
     /**
@@ -27,7 +27,7 @@ private:
      * @param statementListNode The root (ASTNode) of the statement list subtree to create a CFG subtree for
      * @return The head and tail nodes of this subgraph
      */
-    std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildStatementListSubgraph(
+    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildStatementListSubgraph(
             std::unordered_map<Statement, std::shared_ptr<CFGNode>>& map, const std::shared_ptr<StatementListNode>& statementListNode);
 
     /**
@@ -36,7 +36,7 @@ private:
      * @param statementNode The root (ASTNode) of the statement subtree to create a CFG subtree for
      * @return The head and tail nodes of this subgraph
      */
-    std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildStatementSubgraph(
+    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildStatementSubgraph(
             std::unordered_map<Statement, std::shared_ptr<CFGNode>>& map, const std::shared_ptr<StatementNode>& statementNode);
 
     /**
@@ -45,7 +45,7 @@ private:
      * @param ifNode The root (ASTNode) of the if statement subtree to create a CFG subtree for
      * @return The head and tail nodes of this subgraph
      */
-    std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildIfSubgraph(
+    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildIfSubgraph(
             std::unordered_map<Statement, std::shared_ptr<CFGNode>>& map, const std::shared_ptr<IfNode>& ifNode);
 
     /**
@@ -54,7 +54,7 @@ private:
      * @param whileNode The root (ASTNode) of the while statement subtree to create a CFG subtree for
      * @return The head and tail nodes of this subgraph
      */
-    std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildWhileSubgraph(
+    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildWhileSubgraph(
             std::unordered_map<Statement, std::shared_ptr<CFGNode>>& map, const std::shared_ptr<WhileNode>& whileNode);
 public:
     /**
@@ -63,6 +63,6 @@ public:
      * @param ASTRootNode The root node of the AST
      * @return Unordered map of each procedure to a map of Statement to CFGNode
      */
-    std::unordered_map<ProcedureName, std::unordered_map<Statement,
+    static std::unordered_map<ProcedureName, std::unordered_map<Statement,
     std::shared_ptr<CFGNode>>> buildAllCFG(const std::shared_ptr<ProgramNode>& ASTRootNode);
 };

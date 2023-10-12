@@ -47,9 +47,8 @@ TEST_CASE("Test single procedure") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    CFGBuilder builder;
     std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
-            builder.buildAllCFG(rootNode);
+            CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
     REQUIRE(cfgs.count("Proc1") == 1);
 
@@ -161,9 +160,8 @@ TEST_CASE("Test multiple procedures") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    CFGBuilder builder;
     std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = builder.buildAllCFG(rootNode);
+            cfgs = CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 6);
 
     SECTION("Test Proc1") {
@@ -325,9 +323,8 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    CFGBuilder builder;
     std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = builder.buildAllCFG(rootNode);
+            cfgs = CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);
@@ -506,9 +503,8 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    CFGBuilder builder;
     std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = builder.buildAllCFG(rootNode);
+            cfgs = CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);
@@ -602,9 +598,8 @@ TEST_CASE("Test nested whiles") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    CFGBuilder builder;
     std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = builder.buildAllCFG(rootNode);
+            cfgs = CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);
@@ -775,9 +770,8 @@ TEST_CASE("Test nested whiles and ifs") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    CFGBuilder builder;
     std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = builder.buildAllCFG(rootNode);
+            cfgs = CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);

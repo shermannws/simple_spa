@@ -12,6 +12,7 @@
 #include "SP/AST/Visitors/ParentExtractorVisitor.h"
 #include "SP/AST/Visitors/CallsExtractorVisitor.h"
 #include "SP/AST/Traverser/Traverser.h"
+#include "SP/CFG/CFGBuilder.h"
 #include "SP/Errors/SyntaxError.h"
 #include "SP/Errors/SemanticError.h"
 
@@ -50,6 +51,9 @@ void SP::startSPProcessing(std::string& input) {
 
         //Trigger PKB to do transitivity calculations
         pkbWriter->triggerTransitiveCalc();
+
+        // Build CFGs
+        auto cfgs = CFGBuilder::buildAllCFG(root);
     } catch (const SyntaxError& e) {
         std::cout << "\n" << e.what() << "\n\n" << "Terminating program due to invalid SIMPLE code." << std::endl;
         std::exit(EXIT_FAILURE); // Exit the program with an error code
