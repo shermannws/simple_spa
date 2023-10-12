@@ -53,7 +53,8 @@ void SP::startSPProcessing(std::string& input) {
         pkbWriter->triggerTransitiveCalc();
 
         // Build CFGs
-        auto cfgs = CFGBuilder::buildAllCFG(root);
+        std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
+                CFGBuilder::buildAllCFG(root);
     } catch (const SyntaxError& e) {
         std::cout << "\n" << e.what() << "\n\n" << "Terminating program due to invalid SIMPLE code." << std::endl;
         std::exit(EXIT_FAILURE); // Exit the program with an error code
