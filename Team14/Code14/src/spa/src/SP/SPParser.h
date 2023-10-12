@@ -177,6 +177,10 @@ private:
      */
     std::shared_ptr<ConstantNode> parseConstant(std::deque<SPToken>& tokens);
 
+    /**
+     * Map of statement keyword ("assign", "print", etc) to statement parser function
+     */
+    std::unordered_map<std::string, std::function<std::shared_ptr<StatementNode>(std::deque<SPToken>&)>> parseFunctionMap;
 public:
     /**
      * Creates and initiates an SPParser.
