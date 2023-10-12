@@ -17,12 +17,12 @@ PQLParser::PQLParser(const std::string& PQLQuery) {
 Query PQLParser::parse() {
     Query query = Query();
     std::vector<Synonym> declarations = parseDeclarations(query);
-    Synonym select = parseResultClause(query);
+    parseResultClause(query);
     parseClauses(query);
 
     PqlSemanticValidator semanticValidator = PqlSemanticValidator();
     semanticValidator.validateDeclarations(declarations);
-    semanticValidator.validateResultClause(query, select);
+    semanticValidator.validateResultClause(query); //TODO replace this
     semanticValidator.validateConstraintClauses(query);
     return query;
 }
@@ -46,20 +46,50 @@ std::vector<Synonym> PQLParser::parseDeclarations(Query& query) {
     return synonyms;
 }
 
-Synonym PQLParser::parseResultClause(Query& query) {
+//Synonym PQLParser::parseResultClause(Query& query) {
+//    std::shared_ptr<Token> next = tokenizer->popToken();
+//    if (!next->isToken("Select")) {
+//        throw SyntaxException("Expected Select clause but found '" + next->getRep() + "'");
+//    }
+//
+//    next = tokenizer->popToken();
+//    if (!next->isIdent()) {
+//        throw SyntaxException("Invalid synonym syntax");
+//    }
+//
+//    Synonym syn = next->getRep();
+//    query.addSelect(next->getRep());
+//    return syn;
+//}
+
+void PQLParser::parseResultClause(Query& query) {
+    std::unordered_map<TokenType, processClausefunc> resultExtractorMap {
+            {TokenType::Word,  [&] (Query& query) {return processSingle(query);}},
+            {TokenType::Ltuple,  [&] (Query& query) {return processTuple(query);}}
+    };
+
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken("Select")) {
         throw SyntaxException("Expected Select clause but found '" + next->getRep() + "'");
     }
 
-    next = tokenizer->popToken();
-    if (!next->isIdent()) {
+    next = tokenizer->peekToken();
+    if (!next->isIdent() && !next->isToken(TokenType::Ltuple)) {
         throw SyntaxException("Invalid synonym syntax");
     }
 
-    Synonym syn = next->getRep();
-    query.addSelect(next->getRep());
-    return syn;
+    resultExtractorMap[next->getType()](query);
+}
+
+void PQLParser::processTuple(Query& query) {
+    // TODO
+    //parse elements
+    //add to query
+}
+
+void PQLParser::processSingle(Query& query) {
+    auto syn = tokenizer->popToken();
+    query.addSelect(syn->getRep());
 }
 
 void PQLParser::parseClauses(Query& query) {

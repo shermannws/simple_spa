@@ -24,9 +24,8 @@ public:
     /**
      * @brief Validates the result clause semantically, throws a Semantic exception if synonym is undeclared
      * @param query the query object
-     * @param syn the synonym selected in the query
      */
-    void validateResultClause(const Query& query, const Synonym& syn);
+    void validateResultClause(const Query& query);
 
     /**
      * @brief Validates all the clauses in the given query

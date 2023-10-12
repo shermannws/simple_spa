@@ -32,7 +32,17 @@ private:
     /**
      * @brief parses result clause and adds the selected synonyms to the query object
      */
-    Synonym parseResultClause(Query& query);
+    void parseResultClause(Query& query);
+
+    /**
+     * @brief parses a tuple result clause and adds the tuple elements to the query
+     */
+    void processTuple(Query& query);
+
+    /**
+     * @brief parses a single result clause and adds the single to the query
+     */
+    void processSingle(Query& query);
 
     /**
      * @brief parses the chain of constraint clause and adds the clauses to the query object

@@ -17,7 +17,8 @@ void PqlSemanticValidator::validateDeclarations(const std::vector<Synonym>& syno
     }
 }
 
-void PqlSemanticValidator::validateResultClause(const Query& query, const Synonym& syn) {
+void PqlSemanticValidator::validateResultClause(const Query& query) {
+    auto syn = query.getSelect()[0];
     EntityPtr entity = query.getEntity(syn);
     if (!entity) {
         throw SemanticException("Undeclared synonym in Select clause");
