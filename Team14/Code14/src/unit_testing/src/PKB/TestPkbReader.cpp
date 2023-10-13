@@ -359,7 +359,38 @@ TEST_CASE("Assign Pattern") {
 }
 
 TEST_CASE("Next(*) Relationship") {
-    //TODO
+    Pkb pkb = Pkb();
+    auto reader = pkb.createPkbReader();
+    auto writer = pkb.createPkbWriter();
+
+    Statement s = Statement(1, StatementType::Print);
+    Statement s1 = Statement(1, StatementType::Read);
+
+    writer->addNextRelationship(make_shared<Statement>(s), make_shared<Statement>(s1));
+
+    REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt).size() == 1);
+    REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt)[0][0] == s);
+    REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt)[0][1] == s1);
+
+    REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read).size() == 1);
+    REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read)[0][0] == s);
+    REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read)[0][1] == s1);
+
+    REQUIRE(reader->getNextStarSameStmt(StatementType::Stmt).size() == 0);
+
+    REQUIRE(reader->getNextTypeStmt(StatementType::Print, s1).size() == 1);
+    REQUIRE(reader->getNextTypeStmt(StatementType::Print, s1)[0] == s);
+
+    REQUIRE(reader->getNextStarTypeStmt(StatementType::Stmt, s1).size() == 1);
+    REQUIRE(reader->getNextStarTypeStmt(StatementType::Stmt, s1)[0] == s);
+
+    REQUIRE(reader->getNextTypeWildcard(StatementType::Print).size() == 1);
+    REQUIRE(reader->getNextTypeWildcard(StatementType::Print)[0] == s);
+
+    REQUIRE(reader->getNextStarTypeWildcard(StatementType::Stmt).size() == 1);
+    REQUIRE(reader->getNextStarTypeWildcard(StatementType::Stmt)[0] == s);
+
+    writer->clearCache();
 }
 
 TEST_CASE("If Pattern") {
