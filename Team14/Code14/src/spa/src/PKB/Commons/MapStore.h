@@ -3,8 +3,6 @@
 #include <unordered_map>
 #include <memory>
 
-#include "PKB/Commons/SetStore.h"
-
 /**
  * @brief A class that stores objects using a map as the underlying data structure
  * @tparam K The type of object that the MapStore stores as the key

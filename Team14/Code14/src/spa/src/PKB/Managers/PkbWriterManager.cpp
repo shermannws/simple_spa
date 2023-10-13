@@ -13,7 +13,8 @@ PkbWriterManager::PkbWriterManager(
         std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
         std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
         std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
-        std::shared_ptr<NextRelationshipManager> nextRelationshipManager)
+        std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
+        std::shared_ptr<CFGManager> cfgManager)
     : assignmentManager(assignmentManager),
     entitiesManager(entitiesManager),
     followsRelationshipManager(followsRelationshipManager),
@@ -23,7 +24,8 @@ PkbWriterManager::PkbWriterManager(
     callsRelationshipManager(callsRelationshipManager),
     modifiesProcRelationshipManager(modifiesProcRelationshipManager),
     usesProcRelationshipManager(usesProcRelationshipManager),
-    nextRelationshipManager(nextRelationshipManager) {}
+    nextRelationshipManager(nextRelationshipManager),
+    cfgManager(cfgManager) {}
 
 void PkbWriterManager::addConstant(std::shared_ptr<Constant> c) {
     this->entitiesManager->storeConstant(c);
@@ -104,6 +106,10 @@ void PkbWriterManager::triggerTransitiveCalc() {
 
 void PkbWriterManager::addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) {
     this->nextRelationshipManager->storeRelationship(s1, s2, true);
+}
+
+void PkbWriterManager::setCFGMap(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap) {
+    this->cfgManager->setCFG(cfgMap);
 }
 
 void PkbWriterManager::clearCache() {

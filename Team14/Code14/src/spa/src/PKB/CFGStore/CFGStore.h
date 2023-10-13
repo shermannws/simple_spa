@@ -1,3 +1,5 @@
+#pragma once
+
 #include "PKB/Commons/MapStore.h"
 #include "Commons/CFG/CFGNode.h"
 

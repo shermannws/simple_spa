@@ -1,4 +1,6 @@
-#include "PKB/CFGStore/CFGStore.h";
+#pragma once
+
+#include "PKB/CFGStore/CFGStore.h"
 
 class CFGManager {
 private:
@@ -14,8 +16,8 @@ public:
 	CFGManager();
 
 	/**
-	 * @brief Adds the map from ProcedureName to the first CFGNode of the CFG to the CFGStore.
+	 * @brief Sets the map from ProcedureName to the first CFGNode as the representation of the CFG.
 	 * @param map The map from ProcedureName to the first CFGNode of the CFG.
 	 */
-	void addCFG(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> map);
+	void setCFG(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> map);
 };
