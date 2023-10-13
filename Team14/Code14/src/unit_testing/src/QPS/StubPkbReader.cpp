@@ -100,6 +100,13 @@ std::vector<Entity> StubPkbReader::getUsesVar(Procedure& proc) const {
 }
 
 bool StubPkbReader::isStmtUsesVar(Statement& stmt, Variable& var) const {
+    if (stmt == Statement(1, StatementType::Stmt) &&
+            var == Variable("multiClauseSTonly")) {
+        return false;
+    }
+    if (var == Variable("multiClauseTrue")) {
+        return true;
+    }
     return true;
 }
 
@@ -128,6 +135,9 @@ std::vector<Entity> StubPkbReader::getFollowsTypeStmt(StatementType type, Statem
 }
 
 std::vector<Entity> StubPkbReader::getFollowsStarTypeStmt(StatementType type, Statement& statement) const {
+    if (type == StatementType::Stmt && statement == Statement(700, StatementType::Stmt)){
+        return std::vector<Entity>({Statement(10, StatementType::Assign)});
+    }
     return std::vector<Entity>();
 }
 
@@ -282,14 +292,24 @@ std::vector<std::vector<Entity>> StubPkbReader::getAllAssignStmtVarPair() const 
 
 // pattern a (v, "x")
 std::vector<std::vector<Entity>> StubPkbReader::getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const {
+    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var1")};
+    std::vector<Entity> pair2 = {Statement(1, StatementType::Assign), Variable("var2")};
+    std::vector<Entity> pair3 = {Statement(2, StatementType::Assign), Variable("var3")};
+    std::vector<Entity> pair4 = {Statement(3, StatementType::Assign), Variable("var4")};
+    std::vector<Entity> pair5 = {Statement(4, StatementType::Assign), Variable("var3")};
+    std::vector<Entity> pair6 = {Statement(6, StatementType::Assign), Variable("var6")};
+    if (rhs == "((1)+(multiclauseTest))" && hasWildCard) {
+        return std::vector<std::vector<Entity>>({pair1, pair2, pair3, pair4, pair5});
+    }
+    if (rhs == "((multiclauseTest)+(patternOnly))" && !hasWildCard) {
+        return std::vector<std::vector<Entity>>({pair6});
+    }
+
     if (hasWildCard) {
         std::vector<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var2")};
         std::vector<Entity> pair3 = {Statement(3, StatementType::Assign), Variable("var3")};
         return std::vector<std::vector<Entity>>({pair2, pair3});
     }
-    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var1")};
-    std::vector<Entity> pair2 = {Statement(1, StatementType::Assign), Variable("var2")};
-    std::vector<Entity> pair3 = {Statement(2, StatementType::Assign), Variable("var3")};
     return std::vector<std::vector<Entity>>({pair1, pair2, pair3});
 }
 
@@ -348,7 +368,11 @@ std::vector<Entity> StubPkbReader::getParentStarWildcardType(StatementType type)
 }
 
 bool StubPkbReader::isParent(Statement& statement1, Statement& statement2) const {
-    return false;
+    if (statement1 == Statement(1, StatementType::Stmt) &&
+            statement2 == Statement(10, StatementType::Stmt)) {
+        return true;
+    }
+    return true;
 }
 
 bool StubPkbReader::isParentStar(Statement& statement1, Statement& statement2) const  {
