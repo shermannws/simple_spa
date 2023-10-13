@@ -364,7 +364,7 @@ TEST_CASE("Next(*) Relationship") {
     auto writer = pkb.createPkbWriter();
 
     Statement s = Statement(1, StatementType::Print);
-    Statement s1 = Statement(1, StatementType::Read);
+    Statement s1 = Statement(2, StatementType::Read);
 
     writer->addNextRelationship(make_shared<Statement>(s), make_shared<Statement>(s1));
 
@@ -389,6 +389,30 @@ TEST_CASE("Next(*) Relationship") {
 
     REQUIRE(reader->getNextStarTypeWildcard(StatementType::Stmt).size() == 1);
     REQUIRE(reader->getNextStarTypeWildcard(StatementType::Stmt)[0] == s);
+
+    REQUIRE(reader->getNextStmtType(s, StatementType::Read).size() == 1);
+    REQUIRE(reader->getNextStmtType(s, StatementType::Read)[0] == s1);
+
+    REQUIRE(reader->getNextStarStmtType(s, StatementType::Stmt).size() == 1);
+    REQUIRE(reader->getNextStarStmtType(s, StatementType::Stmt)[0] == s1);
+
+    REQUIRE(reader->getNextWildcardType(StatementType::Read).size() == 1);
+    REQUIRE(reader->getNextWildcardType(StatementType::Read)[0] == s1);
+
+    REQUIRE(reader->getNextStarWildcardType(StatementType::Stmt).size() == 1);
+    REQUIRE(reader->getNextStarWildcardType(StatementType::Stmt)[0] == s1);
+
+    REQUIRE(reader->isNext(s, s1));
+    REQUIRE(reader->isNextStar(s, s1));
+
+    REQUIRE(reader->hasNext());
+    REQUIRE(reader->hasNextStar());
+
+    REQUIRE(reader->hasBeforeStmt(s1));
+    REQUIRE(reader->hasBeforeStarStmt(s1));
+
+    REQUIRE(reader->hasAfterStmt(s));
+    REQUIRE(reader->hasAfterStarStmt(s));
 
     writer->clearCache();
 }
