@@ -19,14 +19,14 @@ void WithHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
         throw SemanticException("Different attribute value types");
     }
 
-    if (leftRef.isRootType(RootType::Synonym) || leftRef.isRootType(RootType::AttrRef)) {
+    if (leftRef.isRootType(RootType::AttrRef)) {
         auto attrNameSet = QPSUtil::entityToAttrNamesMap[leftRef.getEntityType()];
         if (attrNameSet.find(leftRef.getAttrName()) == attrNameSet.end()) {
             throw SemanticException("Invalid attribute of the synonym");
         }
     }
 
-    if (rightRef.isRootType(RootType::Synonym) || rightRef.isRootType(RootType::AttrRef)) {
+    if (rightRef.isRootType(RootType::AttrRef)) {
         auto attrNameSet = QPSUtil::entityToAttrNamesMap[rightRef.getEntityType()];
         if (attrNameSet.find(rightRef.getAttrName()) == attrNameSet.end()) {
             throw SemanticException("Invalid attribute of the synonym");
