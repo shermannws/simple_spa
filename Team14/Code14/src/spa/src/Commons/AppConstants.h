@@ -13,6 +13,7 @@ typedef std::string AttrValue;
 
 class AppConstants {
 public:
+    inline static const std::string STRING_EMPTY = "";
     // Entities
     inline static const std::string STRING_PROCEDURE = "procedure";
     inline static const std::string STRING_STATEMENT = "stmt";

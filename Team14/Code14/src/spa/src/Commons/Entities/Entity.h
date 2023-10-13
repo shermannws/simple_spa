@@ -23,6 +23,11 @@ private:
      */
     std::shared_ptr<EntityValue> entityValue;
 
+    /**
+     * @brief The secondary string value of the entity
+     */
+    std::shared_ptr<AttrValue> attrValue;
+
 public:
     /**
      * @brief Construct a new Entity object
@@ -32,6 +37,16 @@ public:
      * @return A new Entity object
      */
     Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType);
+
+    /**
+     * @brief Construct a new Entity object
+     * @param entityValue The string value of the entity
+     * @param attrValue The secondary string value of the entity
+     * @param isInt True if the entity is of type int, false otherwise
+     * @param entityType The Entity Type of the Entity of enum type `EntityType`
+     * @return A new Entity object
+     */
+    Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType, const std::shared_ptr<AttrValue> attrValue);
 
     /**
      * @brief Destroy the Entity object
@@ -51,6 +66,12 @@ public:
      * @return The EntityValue (of type string) of the Entity object
      */
     EntityValue* getEntityValue() const;
+
+    /**
+     * @brief Returns the AttrValue (of type string) of the Entity object
+     * @return The AttrValue (of type string) of the Entity object
+     */
+    AttrValue getAttrValue() const;
 
     /**
      * @brief Returns true if the Entity object is equal to the other Entity object, false otherwise
