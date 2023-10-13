@@ -40,9 +40,9 @@ private:
     void processTuple(Query& query);
 
     /**
-     * @brief parses a single result clause and adds the single to the query
-     */
-    void processSingle(Query& query);
+    * @brief parses a single element of result clause and adds the element to the query
+    */
+    void processElem(Query& query);
 
     /**
      * @brief parses the chain of constraint clause and adds the clauses to the query object

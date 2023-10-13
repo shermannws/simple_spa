@@ -46,25 +46,9 @@ std::vector<Synonym> PQLParser::parseDeclarations(Query& query) {
     return synonyms;
 }
 
-//Synonym PQLParser::parseResultClause(Query& query) {
-//    std::shared_ptr<Token> next = tokenizer->popToken();
-//    if (!next->isToken("Select")) {
-//        throw SyntaxException("Expected Select clause but found '" + next->getRep() + "'");
-//    }
-//
-//    next = tokenizer->popToken();
-//    if (!next->isIdent()) {
-//        throw SyntaxException("Invalid synonym syntax");
-//    }
-//
-//    Synonym syn = next->getRep();
-//    query.addSelect(next->getRep());
-//    return syn;
-//}
-
 void PQLParser::parseResultClause(Query& query) {
     std::unordered_map<TokenType, processClausefunc> resultExtractorMap {
-            {TokenType::Word,  [&] (Query& query) {return processSingle(query);}},
+            {TokenType::Word,  [&] (Query& query) {return processElem(query);}},
             {TokenType::Ltuple,  [&] (Query& query) {return processTuple(query);}}
     };
 
@@ -82,13 +66,38 @@ void PQLParser::parseResultClause(Query& query) {
 }
 
 void PQLParser::processTuple(Query& query) {
-    // TODO
-    //parse elements
-    //add to query
+    tokenizer->popToken(); // consume Ltuple
+    processElem(query); // expect non-empty list
+
+    while(tokenizer->peekToken()->isToken(TokenType::Comma)) {
+        tokenizer->popToken(); //consume comma
+        processElem(query);
+    }
+
+    auto rTuple = tokenizer->popToken(); // consume Rtuple
+    if (!rTuple->isToken(TokenType::Rtuple)){
+        throw SyntaxException("Expected closing tuple bracket");
+    }
 }
 
-void PQLParser::processSingle(Query& query) {
-    auto syn = tokenizer->popToken();
+void PQLParser::processElem(Query& query) {
+    auto syn = tokenizer->popToken(); // expect Syn
+    if (!syn->isIdent()) {
+        throw SyntaxException("invalid synonym in elem");
+    }
+
+    auto next = tokenizer->peekToken(); // check following token
+
+    if (next->isToken(TokenType::Dot)) {
+        tokenizer->popToken(); // consume dot
+        auto attrName = tokenizer->popToken(); // expect attrName
+        if (!attrName->isAttrName()) {
+            throw SyntaxException("invalid attrName found");
+        }
+        Synonym elem = syn->getRep().append(".").append(attrName->getRep());
+        query.addSelect(elem);
+        return;
+    }
     query.addSelect(syn->getRep());
 }
 
