@@ -18,11 +18,4 @@ public:
 	 * @param map The map from ProcedureName to the first CFGNode of the CFG.
 	 */
 	void addCFG(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> map);
-
-	/**
-	 * @brief Gets the CFG of the procedure with the given procedureName.
-	 * @param procedureName The name of the procedure.
-	 * @return The CFG of the procedure with the given procedureName.
-	 */
-	std::shared_ptr<CFGNode> getCFG(ProcedureName procedureName);
 };

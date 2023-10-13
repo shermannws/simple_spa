@@ -33,13 +33,6 @@ public:
     MapStore();
 
     /**
-     * @brief Return the value which the entity `key` maps to
-     * @param key The key object used as key
-     * @return The Store which the object `key` maps to
-     */
-    std::shared_ptr<V> getValueOf(K key) const;
-
-    /**
      * @brief Returns the start iterator to the map store
      * @return The start iterator to the map store
      */

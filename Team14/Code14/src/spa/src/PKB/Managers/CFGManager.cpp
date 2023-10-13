@@ -7,7 +7,3 @@ CFGManager::CFGManager() {
 void CFGManager::addCFG(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> map) {
 	this->cfgStore->storeCFGMap(map);
 }
-
-std::shared_ptr<CFGNode> CFGManager::getCFG(ProcedureName procedureName) {
-	return this->cfgStore->getValueOf(procedureName);
-}
