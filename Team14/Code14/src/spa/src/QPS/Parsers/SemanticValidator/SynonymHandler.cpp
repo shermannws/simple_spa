@@ -39,7 +39,7 @@ void SynonymHandler::handle(const Query &query, std::shared_ptr<Clause> clause) 
 
     auto with = std::dynamic_pointer_cast<WithClause>(clause);
     if (with) {
-        if (leftRef.isRootType(RootType::Synonym) || leftRef.isRootType(RootType::AttrRef)) {
+        if (leftRef.isRootType(RootType::AttrRef)) {
             std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
             if (!entity) {
                 throw SemanticException("Invalid LHS, undeclared synonym found");
@@ -49,7 +49,7 @@ void SynonymHandler::handle(const Query &query, std::shared_ptr<Clause> clause) 
         }
 
         Ref& rightRef = with->getSecondParam();
-        if (rightRef.isRootType(RootType::Synonym) || rightRef.isRootType(RootType::AttrRef)) {
+        if (rightRef.isRootType(RootType::AttrRef)) {
             std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
             if (!entity) {
                 throw SemanticException("Invalid RHS, undeclared synonym found");
