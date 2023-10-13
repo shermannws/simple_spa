@@ -20,8 +20,8 @@ private:
     void saveCFGToPKB(const std::unordered_map<ProcedureName, Statement>& heads,
             const std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>& cfgs);
 
-    void extractNextRelationships(const std::unordered_map<ProcedureName, Statement>& heads,
-            const std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>& cfgs);
+    void extractNextRelationship(const std::shared_ptr<CFGNode>& head,
+            const std::unordered_map<Statement, std::shared_ptr<CFGNode>>& cfg);
 public:
     /**
      * Creates a CFGExtractor and instantiates it with a PkbWriter.

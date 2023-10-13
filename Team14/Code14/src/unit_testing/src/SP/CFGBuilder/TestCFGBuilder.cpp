@@ -51,11 +51,11 @@ TEST_CASE("Test single procedure") {
 
     // Check Heads
     REQUIRE(heads.size() == cfgs.size());
-    for (auto& [procName, statement] : heads) {
+    for (const auto& [procName, statement] : heads) {
         REQUIRE(cfgs.count(procName) == 1);
         REQUIRE(cfgs[procName].count(statement) == 1);
     }
-    for (auto& [procName, map] : cfgs) {
+    for (const auto& [procName, map] : cfgs) {
         REQUIRE(heads.count(procName) == 1);
     }
 
@@ -64,7 +64,7 @@ TEST_CASE("Test single procedure") {
     REQUIRE(cfgs.count("Proc1") == 1);
 
     // Check that the heads map holds the right head for each CFG
-    auto firstStatement = heads["Proc1"];
+    auto& firstStatement = heads["Proc1"];
     REQUIRE(cfgs["Proc1"][firstStatement]->getStatementNumber() == 1);
 
     std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
@@ -82,7 +82,7 @@ TEST_CASE("Test single procedure") {
             { 8, StatementType::Print },
     };
 
-    for (auto [stmtNum, stmtType] : numToTypeVector) {
+    for (const auto& [stmtNum, stmtType] : numToTypeVector) {
         auto stmt = Statement(stmtNum, stmtType);
         REQUIRE(proc1CFG.count(stmt) == 1);
     }
@@ -180,11 +180,11 @@ TEST_CASE("Test multiple procedures") {
 
     // Check Heads
     REQUIRE(heads.size() == cfgs.size());
-    for (auto& [procName, statement] : heads) {
+    for (const auto& [procName, statement] : heads) {
         REQUIRE(cfgs.count(procName) == 1);
         REQUIRE(cfgs[procName].count(statement) == 1);
     }
-    for (auto& [procName, map] : cfgs) {
+    for (const auto& [procName, map] : cfgs) {
         REQUIRE(heads.count(procName) == 1);
     }
 
@@ -209,7 +209,7 @@ TEST_CASE("Test multiple procedures") {
 
         auto stmt = Statement(1, StatementType::Assign);
         REQUIRE(proc1CFG.count(stmt) == 1);
-        auto node1 = proc1CFG[stmt];
+        auto& node1 = proc1CFG[stmt];
 
         REQUIRE(node1->getStatementType() == StatementType::Assign);
         REQUIRE(node1->getStatementNumber() == 1);
@@ -224,7 +224,7 @@ TEST_CASE("Test multiple procedures") {
 
         auto stmt = Statement(2, StatementType::Read);
         REQUIRE(proc2CFG.count(stmt) == 1);
-        auto node2 = proc2CFG[stmt];
+        auto& node2 = proc2CFG[stmt];
 
         REQUIRE(node2->getStatementType() == StatementType::Read);
         REQUIRE(node2->getStatementNumber() == 2);
@@ -239,7 +239,7 @@ TEST_CASE("Test multiple procedures") {
 
         auto stmt = Statement(3, StatementType::Print);
         REQUIRE(proc3CFG.count(stmt) == 1);
-        auto node3 = proc3CFG[stmt];
+        auto& node3 = proc3CFG[stmt];
 
         REQUIRE(node3->getStatementType() == StatementType::Print);
         REQUIRE(node3->getStatementNumber() == 3);
@@ -254,7 +254,7 @@ TEST_CASE("Test multiple procedures") {
 
         auto stmt = Statement(4, StatementType::Call);
         REQUIRE(proc4CFG.count(stmt) == 1);
-        auto node4 = proc4CFG[stmt];
+        auto& node4 = proc4CFG[stmt];
 
         REQUIRE(node4->getStatementType() == StatementType::Call);
         REQUIRE(node4->getStatementNumber() == 4);
@@ -273,9 +273,9 @@ TEST_CASE("Test multiple procedures") {
         REQUIRE(proc5CFG.count(stmtIf) == 1);
         REQUIRE(proc5CFG.count(stmtThen) == 1);
         REQUIRE(proc5CFG.count(stmtElse) == 1);
-        auto node5 = proc5CFG[stmtIf];
-        auto node6 = proc5CFG[stmtThen];
-        auto node7 = proc5CFG[stmtElse];
+        auto& node5 = proc5CFG[stmtIf];
+        auto& node6 = proc5CFG[stmtThen];
+        auto& node7 = proc5CFG[stmtElse];
 
         REQUIRE(node5->getStatementType() == StatementType::If);
         REQUIRE(node5->getStatementNumber() == 5);
@@ -306,8 +306,8 @@ TEST_CASE("Test multiple procedures") {
         auto stmtAssign = Statement(9, StatementType::Assign);
         REQUIRE(proc6CFG.count(stmtWhile) == 1);
         REQUIRE(proc6CFG.count(stmtAssign) == 1);
-        auto node8 = proc6CFG[stmtWhile];
-        auto node9 = proc6CFG[stmtAssign];
+        auto& node8 = proc6CFG[stmtWhile];
+        auto& node9 = proc6CFG[stmtAssign];
 
         REQUIRE(node8->getStatementType() == StatementType::While);
         REQUIRE(node8->getStatementNumber() == 8);
@@ -371,7 +371,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 1
     auto stmt1 = Statement(1, StatementType::If);
     REQUIRE(proc1CFG.count(stmt1) == 1);
-    auto node1 = proc1CFG[stmt1];
+    auto& node1 = proc1CFG[stmt1];
     REQUIRE(node1->getStatementType() == StatementType::If);
     REQUIRE(node1->getStatementNumber() == 1);
     REQUIRE(node1->getParentNodes().empty());
@@ -382,7 +382,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 2
     auto stmt2 = Statement(2, StatementType::If);
     REQUIRE(proc1CFG.count(stmt2) == 1);
-    auto node2 = proc1CFG[stmt2];
+    auto& node2 = proc1CFG[stmt2];
     REQUIRE(node2->getStatementType() == StatementType::If);
     REQUIRE(node2->getStatementNumber() == 2);
     REQUIRE(node2->getParentNodes().size() == 1);
@@ -394,7 +394,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 3
     auto stmt3 = Statement(3, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt3) == 1);
-    auto node3 = proc1CFG[stmt3];
+    auto& node3 = proc1CFG[stmt3];
     REQUIRE(node3->getStatementType() == StatementType::Print);
     REQUIRE(node3->getStatementNumber() == 3);
     REQUIRE(node3->getParentNodes().size() == 1);
@@ -405,7 +405,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 4
     auto stmt4 = Statement(4, StatementType::If);
     REQUIRE(proc1CFG.count(stmt4) == 1);
-    auto node4 = proc1CFG[stmt4];
+    auto& node4 = proc1CFG[stmt4];
     REQUIRE(node4->getStatementType() == StatementType::If);
     REQUIRE(node4->getStatementNumber() == 4);
     REQUIRE(node4->getParentNodes().size() == 1);
@@ -417,7 +417,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 5
     auto stmt5 = Statement(5, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt5) == 1);
-    auto node5 = proc1CFG[stmt5];
+    auto& node5 = proc1CFG[stmt5];
     REQUIRE(node5->getStatementType() == StatementType::Print);
     REQUIRE(node5->getStatementNumber() == 5);
     REQUIRE(node5->getParentNodes().size() == 1);
@@ -428,7 +428,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 6
     auto stmt6 = Statement(6, StatementType::If);
     REQUIRE(proc1CFG.count(stmt6) == 1);
-    auto node6 = proc1CFG[stmt6];
+    auto& node6 = proc1CFG[stmt6];
     REQUIRE(node6->getStatementType() == StatementType::If);
     REQUIRE(node6->getStatementNumber() == 6);
     REQUIRE(node6->getParentNodes().size() == 1);
@@ -440,7 +440,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 7
     auto stmt7 = Statement(7, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt7) == 1);
-    auto node7 = proc1CFG[stmt7];
+    auto& node7 = proc1CFG[stmt7];
     REQUIRE(node7->getStatementType() == StatementType::Print);
     REQUIRE(node7->getStatementNumber() == 7);
     REQUIRE(node7->getParentNodes().size() == 1);
@@ -451,7 +451,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 8
     auto stmt8 = Statement(8, StatementType::Read);
     REQUIRE(proc1CFG.count(stmt8) == 1);
-    auto node8 = proc1CFG[stmt8];
+    auto& node8 = proc1CFG[stmt8];
     REQUIRE(node8->getStatementType() == StatementType::Read);
     REQUIRE(node8->getStatementNumber() == 8);
     REQUIRE(node8->getParentNodes().size() == 1);
@@ -462,7 +462,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 9
     auto stmt9 = Statement(9, StatementType::If);
     REQUIRE(proc1CFG.count(stmt9) == 1);
-    auto node9 = proc1CFG[stmt9];
+    auto& node9 = proc1CFG[stmt9];
     REQUIRE(node9->getStatementType() == StatementType::If);
     REQUIRE(node9->getStatementNumber() == 9);
     REQUIRE(node9->getParentNodes().size() == 1);
@@ -474,7 +474,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 10
     auto stmt10 = Statement(10, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt10) == 1);
-    auto node10 = proc1CFG[stmt10];
+    auto& node10 = proc1CFG[stmt10];
     REQUIRE(node10->getStatementType() == StatementType::Print);
     REQUIRE(node10->getStatementNumber() == 10);
     REQUIRE(node10->getParentNodes().size() == 1);
@@ -485,7 +485,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 11
     auto stmt11 = Statement(11, StatementType::Read);
     REQUIRE(proc1CFG.count(stmt11) == 1);
-    auto node11 = proc1CFG[stmt11];
+    auto& node11 = proc1CFG[stmt11];
     REQUIRE(node11->getStatementType() == StatementType::Read);
     REQUIRE(node11->getStatementNumber() == 11);
     REQUIRE(node11->getParentNodes().size() == 1);
@@ -496,7 +496,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     // stmt 12
     auto stmt12 = Statement(12, StatementType::Assign);
     REQUIRE(proc1CFG.count(stmt12) == 1);
-    auto node12 = proc1CFG[stmt12];
+    auto& node12 = proc1CFG[stmt12];
     REQUIRE(node12->getStatementType() == StatementType::Assign);
     REQUIRE(node12->getStatementNumber() == 12);
     REQUIRE(node12->getParentNodes().size() == 6);
@@ -550,7 +550,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     // stmt 3
     auto stmt3 = Statement(3, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt3) == 1);
-    auto node3 = proc1CFG[stmt3];
+    auto& node3 = proc1CFG[stmt3];
     REQUIRE(node3->getStatementType() == StatementType::Print);
     REQUIRE(node3->getStatementNumber() == 3);
     REQUIRE(node3->getParentNodes().size() == 1);
@@ -560,7 +560,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     // stmt 5
     auto stmt5 = Statement(5, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt5) == 1);
-    auto node5 = proc1CFG[stmt5];
+    auto& node5 = proc1CFG[stmt5];
     REQUIRE(node5->getStatementType() == StatementType::Print);
     REQUIRE(node5->getStatementNumber() == 5);
     REQUIRE(node5->getParentNodes().size() == 1);
@@ -570,7 +570,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     // stmt 7
     auto stmt7 = Statement(7, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt7) == 1);
-    auto node7 = proc1CFG[stmt7];
+    auto& node7 = proc1CFG[stmt7];
     REQUIRE(node7->getStatementType() == StatementType::Print);
     REQUIRE(node7->getStatementNumber() == 7);
     REQUIRE(node7->getParentNodes().size() == 1);
@@ -580,7 +580,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     // stmt 8
     auto stmt8 = Statement(8, StatementType::Read);
     REQUIRE(proc1CFG.count(stmt8) == 1);
-    auto node8 = proc1CFG[stmt8];
+    auto& node8 = proc1CFG[stmt8];
     REQUIRE(node8->getStatementType() == StatementType::Read);
     REQUIRE(node8->getStatementNumber() == 8);
     REQUIRE(node8->getParentNodes().size() == 1);
@@ -590,7 +590,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     // stmt 10
     auto stmt10 = Statement(10, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt10) == 1);
-    auto node10 = proc1CFG[stmt10];
+    auto& node10 = proc1CFG[stmt10];
     REQUIRE(node10->getStatementType() == StatementType::Print);
     REQUIRE(node10->getStatementNumber() == 10);
     REQUIRE(node10->getParentNodes().size() == 1);
@@ -600,7 +600,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     // stmt 11
     auto stmt11 = Statement(11, StatementType::Read);
     REQUIRE(proc1CFG.count(stmt11) == 1);
-    auto node11 = proc1CFG[stmt11];
+    auto& node11 = proc1CFG[stmt11];
     REQUIRE(node11->getStatementType() == StatementType::Read);
     REQUIRE(node11->getStatementNumber() == 11);
     REQUIRE(node11->getParentNodes().size() == 1);
@@ -644,7 +644,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 1
     auto stmt1 = Statement(1, StatementType::While);
     REQUIRE(proc1CFG.count(stmt1) == 1);
-    auto node1 = proc1CFG[stmt1];
+    auto& node1 = proc1CFG[stmt1];
     REQUIRE(node1->getStatementType() == StatementType::While);
     REQUIRE(node1->getStatementNumber() == 1);
     REQUIRE(node1->getParentNodes().size() == 1);
@@ -655,7 +655,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 2
     auto stmt2 = Statement(2, StatementType::While);
     REQUIRE(proc1CFG.count(stmt2) == 1);
-    auto node2 = proc1CFG[stmt2];
+    auto& node2 = proc1CFG[stmt2];
     REQUIRE(node2->getStatementType() == StatementType::While);
     REQUIRE(node2->getStatementNumber() == 2);
     REQUIRE(node2->getParentNodes().size() == 2);
@@ -666,7 +666,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 3
     auto stmt3 = Statement(3, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt3) == 1);
-    auto node3 = proc1CFG[stmt3];
+    auto& node3 = proc1CFG[stmt3];
     REQUIRE(node3->getStatementType() == StatementType::Print);
     REQUIRE(node3->getStatementNumber() == 3);
     REQUIRE(node3->getParentNodes().size() == 1);
@@ -677,7 +677,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 4
     auto stmt4 = Statement(4, StatementType::While);
     REQUIRE(proc1CFG.count(stmt4) == 1);
-    auto node4 = proc1CFG[stmt4];
+    auto& node4 = proc1CFG[stmt4];
     REQUIRE(node4->getStatementType() == StatementType::While);
     REQUIRE(node4->getStatementNumber() == 4);
     REQUIRE(node4->getParentNodes().size() == 2);
@@ -688,7 +688,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 5
     auto stmt5 = Statement(5, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt5) == 1);
-    auto node5 = proc1CFG[stmt5];
+    auto& node5 = proc1CFG[stmt5];
     REQUIRE(node5->getStatementType() == StatementType::Print);
     REQUIRE(node5->getStatementNumber() == 5);
     REQUIRE(node5->getParentNodes().size() == 1);
@@ -699,7 +699,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 6
     auto stmt6 = Statement(6, StatementType::While);
     REQUIRE(proc1CFG.count(stmt6) == 1);
-    auto node6 = proc1CFG[stmt6];
+    auto& node6 = proc1CFG[stmt6];
     REQUIRE(node6->getStatementType() == StatementType::While);
     REQUIRE(node6->getStatementNumber() == 6);
     REQUIRE(node6->getParentNodes().size() == 2);
@@ -710,7 +710,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 7
     auto stmt7 = Statement(7, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt7) == 1);
-    auto node7 = proc1CFG[stmt7];
+    auto& node7 = proc1CFG[stmt7];
     REQUIRE(node7->getStatementType() == StatementType::Print);
     REQUIRE(node7->getStatementNumber() == 7);
     REQUIRE(node7->getParentNodes().size() == 1);
@@ -721,7 +721,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 8
     auto stmt8 = Statement(8, StatementType::Read);
     REQUIRE(proc1CFG.count(stmt8) == 1);
-    auto node8 = proc1CFG[stmt8];
+    auto& node8 = proc1CFG[stmt8];
     REQUIRE(node8->getStatementType() == StatementType::Read);
     REQUIRE(node8->getStatementNumber() == 8);
     REQUIRE(node8->getParentNodes().size() == 1);
@@ -732,7 +732,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 9
     auto stmt9 = Statement(9, StatementType::Assign);
     REQUIRE(proc1CFG.count(stmt9) == 1);
-    auto node9 = proc1CFG[stmt9];
+    auto& node9 = proc1CFG[stmt9];
     REQUIRE(node9->getStatementType() == StatementType::Assign);
     REQUIRE(node9->getStatementNumber() == 9);
     REQUIRE(node9->getParentNodes().size() == 1);
@@ -743,7 +743,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 10
     auto stmt10 = Statement(10, StatementType::While);
     REQUIRE(proc1CFG.count(stmt10) == 1);
-    auto node10 = proc1CFG[stmt10];
+    auto& node10 = proc1CFG[stmt10];
     REQUIRE(node10->getStatementType() == StatementType::While);
     REQUIRE(node10->getStatementNumber() == 10);
     REQUIRE(node10->getParentNodes().size() == 2);
@@ -754,7 +754,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 11
     auto stmt11 = Statement(11, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt11) == 1);
-    auto node11 = proc1CFG[stmt11];
+    auto& node11 = proc1CFG[stmt11];
     REQUIRE(node11->getStatementType() == StatementType::Print);
     REQUIRE(node11->getStatementNumber() == 11);
     REQUIRE(node11->getParentNodes().size() == 1);
@@ -765,7 +765,7 @@ TEST_CASE("Test nested whiles") {
     // stmt 12
     auto stmt12 = Statement(12, StatementType::Read);
     REQUIRE(proc1CFG.count(stmt12) == 1);
-    auto node12 = proc1CFG[stmt12];
+    auto& node12 = proc1CFG[stmt12];
     REQUIRE(node12->getStatementType() == StatementType::Read);
     REQUIRE(node12->getStatementNumber() == 12);
     REQUIRE(node12->getParentNodes().size() == 1);
@@ -815,7 +815,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 1
     auto stmt1 = Statement(1, StatementType::If);
     REQUIRE(proc1CFG.count(stmt1) == 1);
-    auto node1 = proc1CFG[stmt1];
+    auto& node1 = proc1CFG[stmt1];
     REQUIRE(node1->getStatementType() == StatementType::If);
     REQUIRE(node1->getStatementNumber() == 1);
     REQUIRE(node1->getParentNodes().empty());
@@ -825,7 +825,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 2
     auto stmt2 = Statement(2, StatementType::While);
     REQUIRE(proc1CFG.count(stmt2) == 1);
-    auto node2 = proc1CFG[stmt2];
+    auto& node2 = proc1CFG[stmt2];
     REQUIRE(node2->getStatementType() == StatementType::While);
     REQUIRE(node2->getStatementNumber() == 2);
     REQUIRE(node2->getParentNodes().size() == 3);
@@ -836,7 +836,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 3
     auto stmt3 = Statement(3, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt3) == 1);
-    auto node3 = proc1CFG[stmt3];
+    auto& node3 = proc1CFG[stmt3];
     REQUIRE(node3->getStatementType() == StatementType::Print);
     REQUIRE(node3->getStatementNumber() == 3);
     REQUIRE(node3->getParentNodes().size() == 1);
@@ -847,7 +847,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 4
     auto stmt4 = Statement(4, StatementType::If);
     REQUIRE(proc1CFG.count(stmt4) == 1);
-    auto node4 = proc1CFG[stmt4];
+    auto& node4 = proc1CFG[stmt4];
     REQUIRE(node4->getStatementType() == StatementType::If);
     REQUIRE(node4->getStatementNumber() == 4);
     REQUIRE(node4->getParentNodes().size() == 1);
@@ -858,7 +858,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 5
     auto stmt5 = Statement(5, StatementType::While);
     REQUIRE(proc1CFG.count(stmt5) == 1);
-    auto node5 = proc1CFG[stmt5];
+    auto& node5 = proc1CFG[stmt5];
     REQUIRE(node5->getStatementType() == StatementType::While);
     REQUIRE(node5->getStatementNumber() == 5);
     REQUIRE(node5->getParentNodes().size() == 2);
@@ -869,7 +869,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 6
     auto stmt6 = Statement(6, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt6) == 1);
-    auto node6 = proc1CFG[stmt6];
+    auto& node6 = proc1CFG[stmt6];
     REQUIRE(node6->getStatementType() == StatementType::Print);
     REQUIRE(node6->getStatementNumber() == 6);
     REQUIRE(node6->getParentNodes().size() == 1);
@@ -880,7 +880,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 7
     auto stmt7 = Statement(7, StatementType::Read);
     REQUIRE(proc1CFG.count(stmt7) == 1);
-    auto node7 = proc1CFG[stmt7];
+    auto& node7 = proc1CFG[stmt7];
     REQUIRE(node7->getStatementType() == StatementType::Read);
     REQUIRE(node7->getStatementNumber() == 7);
     REQUIRE(node7->getParentNodes().size() == 1);
@@ -891,7 +891,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 8
     auto stmt8 = Statement(8, StatementType::Assign);
     REQUIRE(proc1CFG.count(stmt8) == 1);
-    auto node8 = proc1CFG[stmt8];
+    auto& node8 = proc1CFG[stmt8];
     REQUIRE(node8->getStatementType() == StatementType::Assign);
     REQUIRE(node8->getStatementNumber() == 8);
     REQUIRE(node8->getParentNodes().size() == 1);
@@ -902,7 +902,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 9
     auto stmt9 = Statement(9, StatementType::While);
     REQUIRE(proc1CFG.count(stmt9) == 1);
-    auto node9 = proc1CFG[stmt9];
+    auto& node9 = proc1CFG[stmt9];
     REQUIRE(node9->getStatementType() == StatementType::While);
     REQUIRE(node9->getStatementNumber() == 9);
     REQUIRE(node9->getParentNodes().size() == 2);
@@ -913,7 +913,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 10
     auto stmt10 = Statement(10, StatementType::Print);
     REQUIRE(proc1CFG.count(stmt10) == 1);
-    auto node10 = proc1CFG[stmt10];
+    auto& node10 = proc1CFG[stmt10];
     REQUIRE(node10->getStatementType() == StatementType::Print);
     REQUIRE(node10->getStatementNumber() == 10);
     REQUIRE(node10->getParentNodes().size() == 1);
@@ -924,7 +924,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 11
     auto stmt11 = Statement(11, StatementType::Read);
     REQUIRE(proc1CFG.count(stmt11) == 1);
-    auto node11 = proc1CFG[stmt11];
+    auto& node11 = proc1CFG[stmt11];
     REQUIRE(node11->getStatementType() == StatementType::Read);
     REQUIRE(node11->getStatementNumber() == 11);
     REQUIRE(node11->getParentNodes().size() == 1);
@@ -935,7 +935,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 12
     auto stmt12 = Statement(12, StatementType::While);
     REQUIRE(proc1CFG.count(stmt12) == 1);
-    auto node12 = proc1CFG[stmt12];
+    auto& node12 = proc1CFG[stmt12];
     REQUIRE(node12->getStatementType() == StatementType::While);
     REQUIRE(node12->getStatementNumber() == 12);
     REQUIRE(node12->getParentNodes().size() == 2);
@@ -946,7 +946,7 @@ TEST_CASE("Test nested whiles and ifs") {
     // stmt 13
     auto stmt13 = Statement(13, StatementType::Read);
     REQUIRE(proc1CFG.count(stmt13) == 1);
-    auto node13 = proc1CFG[stmt13];
+    auto& node13 = proc1CFG[stmt13];
     REQUIRE(node13->getStatementType() == StatementType::Read);
     REQUIRE(node13->getStatementNumber() == 13);
     REQUIRE(node13->getParentNodes().size() == 1);
