@@ -58,11 +58,16 @@ private:
             std::unordered_map<Statement, std::shared_ptr<CFGNode>>& map, const std::shared_ptr<WhileNode>& whileNode);
 public:
     /**
-     * Builds a CFG for each procedure in the AST given. For each procedure, returns an unordered map of Statement to
-     * CFGNode for random access using Statements.
+     * Builds a CFG for each procedure in the AST given.
+     * Returns a pair of 2 maps required to traverse CFGs.
+     * 1. Unordered map of each procedure to the first Statement in the procedure, i.e. heads of each CFG, and
+     * 2. Unordered map of each procedure to an unordered map of Statement to CFGNode
      * @param ASTRootNode The root node of the AST
-     * @return Unordered map of each procedure to a map of Statement to CFGNode
+     * @return A pair of:
+     * (1) Unordered map of ProcedureName to Statement, and
+     * (2) Unordered map of ProcedureName to an unordered map of Statement to CFGNode
      */
-    static std::unordered_map<ProcedureName, std::unordered_map<Statement,
-    std::shared_ptr<CFGNode>>> buildAllCFG(const std::shared_ptr<ProgramNode>& ASTRootNode);
+    static std::pair<std::unordered_map<ProcedureName, Statement>,
+            std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>>
+            buildAllCFG(const std::shared_ptr<ProgramNode>& ASTRootNode);
 };

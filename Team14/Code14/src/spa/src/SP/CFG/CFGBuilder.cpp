@@ -3,15 +3,23 @@
 #include "Commons/CFG/DummyCFGNode.h"
 #include "SP/AST/Nodes/StatementNode.h"
 
-std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
+std::pair<std::unordered_map<ProcedureName, Statement>,
+std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>>
 CFGBuilder::buildAllCFG(const std::shared_ptr<ProgramNode>& astRootNode) {
     std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> procedureToCFGMap;
+    std::unordered_map<ProcedureName, Statement> procedureToStatementMap;
     for (auto& procedureNode : astRootNode->getProcedures()) {
         ProcedureName procedureName = procedureNode->getProcedureName();
         procedureToCFGMap[procedureName] = buildCFGForProcedure(procedureNode);
+
+        auto statementListNode = procedureNode->getStatementList();
+        auto firstStatementNode = statementListNode->getStatements().front();
+        StatementType statementType = StatementTypeFactory::getStatementTypeFrom(firstStatementNode->getStatementType());
+        Statement statement = Statement(firstStatementNode->getStatementNumber(), statementType);
+        procedureToStatementMap[procedureName] = statement;
     }
 
-    return procedureToCFGMap;
+    return std::make_pair(procedureToStatementMap, procedureToCFGMap);
 }
 
 std::unordered_map<Statement, std::shared_ptr<CFGNode>>

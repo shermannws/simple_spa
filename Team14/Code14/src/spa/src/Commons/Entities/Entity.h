@@ -25,6 +25,12 @@ private:
 
 public:
     /**
+     * Creates an empty Entity object.
+     * CPP requires this to use Entity and its subclasses as a value in an (unordered) map.
+     */
+    Entity();
+
+    /**
      * @brief Construct a new Entity object
      * @param entityValue The string value of the entity
      * @param isInt True if the entity is of type int, false otherwise

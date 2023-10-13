@@ -2,6 +2,8 @@
 
 #include "Entity.h"
 
+Entity::Entity() {}
+
 Entity::Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType)
     : entityValue(entityValue), entityType(entityType) {}
 

@@ -47,10 +47,25 @@ TEST_CASE("Test single procedure") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
-            CFGBuilder::buildAllCFG(rootNode);
+    auto [heads, cfgs] = CFGBuilder::buildAllCFG(rootNode);
+
+    // Check Heads
+    REQUIRE(heads.size() == cfgs.size());
+    for (auto& [procName, statement] : heads) {
+        REQUIRE(cfgs.count(procName) == 1);
+        REQUIRE(cfgs[procName].count(statement) == 1);
+    }
+    for (auto& [procName, map] : cfgs) {
+        REQUIRE(heads.count(procName) == 1);
+    }
+
+    // Check CFGs
     REQUIRE(cfgs.size() == 1);
     REQUIRE(cfgs.count("Proc1") == 1);
+
+    // Check that the heads map holds the right head for each CFG
+    auto firstStatement = heads["Proc1"];
+    REQUIRE(cfgs["Proc1"][firstStatement]->getStatementNumber() == 1);
 
     std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
     REQUIRE(proc1CFG.size() == 8);
@@ -160,9 +175,32 @@ TEST_CASE("Test multiple procedures") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = CFGBuilder::buildAllCFG(rootNode);
+    auto [heads, cfgs] = CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 6);
+
+    // Check Heads
+    REQUIRE(heads.size() == cfgs.size());
+    for (auto& [procName, statement] : heads) {
+        REQUIRE(cfgs.count(procName) == 1);
+        REQUIRE(cfgs[procName].count(statement) == 1);
+    }
+    for (auto& [procName, map] : cfgs) {
+        REQUIRE(heads.count(procName) == 1);
+    }
+
+    // Check that the heads map holds the right head for each CFG
+    auto proc1FirstStatement = heads["Proc1"];
+    auto proc2FirstStatement = heads["Proc2"];
+    auto proc3FirstStatement = heads["Proc3"];
+    auto proc4FirstStatement = heads["Proc4"];
+    auto proc5FirstStatement = heads["Proc5"];
+    auto proc6FirstStatement = heads["Proc6"];
+    REQUIRE(cfgs["Proc1"][proc1FirstStatement]->getStatementNumber() == 1);
+    REQUIRE(cfgs["Proc2"][proc2FirstStatement]->getStatementNumber() == 2);
+    REQUIRE(cfgs["Proc3"][proc3FirstStatement]->getStatementNumber() == 3);
+    REQUIRE(cfgs["Proc4"][proc4FirstStatement]->getStatementNumber() == 4);
+    REQUIRE(cfgs["Proc5"][proc5FirstStatement]->getStatementNumber() == 5);
+    REQUIRE(cfgs["Proc6"][proc6FirstStatement]->getStatementNumber() == 8);
 
     SECTION("Test Proc1") {
         REQUIRE(cfgs.count("Proc1") == 1);
@@ -323,8 +361,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = CFGBuilder::buildAllCFG(rootNode);
+    auto [heads, cfgs] = CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);
@@ -503,8 +540,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = CFGBuilder::buildAllCFG(rootNode);
+    auto [heads, cfgs] = CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);
@@ -598,8 +634,7 @@ TEST_CASE("Test nested whiles") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = CFGBuilder::buildAllCFG(rootNode);
+    auto [heads, cfgs] = CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);
@@ -770,8 +805,7 @@ TEST_CASE("Test nested whiles and ifs") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = CFGBuilder::buildAllCFG(rootNode);
+    auto [heads, cfgs] = CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);
