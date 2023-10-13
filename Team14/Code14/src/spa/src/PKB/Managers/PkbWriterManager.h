@@ -147,7 +147,7 @@ public:
      * @brief Adds a assign statement to the PKB.
      * @param s The shared pointer to the assign statement to be added.
      */
-    void addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs);
+    void addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs);
 
     /**
      * @brief Adds a follows relationship to the PKB.
