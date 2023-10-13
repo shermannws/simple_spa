@@ -1,5 +1,6 @@
 #include <utility>
 #include <stack>
+#include <cassert>
 
 #include "CFGExtractor.h"
 
@@ -46,8 +47,7 @@ void CFGExtractor::extractNextRelationship(const std::shared_ptr<CFGNode>& head,
         for (const auto& child : currentNode->getChildrenNodes()) {
             StatementNumber childStatementNumber = child->getStatementNumber();
             auto& childStatement = statements[childStatementNumber];
-            // TODO: call pkbWriter to save relationship
-            // pkbWriter->addNextRelationship(parentStatement, childStatement);
+             pkbWriter->addNextRelationship(parentStatement, childStatement);
 
             int childIndex = childStatementNumber - firstStatementNumber;
             assert(childIndex < isVisited.size());
