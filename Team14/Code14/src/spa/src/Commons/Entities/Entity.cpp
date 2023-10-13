@@ -18,7 +18,7 @@ EntityValue* Entity::getEntityValue() const {
 }
 
 AttrValue Entity::getAttrValue() const {
-    return *(this->attrValue);
+    return this->attrValue == nullptr ? AppConstants::STRING_EMPTY : *(this->attrValue);
 }
 
 bool Entity::operator==(const HashableKey& other) const {
