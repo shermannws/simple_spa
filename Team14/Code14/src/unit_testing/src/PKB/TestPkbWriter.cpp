@@ -19,7 +19,8 @@ TEST_CASE("Test PKBConcreteWriter Methods - Assert no throw") {
     REQUIRE_NOTHROW(writer->addProcedure(make_shared<Procedure>("main")));
     REQUIRE_NOTHROW(writer->addPrintStatement(make_shared<Statement>(1, StatementType::Print)));
     REQUIRE_NOTHROW(writer->addReadStatement(make_shared<Statement>(2, StatementType::Read)));
-    REQUIRE_NOTHROW(writer->addAssignStatement(make_shared<Statement>(3, StatementType::Assign), make_shared<Variable>("x"), make_shared<Expression>("1")));
+    REQUIRE_NOTHROW(writer->addAssignStatement(make_shared<Statement>(3, StatementType::Assign)));
+    REQUIRE_NOTHROW(writer->addAssignPattern(make_shared<Statement>(3, StatementType::Assign), make_shared<Variable>("x"), make_shared<Expression>("1")));
     REQUIRE_NOTHROW(writer->addFollowsRelationship(make_shared<Statement>(1, StatementType::Print), make_shared<Statement>(2, StatementType::Read), true));
     REQUIRE_NOTHROW(writer->addFollowsRelationship(make_shared<Statement>(1, StatementType::Print), make_shared<Statement>(3, StatementType::Assign), false));
     REQUIRE_NOTHROW(writer->addUsesRelationship(make_shared<Statement>(1, StatementType::Print), make_shared<Variable>("x")));
