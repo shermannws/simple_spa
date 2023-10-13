@@ -15,5 +15,5 @@ public:
      * @param lineNo The line number of the statement as StatementNumber (int)
      * @return A new WhileStatement object
      */
-    WhileStatement(StatementNumber lineNo)
+    WhileStatement(StatementNumber lineNo);
 };
