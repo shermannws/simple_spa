@@ -84,6 +84,14 @@ std::shared_ptr<Token> Tokenizer::popToken() {
             popToken();
         }
 
+        // handler stmt# as one token
+        if (isCurrValid() && peekString() == "#") {
+            std::string temp = peekString();
+            if (res == "stmt") {
+                res += popString();
+            }
+        }
+
         return std::make_shared<Token>(res);
     }
     throw SyntaxException("Invalid token");

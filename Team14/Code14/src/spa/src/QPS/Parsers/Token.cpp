@@ -75,6 +75,10 @@ bool Token::isDesignEntity() {
         || rep == "assign" || rep == "while" || rep == "if" || rep == "variable" || rep == "constant" || rep == "call");
 }
 
+bool Token::isAttrName() {
+    return type == TokenType::Word && (rep == "procName" || rep == "varName" || rep == "value" || rep == "stmt#" );
+}
+
 bool Token::isIdent() {
     std::regex pattern("[a-zA-Z][a-zA-Z0-9]*");
     return std::regex_match(rep, pattern);

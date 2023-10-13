@@ -89,6 +89,12 @@ public:
     bool isDesignEntity();
 
     /**
+     * @brief Checks if the token is of TokenType::Word and the string representation is of attrName
+     * @return The result of the check in boolean
+     */
+    bool isAttrName();
+
+    /**
      * @brief Checks if the string representation matches the pattern of an INTEGER
      * @return The result of the check in boolean
      */
