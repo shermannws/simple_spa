@@ -175,6 +175,8 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> cl
         case ClauseType::FollowsStar:
         case ClauseType::Parent:
         case ClauseType::ParentStar:
+        case ClauseType::Next:
+        case ClauseType::NextStar:
             // check left
             if (!leftRef.isOfStmtRef()) {
                 throw SyntaxException("Invalid LHS, stmtRef expected");

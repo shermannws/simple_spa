@@ -33,6 +33,13 @@ typedef std::string Expression;
 /* Type alias for a pair of ExpressionSpecType and Expression representing an expr-spec */
 typedef std::pair<ExpressionSpecType, Expression> ExpressionSpec;
 
+/* Enum class for clause argument type used in Semantic Validation Handlers*/
+enum ClauseArgType {
+    StmtrefProcVar,
+    StmtrefStmtref,
+    ProcProc
+};
+
 // Result typedefs
 class Entity;
 /* Type alias for an unordered map representing synonym-to-index mapping for a Result table header*/
