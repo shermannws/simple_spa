@@ -8,7 +8,7 @@
  * @brief An WhileStatement is a statement in the SIMPLE programming language
  * @details An WhileStatement is a statement in the SIMPLE programming language
  */
-class WhileStatement : Statement {
+class WhileStatement : public Statement {
 public:
     /**
      * @brief Construct a new WhileStatement object

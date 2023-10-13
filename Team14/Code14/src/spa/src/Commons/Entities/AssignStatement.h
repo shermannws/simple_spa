@@ -8,7 +8,7 @@
  * @brief An AssignStatement is a statement in the SIMPLE programming language
  * @details An AssignStatement is a statement in the SIMPLE programming language
  */
-class AssignStatement : Statement {
+class AssignStatement : public Statement {
 public:
     /**
      * @brief Construct a new AssignStatement object

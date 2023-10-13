@@ -8,7 +8,7 @@
  * @brief An ReadStatement is a statement in the SIMPLE programming language
  * @details An ReadStatement is a statement in the SIMPLE programming language
  */
-class ReadStatement : Statement {
+class ReadStatement : public Statement {
 public:
     /**
      * @brief Construct a new ReadStatement object

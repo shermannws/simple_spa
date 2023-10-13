@@ -8,7 +8,7 @@
  * @brief An IfStatement is a statement in the SIMPLE programming language
  * @details An IfStatement is a statement in the SIMPLE programming language
  */
-class IfStatement : Statement {
+class IfStatement : public Statement {
 public:
     /**
      * @brief Construct a new IfStatement object

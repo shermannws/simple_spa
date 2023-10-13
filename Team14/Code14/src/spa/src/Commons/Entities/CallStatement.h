@@ -8,7 +8,7 @@
  * @brief An CallStatement is a statement in the SIMPLE programming language
  * @details An CallStatement is a statement in the SIMPLE programming language
  */
-class CallStatement : Statement {
+class CallStatement : public Statement {
 public:
     /**
      * @brief Construct a new CallStatement object

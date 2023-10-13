@@ -8,7 +8,7 @@
  * @brief An PrintStatement is a statement in the SIMPLE programming language
  * @details An PrintStatement is a statement in the SIMPLE programming language
  */
-class PrintStatement : Statement {
+class PrintStatement : public Statement {
 public:
     /**
      * @brief Construct a new PrintStatement object
