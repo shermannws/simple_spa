@@ -9,6 +9,7 @@ typedef int StatementNumber;
 typedef std::string ConstantValue;
 typedef std::string FormattedExpression;
 typedef std::string EntityValue;
+typedef std::string AttrValue;
 
 class AppConstants {
 public:
