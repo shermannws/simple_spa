@@ -29,8 +29,13 @@ std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeStmt(St
 }
 
 template <typename S>
-std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type) const { // Same for Follows and Follows* since Follows* is a superset of Follows
+std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type) const {
     return ManagerUtils::getLeftKeysStmtMatch<Statement>(*relationshipStore, type);
+}
+
+template <typename S>
+std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type, bool requireDirect) const {
+    return ManagerUtils::getLeftKeysStmtMatch<Statement>(requireDirect ? *relationshipStore : *starRelationshipStore, type);
 }
 
 template <typename S>
@@ -41,8 +46,13 @@ std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipStmtType(St
 }
 
 template <typename S>
-std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipWildcardType(StatementType type) const { // Same for Follows and Follows* since Follows* is a superset of Follows
+std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipWildcardType(StatementType type) const {
     return ManagerUtils::getRightKeysStmtMatch<Statement>(*relationshipStore, type);
+}
+
+template <typename S>
+std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipWildcardType(StatementType type, bool requireDirect) const { 
+    return ManagerUtils::getRightKeysStmtMatch<Statement>(requireDirect ? *relationshipStore : *starRelationshipStore, type);
 }
 
 template <typename S>
