@@ -999,22 +999,8 @@ TEST_CASE("processWithClause") {
         REQUIRE(rightRef.getRep() == "world");
     }
 
-    SECTION("Valid Ident = Integer") {
-        PQLParser parser("assign a; variable v;\nSelect a with \"hello\" = 3");
-        Query query = parser.parse();
-
-        std::shared_ptr<WithClause> clause = query.getWith()[0];
-        Ref leftRef = clause->getFirstParam();
-        Ref rightRef = clause->getSecondParam();
-        REQUIRE(clause->getType() == ClauseType::With);
-        REQUIRE(leftRef.getRootType() == RootType::Ident);
-        REQUIRE(leftRef.getRep() == "hello");
-        REQUIRE(rightRef.getRootType() == RootType::Integer);
-        REQUIRE(rightRef.getRep() == "3");
-    }
-
     SECTION("Valid Ident = attrRef") {
-        PQLParser parser("assign a; variable v;\nSelect a with \"hello\" = procedure.procName");
+        PQLParser parser("assign a; procedure p;\nSelect a with \"hello\" = p.procName");
         Query query = parser.parse();
 
         std::shared_ptr<WithClause> clause = query.getWith()[0];
@@ -1024,8 +1010,8 @@ TEST_CASE("processWithClause") {
         REQUIRE(leftRef.getRootType() == RootType::Ident);
         REQUIRE(leftRef.getRep() == "hello");
         REQUIRE(rightRef.getRootType() == RootType::AttrRef);
-        REQUIRE(rightRef.getRep() == "procedure");
-        REQUIRE(rightRef.getAttrName() == "procName");
+        REQUIRE(rightRef.getRep() == "p");
+        REQUIRE(rightRef.getAttrName() == AttrName::ProcName);
     }
 
     SECTION("Valid Integer = Integer") {
@@ -1042,22 +1028,8 @@ TEST_CASE("processWithClause") {
         REQUIRE(rightRef.getRep() == "321");
     }
 
-    SECTION("Valid Integer = Ident") {
-        PQLParser parser("assign a; variable v;\nSelect a with 12 = \"ident\"");
-        Query query = parser.parse();
-
-        std::shared_ptr<WithClause> clause = query.getWith()[0];
-        Ref leftRef = clause->getFirstParam();
-        Ref rightRef = clause->getSecondParam();
-        REQUIRE(clause->getType() == ClauseType::With);
-        REQUIRE(leftRef.getRootType() == RootType::Integer);
-        REQUIRE(leftRef.getRep() == "12");
-        REQUIRE(rightRef.getRootType() == RootType::Ident);
-        REQUIRE(rightRef.getRep() == "ident");
-    }
-
     SECTION("Valid Integer = attrRef") {
-        PQLParser parser("assign a; variable v;\nSelect a with 3 = variable.varName");
+        PQLParser parser("assign a; constant c;\nSelect a with 3 = c.value");
         Query query = parser.parse();
 
         std::shared_ptr<WithClause> clause = query.getWith()[0];
@@ -1067,12 +1039,12 @@ TEST_CASE("processWithClause") {
         REQUIRE(leftRef.getRootType() == RootType::Integer);
         REQUIRE(leftRef.getRep() == "3");
         REQUIRE(rightRef.getRootType() == RootType::AttrRef);
-        REQUIRE(rightRef.getRep() == "variable");
-        REQUIRE(rightRef.getAttrName() == "varName");
+        REQUIRE(rightRef.getRep() == "c");
+        REQUIRE(rightRef.getAttrName() == AttrName::Value);
     }
 
     SECTION("Valid attrRef = attrRef stmt#") {
-        PQLParser parser("assign a; variable v;\nSelect a with read.stmt# = assign.stmt#");
+        PQLParser parser("assign a; read r;\nSelect a with r.stmt# = a.stmt#");
         Query query = parser.parse();
 
         std::shared_ptr<WithClause> clause = query.getWith()[0];
@@ -1080,11 +1052,11 @@ TEST_CASE("processWithClause") {
         Ref rightRef = clause->getSecondParam();
         REQUIRE(clause->getType() == ClauseType::With);
         REQUIRE(leftRef.getRootType() == RootType::AttrRef);
-        REQUIRE(leftRef.getRep() == "read");
-        REQUIRE(leftRef.getAttrName() == "stmt#");
+        REQUIRE(leftRef.getRep() == "r");
+        REQUIRE(leftRef.getAttrName() == AttrName::StmtNo);
         REQUIRE(rightRef.getRootType() == RootType::AttrRef);
-        REQUIRE(rightRef.getRep() == "assign");
-        REQUIRE(rightRef.getAttrName() == "stmt#");
+        REQUIRE(rightRef.getRep() == "a");
+        REQUIRE(rightRef.getAttrName() == AttrName::StmtNo);
     }
 
     SECTION("Valid attrRef = attrRef value") {
@@ -1097,16 +1069,15 @@ TEST_CASE("processWithClause") {
         REQUIRE(clause->getType() == ClauseType::With);
         REQUIRE(leftRef.getRootType() == RootType::AttrRef);
         REQUIRE(leftRef.getRep() == "c1");
-        REQUIRE(leftRef.getAttrName() == "value");
+        REQUIRE(leftRef.getAttrName() == AttrName::Value);
         REQUIRE(rightRef.getRootType() == RootType::AttrRef);
         REQUIRE(rightRef.getRep() == "c2");
-        REQUIRE(rightRef.getAttrName() == "value");
+        REQUIRE(rightRef.getAttrName() == AttrName::Value);
     }
 
 }
 
 TEST_CASE("Invalid processWithClause SyntaxError") {
-    // Syntax Check
     SECTION ("Invalid general structure") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assign a; print d;\nSelect a with ",
@@ -1159,6 +1130,41 @@ TEST_CASE("Invalid processWithClause SyntaxError") {
         for (const auto& testcase : testcases) {
             PQLParser parser(testcase.first);
             REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+        }
+    }
+}
+
+TEST_CASE("Invalid processWithClause SemanticError") {
+    SECTION("Different types in attrCompare") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("assign a; print d; procedure p; constant c;\nSelect a with p.procName = c.value",
+                               "Different attribute value types");
+        testcases.emplace_back("assign a; if if; procedure p; constant c; variable v;\nSelect a with v.varName = if.stmt#",
+                               "Different attribute value types");
+        testcases.emplace_back("assign a; call c;\nSelect a with a.stmt# = c.procName",
+                               "Different attribute value types");
+        testcases.emplace_back("assign a; print d; procedure p; constant c;\nSelect a with c.value = d.varName",
+                               "Different attribute value types");
+
+        for (const auto& testcase : testcases) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+        }
+    }
+    SECTION("Different types in attrCompare") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("assign a; print d; procedure p; constant c;\nSelect a with p.varName = \"test\"",
+                               "Invalid attribute of the synonym");
+        testcases.emplace_back("assign a; if if; procedure p; constant c; variable v;\nSelect a with 1 = v.stmt#",
+                               "Invalid attribute of the synonym");
+        testcases.emplace_back("assign a; call c;\nSelect a with \"procName\" = a.procName",
+                               "Invalid attribute of the synonym");
+        testcases.emplace_back("assign a; print d; procedure p; constant c;\nSelect a with d.value = 3",
+                               "Invalid attribute of the synonym");
+
+        for (const auto& testcase : testcases) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_AS(parser.parse(), SemanticException);
         }
     }
 }

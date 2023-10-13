@@ -9,7 +9,7 @@
 #include "QPS/Evaluators/Strategies/CallsStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
 
-std::unordered_map<std::string, TokenType> QPSUtil::repToTokenTypeMap = {
+std::unordered_map<std::string, TokenType> QPSUtil::strToTokenTypeMap = {
         {"(", TokenType::Lparenthesis},
         {")", TokenType::Rparenthesis},
         {"+", TokenType::Plus},
@@ -25,8 +25,11 @@ std::unordered_map<std::string, TokenType> QPSUtil::repToTokenTypeMap = {
         {"=", TokenType::Equal},
 };
 
-std::unordered_set<std::string> QPSUtil::attrNames = {
-        "procName", "varName", "value", "stmt#"
+std::unordered_map<std::string, AttrName> QPSUtil::strToAttrNameMap = {
+        {"procName", AttrName::ProcName},
+        {"varName", AttrName::VarName},
+        {"value", AttrName::Value},
+        {"stmt#", AttrName::StmtNo}
 };
 
 std::unordered_set<ClauseType> QPSUtil::stmtrefClauseTypes = {
@@ -37,6 +40,20 @@ std::unordered_set<ClauseType> QPSUtil::stmtrefClauseTypes = {
 std::unordered_set<ClauseType> QPSUtil::stmtrefProcVarClauseTypes = {ClauseType::Uses, ClauseType::Modifies};
 
 std::unordered_set<ClauseType> QPSUtil::procRefClauseTypes = {ClauseType::Calls, ClauseType::CallsStar};
+
+std::unordered_map<QueryEntityType, std::unordered_set<AttrName>> QPSUtil::entityToAttrNamesMap = {
+        {QueryEntityType::Call, std::unordered_set{AttrName::ProcName, AttrName::StmtNo}},
+        {QueryEntityType::Procedure, std::unordered_set{AttrName::ProcName}},
+        {QueryEntityType::Read, std::unordered_set{AttrName::VarName, AttrName::StmtNo}},
+        {QueryEntityType::Print, std::unordered_set{AttrName::VarName, AttrName::StmtNo}},
+        {QueryEntityType::Variable, std::unordered_set{AttrName::VarName}},
+        {QueryEntityType::Stmt, std::unordered_set{AttrName::StmtNo}},
+        {QueryEntityType::Call, std::unordered_set{AttrName::StmtNo}},
+        {QueryEntityType::While, std::unordered_set{AttrName::StmtNo}},
+        {QueryEntityType::If, std::unordered_set{AttrName::StmtNo}},
+        {QueryEntityType::Assign, std::unordered_set{AttrName::StmtNo}},
+        {QueryEntityType::Constant, std::unordered_set{AttrName::Value}},
+};
 
 std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
     {QueryEntityType::Stmt, RefType::StmtRef},

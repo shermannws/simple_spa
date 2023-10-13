@@ -10,9 +10,15 @@
  */
 class QPSUtil {
 public:
-    static std::unordered_map<std::string, TokenType> repToTokenTypeMap;
+    /**
+     * @brief An unordered map that maps a string to TokenType
+     */
+    static std::unordered_map<std::string, TokenType> strToTokenTypeMap;
 
-    static std::unordered_set<std::string> attrNames;
+    /**
+     * @brief An unordered map that maps a string to AttrName
+     */
+    static std::unordered_map<std::string, AttrName> strToAttrNameMap;
 
     /**
      * @brief An unordered map that maps QueryEntityType to the corresponding RefType
@@ -33,6 +39,11 @@ public:
     * @brief An unordered set of clause types that follow the pattern (proc-Entref, proc-Entref)
     */
     static std::unordered_set<ClauseType>procRefClauseTypes;
+
+    /**
+     * @brief An unordered map that maps QueryEntityType to the set of valid AttrNames
+     */
+    static std::unordered_map<QueryEntityType, std::unordered_set<AttrName>> entityToAttrNamesMap;
 
     /**
      * @brief An unordered set of QueryEntityTypes that are categorised as stmtRef

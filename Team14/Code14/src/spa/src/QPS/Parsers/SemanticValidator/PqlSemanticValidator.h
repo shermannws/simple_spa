@@ -49,5 +49,12 @@ private:
      */
     void validateClauseSemantics(const Query& query, std::shared_ptr<PatternClause> clause);
 
+    /**
+     * @brief Validates WithClause semantically, throws a SemanticException if semantically invalid
+     * @param query the Query object
+     * @param clause the shared pointer of WithClause to validate
+     */
+    void validateClauseSemantics(const Query& query, std::shared_ptr<WithClause> clause);
+
 };
 

@@ -15,8 +15,8 @@ std::unordered_map<TokenType, int> operatorPrecedence = {
 
 Token::Token(const std::string& input) {
     this->rep = input;
-    if (QPSUtil::repToTokenTypeMap.find(rep) != QPSUtil::repToTokenTypeMap.end()) {
-        this->type = QPSUtil::repToTokenTypeMap[rep];
+    if (QPSUtil::strToTokenTypeMap.find(rep) != QPSUtil::strToTokenTypeMap.end()) {
+        this->type = QPSUtil::strToTokenTypeMap[rep];
     } else if (!rep.empty()){
         this->type = TokenType::Word;
     } else {
@@ -51,7 +51,7 @@ bool Token::isDesignEntity() {
 }
 
 bool Token::isAttrName() {
-    return type == TokenType::Word && (QPSUtil::attrNames.find(rep) != QPSUtil::attrNames.end());
+    return type == TokenType::Word && (QPSUtil::strToAttrNameMap.find(rep) != QPSUtil::strToAttrNameMap.end());
 }
 
 bool Token::isIdent() {

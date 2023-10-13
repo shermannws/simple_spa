@@ -28,6 +28,17 @@ enum class RootType {
 };
 
 /**
+ * @brief The enum class of AttrName
+ */
+enum class AttrName {
+    ProcName,
+    VarName,
+    Value,
+    StmtNo,
+    Invalid
+};
+
+/**
  * @brief Ref class
  */
 class Ref {
@@ -37,7 +48,10 @@ private:
      */
     StringRep rep;
 
-    std::string attrName; // if any
+    /**
+     * @brief The AttrName of the Ref if its RootType is AttrRef
+     */
+    AttrName attrName;
 
     /**
      * @brief The RefType of the Ref
@@ -65,8 +79,6 @@ public:
      */
     StringRep getRep() const;
 
-    std::string getAttrName() const;
-
     /**
      * @brief The getter of the RefType of the Ref
      * @return The RefType of the Ref
@@ -86,12 +98,16 @@ public:
     QueryEntityType getEntityType() const;
 
     /**
+     * @brief The getter of the AttrName of the Ref
+     * @return The StringRep of the Ref
+     */
+    AttrName getAttrName() const;
+
+    /**
      * @brief The setter of the string representation of the Ref
      * @param rrep The StringRep reference
      */
     void setRep(StringRep& rrep);
-
-    void setAttrName(std::string name);
 
     /**
      * @brief The setter of the RefType of the Ref
@@ -110,6 +126,12 @@ public:
      * @param eentityType The QueryEntityType reference
      */
     void setEntityType(QueryEntityType& eentityType);
+
+    /**
+     * @brief The setter of the AttrName of the Ref
+     * @param eentityType The QueryEntityType reference
+     */
+    void setAttrName(const std::string& name);
 
     /**
      * @brief Checks if the RootType of the Ref is rrootType
@@ -142,4 +164,8 @@ public:
      * @return Returns true if this == other, otherwise false
      */
     bool operator==(const Ref& other) const;
+
+    bool isOfName();
+
+    bool isOfInteger();
 };

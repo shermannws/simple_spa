@@ -1,8 +1,10 @@
 #include <string>
 
 #include "Ref.h"
+#include "QPSUtil.h"
 
-Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid), entityType(QueryEntityType::Invalid) {}
+Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid),
+entityType(QueryEntityType::Invalid), attrName(AttrName::Invalid) {}
 
 void Ref::setRep(StringRep & rrep) {
     rep = rrep;
@@ -12,7 +14,11 @@ std::string Ref::getRep() const{
     return rep;
 }
 
-std::string Ref::getAttrName() const{
+void Ref::setAttrName(const std::string& name) {
+    attrName = QPSUtil::strToAttrNameMap[name];
+}
+
+AttrName Ref::getAttrName() const{
     return attrName;
 }
 
@@ -61,6 +67,10 @@ bool Ref::isOfWithRef() {
     return isRootType(RootType::Ident) || isRootType(RootType::Integer) || isRootType(RootType::AttrRef);
 }
 
-void Ref::setAttrName(std::string name) {
-    attrName = name;
+bool Ref::isOfName() {
+    return rootType == RootType::Ident || attrName == AttrName::ProcName || attrName == AttrName::VarName;
+}
+
+bool Ref::isOfInteger() {
+    return rootType == RootType::Integer || attrName == AttrName::Value || attrName == AttrName::StmtNo;
 }
