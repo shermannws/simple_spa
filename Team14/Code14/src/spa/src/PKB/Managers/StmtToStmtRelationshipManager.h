@@ -41,7 +41,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return A vector of Statement, Statement pair stored in a vector
      */
-    std::vector<std::vector<Entity>> getRelationshipPair(StatementType formerType, StatementType latterType, bool requireDirect) const;
+    virtual std::vector<std::vector<Entity>> getRelationshipPair(StatementType formerType, StatementType latterType, bool requireDirect) const;
 
     /**
      * Returns a vector of statements of the given statement type which is related to the given statement. The statement given is the latter statement
@@ -50,7 +50,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return A vector of statements
      */
-    std::vector<Entity> getRelationshipTypeStmt(StatementType type, Statement& statement, bool requireDirect) const;
+    virtual std::vector<Entity> getRelationshipTypeStmt(StatementType type, Statement& statement, bool requireDirect) const;
 
     /**
      * Returns a vector of statements of the given statement type which is related to any statement. The statements retrieved are the former statements
@@ -65,7 +65,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return A vector of statements
      */
-    std::vector<Entity> getRelationshipTypeWildcard(StatementType type, bool requireDirect) const;
+    virtual std::vector<Entity> getRelationshipTypeWildcard(StatementType type, bool requireDirect) const;
 
     /**
      * Returns a vector of statements of the given statement type which is related to the given statement. The statement given is the former statement
@@ -74,7 +74,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return A vector of statements
      */
-    std::vector<Entity> getRelationshipStmtType(Statement& statement, StatementType type, bool requireDirect) const;
+    virtual std::vector<Entity> getRelationshipStmtType(Statement& statement, StatementType type, bool requireDirect) const;
 
     /**
      * Returns a vector of statements of the given statement type which is related to any statement. The statements retrieved are the latter statements
@@ -89,7 +89,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return A vector of statements
      */
-    std::vector<Entity> getRelationshipWildcardType(StatementType type, bool requireDirect) const;
+    virtual std::vector<Entity> getRelationshipWildcardType(StatementType type, bool requireDirect) const;
 
     /**
      * Returns true if statement1 is related to statement2, false otherwise
@@ -98,7 +98,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return True if statement1 is related to statement2, false otherwise
      */
-    bool isRelationship(Statement& statement1, Statement& statement2, bool requireDirect) const;
+    virtual bool isRelationship(Statement& statement1, Statement& statement2, bool requireDirect) const;
 
     /**
      * Returns true if there are any relationships stored, false otherwise
