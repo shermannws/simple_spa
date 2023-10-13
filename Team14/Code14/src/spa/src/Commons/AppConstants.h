@@ -86,4 +86,7 @@ public:
             STRING_PLUS,
             STRING_MINUS
     };
+
+    inline static const StatementNumber INITIAL_STATEMENT_NUMBER = 1;
+    inline static const StatementNumber DUMMY_CFGNODE_STATEMENT_NUMBER = -1;
 };
