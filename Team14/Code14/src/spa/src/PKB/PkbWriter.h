@@ -115,4 +115,15 @@ public:
      * Adds new Uses (Procedure-Variable) Relationship into the PKB
      */
     virtual void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) = 0;
+
+    /*!
+     * Adds new Next Relationship into the PKB
+     */
+    virtual void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) = 0;
+
+    /*!
+     * Clears any Cache in the PKB that is used for Query Processing
+     *
+     */
+    virtual void clearCache() = 0;
 };

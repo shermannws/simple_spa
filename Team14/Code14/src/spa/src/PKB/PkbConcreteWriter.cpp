@@ -79,3 +79,11 @@ void PkbConcreteWriter::addModifiesProcRelationship(std::shared_ptr<Procedure> p
 void PkbConcreteWriter::addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) {
 	this->writerManager->addUsesProcRelationship(p, v);
 }
+
+void PkbConcreteWriter::addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) {
+	this->writerManager->addNextRelationship(s1, s2);
+}
+
+void PkbConcreteWriter::clearCache() {
+	this->writerManager->clearCache();
+}
