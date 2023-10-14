@@ -14,6 +14,7 @@
 #include "PKB/Managers/IfPatternManager.h"
 #include "PKB/Managers/WhilePatternManager.h"
 #include "PKB/Managers/NextRelationshipManager.h"
+#include "PKB/Managers/CFGManager.h"
 #include "PKB/Managers/PkbReaderManager.h"
 #include "PKB/Managers/PkbWriterManager.h"
 #include "PKB/PkbReader.h"
@@ -94,6 +95,11 @@ private:
      * @brief The NextRelationshipManager of the PKB
      */
     std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
+
+    /**
+	 * @brief The CFGManager of the PKB
+	 */
+    std::shared_ptr<CFGManager> cfgManager;
 
 public:
     /**

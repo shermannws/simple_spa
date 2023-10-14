@@ -11,7 +11,11 @@
  */
 class PkbConcreteWriter : public PkbWriter {
 private:
+    /**
+     * @brief The PkbWriterManager that is used to write to the PKB.
+     */
     std::shared_ptr<PkbWriterManager> writerManager;
+
 public:
     /*!
      * Constructor for PkbConcreteWriter Class
@@ -106,12 +110,12 @@ public:
     /*!
      * Stores a map of procedures to a vector of statements that modifies/uses whatever the procedure modifies/uses
      */
-    virtual void addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) override;
+    void addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s) override;
 
     /*!
      * Triggers transitivity calculation for Relationships
      */
-    virtual void triggerTransitiveCalc() override;
+    void triggerTransitiveCalc() override;
 
     /*!
      * Adds new Modifies (Procedure-Variable) Relationship into the PKB
@@ -126,10 +130,15 @@ public:
     /*!
      * Adds new Next Relationship into the PKB
      */
-    virtual void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) override;
+    void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) override;
+
+    /*!
+     * Sets the `cfgMap` received as argument as the CFGs for each procedures
+     */
+    void setCFGMap(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap) override;
 
     /*!
      * Clears any Cache in the PKB that is used for Query Processing
      */
-    virtual void clearCache() override;
+    void clearCache() override;
 };
