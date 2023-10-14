@@ -200,7 +200,7 @@ TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation
 }
 
 TEST_CASE("Test setting new map in the CFGStore") {
-    auto assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
+    auto assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());
     auto entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
     auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
@@ -209,21 +209,25 @@ TEST_CASE("Test setting new map in the CFGStore") {
     auto callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
     auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
     auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
+    auto ifPatternManager = std::make_shared<IfPatternManager>();
+    auto whilePatternManager = std::make_shared<WhilePatternManager>();
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
     auto cfgManager = std::make_shared<CFGManager>();
 
     PkbWriterManager pkbWriterManager = PkbWriterManager(
-        assignmentManager,
-        entitiesManager,
-        followsRelationshipManager,
-        usesRelationshipManager,
-        modifiesRelationshipManager,
-        parentRelationshipManager,
-        callsRelationshipManager,
-        modifiesProcRelationshipManager,
-        usesProcRelationshipManager,
-        nextRelationshipManager,
-        cfgManager
+            assignmentManager,
+            entitiesManager,
+            followsRelationshipManager,
+            usesRelationshipManager,
+            modifiesRelationshipManager,
+            parentRelationshipManager,
+            callsRelationshipManager,
+            modifiesProcRelationshipManager,
+            usesProcRelationshipManager,
+            ifPatternManager,
+            whilePatternManager,
+            nextRelationshipManager,
+            cfgManager
     );
 
     std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> temp = std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>>();

@@ -268,14 +268,14 @@ public:
      * @return A vector of key-value pairs from the map
      */
     template <typename K, typename V>
-    static std::vector<std::vector<Entity>> getPairsNoMatch(RelationshipStore<K, V> &store);
+    static std::vector<std::vector<Entity>> getPairsNoMatch(RelationshipStore<K, V>& store);
 
     /**
      * @brief A function that retrieves key-value pairs from a map-based store when no matcher function is required
      * @param store The store to be retrieved from
      * @return A vector of key-value pairs from the map
      */
-    static std::vector<std::vector<Entity>> getPairsNoMatch(ConditionPatternStore &store);
+    static std::vector<std::vector<Entity>> getPairsNoMatch(ConditionPatternStore& store);
 
     /**
      * @brief A function that removes duplicates in a vector of object of type E

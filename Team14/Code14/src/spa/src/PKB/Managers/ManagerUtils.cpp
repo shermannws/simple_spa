@@ -210,7 +210,7 @@ std::vector<std::vector<R>> ManagerUtils::getPairs(S& store, std::function<bool(
 }
 
 template <typename K, typename V>
-std::vector<std::vector<Entity>> ManagerUtils::getPairsNoMatch(RelationshipStore<K, V> &store) {
+std::vector<std::vector<Entity>> ManagerUtils::getPairsNoMatch(RelationshipStore<K, V>& store) {
     auto leftMatcher = [](K& entity) {
         return true;
     };
@@ -220,7 +220,7 @@ std::vector<std::vector<Entity>> ManagerUtils::getPairsNoMatch(RelationshipStore
     return getPairs<Entity, RelationshipStore<K, V>, K, V>(store, leftMatcher, rightMatcher);
 }
 
-std::vector<std::vector<Entity>> ManagerUtils::getPairsNoMatch(ConditionPatternStore &store) {
+std::vector<std::vector<Entity>> ManagerUtils::getPairsNoMatch(ConditionPatternStore& store) {
     auto leftMatcher = [](Statement& entity) {
         return true;
     };
