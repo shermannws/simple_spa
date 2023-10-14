@@ -10,6 +10,7 @@
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/AST/Visitors/ModifiesExtractorVisitor.h"
 #include "SP/AST/Visitors/ParentExtractorVisitor.h"
+#include "SP/AST/Visitors/PatternExtractorVisitor.h"
 #include "SP/AST/Visitors/CallsExtractorVisitor.h"
 #include "SP/AST/Traverser/Traverser.h"
 #include "SP/Errors/SyntaxError.h"
@@ -42,7 +43,8 @@ void SP::startSPProcessing(std::string& input) {
         std::shared_ptr<ModifiesExtractorVisitor> modifiesExtractor = std::make_shared<ModifiesExtractorVisitor>(pkbWriter);
         std::shared_ptr<ParentExtractorVisitor> parentExtractor = std::make_shared<ParentExtractorVisitor>(pkbWriter);
         std::shared_ptr<CallsExtractorVisitor> callsExtractor = std::make_shared<CallsExtractorVisitor>(pkbWriter);
-        std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = { entityExtractor, followsExtractor, usesExtractor, modifiesExtractor, parentExtractor, callsExtractor };
+        std::shared_ptr<PatternExtractorVisitor> patternExtractor = std::make_shared<PatternExtractorVisitor>(pkbWriter);
+        std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = { entityExtractor, followsExtractor, usesExtractor, modifiesExtractor, parentExtractor, callsExtractor, patternExtractor };
 
         //Traverse the AST from root node
         Traverser traverser = Traverser(visitors);
