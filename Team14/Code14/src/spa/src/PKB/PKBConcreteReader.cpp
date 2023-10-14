@@ -459,3 +459,19 @@ bool PkbConcreteReader::hasAfterStmt(Statement& statement) const {
 bool PkbConcreteReader::hasAfterStarStmt(Statement& statement) const {
     return this->readerManager->hasAfterStarStmt(statement);
 }
+
+std::vector<Entity> PkbConcreteReader::getIfStmtsByVar(Variable& var) const {
+    return this->readerManager->getIfStmtsByVar(var);
+};
+
+std::vector<std::vector<Entity>> PkbConcreteReader::getAllIfStmtVarPair() const {
+    return this->readerManager->getAllIfStmtVarPair();
+}
+
+std::vector<Entity> PkbConcreteReader::getWhileStmtsByVar(Variable& var) const {
+    return this->readerManager->getWhileStmtsByVar(var);
+}
+
+std::vector<std::vector<Entity>> PkbConcreteReader::getAllWhileStmtVarPair() const {
+    return this->readerManager->getAllWhileStmtVarPair();
+}

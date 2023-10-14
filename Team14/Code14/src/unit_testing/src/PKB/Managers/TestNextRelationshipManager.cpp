@@ -148,7 +148,7 @@ TEST_CASE("Test Next/Next* Relationship Retrieval") {
         REQUIRE(nextRelationshipManager.getNextStarSameStmt(StatementType::Call).size() == 1);
     }
 
-    SECTION("Intermeidate Test 1 - While Loop at node 3") {
+    SECTION("Intermediate Test 1 - While Loop at node 3") {
         NextRelationshipManager nextRelationshipManager = NextRelationshipManager();
 
         REQUIRE(nextRelationshipManager.hasRelationship() == false);

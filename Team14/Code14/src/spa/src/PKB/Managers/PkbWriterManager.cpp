@@ -4,7 +4,7 @@
 #include "PKB/Managers/ManagerUtils.h"
 
 PkbWriterManager::PkbWriterManager(
-        std::shared_ptr<AssignmentManager> assignmentManager,
+        std::shared_ptr<AssignPatternManager> assignmentManager,
         std::shared_ptr<EntitiesManager> entitiesManager,
         std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
         std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
@@ -13,6 +13,8 @@ PkbWriterManager::PkbWriterManager(
         std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
         std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
         std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
+        std::shared_ptr<IfPatternManager> ifPatternManager,
+        std::shared_ptr<WhilePatternManager> whilePatternManager,
         std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
         std::shared_ptr<CFGManager> cfgManager)
     : assignmentManager(assignmentManager),
@@ -24,6 +26,8 @@ PkbWriterManager::PkbWriterManager(
     callsRelationshipManager(callsRelationshipManager),
     modifiesProcRelationshipManager(modifiesProcRelationshipManager),
     usesProcRelationshipManager(usesProcRelationshipManager),
+    ifPatternManager(ifPatternManager),
+    whilePatternManager(whilePatternManager),
     nextRelationshipManager(nextRelationshipManager),
     cfgManager(cfgManager) {}
 
@@ -45,7 +49,7 @@ void PkbWriterManager::addStatement(std::shared_ptr<Statement> s) {
 
 void PkbWriterManager::addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) {
 	std::shared_ptr<Assignment> assignStmt = std::make_shared<Assignment>(s, lhs, rhs);
-	this->assignmentManager->addAssignment(assignStmt);
+	this->assignmentManager->storeAssignPattern(assignStmt);
 }
 
 void PkbWriterManager::addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
@@ -84,6 +88,14 @@ void PkbWriterManager::addProcedureToStatementsMap(std::shared_ptr<Procedure> p,
     for (auto stmt : s) {
 		this->tempProcedureToStatementsMap.storeRelationship(p, stmt);
 	}
+}
+
+void PkbWriterManager::addIfPattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) {
+    this->ifPatternManager->storeIfPattern(s, v);
+}
+
+void PkbWriterManager::addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) {
+    this->whilePatternManager->storeWhilePattern(s, v);
 }
 
 void PkbWriterManager::triggerProcToVarTransitiveCalculation() {

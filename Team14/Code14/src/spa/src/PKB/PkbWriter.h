@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "PKB/Managers/AssignmentManager.h"
+#include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/EntityStores/ConstantStore.h"
 #include "PKB/EntityStores/ProcedureStore.h"
 #include "PKB/EntityStores/StatementStore.h"
@@ -131,4 +131,14 @@ public:
      *
      */
     virtual void clearCache() = 0;
+
+    /*!
+     * Adds new If Pattern into the PKB
+     */
+    virtual void addIfPattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) = 0;
+
+    /*!
+     * Adds new While Pattern into the PKB
+     */
+    virtual void addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) = 0;
 };

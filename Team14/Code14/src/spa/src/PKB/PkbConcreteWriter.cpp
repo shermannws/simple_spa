@@ -91,3 +91,11 @@ void PkbConcreteWriter::setCFGMap(std::unordered_map<ProcedureName, std::shared_
 void PkbConcreteWriter::clearCache() {
 	this->writerManager->clearCache();
 }
+
+void PkbConcreteWriter::addIfPattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) {
+    this->writerManager->addIfPattern(s, v);
+}
+
+void PkbConcreteWriter::addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) {
+    this->writerManager->addWhilePattern(s, v);
+}
