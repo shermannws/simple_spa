@@ -45,3 +45,11 @@ typedef std::unordered_set<std::string> ResultSet;
 typedef std::string FormattedResult;
 /* Type alias for a vector of vectors of Entities, representing rows of tuples in a result table */
 typedef std::vector<std::vector<Entity>> ResultTuples;
+
+/* enum class for the valid types of attrName */
+enum AttrName {
+   procName,
+   varName,
+   value,
+   stmtNo,
+};

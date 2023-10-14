@@ -1118,3 +1118,27 @@ TEST_CASE("valid multi-clause queries") {
         REQUIRE(*stClauses[1] == *sc2);
     }
 }
+
+TEST_CASE("tuple and boolean result clause") {
+
+    PQLParser parser("assign a, b, c, d; Select<a  , b  , c> ");
+    Query query = parser.parse();
+
+    REQUIRE(query.getSelect().size() == 3);
+
+    parser = PQLParser("assign a, b, c, d; Select<a.stmt#  , b> ");
+    auto query2 = parser.parse();
+
+    REQUIRE(query2.getSelect().size() == 2);
+    REQUIRE(query2.getSelect()[0] == "a.stmt#");
+
+    parser = PQLParser("procedure a, b, c, d; Select a.procName ");
+    auto query3 = parser.parse();
+    REQUIRE(query3.getSelect().size() == 1);
+    REQUIRE(query3.getSelect()[0] == "a.procName");
+
+
+    //TODO
+//    PQLParser parser("Select BOOLEAN");
+//    Query query = parser.parse();
+}

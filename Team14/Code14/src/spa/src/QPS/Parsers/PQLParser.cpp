@@ -22,7 +22,7 @@ Query PQLParser::parse() {
 
     PqlSemanticValidator semanticValidator = PqlSemanticValidator();
     semanticValidator.validateDeclarations(declarations);
-    semanticValidator.validateResultClause(query); //TODO replace this
+    semanticValidator.validateResultClause(query); //TODO replace this, validate the attrRef and BOOLEAN syn (if any)
     semanticValidator.validateConstraintClauses(query);
     return query;
 }

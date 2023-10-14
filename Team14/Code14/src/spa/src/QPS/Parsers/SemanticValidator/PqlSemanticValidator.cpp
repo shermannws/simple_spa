@@ -18,12 +18,46 @@ void PqlSemanticValidator::validateDeclarations(const std::vector<Synonym>& syno
 }
 
 void PqlSemanticValidator::validateResultClause(const Query& query) {
-    auto syn = query.getSelect()[0];
-    EntityPtr entity = query.getEntity(syn);
+    // if size == 1 and "BOOLEAN" and undeclared
+    auto resultClause = query.getSelect();
+    if (isBoolean(resultClause)) {
+        // set query as type bool? validateResultBoolean()
+    } else {
+        for (const auto& elem : resultClause) {
+            std::size_t dotPos = elem.find('.');
+            if (dotPos != std::string::npos){ // attrRef
+                validateResultAttrRef(query, elem, dotPos);
+            } else {  // synonym
+                validateResultSynonym(query, elem);
+            }
+        }
+    }
+}
+
+
+void PqlSemanticValidator::validateResultSynonym(const Query& query, Synonym elem) {
+    EntityPtr entity = query.getEntity(elem);
     if (!entity) {
         throw SemanticException("Undeclared synonym in Select clause");
     }
 }
+
+void PqlSemanticValidator::validateResultAttrRef(const Query& query, Synonym elem, size_t dotPos) {
+    // validate syn & AttrName i.e. correct attrName to synType
+    auto syn = elem.substr(0, dotPos);
+    auto attrName = elem.substr(dotPos + 1);
+    EntityPtr entity = query.getEntity(syn);
+    if (!entity) {
+        throw SemanticException("Undeclared synonym in Select clause");
+    }
+    // check if entity->getType() has attrName
+}
+
+
+bool PqlSemanticValidator::isBoolean(std::vector<Synonym> resultClause) {
+    return (resultClause.size() == 1 && resultClause[0] == "BOOLEAN");
+}
+
 
 void PqlSemanticValidator::validateConstraintClauses(const Query& query) {
     for (const auto& clause : query.getSuchThat()) {

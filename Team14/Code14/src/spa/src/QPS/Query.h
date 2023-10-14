@@ -25,7 +25,7 @@ private:
     /**
      * Vector of selected entities
      */
-    std::vector<Synonym> selects;
+    std::vector<Synonym> selects; // or BOOLEAN, how are we storing syn.attrName?
 
     /**
      * Vector of such that clauses

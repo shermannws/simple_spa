@@ -48,5 +48,11 @@ private:
      */
     void validateClauseSemantics(const Query& query, std::shared_ptr<PatternClause> clause);
 
+    void validateResultSynonym(const Query& query, Synonym elem);
+
+    void validateResultAttrRef(const Query& query, Synonym elem, size_t dotPos);
+
+    bool isBoolean(std::vector<Synonym> resultClause);
+
 };
 
