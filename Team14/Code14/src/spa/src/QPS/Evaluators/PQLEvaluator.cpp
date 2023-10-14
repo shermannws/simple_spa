@@ -87,28 +87,8 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
 
 std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& queryEntity) {
     QueryEntityType entityType = queryEntity->getType();
-    switch (entityType) {
-        case QueryEntityType::Procedure:
-            return pkbReader->getAllProcedures();
-        case QueryEntityType::Stmt:
-            return pkbReader->getAllStatements();
-        case QueryEntityType::Assign:
-            return pkbReader->getAllAssign();
-        case QueryEntityType::Variable:
-            return pkbReader->getAllVariables();
-        case QueryEntityType::Constant:
-            return pkbReader->getAllConstants();
-        case QueryEntityType::While:
-            return pkbReader->getAllWhile();
-        case QueryEntityType::If:
-            return pkbReader->getAllIf();
-        case QueryEntityType::Read:
-            return pkbReader->getAllRead();
-        case QueryEntityType::Print:
-            return pkbReader->getAllPrint();
-        case QueryEntityType::Call:
-            return pkbReader->getAllCall();
-        default:
-            throw std::runtime_error("Not supported entity type in query select clause");
+    if (QPSUtil::entityToGetterMap.find(entityType) == QPSUtil::entityToGetterMap.end()) {
+        throw std::runtime_error("Not supported entity type in query select clause");
     }
+    return QPSUtil::entityToGetterMap[entityType](pkbReader);
 }

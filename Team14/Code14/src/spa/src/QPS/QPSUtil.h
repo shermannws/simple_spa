@@ -59,4 +59,9 @@ public:
      * @brief An unordered map that maps QueryEntityType to the corresponding StatementType
      */
     static std::unordered_map<QueryEntityType, StatementType> entityToStmtMap;
+
+    /**
+     * @brief An unordered map that maps QueryEntityType to the corresponding function to get the entity from PkbReader
+     */
+    static std::unordered_map<QueryEntityType, std::function<std::vector<Entity>(std::shared_ptr<PkbReader>)>> entityToGetterMap;
 };

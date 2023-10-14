@@ -52,7 +52,7 @@ bool Ref::isRootType(RootType rrootType) {
 
 bool Ref::operator==(const Ref& other) const {
     return (rep == other.rep) && (type == other.type)
-        && (rootType == other.rootType) && (entityType == other.entityType);
+        && (rootType == other.rootType) && (entityType == other.entityType) && (attrName == other.attrName);
 }
 
 bool Ref::isOfStmtRef() {
