@@ -163,7 +163,7 @@ public:
      * @brief Adds a assign statement to the PKB.
      * @param s The shared pointer to the assign statement to be added.
      */
-    void addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs);
+    void addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs);
 
     /**
      * @brief Adds a follows relationship to the PKB.
@@ -248,4 +248,9 @@ public:
      * @param s2 The shared pointer to the second statement.
      */
     void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2);
+
+    /**
+     * @brief Clears the PKB of any cache information that should not persist across queries
+     */
+    void clearCache();
 };

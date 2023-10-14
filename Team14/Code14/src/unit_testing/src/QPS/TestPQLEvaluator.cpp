@@ -1,5 +1,6 @@
 #include "QPS/Evaluators/PQLEvaluator.h"
 #include "QPS/Parsers/PQLParser.h"
+#include "QPSTestUtil.h"
 
 #include <unordered_map>
 
@@ -376,6 +377,275 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
     }
 }
 
+TEST_CASE("Test NextSuchThatStrategy") {
+    // evaluateSynSyn
+    SECTION("leftRef == rightRef") { // false
+        PQLParser parser("stmt s; Select s such that Next(s,s)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.empty());
+    }
+
+    SECTION ("getNextPair") {
+        PQLParser parser("assign a; read r; Select r such that Next(a, r)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "4") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "6") != results.end());
+    }
+
+    // evaluateSynAny
+    SECTION ("getNextTypeStmt") {
+        PQLParser parser("stmt s; Select s such that Next(s,14)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "13") != results.end());
+    }
+
+    SECTION ("getNextTypeWildcard") {
+        PQLParser parser("if if; Select if such that Next(if,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "11") != results.end());
+    }
+
+    // evaluateAnySyn
+    SECTION ("getNextStmtType") {
+        PQLParser parser("call call; Select call such that Next(23, call)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "24") != results.end());
+    }
+
+    SECTION ("getNextWildcardType") {
+        PQLParser parser("assign assign; Select assign such that Next(_,assign)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "10") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "12") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "13") != results.end());
+    }
+
+    // evaluateBoolean
+    SECTION("isNext") {
+        PQLParser parser("if if; Select if such that Next(1,2)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "101") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "102") != results.end());
+    }
+
+    SECTION ("hasAfterStmt") {
+        PQLParser parser("stmt s; Select s such that Next(1,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("hasBeforeStmt") {
+        PQLParser parser("stmt s; Select s such that Next(_,1)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("hasNext") {
+        PQLParser parser("stmt s; Select s such that Next(_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 5);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "4") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "5") != results.end());
+    }
+}
+
+TEST_CASE("Test NextStarSuchThatStrategy") {
+    // evaluateSynSyn
+    SECTION("leftRef == rightRef, getNextStarSameStmt") {
+        PQLParser parser("assign a; Select a such that Next*(a,a)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "102") != results.end());
+    }
+
+    SECTION ("getNextStarPair") {
+        PQLParser parser("read read; if if; Select read such that Next*(read, if)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "11") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "21") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "31") != results.end());
+    }
+
+        // evaluateSynAny
+    SECTION ("getNextStarTypeStmt") {
+        PQLParser parser("stmt s; Select s such that Next*(s,15)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "5") != results.end());
+    }
+
+    SECTION ("getNextStarTypeWildcard") {
+        PQLParser parser("while w; Select w such that Next*(w,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "20") != results.end());
+    }
+
+        // evaluateAnySyn
+    SECTION ("getNextStarStmtType") {
+        PQLParser parser("if ifs; Select ifs such that Next*(23, ifs)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "26") != results.end());
+    }
+
+    SECTION ("getNextStarWildcardType") {
+        PQLParser parser("read read; Select read such that Next*(_,read)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "10") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "12") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "15") != results.end());
+    }
+
+        // evaluateBoolean
+    SECTION("isNextStar") {
+        PQLParser parser("if if; Select if such that Next*(1,2)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("hasAfterStarStmt") {
+        PQLParser parser("stmt s; Select s such that Next*(1,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 5);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "4") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "5") != results.end());
+    }
+
+    SECTION ("hasBeforeStarStmt") {
+        PQLParser parser("stmt s; Select s such that Next*(_,1)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 0);
+    }
+
+    SECTION ("hasNextStar") {
+        PQLParser parser("read r; Select r such that Next*(_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 4);
+        REQUIRE(find(results.begin(), results.end(), "88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "14") != results.end());
+    }
+}
+
 TEST_CASE("Test QPS Flow - Assign With Pattern") {
     PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
 
@@ -667,4 +937,185 @@ TEST_CASE("Calls and Calls* clauses") {
     }
 
 }
+
+TEST_CASE("multiclause, pattern only - synonym in empty result table") {
+    // assign a, a1; variable v; Select a pattern a (v,_"multiclauseTest+patternOnly"_) and a(v1,_)
+
+    auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
+                                                RootType::Synonym, "v",
+                                                ExpressionSpecType::ExactMatch, "((multiclauseTest)+(patternOnly))");
+    auto pc2 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
+                                                RootType::Synonym, "v1",
+                                                ExpressionSpecType::Wildcard, "");
+
+    Query queryObj;
+    queryObj.addSelect("a");
+    queryObj.addClause(pc1); // returns a,v of 1 var1, 1 var2, 2 var3, 3 var4, 4 var3
+    queryObj.addClause(pc2); // returns a,v1 of 6 var6
+    std::vector<std::shared_ptr<QueryEntity>> decl = {
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, "a"),
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
+            std::make_shared<QueryEntity>(QueryEntityType::Variable, "v")
+    };
+    queryObj.addDeclaration(decl[0]);
+    queryObj.addDeclaration(decl[1]);
+    queryObj.addDeclaration(decl[2]);
+
+    auto stubReader = make_shared<StubPkbReader>();
+    PQLEvaluator evaluator = PQLEvaluator(stubReader);
+    auto resultObj = evaluator.evaluate(queryObj); // no intersection of v, no a returned
+    auto results = evaluator.formatResult(queryObj, resultObj);
+    REQUIRE(resultObj.getType() == ResultType::Boolean);
+    REQUIRE(resultObj.getBoolResult() == false);
+    REQUIRE(results.size() == 0);
+}
+
+TEST_CASE("multiclause, suchThat only - False Result table ") { //syn not involved in clauses
+    // assign a, a1; variable v; Select a1 such that Follows*(a,20) and  Parent(1,10) and Uses(1, "x")
+
+    auto sc1 = QPSTestUtil::createSuchThatClause(ClauseType::FollowsStar,
+                                                 RefType::StmtRef, RootType::Synonym, QueryEntityType::Assign, "a",
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "700");
+    auto sc2 = QPSTestUtil::createSuchThatClause(ClauseType::Parent,
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "10");
+    auto sc3 = QPSTestUtil::createSuchThatClause(ClauseType::Uses,
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
+                                                 RefType::EntRef, RootType::Ident, QueryEntityType::Variable, "multiClauseSTonly");
+
+    Query queryObj;
+    queryObj.addSelect("a1");
+    queryObj.addClause(sc1); // returns non-empty
+    queryObj.addClause(sc2); // returns  true
+    queryObj.addClause(sc3); // returns false
+    std::vector<std::shared_ptr<QueryEntity>> decl = {
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, "a"),
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
+            std::make_shared<QueryEntity>(QueryEntityType::Variable, "v")
+    };
+    queryObj.addDeclaration(decl[0]);
+    queryObj.addDeclaration(decl[1]);
+    queryObj.addDeclaration(decl[2]);
+
+    auto stubReader = make_shared<StubPkbReader>();
+    PQLEvaluator evaluator = PQLEvaluator(stubReader);
+    auto resultObj = evaluator.evaluate(queryObj);
+    auto results = evaluator.formatResult(queryObj, resultObj);
+    REQUIRE(resultObj.getType() == ResultType::Boolean);
+    REQUIRE(!resultObj.getBoolResult());
+    REQUIRE(results.size() == 0);
+}
+
+TEST_CASE("multiclause, pattern and suchThat - True Result table ") {
+    // assign a1; Select a1 such that Parent(1,10) and Uses(1, "multiclauseTrue")
+
+    auto sc2 = QPSTestUtil::createSuchThatClause(ClauseType::Parent,
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "10");
+    auto sc3 = QPSTestUtil::createSuchThatClause(ClauseType::Uses,
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
+                                                 RefType::EntRef, RootType::Ident, QueryEntityType::Variable, "multiClauseTrue");
+
+    Query queryObj;
+    queryObj.addSelect("a1");
+    queryObj.addClause(sc2); // returns  true
+    queryObj.addClause(sc3); //returns true
+    std::vector<std::shared_ptr<QueryEntity>> decl = {
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
+    };
+    queryObj.addDeclaration(decl[0]);
+    auto stubReader = make_shared<StubPkbReader>();
+    PQLEvaluator evaluator = PQLEvaluator(stubReader);
+    auto resultObj = evaluator.evaluate(queryObj);
+    auto results = evaluator.formatResult(queryObj, resultObj);
+    REQUIRE(resultObj.getType() == ResultType::Tuples);
+    REQUIRE(resultObj.getSynIndices()["a1"] == 0);
+    REQUIRE(resultObj.getTuples().size() == 3);
+    REQUIRE(results.size() == 3);
+    REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+}
+
+TEST_CASE("multiclause, pattern and suchThat - synonym in tuple result table") {
+    // assign a, a1; variable v; Select a such that Follows*(a,20) pattern a (v,_"1+multiclauseTest"_) and a(v,_) such that Parent(1,10)
+
+    auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
+                                                RootType::Synonym, "v",
+                                                ExpressionSpecType::PartialMatch, "((1)+(multiclauseTest))");
+    auto pc2 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a1",
+                                                RootType::Synonym, "v",
+                                                ExpressionSpecType::Wildcard, "");
+    auto sc2 = QPSTestUtil::createSuchThatClause(ClauseType::Parent,
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "10");
+
+    Query queryObj;
+    queryObj.addSelect("a");
+    queryObj.addClause(pc1); // returns a,v of 1 var1, 1 var2, 2 var3, 3 var4, 4 var3
+    queryObj.addClause(pc2); // returns a1,v of 1 var1, 1 var2, 2 var3
+    queryObj.addClause(sc2); // returns  true
+    std::vector<std::shared_ptr<QueryEntity>> decl = {
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, "a"),
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
+            std::make_shared<QueryEntity>(QueryEntityType::Variable, "v")
+    };
+    queryObj.addDeclaration(decl[0]);
+    queryObj.addDeclaration(decl[1]);
+    queryObj.addDeclaration(decl[2]);
+
+    auto stubReader = make_shared<StubPkbReader>();
+    PQLEvaluator evaluator = PQLEvaluator(stubReader);
+    auto resultObj = evaluator.evaluate(queryObj);
+    auto results = evaluator.formatResult(queryObj, resultObj);
+    REQUIRE(resultObj.getType() == ResultType::Tuples);
+    REQUIRE(resultObj.getSynIndices()["a"] == 0);
+    REQUIRE(resultObj.getSynIndices()["v"] == 1);
+    REQUIRE(resultObj.getSynIndices()["a1"] == 2);
+    REQUIRE(resultObj.getTuples().size() == 4);
+    REQUIRE(results.size() == 3);
+    REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "4") != results.end());
+}
+
+TEST_CASE("multiclause, pattern and suchThat - synonym not in tuple result table") {
+    // assign a, a1; variable v; constant c; Select c such that Follows*(a,20) pattern a (v,_"1+multiclauseTest"_) and a(v,_) such that Parent(1,10)
+
+    auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
+                                                RootType::Synonym, "v",
+                                                ExpressionSpecType::PartialMatch, "((1)+(multiclauseTest))");
+    auto pc2 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a1",
+                                                RootType::Synonym, "v",
+                                                ExpressionSpecType::Wildcard, "");
+    auto sc2 = QPSTestUtil::createSuchThatClause(ClauseType::Parent,
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
+                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "10");
+
+    Query queryObj;
+    queryObj.addSelect("c");
+    queryObj.addClause(pc1); // returns a,v of 1 var1, 1 var2, 2 var3, 3 var4, 4 var3
+    queryObj.addClause(pc2); // returns a1,v of 1 var1, 1 var2, 2 var3
+    queryObj.addClause(sc2); // returns  true
+    std::vector<std::shared_ptr<QueryEntity>> decl = {
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, "a"),
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
+            std::make_shared<QueryEntity>(QueryEntityType::Variable, "v"),
+            std::make_shared<QueryEntity>(QueryEntityType::Constant, "c")
+    };
+    queryObj.addDeclaration(decl[0]);
+    queryObj.addDeclaration(decl[1]);
+    queryObj.addDeclaration(decl[2]);
+    queryObj.addDeclaration(decl[3]);
+
+    auto stubReader = make_shared<StubPkbReader>();
+    PQLEvaluator evaluator = PQLEvaluator(stubReader);
+    auto resultObj = evaluator.evaluate(queryObj);
+    auto results = evaluator.formatResult(queryObj, resultObj);
+    REQUIRE(resultObj.getType() == ResultType::Tuples);
+    REQUIRE(resultObj.getSynIndices()["c"] == 0);
+    REQUIRE(resultObj.getTuples().size() == 0);
+    REQUIRE(results.size() == 0);
+}
+
 

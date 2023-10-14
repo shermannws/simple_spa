@@ -9,7 +9,7 @@ void ProcProcHandler::handle(const Query &query, std::shared_ptr<Clause> clause)
     Ref& leftRef = suchThat->getFirstParam();
     Ref& rightRef = suchThat->getSecondParam();
 
-    if (QPSUtil::procRefClauseTypes.find(type) == QPSUtil::procRefClauseTypes.end()) {
+    if (QPSUtil::typeToArgTypeMap[type] != ProcProc) {
         return SemanticValHandler::handle(query, clause);
     }
 

@@ -36,3 +36,14 @@ public:
      */
     bool isStatementType(StatementType statementType) const;
 };
+
+/**
+ * @brief A hash function for Statement objects. Necessary as Statement class has an additional
+ * member field compared to its base class, so CPP doesn't allow using hash function of Entity.
+ * @details A hash function for Statement objects.
+ * StatementType not used to differentiate State ment objects as lineno (as EntityValue) should uniquely identify a Statement
+ */
+template <>
+struct std::hash<Statement> {
+    std::size_t operator()(const Statement& statement) const;
+};

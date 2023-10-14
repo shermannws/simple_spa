@@ -44,9 +44,24 @@ private:
     /**
      * @brief Evaluates a clause and updates the result accordingly.
      * @param clause A shared pointer to the Clause to evaluate.
-     * @return  shared pointer to result object
+     * @return shared pointer to result object
      */
     std::shared_ptr<Result> evaluateClause(const std::shared_ptr<Clause> clause);
+
+    /**
+     * @brief Evaluates the select clause of a query.
+     * @param query the query object to evaluate
+     * @return shared pointer to result object
+     */
+    std::shared_ptr<Result> evaluateSelect(const Query& query);
+
+    /**
+     * @brief Evaluates all the constraint clauses of a query into a combined result, returns nullptr if
+     * there are no constraint clauses
+     * @param query the query object to evaluate
+     * @return shared pointer to result object
+     */
+    std::shared_ptr<Result> evaluateConstraintClauses(const Query& query);
 
 public:
     /**

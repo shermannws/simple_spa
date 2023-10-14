@@ -17,10 +17,14 @@ void EntityExtractorVisitor::visitProcedureNode(ProcedureNode *node, std::vector
 }
 
 void EntityExtractorVisitor::visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
-	this->pkbWriter->addAssignStatement(
-			std::make_shared<Statement>(node->getStatementNumber(), StatementType::Assign),
-			std::make_shared<Variable>(node->getVar()->getVarName()),
-			std::make_shared<FormattedExpression>(node->getExpression()->toString()));
+	auto currentStmt = std::make_shared<Statement>(node->getStatementNumber(), StatementType::Assign);
+
+	this->pkbWriter->addAssignStatement(currentStmt);
+	this->pkbWriter->addAssignPattern(
+		currentStmt,
+		std::make_shared<Variable>(node->getVar()->getVarName()),
+		std::make_shared<FormattedExpression>(node->getExpression()->toString())
+	);
 }
 
 void EntityExtractorVisitor::visitReadNode(ReadNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {

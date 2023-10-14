@@ -45,11 +45,9 @@ void PkbWriterManager::addStatement(std::shared_ptr<Statement> s) {
     this->entitiesManager->storeStatement(s);
 }
 
-void PkbWriterManager::addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) {
-    this->entitiesManager->storeStatement(s);
-
-    std::shared_ptr<Assignment> assignStmt = std::make_shared<Assignment>(s, lhs, rhs);
-    this->assignmentManager->storeAssignPattern(assignStmt);
+void PkbWriterManager::addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) {
+	std::shared_ptr<Assignment> assignStmt = std::make_shared<Assignment>(s, lhs, rhs);
+	this->assignmentManager->storeAssignPattern(assignStmt);
 }
 
 void PkbWriterManager::addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
@@ -118,4 +116,8 @@ void PkbWriterManager::triggerTransitiveCalc() {
 
 void PkbWriterManager::addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) {
     this->nextRelationshipManager->storeRelationship(s1, s2, true);
+}
+
+void PkbWriterManager::clearCache() {
+	this->nextRelationshipManager->clearNextStarStore();
 }

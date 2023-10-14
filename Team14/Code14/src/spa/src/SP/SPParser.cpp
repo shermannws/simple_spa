@@ -1,6 +1,6 @@
 #include "SPParser.h"
 
-SPParser::SPParser() {
+SPParser::SPParser() : runningStatementNumber(AppConstants::INITIAL_STATEMENT_NUMBER) {
     parseFunctionMap[AppConstants::STRING_READ] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<ReadNode> { return parseReadStatement(tokens); };
     parseFunctionMap[AppConstants::STRING_PRINT] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<PrintNode> { return parsePrintStatement(tokens); };
     parseFunctionMap[AppConstants::STRING_CALL] = [&] (std::deque<SPToken>& tokens) -> std::shared_ptr<CallNode> { return parseCallStatement(tokens); };
@@ -9,7 +9,7 @@ SPParser::SPParser() {
 }
 
 std::shared_ptr<ProgramNode> SPParser::parse(std::vector<SPToken> tokens) {
-    runningStatementNumber = 1;
+    runningStatementNumber = AppConstants::INITIAL_STATEMENT_NUMBER;
     // std::deque is an adapter that wraps the underlying std::deque container
     std::deque<SPToken> tokensQueue(tokens.begin(), tokens.end());
     std::vector<std::shared_ptr<ProcedureNode>> procedures;

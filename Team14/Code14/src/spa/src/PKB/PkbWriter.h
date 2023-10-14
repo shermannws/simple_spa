@@ -49,7 +49,12 @@ public:
     /*!
      * Adds new Assign Statement Entity into the PKB
      */
-    virtual void addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) = 0;
+    virtual void addAssignStatement(std::shared_ptr<Statement> s) = 0;
+
+    /*!
+     * Add new Assign Pattern into the PKB
+     */
+    virtual void addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) = 0;
 
     /*!
      * Adds new Follows Relationship into the PKB
@@ -110,6 +115,17 @@ public:
      * Adds new Uses (Procedure-Variable) Relationship into the PKB
      */
     virtual void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) = 0;
+
+    /*!
+     * Adds new Next Relationship into the PKB
+     */
+    virtual void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) = 0;
+
+    /*!
+     * Clears any Cache in the PKB that is used for Query Processing
+     *
+     */
+    virtual void clearCache() = 0;
 
     /*!
      * Adds new If Pattern into the PKB

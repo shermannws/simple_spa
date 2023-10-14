@@ -51,6 +51,12 @@ public:
     Result();
 
     /**
+     * @brief Constructor for a boolean Result instance, returns a Result object with Type Boolean and boolResult of value
+     * @param value boolean value of the result
+     */
+    Result(bool value);
+
+    /**
      * @brief Gets the type of the result.
      * @return The type of the result (ResultType).
      */
@@ -89,4 +95,28 @@ public:
      * @return The result tuples (ResultTuples).
      */
     ResultTuples& getTuples();
+
+    /**
+     * @brief returns true if a Result object represents a True boolean Result
+     * @return true if the result object is a True Boolean Result
+     */
+    bool isTrue();
+
+    /**
+    * @brief returns true if a Result object represents a False boolean Result
+    * @return true if the result object is a False Boolean Result
+    */
+    bool isFalse();
+
+    /**
+    * @brief returns true if a Result object represents a Empty Tuple Result
+    * @return true if the result object is a Empty Tuple Result
+    */
+    bool isEmpty();
+
+    /**
+    * @brief returns true if a Result object's type is Invalid
+    * @return true if the result object is Invalid
+    */
+    bool isInvalid();
 };
