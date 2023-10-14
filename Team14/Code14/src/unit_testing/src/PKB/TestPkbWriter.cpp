@@ -10,3 +10,14 @@ TEST_CASE("Test initialising PKB Writer") {
 
     REQUIRE(1 == 1);
 }
+
+TEST_CASE("Test set new map as CFGStore through Writer") {
+    Pkb pkb = Pkb();
+    auto writer = pkb.createPkbWriter();
+
+    std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> temp = std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>>();
+
+    temp.insert({ "main" , std::make_shared<CFGNode>(1) });
+
+    REQUIRE_NOTHROW(writer->setCFGMap(temp));
+}
