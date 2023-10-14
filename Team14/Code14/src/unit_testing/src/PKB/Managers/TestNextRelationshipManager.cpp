@@ -86,7 +86,7 @@ TEST_CASE("Test Next Relationship Retrieval") {
 }
 
 
-TEST_CASE("Test NNext/Next* Relationship Retrieval") {
+TEST_CASE("Test Next/Next* Relationship Retrieval") {
     SECTION("Test simple loop") {
         NextRelationshipManager nextRelationshipManager = NextRelationshipManager();
 
