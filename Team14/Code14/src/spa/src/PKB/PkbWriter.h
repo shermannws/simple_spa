@@ -9,10 +9,10 @@
 #include "PKB/EntityStores/VariableStore.h"
 #include "PKB/RelationshipStores/FollowsRelationshipStore.h"
 #include "PKB/RelationshipStores/UsesRelationshipStore.h"
-#include "../Commons/Entities/Constant.h"
-#include "../Commons/Entities/Procedure.h"
-#include "../Commons/Entities/Variable.h"
-#include "../Commons/Entities/Statement.h"
+#include "Commons/Entities/Constant.h"
+#include "Commons/Entities/Procedure.h"
+#include "Commons/Entities/Variable.h"
+#include "Commons/Entities/Statement.h"
 #include "PKB/Managers/PkbWriterManager.h"
 #include "PKB/PkbTypes.h"
 
@@ -120,6 +120,11 @@ public:
      * Adds new Next Relationship into the PKB
      */
     virtual void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) = 0;
+
+    /*!
+     * Sets the `cfgMap` received as argument as the CFGs for each procedures
+     */
+    virtual void setCFGMap(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap) = 0;
 
     /*!
      * Clears any Cache in the PKB that is used for Query Processing

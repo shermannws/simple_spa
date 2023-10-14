@@ -60,6 +60,7 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
     auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
+    auto cfgManager = std::make_shared<CFGManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager,
@@ -71,7 +72,8 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
             callsRelationshipManager,
             modifiesProcRelationshipManager,
             usesProcRelationshipManager,
-            nextRelationshipManager
+            nextRelationshipManager,
+            cfgManager
     );
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
@@ -154,6 +156,7 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
     auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
+    auto cfgManager = std::make_shared<CFGManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
         assignmentManager,
@@ -165,7 +168,8 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
         callsRelationshipManager,
         modifiesProcRelationshipManager,
         usesProcRelationshipManager,
-        nextRelationshipManager
+        nextRelationshipManager,
+        cfgManager
     );
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
@@ -316,6 +320,7 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
     auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
     auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
+    auto cfgManager = std::make_shared<CFGManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
         assignmentManager,
@@ -327,7 +332,8 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
         callsRelationshipManager,
         modifiesProcRelationshipManager,
         usesProcRelationshipManager,
-        nextRelationshipManager
+        nextRelationshipManager,
+        cfgManager
     );
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 

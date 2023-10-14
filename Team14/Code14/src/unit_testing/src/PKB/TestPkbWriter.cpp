@@ -14,6 +14,19 @@ TEST_CASE("Test PKBConcreteWriter Methods - Assert no throw") {
     Pkb pkb = Pkb();
     auto writer = pkb.createPkbWriter();
 
+    REQUIRE(1 == 1);
+}
+
+TEST_CASE("Test set new map as CFGStore through Writer") {
+    Pkb pkb = Pkb();
+    auto writer = pkb.createPkbWriter();
+
+    std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> temp = std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>>();
+
+    temp.insert({ "main" , std::make_shared<CFGNode>(1) });
+
+    REQUIRE_NOTHROW(writer->setCFGMap(temp));
+
     REQUIRE_NOTHROW(writer->addConstant(make_shared<Constant>("1")));
     REQUIRE_NOTHROW(writer->addVariable(make_shared<Variable>("x")));
     REQUIRE_NOTHROW(writer->addProcedure(make_shared<Procedure>("main")));

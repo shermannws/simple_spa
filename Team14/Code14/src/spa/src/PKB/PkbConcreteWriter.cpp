@@ -84,6 +84,10 @@ void PkbConcreteWriter::addNextRelationship(std::shared_ptr<Statement> s1, std::
 	this->writerManager->addNextRelationship(s1, s2);
 }
 
+void PkbConcreteWriter::setCFGMap(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap) {
+	this->writerManager->setCFGMap(cfgMap);
+}
+
 void PkbConcreteWriter::clearCache() {
 	this->writerManager->clearCache();
 }
