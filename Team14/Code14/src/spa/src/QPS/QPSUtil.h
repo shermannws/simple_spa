@@ -35,4 +35,9 @@ public:
      * @brief An unordered map that maps QueryEntityType to the corresponding StatementType
      */
     static std::unordered_map<QueryEntityType, StatementType> entityToStmtMap;
+
+    /**
+     * @brief An unordered map that maps AttrName type to the valid query entity types;
+     */
+    static std::unordered_map<AttrName, std::unordered_set<QueryEntityType>> attrNameToTypeMap;
 };

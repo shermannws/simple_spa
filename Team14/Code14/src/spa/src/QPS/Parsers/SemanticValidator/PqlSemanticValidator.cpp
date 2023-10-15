@@ -43,14 +43,17 @@ void PqlSemanticValidator::validateResultSynonym(const Query& query, Synonym ele
 }
 
 void PqlSemanticValidator::validateResultAttrRef(const Query& query, Synonym elem, size_t dotPos) {
-    // validate syn & AttrName i.e. correct attrName to synType
-    auto syn = elem.substr(0, dotPos);
-    auto attrName = elem.substr(dotPos + 1);
+    Synonym syn = elem.substr(0, dotPos);
+    AttrName attrName = elem.substr(dotPos + 1);
     EntityPtr entity = query.getEntity(syn);
     if (!entity) {
         throw SemanticException("Undeclared synonym in Select clause");
     }
-    // check if entity->getType() has attrName
+    auto expectedEntityTypes = QPSUtil::attrNameToTypeMap[attrName];
+    auto it = expectedEntityTypes.find(entity->getType());
+    if (it == expectedEntityTypes.end()) {
+        throw SemanticException("Invalid attrRef in result clause");
+    }
 }
 
 
