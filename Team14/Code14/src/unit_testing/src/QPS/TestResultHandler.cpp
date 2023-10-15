@@ -9,7 +9,7 @@
 
 TEST_CASE("Test Result combiner") {
 
-    SECTION("Test both tuples") {
+    SECTION("Test both tuples, should return tuple result") {
         std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
         std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
         std::vector<Entity> v3{Statement(7, StatementType::Stmt), Variable("third_variable")};
@@ -34,7 +34,7 @@ TEST_CASE("Test Result combiner") {
         REQUIRE(find(finalTuples.begin(), finalTuples.end(), v2) != finalTuples.end());
     }
 
-    SECTION("Test both tuples with 1 empty Tuples Result") {
+    SECTION("Test both tuples with 1 empty Tuples Result, should return false Result") {
         std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
         std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
         std::vector<Entity> v3{Statement(7, StatementType::Stmt), Variable("third_variable")};
@@ -52,8 +52,8 @@ TEST_CASE("Test Result combiner") {
         std::shared_ptr<Result> final = evaluator.getCombined(r, r1);
         auto finalTuples = final->getTuples();
 
-        REQUIRE(final->getTuples().empty());
-        REQUIRE(final->getSynIndices().size()==3);
+        REQUIRE(final->getType() == ResultType::Boolean);
+        REQUIRE(final->getBoolResult() == false);
 
     }
 
@@ -190,6 +190,49 @@ TEST_CASE("Test Result combiner") {
         auto i = evaluator.getCombined(rInvalid, rInvalid);
         REQUIRE(i->getBoolResult() == false);
         REQUIRE(i->getType() == ResultType::Invalid);
+    }
+
+}
+
+
+TEST_CASE("Test cast") {
+    SECTION("Empty tuple result, should return False Boolean Result"){
+        auto resultHandler = ResultHandler();
+        auto tupleRes = std::make_shared<Result>();
+        tupleRes->setType(std::vector<Synonym>{"a"});
+        REQUIRE(resultHandler.cast(tupleRes)->getType() == ResultType::Boolean);
+        REQUIRE(resultHandler.cast(tupleRes)->getBoolResult() == false);
+    }
+
+    SECTION("Invalid result, should return original result"){
+        auto resultHandler = ResultHandler();
+        auto invalidRes = std::make_shared<Result>();
+        REQUIRE(resultHandler.cast(invalidRes) == invalidRes);
+    }
+
+    SECTION("Non-empty result, should return original result"){
+        auto resultHandler = ResultHandler();
+        auto tupleRes = std::make_shared<Result>();
+        tupleRes->setType(std::vector<Synonym>{"a"});
+        auto rows = std::vector<Entity>{Variable("x")};
+        tupleRes->setTuples(rows);
+        REQUIRE(resultHandler.cast(tupleRes) == tupleRes);
+    }
+
+    SECTION("True Boolean result, should return original result"){
+        auto resultHandler = ResultHandler();
+        auto trueRes = std::make_shared<Result>();
+        trueRes->setType(std::vector<Synonym>{});
+        trueRes->setBoolResult(true);
+        REQUIRE(resultHandler.cast(trueRes) == trueRes);
+    }
+
+    SECTION("False Boolean result, should return original result"){
+        auto resultHandler = ResultHandler();
+        auto falseRes = std::make_shared<Result>();
+        falseRes->setType(std::vector<Synonym>{});
+        falseRes->setBoolResult(false);
+        REQUIRE(resultHandler.cast(falseRes) == falseRes);
     }
 
 }

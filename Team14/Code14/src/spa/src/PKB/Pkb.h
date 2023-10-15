@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "PKB/Managers/AssignmentManager.h"
+#include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/Managers/EntitiesManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
@@ -11,6 +11,10 @@
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/ModifiesProcRelationshipManager.h"
 #include "PKB/Managers/UsesProcRelationshipManager.h"
+#include "PKB/Managers/IfPatternManager.h"
+#include "PKB/Managers/WhilePatternManager.h"
+#include "PKB/Managers/NextRelationshipManager.h"
+#include "PKB/Managers/CFGManager.h"
 #include "PKB/Managers/PkbReaderManager.h"
 #include "PKB/Managers/PkbWriterManager.h"
 #include "PKB/PkbReader.h"
@@ -23,9 +27,9 @@
 class Pkb {
 private:
     /**
-     * @brief The AssignmentManager of the PKB
+     * @brief The AssignPatternManager of the PKB
      */
-    std::shared_ptr<AssignmentManager> assignmentManager;
+    std::shared_ptr<AssignPatternManager> assignmentManager;
 
     /**
      * @brief The EntitiesManager of the PKB
@@ -68,6 +72,16 @@ private:
     std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager;
 
     /**
+     * @brief The IfPatternManager of the PKB
+     */
+    std::shared_ptr<IfPatternManager> ifPatternManager;
+
+    /**
+     * @brief The WhilePatternManager of the PKB
+     */
+    std::shared_ptr<WhilePatternManager> whilePatternManager;
+
+    /**
      * @brief The PkbReaderManager of the PKB
      */
     std::shared_ptr<PkbReaderManager> pkbReaderManager;
@@ -76,6 +90,16 @@ private:
      * @brief The PkbWriterManager of the PKB
      */
     std::shared_ptr<PkbWriterManager> pkbWriterManager;
+
+    /**
+     * @brief The NextRelationshipManager of the PKB
+     */
+    std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
+
+    /**
+	 * @brief The CFGManager of the PKB
+	 */
+    std::shared_ptr<CFGManager> cfgManager;
 
 public:
     /**

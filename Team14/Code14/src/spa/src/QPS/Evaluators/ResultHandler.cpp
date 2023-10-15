@@ -5,25 +5,19 @@
 ResultHandler::ResultHandler(){};
 
 std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
-    if (r1->getType() == ResultType::Invalid) {
-        return r2;
+    if (r1->isInvalid()) {
+        return cast(r2);
     }
-    if (r2->getType() == ResultType::Invalid) {
-        return r1;
+    if (r2->isInvalid()) {
+        return cast(r1);
     }
-    if (r1->getType() == ResultType::Boolean && !r1->getBoolResult()) {
-        return r1;
+    if (r1->isFalse() || r1->isEmpty() || r2->isTrue()) {
+        return cast(r1);
     }
-    if (r2->getType() == ResultType::Boolean && !r2->getBoolResult()) {
-        return r2;
+    if (r2->isFalse() || r2->isEmpty() || r1->isTrue()) {
+        return cast(r2);
     }
-    if (r1->getType() == ResultType::Boolean && r1->getBoolResult()) {
-        return r2;
-    }
-    if (r2->getType() == ResultType::Boolean && r2->getBoolResult()) {
-        return r1;
-    }
-    return join(r1, r2);
+    return cast(join(r1, r2)); // case 2 non-empty Tuple Result
 }
 
 std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
@@ -110,4 +104,11 @@ bool ResultHandler::isMatch(const std::vector<Entity>& row1,
         return false;
     }
     return true;
+}
+
+std::shared_ptr<Result> ResultHandler::cast(std::shared_ptr<Result> result) {
+    if (result->isEmpty()) {
+        return std::make_shared<Result>(false);
+    }
+    return result;
 }

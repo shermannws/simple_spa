@@ -1,11 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-#include <algorithm>
-
 #include "PKB/RelationshipStores/CallsRelationshipStore.h"
-#include "Commons/Entities/Procedure.h"
 #include "PKB/Managers/ProcToProcRelationshipManager.h"
 
 /**

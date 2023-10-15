@@ -4,7 +4,7 @@
 #include "PKB/Managers/ManagerUtils.h"
 
 PkbWriterManager::PkbWriterManager(
-        std::shared_ptr<AssignmentManager> assignmentManager,
+        std::shared_ptr<AssignPatternManager> assignmentManager,
         std::shared_ptr<EntitiesManager> entitiesManager,
         std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
         std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
@@ -12,7 +12,11 @@ PkbWriterManager::PkbWriterManager(
         std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
         std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
         std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
-        std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager)
+        std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
+        std::shared_ptr<IfPatternManager> ifPatternManager,
+        std::shared_ptr<WhilePatternManager> whilePatternManager,
+        std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
+        std::shared_ptr<CFGManager> cfgManager)
     : assignmentManager(assignmentManager),
     entitiesManager(entitiesManager),
     followsRelationshipManager(followsRelationshipManager),
@@ -21,7 +25,11 @@ PkbWriterManager::PkbWriterManager(
     parentRelationshipManager(parentRelationshipManager),
     callsRelationshipManager(callsRelationshipManager),
     modifiesProcRelationshipManager(modifiesProcRelationshipManager),
-    usesProcRelationshipManager(usesProcRelationshipManager) {}
+    usesProcRelationshipManager(usesProcRelationshipManager),
+    ifPatternManager(ifPatternManager),
+    whilePatternManager(whilePatternManager),
+    nextRelationshipManager(nextRelationshipManager),
+    cfgManager(cfgManager) {}
 
 void PkbWriterManager::addConstant(std::shared_ptr<Constant> c) {
     this->entitiesManager->storeConstant(c);
@@ -39,11 +47,9 @@ void PkbWriterManager::addStatement(std::shared_ptr<Statement> s) {
     this->entitiesManager->storeStatement(s);
 }
 
-void PkbWriterManager::addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) {
-    this->entitiesManager->storeStatement(s);
-
-    std::shared_ptr<Assignment> assignStmt = std::make_shared<Assignment>(s, lhs, rhs);
-    this->assignmentManager->addAssignment(assignStmt);
+void PkbWriterManager::addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) {
+	std::shared_ptr<Assignment> assignStmt = std::make_shared<Assignment>(s, lhs, rhs);
+	this->assignmentManager->storeAssignPattern(assignStmt);
 }
 
 void PkbWriterManager::addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) {
@@ -84,6 +90,14 @@ void PkbWriterManager::addProcedureToStatementsMap(std::shared_ptr<Procedure> p,
 	}
 }
 
+void PkbWriterManager::addIfPattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) {
+    this->ifPatternManager->storeIfPattern(s, v);
+}
+
+void PkbWriterManager::addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) {
+    this->whilePatternManager->storeWhilePattern(s, v);
+}
+
 void PkbWriterManager::triggerProcToVarTransitiveCalculation() {
     this->modifiesProcRelationshipManager->calculateProcVarRelationshipForCallers(this->callsRelationshipManager);
     this->usesProcRelationshipManager->calculateProcVarRelationshipForCallers(this->callsRelationshipManager);
@@ -100,4 +114,16 @@ void PkbWriterManager::triggerTransitiveCalc() {
     triggerCallsTransitiveCalculation();
     triggerProcToVarTransitiveCalculation();
     triggerStmtToVarTransitiveCalculation();
+}
+
+void PkbWriterManager::addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) {
+    this->nextRelationshipManager->storeRelationship(s1, s2, true);
+}
+
+void PkbWriterManager::setCFGMap(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap) {
+    this->cfgManager->setCFG(cfgMap);
+}
+
+void PkbWriterManager::clearCache() {
+	this->nextRelationshipManager->clearNextStarStore();
 }

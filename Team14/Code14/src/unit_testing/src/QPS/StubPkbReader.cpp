@@ -25,7 +25,12 @@ std::vector<Entity> StubPkbReader::getAllStatements() const {
 }
 
 std::vector<Entity> StubPkbReader::getAllRead() const {
-    return std::vector<Entity>();
+    return std::vector<Entity>({
+       Statement(88, StatementType::Read),
+       Statement(24, StatementType::Read),
+       Statement(36, StatementType::Read),
+       Statement(14, StatementType::Read),
+    });
 }
 
 std::vector<Entity> StubPkbReader::getAllPrint() const {
@@ -41,7 +46,10 @@ std::vector<Entity> StubPkbReader::getAllWhile() const {
 }
 
 std::vector<Entity> StubPkbReader::getAllIf() const {
-    return std::vector<Entity>();
+    return std::vector<Entity>({
+       Statement(101, StatementType::If),
+       Statement(102, StatementType::If),
+    });
 }
 
 std::vector<Entity> StubPkbReader::getAllCall() const {
@@ -100,6 +108,13 @@ std::vector<Entity> StubPkbReader::getUsesVar(Procedure& proc) const {
 }
 
 bool StubPkbReader::isStmtUsesVar(Statement& stmt, Variable& var) const {
+    if (stmt == Statement(1, StatementType::Stmt) &&
+            var == Variable("multiClauseSTonly")) {
+        return false;
+    }
+    if (var == Variable("multiClauseTrue")) {
+        return true;
+    }
     return true;
 }
 
@@ -128,6 +143,9 @@ std::vector<Entity> StubPkbReader::getFollowsTypeStmt(StatementType type, Statem
 }
 
 std::vector<Entity> StubPkbReader::getFollowsStarTypeStmt(StatementType type, Statement& statement) const {
+    if (type == StatementType::Stmt && statement == Statement(700, StatementType::Stmt)){
+        return std::vector<Entity>({Statement(10, StatementType::Assign)});
+    }
     return std::vector<Entity>();
 }
 
@@ -282,14 +300,24 @@ std::vector<std::vector<Entity>> StubPkbReader::getAllAssignStmtVarPair() const 
 
 // pattern a (v, "x")
 std::vector<std::vector<Entity>> StubPkbReader::getAssignStmtsVarPairByRhs(std::string& rhs, bool hasWildCard) const {
+    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var1")};
+    std::vector<Entity> pair2 = {Statement(1, StatementType::Assign), Variable("var2")};
+    std::vector<Entity> pair3 = {Statement(2, StatementType::Assign), Variable("var3")};
+    std::vector<Entity> pair4 = {Statement(3, StatementType::Assign), Variable("var4")};
+    std::vector<Entity> pair5 = {Statement(4, StatementType::Assign), Variable("var3")};
+    std::vector<Entity> pair6 = {Statement(6, StatementType::Assign), Variable("var6")};
+    if (rhs == "((1)+(multiclauseTest))" && hasWildCard) {
+        return std::vector<std::vector<Entity>>({pair1, pair2, pair3, pair4, pair5});
+    }
+    if (rhs == "((multiclauseTest)+(patternOnly))" && !hasWildCard) {
+        return std::vector<std::vector<Entity>>({pair6});
+    }
+
     if (hasWildCard) {
         std::vector<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var2")};
         std::vector<Entity> pair3 = {Statement(3, StatementType::Assign), Variable("var3")};
         return std::vector<std::vector<Entity>>({pair2, pair3});
     }
-    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var1")};
-    std::vector<Entity> pair2 = {Statement(1, StatementType::Assign), Variable("var2")};
-    std::vector<Entity> pair3 = {Statement(2, StatementType::Assign), Variable("var3")};
     return std::vector<std::vector<Entity>>({pair1, pair2, pair3});
 }
 
@@ -348,7 +376,11 @@ std::vector<Entity> StubPkbReader::getParentStarWildcardType(StatementType type)
 }
 
 bool StubPkbReader::isParent(Statement& statement1, Statement& statement2) const {
-    return false;
+    if (statement1 == Statement(1, StatementType::Stmt) &&
+            statement2 == Statement(10, StatementType::Stmt)) {
+        return true;
+    }
+    return true;
 }
 
 bool StubPkbReader::isParentStar(Statement& statement1, Statement& statement2) const  {
@@ -469,63 +501,130 @@ std::vector<Entity> StubPkbReader::getCalleesStar(Procedure& caller) const {
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getNextPair(StatementType formerType, StatementType latterType) const {
+    if (formerType == StatementType::Assign && latterType == StatementType::Read) {
+        std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Statement(2, StatementType::Read)};
+        std::vector<Entity> pair2 = {Statement(3, StatementType::Assign), Statement(4, StatementType::Read)};
+        std::vector<Entity> pair3 = {Statement(5, StatementType::Assign), Statement(6, StatementType::Read)};
+        return std::vector<std::vector<Entity>>({pair1, pair2, pair3});
+    }
     return std::vector<std::vector<Entity>>();
 }
 
 std::vector<std::vector<Entity>> StubPkbReader::getNextStarPair(StatementType formerType, StatementType latterType) const {
+    if (formerType == StatementType::Read && latterType == StatementType::If) {
+        return std::vector<std::vector<Entity>>({
+            {Statement(11, StatementType::Read), Statement(12, StatementType::If)},
+            {Statement(21, StatementType::Read), Statement(22, StatementType::If)},
+            {Statement(31, StatementType::Read), Statement(32, StatementType::If)}
+        });
+    }
     return std::vector<std::vector<Entity>>();
 }
 
 std::vector<Entity> StubPkbReader::getNextStarSameStmt(StatementType stmtType) const {
+    if (stmtType == StatementType::Assign) {
+        return std::vector<Entity>({
+            Statement(102, StatementType::Assign)
+        });
+    }
     return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextTypeStmt(StatementType type, Statement& statement) const {
+    if (type == StatementType::Stmt && statement == Statement(14, StatementType::Stmt)) {
+        return std::vector<Entity>({
+            Statement(13, StatementType::Call)
+        });
+    }
     return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextStarTypeStmt(StatementType type, Statement& statement) const {
+    if (type == StatementType::Stmt && statement == Statement(15, StatementType::Stmt)) {
+        return std::vector<Entity>({
+            Statement(1, StatementType::Call),
+            Statement(2, StatementType::Assign),
+            Statement(5, StatementType::Read)
+        });
+    }
     return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextTypeWildcard(StatementType type) const {
+    if (type == StatementType::If) {
+        return std::vector<Entity>({
+            Statement(11, StatementType::If),
+        });
+    }
     return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextStarTypeWildcard(StatementType type) const {
+    if (type == StatementType::While) {
+        return std::vector<Entity>({
+           Statement(20, StatementType::While),
+        });
+    }
     return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextStmtType(Statement& statement, StatementType type) const {
+    if (statement == Statement(23, StatementType::Stmt) && type == StatementType::Call) {
+        return std::vector<Entity>({
+            Statement(24, StatementType::Call)
+        });
+    }
     return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextStarStmtType(Statement& statement, StatementType type) const {
+    if (statement == Statement(23, StatementType::Stmt) && type == StatementType::If) {
+        return std::vector<Entity>({
+           Statement(26, StatementType::If)
+        });
+    }
     return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextWildcardType(StatementType type) const {
+    if (type == StatementType::Assign) {
+        return std::vector<Entity>({
+            Statement(10, StatementType::Assign),
+            Statement(12, StatementType::Assign),
+            Statement(13, StatementType::Assign),
+        });
+    }
     return std::vector<Entity>();
 }
 
 std::vector<Entity> StubPkbReader::getNextStarWildcardType(StatementType type) const {
+    if (type == StatementType::Read) {
+        return std::vector<Entity>({
+               Statement(10, StatementType::Read),
+               Statement(12, StatementType::Read),
+               Statement(15, StatementType::Read),
+        });
+    }
     return std::vector<Entity>();
 }
 
 bool StubPkbReader::isNext(Statement& statement1, Statement& statement2) const {
-    return false;
+    return true;
 }
 
 bool StubPkbReader::isNextStar(Statement& statement1, Statement& statement2) const {
-    return false;
+    if (statement1 == Statement(1, StatementType::Stmt) && statement2 == Statement(2, StatementType::Stmt)) {
+        return false;
+    }
+    return true;
 }
 
 bool StubPkbReader::hasNext() const {
-    return false;
+    return true;
 }
 
 bool StubPkbReader::hasNextStar() const {
-    return false;
+    return true;
 }
 
 bool StubPkbReader::hasBeforeStmt(Statement& statement) const {
@@ -533,7 +632,10 @@ bool StubPkbReader::hasBeforeStmt(Statement& statement) const {
 }
 
 bool StubPkbReader::hasBeforeStarStmt(Statement& statement) const {
-    return false;
+    if (statement == Statement(1, StatementType::Stmt)) {
+        return false;
+    }
+    return true;
 }
 
 bool StubPkbReader::hasAfterStmt(Statement& statement) const {
@@ -541,5 +643,24 @@ bool StubPkbReader::hasAfterStmt(Statement& statement) const {
 }
 
 bool StubPkbReader::hasAfterStarStmt(Statement& statement) const {
+    if (statement == Statement(1, StatementType::Stmt)) {
+        return true;
+    }
     return false;
+}
+
+std::vector<Entity> StubPkbReader::getIfStmtsByVar(Variable& var) const {
+    return std::vector<Entity>{};
+};
+
+std::vector<std::vector<Entity>> StubPkbReader::getAllIfStmtVarPair() const {
+    return std::vector<std::vector<Entity>>{};
+}
+
+std::vector<Entity> StubPkbReader::getWhileStmtsByVar(Variable& var) const {
+    return std::vector<Entity>{};
+}
+
+std::vector<std::vector<Entity>> StubPkbReader::getAllWhileStmtVarPair() const {
+    return std::vector<std::vector<Entity>>{};
 }

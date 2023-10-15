@@ -2,17 +2,17 @@
 
 #include <memory>
 
-#include "PKB/Managers/AssignmentManager.h"
+#include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/EntityStores/ConstantStore.h"
 #include "PKB/EntityStores/ProcedureStore.h"
 #include "PKB/EntityStores/StatementStore.h"
 #include "PKB/EntityStores/VariableStore.h"
 #include "PKB/RelationshipStores/FollowsRelationshipStore.h"
 #include "PKB/RelationshipStores/UsesRelationshipStore.h"
-#include "../Commons/Entities/Constant.h"
-#include "../Commons/Entities/Procedure.h"
-#include "../Commons/Entities/Variable.h"
-#include "../Commons/Entities/Statement.h"
+#include "Commons/Entities/Constant.h"
+#include "Commons/Entities/Procedure.h"
+#include "Commons/Entities/Variable.h"
+#include "Commons/Entities/Statement.h"
 #include "PKB/Managers/PkbWriterManager.h"
 #include "PKB/PkbTypes.h"
 
@@ -49,7 +49,12 @@ public:
     /*!
      * Adds new Assign Statement Entity into the PKB
      */
-    virtual void addAssignStatement(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) = 0;
+    virtual void addAssignStatement(std::shared_ptr<Statement> s) = 0;
+
+    /*!
+     * Add new Assign Pattern into the PKB
+     */
+    virtual void addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) = 0;
 
     /*!
      * Adds new Follows Relationship into the PKB
@@ -110,4 +115,30 @@ public:
      * Adds new Uses (Procedure-Variable) Relationship into the PKB
      */
     virtual void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) = 0;
+
+    /*!
+     * Adds new Next Relationship into the PKB
+     */
+    virtual void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) = 0;
+
+    /*!
+     * Sets the `cfgMap` received as argument as the CFGs for each procedures
+     */
+    virtual void setCFGMap(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap) = 0;
+
+    /*!
+     * Clears any Cache in the PKB that is used for Query Processing
+     *
+     */
+    virtual void clearCache() = 0;
+
+    /*!
+     * Adds new If Pattern into the PKB
+     */
+    virtual void addIfPattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) = 0;
+
+    /*!
+     * Adds new While Pattern into the PKB
+     */
+    virtual void addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) = 0;
 };

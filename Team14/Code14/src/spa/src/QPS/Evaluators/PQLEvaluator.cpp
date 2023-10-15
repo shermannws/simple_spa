@@ -43,23 +43,15 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
     return list_results;
 }
 
-Result PQLEvaluator::evaluate(Query& query) { //TODO handle multiclause
-
-    auto sResult = std::make_shared<Result>();
-    if (!query.getSuchThat().empty()) {
-        sResult = evaluateClause(query.getSuchThat()[0]);
+Result PQLEvaluator::evaluate(Query& query) {
+    std::shared_ptr<Result> result = evaluateConstraintClauses(query);
+    if (!result) {
+        result = evaluateSelect(query);
+        return *result;
     }
 
-    auto pResult = std::make_shared<Result>();
-    if (!query.getPattern().empty()) {
-        pResult = evaluateClause(query.getPattern()[0]);
-    }
-
-    auto result = resultHandler->getCombined(sResult, pResult);
-
-    // CASE FALSE OR EMPTY
-    if ((result->getType()==ResultType::Boolean && !result->getBoolResult()) ||
-        (result->getType()==ResultType::Tuples && result->getTuples().empty()) ){
+    // CASE FALSE
+    if (result->isFalse()){
         return *result;
     }
 
@@ -70,18 +62,45 @@ Result PQLEvaluator::evaluate(Query& query) { //TODO handle multiclause
         return *result;
     }
 
-    // CASE TRUE OR NON-EMPTY TABLE OR INVALID, evaluate select independently
-    auto selectResult = std::make_shared<Result>();
-    selectResult->setType(query.getSelect());
-    EntityPtr entity = query.getEntity(syn);
-    selectResult->setTuples(getAll(entity));
-    return *selectResult;
+    // CASE TRUE OR NON-EMPTY TABLE, evaluate select independently
+    result = evaluateSelect(query);
+    return *result;
 }
 
 std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Clause> clause) {
     std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()](pkbReader);
     clauseHandler->setStrategy(strategy);
     std::shared_ptr<Result> result = clauseHandler->executeClause(clause);
+    return result;
+}
+
+std::shared_ptr<Result> PQLEvaluator::evaluateConstraintClauses(const Query& query) {
+    if (query.getSuchThat().empty() && query.getPattern().empty()) {
+        return nullptr;
+    }
+
+    std::vector<std::shared_ptr<Result>> results;
+    for (const auto& clause : query.getSuchThat()) {
+        results.push_back(evaluateClause(clause));
+    }
+    for (const auto& clause : query.getPattern()) {
+        results.push_back(evaluateClause(clause));
+    }
+    auto result = resultHandler->cast(results[0]); // Initialize with the first element
+    for (size_t i = 1; i < results.size(); ++i) { // Combine with next until end of list
+        result = resultHandler->getCombined(result, results[i]);
+    }
+    return result;
+}
+
+std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const Query& query) {
+    std::shared_ptr<Result> result = std::make_shared<Result>();
+    result->setType(query.getSelect());
+
+    Synonym selectSyn = query.getSelect()[0];
+    std::shared_ptr<QueryEntity> entity = query.getEntity(selectSyn);
+    result->setTuples(getAll(entity));
+
     return result;
 }
 
