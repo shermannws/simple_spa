@@ -22,6 +22,10 @@ void Query::addSelect(const Synonym synonym){
     selects.push_back(synonym);
 }
 
+void Query::setBooleanResult() {
+    selects = std::vector<Synonym>();
+}
+
 void Query::addDeclaration(const EntityPtr& entity){
     declarations.insert({entity->getSynonym(), entity});
 }

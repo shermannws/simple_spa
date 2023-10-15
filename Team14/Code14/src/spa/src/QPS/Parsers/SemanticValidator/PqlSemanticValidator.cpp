@@ -19,7 +19,9 @@ void PqlSemanticValidator::validateDeclarations(const std::vector<Synonym>& syno
 
 void PqlSemanticValidator::validateResultClause(Query& query) {
     auto resultClause = query.getSelect();
-    if (!isBooleanResult(query, resultClause)) { // if tuple result-cl
+    if (isBooleanResult(query, resultClause)) { // if tuple result-cl
+       query.setBooleanResult();
+    } else {
         for (const auto& elem : resultClause) {
             validateResultElem(query, elem);
         }

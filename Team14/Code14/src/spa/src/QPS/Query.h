@@ -54,6 +54,8 @@ public:
      */
     void addSelect(const Synonym);
 
+    void setBooleanResult();
+
     /**
      * @brief Adds a such-that clause to the query.
      * @param clause A shared pointer to the SuchThatClause to be added.
