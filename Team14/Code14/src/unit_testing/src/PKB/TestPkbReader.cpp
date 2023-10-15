@@ -612,11 +612,51 @@ TEST_CASE("Next(*) Relationship") {
 }
 
 TEST_CASE("If Pattern") {
-    //TODO
+    Pkb pkb = Pkb();
+    auto reader = pkb.createPkbReader();
+    auto writer = pkb.createPkbWriter();
+
+    Statement s = Statement(1, StatementType::If);
+    Variable v = Variable("x");
+
+    REQUIRE(reader->getAllIf().empty());
+    REQUIRE(reader->getIfStmtsByVar(v).empty());
+    REQUIRE(reader->getAllIfStmtVarPair().empty());
+
+    writer->addIfPattern(make_shared<Statement>(s), make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>(v)));
+
+    // TODO: Enable when getAllIf is changed to IfPatternManager
+    // REQUIRE(reader->getAllIf().size() == 1);
+    // REQUIRE(reader->getAllIf()[0] == s);
+    REQUIRE(reader->getIfStmtsByVar(v).size() == 1);
+    REQUIRE(reader->getIfStmtsByVar(v)[0] == s);
+    REQUIRE(reader->getAllIfStmtVarPair().size() == 1);
+    REQUIRE(reader->getAllIfStmtVarPair()[0][0] == s);
+    REQUIRE(reader->getAllIfStmtVarPair()[0][1] == v);
 }
 
 TEST_CASE("While Pattern") {
-    //TODO
+    Pkb pkb = Pkb();
+    auto reader = pkb.createPkbReader();
+    auto writer = pkb.createPkbWriter();
+
+    Statement s = Statement(1, StatementType::While);
+    Variable v = Variable("x");
+
+    REQUIRE(reader->getAllWhile().empty());
+    REQUIRE(reader->getWhileStmtsByVar(v).empty());
+    REQUIRE(reader->getAllWhileStmtVarPair().empty());
+
+    writer->addWhilePattern(make_shared<Statement>(s), make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>(v)));
+
+    // TODO: Enable when getAllWhile is changed to WhilePatternManager
+    // REQUIRE(reader->getAllWhile().size() == 1);
+    // REQUIRE(reader->getAllWhile()[0] == s);
+    REQUIRE(reader->getWhileStmtsByVar(v).size() == 1);
+    REQUIRE(reader->getWhileStmtsByVar(v)[0] == s);
+    REQUIRE(reader->getAllWhileStmtVarPair().size() == 1);
+    REQUIRE(reader->getAllWhileStmtVarPair()[0][0] == s);
+    REQUIRE(reader->getAllWhileStmtVarPair()[0][1] == v);
 }
 
 TEST_CASE("Affects Relationship") {

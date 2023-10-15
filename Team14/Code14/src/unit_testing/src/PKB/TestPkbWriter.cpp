@@ -39,7 +39,9 @@ TEST_CASE("Test set new map as CFGStore through Writer") {
     REQUIRE_NOTHROW(writer->addUsesRelationship(make_shared<Statement>(1, StatementType::Print), make_shared<Variable>("x")));
     REQUIRE_NOTHROW(writer->addCallStatement(make_shared<Statement>(4, StatementType::Call)));
     REQUIRE_NOTHROW(writer->addIfStatement(make_shared<Statement>(5, StatementType::If)));
+    REQUIRE_NOTHROW(writer->addIfPattern(make_shared<Statement>(5, StatementType::If), make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>("x"))));
     REQUIRE_NOTHROW(writer->addWhileStatement(make_shared<Statement>(6, StatementType::While)));
+    REQUIRE_NOTHROW(writer->addWhilePattern(make_shared<Statement>(6, StatementType::While), make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>("x"))));
     REQUIRE_NOTHROW(writer->addModifiesRelationship(make_shared<Statement>(2, StatementType::Read), make_shared<Variable>("x")));
     REQUIRE_NOTHROW(writer->addParentRelationship(make_shared<Statement>(5, StatementType::If), make_shared<Statement>(6, StatementType::While), true));
     REQUIRE_NOTHROW(writer->addParentRelationship(make_shared<Statement>(5, StatementType::If), make_shared<Statement>(7, StatementType::While), false));
