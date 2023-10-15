@@ -40,4 +40,9 @@ public:
      * @brief An unordered map that maps AttrName type to the valid query entity types;
      */
     static std::unordered_map<AttrName, std::unordered_set<QueryEntityType>> attrNameToTypeMap;
+
+    static Synonym getSyn(std::string elem);
+
+    static AttrName getAttrName(std::string elem);
+
 };

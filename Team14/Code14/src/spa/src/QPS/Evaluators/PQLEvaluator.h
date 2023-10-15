@@ -49,11 +49,19 @@ private:
     std::shared_ptr<Result> evaluateClause(const std::shared_ptr<Clause> clause);
 
     /**
-     * @brief Evaluates the select clause of a query.
-     * @param query the query object to evaluate
+     * @brief Evaluates a select clause with the given entity as the result clause without any constraint clauses
+     * @param entity the selected entity to be evaluated
      * @return shared pointer to result object
      */
-    std::shared_ptr<Result> evaluateSelect(const Query& query);
+    std::shared_ptr<Result> evaluateSelect(const std::shared_ptr<QueryEntity> entity);
+
+    /**
+     * @brief Evaluates a subset of the result clause of a query
+     * @param query the query object whose result clause is being evaluated
+     * @param resultSyns the vector of synonyms representing the subset of result clause to be evaluated
+     * @return shared pointer to result object
+     */
+    std::shared_ptr<Result> evaluateResultClause(const Query& query, std::vector<Synonym> resultSyns);
 
     /**
      * @brief Evaluates all the constraint clauses of a query into a combined result, returns nullptr if
@@ -62,6 +70,14 @@ private:
      * @return shared pointer to result object
      */
     std::shared_ptr<Result> evaluateConstraintClauses(const Query& query);
+
+    /**
+     * @brief returns the vector of synonyms in the result clause that is not present in the result object
+     * @param resultClause vector of synonyms
+     * @param result result object
+     * @return vector of unevaluated synonyms
+     */
+    std::vector<Synonym> getUnevaluatedSyn (const std::vector<Synonym> resultClause, std::shared_ptr<Result> result);
 
 public:
     /**

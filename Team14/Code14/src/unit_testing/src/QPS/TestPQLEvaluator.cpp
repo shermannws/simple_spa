@@ -1112,10 +1112,8 @@ TEST_CASE("multiclause, pattern and suchThat - synonym not in tuple result table
     PQLEvaluator evaluator = PQLEvaluator(stubReader);
     auto resultObj = evaluator.evaluate(queryObj);
     auto results = evaluator.formatResult(queryObj, resultObj);
-    REQUIRE(resultObj.getType() == ResultType::Tuples);
-    REQUIRE(resultObj.getSynIndices()["c"] == 0);
-    REQUIRE(resultObj.getTuples().size() == 0);
-    REQUIRE(results.size() == 0);
+    REQUIRE(resultObj.getType() == ResultType::Boolean);
+    REQUIRE(resultObj.getBoolResult() == false);
 }
 
 

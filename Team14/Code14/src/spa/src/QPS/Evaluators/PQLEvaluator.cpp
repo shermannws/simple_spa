@@ -46,7 +46,7 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
 Result PQLEvaluator::evaluate(Query& query) {
     std::shared_ptr<Result> result = evaluateConstraintClauses(query);
     if (!result) {
-        result = evaluateSelect(query);
+        result = evaluateResultClause(query, query.getSelect());
         return *result;
     }
 
@@ -55,16 +55,29 @@ Result PQLEvaluator::evaluate(Query& query) {
         return *result;
     }
 
-    // CASE SYN IN RESULT TABLE, check if synonym in select is in result table
-    Synonym syn = query.getSelect()[0];
-    SynonymMap indicesMap = result->getSynIndices();
-    if (indicesMap.find(syn) != indicesMap.end()) {
+    // CASE RESULT-CLAUSE IN RESULT TABLE, check if ALL synonym in select is in result table
+    std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(query.getSelect(), result);
+    if (unevaluatedSyn.size() == 0){
         return *result;
     }
 
     // CASE TRUE OR NON-EMPTY TABLE, evaluate select independently
-    result = evaluateSelect(query);
-    return *result;
+    auto synResult = evaluateResultClause(query, unevaluatedSyn); // TODO project curr result first before combine?
+    auto finalResult = resultHandler->getCombined(result, synResult);
+    return *finalResult;
+
+}
+
+std::vector<Synonym> PQLEvaluator::getUnevaluatedSyn (const std::vector<Synonym> resultClause, std::shared_ptr<Result> result) {
+    auto synMap = result->getSynIndices();
+    std::vector<Synonym> unevaluated;
+    for (auto &elem : resultClause) {
+        auto syn = QPSUtil::getSyn(elem);
+        if (synMap.count(syn) == 0) {
+            unevaluated.push_back(syn);
+        }
+    }
+    return unevaluated;
 }
 
 std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Clause> clause) {
@@ -86,23 +99,32 @@ std::shared_ptr<Result> PQLEvaluator::evaluateConstraintClauses(const Query& que
     for (const auto& clause : query.getPattern()) {
         results.push_back(evaluateClause(clause));
     }
-    auto result = resultHandler->cast(results[0]); // Initialize with the first element
+    auto result = resultHandler->cast(results[0]); // Initialize with the first element //TODO extract this? (DRY)
     for (size_t i = 1; i < results.size(); ++i) { // Combine with next until end of list
         result = resultHandler->getCombined(result, results[i]);
     }
     return result;
 }
 
-std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const Query& query) {
+std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const std::shared_ptr<QueryEntity> entity) {
     std::shared_ptr<Result> result = std::make_shared<Result>();
-    result->setType(query.getSelect());
-
-    Synonym selectSyn = query.getSelect()[0];
-    std::shared_ptr<QueryEntity> entity = query.getEntity(selectSyn);
+    result->setType({entity->getSynonym()});
     result->setTuples(getAll(entity));
-
     return result;
 }
+
+std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(const Query& query, std::vector<Synonym> resultSyns) {
+    std::vector<std::shared_ptr<Result>> results;
+    for (auto &syn : resultSyns) {
+        results.push_back(evaluateSelect(query.getEntity(syn)));
+    }
+    auto synResult = resultHandler->cast(results[0]); // Initialize with the first element
+    for (size_t i = 1; i < results.size(); ++i) { // Combine with next until end of list
+        synResult = resultHandler->getCombined(synResult, results[i]);
+    }
+    return synResult;
+}
+
 
 std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& queryEntity) {
     QueryEntityType entityType = queryEntity->getType();
