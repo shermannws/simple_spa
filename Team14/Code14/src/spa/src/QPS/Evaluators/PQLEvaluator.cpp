@@ -25,7 +25,7 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
                 SynonymMap indicesMap = result.getSynIndices();
                 if (indicesMap.find(syn) != indicesMap.end()) {
                     int idx = indicesMap.at(syn);
-                    std::string value = *tuple[idx].getEntityValue();
+                    std::string value = tuple[idx].getEntityValue();
                     tmp.emplace_back(value);
                 }
             }
