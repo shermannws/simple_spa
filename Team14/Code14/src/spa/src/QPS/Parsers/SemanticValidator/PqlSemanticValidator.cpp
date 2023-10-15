@@ -17,23 +17,23 @@ void PqlSemanticValidator::validateDeclarations(const std::vector<Synonym>& syno
     }
 }
 
-void PqlSemanticValidator::validateResultClause(const Query& query) {
-    // if size == 1 and "BOOLEAN" and undeclared
+void PqlSemanticValidator::validateResultClause(Query& query) {
     auto resultClause = query.getSelect();
-    if (isBoolean(resultClause)) {
-        // set query as type bool? validateResultBoolean()
-    } else {
+    if (!isBooleanResult(query, resultClause)) { // if tuple result-cl
         for (const auto& elem : resultClause) {
-            std::size_t dotPos = elem.find('.');
-            if (dotPos != std::string::npos){ // attrRef
-                validateResultAttrRef(query, elem, dotPos);
-            } else {  // synonym
-                validateResultSynonym(query, elem);
-            }
+            validateResultElem(query, elem);
         }
     }
 }
 
+void PqlSemanticValidator::validateResultElem(const Query& query, Synonym elem) {
+    std::size_t dotPos = elem.find('.');
+    if (dotPos != std::string::npos){ // attrRef
+        validateResultAttrRef(query, elem, dotPos);
+    } else {  // synonym
+        validateResultSynonym(query, elem);
+    }
+}
 
 void PqlSemanticValidator::validateResultSynonym(const Query& query, Synonym elem) {
     EntityPtr entity = query.getEntity(elem);
@@ -57,8 +57,8 @@ void PqlSemanticValidator::validateResultAttrRef(const Query& query, Synonym ele
 }
 
 
-bool PqlSemanticValidator::isBoolean(std::vector<Synonym> resultClause) {
-    return (resultClause.size() == 1 && resultClause[0] == "BOOLEAN");
+bool PqlSemanticValidator::isBooleanResult(const Query& query, std::vector<Synonym> resultClause) {
+    return (resultClause.size() == 1 && resultClause[0] == "BOOLEAN" && !query.getEntity("BOOLEAN"));
 }
 
 

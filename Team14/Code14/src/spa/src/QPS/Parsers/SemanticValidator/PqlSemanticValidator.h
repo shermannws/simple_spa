@@ -25,7 +25,7 @@ public:
      * @brief Validates the result clause semantically, throws a Semantic exception if synonym is undeclared
      * @param query the query object
      */
-    void validateResultClause(const Query& query);
+    void validateResultClause(Query& query);
 
     /**
      * @brief Validates all the clauses in the given query
@@ -52,7 +52,9 @@ private:
 
     void validateResultAttrRef(const Query& query, Synonym elem, size_t dotPos);
 
-    bool isBoolean(std::vector<Synonym> resultClause);
+    void validateResultElem(const Query& query, Synonym elem);
+
+    bool isBooleanResult(const Query& query, std::vector<Synonym> resultClause);
 
 };
 
