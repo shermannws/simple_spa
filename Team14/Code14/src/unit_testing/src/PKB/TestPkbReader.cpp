@@ -625,9 +625,6 @@ TEST_CASE("If Pattern") {
 
     writer->addIfPattern(make_shared<Statement>(s), make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>(v)));
 
-    // TODO: Enable when getAllIf is changed to IfPatternManager
-    // REQUIRE(reader->getAllIf().size() == 1);
-    // REQUIRE(reader->getAllIf()[0] == s);
     REQUIRE(reader->getIfStmtsByVar(v).size() == 1);
     REQUIRE(reader->getIfStmtsByVar(v)[0] == s);
     REQUIRE(reader->getAllIfStmtVarPair().size() == 1);
@@ -649,9 +646,6 @@ TEST_CASE("While Pattern") {
 
     writer->addWhilePattern(make_shared<Statement>(s), make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>(v)));
 
-    // TODO: Enable when getAllWhile is changed to WhilePatternManager
-    // REQUIRE(reader->getAllWhile().size() == 1);
-    // REQUIRE(reader->getAllWhile()[0] == s);
     REQUIRE(reader->getWhileStmtsByVar(v).size() == 1);
     REQUIRE(reader->getWhileStmtsByVar(v)[0] == s);
     REQUIRE(reader->getAllWhileStmtVarPair().size() == 1);
