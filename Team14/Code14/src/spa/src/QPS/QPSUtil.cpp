@@ -10,6 +10,7 @@
 #include "QPS/Evaluators/Strategies/CallsSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/CallsStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
+#include "QPS/Evaluators/Strategies/IfPatternStrategy.h"
 
 std::unordered_map<StringRep, ClauseType> QPSUtil::repClauseTypeMap = {
         {"Uses", ClauseType::Uses},
@@ -71,6 +72,7 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
     {ClauseType::Calls, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<CallsSuchThatStrategy>(pkbReader);}},
     {ClauseType::CallsStar, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<CallsStarSuchThatStrategy>(pkbReader);}},
     {ClauseType::Assign, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<AssignPatternStrategy>(pkbReader);}},
+    {ClauseType::If, [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> { return std::make_shared<IfPatternStrategy>(pkbReader);}},
 };
 
 std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
