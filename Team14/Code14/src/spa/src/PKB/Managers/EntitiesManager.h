@@ -1,9 +1,5 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-#include <algorithm>
-
 #include "PKB/EntityStores/ConstantStore.h"
 #include "PKB/EntityStores/ProcedureStore.h"
 #include "PKB/EntityStores/StatementStore.h"

@@ -648,3 +648,19 @@ bool StubPkbReader::hasAfterStarStmt(Statement& statement) const {
     }
     return false;
 }
+
+std::vector<Entity> StubPkbReader::getIfStmtsByVar(Variable& var) const {
+    return std::vector<Entity>{};
+};
+
+std::vector<std::vector<Entity>> StubPkbReader::getAllIfStmtVarPair() const {
+    return std::vector<std::vector<Entity>>{};
+}
+
+std::vector<Entity> StubPkbReader::getWhileStmtsByVar(Variable& var) const {
+    return std::vector<Entity>{};
+}
+
+std::vector<std::vector<Entity>> StubPkbReader::getAllWhileStmtVarPair() const {
+    return std::vector<std::vector<Entity>>{};
+}

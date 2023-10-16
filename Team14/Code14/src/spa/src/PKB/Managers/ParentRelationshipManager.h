@@ -1,10 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-
 #include "PKB/RelationshipStores/ParentRelationshipStore.h"
-#include "Commons/Entities/Statement.h"
 #include "PKB/Managers/StmtToStmtRelationshipManager.h"
 
 /**

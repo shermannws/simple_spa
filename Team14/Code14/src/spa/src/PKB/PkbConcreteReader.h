@@ -820,4 +820,30 @@ public:
      * @return True if the given statement is executed before any statement, false otherwise
      */
     bool hasAfterStarStmt(Statement& statement) const override;
+
+    /**
+     * Returns a vector of If Statements with the given variable as a control variable
+     * @param var The variable to be checked
+     * @return A vector of If Statements
+     */
+    std::vector<Entity> getIfStmtsByVar(Variable& var) const override;
+
+    /**
+     * Returns a vector of vectors containing If Statement and Variable pairs where the variable is the control variable of the If Statement
+     * @return A vector of vectors containing If Statement and Variable pairs
+     */
+    std::vector<std::vector<Entity>> getAllIfStmtVarPair() const override;
+
+    /**
+     * Returns a vector of While Statements with the given variable as a control variable
+     * @param var The variable to be checked
+     * @return A vector of While Statements
+     */
+    std::vector<Entity> getWhileStmtsByVar(Variable& var) const override;
+
+    /**
+     * Returns a vector of vectors containing While Statement and Variable pairs where the variable is the control variable of the While Statement
+     * @return A vector of vectors containing While Statement and Variable pairs
+     */
+    std::vector<std::vector<Entity>> getAllWhileStmtVarPair() const override;
 };

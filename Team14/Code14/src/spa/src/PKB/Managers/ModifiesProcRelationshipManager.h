@@ -1,13 +1,7 @@
 #pragma once
 
-#include <memory>
-#include <utility>
-#include <vector>
-
 #include "ProcToVarRelationshipManager.h"
 #include "PKB/RelationshipStores/ModifiesProcRelationshipStore.h"
-#include "Commons/Entities/Procedure.h"
-#include "Commons/Entities/Variable.h"
 
 /**
  * @class ModifiesProcRelationshipManager is responsible for storing and retrieving the Modifies relationships (Procedure)
