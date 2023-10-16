@@ -5,6 +5,8 @@
 #include <vector>
 
 #include "Commons/Entities/Entity.h"
+#include "PKB/PatternStore/IfPatternStore.h"
+#include "PKB/PatternStore/WhilePatternStore.h"
 #include "PKB/RelationshipStores/RelationshipStore.h"
 #include "PKB/EntityStores/EntityStore.h"
 #include "Commons/Entities/Procedure.h"
@@ -153,6 +155,15 @@ public:
     getLeftEntitiesFromRightKeyNoMatch(RelationshipStore<L, R>& store, R& key);
 
     /**
+     * @brief A function that retrieves left entities based on a right key when no matcher function is required
+     * @param store The store to be retrieved from
+     * @param key The right key to be used to retrieve the left entities
+     * @return A vector of left entities
+     */
+    static std::vector<Entity>
+    getLeftEntitiesFromRightKeyNoMatch(ConditionPatternStore& store, Variable& key);
+
+    /**
      * @brief A function that retrieves right entities based on a left key when a matcher function for statement type is required
      * @tparam L The type of the left object stored in the store
      * @param store The store to be retrieved from
@@ -209,6 +220,13 @@ public:
     static std::vector<Entity> getRightKeysNoMatch(RelationshipStore<K, V>& store);
 
     /**
+     * @brief A function that retrieves left keys from a double map-based store when no matcher function is required
+     * @param store The store to be retrieved from
+     * @return A vector of left keys from the map
+     */
+    static std::vector<Entity> getLeftKeysNoMatch(ConditionPatternStore& store);
+
+    /**
      * @brief A function that retrieves left keys from a double map-based store when a matcher function for statement type is required
      * @tparam V The type of the right object stored in the store
      * @param store The store to be retrieved from
@@ -240,7 +258,7 @@ public:
      * @return A vector of key-value pairs from the map
      */
     template <typename R, typename S, typename K, typename V>
-    static std::vector<std::vector<R>> getPair(S& store, std::function<bool(K &)> leftMatcher, std::function<bool(V &)> rightMatcher);
+    static std::vector<std::vector<R>> getPairs(S& store, std::function<bool(K &)> leftMatcher, std::function<bool(V &)> rightMatcher);
 
     /**
      * @brief A function that retrieves key-value pairs from a map-based store when no matcher function is required
@@ -250,7 +268,14 @@ public:
      * @return A vector of key-value pairs from the map
      */
     template <typename K, typename V>
-    static std::vector<std::vector<Entity>> getPairNoMatch(RelationshipStore<K, V>& store);
+    static std::vector<std::vector<Entity>> getPairsNoMatch(RelationshipStore<K, V>& store);
+
+    /**
+     * @brief A function that retrieves key-value pairs from a map-based store when no matcher function is required
+     * @param store The store to be retrieved from
+     * @return A vector of key-value pairs from the map
+     */
+    static std::vector<std::vector<Entity>> getPairsNoMatch(ConditionPatternStore& store);
 
     /**
      * @brief A function that removes duplicates in a vector of object of type E

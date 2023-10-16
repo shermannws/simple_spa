@@ -1,12 +1,12 @@
 #include <memory>
 
 #include "catch.hpp"
-#include "PKB/Managers/AssignmentManager.h"
+#include "PKB/Managers/AssignPatternManager.h"
 
 using namespace std;
 
 TEST_CASE("Test Assignment Retrieval") {
-    AssignmentManager assignmentManager = AssignmentManager();
+    AssignPatternManager assignmentManager = AssignPatternManager();
 
     // Test a = w + (x + y) + z
     shared_ptr<Statement> statement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
@@ -20,8 +20,8 @@ TEST_CASE("Test Assignment Retrieval") {
     shared_ptr<string> expression2 = make_shared<string>("w+x+y+z");
     shared_ptr<Assignment> assignment1 = make_shared<Assignment>(Assignment(statement1, variableA, expression1));
     shared_ptr<Assignment> assignment2 = make_shared<Assignment>(Assignment(statement2, variableA, expression2));
-    assignmentManager.addAssignment(assignment1);
-    assignmentManager.addAssignment(assignment2);
+    assignmentManager.storeAssignPattern(assignment1);
+    assignmentManager.storeAssignPattern(assignment2);
 
     string empty;
     string query = "(x+y)";

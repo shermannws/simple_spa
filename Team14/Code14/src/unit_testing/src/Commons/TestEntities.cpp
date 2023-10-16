@@ -13,7 +13,7 @@ TEST_CASE("Test Entity - Constant") {
 	ConstantValue mockValue = "1";
 	Constant c = Constant(mockValue);
 
-	REQUIRE(mockValue == *c.getEntityValue());
+	REQUIRE(mockValue == c.getEntityValue());
     REQUIRE(c.getEntityType() == EntityType::Constant);
 }
 
@@ -21,7 +21,7 @@ TEST_CASE("Test Entity - Procedure") {
 	ProcedureName mockName = "mockName";
 	Procedure p = Procedure(mockName);
 
-	REQUIRE(mockName == *p.getEntityValue());
+	REQUIRE(mockName == p.getEntityValue());
     REQUIRE(p.getEntityType() == EntityType::Procedure);
 }
 
@@ -29,7 +29,7 @@ TEST_CASE("Test Entity - Statement") {
 	StatementNumber mockLineNo = 1;
 	Statement s = Statement(mockLineNo, StatementType::Assign);
 
-	REQUIRE(std::to_string(mockLineNo) == *s.getEntityValue());
+	REQUIRE(std::to_string(mockLineNo) == s.getEntityValue());
     REQUIRE(s.getEntityType() == EntityType::Statement);
 }
 
@@ -37,7 +37,7 @@ TEST_CASE("Test Entity - Variable") {
 	VariableName mockName = "mockName";
 	Variable v = Variable(mockName);
 
-	REQUIRE(mockName == *v.getEntityValue());
+	REQUIRE(mockName == v.getEntityValue());
     REQUIRE(v.getEntityType() == EntityType::Variable);
 }
 

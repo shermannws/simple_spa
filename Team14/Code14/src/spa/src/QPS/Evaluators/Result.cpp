@@ -2,6 +2,8 @@
 
 Result::Result() : type(ResultType::Invalid), boolResult(false) {}
 
+Result::Result(bool value) : type(ResultType::Boolean), boolResult(false) {}
+
 ResultType Result::getType() {
     return type;
 }
@@ -44,3 +46,20 @@ ResultTuples& Result::getTuples() {
 SynonymMap& Result::getSynIndices() {
     return synIndices;
 }
+
+bool Result::isTrue() {
+    return (type == ResultType::Boolean && boolResult);
+}
+
+bool Result::isFalse() {
+    return (type == ResultType::Boolean && !boolResult);
+}
+
+bool Result::isEmpty() {
+    return (type == ResultType::Tuples && tuples.empty());
+}
+
+bool Result::isInvalid() {
+    return type == ResultType::Invalid;
+}
+
