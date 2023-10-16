@@ -10,16 +10,18 @@
 class StmtrefProcVarHandler : public SemanticValHandler {
 public:
     /**
-     * @brief Handles (stmtRef/proc, var) semantic validation of the Clause in the Query
+     * @brief Handles (stmtRef/proc, var) semantic validation of the Clause in
+     * the Query
      * @param query The Query object
      * @param clause The shared pointer of the Clause
      */
     void handle(const Query &query, std::shared_ptr<Clause> clause) override;
 
     /**
-     * @brief Handles the Refs of the clause by checking the semantics and setting the appropriate RefType
+     * @brief Handles the Refs of the clause by checking the semantics and
+     * setting the appropriate RefType
      * @param leftRef The first parameter of the Clause
      * @param rightRef The second parameter of the Clause
      */
-    void handleRefType(Ref& leftRef, Ref& rightRef);
+    void handleRefType(Ref &leftRef, Ref &rightRef);
 };

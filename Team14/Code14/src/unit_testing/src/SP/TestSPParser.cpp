@@ -1,16 +1,16 @@
 #include <vector>
 
-#include "catch.hpp"
+#include "SP/AST/Nodes/ProgramNode.h"
 #include "SP/SPParser.h"
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
-#include "SP/AST/Nodes/ProgramNode.h"
-#include "TestingUtilities/ASTPrinter/ASTPrinter.h"
 #include "TestingUtilities/ASTComparer/ASTComparer.h"
+#include "TestingUtilities/ASTPrinter/ASTPrinter.h"
+#include "catch.hpp"
 
 TEST_CASE("Test parse with one procedure, one read statement") {
     SPParser parser;
-    VariableName varName= "num1";
+    VariableName varName = "num1";
     ProcedureName procName = "doMath";
     std::vector<SPToken> tokens = {
             SPToken(TokenType::Name, "procedure"),
@@ -19,21 +19,24 @@ TEST_CASE("Test parse with one procedure, one read statement") {
             SPToken(TokenType::Name, "read"),
             SPToken(TokenType::Name, varName),
             SPToken(TokenType::Semicolon, ";"),
-            SPToken(TokenType::CloseCurlyParenthesis, "}")
-    };
+            SPToken(TokenType::CloseCurlyParenthesis, "}")};
 
     std::shared_ptr<ProgramNode> parsedRootNode = parser.parse(tokens);
 
     // Create AST
-    std::shared_ptr<VariableNode> varNode = std::make_shared<VariableNode>(varName);
+    std::shared_ptr<VariableNode> varNode =
+            std::make_shared<VariableNode>(varName);
     std::shared_ptr<ReadNode> readNode = std::make_shared<ReadNode>(1, varNode);
 
-    std::vector<std::shared_ptr<StatementNode>> statements = { readNode };
-    std::shared_ptr<StatementListNode> statementListNode = std::make_shared<StatementListNode>(statements);
+    std::vector<std::shared_ptr<StatementNode>> statements = {readNode};
+    std::shared_ptr<StatementListNode> statementListNode =
+            std::make_shared<StatementListNode>(statements);
 
-    std::shared_ptr<ProcedureNode> procedureNode = std::make_shared<ProcedureNode>(procName, statementListNode);
-    std::vector<std::shared_ptr<ProcedureNode>> procedures = { procedureNode };
-    std::shared_ptr<ProgramNode> programNode = std::make_shared<ProgramNode>(procedures);
+    std::shared_ptr<ProcedureNode> procedureNode =
+            std::make_shared<ProcedureNode>(procName, statementListNode);
+    std::vector<std::shared_ptr<ProcedureNode>> procedures = {procedureNode};
+    std::shared_ptr<ProgramNode> programNode =
+            std::make_shared<ProgramNode>(procedures);
 
     REQUIRE(ASTComparer::isSameAST(parsedRootNode, programNode));
 }
@@ -49,21 +52,25 @@ TEST_CASE("Test parse with one procedure, one print statement") {
             SPToken(TokenType::Name, "print"),
             SPToken(TokenType::Name, varName),
             SPToken(TokenType::Semicolon, ";"),
-            SPToken(TokenType::CloseCurlyParenthesis, "}")
-    };
+            SPToken(TokenType::CloseCurlyParenthesis, "}")};
 
     std::shared_ptr<ProgramNode> parsedRootNode = parser.parse(tokens);
 
     // Create AST
-    std::shared_ptr<VariableNode> varNode = std::make_shared<VariableNode>(varName);
-    std::shared_ptr<PrintNode> printNode = std::make_shared<PrintNode>(1, varNode);
+    std::shared_ptr<VariableNode> varNode =
+            std::make_shared<VariableNode>(varName);
+    std::shared_ptr<PrintNode> printNode =
+            std::make_shared<PrintNode>(1, varNode);
 
-    std::vector<std::shared_ptr<StatementNode>> statements = { printNode };
-    std::shared_ptr<StatementListNode> statementListNode = std::make_shared<StatementListNode>(statements);
+    std::vector<std::shared_ptr<StatementNode>> statements = {printNode};
+    std::shared_ptr<StatementListNode> statementListNode =
+            std::make_shared<StatementListNode>(statements);
 
-    std::shared_ptr<ProcedureNode> procedureNode = std::make_shared<ProcedureNode>(procName, statementListNode);
-    std::vector<std::shared_ptr<ProcedureNode>> procedures = { procedureNode };
-    std::shared_ptr<ProgramNode> programNode = std::make_shared<ProgramNode>(procedures);
+    std::shared_ptr<ProcedureNode> procedureNode =
+            std::make_shared<ProcedureNode>(procName, statementListNode);
+    std::vector<std::shared_ptr<ProcedureNode>> procedures = {procedureNode};
+    std::shared_ptr<ProgramNode> programNode =
+            std::make_shared<ProgramNode>(procedures);
 
     REQUIRE(ASTComparer::isSameAST(parsedRootNode, programNode));
 }
@@ -81,22 +88,27 @@ TEST_CASE("Test parse with one procedure, one assign statement") {
             SPToken(TokenType::Equals, "="),
             SPToken(TokenType::Integer, constVal),
             SPToken(TokenType::Semicolon, ";"),
-            SPToken(TokenType::CloseCurlyParenthesis, "}")
-    };
+            SPToken(TokenType::CloseCurlyParenthesis, "}")};
 
     std::shared_ptr<ProgramNode> parsedRootNode = parser.parse(tokens);
 
     // Create AST
-    std::shared_ptr<VariableNode> varNode = std::make_shared<VariableNode>(varName);
-    std::shared_ptr<ExpressionNode> exprNode = std::make_shared<ConstantNode>(constVal);
-    std::shared_ptr<AssignNode> assignNode = std::make_shared<AssignNode>(1, varNode, exprNode);
+    std::shared_ptr<VariableNode> varNode =
+            std::make_shared<VariableNode>(varName);
+    std::shared_ptr<ExpressionNode> exprNode =
+            std::make_shared<ConstantNode>(constVal);
+    std::shared_ptr<AssignNode> assignNode =
+            std::make_shared<AssignNode>(1, varNode, exprNode);
 
-    std::vector<std::shared_ptr<StatementNode>> statements = { assignNode };
-    std::shared_ptr<StatementListNode> statementListNode = std::make_shared<StatementListNode>(statements);
+    std::vector<std::shared_ptr<StatementNode>> statements = {assignNode};
+    std::shared_ptr<StatementListNode> statementListNode =
+            std::make_shared<StatementListNode>(statements);
 
-    std::shared_ptr<ProcedureNode> procedureNode = std::make_shared<ProcedureNode>(procName, statementListNode);
-    std::vector<std::shared_ptr<ProcedureNode>> procedures = { procedureNode };
-    std::shared_ptr<ProgramNode> programNode = std::make_shared<ProgramNode>(procedures);
+    std::shared_ptr<ProcedureNode> procedureNode =
+            std::make_shared<ProcedureNode>(procName, statementListNode);
+    std::vector<std::shared_ptr<ProcedureNode>> procedures = {procedureNode};
+    std::shared_ptr<ProgramNode> programNode =
+            std::make_shared<ProgramNode>(procedures);
 
     REQUIRE(ASTComparer::isSameAST(parsedRootNode, programNode));
 
@@ -105,7 +117,8 @@ TEST_CASE("Test parse with one procedure, one assign statement") {
     printerTraverser.traverseAndPrint(programNode);
 }
 
-TEST_CASE("Test parse with one procedure, one assign statement, different RHS") {
+TEST_CASE(
+        "Test parse with one procedure, one assign statement, different RHS") {
     SPParser parser;
 
     SECTION("assign statement, RHS constant") {
@@ -120,21 +133,27 @@ TEST_CASE("Test parse with one procedure, one assign statement, different RHS") 
                 SPToken(TokenType::Equals, "="),
                 SPToken(TokenType::Integer, constVal),
                 SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
+                SPToken(TokenType::CloseCurlyParenthesis, "}")};
         std::shared_ptr<ProgramNode> parsedRootNode = parser.parse(tokens);
 
         // Create AST
-        std::shared_ptr<VariableNode> varNode = std::make_shared<VariableNode>(varName);
-        std::shared_ptr<ExpressionNode> exprNode = std::make_shared<ConstantNode>(constVal);
-        std::shared_ptr<AssignNode> assignNode = std::make_shared<AssignNode>(1, varNode, exprNode);
+        std::shared_ptr<VariableNode> varNode =
+                std::make_shared<VariableNode>(varName);
+        std::shared_ptr<ExpressionNode> exprNode =
+                std::make_shared<ConstantNode>(constVal);
+        std::shared_ptr<AssignNode> assignNode =
+                std::make_shared<AssignNode>(1, varNode, exprNode);
 
-        std::vector<std::shared_ptr<StatementNode>> statements = { assignNode };
-        std::shared_ptr<StatementListNode> statementListNode = std::make_shared<StatementListNode>(statements);
+        std::vector<std::shared_ptr<StatementNode>> statements = {assignNode};
+        std::shared_ptr<StatementListNode> statementListNode =
+                std::make_shared<StatementListNode>(statements);
 
-        std::shared_ptr<ProcedureNode> procedureNode = std::make_shared<ProcedureNode>(procName, statementListNode);
-        std::vector<std::shared_ptr<ProcedureNode>> procedures = { procedureNode };
-        std::shared_ptr<ProgramNode> programNode = std::make_shared<ProgramNode>(procedures);
+        std::shared_ptr<ProcedureNode> procedureNode =
+                std::make_shared<ProcedureNode>(procName, statementListNode);
+        std::vector<std::shared_ptr<ProcedureNode>> procedures = {
+                procedureNode};
+        std::shared_ptr<ProgramNode> programNode =
+                std::make_shared<ProgramNode>(procedures);
 
         REQUIRE(ASTComparer::isSameAST(parsedRootNode, programNode));
     }
@@ -151,21 +170,27 @@ TEST_CASE("Test parse with one procedure, one assign statement, different RHS") 
                 SPToken(TokenType::Equals, "="),
                 SPToken(TokenType::Name, varName2),
                 SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
+                SPToken(TokenType::CloseCurlyParenthesis, "}")};
         std::shared_ptr<ProgramNode> parsedRootNode = parser.parse(tokens);
 
         // Create AST
-        std::shared_ptr<VariableNode> varNode = std::make_shared<VariableNode>(varName1);
-        std::shared_ptr<ExpressionNode> exprNode = std::make_shared<VariableNode>(varName2);
-        std::shared_ptr<AssignNode> assignNode = std::make_shared<AssignNode>(1, varNode, exprNode);
+        std::shared_ptr<VariableNode> varNode =
+                std::make_shared<VariableNode>(varName1);
+        std::shared_ptr<ExpressionNode> exprNode =
+                std::make_shared<VariableNode>(varName2);
+        std::shared_ptr<AssignNode> assignNode =
+                std::make_shared<AssignNode>(1, varNode, exprNode);
 
-        std::vector<std::shared_ptr<StatementNode>> statements = { assignNode };
-        std::shared_ptr<StatementListNode> statementListNode = std::make_shared<StatementListNode>(statements);
+        std::vector<std::shared_ptr<StatementNode>> statements = {assignNode};
+        std::shared_ptr<StatementListNode> statementListNode =
+                std::make_shared<StatementListNode>(statements);
 
-        std::shared_ptr<ProcedureNode> procedureNode = std::make_shared<ProcedureNode>(procName, statementListNode);
-        std::vector<std::shared_ptr<ProcedureNode>> procedures = { procedureNode };
-        std::shared_ptr<ProgramNode> programNode = std::make_shared<ProgramNode>(procedures);
+        std::shared_ptr<ProcedureNode> procedureNode =
+                std::make_shared<ProcedureNode>(procName, statementListNode);
+        std::vector<std::shared_ptr<ProcedureNode>> procedures = {
+                procedureNode};
+        std::shared_ptr<ProgramNode> programNode =
+                std::make_shared<ProgramNode>(procedures);
 
         REQUIRE(ASTComparer::isSameAST(parsedRootNode, programNode));
     }
@@ -185,27 +210,32 @@ TEST_CASE("Test parse with one procedure, one assign statement, different RHS") 
                 SPToken(TokenType::ArithmeticOperator, "+"),
                 SPToken(TokenType::Integer, constVal),
                 SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
+                SPToken(TokenType::CloseCurlyParenthesis, "}")};
         std::shared_ptr<ProgramNode> parsedRootNode = parser.parse(tokens);
 
         // Create AST
-        std::shared_ptr<VariableNode> varNode = std::make_shared<VariableNode>(varName1);
+        std::shared_ptr<VariableNode> varNode =
+                std::make_shared<VariableNode>(varName1);
 
-        std::shared_ptr<ExpressionNode> exprNode = std::make_shared<ArithmeticExpressionNode>(
-                ArithmeticOperatorType::Plus,
-                std::make_shared<VariableNode>(varName2),
-                std::make_shared<ConstantNode>(constVal)
-            );
+        std::shared_ptr<ExpressionNode> exprNode =
+                std::make_shared<ArithmeticExpressionNode>(
+                        ArithmeticOperatorType::Plus,
+                        std::make_shared<VariableNode>(varName2),
+                        std::make_shared<ConstantNode>(constVal));
 
-        std::shared_ptr<AssignNode> assignNode = std::make_shared<AssignNode>(1, varNode, exprNode);
+        std::shared_ptr<AssignNode> assignNode =
+                std::make_shared<AssignNode>(1, varNode, exprNode);
 
-        std::vector<std::shared_ptr<StatementNode>> statements = { assignNode };
-        std::shared_ptr<StatementListNode> statementListNode = std::make_shared<StatementListNode>(statements);
+        std::vector<std::shared_ptr<StatementNode>> statements = {assignNode};
+        std::shared_ptr<StatementListNode> statementListNode =
+                std::make_shared<StatementListNode>(statements);
 
-        std::shared_ptr<ProcedureNode> procedureNode = std::make_shared<ProcedureNode>(procName, statementListNode);
-        std::vector<std::shared_ptr<ProcedureNode>> procedures = { procedureNode };
-        std::shared_ptr<ProgramNode> programNode = std::make_shared<ProgramNode>(procedures);
+        std::shared_ptr<ProcedureNode> procedureNode =
+                std::make_shared<ProcedureNode>(procName, statementListNode);
+        std::vector<std::shared_ptr<ProcedureNode>> procedures = {
+                procedureNode};
+        std::shared_ptr<ProgramNode> programNode =
+                std::make_shared<ProgramNode>(procedures);
 
         REQUIRE(ASTComparer::isSameAST(parsedRootNode, programNode));
     }
@@ -223,8 +253,7 @@ TEST_CASE("Test parse with one procedure, one assign statement, different RHS") 
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
                 // x = v + x * y + z * t
                 // varNode
-                SPToken(TokenType::Name, varX),
-                SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, varX), SPToken(TokenType::Equals, "="),
                 // exprNode
                 SPToken(TokenType::Name, varV),
                 SPToken(TokenType::ArithmeticOperator, "+"),
@@ -236,43 +265,45 @@ TEST_CASE("Test parse with one procedure, one assign statement, different RHS") 
                 SPToken(TokenType::ArithmeticOperator, "*"),
                 SPToken(TokenType::Name, varT),
                 SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
+                SPToken(TokenType::CloseCurlyParenthesis, "}")};
         std::shared_ptr<ProgramNode> parsedRootNode = parser.parse(tokens);
 
         // Create AST
-        std::shared_ptr<VariableNode> varNode = std::make_shared<VariableNode>(varX);
+        std::shared_ptr<VariableNode> varNode =
+                std::make_shared<VariableNode>(varX);
 
         // create exprNode
-        std::shared_ptr<ArithmeticExpressionNode> x_y = std::make_shared<ArithmeticExpressionNode>(
-                ArithmeticOperatorType::Times,
-                std::make_shared<VariableNode>(varX),
-                std::make_shared<VariableNode>(varY)
-        );
-        std::shared_ptr<ArithmeticExpressionNode> z_t = std::make_shared<ArithmeticExpressionNode>(
-                ArithmeticOperatorType::Times,
-                std::make_shared<VariableNode>(varZ),
-                std::make_shared<VariableNode>(varT)
-        );
-        std::shared_ptr<ArithmeticExpressionNode> v_xy = std::make_shared<ArithmeticExpressionNode>(
-                ArithmeticOperatorType::Plus,
-                std::make_shared<VariableNode>(varV),
-                x_y
-        );
-        std::shared_ptr<ExpressionNode> vxy_zt = std::make_shared<ArithmeticExpressionNode>(
-                ArithmeticOperatorType::Plus,
-                v_xy,
-                z_t
-        );
+        std::shared_ptr<ArithmeticExpressionNode> x_y =
+                std::make_shared<ArithmeticExpressionNode>(
+                        ArithmeticOperatorType::Times,
+                        std::make_shared<VariableNode>(varX),
+                        std::make_shared<VariableNode>(varY));
+        std::shared_ptr<ArithmeticExpressionNode> z_t =
+                std::make_shared<ArithmeticExpressionNode>(
+                        ArithmeticOperatorType::Times,
+                        std::make_shared<VariableNode>(varZ),
+                        std::make_shared<VariableNode>(varT));
+        std::shared_ptr<ArithmeticExpressionNode> v_xy =
+                std::make_shared<ArithmeticExpressionNode>(
+                        ArithmeticOperatorType::Plus,
+                        std::make_shared<VariableNode>(varV), x_y);
+        std::shared_ptr<ExpressionNode> vxy_zt =
+                std::make_shared<ArithmeticExpressionNode>(
+                        ArithmeticOperatorType::Plus, v_xy, z_t);
 
-        std::shared_ptr<AssignNode> assignNode = std::make_shared<AssignNode>(1, varNode, vxy_zt);
+        std::shared_ptr<AssignNode> assignNode =
+                std::make_shared<AssignNode>(1, varNode, vxy_zt);
 
-        std::vector<std::shared_ptr<StatementNode>> statements = { assignNode };
-        std::shared_ptr<StatementListNode> statementListNode = std::make_shared<StatementListNode>(statements);
+        std::vector<std::shared_ptr<StatementNode>> statements = {assignNode};
+        std::shared_ptr<StatementListNode> statementListNode =
+                std::make_shared<StatementListNode>(statements);
 
-        std::shared_ptr<ProcedureNode> procedureNode = std::make_shared<ProcedureNode>(procName, statementListNode);
-        std::vector<std::shared_ptr<ProcedureNode>> procedures = { procedureNode };
-        std::shared_ptr<ProgramNode> programNode = std::make_shared<ProgramNode>(procedures);
+        std::shared_ptr<ProcedureNode> procedureNode =
+                std::make_shared<ProcedureNode>(procName, statementListNode);
+        std::vector<std::shared_ptr<ProcedureNode>> procedures = {
+                procedureNode};
+        std::shared_ptr<ProgramNode> programNode =
+                std::make_shared<ProgramNode>(procedures);
 
         REQUIRE(ASTComparer::isSameAST(parsedRootNode, programNode));
     }
@@ -304,13 +335,13 @@ TEST_CASE("Test parse with one procedure, all statement types") {
             SPToken(TokenType::Name, "print"),
             SPToken(TokenType::Name, varName),
             SPToken(TokenType::Semicolon, ";"),
-            SPToken(TokenType::CloseCurlyParenthesis, "}")
-    };
+            SPToken(TokenType::CloseCurlyParenthesis, "}")};
 
     std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
 }
 
-TEST_CASE("Tests parse with one procedure, one if statement with one assign statement for each statementlist") {
+TEST_CASE("Tests parse with one procedure, one if statement with one assign "
+          "statement for each statementlist") {
     SPParser parser;
 
     /*
@@ -348,8 +379,7 @@ TEST_CASE("Tests parse with one procedure, one if statement with one assign stat
                 SPToken(TokenType::Name, "then"),
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
                 // then statement list
-                SPToken(TokenType::Name, "x"),
-                SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "x"), SPToken(TokenType::Equals, "="),
                 SPToken(TokenType::Name, "v"),
                 SPToken(TokenType::ArithmeticOperator, "+"),
                 SPToken(TokenType::Name, "x"),
@@ -365,8 +395,7 @@ TEST_CASE("Tests parse with one procedure, one if statement with one assign stat
                 // else statement list
                 SPToken(TokenType::Name, "else"),
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "x"),
-                SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "x"), SPToken(TokenType::Equals, "="),
                 SPToken(TokenType::Integer, "1"),
                 SPToken(TokenType::ArithmeticOperator, "/"),
                 SPToken(TokenType::OpenRoundParenthesis, "("),
@@ -379,13 +408,13 @@ TEST_CASE("Tests parse with one procedure, one if statement with one assign stat
                 SPToken(TokenType::Semicolon, ";"),
 
                 SPToken(TokenType::CloseCurlyParenthesis, "}"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
+                SPToken(TokenType::CloseCurlyParenthesis, "}")};
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
 }
 
-TEST_CASE("Tests parse with one procedure, one while statement with one assign statement") {
+TEST_CASE("Tests parse with one procedure, one while statement with one assign "
+          "statement") {
     SPParser parser;
 
     /*
@@ -414,21 +443,19 @@ TEST_CASE("Tests parse with one procedure, one while statement with one assign s
                 SPToken(TokenType::CloseRoundParenthesis, ")"),
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
                 // statement list
-                SPToken(TokenType::Name, "a"),
-                SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "a"), SPToken(TokenType::Equals, "="),
                 SPToken(TokenType::Name, "r"),
                 SPToken(TokenType::Semicolon, ";"),
 
                 SPToken(TokenType::CloseCurlyParenthesis, "}"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}")
-        };
+                SPToken(TokenType::CloseCurlyParenthesis, "}")};
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
 }
 
 TEST_CASE("Test ASTPrinter") {
     SPParser parser;
-    VariableName varName= "num1";
+    VariableName varName = "num1";
     std::vector<SPToken> tokens = {
             SPToken(TokenType::Name, "procedure"),
             SPToken(TokenType::Name, "procedure"),
@@ -472,8 +499,7 @@ TEST_CASE("Test ASTPrinter") {
             SPToken(TokenType::CloseRoundParenthesis, ")"),
             // statement list
             SPToken(TokenType::OpenCurlyParenthesis, "{"),
-            SPToken(TokenType::Name, "r"),
-            SPToken(TokenType::Equals, "="),
+            SPToken(TokenType::Name, "r"), SPToken(TokenType::Equals, "="),
             SPToken(TokenType::Name, "a"),
             SPToken(TokenType::ArithmeticOperator, "-"),
             SPToken(TokenType::Name, "b"),
@@ -484,8 +510,7 @@ TEST_CASE("Test ASTPrinter") {
             SPToken(TokenType::Semicolon, ";"),
             SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-            SPToken(TokenType::CloseCurlyParenthesis, "}")
-    };
+            SPToken(TokenType::CloseCurlyParenthesis, "}")};
 
     std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
     ASTPrinter printerTraverser;
