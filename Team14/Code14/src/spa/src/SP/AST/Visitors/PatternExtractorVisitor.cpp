@@ -19,23 +19,23 @@ void PatternExtractorVisitor::visitIfNode(IfNode *node, std::vector<std::shared_
                                           std::shared_ptr<ASTNode> proc) const {
     auto currentStmt = std::make_shared<Statement>(node->getStatementNumber(),
                                                    StatementTypeFactory::getStatementTypeFrom(node->getStatementType()));
-    std::shared_ptr<RelativeExpressionNode> relExpr = std::dynamic_pointer_cast<RelativeExpressionNode>(node->getConditionalExpression());
+    std::shared_ptr<ConditionalExpressionNode> condExpr = std::dynamic_pointer_cast<ConditionalExpressionNode>(node->getConditionalExpression());
 
-    this->pkbWriter->addIfPattern(currentStmt, getVariablesFromRelExpr(relExpr));
+    this->pkbWriter->addIfPattern(currentStmt, getVariablesFromCondExpr(condExpr));
 }
 
 void PatternExtractorVisitor::visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                                              std::shared_ptr<ASTNode> proc) const {
     auto currentStmt = std::make_shared<Statement>(node->getStatementNumber(),
                                                    StatementTypeFactory::getStatementTypeFrom(node->getStatementType()));
-    std::shared_ptr<RelativeExpressionNode> relExpr = std::dynamic_pointer_cast<RelativeExpressionNode>(node->getConditionalExpression());
+    std::shared_ptr<ConditionalExpressionNode> condExpr = std::dynamic_pointer_cast<ConditionalExpressionNode>(node->getConditionalExpression());
 
-    this->pkbWriter->addWhilePattern(currentStmt, getVariablesFromRelExpr(relExpr));
+    this->pkbWriter->addWhilePattern(currentStmt, getVariablesFromCondExpr(condExpr));
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<Variable>>> PatternExtractorVisitor::getVariablesFromRelExpr(std::shared_ptr<RelativeExpressionNode> relExpr) {
+std::shared_ptr<std::vector<std::shared_ptr<Variable>>> PatternExtractorVisitor::getVariablesFromCondExpr(std::shared_ptr<ConditionalExpressionNode> condExpr) {
     std::vector<std::shared_ptr<Variable>> variableNodes;
-    std::vector<std::shared_ptr<ASTNode>> childNodes = relExpr->getAllChildNodes();
+    std::vector<std::shared_ptr<ASTNode>> childNodes = condExpr->getAllChildNodes();
 
     for (const auto& childNode : childNodes) {
         if (std::shared_ptr<Variable> variable = std::dynamic_pointer_cast<Variable>(childNode)) {

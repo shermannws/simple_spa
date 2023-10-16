@@ -5,6 +5,7 @@
 #include "../../AST/Nodes/IfNode.h"
 #include "../../AST/Nodes/WhileNode.h"
 #include "SP/AST/Nodes/RelativeExpressionNode.h"
+#include "SP/AST/Nodes/ConditionalExpressionNode.h"
 
 class PatternExtractorVisitor : public DesignExtractorVisitor,
         public AssignNodeVisitor,
@@ -45,9 +46,9 @@ public:
 private:
 
     /**
-     * Extracts all the variables from a relational expression on both the LHS and RHS.
-     * @param relExpr The relational expression
+     * Extracts all the variables from a conditional expression on both the LHS and RHS.
+     * @param condExpr The conditional expression
      * @return A vector of variables
      */
-    static std::shared_ptr<std::vector<std::shared_ptr<Variable>>> getVariablesFromRelExpr(std::shared_ptr<RelativeExpressionNode> relExpr);
+    static std::shared_ptr<std::vector<std::shared_ptr<Variable>>> getVariablesFromCondExpr(std::shared_ptr<ConditionalExpressionNode> condExpr);
 };
