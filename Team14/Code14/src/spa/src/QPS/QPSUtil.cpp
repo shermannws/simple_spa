@@ -24,6 +24,12 @@ std::unordered_map<StringRep, ClauseType> QPSUtil::repClauseTypeMap = {
         {"Next*", ClauseType::NextStar},
 };
 
+std::unordered_map<QueryEntityType, ClauseType> QPSUtil::entityToClauseMap = {
+        {QueryEntityType::Assign, ClauseType::Assign},
+        {QueryEntityType::While, ClauseType::While},
+        {QueryEntityType::If, ClauseType::If},
+};
+
 std::unordered_map<ClauseType, ClauseArgType> QPSUtil::typeToArgTypeMap = {
     {ClauseType::Uses, StmtrefProcVar},
     {ClauseType::Modifies, StmtrefProcVar},

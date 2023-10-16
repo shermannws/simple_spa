@@ -6,6 +6,7 @@
 #include "QPS/Exceptions/SemanticException.h"
 #include "StmtrefProcVarHandler.h"
 #include "ProcProcHandler.h"
+#include "NoExprHandler.h"
 
 PqlSemanticValidator::PqlSemanticValidator() = default;
 
@@ -44,7 +45,8 @@ void PqlSemanticValidator::validateClauseSemantics(const Query& query, const std
 
 void PqlSemanticValidator::validateClauseSemantics(const Query& query, const std::shared_ptr<PatternClause> clause) {
     std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
+    std::shared_ptr<NoExprHandler> noExprHandler = std::make_shared<NoExprHandler>();
     std::shared_ptr<EntrefExprSpecHandler> EntExprHandler = std::make_shared<EntrefExprSpecHandler>();
-    synonymHandler->setNext(EntExprHandler);
+    synonymHandler->setNext(noExprHandler)->setNext(EntExprHandler);
     synonymHandler->handle(query, clause);
 }

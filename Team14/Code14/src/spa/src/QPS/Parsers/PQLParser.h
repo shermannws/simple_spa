@@ -68,6 +68,11 @@ private:
     void validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause);
 
     /**
+     * @brief Validates Pattern Clause structure according to the existence of thirdParam
+     * @param clause The shared pointer of PatternClause to validate
+     */
+    void validatePatternStructure(const std::shared_ptr<PatternClause> clause);
+    /**
      * @brief Returns the next token as Ref if it is Integer, Identity, Wildcard or Synonym,
      * otherwise throws a SyntaxException
      * @return a Ref object

@@ -152,10 +152,31 @@ std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
     }
 
     next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Rparenthesis)) {
-        throw SyntaxException("expected right parenthesis");
+    if (next->isToken(TokenType::Comma)) {
+        next = tokenizer->popToken();
+        if (!next->isToken(TokenType::Underscore)) {
+            throw SyntaxException("Invalid pattern syntax, expected underscore");
+        }
+        next = tokenizer->popToken();
+        clause->setThirdParam(true);
+
     }
+
+    if (!next->isToken(TokenType::Rparenthesis)) {
+        throw SyntaxException("Expected right parenthesis");
+    }
+
+    validatePatternStructure(clause);
     return clause;
+}
+
+void PQLParser::validatePatternStructure(const std::shared_ptr<PatternClause> clause) {
+    if (clause->hasThirdParam()) {
+        ExpressionSpec spec = clause->getSecondParam();
+        if (spec.first != ExpressionSpecType::Wildcard) {
+            throw SyntaxException("Invalid pattern structure, wildcard as second param expected");
+        }
+    }
 }
 
 void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause) {
