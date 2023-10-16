@@ -33,7 +33,7 @@ void PatternExtractorVisitor::visitWhileNode(WhileNode *node, std::vector<std::s
     this->pkbWriter->addWhilePattern(currentStmt, getVariablesFromRelExpr(relExpr));
 }
 
-std::vector<std::shared_ptr<Variable>> PatternExtractorVisitor::getVariablesFromRelExpr(std::shared_ptr<RelativeExpressionNode> relExpr) {
+std::shared_ptr<std::vector<std::shared_ptr<Variable>>> PatternExtractorVisitor::getVariablesFromRelExpr(std::shared_ptr<RelativeExpressionNode> relExpr) {
     std::vector<std::shared_ptr<Variable>> variableNodes;
     std::vector<std::shared_ptr<ASTNode>> childNodes = relExpr->getAllChildNodes();
 
@@ -42,6 +42,6 @@ std::vector<std::shared_ptr<Variable>> PatternExtractorVisitor::getVariablesFrom
             variableNodes.push_back(variable);
         }
     }
-    return variableNodes;
+    return std::make_shared<std::vector<std::shared_ptr<Variable>>>(variableNodes);
 }
 

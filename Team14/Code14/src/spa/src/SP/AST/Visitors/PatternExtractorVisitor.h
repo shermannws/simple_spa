@@ -49,5 +49,5 @@ private:
      * @param relExpr The relational expression
      * @return A vector of variables
      */
-    static std::vector<std::shared_ptr<Variable>> getVariablesFromRelExpr(std::shared_ptr<RelativeExpressionNode> relExpr);
+    static std::shared_ptr<std::vector<std::shared_ptr<Variable>>> getVariablesFromRelExpr(std::shared_ptr<RelativeExpressionNode> relExpr);
 };
