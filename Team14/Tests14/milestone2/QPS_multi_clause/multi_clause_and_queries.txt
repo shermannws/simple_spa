@@ -1,0 +1,99 @@
+1 - same such that clause type, such that - and - and (equivalent as q2, 3)
+assign a; while w;
+Select a such that Modifies (a, "x") and Parent* (w, a) and Next* (1, a)
+
+5000
+2 - same such that clause type, such that - and, such that
+assign a; while w;
+Select a such that Parent* (w, a) and Modifies (a, "x") such that Next* (1, a)
+
+5000
+3 - same such that clause type, such that, such that - and
+assign a; while w;
+Select a such that Next* (1, a) such that Modifies (a, "x") and Parent* (w, a)
+
+5000
+4 - same pattern clause type, pattern - and - and
+
+
+5000
+5 - same pattern clause type, pattern - and, pattern
+
+
+5000
+6 - same pattern clause type, pattern, pattern - and
+
+
+5000
+7 - same with clause type, with - and - and
+
+
+5000
+8 - same with clause type, with - and, with
+
+
+5000
+9 - same with clause type, with, with - and
+
+
+5000
+10 - different clause type, pattern, such that - and
+
+
+5000
+11 - different clause type, such that - and, pattern
+
+
+5000
+12 - different clause type, such that, such that, pattern
+
+
+5000
+13 - different clause type, with, pattern - and
+
+
+5000
+14 - different clause type, pattern - and, with
+
+
+5000
+15 - different clause type, pattern, pattern, with
+
+
+5000
+16 - different clause type, such that, with - and
+
+
+5000
+17 - different clause type, with - and, such that
+
+
+5000
+18 - different clause type, with, with, such that
+
+
+5000
+19 - all 3 different clause types, such that - and, with - and, pattern - and, such that, with, pattern
+
+
+5000
+20 - syntactically invalid and connector 'and such that'
+
+
+5000
+21 - syntactically invalid and connector 'such that and pattern'
+
+
+5000
+22 - syntactically invalid and connector 'pattern and such that'
+
+
+5000
+23 - syntactically invalid and connector 'such that - and with'
+
+
+5000
+24 - syntactically invalid and connector 'and and'
+
+
+5000
