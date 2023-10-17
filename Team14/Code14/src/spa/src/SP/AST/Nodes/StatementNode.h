@@ -5,9 +5,7 @@
 /**
  * Enum class representing all valid statement node types.
  */
-enum class StatementNodeType {
-    Assign, Read, Print, Call, While, If
-};
+enum class StatementNodeType { Assign, Read, Print, Call, While, If };
 
 
 /**

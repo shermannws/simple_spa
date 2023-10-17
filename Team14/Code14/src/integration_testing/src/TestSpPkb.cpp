@@ -10,9 +10,9 @@
 #include "SP/AST/Visitors/FollowsExtractorVisitor.h"
 #include "SP/AST/Visitors/ModifiesExtractorVisitor.h"
 #include "SP/AST/Visitors/ParentExtractorVisitor.h"
+#include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/CFG/CFGBuilder.h"
 #include "SP/CFG/CFGExtractor.h"
-#include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/SPParser.h"
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
@@ -403,41 +403,40 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
 
 
 TEST_CASE("Test CFG Extractor - test Next extraction") {
-    std::string sourceProgram =
-            "procedure Proc1 {"
-            "   x = 1 + 2 * y - (1 / var) % 5;"     // stmt 1
-            "   read x;"                            // stmt 2
-            "   print y;"                           // stmt 3
-            "   if (x > 1) then {"                  // stmt 4
-            "       z = y;"                         // stmt 5
-            "   } else {"
-            "       var1 = 5;"                      // stmt 6
-            "   } "
-            "   while (1 != 3) {"                   // stmt 7
-            "       print c;"                       // stmt 8
-            "   }"
-            "}"
-            "procedure Proc2 { "
-            "   read x; "                           // stmt 9
-            "}"
-            "procedure Proc3 { "
-            "   print y; "                          // stmt 10
-            "}"
-            "procedure Proc4 { "
-            "   call Proc1; "                       // stmt 11
-            "}"
-            "procedure Proc5 { "
-            "   if (z > 1) then { "                 // stmt 12
-            "       print p; "                      // stmt 13
-            "   } else { "
-            "       read r; "                       // stmt 14
-            "   } "
-            "}"
-            "procedure Proc6 { "
-            "   while (z <= w) { "                  // stmt 15
-            "       x = 2; "                        // stmt 16
-            "   } "
-            "}";
+    std::string sourceProgram = "procedure Proc1 {"
+                                "   x = 1 + 2 * y - (1 / var) % 5;"// stmt 1
+                                "   read x;"                       // stmt 2
+                                "   print y;"                      // stmt 3
+                                "   if (x > 1) then {"             // stmt 4
+                                "       z = y;"                    // stmt 5
+                                "   } else {"
+                                "       var1 = 5;"// stmt 6
+                                "   } "
+                                "   while (1 != 3) {"// stmt 7
+                                "       print c;"    // stmt 8
+                                "   }"
+                                "}"
+                                "procedure Proc2 { "
+                                "   read x; "// stmt 9
+                                "}"
+                                "procedure Proc3 { "
+                                "   print y; "// stmt 10
+                                "}"
+                                "procedure Proc4 { "
+                                "   call Proc1; "// stmt 11
+                                "}"
+                                "procedure Proc5 { "
+                                "   if (z > 1) then { "// stmt 12
+                                "       print p; "     // stmt 13
+                                "   } else { "
+                                "       read r; "// stmt 14
+                                "   } "
+                                "}"
+                                "procedure Proc6 { "
+                                "   while (z <= w) { "// stmt 15
+                                "       x = 2; "      // stmt 16
+                                "   } "
+                                "}";
 
     std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceProgram);
 

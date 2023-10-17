@@ -1,5 +1,5 @@
 template<typename S>
-ProcToVarRelationshipManager<S>::ProcToVarRelationshipManager() : relationshipStore(std::make_shared<S>(S())) {};
+ProcToVarRelationshipManager<S>::ProcToVarRelationshipManager() : relationshipStore(std::make_shared<S>(S())){};
 
 template<typename S>
 void ProcToVarRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedure> procedure,

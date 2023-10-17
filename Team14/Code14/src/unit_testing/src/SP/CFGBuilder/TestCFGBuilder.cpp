@@ -1,6 +1,6 @@
+#include <algorithm>
 #include <memory>
 #include <unordered_map>
-#include <algorithm>
 
 #include "Commons/Entities/StatementType.h"
 #include "SP/CFG/CFGBuilder.h"

@@ -5,7 +5,8 @@
 
 std::unordered_map<ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>>
 CFGBuilder::buildAllCFG(const std::shared_ptr<ProgramNode> &astRootNode) {
-    std::unordered_map<ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>> cfgMap;
+    std::unordered_map<ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>>
+            cfgMap;
     for (auto &procedureNode: astRootNode->getProcedures()) {
         ProcedureName procedureName = procedureNode->getProcedureName();
         cfgMap[procedureName] = buildCFGForProcedure(procedureNode);
@@ -44,8 +45,8 @@ CFGBuilder::buildStatementListSubgraph(std::vector<std::shared_ptr<CFGNode>> &cf
         if (statementNode->getStatementType() == StatementNodeType::If) {
             std::tie(childHead, childTail) = buildIfSubgraph(cfgNodes, std::static_pointer_cast<IfNode>(statementNode));
         } else if (statementNode->getStatementType() == StatementNodeType::While) {
-            std::tie(childHead, childTail) = buildWhileSubgraph(cfgNodes,
-                                                                std::static_pointer_cast<WhileNode>(statementNode));
+            std::tie(childHead, childTail) =
+                    buildWhileSubgraph(cfgNodes, std::static_pointer_cast<WhileNode>(statementNode));
         } else {
             std::tie(childHead, childTail) = buildStatementSubgraph(cfgNodes, statementNode);
         }

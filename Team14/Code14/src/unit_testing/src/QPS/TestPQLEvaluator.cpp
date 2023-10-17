@@ -143,7 +143,7 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         REQUIRE(results.size() == 0);
     }
 
-        // USES(ENTREF, ENTREF)
+    // USES(ENTREF, ENTREF)
     SECTION("getUsesProcPair") {
         PQLParser parser("procedure p; variable v; Select v such that Uses(p, v)");
         Query queryObj = parser.parse();
@@ -298,7 +298,7 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "3") != results.end());
     }
 
-        // MODIFIES(ENTREF, ENTREF)
+    // MODIFIES(ENTREF, ENTREF)
     SECTION("getModifiesProcPair") {
         PQLParser parser("procedure p; variable v; Select p such that Modifies(p, v)");
         Query queryObj = parser.parse();
@@ -404,7 +404,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "6") != results.end());
     }
 
-        // evaluateSynAny
+    // evaluateSynAny
     SECTION("getNextTypeStmt") {
         PQLParser parser("stmt s; Select s such that Next(s,14)");
         Query queryObj = parser.parse();
@@ -429,7 +429,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "11") != results.end());
     }
 
-        // evaluateAnySyn
+    // evaluateAnySyn
     SECTION("getNextStmtType") {
         PQLParser parser("call call; Select call such that Next(23, call)");
         Query queryObj = parser.parse();
@@ -456,7 +456,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "13") != results.end());
     }
 
-        // evaluateBoolean
+    // evaluateBoolean
     SECTION("isNext") {
         PQLParser parser("if if; Select if such that Next(1,2)");
         Query queryObj = parser.parse();
@@ -537,7 +537,7 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "31") != results.end());
     }
 
-        // evaluateSynAny
+    // evaluateSynAny
     SECTION("getNextStarTypeStmt") {
         PQLParser parser("stmt s; Select s such that Next*(s,15)");
         Query queryObj = parser.parse();
@@ -564,7 +564,7 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "20") != results.end());
     }
 
-        // evaluateAnySyn
+    // evaluateAnySyn
     SECTION("getNextStarStmtType") {
         PQLParser parser("if ifs; Select ifs such that Next*(23, ifs)");
         Query queryObj = parser.parse();
@@ -591,7 +591,7 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "15") != results.end());
     }
 
-        // evaluateBoolean
+    // evaluateBoolean
     SECTION("isNextStar") {
         PQLParser parser("if if; Select if such that Next*(1,2)");
         Query queryObj = parser.parse();
@@ -890,7 +890,7 @@ TEST_CASE("Calls and Calls* clauses") {
             REQUIRE(find(results.begin(), results.end(), "procedure2") != results.end());
         }
 
-            // Calls(syn, procName) -  - getCallers(procName) returns empty
+        // Calls(syn, procName) -  - getCallers(procName) returns empty
         SECTION("single results, Calls (syn, ident)") {
             PQLParser parser("procedure procedure; stmt s; Select s such that Calls(procedure, \"procName\")");
             Query queryObj = parser.parse();
@@ -902,7 +902,7 @@ TEST_CASE("Calls and Calls* clauses") {
             REQUIRE(results.size() == 0);
         }
 
-            // Calls*(procName, syn) - getCalleesStar(procName) returns empty
+        // Calls*(procName, syn) - getCalleesStar(procName) returns empty
         SECTION("single results, Calls* (ident, syn)") {
             PQLParser parser("procedure procedure; Select procedure such that Calls*(\"procName\",procedure)");
             Query queryObj = parser.parse();
@@ -914,7 +914,7 @@ TEST_CASE("Calls and Calls* clauses") {
             REQUIRE(results.size() == 0);
         }
 
-            // Calls*(syn, _)  - getCallersStar() returns non-empty
+        // Calls*(syn, _)  - getCallersStar() returns non-empty
         SECTION("single results, Calls* (syn,_)") {
             PQLParser parser("procedure p; assign a; Select a such that Calls*(p,_)");
             Query queryObj = parser.parse();

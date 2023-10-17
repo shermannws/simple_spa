@@ -5,11 +5,8 @@
 #include <unordered_map>
 
 std::unordered_map<TokenType, int> operatorPrecedence = {
-        {TokenType::Asterisk, 1},
-        {TokenType::Slash,    1},
-        {TokenType::Percent,  1},
-        {TokenType::Plus,     0},
-        {TokenType::Minus,    0},
+        {TokenType::Asterisk, 1}, {TokenType::Slash, 1}, {TokenType::Percent, 1},
+        {TokenType::Plus, 0},     {TokenType::Minus, 0},
 };
 
 Token::Token(const std::string &input) {

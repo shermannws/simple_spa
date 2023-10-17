@@ -23,15 +23,15 @@ SP::SP(std::shared_ptr<PkbWriter> pkbWriter) : pkbWriter(std::move(pkbWriter)) {
 
 void SP::startSPProcessing(std::string &input) {
     try {
-        //Tokenize the string input
+        // Tokenize the string input
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
 
-        //Syntactic Validator takes in tokens
+        // Syntactic Validator takes in tokens
         SyntacticValidator syntacticValidator(tokens);
         syntacticValidator.validate();
 
-        //Parse the tokens
+        // Parse the tokens
         SPParser parser;
         std::shared_ptr<ProgramNode> root = parser.parse(tokens);
 
@@ -51,10 +51,10 @@ void SP::startSPProcessing(std::string &input) {
         std::shared_ptr<PatternExtractorVisitor> patternExtractor =
                 std::make_shared<PatternExtractorVisitor>(pkbWriter);
         std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = {
-                entityExtractor, followsExtractor, usesExtractor, modifiesExtractor,
-                parentExtractor, callsExtractor, patternExtractor};
+                entityExtractor, followsExtractor, usesExtractor,   modifiesExtractor,
+                parentExtractor, callsExtractor,   patternExtractor};
 
-        //Traverse the AST from root node
+        // Traverse the AST from root node
         Traverser traverser(visitors);
         traverser.traverse(root);
 
@@ -68,10 +68,14 @@ void SP::startSPProcessing(std::string &input) {
         CFGExtractor cfgExtractor(pkbWriter);
         cfgExtractor.extractRelationships(cfgMap);
     } catch (const SyntaxError &e) {
-        std::cout << "\n" << e.what() << "\n\n" << "Terminating program due to invalid SIMPLE code." << std::endl;
-        std::exit(EXIT_FAILURE); // Exit the program with an error code
+        std::cout << "\n"
+                  << e.what() << "\n\n"
+                  << "Terminating program due to invalid SIMPLE code." << std::endl;
+        std::exit(EXIT_FAILURE);// Exit the program with an error code
     } catch (const SemanticError &e) {
-        std::cout << "\n" << e.what() << "\n\n" << "Terminating program due to invalid SIMPLE code." << std::endl;
-        std::exit(EXIT_FAILURE); // Exit the program with an error code
+        std::cout << "\n"
+                  << e.what() << "\n\n"
+                  << "Terminating program due to invalid SIMPLE code." << std::endl;
+        std::exit(EXIT_FAILURE);// Exit the program with an error code
     }
 }

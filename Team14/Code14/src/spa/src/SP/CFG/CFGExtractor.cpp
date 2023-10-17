@@ -1,13 +1,14 @@
-#include <utility>
-#include <stack>
 #include <cassert>
+#include <stack>
+#include <utility>
 
 #include "CFGExtractor.h"
 
 CFGExtractor::CFGExtractor(std::shared_ptr<PkbWriter> pkbWriter) : pkbWriter(std::move(pkbWriter)) {}
 
 void CFGExtractor::extractRelationships(
-        const std::unordered_map<ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>> &cfgMap) {
+        const std::unordered_map<ProcedureName,
+                                 std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>> &cfgMap) {
     saveCFGToPKB(cfgMap);
 
     for (const auto &[procName, cfgHeadAndNodes]: cfgMap) {
@@ -17,7 +18,8 @@ void CFGExtractor::extractRelationships(
 }
 
 void CFGExtractor::saveCFGToPKB(
-        const std::unordered_map<ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>> &cfgMap) {
+        const std::unordered_map<ProcedureName,
+                                 std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>> &cfgMap) {
     std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> procedureToCFGHeadMap;
     for (const auto &[procName, cfgHeadAndNodes]: cfgMap) {
         auto &[cfgHead, cfgNodes] = cfgHeadAndNodes;
@@ -52,9 +54,7 @@ void CFGExtractor::extractNextRelationship(const std::shared_ptr<CFGNode> &head,
             auto &childStatement = statements[childStatementNumber];
             pkbWriter->addNextRelationship(parentStatement, childStatement);
 
-            if (isVisited.find(childStatementNumber) == isVisited.end()) {
-                frontier.push(child);
-            }
+            if (isVisited.find(childStatementNumber) == isVisited.end()) { frontier.push(child); }
         }
         isVisited.insert(parentStatementNumber);
     }

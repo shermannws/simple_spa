@@ -52,7 +52,7 @@ private:
      */
     inline static const std::unordered_map<std::string, BinaryConditionalExpressionType> stringToExpressionTypeMap = {
             {AppConstants::STRING_AND, BinaryConditionalExpressionType::And},
-            {AppConstants::STRING_OR,  BinaryConditionalExpressionType::Or}};
+            {AppConstants::STRING_OR, BinaryConditionalExpressionType::Or}};
 
 public:
     /**

@@ -1,3 +1,3 @@
 #include "CallsRelationshipManager.h"
 
-CallsRelationshipManager::CallsRelationshipManager() : ProcToProcRelationshipManager() {};
+CallsRelationshipManager::CallsRelationshipManager() : ProcToProcRelationshipManager(){};

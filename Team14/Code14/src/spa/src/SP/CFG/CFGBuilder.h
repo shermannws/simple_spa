@@ -18,8 +18,8 @@ private:
      * @param procedureNode The root (ASTNode) of the procedure subtree to create a CFG for
      * @return Unordered map of Statement to CFGNode
      */
-    static std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>> buildCFGForProcedure(
-            const std::shared_ptr<ProcedureNode> &procedureNode);
+    static std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>
+    buildCFGForProcedure(const std::shared_ptr<ProcedureNode> &procedureNode);
 
     /**
      * Builds a CFG subgraph for a statement list.
@@ -27,9 +27,9 @@ private:
      * @param statementListNode The root (ASTNode) of the statement list subtree to create a CFG subtree for
      * @return The head and tail nodes of this subgraph
      */
-    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildStatementListSubgraph(
-            std::vector<std::shared_ptr<CFGNode>> &cfgNodes,
-            const std::shared_ptr<StatementListNode> &statementListNode);
+    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
+    buildStatementListSubgraph(std::vector<std::shared_ptr<CFGNode>> &cfgNodes,
+                               const std::shared_ptr<StatementListNode> &statementListNode);
 
     /**
      * Builds a CFG subgraph for a statement (assign, call, print, read, if, while).
@@ -37,8 +37,9 @@ private:
      * @param statementNode The root (ASTNode) of the statement subtree to create a CFG subtree for
      * @return The head and tail nodes of this subgraph
      */
-    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildStatementSubgraph(
-            std::vector<std::shared_ptr<CFGNode>> &cfgNodes, const std::shared_ptr<StatementNode> &statementNode);
+    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
+    buildStatementSubgraph(std::vector<std::shared_ptr<CFGNode>> &cfgNodes,
+                           const std::shared_ptr<StatementNode> &statementNode);
 
     /**
      * Builds a CFG subgraph for an if statement and its statement lists.
@@ -46,8 +47,8 @@ private:
      * @param ifNode The root (ASTNode) of the if statement subtree to create a CFG subtree for
      * @return The head and tail nodes of this subgraph
      */
-    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildIfSubgraph(
-            std::vector<std::shared_ptr<CFGNode>> &cfgNodes, const std::shared_ptr<IfNode> &ifNode);
+    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
+    buildIfSubgraph(std::vector<std::shared_ptr<CFGNode>> &cfgNodes, const std::shared_ptr<IfNode> &ifNode);
 
     /**
      * Builds a CFG subgraph for a while statement and its statement list.
@@ -55,8 +56,8 @@ private:
      * @param whileNode The root (ASTNode) of the while statement subtree to create a CFG subtree for
      * @return The head and tail nodes of this subgraph
      */
-    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildWhileSubgraph(
-            std::vector<std::shared_ptr<CFGNode>> &cfgNodes, const std::shared_ptr<WhileNode> &whileNode);
+    static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
+    buildWhileSubgraph(std::vector<std::shared_ptr<CFGNode>> &cfgNodes, const std::shared_ptr<WhileNode> &whileNode);
 
 public:
     /**

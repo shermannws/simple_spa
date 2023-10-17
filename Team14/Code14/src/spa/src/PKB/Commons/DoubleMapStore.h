@@ -21,14 +21,14 @@ private:
      * @brief The unordered_map that stores K1 to K2 pairs using V1 as the underlying data structure
      */
     std::unordered_map<std::shared_ptr<K1>, std::shared_ptr<V1>, std::hash<std::shared_ptr<H1>>,
-            std::equal_to<std::shared_ptr<H1>>>
+                       std::equal_to<std::shared_ptr<H1>>>
             leftToRightStore;
 
     /**
      * @brief The unordered_map that stores K2 to K1 pairs using V2 as the underlying data structure
      */
     std::unordered_map<std::shared_ptr<K2>, std::shared_ptr<V2>, std::hash<std::shared_ptr<H2>>,
-            std::equal_to<std::shared_ptr<H2>>>
+                       std::equal_to<std::shared_ptr<H2>>>
             rightToLeftStore;
 
 public:
