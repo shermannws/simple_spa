@@ -19,15 +19,13 @@ AttrValue Entity::getAttrValue() const {
 
 bool Entity::operator==(const HashableKey &other) const {
     if (const Entity *otherKey = dynamic_cast<const Entity *>(&other)) {
-        return this->getEntityValue() == otherKey->getEntityValue() && this->getAttrValue() == otherKey->getAttrValue();
+        return this->getEntityValue() == otherKey->getEntityValue();
     }
     return false;
 }
 
 std::size_t std::hash<Entity>::operator()(const Entity &entity) const {
-    std::size_t entityValueHash = std::hash<std::string>()(entity.getEntityValue());
-    std::size_t attrValueHash = std::hash<std::string>()(entity.getAttrValue());
-    return entityValueHash ^ attrValueHash;
+    return std::hash<std::string>()(entity.getEntityValue());
 }
 
 std::size_t std::hash<std::shared_ptr<Entity>>::operator()(const std::shared_ptr<Entity> entityPtr) const {
