@@ -3,7 +3,7 @@
 #include "SP/AST/Nodes/ProcedureNode.h"
 #include "SP/AST/Nodes/WhileNode.h"
 
-Traverser::Traverser(std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors) : visitors(visitors) {};
+Traverser::Traverser(std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors) : visitors(visitors){};
 
 void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
     // DFS Algorithm where frontier is a stack

@@ -20,11 +20,9 @@ public:
      * @param funcProc The function to call to store the Procedure-Variable relationship
      */
     static void addAllVariableRelationshipFrom(
-            const std::shared_ptr<ASTNode> &subtree,
-            const std::shared_ptr<Statement> &s,
+            const std::shared_ptr<ASTNode> &subtree, const std::shared_ptr<Statement> &s,
             const std::vector<std::shared_ptr<ASTNode>> &parents,
             const std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> &funcStmt,
             const std::shared_ptr<ASTNode> &proc,
-            const std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> &funcProc
-    );
+            const std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> &funcProc);
 };

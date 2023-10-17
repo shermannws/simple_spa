@@ -3,7 +3,7 @@
 #include "ProcedureNode.h"
 
 ProcedureNode::ProcedureNode(ProcedureName procedureName, std::shared_ptr<StatementListNode> statementList)
-        : procedureName(std::move(procedureName)), statementList(std::move(statementList)) {}
+    : procedureName(std::move(procedureName)), statementList(std::move(statementList)) {}
 
 ProcedureName ProcedureNode::getProcedureName() { return procedureName; }
 

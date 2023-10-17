@@ -53,13 +53,13 @@ void ConditionalValidator::validateConditionalExpression(std::deque<SPToken> &ex
                 validateConditionalExpression(rightSubExpression);
             }
 
-                // Option 2.2 Relational expr
+            // Option 2.2 Relational expr
             else if (nextToken.getType() == TokenType::RelationalOperator) {
                 validateExpr(subExpression);
                 validateExpr(rightSubExpression);
             }
 
-                // Option 2.3 arithmetic expr (for cases like '( (A+B) + C > D )' )
+            // Option 2.3 arithmetic expr (for cases like '( (A+B) + C > D )' )
             else if (nextToken.getType() == TokenType::ArithmeticOperator) {
                 validateRelationalExpression(rightSubExpression);
             } else {

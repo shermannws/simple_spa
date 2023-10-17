@@ -205,10 +205,10 @@ TEST_CASE("Test parse with one procedure, one assign statement, different RHS") 
         ProcedureName procName = "doMath123";
         std::vector<SPToken> tokens = {SPToken(TokenType::Name, "procedure"), SPToken(TokenType::Name, procName),
                                        SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                // x = v + x * y + z * t
-                // varNode
+                                       // x = v + x * y + z * t
+                                       // varNode
                                        SPToken(TokenType::Name, varX), SPToken(TokenType::Equals, "="),
-                // exprNode
+                                       // exprNode
                                        SPToken(TokenType::Name, varV), SPToken(TokenType::ArithmeticOperator, "+"),
                                        SPToken(TokenType::Name, varX), SPToken(TokenType::ArithmeticOperator, "*"),
                                        SPToken(TokenType::Name, varY), SPToken(TokenType::ArithmeticOperator, "+"),

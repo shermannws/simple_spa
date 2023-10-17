@@ -1,7 +1,7 @@
 #include "CallsExtractorVisitor.h"
-#include "Commons/StatementTypeFactory.h"
-#include "Commons/StatementFactory.h"
 #include "Commons/Entities/CallStatement.h"
+#include "Commons/StatementFactory.h"
+#include "Commons/StatementTypeFactory.h"
 
 CallsExtractorVisitor::CallsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter) { this->pkbWriter = pkbWriter; }
 

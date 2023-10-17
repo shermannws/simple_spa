@@ -3,15 +3,13 @@
 #include "Entity.h"
 
 Entity::Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType)
-        : entityValue(entityValue), entityType(entityType) {}
+    : entityValue(entityValue), entityType(entityType) {}
 
 Entity::Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType,
                const std::shared_ptr<AttrValue> attrValue)
-        : entityValue(entityValue), entityType(entityType), attrValue(attrValue) {}
+    : entityValue(entityValue), entityType(entityType), attrValue(attrValue) {}
 
-EntityType Entity::getEntityType() const {
-    return this->entityType;
-}
+EntityType Entity::getEntityType() const { return this->entityType; }
 
 EntityValue Entity::getEntityValue() const { return *this->entityValue; }
 
@@ -21,8 +19,7 @@ AttrValue Entity::getAttrValue() const {
 
 bool Entity::operator==(const HashableKey &other) const {
     if (const Entity *otherKey = dynamic_cast<const Entity *>(&other)) {
-        return this->getEntityValue() == otherKey->getEntityValue()
-               && this->getAttrValue() == otherKey->getAttrValue();
+        return this->getEntityValue() == otherKey->getEntityValue() && this->getAttrValue() == otherKey->getAttrValue();
     }
     return false;
 }

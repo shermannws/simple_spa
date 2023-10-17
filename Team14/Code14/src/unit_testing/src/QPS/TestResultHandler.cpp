@@ -67,9 +67,7 @@ TEST_CASE("Test Result combiner") {
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
         r1->setType(std::vector<Synonym>{"b"});
-        std::vector<std::vector<Entity>> tuples1{{a1},
-                                                 {a2},
-                                                 {a3}};
+        std::vector<std::vector<Entity>> tuples1{{a1}, {a2}, {a3}};
         r1->setTuples(tuples1);
 
         ResultHandler evaluator = ResultHandler();

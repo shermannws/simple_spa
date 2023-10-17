@@ -1,6 +1,6 @@
 template<typename S>
 StmtToStmtRelationshipManager<S>::StmtToStmtRelationshipManager()
-        : relationshipStore(std::make_shared<S>()), starRelationshipStore(std::make_shared<S>()) {};
+    : relationshipStore(std::make_shared<S>()), starRelationshipStore(std::make_shared<S>()){};
 
 template<typename S>
 void StmtToStmtRelationshipManager<S>::storeRelationship(std::shared_ptr<Statement> statement1,

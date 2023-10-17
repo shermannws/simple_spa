@@ -63,7 +63,7 @@ Synonym PQLParser::parseResultClause(Query &query) {
 void PQLParser::parseClauses(Query &query) {
     std::unordered_map<std::string, processClausefunc> clauseExtractorMap{
             {"such that", [&](Query &query) { return processSuchThatClause(query); }},
-            {"pattern",   [&](Query &query) { return processPatternClause(query); }}};
+            {"pattern", [&](Query &query) { return processPatternClause(query); }}};
 
     while (!tokenizer->peekToken()->isToken(TokenType::Empty)) {
         std::string clauseConnector = tokenizer->peekToken()->getRep();

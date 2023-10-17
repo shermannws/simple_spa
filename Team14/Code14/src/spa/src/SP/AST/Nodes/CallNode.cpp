@@ -1,7 +1,7 @@
 #include "CallNode.h"
 
 CallNode::CallNode(StatementNumber statementNumber, ProcedureName procedureName)
-        : StatementNode(statementNumber), procedureName(std::move(procedureName)) {}
+    : StatementNode(statementNumber), procedureName(std::move(procedureName)) {}
 
 ProcedureName CallNode::getProcedureName() { return procedureName; }
 

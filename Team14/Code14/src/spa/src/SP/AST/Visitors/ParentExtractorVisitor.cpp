@@ -1,8 +1,8 @@
 #include "ParentExtractorVisitor.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
-#include "Commons/StatementTypeFactory.h"
 #include "Commons/StatementFactory.h"
+#include "Commons/StatementTypeFactory.h"
 
 ParentExtractorVisitor::ParentExtractorVisitor(std::shared_ptr<PkbWriter> writer) { this->pkbWriter = writer; }
 

@@ -1,22 +1,18 @@
-#include <unordered_map>
-#include <memory>
 #include <functional>
+#include <memory>
+#include <unordered_map>
 
-#include "StatementFactory.h"
-#include "StatementTypeFactory.h"
 #include "SP/AST/Nodes/CallNode.h"
 #include "SP/AST/Nodes/PrintNode.h"
 #include "SP/AST/Nodes/ReadNode.h"
+#include "StatementFactory.h"
+#include "StatementTypeFactory.h"
 
-std::unordered_map<StatementType, std::function<std::shared_ptr<Statement>(
-        std::shared_ptr<StatementNode>)>> StatementFactory::factoryMethodMap = {
-        {StatementType::Assign, createAssignStatement},
-        {StatementType::Call,   createCallStatement},
-        {StatementType::Print,  createPrintStatement},
-        {StatementType::Read,   createReadStatement},
-        {StatementType::If,     createIfStatement},
-        {StatementType::While,  createWhileStatement}
-};
+std::unordered_map<StatementType, std::function<std::shared_ptr<Statement>(std::shared_ptr<StatementNode>)>>
+        StatementFactory::factoryMethodMap = {
+                {StatementType::Assign, createAssignStatement}, {StatementType::Call, createCallStatement},
+                {StatementType::Print, createPrintStatement},   {StatementType::Read, createReadStatement},
+                {StatementType::If, createIfStatement},         {StatementType::While, createWhileStatement}};
 
 std::shared_ptr<Statement>
 StatementFactory::createStatementFromStatementNode(const std::shared_ptr<StatementNode> &node) {

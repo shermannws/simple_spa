@@ -63,9 +63,9 @@ void ASTPrinterVisitor::visitWhileNode(WhileNode *node, std::vector<std::shared_
 void ASTPrinterVisitor::visitArithmeticExpressionNode(ArithmeticExpressionNode *node,
                                                       std::vector<std::shared_ptr<ASTNode>> parents,
                                                       std::shared_ptr<ASTNode> proc) const {
-    std::unordered_map<ArithmeticOperatorType, std::string> stringMap = {{ArithmeticOperatorType::Plus,   ":plus"},
-                                                                         {ArithmeticOperatorType::Minus,  ":minus"},
-                                                                         {ArithmeticOperatorType::Times,  ":times"},
+    std::unordered_map<ArithmeticOperatorType, std::string> stringMap = {{ArithmeticOperatorType::Plus, ":plus"},
+                                                                         {ArithmeticOperatorType::Minus, ":minus"},
+                                                                         {ArithmeticOperatorType::Times, ":times"},
                                                                          {ArithmeticOperatorType::Divide, ":divide"},
                                                                          {ArithmeticOperatorType::Modulo, ":modulo"}};
     assert(stringMap.find(node->getOperatorType()) != stringMap.end());
@@ -89,12 +89,12 @@ void ASTPrinterVisitor::visitRelativeExpressionNode(RelativeExpressionNode *node
                                                     std::vector<std::shared_ptr<ASTNode>> parents,
                                                     std::shared_ptr<ASTNode> proc) const {
     std::unordered_map<ComparisonOperatorType, std::string> stringMap = {
-            {ComparisonOperatorType::GreaterThan,      ":greater"},
+            {ComparisonOperatorType::GreaterThan, ":greater"},
             {ComparisonOperatorType::GreaterThanEqual, ":greaterEqual"},
-            {ComparisonOperatorType::LessThan,         ":less"},
-            {ComparisonOperatorType::LessThanEqual,    ":lessEqual"},
-            {ComparisonOperatorType::Equal,            ":eq"},
-            {ComparisonOperatorType::NotEqual,         ":neq"}};
+            {ComparisonOperatorType::LessThan, ":less"},
+            {ComparisonOperatorType::LessThanEqual, ":lessEqual"},
+            {ComparisonOperatorType::Equal, ":eq"},
+            {ComparisonOperatorType::NotEqual, ":neq"}};
     assert(stringMap.find(node->getComparisonOperatorType()) != stringMap.end());
     std::cout << stringMap[node->getComparisonOperatorType()] << "\n";
 }

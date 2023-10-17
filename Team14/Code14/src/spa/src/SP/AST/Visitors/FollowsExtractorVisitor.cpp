@@ -15,11 +15,8 @@ void FollowsExtractorVisitor::visitStatementListNode(StatementListNode *node,
         for (auto it2 = it + 1; it2 != stmts.end(); it2++) {
             auto s1 = *it;
             auto s2 = *it2;
-            this->pkbWriter->addFollowsRelationship(
-                    StatementFactory::createStatementFromStatementNode(s1),
-                    StatementFactory::createStatementFromStatementNode(s2),
-                    isDirect
-            );
+            this->pkbWriter->addFollowsRelationship(StatementFactory::createStatementFromStatementNode(s1),
+                                                    StatementFactory::createStatementFromStatementNode(s2), isDirect);
             isDirect = false;
         }
     }

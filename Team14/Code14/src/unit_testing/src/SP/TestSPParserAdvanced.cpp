@@ -77,12 +77,12 @@ TEST_CASE("Valid program with single statements") {
     SECTION("Single while") {
         std::vector<SPToken> tokens = {SPToken(TokenType::Name, "procedure"), SPToken(TokenType::Name, "procedure"),
                                        SPToken(TokenType::OpenCurlyParenthesis, "{"), SPToken(TokenType::Name, "while"),
-                // Conditional expression
+                                       // Conditional expression
                                        SPToken(TokenType::OpenRoundParenthesis, "("), SPToken(TokenType::Name, "k"),
                                        SPToken(TokenType::RelationalOperator, ">"), SPToken(TokenType::Name, "1"),
                                        SPToken(TokenType::CloseRoundParenthesis, ")"),
 
-                // statement list
+                                       // statement list
                                        SPToken(TokenType::OpenCurlyParenthesis, "{"), SPToken(TokenType::Name, "a"),
                                        SPToken(TokenType::Equals, "="), SPToken(TokenType::Name, "r"),
                                        SPToken(TokenType::Semicolon, ";"),
@@ -137,11 +137,11 @@ TEST_CASE("Valid program to test conditional expressions") {
     SECTION("Simple rel_expr") {
         std::vector<SPToken> tokens = {SPToken(TokenType::Name, "procedure"), SPToken(TokenType::Name, "procedure"),
                                        SPToken(TokenType::OpenCurlyParenthesis, "{"), SPToken(TokenType::Name, "while"),
-                // Conditional expression (...)
+                                       // Conditional expression (...)
                                        SPToken(TokenType::OpenRoundParenthesis, "("), SPToken(TokenType::Name, "a"),
                                        SPToken(TokenType::RelationalOperator, ">"), SPToken(TokenType::Name, "b"),
                                        SPToken(TokenType::CloseRoundParenthesis, ")"),
-                // statement list
+                                       // statement list
                                        SPToken(TokenType::OpenCurlyParenthesis, "{"), SPToken(TokenType::Name, "a"),
                                        SPToken(TokenType::Equals, "="), SPToken(TokenType::Name, "r"),
                                        SPToken(TokenType::Semicolon, ";"),

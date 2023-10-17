@@ -1,15 +1,15 @@
 #include <string>
 
-#include "EntityExtractorVisitor.h"
-#include "Commons/Entities/Constant.h"
-#include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/AssignStatement.h"
-#include "Commons/Entities/PrintStatement.h"
-#include "Commons/Entities/ReadStatement.h"
-#include "Commons/Entities/IfStatement.h"
-#include "Commons/Entities/WhileStatement.h"
 #include "Commons/Entities/CallStatement.h"
+#include "Commons/Entities/Constant.h"
+#include "Commons/Entities/IfStatement.h"
+#include "Commons/Entities/PrintStatement.h"
+#include "Commons/Entities/Procedure.h"
+#include "Commons/Entities/ReadStatement.h"
 #include "Commons/Entities/Variable.h"
+#include "Commons/Entities/WhileStatement.h"
+#include "EntityExtractorVisitor.h"
 
 EntityExtractorVisitor::EntityExtractorVisitor(std::shared_ptr<PkbWriter> writer) { this->pkbWriter = writer; }
 

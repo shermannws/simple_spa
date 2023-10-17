@@ -1,23 +1,23 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <unordered_map>
-#include <functional>
 
-#include "Commons/Entities/Statement.h"
-#include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/AssignStatement.h"
 #include "Commons/Entities/CallStatement.h"
+#include "Commons/Entities/IfStatement.h"
 #include "Commons/Entities/PrintStatement.h"
 #include "Commons/Entities/ReadStatement.h"
-#include "Commons/Entities/IfStatement.h"
+#include "Commons/Entities/Statement.h"
+#include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/WhileStatement.h"
 #include "SP/AST/Nodes/StatementNode.h"
 
 class StatementFactory {
 private:
-    static std::unordered_map<StatementType, std::function<std::shared_ptr<Statement>(
-            std::shared_ptr<StatementNode>)>> factoryMethodMap;
+    static std::unordered_map<StatementType, std::function<std::shared_ptr<Statement>(std::shared_ptr<StatementNode>)>>
+            factoryMethodMap;
 
     static std::shared_ptr<AssignStatement> createAssignStatement(const std::shared_ptr<StatementNode> &node);
 

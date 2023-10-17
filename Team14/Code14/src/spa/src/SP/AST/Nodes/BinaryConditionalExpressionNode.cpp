@@ -4,9 +4,9 @@ BinaryConditionalExpressionNode::BinaryConditionalExpressionNode(
         BinaryConditionalExpressionType binaryConditionalExpressionType,
         std::shared_ptr<ConditionalExpressionNode> leftConditionalExpression,
         std::shared_ptr<ConditionalExpressionNode> rightConditionalExpression)
-        : binaryConditionalExpressionType(binaryConditionalExpressionType),
-          leftConditionalExpression(std::move(leftConditionalExpression)),
-          rightConditionalExpression(std::move(rightConditionalExpression)) {}
+    : binaryConditionalExpressionType(binaryConditionalExpressionType),
+      leftConditionalExpression(std::move(leftConditionalExpression)),
+      rightConditionalExpression(std::move(rightConditionalExpression)) {}
 
 BinaryConditionalExpressionType BinaryConditionalExpressionNode::getBinaryConditionalExpressionType() {
     return binaryConditionalExpressionType;

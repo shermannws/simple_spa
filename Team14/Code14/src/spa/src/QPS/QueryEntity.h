@@ -9,9 +9,7 @@
 /**
  * Enum class representing all valid query entity types
  */
-enum class QueryEntityType {
-    Procedure, Stmt, Read, Print, Assign, Call, While, If, Variable, Constant, Invalid
-};
+enum class QueryEntityType { Procedure, Stmt, Read, Print, Assign, Call, While, If, Variable, Constant, Invalid };
 
 /**
  * @brief QueryEntity is a design entity declared in PQL queries

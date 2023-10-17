@@ -52,12 +52,12 @@ private:
      * Map of comparison operator string to ComparisonOperatorType.
      */
     inline static const std::unordered_map<std::string, ComparisonOperatorType> stringToOperatorTypeMap = {
-            {AppConstants::STRING_GREATER_THAN,  ComparisonOperatorType::GreaterThan},
+            {AppConstants::STRING_GREATER_THAN, ComparisonOperatorType::GreaterThan},
             {AppConstants::STRING_GREATER_EQUAL, ComparisonOperatorType::GreaterThanEqual},
-            {AppConstants::STRING_LESS_THAN,     ComparisonOperatorType::LessThan},
-            {AppConstants::STRING_LESS_EQUAL,    ComparisonOperatorType::LessThanEqual},
-            {AppConstants::STRING_DOUBLE_EQUAL,  ComparisonOperatorType::Equal},
-            {AppConstants::STRING_NOT_EQUAL,     ComparisonOperatorType::NotEqual}};
+            {AppConstants::STRING_LESS_THAN, ComparisonOperatorType::LessThan},
+            {AppConstants::STRING_LESS_EQUAL, ComparisonOperatorType::LessThanEqual},
+            {AppConstants::STRING_DOUBLE_EQUAL, ComparisonOperatorType::Equal},
+            {AppConstants::STRING_NOT_EQUAL, ComparisonOperatorType::NotEqual}};
 
 public:
     /**

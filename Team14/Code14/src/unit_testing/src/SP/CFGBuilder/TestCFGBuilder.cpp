@@ -53,14 +53,9 @@ TEST_CASE("Test single procedure") {
 
     // map stmtnum to stmttype
     std::vector<std::pair<StatementNumber, StatementType>> numToTypeVector = {
-            {1, StatementType::Assign},
-            {2, StatementType::Read},
-            {3, StatementType::Print},
-            {4, StatementType::If},
-            {5, StatementType::Assign},
-            {6, StatementType::Assign},
-            {7, StatementType::While},
-            {8, StatementType::Print},
+            {1, StatementType::Assign}, {2, StatementType::Read},   {3, StatementType::Print},
+            {4, StatementType::If},     {5, StatementType::Assign}, {6, StatementType::Assign},
+            {7, StatementType::While},  {8, StatementType::Print},
     };
 
     for (auto [stmtNum, stmtType]: numToTypeVector) {

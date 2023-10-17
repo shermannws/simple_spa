@@ -51,9 +51,9 @@ private:
      * Map of arithmetic operator string to ArithmeticOperatorType.
      */
     inline static const std::unordered_map<std::string, ArithmeticOperatorType> stringToOperatorTypeMap = {
-            {AppConstants::STRING_PLUS,   ArithmeticOperatorType::Plus},
-            {AppConstants::STRING_MINUS,  ArithmeticOperatorType::Minus},
-            {AppConstants::STRING_TIMES,  ArithmeticOperatorType::Times},
+            {AppConstants::STRING_PLUS, ArithmeticOperatorType::Plus},
+            {AppConstants::STRING_MINUS, ArithmeticOperatorType::Minus},
+            {AppConstants::STRING_TIMES, ArithmeticOperatorType::Times},
             {AppConstants::STRING_DIVIDE, ArithmeticOperatorType::Divide},
             {AppConstants::STRING_MODULO, ArithmeticOperatorType::Modulo}};
 
@@ -61,9 +61,9 @@ private:
      * Map of ArithmeticOperatorType to arithmetic operator string.
      */
     inline static const std::unordered_map<ArithmeticOperatorType, std::string> operatorTypeToStringMap = {
-            {ArithmeticOperatorType::Plus,   AppConstants::STRING_PLUS},
-            {ArithmeticOperatorType::Minus,  AppConstants::STRING_MINUS},
-            {ArithmeticOperatorType::Times,  AppConstants::STRING_TIMES},
+            {ArithmeticOperatorType::Plus, AppConstants::STRING_PLUS},
+            {ArithmeticOperatorType::Minus, AppConstants::STRING_MINUS},
+            {ArithmeticOperatorType::Times, AppConstants::STRING_TIMES},
             {ArithmeticOperatorType::Divide, AppConstants::STRING_DIVIDE},
             {ArithmeticOperatorType::Modulo, AppConstants::STRING_MODULO}};
 
