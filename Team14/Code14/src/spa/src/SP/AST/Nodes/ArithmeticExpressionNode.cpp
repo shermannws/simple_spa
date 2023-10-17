@@ -18,6 +18,7 @@ ArithmeticOperatorType ArithmeticExpressionNode::translateOperatorTypeString(con
     assert(stringToOperatorTypeMap.find(operatorTypeString) != stringToOperatorTypeMap.end());
     return stringToOperatorTypeMap.at(operatorTypeString);
 }
+
 std::vector<std::shared_ptr<ASTNode>> ArithmeticExpressionNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children{leftExpression, rightExpression};
     return children;

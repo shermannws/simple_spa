@@ -5,6 +5,11 @@ Statement::Statement(StatementNumber lineNo, StatementType statementType)
     this->statementType = statementType;
 }
 
+Statement::Statement(StatementNumber lineNo, StatementType statementType, AttrValue attrValue)
+    : Entity(std::make_shared<EntityValue>(std::to_string(lineNo)), EntityType::Statement,
+             std::make_shared<AttrValue>(attrValue)),
+      statementType(statementType) {}
+
 StatementType Statement::getStatementType() const { return this->statementType; }
 
 bool Statement::isStatementType(StatementType statementType) const {

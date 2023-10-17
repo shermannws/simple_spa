@@ -96,4 +96,5 @@ public:
      */
     void clear();
 };
+
 #include "DoubleMapStore.hpp"
