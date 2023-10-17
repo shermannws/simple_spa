@@ -12,6 +12,8 @@
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/AST/Visitors/ModifiesExtractorVisitor.h"
 #include "SP/AST/Visitors/ParentExtractorVisitor.h"
+#include "SP/CFG/CFGBuilder.h"
+#include "SP/CFG/CFGExtractor.h"
 #include "SP/AST/Traverser/Traverser.h"
 #include "PKB/PkbConcreteWriter.h"
 #include "ASTGenerator.h"
@@ -412,4 +414,51 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
     REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varD));
     REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varE));
     REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varF));
+}
+
+
+TEST_CASE("Test CFG Extractor - test CFG saving and Next extraction") {
+    std::string sourceProgram =
+            "procedure Proc1 {"
+            "   x = 1 + 2 * y - (1 / var) % 5;"    // stmt 1
+            "   read x;"                           // stmt 2
+            "   print y;"                          // stmt 3
+            "   if (x > 1) then {"                 // stmt 4
+            "       z = y;"                        // stmt 5
+            "   } else {"
+            "       var1 = 5;"                     // stmt 6
+            "   } "
+            "   while (1 != 3) {"                  // stmt 7
+            "       print c;"                      // stmt 8
+            "   }"
+            "}"
+            "procedure Proc2 { "
+            "   read x; "
+            "}"
+            "procedure Proc3 { "
+            "   print y; "
+            "}"
+            "procedure Proc4 { "
+            "   call Proc1; "
+            "}"
+            "procedure Proc5 { "
+            "   if (z > 1) then { "
+            "       print p; "
+            "   } else { "
+            "       read r; "
+            "   } "
+            "}"
+            "procedure Proc6 { "
+            "   while (z <= w) { "
+            "       x = 2; "
+            "   } "
+            "}";
+
+    std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceProgram);
+
+    auto cfgs = CFGBuilder::buildAllCFG(rootNode);
+
+    auto& [cfgHead, proc1CFGNodes] = cfgs["Proc1"];
+
+    // TODO: Finish test
 }
