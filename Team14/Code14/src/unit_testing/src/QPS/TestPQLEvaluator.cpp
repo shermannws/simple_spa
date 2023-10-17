@@ -4,16 +4,17 @@
 
 #include <unordered_map>
 
-#include "catch.hpp"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
 #include "StubPkbReader.h"
+#include "catch.hpp"
 
 
 using namespace std;
 
-std::shared_ptr<StubPkbReader> stubPkbReader = std::make_shared<StubPkbReader>();
+std::shared_ptr<StubPkbReader> stubPkbReader =
+        std::make_shared<StubPkbReader>();
 
 TEST_CASE("Test formatResult") {
 
@@ -24,19 +25,24 @@ TEST_CASE("Test formatResult") {
         Result r = Result();
         r.setType(std::vector<Synonym>{"a", "x"});
 
-        std::vector<Entity> v1 {Statement(1, StatementType::Assign), Variable("my_variable")};
-        std::vector<Entity> v2 {Statement(5, StatementType::Stmt), Variable("another_variable")};
+        std::vector<Entity> v1{Statement(1, StatementType::Assign),
+                               Variable("my_variable")};
+        std::vector<Entity> v2{Statement(5, StatementType::Stmt),
+                               Variable("another_variable")};
 
-        std::vector<std::vector<Entity>> tuples {v1, v2};
+        std::vector<std::vector<Entity>> tuples{v1, v2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
 
-        std::list<std::string> formattedResults = evaluator.formatResult(query, r);
+        std::list<std::string> formattedResults =
+                evaluator.formatResult(query, r);
 
-        std::list<std::string> expected {"my_variable", "another_variable"};
-        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "my_variable") != formattedResults.end());
-        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "another_variable") != formattedResults.end());
+        std::list<std::string> expected{"my_variable", "another_variable"};
+        REQUIRE(find(formattedResults.begin(), formattedResults.end(),
+                     "my_variable") != formattedResults.end());
+        REQUIRE(find(formattedResults.begin(), formattedResults.end(),
+                     "another_variable") != formattedResults.end());
     }
 
     SECTION("Follows query single tuple") {
@@ -46,8 +52,8 @@ TEST_CASE("Test formatResult") {
         Result r = Result();
         r.setType(std::vector<Synonym>{"s"});
 
-        std::vector<Entity> v1 {Statement(1, StatementType::Stmt)};
-        std::vector<Entity> v2 {Statement(2, StatementType::Stmt)};
+        std::vector<Entity> v1{Statement(1, StatementType::Stmt)};
+        std::vector<Entity> v2{Statement(2, StatementType::Stmt)};
 
 
         std::vector<std::vector<Entity>> tuples{v1, v2};
@@ -55,11 +61,14 @@ TEST_CASE("Test formatResult") {
 
         PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
 
-        std::list<std::string> formattedResults = evaluator.formatResult(query, r);
+        std::list<std::string> formattedResults =
+                evaluator.formatResult(query, r);
 
-        std::list<std::string> expected {"1", "2"};
-        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "1") != formattedResults.end());
-        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "2") != formattedResults.end());
+        std::list<std::string> expected{"1", "2"};
+        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "1") !=
+                formattedResults.end());
+        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "2") !=
+                formattedResults.end());
     }
 }
 
@@ -78,7 +87,7 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "2") != results.end());
     }
 
-    SECTION ("getUsesTypeIdent") {
+    SECTION("getUsesTypeIdent") {
         PQLParser parser("if ifs; Select ifs such that Uses(ifs, \"hello\")");
         Query queryObj = parser.parse();
 
@@ -92,7 +101,7 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "5") != results.end());
     }
 
-    SECTION ("getUsesStmt") {
+    SECTION("getUsesStmt") {
         PQLParser parser("stmt s; Select s such that Uses(s,_)");
         Query queryObj = parser.parse();
 
@@ -105,7 +114,7 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "3") != results.end());
     }
 
-    SECTION ("getUsesVar(s)") {
+    SECTION("getUsesVar(s)") {
         PQLParser parser("stmt s; variable v; Select v such that Uses(3,v)");
         Query queryObj = parser.parse();
 
@@ -115,10 +124,11 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 2);
         REQUIRE(find(results.begin(), results.end(), "name") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "asdfghjkl") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "asdfghjkl") !=
+                results.end());
     }
 
-    SECTION ("isStmtUsesVar") {
+    SECTION("isStmtUsesVar") {
         PQLParser parser("while w; Select w such that Uses(3,\"var\")");
         Query queryObj = parser.parse();
 
@@ -132,7 +142,7 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "15") != results.end());
     }
 
-    SECTION ("hasUses(s)") {
+    SECTION("hasUses(s)") {
         PQLParser parser("assign a; Select a such that Uses(3,_)");
         Query queryObj = parser.parse();
 
@@ -145,7 +155,8 @@ TEST_CASE("Test UsesSuchThatStrategy") {
 
     // USES(ENTREF, ENTREF)
     SECTION("getUsesProcPair") {
-        PQLParser parser("procedure p; variable v; Select v such that Uses(p, v)");
+        PQLParser parser(
+                "procedure p; variable v; Select v such that Uses(p, v)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -153,11 +164,13 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         auto resultObj = evaluator.evaluate(queryObj);
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 2);
-        REQUIRE(find(results.begin(), results.end(), "hello123") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "hello321") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "hello123") !=
+                results.end());
+        REQUIRE(find(results.begin(), results.end(), "hello321") !=
+                results.end());
     }
 
-    SECTION ("getUsesProcIdent") {
+    SECTION("getUsesProcIdent") {
         PQLParser parser("procedure p; Select p such that Uses(p, \"hello\")");
         Query queryObj = parser.parse();
 
@@ -166,10 +179,11 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         auto resultObj = evaluator.evaluate(queryObj);
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 1);
-        REQUIRE(find(results.begin(), results.end(), "ProcedureName") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "ProcedureName") !=
+                results.end());
     }
 
-    SECTION ("getUsesProc") {
+    SECTION("getUsesProc") {
         PQLParser parser("procedure p; Select p such that Uses(p,_)");
         Query queryObj = parser.parse();
 
@@ -180,8 +194,9 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         REQUIRE(results.size() == 0);
     }
 
-    SECTION ("getUsesVar(p)") {
-        PQLParser parser("stmt s; variable v; Select v such that Uses(\"proc\",v)");
+    SECTION("getUsesVar(p)") {
+        PQLParser parser(
+                "stmt s; variable v; Select v such that Uses(\"proc\",v)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -190,10 +205,11 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 2);
         REQUIRE(find(results.begin(), results.end(), "proc") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "anotherVar") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "anotherVar") !=
+                results.end());
     }
 
-    SECTION ("isProcUsesVar") {
+    SECTION("isProcUsesVar") {
         PQLParser parser(R"(while w; Select w such that Uses("proc","var"))");
         Query queryObj = parser.parse();
 
@@ -204,7 +220,7 @@ TEST_CASE("Test UsesSuchThatStrategy") {
         REQUIRE(results.size() == 0);
     }
 
-    SECTION ("hasUses(p)") {
+    SECTION("hasUses(p)") {
         PQLParser parser("assign a; Select a such that Uses(\"proc\",_)");
         Query queryObj = parser.parse();
 
@@ -222,7 +238,8 @@ TEST_CASE("Test UsesSuchThatStrategy") {
 TEST_CASE("Test ModifiesSuchThatStrategy") {
     // MODIFIES(STMTREF, ENTREF)
     SECTION("getModifiesStmtPair") {
-        PQLParser parser("stmt s; variable v; Select s such that Modifies(s, v)");
+        PQLParser parser(
+                "stmt s; variable v; Select s such that Modifies(s, v)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -235,7 +252,7 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "2") != results.end());
     }
 
-    SECTION ("getModifiesTypeIdent") {
+    SECTION("getModifiesTypeIdent") {
         PQLParser parser("read r; Select r such that Modifies(r, \"hello\")");
         Query queryObj = parser.parse();
 
@@ -248,7 +265,7 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "15") != results.end());
     }
 
-    SECTION ("getModifiesStmt") {
+    SECTION("getModifiesStmt") {
         PQLParser parser("while w; Select w such that Modifies(w,_)");
         Query queryObj = parser.parse();
 
@@ -260,7 +277,7 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "34") != results.end());
     }
 
-    SECTION ("getModifiesVar(s)") {
+    SECTION("getModifiesVar(s)") {
         PQLParser parser("variable v; Select v such that Modifies(34,v)");
         Query queryObj = parser.parse();
 
@@ -270,10 +287,11 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 2);
         REQUIRE(find(results.begin(), results.end(), "myVar") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "anotherVar") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "anotherVar") !=
+                results.end());
     }
 
-    SECTION ("isStmtModifiesVar") {
+    SECTION("isStmtModifiesVar") {
         PQLParser parser("while w; Select w such that Modifies(3,\"var\")");
         Query queryObj = parser.parse();
 
@@ -284,7 +302,7 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
         REQUIRE(results.size() == 0);
     }
 
-    SECTION ("hasModifies(s)") {
+    SECTION("hasModifies(s)") {
         PQLParser parser("assign a; Select a such that Modifies(3,_)");
         Query queryObj = parser.parse();
 
@@ -300,7 +318,8 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
 
     // MODIFIES(ENTREF, ENTREF)
     SECTION("getModifiesProcPair") {
-        PQLParser parser("procedure p; variable v; Select p such that Modifies(p, v)");
+        PQLParser parser(
+                "procedure p; variable v; Select p such that Modifies(p, v)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -309,13 +328,16 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 4);
         REQUIRE(find(results.begin(), results.end(), "first") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "second") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "second") !=
+                results.end());
         REQUIRE(find(results.begin(), results.end(), "third") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "fourth") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "fourth") !=
+                results.end());
     }
 
-    SECTION ("getModifiesProcIdent") {
-        PQLParser parser("procedure p; Select p such that Modifies(p, \"test\")");
+    SECTION("getModifiesProcIdent") {
+        PQLParser parser(
+                "procedure p; Select p such that Modifies(p, \"test\")");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -323,10 +345,11 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
         auto resultObj = evaluator.evaluate(queryObj);
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 1);
-        REQUIRE(find(results.begin(), results.end(), "Procedure") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "Procedure") !=
+                results.end());
     }
 
-    SECTION ("getModifiesProc") {
+    SECTION("getModifiesProc") {
         PQLParser parser("procedure p; Select p such that Modifies(p,_)");
         Query queryObj = parser.parse();
 
@@ -338,8 +361,9 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "first") != results.end());
     }
 
-    SECTION ("getModifiesVar(p)") {
-        PQLParser parser("stmt s; variable v; Select v such that Modifies(\"proc\",v)");
+    SECTION("getModifiesVar(p)") {
+        PQLParser parser(
+                "stmt s; variable v; Select v such that Modifies(\"proc\",v)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -349,8 +373,9 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
         REQUIRE(results.size() == 0);
     }
 
-    SECTION ("isProcModifiesVar") {
-        PQLParser parser(R"(stmt s; Select s such that Modifies("proc","var"))");
+    SECTION("isProcModifiesVar") {
+        PQLParser parser(
+                R"(stmt s; Select s such that Modifies("proc","var"))");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -365,7 +390,7 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "5") != results.end());
     }
 
-    SECTION ("hasModifies(p)") {
+    SECTION("hasModifies(p)") {
         PQLParser parser("assign a; Select a such that Modifies(\"proc\",_)");
         Query queryObj = parser.parse();
 
@@ -379,7 +404,7 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
 
 TEST_CASE("Test NextSuchThatStrategy") {
     // evaluateSynSyn
-    SECTION("leftRef == rightRef") { // false
+    SECTION("leftRef == rightRef") {// false
         PQLParser parser("stmt s; Select s such that Next(s,s)");
         Query queryObj = parser.parse();
 
@@ -390,7 +415,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
         REQUIRE(results.empty());
     }
 
-    SECTION ("getNextPair") {
+    SECTION("getNextPair") {
         PQLParser parser("assign a; read r; Select r such that Next(a, r)");
         Query queryObj = parser.parse();
 
@@ -405,7 +430,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
     }
 
     // evaluateSynAny
-    SECTION ("getNextTypeStmt") {
+    SECTION("getNextTypeStmt") {
         PQLParser parser("stmt s; Select s such that Next(s,14)");
         Query queryObj = parser.parse();
 
@@ -417,7 +442,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "13") != results.end());
     }
 
-    SECTION ("getNextTypeWildcard") {
+    SECTION("getNextTypeWildcard") {
         PQLParser parser("if if; Select if such that Next(if,_)");
         Query queryObj = parser.parse();
 
@@ -430,7 +455,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
     }
 
     // evaluateAnySyn
-    SECTION ("getNextStmtType") {
+    SECTION("getNextStmtType") {
         PQLParser parser("call call; Select call such that Next(23, call)");
         Query queryObj = parser.parse();
 
@@ -442,8 +467,9 @@ TEST_CASE("Test NextSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "24") != results.end());
     }
 
-    SECTION ("getNextWildcardType") {
-        PQLParser parser("assign assign; Select assign such that Next(_,assign)");
+    SECTION("getNextWildcardType") {
+        PQLParser parser(
+                "assign assign; Select assign such that Next(_,assign)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -470,7 +496,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "102") != results.end());
     }
 
-    SECTION ("hasAfterStmt") {
+    SECTION("hasAfterStmt") {
         PQLParser parser("stmt s; Select s such that Next(1,_)");
         Query queryObj = parser.parse();
 
@@ -481,7 +507,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
         REQUIRE(results.size() == 0);
     }
 
-    SECTION ("hasBeforeStmt") {
+    SECTION("hasBeforeStmt") {
         PQLParser parser("stmt s; Select s such that Next(_,1)");
         Query queryObj = parser.parse();
 
@@ -492,7 +518,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
         REQUIRE(results.size() == 0);
     }
 
-    SECTION ("hasNext") {
+    SECTION("hasNext") {
         PQLParser parser("stmt s; Select s such that Next(_,_)");
         Query queryObj = parser.parse();
 
@@ -523,8 +549,9 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "102") != results.end());
     }
 
-    SECTION ("getNextStarPair") {
-        PQLParser parser("read read; if if; Select read such that Next*(read, if)");
+    SECTION("getNextStarPair") {
+        PQLParser parser(
+                "read read; if if; Select read such that Next*(read, if)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -537,8 +564,8 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "31") != results.end());
     }
 
-        // evaluateSynAny
-    SECTION ("getNextStarTypeStmt") {
+    // evaluateSynAny
+    SECTION("getNextStarTypeStmt") {
         PQLParser parser("stmt s; Select s such that Next*(s,15)");
         Query queryObj = parser.parse();
 
@@ -552,7 +579,7 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "5") != results.end());
     }
 
-    SECTION ("getNextStarTypeWildcard") {
+    SECTION("getNextStarTypeWildcard") {
         PQLParser parser("while w; Select w such that Next*(w,_)");
         Query queryObj = parser.parse();
 
@@ -564,8 +591,8 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "20") != results.end());
     }
 
-        // evaluateAnySyn
-    SECTION ("getNextStarStmtType") {
+    // evaluateAnySyn
+    SECTION("getNextStarStmtType") {
         PQLParser parser("if ifs; Select ifs such that Next*(23, ifs)");
         Query queryObj = parser.parse();
 
@@ -577,7 +604,7 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "26") != results.end());
     }
 
-    SECTION ("getNextStarWildcardType") {
+    SECTION("getNextStarWildcardType") {
         PQLParser parser("read read; Select read such that Next*(_,read)");
         Query queryObj = parser.parse();
 
@@ -591,7 +618,7 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "15") != results.end());
     }
 
-        // evaluateBoolean
+    // evaluateBoolean
     SECTION("isNextStar") {
         PQLParser parser("if if; Select if such that Next*(1,2)");
         Query queryObj = parser.parse();
@@ -603,7 +630,7 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(results.size() == 0);
     }
 
-    SECTION ("hasAfterStarStmt") {
+    SECTION("hasAfterStarStmt") {
         PQLParser parser("stmt s; Select s such that Next*(1,_)");
         Query queryObj = parser.parse();
 
@@ -619,7 +646,7 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "5") != results.end());
     }
 
-    SECTION ("hasBeforeStarStmt") {
+    SECTION("hasBeforeStarStmt") {
         PQLParser parser("stmt s; Select s such that Next*(_,1)");
         Query queryObj = parser.parse();
 
@@ -630,7 +657,7 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
         REQUIRE(results.size() == 0);
     }
 
-    SECTION ("hasNextStar") {
+    SECTION("hasNextStar") {
         PQLParser parser("read r; Select r such that Next*(_,_)");
         Query queryObj = parser.parse();
 
@@ -652,11 +679,13 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     // build a query for the query "assign a; Select a pattern a(_, _)"
     Query queryObj = Query();
     Synonym assignSyn = "a";
-    std::shared_ptr<QueryEntity> assignInQuery = std::make_shared<QueryEntity>(QueryEntityType::Assign, assignSyn);
+    std::shared_ptr<QueryEntity> assignInQuery =
+            std::make_shared<QueryEntity>(QueryEntityType::Assign, assignSyn);
     queryObj.addDeclaration(assignInQuery);
     queryObj.addSelect(assignInQuery->getSynonym());
     ExpressionSpec rhs = ExpressionSpec{ExpressionSpecType::Wildcard, ""};
-    std::shared_ptr<PatternClause> patternClause = std::make_shared<PatternClause>();
+    std::shared_ptr<PatternClause> patternClause =
+            std::make_shared<PatternClause>();
     patternClause->setType(ClauseType::Assign);
     patternClause->setSyn(assignSyn);
     Ref wildcard;
@@ -679,7 +708,8 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("pattern a(wildcard , expr-spec)") { //getAssignStmtsByRhs, hasRhsWildCard == false
+TEST_CASE("pattern a(wildcard , expr-spec)") {// getAssignStmtsByRhs,
+                                              // hasRhsWildCard == false
     PQLParser parser("assign a; Select a pattern a(_, \"x   + y\")");
     Query queryObj = parser.parse();
 
@@ -692,7 +722,8 @@ TEST_CASE("pattern a(wildcard , expr-spec)") { //getAssignStmtsByRhs, hasRhsWild
     REQUIRE(find(results.begin(), results.end(), "5") != results.end());
 }
 
-TEST_CASE("pattern a(wildcard , _expr-spec_)") { //getAssignStmtsByRhs, hasRhsWildCard == true
+TEST_CASE("pattern a(wildcard , _expr-spec_)") {// getAssignStmtsByRhs,
+                                                // hasRhsWildCard == true
     PQLParser parser("assign a; Select a pattern a(_, _\"a/(b+c)\"_)");
     Query queryObj = parser.parse();
 
@@ -705,7 +736,7 @@ TEST_CASE("pattern a(wildcard , _expr-spec_)") { //getAssignStmtsByRhs, hasRhsWi
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("pattern a(var_synonym, wildcard)") { //getAllAssignStmtVarPair()
+TEST_CASE("pattern a(var_synonym, wildcard)") {// getAllAssignStmtVarPair()
     PQLParser parser("assign a; variable v; Select a pattern a(v, _)");
     Query queryObj = parser.parse();
 
@@ -718,8 +749,10 @@ TEST_CASE("pattern a(var_synonym, wildcard)") { //getAllAssignStmtVarPair()
     REQUIRE(find(results.begin(), results.end(), "2") != results.end());
 }
 
-TEST_CASE("pattern a(var_synonym, _expr-spec_)") { //getAssignStmtsVarPairByRhs, hasWildCard == true
-    PQLParser parser("assign a; variable v; Select a pattern a(v, _\"(a-b)+c\"_)");
+TEST_CASE("pattern a(var_synonym, _expr-spec_)") {// getAssignStmtsVarPairByRhs,
+                                                  // hasWildCard == true
+    PQLParser parser(
+            "assign a; variable v; Select a pattern a(v, _\"(a-b)+c\"_)");
     Query queryObj = parser.parse();
 
     auto stubReader = make_shared<StubPkbReader>();
@@ -731,7 +764,8 @@ TEST_CASE("pattern a(var_synonym, _expr-spec_)") { //getAssignStmtsVarPairByRhs,
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("pattern a(var_synonym, expr-spec)") { //getAssignStmtsVarPairByRhs, hasWildcard == false
+TEST_CASE("pattern a(var_synonym, expr-spec)") {// getAssignStmtsVarPairByRhs,
+                                                // hasWildcard == false
     PQLParser parser("assign a; variable v; Select v pattern a(v, \"a-b*c\")");
     Query queryObj = parser.parse();
 
@@ -745,7 +779,7 @@ TEST_CASE("pattern a(var_synonym, expr-spec)") { //getAssignStmtsVarPairByRhs, h
     REQUIRE(find(results.begin(), results.end(), "var3") != results.end());
 }
 
-TEST_CASE("pattern a(char_string , wildcard)") { //getAssignStmtsByLhs
+TEST_CASE("pattern a(char_string , wildcard)") {// getAssignStmtsByLhs
     PQLParser parser("assign a; Select a pattern a(\"x\", _)");
     Query queryObj = parser.parse();
 
@@ -757,7 +791,8 @@ TEST_CASE("pattern a(char_string , wildcard)") { //getAssignStmtsByLhs
     REQUIRE(find(results.begin(), results.end(), "6") != results.end());
 }
 
-TEST_CASE("pattern a(char_string , expr-spec)") { //getAssignStmtsByLhsRhs, hasRhsWildcard = true
+TEST_CASE("pattern a(char_string , expr-spec)") {// getAssignStmtsByLhsRhs,
+                                                 // hasRhsWildcard = true
     PQLParser parser("assign a; Select a pattern a(\"x\", _\"(a-b)\"_)");
     Query queryObj = parser.parse();
 
@@ -770,8 +805,10 @@ TEST_CASE("pattern a(char_string , expr-spec)") { //getAssignStmtsByLhsRhs, hasR
     REQUIRE(find(results.begin(), results.end(), "100000") != results.end());
 }
 
-TEST_CASE("pattern, select synonym not in clause ") { //getAssignStmtsByLhsRhs, hasRhsWildcard = false
-    PQLParser parser("assign a; variable v; Select v pattern a(\"noneCase\", \"(a-b)\")");
+TEST_CASE("pattern, select synonym not in clause ") {// getAssignStmtsByLhsRhs,
+                                                     // hasRhsWildcard = false
+    PQLParser parser("assign a; variable v; Select v pattern a(\"noneCase\", "
+                     "\"(a-b)\")");
     Query queryObj = parser.parse();
 
     auto stubReader = make_shared<StubPkbReader>();
@@ -782,54 +819,57 @@ TEST_CASE("pattern, select synonym not in clause ") { //getAssignStmtsByLhsRhs, 
 }
 
 TEST_CASE("Calls and Calls* clauses") {
-    SECTION ("boolean results, Calls (_,_)") {
+    SECTION("boolean results, Calls (_,_)") {
         // Calls(_,_) - hasCalls()
         PQLParser parser("assign a; Select a such that Calls(_,_)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
         PQLEvaluator evaluator = PQLEvaluator(stubReader);
-        auto resultObj = evaluator.evaluate(queryObj); // hasCalls return true
+        auto resultObj = evaluator.evaluate(queryObj);// hasCalls return true
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 3);
         REQUIRE(find(results.begin(), results.end(), "1") != results.end());
         REQUIRE(find(results.begin(), results.end(), "2") != results.end());
         REQUIRE(find(results.begin(), results.end(), "3") != results.end());
-
     }
 
-    SECTION ("boolean result, Calls (_,ident)") {
+    SECTION("boolean result, Calls (_,ident)") {
         // Calls (_, procName) - isCallee(procName)
         PQLParser parser("assign a; Select a such that Calls(_,\"testIdent\")");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
         PQLEvaluator evaluator = PQLEvaluator(stubReader);
-        auto resultObj = evaluator.evaluate(queryObj); // isCallee return false
+        auto resultObj = evaluator.evaluate(queryObj);// isCallee return false
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 0);
     }
 
-    SECTION ("boolean result, Calls*(ident, _)") {
+    SECTION("boolean result, Calls*(ident, _)") {
         // isCallerStar(procName)
-        PQLParser parser("constant c; Select c such that Calls*(\"testIdent\",_)");
+        PQLParser parser(
+                "constant c; Select c such that Calls*(\"testIdent\",_)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
         PQLEvaluator evaluator = PQLEvaluator(stubReader);
-        auto resultObj = evaluator.evaluate(queryObj); // isCallerStar(procName) return true
+        auto resultObj = evaluator.evaluate(
+                queryObj);// isCallerStar(procName) return true
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 0);
     }
 
-    SECTION ("boolean result, Calls*(ident, ident)") {
+    SECTION("boolean result, Calls*(ident, ident)") {
         //  isCallsStar(procName, procName)
-        PQLParser parser("stmt s; Select s such that  Calls*(\"testIdent\", \"testIdent2\")");
+        PQLParser parser("stmt s; Select s such that  Calls*(\"testIdent\", "
+                         "\"testIdent2\")");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
         PQLEvaluator evaluator = PQLEvaluator(stubReader);
-        auto resultObj = evaluator.evaluate(queryObj); // isCallsStar(procName, procName) return true
+        auto resultObj = evaluator.evaluate(
+                queryObj);// isCallsStar(procName, procName) return true
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 5);
         REQUIRE(find(results.begin(), results.end(), "1") != results.end());
@@ -837,12 +877,11 @@ TEST_CASE("Calls and Calls* clauses") {
         REQUIRE(find(results.begin(), results.end(), "3") != results.end());
         REQUIRE(find(results.begin(), results.end(), "4") != results.end());
         REQUIRE(find(results.begin(), results.end(), "5") != results.end());
-
     }
 
-    SECTION ("Calls(*) pair results") {
+    SECTION("Calls(*) pair results") {
         // Calls(p,q) - getCallsPair()
-        SECTION ("pair results, Calls (p,q)") {
+        SECTION("pair results, Calls (p,q)") {
             PQLParser parser("procedure p, q; Select p such that Calls(p,q)");
             Query queryObj = parser.parse();
 
@@ -851,10 +890,11 @@ TEST_CASE("Calls and Calls* clauses") {
             auto resultObj = evaluator.evaluate(queryObj);
             auto results = evaluator.formatResult(queryObj, resultObj);
             REQUIRE(results.size() == 1);
-            REQUIRE(find(results.begin(), results.end(), "procedureLHS") != results.end());
+            REQUIRE(find(results.begin(), results.end(), "procedureLHS") !=
+                    results.end());
         }
 
-        SECTION ("pair results, Calls (p,p)") {
+        SECTION("pair results, Calls (p,p)") {
             PQLParser parser("procedure p; Select p such that Calls(p,p)");
             Query queryObj = parser.parse();
 
@@ -865,8 +905,9 @@ TEST_CASE("Calls and Calls* clauses") {
             REQUIRE(results.size() == 0);
         }
 
-        SECTION ("pair results, Calls* (p,p)") {
-            PQLParser parser("procedure p; assign a; Select a such that Calls*(p,p)");
+        SECTION("pair results, Calls* (p,p)") {
+            PQLParser parser(
+                    "procedure p; assign a; Select a such that Calls*(p,p)");
             Query queryObj = parser.parse();
 
             auto stubReader = make_shared<StubPkbReader>();
@@ -875,13 +916,13 @@ TEST_CASE("Calls and Calls* clauses") {
             auto results = evaluator.formatResult(queryObj, resultObj);
             REQUIRE(results.size() == 0);
         }
-
     }
 
-    SECTION ("Calls(*) procedure singles results") {
+    SECTION("Calls(*) procedure singles results") {
         // Calls(_, syn) - getCallees() returns non-empty
-        SECTION ("single results, Calls (_,syn)") {
-            PQLParser parser("procedure procedure; Select procedure such that Calls(_,procedure)");
+        SECTION("single results, Calls (_,syn)") {
+            PQLParser parser("procedure procedure; Select procedure such that "
+                             "Calls(_,procedure)");
             Query queryObj = parser.parse();
 
             auto stubReader = make_shared<StubPkbReader>();
@@ -889,13 +930,16 @@ TEST_CASE("Calls and Calls* clauses") {
             auto resultObj = evaluator.evaluate(queryObj);
             auto results = evaluator.formatResult(queryObj, resultObj);
             REQUIRE(results.size() == 2);
-            REQUIRE(find(results.begin(), results.end(), "procedure1") != results.end());
-            REQUIRE(find(results.begin(), results.end(), "procedure2") != results.end());
+            REQUIRE(find(results.begin(), results.end(), "procedure1") !=
+                    results.end());
+            REQUIRE(find(results.begin(), results.end(), "procedure2") !=
+                    results.end());
         }
 
         // Calls(syn, procName) -  - getCallers(procName) returns empty
-        SECTION ("single results, Calls (syn, ident)") {
-            PQLParser parser("procedure procedure; stmt s; Select s such that Calls(procedure, \"procName\")");
+        SECTION("single results, Calls (syn, ident)") {
+            PQLParser parser("procedure procedure; stmt s; Select s such that "
+                             "Calls(procedure, \"procName\")");
             Query queryObj = parser.parse();
 
             auto stubReader = make_shared<StubPkbReader>();
@@ -906,8 +950,9 @@ TEST_CASE("Calls and Calls* clauses") {
         }
 
         // Calls*(procName, syn) - getCalleesStar(procName) returns empty
-        SECTION ("single results, Calls* (ident, syn)") {
-            PQLParser parser("procedure procedure; Select procedure such that Calls*(\"procName\",procedure)");
+        SECTION("single results, Calls* (ident, syn)") {
+            PQLParser parser("procedure procedure; Select procedure such that "
+                             "Calls*(\"procName\",procedure)");
             Query queryObj = parser.parse();
 
             auto stubReader = make_shared<StubPkbReader>();
@@ -915,12 +960,12 @@ TEST_CASE("Calls and Calls* clauses") {
             auto resultObj = evaluator.evaluate(queryObj);
             auto results = evaluator.formatResult(queryObj, resultObj);
             REQUIRE(results.size() == 0);
-
         }
 
         // Calls*(syn, _)  - getCallersStar() returns non-empty
-        SECTION ("single results, Calls* (syn,_)") {
-            PQLParser parser("procedure p; assign a; Select a such that Calls*(p,_)");
+        SECTION("single results, Calls* (syn,_)") {
+            PQLParser parser(
+                    "procedure p; assign a; Select a such that Calls*(p,_)");
             Query queryObj = parser.parse();
 
             auto stubReader = make_shared<StubPkbReader>();
@@ -931,68 +976,73 @@ TEST_CASE("Calls and Calls* clauses") {
             REQUIRE(find(results.begin(), results.end(), "1") != results.end());
             REQUIRE(find(results.begin(), results.end(), "2") != results.end());
             REQUIRE(find(results.begin(), results.end(), "3") != results.end());
-
         }
-
     }
-
 }
 
 TEST_CASE("multiclause, pattern only - synonym in empty result table") {
-    // assign a, a1; variable v; Select a pattern a (v,_"multiclauseTest+patternOnly"_) and a(v1,_)
+    // assign a, a1; variable v; Select a pattern a
+    // (v,_"multiclauseTest+patternOnly"_) and a(v1,_)
 
-    auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
-                                                RootType::Synonym, "v",
-                                                ExpressionSpecType::ExactMatch, "((multiclauseTest)+(patternOnly))");
-    auto pc2 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
-                                                RootType::Synonym, "v1",
-                                                ExpressionSpecType::Wildcard, "");
+    auto pc1 = QPSTestUtil::createPatternClause(
+            ClauseType::Assign, "a", RootType::Synonym, "v",
+            ExpressionSpecType::ExactMatch,
+            "((multiclauseTest)+(patternOnly))");
+    auto pc2 = QPSTestUtil::createPatternClause(
+            ClauseType::Assign, "a", RootType::Synonym, "v1",
+            ExpressionSpecType::Wildcard, "");
 
     Query queryObj;
     queryObj.addSelect("a");
-    queryObj.addClause(pc1); // returns a,v of 1 var1, 1 var2, 2 var3, 3 var4, 4 var3
-    queryObj.addClause(pc2); // returns a,v1 of 6 var6
+    queryObj.addClause(
+            pc1);// returns a,v of 1 var1, 1 var2, 2 var3, 3 var4, 4 var3
+    queryObj.addClause(pc2);// returns a,v1 of 6 var6
     std::vector<std::shared_ptr<QueryEntity>> decl = {
             std::make_shared<QueryEntity>(QueryEntityType::Assign, "a"),
             std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
-            std::make_shared<QueryEntity>(QueryEntityType::Variable, "v")
-    };
+            std::make_shared<QueryEntity>(QueryEntityType::Variable, "v")};
     queryObj.addDeclaration(decl[0]);
     queryObj.addDeclaration(decl[1]);
     queryObj.addDeclaration(decl[2]);
 
     auto stubReader = make_shared<StubPkbReader>();
     PQLEvaluator evaluator = PQLEvaluator(stubReader);
-    auto resultObj = evaluator.evaluate(queryObj); // no intersection of v, no a returned
+    auto resultObj =
+            evaluator.evaluate(queryObj);// no intersection of v, no a returned
     auto results = evaluator.formatResult(queryObj, resultObj);
     REQUIRE(resultObj.getType() == ResultType::Boolean);
     REQUIRE(resultObj.getBoolResult() == false);
     REQUIRE(results.size() == 0);
 }
 
-TEST_CASE("multiclause, suchThat only - False Result table ") { //syn not involved in clauses
-    // assign a, a1; variable v; Select a1 such that Follows*(a,20) and  Parent(1,10) and Uses(1, "x")
+TEST_CASE(
+        "multiclause, suchThat only - False Result table ") {// syn not involved
+                                                             // in clauses
+    // assign a, a1; variable v; Select a1 such that Follows*(a,20) and
+    // Parent(1,10) and Uses(1, "x")
 
-    auto sc1 = QPSTestUtil::createSuchThatClause(ClauseType::FollowsStar,
-                                                 RefType::StmtRef, RootType::Synonym, QueryEntityType::Assign, "a",
-                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "700");
-    auto sc2 = QPSTestUtil::createSuchThatClause(ClauseType::Parent,
-                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
-                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "10");
-    auto sc3 = QPSTestUtil::createSuchThatClause(ClauseType::Uses,
-                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
-                                                 RefType::EntRef, RootType::Ident, QueryEntityType::Variable, "multiClauseSTonly");
+    auto sc1 = QPSTestUtil::createSuchThatClause(
+            ClauseType::FollowsStar, RefType::StmtRef, RootType::Synonym,
+            QueryEntityType::Assign, "a", RefType::StmtRef, RootType::Integer,
+            QueryEntityType::Invalid, "700");
+    auto sc2 = QPSTestUtil::createSuchThatClause(
+            ClauseType::Parent, RefType::StmtRef, RootType::Integer,
+            QueryEntityType::Invalid, "1", RefType::StmtRef, RootType::Integer,
+            QueryEntityType::Invalid, "10");
+    auto sc3 = QPSTestUtil::createSuchThatClause(
+            ClauseType::Uses, RefType::StmtRef, RootType::Integer,
+            QueryEntityType::Invalid, "1", RefType::EntRef, RootType::Ident,
+            QueryEntityType::Variable, "multiClauseSTonly");
 
     Query queryObj;
     queryObj.addSelect("a1");
-    queryObj.addClause(sc1); // returns non-empty
-    queryObj.addClause(sc2); // returns  true
-    queryObj.addClause(sc3); // returns false
+    queryObj.addClause(sc1);// returns non-empty
+    queryObj.addClause(sc2);// returns  true
+    queryObj.addClause(sc3);// returns false
     std::vector<std::shared_ptr<QueryEntity>> decl = {
             std::make_shared<QueryEntity>(QueryEntityType::Assign, "a"),
             std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
-            std::make_shared<QueryEntity>(QueryEntityType::Variable, "v")
-    };
+            std::make_shared<QueryEntity>(QueryEntityType::Variable, "v")};
     queryObj.addDeclaration(decl[0]);
     queryObj.addDeclaration(decl[1]);
     queryObj.addDeclaration(decl[2]);
@@ -1007,19 +1057,22 @@ TEST_CASE("multiclause, suchThat only - False Result table ") { //syn not involv
 }
 
 TEST_CASE("multiclause, pattern and suchThat - True Result table ") {
-    // assign a1; Select a1 such that Parent(1,10) and Uses(1, "multiclauseTrue")
+    // assign a1; Select a1 such that Parent(1,10) and Uses(1,
+    // "multiclauseTrue")
 
-    auto sc2 = QPSTestUtil::createSuchThatClause(ClauseType::Parent,
-                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
-                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "10");
-    auto sc3 = QPSTestUtil::createSuchThatClause(ClauseType::Uses,
-                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
-                                                 RefType::EntRef, RootType::Ident, QueryEntityType::Variable, "multiClauseTrue");
+    auto sc2 = QPSTestUtil::createSuchThatClause(
+            ClauseType::Parent, RefType::StmtRef, RootType::Integer,
+            QueryEntityType::Invalid, "1", RefType::StmtRef, RootType::Integer,
+            QueryEntityType::Invalid, "10");
+    auto sc3 = QPSTestUtil::createSuchThatClause(
+            ClauseType::Uses, RefType::StmtRef, RootType::Integer,
+            QueryEntityType::Invalid, "1", RefType::EntRef, RootType::Ident,
+            QueryEntityType::Variable, "multiClauseTrue");
 
     Query queryObj;
     queryObj.addSelect("a1");
-    queryObj.addClause(sc2); // returns  true
-    queryObj.addClause(sc3); //returns true
+    queryObj.addClause(sc2);// returns  true
+    queryObj.addClause(sc3);// returns true
     std::vector<std::shared_ptr<QueryEntity>> decl = {
             std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
     };
@@ -1038,28 +1091,30 @@ TEST_CASE("multiclause, pattern and suchThat - True Result table ") {
 }
 
 TEST_CASE("multiclause, pattern and suchThat - synonym in tuple result table") {
-    // assign a, a1; variable v; Select a such that Follows*(a,20) pattern a (v,_"1+multiclauseTest"_) and a(v,_) such that Parent(1,10)
+    // assign a, a1; variable v; Select a such that Follows*(a,20) pattern a
+    // (v,_"1+multiclauseTest"_) and a(v,_) such that Parent(1,10)
 
-    auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
-                                                RootType::Synonym, "v",
-                                                ExpressionSpecType::PartialMatch, "((1)+(multiclauseTest))");
-    auto pc2 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a1",
-                                                RootType::Synonym, "v",
-                                                ExpressionSpecType::Wildcard, "");
-    auto sc2 = QPSTestUtil::createSuchThatClause(ClauseType::Parent,
-                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
-                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "10");
+    auto pc1 = QPSTestUtil::createPatternClause(
+            ClauseType::Assign, "a", RootType::Synonym, "v",
+            ExpressionSpecType::PartialMatch, "((1)+(multiclauseTest))");
+    auto pc2 = QPSTestUtil::createPatternClause(
+            ClauseType::Assign, "a1", RootType::Synonym, "v",
+            ExpressionSpecType::Wildcard, "");
+    auto sc2 = QPSTestUtil::createSuchThatClause(
+            ClauseType::Parent, RefType::StmtRef, RootType::Integer,
+            QueryEntityType::Invalid, "1", RefType::StmtRef, RootType::Integer,
+            QueryEntityType::Invalid, "10");
 
     Query queryObj;
     queryObj.addSelect("a");
-    queryObj.addClause(pc1); // returns a,v of 1 var1, 1 var2, 2 var3, 3 var4, 4 var3
-    queryObj.addClause(pc2); // returns a1,v of 1 var1, 1 var2, 2 var3
-    queryObj.addClause(sc2); // returns  true
+    queryObj.addClause(
+            pc1);// returns a,v of 1 var1, 1 var2, 2 var3, 3 var4, 4 var3
+    queryObj.addClause(pc2);// returns a1,v of 1 var1, 1 var2, 2 var3
+    queryObj.addClause(sc2);// returns  true
     std::vector<std::shared_ptr<QueryEntity>> decl = {
             std::make_shared<QueryEntity>(QueryEntityType::Assign, "a"),
             std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
-            std::make_shared<QueryEntity>(QueryEntityType::Variable, "v")
-    };
+            std::make_shared<QueryEntity>(QueryEntityType::Variable, "v")};
     queryObj.addDeclaration(decl[0]);
     queryObj.addDeclaration(decl[1]);
     queryObj.addDeclaration(decl[2]);
@@ -1079,30 +1134,33 @@ TEST_CASE("multiclause, pattern and suchThat - synonym in tuple result table") {
     REQUIRE(find(results.begin(), results.end(), "4") != results.end());
 }
 
-TEST_CASE("multiclause, pattern and suchThat - synonym not in tuple result table") {
-    // assign a, a1; variable v; constant c; Select c such that Follows*(a,20) pattern a (v,_"1+multiclauseTest"_) and a(v,_) such that Parent(1,10)
+TEST_CASE("multiclause, pattern and suchThat - synonym not in tuple result "
+          "table") {
+    // assign a, a1; variable v; constant c; Select c such that Follows*(a,20)
+    // pattern a (v,_"1+multiclauseTest"_) and a(v,_) such that Parent(1,10)
 
-    auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
-                                                RootType::Synonym, "v",
-                                                ExpressionSpecType::PartialMatch, "((1)+(multiclauseTest))");
-    auto pc2 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a1",
-                                                RootType::Synonym, "v",
-                                                ExpressionSpecType::Wildcard, "");
-    auto sc2 = QPSTestUtil::createSuchThatClause(ClauseType::Parent,
-                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "1",
-                                                 RefType::StmtRef, RootType::Integer, QueryEntityType::Invalid, "10");
+    auto pc1 = QPSTestUtil::createPatternClause(
+            ClauseType::Assign, "a", RootType::Synonym, "v",
+            ExpressionSpecType::PartialMatch, "((1)+(multiclauseTest))");
+    auto pc2 = QPSTestUtil::createPatternClause(
+            ClauseType::Assign, "a1", RootType::Synonym, "v",
+            ExpressionSpecType::Wildcard, "");
+    auto sc2 = QPSTestUtil::createSuchThatClause(
+            ClauseType::Parent, RefType::StmtRef, RootType::Integer,
+            QueryEntityType::Invalid, "1", RefType::StmtRef, RootType::Integer,
+            QueryEntityType::Invalid, "10");
 
     Query queryObj;
     queryObj.addSelect("c");
-    queryObj.addClause(pc1); // returns a,v of 1 var1, 1 var2, 2 var3, 3 var4, 4 var3
-    queryObj.addClause(pc2); // returns a1,v of 1 var1, 1 var2, 2 var3
-    queryObj.addClause(sc2); // returns  true
+    queryObj.addClause(
+            pc1);// returns a,v of 1 var1, 1 var2, 2 var3, 3 var4, 4 var3
+    queryObj.addClause(pc2);// returns a1,v of 1 var1, 1 var2, 2 var3
+    queryObj.addClause(sc2);// returns  true
     std::vector<std::shared_ptr<QueryEntity>> decl = {
             std::make_shared<QueryEntity>(QueryEntityType::Assign, "a"),
             std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
             std::make_shared<QueryEntity>(QueryEntityType::Variable, "v"),
-            std::make_shared<QueryEntity>(QueryEntityType::Constant, "c")
-    };
+            std::make_shared<QueryEntity>(QueryEntityType::Constant, "c")};
     queryObj.addDeclaration(decl[0]);
     queryObj.addDeclaration(decl[1]);
     queryObj.addDeclaration(decl[2]);
@@ -1117,5 +1175,3 @@ TEST_CASE("multiclause, pattern and suchThat - synonym not in tuple result table
     REQUIRE(resultObj.getTuples().size() == 0);
     REQUIRE(results.size() == 0);
 }
-
-

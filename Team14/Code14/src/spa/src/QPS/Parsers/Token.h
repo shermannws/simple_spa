@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
 
 /**
  * @brief The enum class of TokenType
@@ -51,7 +51,7 @@ public:
      * @brief The constructor of Token
      * @param rep The string representation of the Token
      */
-    explicit Token(const std::string& rep);
+    explicit Token(const std::string &rep);
 
     /**
      * @brief Returns the string representation of the Token
@@ -66,11 +66,12 @@ public:
     TokenType getType();
 
     /**
-     * @brief Checks if the token is of TokenType::Word and has a string representation equal to str
+     * @brief Checks if the token is of TokenType::Word and has a string
+     * representation equal to str
      * @param str The expected string
      * @return The result of the check in boolean
      */
-    bool isToken(const std::string& str);
+    bool isToken(const std::string &str);
 
     /**
      * @brief Checks if the token is of TokenType ttype
@@ -80,25 +81,29 @@ public:
     bool isToken(TokenType ttype);
 
     /**
-     * @brief Checks if the token is of TokenType::Word and the string representation is of design-entity
+     * @brief Checks if the token is of TokenType::Word and the string
+     * representation is of design-entity
      * @return The result of the check in boolean
      */
     bool isDesignEntity();
 
     /**
-     * @brief Checks if the string representation matches the pattern of an INTEGER
+     * @brief Checks if the string representation matches the pattern of an
+     * INTEGER
      * @return The result of the check in boolean
      */
     bool isInteger();
 
     /**
-     * @brief Checks if the string representation matches the pattern of an IDENT
+     * @brief Checks if the string representation matches the pattern of an
+     * IDENT
      * @return The result of the check in boolean
      */
     bool isIdent();
 
     /**
-     * @brief Checks if the string representation matches the pattern of an operand
+     * @brief Checks if the string representation matches the pattern of an
+     * operand
      * @return The result of the check in boolean
      */
     bool isOperand();

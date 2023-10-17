@@ -1,8 +1,8 @@
 #include "SPTokenizer.h"
 #include "Errors/SyntaxError.h"
 
-SPTokenizer::SPTokenizer(std::string  input) : curr(0), input(std::move(input)) {
-}
+SPTokenizer::SPTokenizer(std::string input)
+    : curr(0), input(std::move(input)) {}
 
 // main function, does not handle syntactic validation
 std::vector<SPToken> SPTokenizer::tokenize() {
@@ -31,7 +31,7 @@ std::vector<SPToken> SPTokenizer::tokenize() {
 
         switch (currChar) {
             case AppConstants::CHAR_OPEN_ROUND_PARENTHESIS: // fallthrough
-            case AppConstants::CHAR_CLOSE_ROUND_PARENTHESIS: // fallthrough
+            case AppConstants::CHAR_CLOSE_ROUND_PARENTHESIS:// fallthrough
             case AppConstants::CHAR_OPEN_CURLY_PARENTHESIS: // fallthrough
             case AppConstants::CHAR_CLOSE_CURLY_PARENTHESIS:
                 tokenizeParenthesis();
@@ -45,10 +45,10 @@ std::vector<SPToken> SPTokenizer::tokenize() {
                 tokenizeEquals();
                 break;
 
-            case AppConstants::CHAR_PLUS: // fallthrough
+            case AppConstants::CHAR_PLUS:  // fallthrough
             case AppConstants::CHAR_MINUS: // fallthrough
             case AppConstants::CHAR_TIMES: // fallthrough
-            case AppConstants::CHAR_DIVIDE: // fallthrough
+            case AppConstants::CHAR_DIVIDE:// fallthrough
             case AppConstants::CHAR_MODULO:
                 tokenizeArithmeticOperator();
                 break;
@@ -57,12 +57,12 @@ std::vector<SPToken> SPTokenizer::tokenize() {
                 tokenizeNot();
                 break;
 
-            case AppConstants::CHAR_AMPERSAND: // fallthrough
+            case AppConstants::CHAR_AMPERSAND:// fallthrough
             case AppConstants::CHAR_VERTICAL_BAR:
                 tokenizeConditionalOperator();
                 break;
 
-            case AppConstants::CHAR_GREATER_THAN: // fallthrough
+            case AppConstants::CHAR_GREATER_THAN:// fallthrough
             case AppConstants::CHAR_LESS_THAN:
                 tokenizeRelationalOperator();
                 break;
@@ -79,12 +79,10 @@ std::vector<SPToken> SPTokenizer::tokenize() {
 }
 
 bool SPTokenizer::isCurrValid() {
-    return curr >= 0 && curr < (int)input.size();
+    return curr >= 0 && curr < (int) input.size();
 }
 
-int SPTokenizer::peekChar() {
-    return input[curr];
-}
+int SPTokenizer::peekChar() { return input[curr]; }
 
 int SPTokenizer::popChar() {
     int res = peekChar();
@@ -96,14 +94,15 @@ int SPTokenizer::peekNextChar() {
     if (curr + 1 < input.size()) {
         return input[curr + 1];
     } else {
-        throw std::out_of_range("Error: attempted to access out-of-range char in input file");
+        throw std::out_of_range(
+                "Error: attempted to access out-of-range char in input file");
     }
 }
 
 void SPTokenizer::tokenizeName() {
     std::string tokenValue;
 
-    while(isCurrValid()) {
+    while (isCurrValid()) {
         // if alphabet or number, add to token. else break
         if (isalnum(peekChar())) {
             tokenValue.push_back(popChar());
@@ -118,7 +117,7 @@ void SPTokenizer::tokenizeName() {
 void SPTokenizer::tokenizeInteger() {
     std::string tokenValue;
 
-    while(isCurrValid()) {
+    while (isCurrValid()) {
         // if number, add to token. else break
         if (isdigit(peekChar())) {
             tokenValue.push_back(popChar());
@@ -187,7 +186,7 @@ void SPTokenizer::tokenizeConditionalOperator() {
     int currChar = peekChar();
 
     switch (currChar) {
-        case AppConstants::CHAR_NOT :
+        case AppConstants::CHAR_NOT:
             tokenValue.push_back(popChar());
             break;
 

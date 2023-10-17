@@ -2,14 +2,13 @@
 #include "QPS/Exceptions/SemanticException.h"
 #include "QPS/QPSUtil.h"
 
-void StmtrefStmtrefHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
+void StmtrefStmtrefHandler::handle(const Query &query,
+                                   std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
-    if (!suchThat) {
-        return SemanticValHandler::handle(query, clause);
-    }
+    if (!suchThat) { return SemanticValHandler::handle(query, clause); }
     ClauseType type = suchThat->getType();
-    Ref& leftRef = suchThat->getFirstParam();
-    Ref& rightRef = suchThat->getSecondParam();
+    Ref &leftRef = suchThat->getFirstParam();
+    Ref &rightRef = suchThat->getSecondParam();
 
     if (QPSUtil::typeToArgTypeMap[type] != StmtrefStmtref) {
         return SemanticValHandler::handle(query, clause);
@@ -20,14 +19,16 @@ void StmtrefStmtrefHandler::handle(const Query &query, std::shared_ptr<Clause> c
     return SemanticValHandler::handle(query, clause);
 }
 
-void StmtrefStmtrefHandler::handleRefType(Ref& leftRef, Ref& rightRef) {
+void StmtrefStmtrefHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
     RootType leftRootType = leftRef.getRootType();
     RootType rightRootType = rightRef.getRootType();
     switch (leftRootType) {
         case RootType::Synonym: {
             QueryEntityType entityType = leftRef.getEntityType();
-            if (QPSUtil::stmtRefEntities.find(entityType) == QPSUtil::stmtRefEntities.end()) {
-                throw SemanticException("Invalid LHS synonym, non-statement found");
+            if (QPSUtil::stmtRefEntities.find(entityType) ==
+                QPSUtil::stmtRefEntities.end()) {
+                throw SemanticException(
+                        "Invalid LHS synonym, non-statement found");
             }
         }
         case RootType::Integer:
@@ -43,8 +44,10 @@ void StmtrefStmtrefHandler::handleRefType(Ref& leftRef, Ref& rightRef) {
     switch (rightRootType) {
         case RootType::Synonym: {
             QueryEntityType entityType = rightRef.getEntityType();
-            if (QPSUtil::stmtRefEntities.find(entityType) == QPSUtil::stmtRefEntities.end()) {
-                throw SemanticException("Invalid RHS synonym, non-statement found");
+            if (QPSUtil::stmtRefEntities.find(entityType) ==
+                QPSUtil::stmtRefEntities.end()) {
+                throw SemanticException(
+                        "Invalid RHS synonym, non-statement found");
             }
         }
         case RootType::Integer:

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <stdexcept>
+#include <string>
 
 #include "QPS/Parsers/Token.h"
 #include "QPSTypes.h"
@@ -47,18 +47,21 @@ public:
     explicit QueryEntity(QueryEntityType type, const Synonym &synonym);
 
     /**
-     * @brief Factory method that constructs a Query Entity based on a design Entity token
+     * @brief Factory method that constructs a Query Entity based on a design
+     * Entity token
      * @param designEntity token representing the query entity type string
      * @param synonym the synonym of the query entity created
      */
-    QueryEntity(const std::shared_ptr<Token>& designEntity, const Synonym &synonym);
+    QueryEntity(const std::shared_ptr<Token> &designEntity,
+                const Synonym &synonym);
 
     /**
-     * @brief returns true if query entity is equal to the other query entity object, else returns false
+     * @brief returns true if query entity is equal to the other query entity
+     * object, else returns false
      * @param other query entity object
      * @return boolean
      */
-    bool operator==(const QueryEntity& other) const;
+    bool operator==(const QueryEntity &other) const;
 
     /**
      * @brief gets the synonym representing the query entity

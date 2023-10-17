@@ -1,3 +1,4 @@
 #include "ModifiesProcRelationshipStore.h"
 
-ModifiesProcRelationshipStore::ModifiesProcRelationshipStore() : RelationshipStore() {}
+ModifiesProcRelationshipStore::ModifiesProcRelationshipStore()
+    : RelationshipStore() {}
