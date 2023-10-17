@@ -241,9 +241,13 @@ public:
 
     bool hasAfterStarStmt(Statement &statement) const override;
 
+    std::vector<Entity> getAllIfPatternStmts() const override;
+
     std::vector<Entity> getIfStmtsByVar(Variable &var) const override;
 
     std::vector<std::vector<Entity>> getAllIfStmtVarPair() const override;
+
+    std::vector<Entity> getAllWhilePatternStmts() const override;
 
     std::vector<Entity> getWhileStmtsByVar(Variable &var) const override;
 

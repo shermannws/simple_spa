@@ -950,6 +950,12 @@ public:
     bool hasAfterStarStmt(Statement &statement) const;
 
     /**
+     * Returns a vector of If Statements that has variables as control variables
+     * @return A vector of Statements
+     */
+    std::vector<Entity> getAllIfPatternStmts() const;
+
+    /**
      * Returns a vector of If Statements with the given variable as a control variable
      * @param var The variable to be checked
      * @return A vector of If Statements
@@ -962,6 +968,12 @@ public:
      * @return A vector of vectors containing If Statement and Variable pairs
      */
     std::vector<std::vector<Entity>> getAllIfStmtVarPair() const;
+
+    /**
+     * Returns a vector of While Statements that has variables as control variables
+     * @return A vector of Statements
+     */
+    std::vector<Entity> getAllWhilePatternStmts() const;
 
     /**
      * Returns a vector of While Statements with the given variable as a control variable
