@@ -3,8 +3,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "SP/AST/Nodes/ProcedureNode.h"
 #include "SP/AST/Nodes/CallNode.h"
+#include "SP/AST/Nodes/ProcedureNode.h"
 
 class CallGraph {
 private:
@@ -18,11 +18,12 @@ private:
      * @param currentPath
      * @return
      */
-    bool hasCycleDFS(const std::string& currentProcedure, std::unordered_set<std::string>& visited, std::unordered_set<std::string>& currentPath);
+    bool hasCycleDFS(const std::string &currentProcedure, std::unordered_set<std::string> &visited,
+                     std::unordered_set<std::string> &currentPath);
 
 public:
     CallGraph();
-    void addNode(const std::shared_ptr<ProcedureNode>& node);
-    void addEdge(const std::string&caller, const std::string& callee);
+    void addNode(const std::shared_ptr<ProcedureNode> &node);
+    void addEdge(const std::string &caller, const std::string &callee);
     bool hasCycle();
 };

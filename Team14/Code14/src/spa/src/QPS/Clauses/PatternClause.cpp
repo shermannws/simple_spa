@@ -6,14 +6,9 @@ PatternClause::PatternClause() : Clause() {
     this->thirdParam = false;
 };
 
-void PatternClause::setSecondParam(ExpressionSpec & expr) {
-    secondParam = expr;
-}
+void PatternClause::setSecondParam(ExpressionSpec &expr) { secondParam = expr; }
 
-ExpressionSpec& PatternClause::getSecondParam() {
-    return secondParam;
-}
-
+ExpressionSpec &PatternClause::getSecondParam() { return secondParam; }
 
 void PatternClause::setThirdParam(bool exists) {
     thirdParam = exists;
@@ -27,11 +22,9 @@ void PatternClause::setSyn(Synonym synonym) {
     syn = synonym;
 }
 
-Synonym PatternClause::getSyn() {
-    return syn;
-}
+Synonym PatternClause::getSyn() { return syn; }
 
-std::vector<Synonym> PatternClause::getSynonyms() const{
+std::vector<Synonym> PatternClause::getSynonyms() const {
     std::vector<Synonym> synonyms = {syn};
     if (firstParam.getRootType() == RootType::Synonym && firstParam.getRep() != syn) {
         synonyms.push_back(firstParam.getRep());
@@ -39,14 +32,10 @@ std::vector<Synonym> PatternClause::getSynonyms() const{
     return synonyms;
 }
 
-bool PatternClause::operator==(const Clause& other) const {
+bool PatternClause::operator==(const Clause &other) const {
     try {
-        const auto& otherPattern = dynamic_cast<const PatternClause&>(other);
-        return (type == otherPattern.type) &&
-               (firstParam == otherPattern.firstParam) &&
-               (secondParam==otherPattern.secondParam) &&
-               (syn == otherPattern.syn);
-    } catch (std::bad_cast& e) {
-       return false;
-    }
+        const auto &otherPattern = dynamic_cast<const PatternClause &>(other);
+        return (type == otherPattern.type) && (firstParam == otherPattern.firstParam) &&
+               (secondParam == otherPattern.secondParam) && (syn == otherPattern.syn);
+    } catch (std::bad_cast &e) { return false; }
 }

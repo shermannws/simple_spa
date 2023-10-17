@@ -1,11 +1,11 @@
 #pragma once
 
+#include <algorithm>
 #include <memory>
 #include <vector>
-#include <algorithm>
 
-#include "PKB/Managers/ManagerUtils.h"
 #include "Commons/Entities/Procedure.h"
+#include "PKB/Managers/ManagerUtils.h"
 
 /**
  * @class ProcToProcRelationshipManager is responsible for storing and retrieving the relationships
@@ -14,7 +14,7 @@
  * @tparam S The type of the relationship store
  * @tparam R The type of the relationship
  */
-template <typename S>
+template<typename S>
 class ProcToProcRelationshipManager {
 private:
     /**
@@ -53,29 +53,33 @@ public:
     std::vector<std::vector<Entity>> getRelationshipPair(bool requireDirect) const;
 
     /**
-     * Returns a vector of procedure which is related to the given procedure. The procedure given is the latter procedure
+     * Returns a vector of procedure which is related to the given procedure. The procedure given is the latter
+     * procedure
      * @param latterProcedure The procedure that is related to the procedure to be retrieved
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return A vector of procedures
      */
-    std::vector<Entity> getRelationshipFormer(Procedure& latterProcedure, bool requireDirect) const;
+    std::vector<Entity> getRelationshipFormer(Procedure &latterProcedure, bool requireDirect) const;
 
     /**
-     * Returns a vector of procedures which is related to any procedures. The procedures retrieved are the former procedures
+     * Returns a vector of procedures which is related to any procedures. The procedures retrieved are the former
+     * procedures
      * @return A vector of procedures
      */
     std::vector<Entity> getRelationshipFormer() const;
 
     /**
-     * Returns a vector of procedures which is related to the given procedure. The procedure given is the former procedure
+     * Returns a vector of procedures which is related to the given procedure. The procedure given is the former
+     * procedure
      * @param formerProcedure The procedure that is related to the procedures to be retrieved
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return A vector of procedures
      */
-    std::vector<Entity> getRelationshipLatter(Procedure& formerProcedure, bool requireDirect) const;
+    std::vector<Entity> getRelationshipLatter(Procedure &formerProcedure, bool requireDirect) const;
 
     /**
-     * Returns a vector of procedures which is related to any procedure. The procedures retrieved are the latter procedure
+     * Returns a vector of procedures which is related to any procedure. The procedures retrieved are the latter
+     * procedure
      * @return A vector of procedures
      */
     std::vector<Entity> getRelationshipLatter() const;
@@ -87,7 +91,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return True if procedure1 is related to procedure2, false otherwise
      */
-    bool isRelationship(Procedure& procedure1, Procedure& procedure2, bool requireDirect) const;
+    bool isRelationship(Procedure &procedure1, Procedure &procedure2, bool requireDirect) const;
 
     /**
      * Returns true if there are any relationships stored, false otherwise
@@ -100,14 +104,14 @@ public:
      * @param procdure The procedure to be checked
      * @return True if there exists a relationship where the given procedure is the former procedure, false otherwise
      */
-    bool isFormer(Procedure& procedure) const;
+    bool isFormer(Procedure &procedure) const;
 
     /**
      * Returns true if there exists a relationship where the given procedure is the latter procedure, false otherwise
      * @param procedure The procedure to be checked
      * @return True if there exists a relationship where the given procedure is the latter procedure, false otherwise
      */
-    bool isLatter(Procedure& procedure) const;
+    bool isLatter(Procedure &procedure) const;
 
     /**
      * Populates the starRelationshipStore based on transitivity calculation of the relationshipStore.
@@ -115,11 +119,12 @@ public:
     void calculateTransitiveRelationship();
 
     /**
-     * Returns a set of procedures which is related to the given procedure i.e. the given procedure is the latter procedure.
+     * Returns a set of procedures which is related to the given procedure i.e. the given procedure is the latter
+     * procedure.
      * @param latterProcedure The procedure that is the latter procedure.
      * @return A set of procedures that are the former procedures
      */
-    std::shared_ptr<EntityStore<Procedure>> getRelationshipFormerStarAsProcedure(Procedure& latterProcedure) const;
+    std::shared_ptr<EntityStore<Procedure>> getRelationshipFormerStarAsProcedure(Procedure &latterProcedure) const;
 };
 
 #include "ProcToProcRelationshipManager.hpp"

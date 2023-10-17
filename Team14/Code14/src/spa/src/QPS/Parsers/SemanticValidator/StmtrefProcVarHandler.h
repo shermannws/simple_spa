@@ -21,5 +21,5 @@ public:
      * @param leftRef The first parameter of the Clause
      * @param rightRef The second parameter of the Clause
      */
-    void handleRefType(Ref& leftRef, Ref& rightRef);
+    void handleRefType(Ref &leftRef, Ref &rightRef);
 };

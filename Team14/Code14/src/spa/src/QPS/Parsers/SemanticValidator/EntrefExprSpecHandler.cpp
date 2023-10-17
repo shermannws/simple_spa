@@ -13,7 +13,7 @@ void EntrefExprSpecHandler::handle(const Query &query, std::shared_ptr<Clause> c
         throw SemanticException("Unsupported assign pattern clause, third param found");
     }
 
-    Ref& leftRef = clause->getFirstParam();
+    Ref &leftRef = clause->getFirstParam();
     RefType lhsType = RefType::EntRef;
     leftRef.setType(lhsType);
 

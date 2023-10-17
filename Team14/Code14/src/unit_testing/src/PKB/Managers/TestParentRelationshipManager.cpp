@@ -1,7 +1,7 @@
 #include <memory>
 
-#include "catch.hpp"
 #include "PKB/Managers/ParentRelationshipManager.h"
+#include "catch.hpp"
 
 using namespace std;
 
@@ -20,7 +20,8 @@ TEST_CASE("Test Parent Relationship Retrieval") {
 
     REQUIRE(parentRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, true).size() == 2);
     REQUIRE(parentRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, false).size() == 3);
-    REQUIRE(parentRelationshipManager.getRelationshipPair(StatementType::While, StatementType::Assign, true).size() == 1);
+    REQUIRE(parentRelationshipManager.getRelationshipPair(StatementType::While, StatementType::Assign, true).size() ==
+            1);
     REQUIRE(parentRelationshipManager.getRelationshipPair(StatementType::If, StatementType::Assign, false).size() == 1);
     REQUIRE(parentRelationshipManager.getRelationshipPair(StatementType::If, StatementType::Assign, true).empty());
 

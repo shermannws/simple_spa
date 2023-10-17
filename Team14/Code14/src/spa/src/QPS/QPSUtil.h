@@ -1,9 +1,9 @@
 #pragma once
 
-#include "QueryEntity.h"
-#include "Ref.h"
 #include "QPS/Clauses/Clause.h"
 #include "QPS/Evaluators/Strategies/Strategy.h"
+#include "QueryEntity.h"
+#include "Ref.h"
 
 /**
  * @brief QPSUtil class
@@ -38,7 +38,8 @@ public:
     /**
      * @brief An unordered map of ClauseType and its corresponding strategy creator function
      */
-    static std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>> strategyCreatorMap;
+    static std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>>
+            strategyCreatorMap;
 
     /**
      * @brief An unordered map that maps QueryEntityType to the corresponding StatementType
