@@ -1,4 +1,4 @@
 #include "ModifiesProcRelationshipManager.h"
 
 ModifiesProcRelationshipManager::ModifiesProcRelationshipManager()
-    : ProcToVarRelationshipManager<ModifiesProcRelationshipStore>() {}
+        : ProcToVarRelationshipManager<ModifiesProcRelationshipStore>() {}

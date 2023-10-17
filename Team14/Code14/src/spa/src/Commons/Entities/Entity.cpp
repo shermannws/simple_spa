@@ -3,11 +3,11 @@
 #include "Entity.h"
 
 Entity::Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType)
-    : entityValue(entityValue), entityType(entityType) {}
+        : entityValue(entityValue), entityType(entityType) {}
 
 Entity::Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType,
                const std::shared_ptr<AttrValue> attrValue)
-               : entityValue(entityValue), entityType(entityType), attrValue(attrValue) {}
+        : entityValue(entityValue), entityType(entityType), attrValue(attrValue) {}
 
 EntityType Entity::getEntityType() const {
     return this->entityType;
@@ -27,7 +27,7 @@ bool Entity::operator==(const HashableKey &other) const {
     return false;
 }
 
-std::size_t std::hash<Entity>::operator()(const Entity& entity) const {
+std::size_t std::hash<Entity>::operator()(const Entity &entity) const {
     std::size_t entityValueHash = std::hash<std::string>()(entity.getEntityValue());
     std::size_t attrValueHash = std::hash<std::string>()(entity.getAttrValue());
     return entityValueHash ^ attrValueHash;

@@ -1,5 +1,5 @@
 template<typename S>
-ConditionPatternManager<S>::ConditionPatternManager() : patternStore(std::make_shared<S>()){};
+ConditionPatternManager<S>::ConditionPatternManager() : patternStore(std::make_shared<S>()) {};
 
 template<typename S>
 void ConditionPatternManager<S>::storePattern(std::shared_ptr<Statement> statement,

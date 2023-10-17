@@ -2,7 +2,7 @@
 
 #include <unordered_set>
 
-ResultHandler::ResultHandler(){};
+ResultHandler::ResultHandler() {};
 
 std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
     if (r1->isInvalid()) { return cast(r2); }

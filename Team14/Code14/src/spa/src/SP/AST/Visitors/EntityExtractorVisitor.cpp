@@ -25,11 +25,14 @@ void EntityExtractorVisitor::visitAssignNode(AssignNode *node, std::vector<std::
     this->pkbWriter->addAssignStatement(currentStmt);
 }
 
-void EntityExtractorVisitor::visitReadNode(ReadNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
-	this->pkbWriter->addReadStatement(std::make_shared<ReadStatement>(node->getStatementNumber(), node->getVar()->getVarName()));
+void EntityExtractorVisitor::visitReadNode(ReadNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+                                           std::shared_ptr<ASTNode> proc) const {
+    this->pkbWriter->addReadStatement(
+            std::make_shared<ReadStatement>(node->getStatementNumber(), node->getVar()->getVarName()));
 }
 
-void EntityExtractorVisitor::visitPrintNode(PrintNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
+void EntityExtractorVisitor::visitPrintNode(PrintNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+                                            std::shared_ptr<ASTNode> proc) const {
     this->pkbWriter->addPrintStatement(
             std::make_shared<PrintStatement>(node->getStatementNumber(), node->getVar()->getVarName()));
 }
@@ -44,14 +47,18 @@ void EntityExtractorVisitor::visitConstantNode(ConstantNode *node, std::vector<s
     this->pkbWriter->addConstant(std::make_shared<Constant>(node->getValue()));
 }
 
-void EntityExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
-	this->pkbWriter->addCallStatement(std::make_shared<CallStatement>(node->getStatementNumber(), node->getProcedureName()));
+void EntityExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+                                           std::shared_ptr<ASTNode> proc) const {
+    this->pkbWriter->addCallStatement(
+            std::make_shared<CallStatement>(node->getStatementNumber(), node->getProcedureName()));
 }
 
-void EntityExtractorVisitor::visitIfNode(IfNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
-	this->pkbWriter->addIfStatement(std::make_shared<IfStatement>(node->getStatementNumber()));
+void EntityExtractorVisitor::visitIfNode(IfNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+                                         std::shared_ptr<ASTNode> proc) const {
+    this->pkbWriter->addIfStatement(std::make_shared<IfStatement>(node->getStatementNumber()));
 }
 
-void EntityExtractorVisitor::visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {
-	this->pkbWriter->addWhileStatement(std::make_shared<WhileStatement>(node->getStatementNumber()));
+void EntityExtractorVisitor::visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+                                            std::shared_ptr<ASTNode> proc) const {
+    this->pkbWriter->addWhileStatement(std::make_shared<WhileStatement>(node->getStatementNumber()));
 }

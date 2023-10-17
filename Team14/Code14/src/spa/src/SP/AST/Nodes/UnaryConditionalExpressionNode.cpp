@@ -2,7 +2,7 @@
 
 UnaryConditionalExpressionNode::UnaryConditionalExpressionNode(
         std::shared_ptr<ConditionalExpressionNode> conditionalExpression)
-    : conditionalExpression(std::move(conditionalExpression)) {}
+        : conditionalExpression(std::move(conditionalExpression)) {}
 
 std::shared_ptr<ConditionalExpressionNode> UnaryConditionalExpressionNode::getConditionalExpression() {
     return conditionalExpression;

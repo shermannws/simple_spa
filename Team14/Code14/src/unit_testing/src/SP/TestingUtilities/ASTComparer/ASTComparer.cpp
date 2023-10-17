@@ -99,7 +99,7 @@ bool ASTComparer::isSameCondExpression(const std::shared_ptr<ConditionalExpressi
     if (auto firstBinary = std::dynamic_pointer_cast<BinaryConditionalExpressionNode>(firstExpr)) {
         if (auto secondBinary = std::dynamic_pointer_cast<BinaryConditionalExpressionNode>(secondExpr)) {
             return firstBinary->getBinaryConditionalExpressionType() ==
-                           secondBinary->getBinaryConditionalExpressionType() &&
+                   secondBinary->getBinaryConditionalExpressionType() &&
                    isSameCondExpression(firstBinary->getLeftConditionalExpression(),
                                         secondBinary->getLeftConditionalExpression()) &&
                    isSameCondExpression(firstBinary->getRightConditionalExpression(),

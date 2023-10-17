@@ -1,6 +1,6 @@
 template<typename S>
 ProcToProcRelationshipManager<S>::ProcToProcRelationshipManager()
-    : relationshipStore(std::make_shared<S>()), starRelationshipStore(std::make_shared<S>()) {}
+        : relationshipStore(std::make_shared<S>()), starRelationshipStore(std::make_shared<S>()) {}
 
 template<typename S>
 void ProcToProcRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedure> procedure1,
@@ -24,7 +24,7 @@ std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipFormer(Proc
 
 template<typename S>
 std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipFormer()
-        const {// Same for Calls and Calls* since Calls* is a superset of Follows
+const {// Same for Calls and Calls* since Calls* is a superset of Follows
     return ManagerUtils::getLeftKeysNoMatch<Procedure, Procedure>(*relationshipStore);
 }
 
@@ -37,7 +37,7 @@ std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipLatter(Proc
 
 template<typename S>
 std::vector<Entity> ProcToProcRelationshipManager<S>::getRelationshipLatter()
-        const {// Same for Calls and Calls* since Calls* is a superset of Follows
+const {// Same for Calls and Calls* since Calls* is a superset of Follows
     return ManagerUtils::getRightKeysNoMatch<Procedure, Procedure>(*relationshipStore);
 }
 

@@ -11,7 +11,9 @@
  * @brief Enumeration representing the type of result.
  * The result type can be Invalid, Boolean, or Tuples.
  */
-enum class ResultType { Invalid, Boolean, Tuples };
+enum class ResultType {
+    Invalid, Boolean, Tuples
+};
 
 /**
  * @brief Represents the result of a PQL clause evaluation.

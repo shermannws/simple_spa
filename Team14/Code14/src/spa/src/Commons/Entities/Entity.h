@@ -46,7 +46,8 @@ public:
      * @param entityType The Entity Type of the Entity of enum type `EntityType`
      * @return A new Entity object
      */
-    Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType, const std::shared_ptr<AttrValue> attrValue);
+    Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType,
+           const std::shared_ptr<AttrValue> attrValue);
 
     /**
      * @brief Destroy the Entity object

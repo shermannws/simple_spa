@@ -3,7 +3,7 @@
 #include "PrintNode.h"
 
 PrintNode::PrintNode(StatementNumber statementNumber, std::shared_ptr<VariableNode> var)
-    : StatementNode(statementNumber), var(std::move(var)) {}
+        : StatementNode(statementNumber), var(std::move(var)) {}
 
 std::shared_ptr<VariableNode> PrintNode::getVar() { return var; }
 

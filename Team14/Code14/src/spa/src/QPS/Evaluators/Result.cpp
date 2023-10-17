@@ -21,6 +21,7 @@ void Result::setType(std::vector<Synonym> synonyms) {
 }
 
 void Result::setBoolResult(bool result) { boolResult = result; }
+
 bool Result::getBoolResult() { return boolResult; }
 
 void Result::setTuples(const std::vector<std::vector<Entity>> &resultTuples) { tuples = resultTuples; }

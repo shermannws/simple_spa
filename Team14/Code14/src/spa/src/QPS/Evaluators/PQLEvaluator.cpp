@@ -7,8 +7,8 @@
 #include "QPS/QueryEntity.h"
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader)
-    : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
-      resultHandler(std::make_shared<ResultHandler>()) {}
+        : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
+          resultHandler(std::make_shared<ResultHandler>()) {}
 
 ResultList PQLEvaluator::formatResult(Query &query, Result &result) {
     std::vector<Synonym> selects = query.getSelect();

@@ -1,7 +1,7 @@
 #include "AssignPatternManager.h"
 
 AssignPatternManager::AssignPatternManager()
-    : assignmentStore(std::make_shared<AssignPatternStore>(AssignPatternStore())) {}
+        : assignmentStore(std::make_shared<AssignPatternStore>(AssignPatternStore())) {}
 
 void AssignPatternManager::storeAssignPattern(std::shared_ptr<Assignment> assignment) {
     assert(assignment->getStatement()->getStatementType() == StatementType::Assign);

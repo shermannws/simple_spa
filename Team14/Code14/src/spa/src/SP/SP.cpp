@@ -49,8 +49,8 @@ void SP::startSPProcessing(std::string &input) {
         std::shared_ptr<PatternExtractorVisitor> patternExtractor =
                 std::make_shared<PatternExtractorVisitor>(pkbWriter);
         std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = {
-                entityExtractor, followsExtractor, usesExtractor,   modifiesExtractor,
-                parentExtractor, callsExtractor,   patternExtractor};
+                entityExtractor, followsExtractor, usesExtractor, modifiesExtractor,
+                parentExtractor, callsExtractor, patternExtractor};
 
         // Traverse the AST from root node
         Traverser traverser = Traverser(visitors);

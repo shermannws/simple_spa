@@ -46,8 +46,8 @@ TEST_CASE("Syntax Errors") {
 TEST_CASE("Semantic Errors") {
     SECTION("in Such That Clause") {
         vector<string> queries = {
-                "assign a; Select a such that Uses(_,_)",      "variable v; Select v such that Uses(v,v)",
-                "stmt s; Select s such that Follows(1,a)",     "stmt s; Select s such that Follows*(b,1)",
+                "assign a; Select a such that Uses(_,_)", "variable v; Select v such that Uses(v,v)",
+                "stmt s; Select s such that Follows(1,a)", "stmt s; Select s such that Follows*(b,1)",
                 "variable v; Select v such that Follows(v,2)", "constant c; Select c such that Follows(2,c)",
 
         };
