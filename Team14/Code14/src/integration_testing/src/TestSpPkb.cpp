@@ -17,7 +17,7 @@
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
 #include "catch.hpp"
-ts
+
 /*
 Test the e2e addition through from SPTraverser to PKB stores
 */
@@ -312,7 +312,7 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
     std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceCode);
 
     auto assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());
-    auto entitiesStore = std::make_shared<EntitiesManager>(EntitiesManager());
+    auto entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
     auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
     auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
@@ -326,7 +326,7 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
     auto cfgManager = std::make_shared<CFGManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
-            assignmentManager, entitiesStore, followsRelationshipManager, usesRelationshipManager,
+            assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
             modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
             modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
             nextRelationshipManager, cfgManager);
@@ -358,9 +358,9 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
     auto varG = Variable("g");
 
     // Check Procedure
-    REQUIRE(*(entitiesStore->getProcedure(std::make_shared<Procedure>(Procedure("kk")))) ==
+    REQUIRE(*(entitiesManager->getProcedure(std::make_shared<Procedure>(Procedure("kk")))) ==
             *(std::make_shared<Procedure>("kk")));
-    REQUIRE(*(entitiesStore->getProcedure(std::make_shared<Procedure>(Procedure("jj")))) ==
+    REQUIRE(*(entitiesManager->getProcedure(std::make_shared<Procedure>(Procedure("jj")))) ==
             *(std::make_shared<Procedure>("jj")));
 
     // Check Modifies with Procedure
@@ -405,45 +405,119 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
 TEST_CASE("Test CFG Extractor - test CFG saving and Next extraction") {
     std::string sourceProgram =
             "procedure Proc1 {"
-            "   x = 1 + 2 * y - (1 / var) % 5;"    // stmt 1
-            "   read x;"                           // stmt 2
-            "   print y;"                          // stmt 3
-            "   if (x > 1) then {"                 // stmt 4
-            "       z = y;"                        // stmt 5
+            "   x = 1 + 2 * y - (1 / var) % 5;"     // stmt 1
+            "   read x;"                            // stmt 2
+            "   print y;"                           // stmt 3
+            "   if (x > 1) then {"                  // stmt 4
+            "       z = y;"                         // stmt 5
             "   } else {"
-            "       var1 = 5;"                     // stmt 6
+            "       var1 = 5;"                      // stmt 6
             "   } "
-            "   while (1 != 3) {"                  // stmt 7
-            "       print c;"                      // stmt 8
+            "   while (1 != 3) {"                   // stmt 7
+            "       print c;"                       // stmt 8
             "   }"
             "}"
             "procedure Proc2 { "
-            "   read x; "
+            "   read x; "                           // stmt 9
             "}"
             "procedure Proc3 { "
-            "   print y; "
+            "   print y; "                          // stmt 10
             "}"
             "procedure Proc4 { "
-            "   call Proc1; "
+            "   call Proc1; "                       // stmt 11
             "}"
             "procedure Proc5 { "
-            "   if (z > 1) then { "
-            "       print p; "
+            "   if (z > 1) then { "                 // stmt 12
+            "       print p; "                      // stmt 13
             "   } else { "
-            "       read r; "
+            "       read r; "                       // stmt 14
             "   } "
             "}"
             "procedure Proc6 { "
-            "   while (z <= w) { "
-            "       x = 2; "
+            "   while (z <= w) { "                  // stmt 15
+            "       x = 2; "                        // stmt 16
             "   } "
             "}";
 
     std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceProgram);
 
+    // Create PkbWriter manually to allow checking of individual managers
+    auto assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());
+    auto entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
+    auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
+    auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
+    auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
+    auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
+    auto callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
+    auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
+    auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
+    auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
+    auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
+    auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
+    auto cfgManager = std::make_shared<CFGManager>();
+
+    auto pkbWriterManager = std::make_shared<PkbWriterManager>(
+            assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
+            modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
+            modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
+            nextRelationshipManager, cfgManager);
+    std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
+
     auto cfgs = CFGBuilder::buildAllCFG(rootNode);
+    CFGExtractor cfgExtractor(pkbWriter);
+    cfgExtractor.extractRelationships(cfgs);
 
-    auto& [cfgHead, proc1CFGNodes] = cfgs["Proc1"];
+    // Create Statements
+    auto statement1 = Statement(1, StatementType::Assign);
+    auto statement2 = Statement(2, StatementType::Read);
+    auto statement3 = Statement(3, StatementType::Print);
+    auto statement4 = Statement(4, StatementType::If);
+    auto statement5 = Statement(5, StatementType::Assign);
+    auto statement6 = Statement(6, StatementType::Assign);
+    auto statement7 = Statement(7, StatementType::While);
+    auto statement8 = Statement(8, StatementType::Print);
+    auto statement9 = Statement(9, StatementType::Read);
+    auto statement10 = Statement(10, StatementType::Print);
+    auto statement11 = Statement(11, StatementType::Call);
+    auto statement12 = Statement(12, StatementType::If);
+    auto statement13 = Statement(13, StatementType::Print);
+    auto statement14 = Statement(14, StatementType::Read);
+    auto statement15 = Statement(15, StatementType::While);
+    auto statement16 = Statement(16, StatementType::Assign);
 
-    // TODO: Finish test
+    // Check stores - positive cases
+    REQUIRE(nextRelationshipManager->isRelationship(statement1, statement2, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement2, statement3, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement3, statement4, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement4, statement5, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement4, statement6, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement5, statement7, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement6, statement7, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement7, statement8, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement8, statement7, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement12, statement13, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement12, statement14, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement15, statement16, true));
+    REQUIRE(nextRelationshipManager->isRelationship(statement16, statement15, true));
+
+    // Check stores - negative cases - across procedures
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement1, statement9, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement8, statement9, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement9, statement10, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement10, statement11, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement11, statement12, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement12, statement15, true));
+
+    // Check stores - negative cases - within procedures
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement1, statement1, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement11, statement11, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement1, statement8, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement4, statement7, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement13, statement14, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement1, statement3, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement2, statement4, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement3, statement5, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement3, statement6, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement5, statement8, true));
+    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement6, statement8, true));
 }
