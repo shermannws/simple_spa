@@ -1,5 +1,6 @@
 #include "CallsExtractorVisitor.h"
 #include "Commons/StatementTypeFactory.h"
+#include "Commons/StatementFactory.h"
 #include "Commons/Entities/CallStatement.h"
 #include "Commons/Entities/IfStatement.h"
 #include "Commons/Entities/WhileStatement.h"
@@ -31,15 +32,8 @@ void CallsExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::share
     for (auto parent = parents.rbegin(); parent != parents.rend(); parent++) {
         auto parentPtr = std::static_pointer_cast<StatementNode>(*parent);
         assert(parentPtr != nullptr);
-        StatementType statementType = StatementTypeFactory::getStatementTypeFrom(parentPtr->getStatementType());
-        if (statementType == StatementType::If) {
-            IfStatement parentStatement(parentPtr->getStatementNumber());
-            statementsToAdd.push_back(std::make_shared<IfStatement>(parentStatement));
-        } else {
-            assert(statementType == StatementType::While);
-            WhileStatement parentStatement(parentPtr->getStatementNumber());
-            statementsToAdd.push_back(std::make_shared<WhileStatement>(parentStatement));
-        }
+        std::shared_ptr<Statement> statement = StatementFactory::createStatementFromStatementNode(parentPtr);
+        statementsToAdd.push_back(statement);
     }
 
     this->pkbWriter->addProcedureToStatementsMap(calleePtr, statementsToAdd);
