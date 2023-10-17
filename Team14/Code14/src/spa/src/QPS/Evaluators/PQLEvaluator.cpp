@@ -11,32 +11,35 @@ PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader) :
     clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
     resultHandler(std::make_shared<ResultHandler>()) {}
 
-ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
+ResultList PQLEvaluator::formatResult(Query& query, Result& result) { //TODO support bool & tuple, if selects.size = 0 -> TRUE/FALSE based on result table empty/bool
     std::vector<Synonym> selects = query.getSelect();
-    ResultSet results;
 
-    if (result.getType() == ResultType::Tuples) {
-        for (auto& tuple : result.getTuples()) {
-            std::vector<std::string> tmp;
-            if (tuple.empty()) {
-                continue;
+    if (selects.empty()){ // case BOOLEAN query
+        if (result.isFalse() || result.isEmpty()){
+            return ResultList{"FALSE"};
+        }
+        return ResultList{"TRUE"};
+    }
+
+    // case tuple query
+    SynonymMap indicesMap = result.getSynIndices();
+    ResultSet results;
+    for (auto& tuple : result.getTuples()) {
+        std::vector<std::string> tmp;
+        for (Synonym & syn : selects) {
+            if (indicesMap.find(syn) != indicesMap.end()) {
+                int idx = indicesMap.at(syn);
+                std::string value = *tuple[idx].getEntityValue();
+                tmp.emplace_back(value);
             }
-            for (Synonym & syn : selects) {
-                SynonymMap indicesMap = result.getSynIndices();
-                if (indicesMap.find(syn) != indicesMap.end()) {
-                    int idx = indicesMap.at(syn);
-                    std::string value = *tuple[idx].getEntityValue();
-                    tmp.emplace_back(value);
-                }
-            }
-            FormattedResult concat = std::accumulate(tmp.begin(), tmp.end(), std::string(),
+        }
+        FormattedResult concat = std::accumulate(tmp.begin(), tmp.end(), std::string(),
                                                  [](std::string& a, const std::string& b) {
                                                      return a += (a.empty() ? "" : " ") + b;
                                                  }); // handles formatting of more than two variables in select clause
 
-            if (!concat.empty() && results.find(concat) == results.end()) {
-                results.insert(concat);
-            }
+        if (!concat.empty() && results.find(concat) == results.end()) {
+            results.insert(concat);
         }
     }
     ResultList list_results(results.begin(),results.end());
@@ -122,7 +125,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(const Query& query, s
     return tupleResult;
 }
 
-std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& queryEntity) {
+std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& queryEntity) { //TODO use Map to funcs
     QueryEntityType entityType = queryEntity->getType();
     switch (entityType) {
         case QueryEntityType::Procedure:

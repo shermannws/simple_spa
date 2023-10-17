@@ -1038,7 +1038,7 @@ TEST_CASE("multiclause, pattern and suchThat - True Result table ") {
 }
 
 TEST_CASE("multiclause, pattern and suchThat - synonym in tuple result table") {
-    // assign a, a1; variable v; Select a such that Follows*(a,20) pattern a (v,_"1+multiclauseTest"_) and a(v,_) such that Parent(1,10)
+    // assign a, a1; variable v; Select a such that Follows*(a,20) pattern a (v,_"1+multiclauseTest"_) and a1(v,_) such that Parent(1,10)
 
     auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a",
                                                 RootType::Synonym, "v",
@@ -1116,4 +1116,78 @@ TEST_CASE("multiclause, pattern and suchThat - synonym not in tuple result table
     REQUIRE(resultObj.getBoolResult() == false);
 }
 
+TEST_CASE("boolean result clause query") {
+    SECTION("no constraint clauses") {
+        PQLParser parser("Select BOOLEAN");
+        Query queryObj = parser.parse();
 
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getBoolResult() == true);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "TRUE") != results.end());
+    }
+
+    SECTION("false constraint clauses") {
+        PQLParser parser("stmt s1, s2; Select BOOLEAN such that Parent*(s1,s2)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getBoolResult() == false);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "FALSE") != results.end());
+    }
+
+    SECTION("non empty result of constraint clauses") {
+        PQLParser parser("assign a; Select BOOLEAN pattern a(_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(!resultObj.getTuples().empty());
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "TRUE") != results.end());
+    }
+}
+
+TEST_CASE("tuple result-clause query"){
+    SECTION("no constraint clauses") {
+        PQLParser parser("read re; if i; Select <i, re>");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getTuples().size() == 8);
+        REQUIRE(find(results.begin(), results.end(), "101 88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "101 24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "101 36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "101 14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "102 88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "102 24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "102 36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "102 14") != results.end());
+    }
+
+//    SECTION("tuple in result") {
+//        PQLParser parser("assign a, a1; variable v; Select <a, a1, v> pattern a (v,_\"1+multiclauseTest\"_) and a1(v,_) such that Parent(1,10)");
+//        // returns a,v of 1 var1, 1 var2, 2 var3, 3 var4, 4 var3
+//        // returns a1,v of 1 var1, 1 var2, 2 var3
+//        // returns  true
+//        Query queryObj = parser.parse();
+//
+//        auto stubReader = make_shared<StubPkbReader>();
+//        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+//        auto resultObj = evaluator.evaluate(queryObj);
+//        //auto results = evaluator.formatResult(queryObj, resultObj);
+//        REQUIRE(resultObj.getBoolResult() == true);
+//    }
+}
