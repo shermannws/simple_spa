@@ -2,7 +2,7 @@
 
 Result::Result() : type(ResultType::Invalid), boolResult(false) {}
 
-Result::Result(bool value) : type(ResultType::Boolean), boolResult(false) {}
+Result::Result(bool value) : type(ResultType::Boolean), boolResult(value) {}
 
 ResultType Result::getType() {
     return type;
