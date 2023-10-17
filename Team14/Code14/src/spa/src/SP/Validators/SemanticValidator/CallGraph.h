@@ -18,8 +18,7 @@ private:
      * @param currentPath
      * @return
      */
-    bool hasCycleDFS(const std::string &currentProcedure,
-                     std::unordered_set<std::string> &visited,
+    bool hasCycleDFS(const std::string &currentProcedure, std::unordered_set<std::string> &visited,
                      std::unordered_set<std::string> &currentPath);
 
 public:

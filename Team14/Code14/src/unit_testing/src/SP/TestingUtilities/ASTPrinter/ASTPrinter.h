@@ -12,9 +12,7 @@ private:
     /*!
      * Keeps a reference of pair of children nodes and their parents in a stack
      */
-    std::stack<std::pair<std::shared_ptr<ASTNode>,
-                         std::vector<std::shared_ptr<ASTNode>>>>
-            frontier;
+    std::stack<std::pair<std::shared_ptr<ASTNode>, std::vector<std::shared_ptr<ASTNode>>>> frontier;
 
 public:
     /*!

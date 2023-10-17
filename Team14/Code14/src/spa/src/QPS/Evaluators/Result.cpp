@@ -23,14 +23,10 @@ void Result::setType(std::vector<Synonym> synonyms) {
 void Result::setBoolResult(bool result) { boolResult = result; }
 bool Result::getBoolResult() { return boolResult; }
 
-void Result::setTuples(const std::vector<std::vector<Entity>> &resultTuples) {
-    tuples = resultTuples;
-}
+void Result::setTuples(const std::vector<std::vector<Entity>> &resultTuples) { tuples = resultTuples; }
 
 void Result::setTuples(const std::vector<Entity> &resultEntities) {
-    for (const Entity &entity: resultEntities) {
-        tuples.push_back(std::vector<Entity>{entity});
-    }
+    for (const Entity &entity: resultEntities) { tuples.push_back(std::vector<Entity>{entity}); }
 }
 
 ResultTuples &Result::getTuples() { return tuples; }
@@ -41,8 +37,6 @@ bool Result::isTrue() { return (type == ResultType::Boolean && boolResult); }
 
 bool Result::isFalse() { return (type == ResultType::Boolean && !boolResult); }
 
-bool Result::isEmpty() {
-    return (type == ResultType::Tuples && tuples.empty());
-}
+bool Result::isEmpty() { return (type == ResultType::Tuples && tuples.empty()); }
 
 bool Result::isInvalid() { return type == ResultType::Invalid; }

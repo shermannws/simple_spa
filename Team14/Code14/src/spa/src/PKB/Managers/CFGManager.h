@@ -16,10 +16,8 @@ public:
     CFGManager();
 
     /**
-     * @brief Sets the map from ProcedureName to the first CFGNode as the
-     * representation of the CFG.
+     * @brief Sets the map from ProcedureName to the first CFGNode as the representation of the CFG.
      * @param map The map from ProcedureName to the first CFGNode of the CFG.
      */
-    void
-    setCFG(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> map);
+    void setCFG(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> map);
 };

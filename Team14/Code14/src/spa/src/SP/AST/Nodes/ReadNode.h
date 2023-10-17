@@ -9,8 +9,7 @@
 class ReadNode;// forward declaration
 
 /**
- * Visitor interface linked to ReadNode, used to implement the Acyclic Visitor
- * pattern.
+ * Visitor interface linked to ReadNode, used to implement the Acyclic Visitor pattern.
  */
 class ReadNodeVisitor {
 public:
@@ -20,8 +19,7 @@ public:
      * @param parents Parents of the ReadNode
      * @param proc The procedure that the ReadNode is contained within
      */
-    virtual void visitReadNode(ReadNode *node,
-                               std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitReadNode(ReadNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                                std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -42,8 +40,7 @@ public:
      * @param statementNumber The statement number of this statement
      * @param var The variable that a value is read into
      */
-    explicit ReadNode(StatementNumber statementNumber,
-                      std::shared_ptr<VariableNode> var);
+    explicit ReadNode(StatementNumber statementNumber, std::shared_ptr<VariableNode> var);
 
     /**
      * Returns the variable that the value is read into.
@@ -51,8 +48,7 @@ public:
      */
     std::shared_ptr<VariableNode> getVar();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor,
-                std::vector<std::shared_ptr<ASTNode>> parents,
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
                 std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;

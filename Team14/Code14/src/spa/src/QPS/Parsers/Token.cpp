@@ -5,9 +5,8 @@
 #include <unordered_map>
 
 std::unordered_map<TokenType, int> operatorPrecedence = {
-        {TokenType::Asterisk, 1}, {TokenType::Slash, 1},
-        {TokenType::Percent, 1},  {TokenType::Plus, 0},
-        {TokenType::Minus, 0},
+        {TokenType::Asterisk, 1}, {TokenType::Slash, 1}, {TokenType::Percent, 1},
+        {TokenType::Plus, 0},     {TokenType::Minus, 0},
 };
 
 Token::Token(const std::string &input) {
@@ -50,18 +49,14 @@ bool Token::isInteger() {
     return std::regex_match(rep, pattern);
 }
 
-bool Token::isToken(const std::string &str) {
-    return rep == str && type == TokenType::Word;
-}
+bool Token::isToken(const std::string &str) { return rep == str && type == TokenType::Word; }
 
 bool Token::isToken(TokenType ttype) { return type == ttype; }
 
 bool Token::isDesignEntity() {
     return type == TokenType::Word &&
-           (rep == "procedure" || rep == "stmt" || rep == "read" ||
-            rep == "print" || rep == "assign" || rep == "while" ||
-            rep == "if" || rep == "variable" || rep == "constant" ||
-            rep == "call");
+           (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" || rep == "assign" ||
+            rep == "while" || rep == "if" || rep == "variable" || rep == "constant" || rep == "call");
 }
 
 bool Token::isIdent() {
@@ -72,9 +67,8 @@ bool Token::isIdent() {
 bool Token::isOperand() { return isIdent() || isInteger(); }
 
 bool Token::isOperator() {
-    return (isToken(TokenType::Plus) || isToken(TokenType::Minus) ||
-            isToken(TokenType::Asterisk) || isToken(TokenType::Slash) ||
-            isToken(TokenType::Percent));
+    return (isToken(TokenType::Plus) || isToken(TokenType::Minus) || isToken(TokenType::Asterisk) ||
+            isToken(TokenType::Slash) || isToken(TokenType::Percent));
 }
 
 bool Token::precedes(const std::shared_ptr<Token> other) {

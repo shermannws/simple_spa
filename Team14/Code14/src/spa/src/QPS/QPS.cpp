@@ -6,8 +6,7 @@
 #include "QPS/Parsers/PQLParser.h"
 #include <utility>
 
-QPS::QPS(std::shared_ptr<PkbReader> pkbReader)
-    : pkbReader(std::move(pkbReader)) {}
+QPS::QPS(std::shared_ptr<PkbReader> pkbReader) : pkbReader(std::move(pkbReader)) {}
 
 void QPS::evaluate(std::string &query, std::list<std::string> &results) {
     try {
@@ -16,7 +15,7 @@ void QPS::evaluate(std::string &query, std::list<std::string> &results) {
         PQLEvaluator evaluator = PQLEvaluator(pkbReader);
         Result resultObj = evaluator.evaluate(queryObj);
         results = evaluator.formatResult(queryObj, resultObj);
-    } catch (SyntaxException &e) {
-        results.emplace_back("SyntaxError");
-    } catch (SemanticException &e) { results.emplace_back("SemanticError"); }
+    } catch (SyntaxException &e) { results.emplace_back("SyntaxError"); } catch (SemanticException &e) {
+        results.emplace_back("SemanticError");
+    }
 }

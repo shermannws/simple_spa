@@ -14,16 +14,15 @@ public:
     explicit PqlSemanticValidator();
 
     /**
-     * @brief Validates the declarations in the query, throws a Semantic
-     * exception in case of a synonym redeclaration
+     * @brief Validates the declarations in the query, throws a Semantic exception in case of
+     * a synonym redeclaration
      * @param query the query object
      * @param synonyms the vector of declared synonyms
      */
     void validateDeclarations(const std::vector<Synonym> &synonyms);
 
     /**
-     * @brief Validates the result clause semantically, throws a Semantic
-     * exception if synonym is undeclared
+     * @brief Validates the result clause semantically, throws a Semantic exception if synonym is undeclared
      * @param query the query object
      * @param syn the synonym selected in the query
      */
@@ -37,20 +36,16 @@ public:
 
 private:
     /**
-     * @brief Validates SuchThatClause semantically, throws a SemanticException
-     * if semantically invalid
+     * @brief Validates SuchThatClause semantically, throws a SemanticException if semantically invalid
      * @param query the Query object
      * @param clause the shared pointer of SuchThatClause to validate
      */
-    void validateClauseSemantics(const Query &query,
-                                 std::shared_ptr<SuchThatClause> clause);
+    void validateClauseSemantics(const Query &query, std::shared_ptr<SuchThatClause> clause);
 
     /**
-     * @brief Validates PatternClause semantically, throws a SemanticException
-     * if semantically invalid
+     * @brief Validates PatternClause semantically, throws a SemanticException if semantically invalid
      * @param query the Query object
      * @param clause the shared pointer of PatternClause to validate
      */
-    void validateClauseSemantics(const Query &query,
-                                 std::shared_ptr<PatternClause> clause);
+    void validateClauseSemantics(const Query &query, std::shared_ptr<PatternClause> clause);
 };

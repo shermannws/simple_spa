@@ -8,8 +8,7 @@
 #include "catch.hpp"
 
 /**
- * Helper function to compare vector of CFGNodes with a vector of
- * StatementNumbers
+ * Helper function to compare vector of CFGNodes with a vector of StatementNumbers
  * @param parents Vector of CFGNodes
  * @param correctParentStmtNums Vector of StatementNumbers
  * @return
@@ -19,9 +18,7 @@ bool isSameStatements(const std::vector<std::shared_ptr<CFGNode>> &parents,
     if (parents.size() != correctParentStmtNums.size()) { return false; }
     std::vector<StatementNumber> parentStmtNums((int) parents.size());
     std::transform(parents.begin(), parents.end(), parentStmtNums.begin(),
-                   [&](const std::shared_ptr<CFGNode> &node) {
-                       return node->getStatementNumber();
-                   });
+                   [&](const std::shared_ptr<CFGNode> &node) { return node->getStatementNumber(); });
     std::sort(parentStmtNums.begin(), parentStmtNums.end());
     std::sort(correctParentStmtNums.begin(), correctParentStmtNums.end());
     return parentStmtNums == correctParentStmtNums;
@@ -46,21 +43,18 @@ TEST_CASE("Test single procedure") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName,
-                       std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = CFGBuilder::buildAllCFG(rootNode);
+    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
+            CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
     REQUIRE(cfgs.count("Proc1") == 1);
 
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG =
-            cfgs["Proc1"];
+    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
     REQUIRE(proc1CFG.size() == 8);
 
     // map stmtnum to stmttype
     std::vector<std::pair<StatementNumber, StatementType>> numToTypeVector = {
-            {1, StatementType::Assign}, {2, StatementType::Read},
-            {3, StatementType::Print},  {4, StatementType::If},
-            {5, StatementType::Assign}, {6, StatementType::Assign},
+            {1, StatementType::Assign}, {2, StatementType::Read},   {3, StatementType::Print},
+            {4, StatementType::If},     {5, StatementType::Assign}, {6, StatementType::Assign},
             {7, StatementType::While},  {8, StatementType::Print},
     };
 
@@ -141,32 +135,28 @@ TEST_CASE("Test single procedure") {
     REQUIRE(node8->getChildrenNodes().size() == 1);
     REQUIRE(isSameStatements(node8->getChildrenNodes(), {7}));
     // parent and child should be the same
-    REQUIRE(node8->getParentNodes().front() ==
-            node8->getChildrenNodes().front());
+    REQUIRE(node8->getParentNodes().front() == node8->getChildrenNodes().front());
 }
 
 TEST_CASE("Test multiple procedures") {
-    std::string sourceProgram =
-            "procedure Proc1 { x = 1; }"
-            "procedure Proc2 { read x; }"
-            "procedure Proc3 { print y; }"
-            "procedure Proc4 { call Proc1; }"
-            "procedure Proc5 { if (z > 1) then { print p; } else { read r; } }"
-            "procedure Proc6 { while (z <= w) { x = 2; } }";
+    std::string sourceProgram = "procedure Proc1 { x = 1; }"
+                                "procedure Proc2 { read x; }"
+                                "procedure Proc3 { print y; }"
+                                "procedure Proc4 { call Proc1; }"
+                                "procedure Proc5 { if (z > 1) then { print p; } else { read r; } }"
+                                "procedure Proc6 { while (z <= w) { x = 2; } }";
     SPTokenizer tokenizer = SPTokenizer(sourceProgram);
     auto tokens = tokenizer.tokenize();
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName,
-                       std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = CFGBuilder::buildAllCFG(rootNode);
+    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
+            CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 6);
 
     SECTION("Test Proc1") {
         REQUIRE(cfgs.count("Proc1") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG =
-                cfgs["Proc1"];
+        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
         REQUIRE(proc1CFG.size() == 1);
 
         auto stmt = Statement(1, StatementType::Assign);
@@ -181,8 +171,7 @@ TEST_CASE("Test multiple procedures") {
 
     SECTION("Test Proc2") {
         REQUIRE(cfgs.count("Proc2") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc2CFG =
-                cfgs["Proc2"];
+        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc2CFG = cfgs["Proc2"];
         REQUIRE(proc2CFG.size() == 1);
 
         auto stmt = Statement(2, StatementType::Read);
@@ -197,8 +186,7 @@ TEST_CASE("Test multiple procedures") {
 
     SECTION("Test Proc3") {
         REQUIRE(cfgs.count("Proc3") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc3CFG =
-                cfgs["Proc3"];
+        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc3CFG = cfgs["Proc3"];
         REQUIRE(proc3CFG.size() == 1);
 
         auto stmt = Statement(3, StatementType::Print);
@@ -213,8 +201,7 @@ TEST_CASE("Test multiple procedures") {
 
     SECTION("Test Proc4") {
         REQUIRE(cfgs.count("Proc4") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc4CFG =
-                cfgs["Proc4"];
+        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc4CFG = cfgs["Proc4"];
         REQUIRE(proc4CFG.size() == 1);
 
         auto stmt = Statement(4, StatementType::Call);
@@ -229,8 +216,7 @@ TEST_CASE("Test multiple procedures") {
 
     SECTION("Test Proc5") {
         REQUIRE(cfgs.count("Proc5") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc5CFG =
-                cfgs["Proc5"];
+        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc5CFG = cfgs["Proc5"];
         REQUIRE(proc5CFG.size() == 3);
 
         auto stmtIf = Statement(5, StatementType::If);
@@ -265,8 +251,7 @@ TEST_CASE("Test multiple procedures") {
 
     SECTION("Test Proc6") {
         REQUIRE(cfgs.count("Proc6") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc6CFG =
-                cfgs["Proc6"];
+        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc6CFG = cfgs["Proc6"];
         REQUIRE(proc6CFG.size() == 2);
 
         auto stmtWhile = Statement(8, StatementType::While);
@@ -283,8 +268,7 @@ TEST_CASE("Test multiple procedures") {
         REQUIRE(node8->getChildrenNodes().size() == 1);
         REQUIRE(isSameStatements(node8->getChildrenNodes(), {9}));
         // child and parent should be the same
-        REQUIRE(node8->getChildrenNodes().front() ==
-                node8->getParentNodes().front());
+        REQUIRE(node8->getChildrenNodes().front() == node8->getParentNodes().front());
 
         REQUIRE(node9->getStatementType() == StatementType::Assign);
         REQUIRE(node9->getStatementNumber() == 9);
@@ -293,8 +277,7 @@ TEST_CASE("Test multiple procedures") {
         REQUIRE(node9->getChildrenNodes().size() == 1);
         REQUIRE(isSameStatements(node9->getChildrenNodes(), {8}));
         // child and parent should be the same
-        REQUIRE(node9->getChildrenNodes().front() ==
-                node9->getParentNodes().front());
+        REQUIRE(node9->getChildrenNodes().front() == node9->getParentNodes().front());
     }
 }
 
@@ -329,14 +312,12 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName,
-                       std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = CFGBuilder::buildAllCFG(rootNode);
+    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
+            CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG =
-            cfgs["Proc1"];
+    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
     REQUIRE(proc1CFG.size() == 12);
 
     // stmt 1
@@ -479,8 +460,9 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     // Repeat of previous test case but without the last assign statement,
     // so there is no common last statement in the CFG.
     // The last statement depends on which branches are taken.
-    // This test case only tests the leaf CFG nodes that previously pointed to
-    // the common last statement but that now have no children 11 stmts
+    // This test case only tests the leaf CFG nodes that previously pointed to the common last statement
+    // but that now have no children
+    // 11 stmts
     std::string sourceProgram = "procedure Proc1 { "
                                 "   if (z > 1) then { "    // 1
                                 "       if (z > 1) then { "// 2
@@ -509,14 +491,12 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName,
-                       std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = CFGBuilder::buildAllCFG(rootNode);
+    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
+            CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG =
-            cfgs["Proc1"];
+    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
     REQUIRE(proc1CFG.size() == 11);
 
     // stmt 3
@@ -605,14 +585,12 @@ TEST_CASE("Test nested whiles") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName,
-                       std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = CFGBuilder::buildAllCFG(rootNode);
+    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
+            CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG =
-            cfgs["Proc1"];
+    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
     REQUIRE(proc1CFG.size() == 12);
 
     // stmt 1
@@ -778,14 +756,12 @@ TEST_CASE("Test nested whiles and ifs") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName,
-                       std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-            cfgs = CFGBuilder::buildAllCFG(rootNode);
+    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
+            CFGBuilder::buildAllCFG(rootNode);
     REQUIRE(cfgs.size() == 1);
 
     REQUIRE(cfgs.count("Proc1") == 1);
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG =
-            cfgs["Proc1"];
+    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
     REQUIRE(proc1CFG.size() == 13);
 
     // stmt 1
@@ -930,6 +906,5 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(node13->getChildrenNodes().size() == 1);
     REQUIRE(isSameStatements(node13->getChildrenNodes(), {12}));
     // parent and child should be the same
-    REQUIRE(node13->getChildrenNodes().front() ==
-            node13->getParentNodes().front());
+    REQUIRE(node13->getChildrenNodes().front() == node13->getParentNodes().front());
 }

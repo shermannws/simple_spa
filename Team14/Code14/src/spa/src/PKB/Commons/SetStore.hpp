@@ -7,14 +7,12 @@ void SetStore<T, H>::store(std::shared_ptr<T> object) {
 }
 
 template<typename T, typename H>
-typename std::unordered_set<std::shared_ptr<T>>::iterator
-SetStore<T, H>::getBeginIterator() {
+typename std::unordered_set<std::shared_ptr<T>>::iterator SetStore<T, H>::getBeginIterator() {
     return this->storage.begin();
 }
 
 template<typename T, typename H>
-typename std::unordered_set<std::shared_ptr<T>>::iterator
-SetStore<T, H>::getEndIterator() {
+typename std::unordered_set<std::shared_ptr<T>>::iterator SetStore<T, H>::getEndIterator() {
     return this->storage.end();
 }
 

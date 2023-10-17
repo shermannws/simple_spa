@@ -23,32 +23,27 @@ private:
     std::vector<SPToken> tokens;
 
     /**
-     * Validates a 'procedure' terminal and pops a token, followed by the rest
-     * of the procedure CGS.
+     * Validates a 'procedure' terminal and pops a token, followed by the rest of the procedure CGS.
      */
     void validateProcedure();
 
     /**
-     * Loops through statements in a procedure and calls relevant validate
-     * methods.
+     * Loops through statements in a procedure and calls relevant validate methods.
      */
     void validateStmtLst();
 
     /**
-     * Validates a 'read/print/call' terminal and pops a token, followed by the
-     * rest of the CGS.
+     * Validates a 'read/print/call' terminal and pops a token, followed by the rest of the CGS.
      */
     void validateReadPrintCall();
 
     /**
-     * Validates an assign statement by calling relevant validate methods in the
-     * CGS.
+     * Validates an assign statement by calling relevant validate methods in the CGS.
      */
     void validateAssign();
 
     /**
-     * Validates a term, followed by an arithmetic operator and expression if
-     * relevant.
+     * Validates a term, followed by an arithmetic operator and expression if relevant.
      */
     void validateExpr();
 
@@ -58,16 +53,14 @@ private:
     void validateTerm();
 
     /**
-     * Validates a 'while' loop by calling on a helper class,
-     * ConditionalValidator, to validate the conditional expression, followed by
-     * the rest of the 'while' CGS.
+     * Validates a 'while' loop by calling on a helper class, ConditionalValidator,
+     * to validate the conditional expression, followed by the rest of the 'while' CGS.
      */
     void validateWhile();
 
     /**
-     * Validates an 'if' loop by calling on a helper class,
-     * ConditionalValidator, to validate the conditional expression, followed by
-     * the rest of the 'if' CGS.
+     * Validates an 'if' loop by calling on a helper class, ConditionalValidator,
+     * to validate the conditional expression, followed by the rest of the 'if' CGS.
      */
     void validateIf();
 
@@ -87,8 +80,7 @@ private:
     void validateName();
 
     /**
-     * Validates an integer which cannot start with '0' if it is non-zero in
-     * value.
+     * Validates an integer which cannot start with '0' if it is non-zero in value.
      */
     void validateInteger();
 
@@ -159,8 +151,7 @@ public:
     SyntacticValidator(const std::vector<SPToken> &tokens);
 
     /**
-     * Validates the vector of tokens via a recursive descent by providing an
-     * entry point.
+     * Validates the vector of tokens via a recursive descent by providing an entry point.
      * @return A syntactically valid vector of tokens of the source program
      */
     std::vector<SPToken> validate();

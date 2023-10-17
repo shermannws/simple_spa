@@ -9,19 +9,7 @@
 /**
  * Enum class representing all valid query entity types
  */
-enum class QueryEntityType {
-    Procedure,
-    Stmt,
-    Read,
-    Print,
-    Assign,
-    Call,
-    While,
-    If,
-    Variable,
-    Constant,
-    Invalid
-};
+enum class QueryEntityType { Procedure, Stmt, Read, Print, Assign, Call, While, If, Variable, Constant, Invalid };
 
 /**
  * @brief QueryEntity is a design entity declared in PQL queries
@@ -47,17 +35,14 @@ public:
     explicit QueryEntity(QueryEntityType type, const Synonym &synonym);
 
     /**
-     * @brief Factory method that constructs a Query Entity based on a design
-     * Entity token
+     * @brief Factory method that constructs a Query Entity based on a design Entity token
      * @param designEntity token representing the query entity type string
      * @param synonym the synonym of the query entity created
      */
-    QueryEntity(const std::shared_ptr<Token> &designEntity,
-                const Synonym &synonym);
+    QueryEntity(const std::shared_ptr<Token> &designEntity, const Synonym &synonym);
 
     /**
-     * @brief returns true if query entity is equal to the other query entity
-     * object, else returns false
+     * @brief returns true if query entity is equal to the other query entity object, else returns false
      * @param other query entity object
      * @return boolean
      */

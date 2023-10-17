@@ -6,8 +6,7 @@
 #include "SPTokenType.h"
 
 /**
- * SPTokens which are created by the SPTokenizer when it tokenizes the SIMPLE
- * input source program.
+ * SPTokens which are created by the SPTokenizer when it tokenizes the SIMPLE input source program.
  */
 class SPToken {
 private:

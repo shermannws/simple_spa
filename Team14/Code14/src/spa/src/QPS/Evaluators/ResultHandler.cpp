@@ -4,8 +4,7 @@
 
 ResultHandler::ResultHandler(){};
 
-std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1,
-                                                   std::shared_ptr<Result> r2) {
+std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
     if (r1->isInvalid()) { return cast(r2); }
     if (r2->isInvalid()) { return cast(r1); }
     if (r1->isFalse() || r1->isEmpty() || r2->isTrue()) { return cast(r1); }
@@ -13,8 +12,7 @@ std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1,
     return cast(join(r1, r2));// case 2 non-empty Tuple Result
 }
 
-std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1,
-                                            std::shared_ptr<Result> r2) {
+std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
     std::shared_ptr<Result> final = std::make_shared<Result>();
     ResultTuples finalTuples;
 
@@ -49,9 +47,7 @@ std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1,
     return final;
 }
 
-std::unordered_map<int, int>
-ResultHandler::getCommonColumns(std::shared_ptr<Result> r1,
-                                std::shared_ptr<Result> r2) {
+std::unordered_map<int, int> ResultHandler::getCommonColumns(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
     std::unordered_map<int, int> commonIndices;
     auto map1 = r1->getSynIndices();
     auto map2 = r2->getSynIndices();
@@ -63,8 +59,7 @@ ResultHandler::getCommonColumns(std::shared_ptr<Result> r1,
     return commonIndices;
 }
 
-SynonymMap ResultHandler::buildSynIndices(std::shared_ptr<Result> r1,
-                                          std::shared_ptr<Result> r2) {
+SynonymMap ResultHandler::buildSynIndices(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
     SynonymMap combined = r1->getSynIndices();
     SynonymMap other = r2->getSynIndices();
     int mapSize = combined.size();
@@ -86,8 +81,7 @@ std::vector<Synonym> ResultHandler::getHeader(SynonymMap map) {
 }
 
 
-bool ResultHandler::isMatch(const std::vector<Entity> &row1,
-                            const std::vector<Entity> &row2,
+bool ResultHandler::isMatch(const std::vector<Entity> &row1, const std::vector<Entity> &row2,
                             const std::unordered_map<int, int> &commons) {
     for (auto &it: commons) {
         if (row1[it.first] == row2[it.second]) { continue; }

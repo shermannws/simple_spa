@@ -8,8 +8,7 @@
 class ProgramNode;// forward declaration
 
 /**
- * Visitor interface linked to ProgramNode, used to implement the Acyclic
- * Visitor pattern.
+ * Visitor interface linked to ProgramNode, used to implement the Acyclic Visitor pattern.
  */
 class ProgramNodeVisitor {
 public:
@@ -19,8 +18,7 @@ public:
      * @param parents Parents of the ProgramNode
      * @param proc nullptr as ProgramNNode is not contained within a procedure
      */
-    virtual void visitProgramNode(ProgramNode *node,
-                                  std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitProgramNode(ProgramNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                                   std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -40,8 +38,7 @@ public:
      * Creates and initializes a ProgramNode.
      * @param procedures The procedures in the program
      */
-    explicit ProgramNode(
-            std::vector<std::shared_ptr<ProcedureNode>> procedures);
+    explicit ProgramNode(std::vector<std::shared_ptr<ProcedureNode>> procedures);
 
     /**
      * Returns a vector of procedures in the program.
@@ -49,8 +46,7 @@ public:
      */
     std::vector<std::shared_ptr<ProcedureNode>> getProcedures();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor,
-                std::vector<std::shared_ptr<ASTNode>> parents,
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
                 std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;

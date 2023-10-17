@@ -1,8 +1,7 @@
 #include "SPTokenizer.h"
 #include "Errors/SyntaxError.h"
 
-SPTokenizer::SPTokenizer(std::string input)
-    : curr(0), input(std::move(input)) {}
+SPTokenizer::SPTokenizer(std::string input) : curr(0), input(std::move(input)) {}
 
 // main function, does not handle syntactic validation
 std::vector<SPToken> SPTokenizer::tokenize() {
@@ -78,9 +77,7 @@ std::vector<SPToken> SPTokenizer::tokenize() {
     return this->tokens;
 }
 
-bool SPTokenizer::isCurrValid() {
-    return curr >= 0 && curr < (int) input.size();
-}
+bool SPTokenizer::isCurrValid() { return curr >= 0 && curr < (int) input.size(); }
 
 int SPTokenizer::peekChar() { return input[curr]; }
 
@@ -94,8 +91,7 @@ int SPTokenizer::peekNextChar() {
     if (curr + 1 < input.size()) {
         return input[curr + 1];
     } else {
-        throw std::out_of_range(
-                "Error: attempted to access out-of-range char in input file");
+        throw std::out_of_range("Error: attempted to access out-of-range char in input file");
     }
 }
 
@@ -211,9 +207,7 @@ void SPTokenizer::tokenizeRelationalOperator() {
     std::string tokenValue;
     tokenValue.push_back(popChar());
 
-    if (peekChar() == AppConstants::CHAR_EQUAL) {
-        tokenValue.push_back(popChar());
-    }
+    if (peekChar() == AppConstants::CHAR_EQUAL) { tokenValue.push_back(popChar()); }
 
     SPToken token(TokenType::RelationalOperator, tokenValue);
     tokens.push_back(token);

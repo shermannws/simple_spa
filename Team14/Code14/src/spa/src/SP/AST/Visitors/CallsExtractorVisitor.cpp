@@ -1,17 +1,12 @@
 #include "CallsExtractorVisitor.h"
 #include "Commons/StatementTypeFactory.h"
 
-CallsExtractorVisitor::CallsExtractorVisitor(
-        std::shared_ptr<PkbWriter> pkbWriter) {
-    this->pkbWriter = pkbWriter;
-}
+CallsExtractorVisitor::CallsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter) { this->pkbWriter = pkbWriter; }
 
-void CallsExtractorVisitor::visitCallNode(
-        CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
-        std::shared_ptr<ASTNode> proc) const {
+void CallsExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+                                          std::shared_ptr<ASTNode> proc) const {
 
-    std::shared_ptr<ProcedureNode> callerNode =
-            std::dynamic_pointer_cast<ProcedureNode>(proc);
+    std::shared_ptr<ProcedureNode> callerNode = std::dynamic_pointer_cast<ProcedureNode>(proc);
     Procedure caller = Procedure(callerNode->getProcedureName());
     Procedure callee = Procedure(node->getProcedureName());
     std::shared_ptr<Procedure> callerPtr = std::make_shared<Procedure>(caller);
@@ -22,9 +17,7 @@ void CallsExtractorVisitor::visitCallNode(
     // Add procedure to statement mapping
     std::vector<std::shared_ptr<Statement>> statementsToAdd;
     Statement currStatement =
-            Statement(node->getStatementNumber(),
-                      StatementTypeFactory::getStatementTypeFrom(
-                              node->getStatementType()));
+            Statement(node->getStatementNumber(), StatementTypeFactory::getStatementTypeFrom(node->getStatementType()));
     statementsToAdd.push_back(std::make_shared<Statement>(currStatement));
 
     // Add procedure to parent statements mapping for UsesP and ModifiesP
@@ -33,8 +26,7 @@ void CallsExtractorVisitor::visitCallNode(
         assert(parentPtr != nullptr);
         Statement parentStatement =
                 Statement(parentPtr->getStatementNumber(),
-                          StatementTypeFactory::getStatementTypeFrom(
-                                  parentPtr->getStatementType()));
+                          StatementTypeFactory::getStatementTypeFrom(parentPtr->getStatementType()));
         statementsToAdd.push_back(std::make_shared<Statement>(parentStatement));
     }
 

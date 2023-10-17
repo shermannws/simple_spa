@@ -64,8 +64,7 @@ private:
     /**
      * @brief The ModifiesProcRelationshipManager of the PKB
      */
-    std::shared_ptr<ModifiesProcRelationshipManager>
-            modifiesProcRelationshipManager;
+    std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager;
 
     /**
      * @brief The UsesProcRelationshipManager of the PKB

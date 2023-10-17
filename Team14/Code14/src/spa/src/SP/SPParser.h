@@ -37,8 +37,7 @@
 class SPParser {
 private:
     /**
-     * Running number used to label consecutive statements in the source
-     * program.
+     * Running number used to label consecutive statements in the source program.
      */
     StatementNumber runningStatementNumber;
 
@@ -56,8 +55,7 @@ private:
      * @param tokens Deque of tokens passed by reference
      * @return A pointer to the created StatementListNode
      */
-    std::shared_ptr<StatementListNode>
-    parseStatementList(std::deque<SPToken> &tokens);
+    std::shared_ptr<StatementListNode> parseStatementList(std::deque<SPToken> &tokens);
 
     /**
      * Consumes tokens, creates an AssignNode and returns a pointer to it.
@@ -65,8 +63,7 @@ private:
      * @param tokens Deque of tokens passed by reference
      * @return A pointer to the created AssignNode
      */
-    std::shared_ptr<AssignNode>
-    parseAssignStatement(std::deque<SPToken> &tokens);
+    std::shared_ptr<AssignNode> parseAssignStatement(std::deque<SPToken> &tokens);
 
     /**
      * Consumes tokens, creates a ReadNode and returns a pointer to it.
@@ -108,44 +105,38 @@ private:
     std::shared_ptr<WhileNode> parseWhileStatement(std::deque<SPToken> &tokens);
 
     /**
-     * Recursively creates RelativeExpressionNodes,
-     * UnaryConditionalExpressionNodes and BinaryConditionalExpressionNodes to
-     * form one final ConditionalExpressionNode. Calls the parser methods for
-     * RelativeExpression and BinaryConditionalExpression.
+     * Recursively creates RelativeExpressionNodes, UnaryConditionalExpressionNodes and
+     * BinaryConditionalExpressionNodes to form one final ConditionalExpressionNode.
+     * Calls the parser methods for RelativeExpression and BinaryConditionalExpression.
      * @param tokens Deque of tokens passed by reference
      * @return A pointer to the final ConditionalExpressionNode
      */
-    std::shared_ptr<ConditionalExpressionNode>
-    parseConditionalExpression(std::deque<SPToken> &tokens);
+    std::shared_ptr<ConditionalExpressionNode> parseConditionalExpression(std::deque<SPToken> &tokens);
 
     /**
-     * Recursively creates left and right conditional expressions and combines
-     * them into one final BinaryConditionalExpressionNode. Calls the parser
-     * methods of ConditionalExpression.
+     * Recursively creates left and right conditional expressions and combines them into one final
+     * BinaryConditionalExpressionNode.
+     * Calls the parser methods of ConditionalExpression.
      * @param tokens Deque of tokens passed by reference
      * @return A pointer to the final BinaryConditionalExpressionNode
      */
-    std::shared_ptr<BinaryConditionalExpressionNode>
-    parseBinaryConditionalExpression(std::deque<SPToken> &tokens);
+    std::shared_ptr<BinaryConditionalExpressionNode> parseBinaryConditionalExpression(std::deque<SPToken> &tokens);
 
     /**
-     * Consumes tokens, creates a RelativeExpressionNode and returns a pointer
-     * to it. Calls the parser methods for Expression.
+     * Consumes tokens, creates a RelativeExpressionNode and returns a pointer to it.
+     * Calls the parser methods for Expression.
      * @param tokens Deque of tokens passed by reference
      * @return A pointer to the created RelativeExpressionNode
      */
-    std::shared_ptr<RelativeExpressionNode>
-    parseRelativeExpression(std::deque<SPToken> &tokens);
+    std::shared_ptr<RelativeExpressionNode> parseRelativeExpression(std::deque<SPToken> &tokens);
 
     /**
      * Creates a VariableNode, ConstantNode, or parses the nested expression.
      * Returns an ExpressionNode representing a relative factor.
      * @param tokens Deque of tokens passed by reference
-     * @return A pointer to the final ExpressionNode (variable, constant or
-     * expr)
+     * @return A pointer to the final ExpressionNode (variable, constant or expr)
      */
-    std::shared_ptr<ExpressionNode>
-    parseRelativeFactor(std::deque<SPToken> &tokens);
+    std::shared_ptr<ExpressionNode> parseRelativeFactor(std::deque<SPToken> &tokens);
 
     /**
      * Creates and combines exprs in pairs from left to right.
@@ -153,8 +144,7 @@ private:
      * @param tokens Deque of tokens passed by reference
      * @return A pointer to the final ExpressionNode (expr)
      */
-    std::shared_ptr<ExpressionNode>
-    parseExpression(std::deque<SPToken> &tokens);
+    std::shared_ptr<ExpressionNode> parseExpression(std::deque<SPToken> &tokens);
 
     /**
      * Creates and combines terms in pairs from left to right.
@@ -187,12 +177,9 @@ private:
     std::shared_ptr<ConstantNode> parseConstant(std::deque<SPToken> &tokens);
 
     /**
-     * Map of statement keyword ("assign", "print", etc) to statement parser
-     * function
+     * Map of statement keyword ("assign", "print", etc) to statement parser function
      */
-    std::unordered_map<std::string,
-                       std::function<std::shared_ptr<StatementNode>(
-                               std::deque<SPToken> &)>>
+    std::unordered_map<std::string, std::function<std::shared_ptr<StatementNode>(std::deque<SPToken> &)>>
             parseFunctionMap;
 
 public:
@@ -202,8 +189,7 @@ public:
     SPParser();
 
     /**
-     * Parses the program tokens into an AST and returns a pointer to the root
-     * ProgramNode of the AST.
+     * Parses the program tokens into an AST and returns a pointer to the root ProgramNode of the AST.
      * @param tokens Tokens to be parsed
      * @return A pointer to the root ProgramNode of the AST
      */

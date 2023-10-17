@@ -7,7 +7,6 @@ void EntityStore<T>::storeEntity(std::shared_ptr<T> entity) {
 }
 
 template<typename T>
-std::shared_ptr<Entity>
-EntityStore<T>::getEntity(std::shared_ptr<T> entity) const {
+std::shared_ptr<Entity> EntityStore<T>::getEntity(std::shared_ptr<T> entity) const {
     return this->get(entity);
 }

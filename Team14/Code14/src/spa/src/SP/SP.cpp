@@ -38,24 +38,19 @@ void SP::startSPProcessing(std::string &input) {
         semanticValidator.validate(root);
 
         // Instantiate all visitors to be used
-        std::shared_ptr<EntityExtractorVisitor> entityExtractor =
-                std::make_shared<EntityExtractorVisitor>(pkbWriter);
+        std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
         std::shared_ptr<FollowsExtractorVisitor> followsExtractor =
                 std::make_shared<FollowsExtractorVisitor>(pkbWriter);
-        std::shared_ptr<UsesExtractorVisitor> usesExtractor =
-                std::make_shared<UsesExtractorVisitor>(pkbWriter);
+        std::shared_ptr<UsesExtractorVisitor> usesExtractor = std::make_shared<UsesExtractorVisitor>(pkbWriter);
         std::shared_ptr<ModifiesExtractorVisitor> modifiesExtractor =
                 std::make_shared<ModifiesExtractorVisitor>(pkbWriter);
-        std::shared_ptr<ParentExtractorVisitor> parentExtractor =
-                std::make_shared<ParentExtractorVisitor>(pkbWriter);
-        std::shared_ptr<CallsExtractorVisitor> callsExtractor =
-                std::make_shared<CallsExtractorVisitor>(pkbWriter);
+        std::shared_ptr<ParentExtractorVisitor> parentExtractor = std::make_shared<ParentExtractorVisitor>(pkbWriter);
+        std::shared_ptr<CallsExtractorVisitor> callsExtractor = std::make_shared<CallsExtractorVisitor>(pkbWriter);
         std::shared_ptr<PatternExtractorVisitor> patternExtractor =
                 std::make_shared<PatternExtractorVisitor>(pkbWriter);
         std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = {
-                entityExtractor,   followsExtractor, usesExtractor,
-                modifiesExtractor, parentExtractor,  callsExtractor,
-                patternExtractor};
+                entityExtractor, followsExtractor, usesExtractor,   modifiesExtractor,
+                parentExtractor, callsExtractor,   patternExtractor};
 
         // Traverse the AST from root node
         Traverser traverser = Traverser(visitors);
@@ -65,21 +60,17 @@ void SP::startSPProcessing(std::string &input) {
         pkbWriter->triggerTransitiveCalc();
 
         // Build CFGs
-        std::unordered_map<
-                ProcedureName,
-                std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-                cfgs = CFGBuilder::buildAllCFG(root);
+        std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
+                CFGBuilder::buildAllCFG(root);
     } catch (const SyntaxError &e) {
         std::cout << "\n"
                   << e.what() << "\n\n"
-                  << "Terminating program due to invalid SIMPLE code."
-                  << std::endl;
+                  << "Terminating program due to invalid SIMPLE code." << std::endl;
         std::exit(EXIT_FAILURE);// Exit the program with an error code
     } catch (const SemanticError &e) {
         std::cout << "\n"
                   << e.what() << "\n\n"
-                  << "Terminating program due to invalid SIMPLE code."
-                  << std::endl;
+                  << "Terminating program due to invalid SIMPLE code." << std::endl;
         std::exit(EXIT_FAILURE);// Exit the program with an error code
     }
 }

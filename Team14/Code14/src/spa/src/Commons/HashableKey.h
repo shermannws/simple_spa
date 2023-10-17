@@ -4,10 +4,8 @@
 #include <functional>
 
 /**
- * @brief A HashableKey is an interface that enforce the implementation of the
- * hash function
- * @details A HashableKey is an interface that enforce the implementation of the
- * hash function
+ * @brief A HashableKey is an interface that enforce the implementation of the hash function
+ * @details A HashableKey is an interface that enforce the implementation of the hash function
  */
 class HashableKey {
 public:
@@ -17,11 +15,9 @@ public:
     virtual ~HashableKey() = default;
 
     /**
-     * @brief Returns true if the HashableKey object is equal to the other
-     * HashableKey object, false otherwise
+     * @brief Returns true if the HashableKey object is equal to the other HashableKey object, false otherwise
      * @param other The other HashableKey object to compare against
-     * @return True if the HashableKey object is equal to the other HashableKey
-     * object, false otherwise
+     * @return True if the HashableKey object is equal to the other HashableKey object, false otherwise
      */
     virtual bool operator==(const HashableKey &other) const = 0;
 };

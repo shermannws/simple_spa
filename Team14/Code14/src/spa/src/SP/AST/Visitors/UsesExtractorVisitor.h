@@ -15,24 +15,19 @@ class UsesExtractorVisitor : public DesignExtractorVisitor,
                              public WhileNodeVisitor {
 private:
     /*!
-     * funcStmt is a lambda function used to abstract the call to PKB to add
-     * Uses relationship.
+     * funcStmt is a lambda function used to abstract the call to PKB to add Uses relationship.
      */
-    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)>
-            funcStmt;
+    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> funcStmt;
 
     /*!
-     * funcProc is a lambda function used to abstract the call to PKB to add
-     * Uses (proc-var) relationship.
+     * funcProc is a lambda function used to abstract the call to PKB to add Uses (proc-var) relationship.
      */
-    std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)>
-            funcProc;
+    std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> funcProc;
 
 public:
     /*!
      * Constructor for UsesExtractorVisitor.
-     * @param pkbWriter A shared ptr to a concrete implementation of PkbWriter
-     * class
+     * @param pkbWriter A shared ptr to a concrete implementation of PkbWriter class
      */
     UsesExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
@@ -42,8 +37,7 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitAssignNode(AssignNode *node,
-                         std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                          std::shared_ptr<ASTNode> proc) const override;
 
     /*!
@@ -52,8 +46,7 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitPrintNode(PrintNode *node,
-                        std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitPrintNode(PrintNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                         std::shared_ptr<ASTNode> proc) const override;
 
     /*!
@@ -62,8 +55,7 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitIfNode(IfNode *node,
-                     std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitIfNode(IfNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                      std::shared_ptr<ASTNode> proc) const override;
 
 
@@ -73,7 +65,6 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitWhileNode(WhileNode *node,
-                        std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                         std::shared_ptr<ASTNode> proc) const override;
 };

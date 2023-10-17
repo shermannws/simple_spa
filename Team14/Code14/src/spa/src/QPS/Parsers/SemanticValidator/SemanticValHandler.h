@@ -31,8 +31,7 @@ public:
      * @param handler The shared pointer of the next handler
      * @return The shared pointer of the next handler
      */
-    std::shared_ptr<SemanticValHandler>
-    setNext(std::shared_ptr<SemanticValHandler> handler);
+    std::shared_ptr<SemanticValHandler> setNext(std::shared_ptr<SemanticValHandler> handler);
 
     /**
      * @brief Handles the semantic validation of the Clause in the Query

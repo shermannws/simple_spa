@@ -41,9 +41,7 @@ TEST_CASE("Test Entities") {
     writer->addPrintStatement(make_shared<Statement>(s));
     writer->addReadStatement(make_shared<Statement>(s2));
     writer->addAssignStatement(make_shared<Statement>(s3));
-    writer->addAssignPattern(make_shared<Statement>(s3),
-                             make_shared<Variable>(v),
-                             make_shared<Expression>("(x)"));
+    writer->addAssignPattern(make_shared<Statement>(s3), make_shared<Variable>(v), make_shared<Expression>("(x)"));
     writer->addCallStatement(make_shared<Statement>(s4));
     writer->addIfStatement(make_shared<Statement>(s5));
     writer->addWhileStatement(make_shared<Statement>(s6));
@@ -75,8 +73,7 @@ TEST_CASE("Uses (Stmt) Relationship") {
     REQUIRE(!reader->isStmtUsesVar(s, v));
     REQUIRE(!reader->hasUses(s));
 
-    writer->addUsesRelationship(make_shared<Statement>(s),
-                                make_shared<Variable>(v));
+    writer->addUsesRelationship(make_shared<Statement>(s), make_shared<Variable>(v));
 
     REQUIRE(reader->getUsesStmtPair(StatementType::Stmt).size() == 1);
     REQUIRE(reader->getUsesStmtPair(StatementType::Stmt)[0][0] == s);
@@ -119,8 +116,7 @@ TEST_CASE("Uses (Proc) Relationship") {
     REQUIRE(!reader->isProcUsesVar(p, v));
     REQUIRE(!reader->hasUses(p));
 
-    writer->addUsesProcRelationship(make_shared<Procedure>(p),
-                                    make_shared<Variable>(v));
+    writer->addUsesProcRelationship(make_shared<Procedure>(p), make_shared<Variable>(v));
 
     REQUIRE(reader->getUsesProcPair().size() == 1);
     REQUIRE(reader->getUsesProcPair()[0][0] == p);
@@ -161,8 +157,7 @@ TEST_CASE("Modifies (Stmt) Relationship") {
     REQUIRE(!reader->isStmtModifiesVar(s, v));
     REQUIRE(!reader->hasModifies(s));
 
-    writer->addModifiesRelationship(make_shared<Statement>(s),
-                                    make_shared<Variable>(v));
+    writer->addModifiesRelationship(make_shared<Statement>(s), make_shared<Variable>(v));
 
     REQUIRE(reader->getModifiesStmtPair(StatementType::Stmt).size() == 1);
     REQUIRE(reader->getModifiesStmtPair(StatementType::Stmt)[0][0] == s);
@@ -205,8 +200,7 @@ TEST_CASE("Modifies (Proc) Relationship") {
     REQUIRE(!reader->isProcModifiesVar(p, v));
     REQUIRE(!reader->hasModifies(p));
 
-    writer->addModifiesProcRelationship(make_shared<Procedure>(p),
-                                        make_shared<Variable>(v));
+    writer->addModifiesProcRelationship(make_shared<Procedure>(p), make_shared<Variable>(v));
 
     REQUIRE(reader->getModifiesProcPair().size() == 1);
     REQUIRE(reader->getModifiesProcPair()[0][0] == p);
@@ -240,22 +234,16 @@ TEST_CASE("Follows(*) Relationship") {
     Statement s = Statement(1, StatementType::Print);
     Statement s2 = Statement(2, StatementType::Read);
 
-    REQUIRE(reader->getFollowsPair(StatementType::Stmt, StatementType::Stmt)
-                    .size() == 0);
-    REQUIRE(reader->getFollowsStarPair(StatementType::Print,
-                                       StatementType::Read)
-                    .size() == 0);
+    REQUIRE(reader->getFollowsPair(StatementType::Stmt, StatementType::Stmt).size() == 0);
+    REQUIRE(reader->getFollowsStarPair(StatementType::Print, StatementType::Read).size() == 0);
     REQUIRE(reader->getFollowsTypeStmt(StatementType::Print, s2).size() == 0);
-    REQUIRE(reader->getFollowsStarTypeStmt(StatementType::Stmt, s2).size() ==
-            0);
+    REQUIRE(reader->getFollowsStarTypeStmt(StatementType::Stmt, s2).size() == 0);
     REQUIRE(reader->getFollowsStmtType(s, StatementType::Read).size() == 0);
     REQUIRE(reader->getFollowsStarStmtType(s, StatementType::Stmt).size() == 0);
     REQUIRE(reader->getFollowsTypeWildcard(StatementType::Print).size() == 0);
-    REQUIRE(reader->getFollowsStarTypeWildcard(StatementType::Stmt).size() ==
-            0);
+    REQUIRE(reader->getFollowsStarTypeWildcard(StatementType::Stmt).size() == 0);
     REQUIRE(reader->getFollowsWildcardType(StatementType::Read).size() == 0);
-    REQUIRE(reader->getFollowsStarWildcardType(StatementType::Stmt).size() ==
-            0);
+    REQUIRE(reader->getFollowsStarWildcardType(StatementType::Stmt).size() == 0);
     REQUIRE(!reader->isFollows(s, s2));
     REQUIRE(!reader->isFollowsStar(s, s2));
     REQUIRE(!reader->hasFollows());
@@ -265,29 +253,20 @@ TEST_CASE("Follows(*) Relationship") {
     REQUIRE(!reader->hasFormerStmt(s2));
     REQUIRE(!reader->hasFormerStarStmt(s2));
 
-    writer->addFollowsRelationship(make_shared<Statement>(s),
-                                   make_shared<Statement>(s2), true);
+    writer->addFollowsRelationship(make_shared<Statement>(s), make_shared<Statement>(s2), true);
 
-    REQUIRE(reader->getFollowsPair(StatementType::Stmt, StatementType::Stmt)
-                    .size() == 1);
-    REQUIRE(reader->getFollowsPair(StatementType::Stmt,
-                                   StatementType::Stmt)[0][0] == s);
-    REQUIRE(reader->getFollowsPair(StatementType::Stmt,
-                                   StatementType::Stmt)[0][1] == s2);
+    REQUIRE(reader->getFollowsPair(StatementType::Stmt, StatementType::Stmt).size() == 1);
+    REQUIRE(reader->getFollowsPair(StatementType::Stmt, StatementType::Stmt)[0][0] == s);
+    REQUIRE(reader->getFollowsPair(StatementType::Stmt, StatementType::Stmt)[0][1] == s2);
 
-    REQUIRE(reader->getFollowsStarPair(StatementType::Print,
-                                       StatementType::Read)
-                    .size() == 1);
-    REQUIRE(reader->getFollowsStarPair(StatementType::Print,
-                                       StatementType::Read)[0][0] == s);
-    REQUIRE(reader->getFollowsStarPair(StatementType::Print,
-                                       StatementType::Read)[0][1] == s2);
+    REQUIRE(reader->getFollowsStarPair(StatementType::Print, StatementType::Read).size() == 1);
+    REQUIRE(reader->getFollowsStarPair(StatementType::Print, StatementType::Read)[0][0] == s);
+    REQUIRE(reader->getFollowsStarPair(StatementType::Print, StatementType::Read)[0][1] == s2);
 
     REQUIRE(reader->getFollowsTypeStmt(StatementType::Print, s2).size() == 1);
     REQUIRE(reader->getFollowsTypeStmt(StatementType::Print, s2)[0] == s);
 
-    REQUIRE(reader->getFollowsStarTypeStmt(StatementType::Stmt, s2).size() ==
-            1);
+    REQUIRE(reader->getFollowsStarTypeStmt(StatementType::Stmt, s2).size() == 1);
     REQUIRE(reader->getFollowsStarTypeStmt(StatementType::Stmt, s2)[0] == s);
 
     REQUIRE(reader->getFollowsStmtType(s, StatementType::Read).size() == 1);
@@ -299,15 +278,13 @@ TEST_CASE("Follows(*) Relationship") {
     REQUIRE(reader->getFollowsTypeWildcard(StatementType::Print).size() == 1);
     REQUIRE(reader->getFollowsTypeWildcard(StatementType::Print)[0] == s);
 
-    REQUIRE(reader->getFollowsStarTypeWildcard(StatementType::Stmt).size() ==
-            1);
+    REQUIRE(reader->getFollowsStarTypeWildcard(StatementType::Stmt).size() == 1);
     REQUIRE(reader->getFollowsStarTypeWildcard(StatementType::Stmt)[0] == s);
 
     REQUIRE(reader->getFollowsWildcardType(StatementType::Read).size() == 1);
     REQUIRE(reader->getFollowsWildcardType(StatementType::Read)[0] == s2);
 
-    REQUIRE(reader->getFollowsStarWildcardType(StatementType::Stmt).size() ==
-            1);
+    REQUIRE(reader->getFollowsStarWildcardType(StatementType::Stmt).size() == 1);
     REQUIRE(reader->getFollowsStarWildcardType(StatementType::Stmt)[0] == s2);
 
     REQUIRE(reader->isFollows(s, s2));
@@ -330,22 +307,15 @@ TEST_CASE("Parent(*) Relationship") {
     Statement s = Statement(1, StatementType::While);
     Statement s2 = Statement(2, StatementType::Read);
 
-    writer->addParentRelationship(make_shared<Statement>(s),
-                                  make_shared<Statement>(s2), true);
+    writer->addParentRelationship(make_shared<Statement>(s), make_shared<Statement>(s2), true);
 
-    REQUIRE(reader->getParentPair(StatementType::Stmt, StatementType::Stmt)
-                    .size() == 1);
-    REQUIRE(reader->getParentPair(StatementType::Stmt,
-                                  StatementType::Stmt)[0][0] == s);
-    REQUIRE(reader->getParentPair(StatementType::Stmt,
-                                  StatementType::Stmt)[0][1] == s2);
+    REQUIRE(reader->getParentPair(StatementType::Stmt, StatementType::Stmt).size() == 1);
+    REQUIRE(reader->getParentPair(StatementType::Stmt, StatementType::Stmt)[0][0] == s);
+    REQUIRE(reader->getParentPair(StatementType::Stmt, StatementType::Stmt)[0][1] == s2);
 
-    REQUIRE(reader->getParentStarPair(StatementType::While, StatementType::Read)
-                    .size() == 1);
-    REQUIRE(reader->getParentStarPair(StatementType::While,
-                                      StatementType::Read)[0][0] == s);
-    REQUIRE(reader->getParentStarPair(StatementType::While,
-                                      StatementType::Read)[0][1] == s2);
+    REQUIRE(reader->getParentStarPair(StatementType::While, StatementType::Read).size() == 1);
+    REQUIRE(reader->getParentStarPair(StatementType::While, StatementType::Read)[0][0] == s);
+    REQUIRE(reader->getParentStarPair(StatementType::While, StatementType::Read)[0][1] == s2);
 
     REQUIRE(reader->getParentTypeStmt(StatementType::While, s2).size() == 1);
     REQUIRE(reader->getParentTypeStmt(StatementType::While, s2)[0] == s);
@@ -384,22 +354,16 @@ TEST_CASE("Parent(*) Relationship") {
 
     // Negative tests
     Statement sNew = Statement(3, StatementType::Print);
-    REQUIRE(reader->getParentPair(StatementType::Print, StatementType::Stmt)
-                    .size() == 0);
-    REQUIRE(reader->getParentStarPair(StatementType::Print, StatementType::Read)
-                    .size() == 0);
+    REQUIRE(reader->getParentPair(StatementType::Print, StatementType::Stmt).size() == 0);
+    REQUIRE(reader->getParentStarPair(StatementType::Print, StatementType::Read).size() == 0);
     REQUIRE(reader->getParentTypeStmt(StatementType::Print, s2).size() == 0);
-    REQUIRE(reader->getParentStarTypeStmt(StatementType::Print, s2).size() ==
-            0);
+    REQUIRE(reader->getParentStarTypeStmt(StatementType::Print, s2).size() == 0);
     REQUIRE(reader->getParentStmtType(sNew, StatementType::Read).size() == 0);
-    REQUIRE(reader->getParentStarStmtType(sNew, StatementType::Stmt).size() ==
-            0);
+    REQUIRE(reader->getParentStarStmtType(sNew, StatementType::Stmt).size() == 0);
     REQUIRE(reader->getParentTypeWildcard(StatementType::Print).size() == 0);
-    REQUIRE(reader->getParentStarTypeWildcard(StatementType::Print).size() ==
-            0);
+    REQUIRE(reader->getParentStarTypeWildcard(StatementType::Print).size() == 0);
     REQUIRE(reader->getParentWildcardType(StatementType::Print).size() == 0);
-    REQUIRE(reader->getParentStarWildcardType(StatementType::Print).size() ==
-            0);
+    REQUIRE(reader->getParentStarWildcardType(StatementType::Print).size() == 0);
     REQUIRE(!reader->isParent(sNew, s2));
     REQUIRE(!reader->isParentStar(sNew, s2));
     REQUIRE(!reader->hasChildStmt(sNew));
@@ -434,8 +398,7 @@ TEST_CASE("Calls(*) Relationship") {
     REQUIRE(reader->getCallees(p).size() == 0);
     REQUIRE(reader->getCalleesStar(p).size() == 0);
 
-    writer->addCallsRelationship(make_shared<Procedure>(p),
-                                 make_shared<Procedure>(p2));
+    writer->addCallsRelationship(make_shared<Procedure>(p), make_shared<Procedure>(p2));
     writer->triggerTransitiveCalc();
 
     REQUIRE(reader->hasCalls());
@@ -510,9 +473,7 @@ TEST_CASE("Assign Pattern") {
     REQUIRE(reader->getAssignStmtsVarPairByRhs(e, false).size() == 0);
 
     writer->addAssignStatement(make_shared<Statement>(s));
-    writer->addAssignPattern(make_shared<Statement>(s),
-                             make_shared<Variable>(v),
-                             make_shared<Expression>(e));
+    writer->addAssignPattern(make_shared<Statement>(s), make_shared<Variable>(v), make_shared<Expression>(e));
 
     REQUIRE(reader->getAllAssign().size() == 1);
     REQUIRE(reader->getAllAssign()[0] == s);
@@ -560,10 +521,8 @@ TEST_CASE("Next(*) Relationship") {
     Statement s = Statement(1, StatementType::Print);
     Statement s1 = Statement(2, StatementType::Read);
 
-    REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt)
-                    .size() == 0);
-    REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read)
-                    .size() == 0);
+    REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt).size() == 0);
+    REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read).size() == 0);
     REQUIRE(reader->getNextStarSameStmt(StatementType::Stmt).size() == 0);
     REQUIRE(reader->getNextTypeStmt(StatementType::Print, s1).size() == 0);
     REQUIRE(reader->getNextStarTypeStmt(StatementType::Stmt, s1).size() == 0);
@@ -582,22 +541,15 @@ TEST_CASE("Next(*) Relationship") {
     REQUIRE(!reader->hasAfterStmt(s));
     REQUIRE(!reader->hasAfterStarStmt(s));
 
-    writer->addNextRelationship(make_shared<Statement>(s),
-                                make_shared<Statement>(s1));
+    writer->addNextRelationship(make_shared<Statement>(s), make_shared<Statement>(s1));
 
-    REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt)
-                    .size() == 1);
-    REQUIRE(reader->getNextPair(StatementType::Stmt,
-                                StatementType::Stmt)[0][0] == s);
-    REQUIRE(reader->getNextPair(StatementType::Stmt,
-                                StatementType::Stmt)[0][1] == s1);
+    REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt).size() == 1);
+    REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt)[0][0] == s);
+    REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt)[0][1] == s1);
 
-    REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read)
-                    .size() == 1);
-    REQUIRE(reader->getNextStarPair(StatementType::Print,
-                                    StatementType::Read)[0][0] == s);
-    REQUIRE(reader->getNextStarPair(StatementType::Print,
-                                    StatementType::Read)[0][1] == s1);
+    REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read).size() == 1);
+    REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read)[0][0] == s);
+    REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read)[0][1] == s1);
 
     REQUIRE(reader->getNextStarSameStmt(StatementType::Stmt).size() == 0);
 
@@ -639,10 +591,8 @@ TEST_CASE("Next(*) Relationship") {
 
     // Negative tests
     Statement sNew = Statement(3, StatementType::Assign);
-    REQUIRE(reader->getNextPair(StatementType::Assign, StatementType::Stmt)
-                    .size() == 0);
-    REQUIRE(reader->getNextStarPair(StatementType::Assign, StatementType::Read)
-                    .size() == 0);
+    REQUIRE(reader->getNextPair(StatementType::Assign, StatementType::Stmt).size() == 0);
+    REQUIRE(reader->getNextStarPair(StatementType::Assign, StatementType::Read).size() == 0);
     REQUIRE(reader->getNextTypeStmt(StatementType::Assign, s1).size() == 0);
     REQUIRE(reader->getNextStarTypeStmt(StatementType::Assign, s1).size() == 0);
     REQUIRE(reader->getNextStmtType(sNew, StatementType::Read).size() == 0);
@@ -674,8 +624,7 @@ TEST_CASE("If Pattern") {
     REQUIRE(reader->getAllIfStmtVarPair().empty());
 
     writer->addIfPattern(make_shared<Statement>(s),
-                         make_shared<vector<shared_ptr<Variable>>>(
-                                 1, make_shared<Variable>(v)));
+                         make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>(v)));
 
     // TODO: Enable when getAllIf is changed to IfPatternManager
     // REQUIRE(reader->getAllIf().size() == 1);
@@ -700,8 +649,7 @@ TEST_CASE("While Pattern") {
     REQUIRE(reader->getAllWhileStmtVarPair().empty());
 
     writer->addWhilePattern(make_shared<Statement>(s),
-                            make_shared<vector<shared_ptr<Variable>>>(
-                                    1, make_shared<Variable>(v)));
+                            make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>(v)));
 
     // TODO: Enable when getAllWhile is changed to WhilePatternManager
     // REQUIRE(reader->getAllWhile().size() == 1);

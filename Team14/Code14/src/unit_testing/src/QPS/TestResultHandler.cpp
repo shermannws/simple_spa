@@ -10,12 +10,9 @@
 TEST_CASE("Test Result combiner") {
 
     SECTION("Test both tuples, should return tuple result") {
-        std::vector<Entity> v1{Statement(1, StatementType::Assign),
-                               Variable("my_variable")};
-        std::vector<Entity> v2{Statement(5, StatementType::Stmt),
-                               Variable("another_variable")};
-        std::vector<Entity> v3{Statement(7, StatementType::Stmt),
-                               Variable("third_variable")};
+        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
+        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
+        std::vector<Entity> v3{Statement(7, StatementType::Stmt), Variable("third_variable")};
         ResultType type = ResultType::Tuples;
 
         std::shared_ptr<Result> r = std::make_shared<Result>();
@@ -33,20 +30,14 @@ TEST_CASE("Test Result combiner") {
         auto finalTuples = final->getTuples();
 
         REQUIRE(final->getTuples().size() == 2);
-        REQUIRE(find(finalTuples.begin(), finalTuples.end(), v1) !=
-                finalTuples.end());
-        REQUIRE(find(finalTuples.begin(), finalTuples.end(), v2) !=
-                finalTuples.end());
+        REQUIRE(find(finalTuples.begin(), finalTuples.end(), v1) != finalTuples.end());
+        REQUIRE(find(finalTuples.begin(), finalTuples.end(), v2) != finalTuples.end());
     }
 
-    SECTION("Test both tuples with 1 empty Tuples Result, should return false "
-            "Result") {
-        std::vector<Entity> v1{Statement(1, StatementType::Assign),
-                               Variable("my_variable")};
-        std::vector<Entity> v2{Statement(5, StatementType::Stmt),
-                               Variable("another_variable")};
-        std::vector<Entity> v3{Statement(7, StatementType::Stmt),
-                               Variable("third_variable")};
+    SECTION("Test both tuples with 1 empty Tuples Result, should return false Result") {
+        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
+        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
+        std::vector<Entity> v3{Statement(7, StatementType::Stmt), Variable("third_variable")};
         ResultType type = ResultType::Tuples;
 
         std::shared_ptr<Result> r = std::make_shared<Result>();
@@ -110,17 +101,15 @@ TEST_CASE("Test Result combiner") {
 
         REQUIRE(final->getTuples().size() == 1);
         REQUIRE(final->getType() == ResultType::Tuples);
-        REQUIRE(find(finalTuples.begin(), finalTuples.end(),
-                     std::vector<Entity>{a1}) != finalTuples.end());
+        REQUIRE(find(finalTuples.begin(), finalTuples.end(), std::vector<Entity>{a1}) != finalTuples.end());
 
         std::shared_ptr<Result> finalAssociative = evaluator.getCombined(r1, r);
         auto finalAssociativeTuples = final->getTuples();
 
         REQUIRE(finalAssociative->getTuples().size() == 1);
         REQUIRE(finalAssociative->getType() == ResultType::Tuples);
-        REQUIRE(find(finalAssociativeTuples.begin(),
-                     finalAssociativeTuples.end(),
-                     std::vector<Entity>{a1}) != finalAssociativeTuples.end());
+        REQUIRE(find(finalAssociativeTuples.begin(), finalAssociativeTuples.end(), std::vector<Entity>{a1}) !=
+                finalAssociativeTuples.end());
     }
 
     SECTION("both boolean result") {
@@ -165,10 +154,8 @@ TEST_CASE("Test Result combiner") {
         rFalse->setType(std::vector<Synonym>{});
         rFalse->setBoolResult(false);
 
-        std::vector<Entity> v1{Statement(1, StatementType::Assign),
-                               Variable("my_variable")};
-        std::vector<Entity> v2{Statement(5, StatementType::Stmt),
-                               Variable("another_variable")};
+        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
+        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
 
         std::shared_ptr<Result> rTuple = std::make_shared<Result>();
         rTuple->setType(std::vector<Synonym>{"a", "x"});
@@ -194,10 +181,8 @@ TEST_CASE("Test Result combiner") {
         REQUIRE(tup->getType() == ResultType::Tuples);
         REQUIRE(tup->getTuples().size() == 2);
         auto finalTuples = tup->getTuples();
-        REQUIRE(find(finalTuples.begin(), finalTuples.end(), v1) !=
-                finalTuples.end());
-        REQUIRE(find(finalTuples.begin(), finalTuples.end(), v2) !=
-                finalTuples.end());
+        REQUIRE(find(finalTuples.begin(), finalTuples.end(), v1) != finalTuples.end());
+        REQUIRE(find(finalTuples.begin(), finalTuples.end(), v2) != finalTuples.end());
 
         // INVALID x INVALID
         auto i = evaluator.getCombined(rInvalid, rInvalid);

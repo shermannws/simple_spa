@@ -6,8 +6,7 @@ SemanticValidator::SemanticValidator() = default;
 
 void SemanticValidator::validate(const std::shared_ptr<ProgramNode> &root) {
 
-    std::vector<std::shared_ptr<ProcedureNode>> procedures =
-            root->getProcedures();
+    std::vector<std::shared_ptr<ProcedureNode>> procedures = root->getProcedures();
     std::unordered_set<std::string> procedureNames;
 
     // insert procedure names into set and check for duplicates
@@ -15,8 +14,7 @@ void SemanticValidator::validate(const std::shared_ptr<ProgramNode> &root) {
         std::string name = procedure->getProcedureName();
 
         if (procedureNames.count(name) > 0) {
-            throw SemanticError(
-                    "Semantic error: Repeated procedure names detected");
+            throw SemanticError("Semantic error: Repeated procedure names detected");
         } else {
             procedureNames.insert(name);
         }
@@ -34,31 +32,21 @@ void SemanticValidator::validate(const std::shared_ptr<ProgramNode> &root) {
         frontier.pop();
 
         // Create CallGraph
-        if (auto procedureNode =
-                    std::dynamic_pointer_cast<ProcedureNode>(current)) {
+        if (auto procedureNode = std::dynamic_pointer_cast<ProcedureNode>(current)) {
             currProcedureNode = procedureNode;
             callGraph.addNode(procedureNode);
-        } else if (auto callNode =
-                           std::dynamic_pointer_cast<CallNode>(current)) {
+        } else if (auto callNode = std::dynamic_pointer_cast<CallNode>(current)) {
             if (procedureNames.count(callNode->getProcedureName()) == 0) {
-                throw SemanticError(
-                        "Semantic error: Called non-existing procedure");
+                throw SemanticError("Semantic error: Called non-existing procedure");
             }
-            callGraph.addEdge(currProcedureNode->getProcedureName(),
-                              callNode->getProcedureName());
+            callGraph.addEdge(currProcedureNode->getProcedureName(), callNode->getProcedureName());
         }
 
         // Add child of current node into the frontier
-        std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent =
-                current->getAllChildNodes();
-        for (auto it = childrenOfCurrent.rbegin();
-             it != childrenOfCurrent.rend(); it++) {
-            frontier.push(*it);
-        }
+        std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();
+        for (auto it = childrenOfCurrent.rbegin(); it != childrenOfCurrent.rend(); it++) { frontier.push(*it); }
     }
     // End of DFS algorithm
 
-    if (callGraph.hasCycle()) {
-        throw SemanticError("Semantic error: Cyclic procedure calls detected");
-    }
+    if (callGraph.hasCycle()) { throw SemanticError("Semantic error: Cyclic procedure calls detected"); }
 }

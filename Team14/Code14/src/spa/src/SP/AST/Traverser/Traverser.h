@@ -14,15 +14,12 @@ private:
     /*!
      * Keeps a reference of pair of children nodes and their parents in a stack
      */
-    std::stack<std::pair<std::shared_ptr<ASTNode>,
-                         std::vector<std::shared_ptr<ASTNode>>>>
-            frontier;
+    std::stack<std::pair<std::shared_ptr<ASTNode>, std::vector<std::shared_ptr<ASTNode>>>> frontier;
 
 public:
     /*!
      * Constructor for Traverser which takes in a vector of Visitor Object.
-     * @param visitors A vector of DesignExtractorVisitor that will each visit
-     * the AST Node as it is being traversed
+     * @param visitors A vector of DesignExtractorVisitor that will each visit the AST Node as it is being traversed
      */
     Traverser(std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors);
 

@@ -10,8 +10,7 @@
 class AssignNode;// forward declaration
 
 /**
- * Visitor interface linked to AssignNode, used to implement the Acyclic Visitor
- * pattern.
+ * Visitor interface linked to AssignNode, used to implement the Acyclic Visitor pattern.
  */
 class AssignNodeVisitor {
 public:
@@ -21,8 +20,7 @@ public:
      * @param parents Parents of the AssignNode
      * @param proc Procedure containing the AssignNode
      */
-    virtual void visitAssignNode(AssignNode *node,
-                                 std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                                  std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -49,8 +47,7 @@ public:
      * @param var The LHS variable that is assigned to
      * @param expression The RHS expression that is assigned
      */
-    explicit AssignNode(StatementNumber statementNumber,
-                        std::shared_ptr<VariableNode> var,
+    explicit AssignNode(StatementNumber statementNumber, std::shared_ptr<VariableNode> var,
                         std::shared_ptr<ExpressionNode> expression);
 
     /**
@@ -65,8 +62,7 @@ public:
      */
     std::shared_ptr<ExpressionNode> getExpression();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor,
-                std::vector<std::shared_ptr<ASTNode>> parents,
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
                 std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;

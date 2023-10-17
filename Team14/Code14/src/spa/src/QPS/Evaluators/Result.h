@@ -41,14 +41,13 @@ private:
 
 public:
     /**
-     * @brief Default constructor for the Result class, returns uninitialized
-     * Result object.
+     * @brief Default constructor for the Result class, returns uninitialized Result object.
      */
     Result();
 
     /**
-     * @brief Constructor for a boolean Result instance, returns a Result object
-     * with Type Boolean and boolResult of value
+     * @brief Constructor for a boolean Result instance, returns a Result object with Type Boolean and boolResult of
+     * value
      * @param value boolean value of the result
      */
     Result(bool value);

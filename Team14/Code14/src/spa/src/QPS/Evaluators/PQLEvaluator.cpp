@@ -7,8 +7,7 @@
 #include "QPS/QueryEntity.h"
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader)
-    : pkbReader(pkbReader),
-      clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
+    : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
       resultHandler(std::make_shared<ResultHandler>()) {}
 
 ResultList PQLEvaluator::formatResult(Query &query, Result &result) {
@@ -28,15 +27,11 @@ ResultList PQLEvaluator::formatResult(Query &query, Result &result) {
                 }
             }
             FormattedResult concat =
-                    std::accumulate(tmp.begin(), tmp.end(), std::string(),
-                                    [](std::string &a, const std::string &b) {
-                                        return a += (a.empty() ? "" : " ") + b;
-                                    });// handles formatting of more than two
-                                       // variables in select clause
+                    std::accumulate(tmp.begin(), tmp.end(), std::string(), [](std::string &a, const std::string &b) {
+                        return a += (a.empty() ? "" : " ") + b;
+                    });// handles formatting of more than two variables in select clause
 
-            if (!concat.empty() && results.find(concat) == results.end()) {
-                results.insert(concat);
-            }
+            if (!concat.empty() && results.find(concat) == results.end()) { results.insert(concat); }
         }
     }
     ResultList list_results(results.begin(), results.end());
@@ -63,32 +58,21 @@ Result PQLEvaluator::evaluate(Query &query) {
     return *result;
 }
 
-std::shared_ptr<Result>
-PQLEvaluator::evaluateClause(const std::shared_ptr<Clause> clause) {
-    std::shared_ptr<Strategy> strategy =
-            QPSUtil::strategyCreatorMap[clause->getType()](pkbReader);
+std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Clause> clause) {
+    std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()](pkbReader);
     clauseHandler->setStrategy(strategy);
     std::shared_ptr<Result> result = clauseHandler->executeClause(clause);
     return result;
 }
 
-std::shared_ptr<Result>
-PQLEvaluator::evaluateConstraintClauses(const Query &query) {
-    if (query.getSuchThat().empty() && query.getPattern().empty()) {
-        return nullptr;
-    }
+std::shared_ptr<Result> PQLEvaluator::evaluateConstraintClauses(const Query &query) {
+    if (query.getSuchThat().empty() && query.getPattern().empty()) { return nullptr; }
 
     std::vector<std::shared_ptr<Result>> results;
-    for (const auto &clause: query.getSuchThat()) {
-        results.push_back(evaluateClause(clause));
-    }
-    for (const auto &clause: query.getPattern()) {
-        results.push_back(evaluateClause(clause));
-    }
-    auto result =
-            resultHandler->cast(results[0]);// Initialize with the first element
-    for (size_t i = 1; i < results.size();
-         ++i) {// Combine with next until end of list
+    for (const auto &clause: query.getSuchThat()) { results.push_back(evaluateClause(clause)); }
+    for (const auto &clause: query.getPattern()) { results.push_back(evaluateClause(clause)); }
+    auto result = resultHandler->cast(results[0]);// Initialize with the first element
+    for (size_t i = 1; i < results.size(); ++i) { // Combine with next until end of list
         result = resultHandler->getCombined(result, results[i]);
     }
     return result;
@@ -105,8 +89,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const Query &query) {
     return result;
 }
 
-std::vector<Entity>
-PQLEvaluator::getAll(const std::shared_ptr<QueryEntity> &queryEntity) {
+std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity> &queryEntity) {
     QueryEntityType entityType = queryEntity->getType();
     switch (entityType) {
         case QueryEntityType::Procedure:
@@ -130,7 +113,6 @@ PQLEvaluator::getAll(const std::shared_ptr<QueryEntity> &queryEntity) {
         case QueryEntityType::Call:
             return pkbReader->getAllCall();
         default:
-            throw std::runtime_error(
-                    "Not supported entity type in query select clause");
+            throw std::runtime_error("Not supported entity type in query select clause");
     }
 }

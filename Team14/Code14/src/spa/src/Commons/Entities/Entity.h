@@ -31,8 +31,7 @@ public:
      * @param entityType The Entity Type of the Entity of enum type `EntityType`
      * @return A new Entity object
      */
-    Entity(const std::shared_ptr<EntityValue> entityValue,
-           EntityType entityType);
+    Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType);
 
     /**
      * @brief Destroy the Entity object
@@ -42,8 +41,7 @@ public:
     virtual ~Entity() = default;
 
     /**
-     * @brief Returns the Entity Type of the Entity object of enum type
-     * `EntityType`
+     * @brief Returns the Entity Type of the Entity object of enum type `EntityType`
      * @return The Entity Type of the Entity object of enum type `EntityType`
      */
     EntityType getEntityType() const;
@@ -55,11 +53,9 @@ public:
     EntityValue getEntityValue() const;
 
     /**
-     * @brief Returns true if the Entity object is equal to the other Entity
-     * object, false otherwise
+     * @brief Returns true if the Entity object is equal to the other Entity object, false otherwise
      * @param other The other Entity object to compare with
-     * @return True if the Entity object is equal to the other Entity object,
-     * false otherwise
+     * @return True if the Entity object is equal to the other Entity object, false otherwise
      */
     bool operator==(const HashableKey &other) const override;
 };
@@ -91,6 +87,5 @@ struct std::hash<std::shared_ptr<Entity>> {
  */
 template<>
 struct std::equal_to<std::shared_ptr<Entity>> {
-    bool operator()(std::shared_ptr<Entity> const &lhs,
-                    std::shared_ptr<Entity> const &rhs) const;
+    bool operator()(std::shared_ptr<Entity> const &lhs, std::shared_ptr<Entity> const &rhs) const;
 };

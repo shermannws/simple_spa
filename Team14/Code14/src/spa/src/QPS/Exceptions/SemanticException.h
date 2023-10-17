@@ -20,8 +20,7 @@ public:
     explicit SemanticException(std::string msg);
 
     /**
-     * @brief Returns the error message of the exception when the exception is
-     * thrown
+     * @brief Returns the error message of the exception when the exception is thrown
      */
     virtual const char *what() const throw();
 };

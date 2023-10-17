@@ -2,8 +2,7 @@
 #include "QPS/Exceptions/SemanticException.h"
 #include "QPS/QPSUtil.h"
 
-void StmtrefProcVarHandler::handle(const Query &query,
-                                   std::shared_ptr<Clause> clause) {
+void StmtrefProcVarHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
     if (!suchThat) { return SemanticValHandler::handle(query, clause); }
 
@@ -11,9 +10,7 @@ void StmtrefProcVarHandler::handle(const Query &query,
     Ref &leftRef = suchThat->getFirstParam();
     Ref &rightRef = suchThat->getSecondParam();
 
-    if (QPSUtil::typeToArgTypeMap[type] != StmtrefProcVar) {
-        return SemanticValHandler::handle(query, clause);
-    }
+    if (QPSUtil::typeToArgTypeMap[type] != StmtrefProcVar) { return SemanticValHandler::handle(query, clause); }
 
     handleRefType(leftRef, rightRef);
 
@@ -27,8 +24,7 @@ void StmtrefProcVarHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
     switch (leftRootType) {
         case RootType::Synonym: {
             QueryEntityType entityType = leftRef.getEntityType();
-            if (QPSUtil::entityRefMap.find(entityType) ==
-                QPSUtil::entityRefMap.end()) {
+            if (QPSUtil::entityRefMap.find(entityType) == QPSUtil::entityRefMap.end()) {
                 throw SemanticException("Invalid LHS synonym");
             }
             RefType leftRefType = QPSUtil::entityRefMap[entityType];
@@ -54,8 +50,7 @@ void StmtrefProcVarHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
         case RootType::Synonym: {
             QueryEntityType entityType = rightRef.getEntityType();
             if (entityType != QueryEntityType::Variable) {
-                throw SemanticException(
-                        "Invalid RHS synonym, non-variable found");
+                throw SemanticException("Invalid RHS synonym, non-variable found");
             }
         }
         case RootType::Ident:

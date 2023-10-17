@@ -18,10 +18,9 @@ public:
      * @param parents Parents of the UnaryConditionalExpressionNode
      * @param proc Procedure containing the UnaryConditionalExpressionNode
      */
-    virtual void visitUnaryConditionalExpressionNode(
-            UnaryConditionalExpressionNode *node,
-            std::vector<std::shared_ptr<ASTNode>> parents,
-            std::shared_ptr<ASTNode> proc) const = 0;
+    virtual void visitUnaryConditionalExpressionNode(UnaryConditionalExpressionNode *node,
+                                                     std::vector<std::shared_ptr<ASTNode>> parents,
+                                                     std::shared_ptr<ASTNode> proc) const = 0;
 };
 
 /**
@@ -42,18 +41,15 @@ public:
      * Creates and initializes a UnaryConditionalExpressionNode.
      * @param conditionalExpression The nested conditional expression
      */
-    explicit UnaryConditionalExpressionNode(
-            std::shared_ptr<ConditionalExpressionNode> conditionalExpression);
+    explicit UnaryConditionalExpressionNode(std::shared_ptr<ConditionalExpressionNode> conditionalExpression);
 
     /**
-     * Returns the nested conditional expression of the unary conditional
-     * expression.
+     * Returns the nested conditional expression of the unary conditional expression.
      * @return The nested conditional expression
      */
     std::shared_ptr<ConditionalExpressionNode> getConditionalExpression();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor,
-                std::vector<std::shared_ptr<ASTNode>> parents,
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
                 std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;

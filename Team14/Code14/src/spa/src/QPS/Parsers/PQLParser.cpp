@@ -38,11 +38,9 @@ std::vector<Synonym> PQLParser::parseDeclarations(Query &query) {
             synonyms.push_back(newEntity->getSynonym());
         } while (tokenizer->peekToken()->isToken(TokenType::Comma));
 
-        std::shared_ptr<Token> endToken =
-                tokenizer->popToken();// consume semicolon
+        std::shared_ptr<Token> endToken = tokenizer->popToken();// consume semicolon
         if (!endToken->isToken(TokenType::Semicolon)) {
-            throw SyntaxException("Expected ; but found '" +
-                                  endToken->getRep() + +"'");
+            throw SyntaxException("Expected ; but found '" + endToken->getRep() + +"'");
         }
     }
     return synonyms;
@@ -51,8 +49,7 @@ std::vector<Synonym> PQLParser::parseDeclarations(Query &query) {
 Synonym PQLParser::parseResultClause(Query &query) {
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken("Select")) {
-        throw SyntaxException("Expected Select clause but found '" +
-                              next->getRep() + "'");
+        throw SyntaxException("Expected Select clause but found '" + next->getRep() + "'");
     }
 
     next = tokenizer->popToken();
@@ -65,15 +62,12 @@ Synonym PQLParser::parseResultClause(Query &query) {
 
 void PQLParser::parseClauses(Query &query) {
     std::unordered_map<std::string, processClausefunc> clauseExtractorMap{
-            {"such that",
-             [&](Query &query) { return processSuchThatClause(query); }},
-            {"pattern",
-             [&](Query &query) { return processPatternClause(query); }}};
+            {"such that", [&](Query &query) { return processSuchThatClause(query); }},
+            {"pattern", [&](Query &query) { return processPatternClause(query); }}};
 
     while (!tokenizer->peekToken()->isToken(TokenType::Empty)) {
         std::string clauseConnector = tokenizer->peekToken()->getRep();
-        if (clauseExtractorMap.find(clauseConnector) ==
-            clauseExtractorMap.end()) {// check if valid clause keyword
+        if (clauseExtractorMap.find(clauseConnector) == clauseExtractorMap.end()) {// check if valid clause keyword
             throw SyntaxException("invalid clause connector");
         }
 
@@ -96,13 +90,10 @@ void PQLParser::processPatternClause(Query &query) {
 
 std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
     std::shared_ptr<Token> absToken = tokenizer->popToken();
-    std::shared_ptr<SuchThatClause> clause =
-            std::make_shared<SuchThatClause>(absToken);
+    std::shared_ptr<SuchThatClause> clause = std::make_shared<SuchThatClause>(absToken);
 
     std::shared_ptr<Token> next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Lparenthesis)) {
-        throw SyntaxException("No left parenthesis");
-    }
+    if (!next->isToken(TokenType::Lparenthesis)) { throw SyntaxException("No left parenthesis"); }
 
     Ref leftRef = extractRef();
     clause->setFirstParam(leftRef);
@@ -114,9 +105,7 @@ std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
     clause->setSecondParam(rightRef);
 
     next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Rparenthesis)) {
-        throw SyntaxException("No right parenthesis");
-    }
+    if (!next->isToken(TokenType::Rparenthesis)) { throw SyntaxException("No right parenthesis"); }
 
     validateSuchThatRefType(clause);
     return clause;
@@ -125,26 +114,18 @@ std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
 std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
     std::shared_ptr<PatternClause> clause = std::make_shared<PatternClause>();
     std::shared_ptr<Token> patternSyn = tokenizer->popToken();
-    if (!patternSyn->isIdent()) {
-        throw SyntaxException("Invalid synonym syntax");
-    }
+    if (!patternSyn->isIdent()) { throw SyntaxException("Invalid synonym syntax"); }
     clause->setSyn(patternSyn->getRep());
 
     std::shared_ptr<Token> next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Lparenthesis)) {
-        throw SyntaxException("Expected Lparenthesis");
-    }
+    if (!next->isToken(TokenType::Lparenthesis)) { throw SyntaxException("Expected Lparenthesis"); }
 
     Ref firstParam = extractRef();
-    if (firstParam.getRootType() == RootType::Integer) {
-        throw SyntaxException("Invalid entRef");
-    }
+    if (firstParam.getRootType() == RootType::Integer) { throw SyntaxException("Invalid entRef"); }
     clause->setFirstParam(firstParam);
 
     next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Comma)) {
-        throw SyntaxException("Expected comma ");
-    }
+    if (!next->isToken(TokenType::Comma)) { throw SyntaxException("Expected comma "); }
 
     try {
         ExpressionSpec secondParam = exprSpecParser->extractExpressionSpec();
@@ -152,14 +133,11 @@ std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
     } catch (...) { throw SyntaxException("Invalid expression spec syntax"); }
 
     next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Rparenthesis)) {
-        throw SyntaxException("expected right parenthesis");
-    }
+    if (!next->isToken(TokenType::Rparenthesis)) { throw SyntaxException("expected right parenthesis"); }
     return clause;
 }
 
-void PQLParser::validateSuchThatRefType(
-        const std::shared_ptr<SuchThatClause> clause) {
+void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause) {
     ClauseType type = clause->getType();
     Ref &leftRef = clause->getFirstParam();
     Ref &rightRef = clause->getSecondParam();
@@ -168,9 +146,7 @@ void PQLParser::validateSuchThatRefType(
         case ClauseType::Uses:
         case ClauseType::Modifies:
             // check right
-            if (!rightRef.isOfEntRef()) {
-                throw SyntaxException("Invalid RHS entRef");
-            }
+            if (!rightRef.isOfEntRef()) { throw SyntaxException("Invalid RHS entRef"); }
             break;
         case ClauseType::Follows:
         case ClauseType::FollowsStar:
@@ -179,34 +155,24 @@ void PQLParser::validateSuchThatRefType(
         case ClauseType::Next:
         case ClauseType::NextStar:
             // check left
-            if (!leftRef.isOfStmtRef()) {
-                throw SyntaxException("Invalid LHS, stmtRef expected");
-            }
+            if (!leftRef.isOfStmtRef()) { throw SyntaxException("Invalid LHS, stmtRef expected"); }
             // check right
-            if (!rightRef.isOfStmtRef()) {
-                throw SyntaxException("Invalid RHS, stmtRef expected");
-            }
+            if (!rightRef.isOfStmtRef()) { throw SyntaxException("Invalid RHS, stmtRef expected"); }
             break;
         case ClauseType::Calls:
         case ClauseType::CallsStar:
-            if (!leftRef.isOfEntRef()) {
-                throw SyntaxException("Invalid RHS entRef");
-            }
-            if (!rightRef.isOfEntRef()) {
-                throw SyntaxException("Invalid RHS entRef");
-            }
+            if (!leftRef.isOfEntRef()) { throw SyntaxException("Invalid RHS entRef"); }
+            if (!rightRef.isOfEntRef()) { throw SyntaxException("Invalid RHS entRef"); }
             break;
         default:
             throw SyntaxException("Invalid ClauseType in Such That Clause");
     }
 }
 
-std::shared_ptr<QueryEntity>
-PQLParser::extractQueryEntity(std::shared_ptr<Token> entityType) {
+std::shared_ptr<QueryEntity> PQLParser::extractQueryEntity(std::shared_ptr<Token> entityType) {
     std::shared_ptr<Token> synonym = tokenizer->popToken();
     if (!synonym->isIdent()) { throw SyntaxException("Invalid synonym"); }
-    EntityPtr newEntity =
-            std::make_shared<QueryEntity>(entityType, synonym->getRep());
+    EntityPtr newEntity = std::make_shared<QueryEntity>(entityType, synonym->getRep());
     return newEntity;
 }
 
@@ -223,8 +189,7 @@ Ref PQLParser::extractRef() {
         std::shared_ptr<Token> syn = tokenizer->peekToken();
         expect(syn->isIdent(), "Identity invalid");
         std::string right_quote = tokenizer->peekToken()->getRep();
-        expect(tokenizer->peekToken()->isToken(TokenType::Quote),
-               "No right quote");
+        expect(tokenizer->peekToken()->isToken(TokenType::Quote), "No right quote");
 
         refString = syn->getRep();
         rootType = RootType::Ident;
@@ -243,8 +208,7 @@ Ref PQLParser::extractRef() {
     return ref;
 }
 
-std::shared_ptr<Token> PQLParser::expect(bool isToken,
-                                         const std::string &errorMsg) {
+std::shared_ptr<Token> PQLParser::expect(bool isToken, const std::string &errorMsg) {
     if (!isToken) { throw SyntaxException(errorMsg); }
     return tokenizer->popToken();
 }

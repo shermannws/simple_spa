@@ -12,8 +12,7 @@
  * @details A class that stores all the conditional patterns
  */
 class ConditionPatternStore
-    : public DoubleMapStore<Statement, Variable, EntityStore<Variable>,
-                            EntityStore<Statement>, Entity, Entity> {
+    : public DoubleMapStore<Statement, Variable, EntityStore<Variable>, EntityStore<Statement>, Entity, Entity> {
 public:
     /**
      * @brief Construct a new ConditionPatternStore object

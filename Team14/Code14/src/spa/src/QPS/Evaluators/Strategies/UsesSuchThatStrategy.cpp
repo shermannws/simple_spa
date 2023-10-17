@@ -5,8 +5,7 @@
 UsesSuchThatStrategy::UsesSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader)
     : SuchThatStrategy(std::move(pkbReader)) {}
 
-std::shared_ptr<Result>
-UsesSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
+std::shared_ptr<Result> UsesSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     auto leftEntityType = leftRef.getEntityType();
     auto leftSyn = leftRef.getRep();
@@ -14,14 +13,12 @@ UsesSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     if (leftEntityType == QueryEntityType::Procedure) {// Uses(p,v)
         res->setTuples(pkbReader->getUsesProcPair());
     } else {// Uses(s,v)
-        res->setTuples(pkbReader->getUsesStmtPair(
-                QPSUtil::entityToStmtMap.at(leftEntityType)));
+        res->setTuples(pkbReader->getUsesStmtPair(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
     return res;
 }
 
-std::shared_ptr<Result>
-UsesSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
+std::shared_ptr<Result> UsesSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     auto leftSyn = leftRef.getRep();
     auto leftEntityType = leftRef.getEntityType();
@@ -32,19 +29,16 @@ UsesSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
     if (isRightIdent && isLeftProc) {// Uses(p,"var")
         res->setTuples(pkbReader->getUsesProcIdent(v));
     } else if (isRightIdent) {// Uses(s, "var")
-        res->setTuples(pkbReader->getUsesTypeIdent(
-                QPSUtil::entityToStmtMap.at(leftEntityType), v));
+        res->setTuples(pkbReader->getUsesTypeIdent(QPSUtil::entityToStmtMap.at(leftEntityType), v));
     } else if (isLeftProc) {// Uses(p,_)
         res->setTuples(pkbReader->getUsesProc());
     } else {// Uses(s,_)
-        res->setTuples(pkbReader->getUsesStmt(
-                QPSUtil::entityToStmtMap.at(leftEntityType)));
+        res->setTuples(pkbReader->getUsesStmt(QPSUtil::entityToStmtMap.at(leftEntityType)));
     }
     return res;
 }
 
-std::shared_ptr<Result>
-UsesSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
+std::shared_ptr<Result> UsesSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     auto leftRep = leftRef.getRep();
     auto rightSyn = rightRef.getRep();
@@ -58,8 +52,7 @@ UsesSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
     return res;
 }
 
-std::shared_ptr<Result>
-UsesSuchThatStrategy::evaluateBoolean(Ref &leftRef, Ref &rightRef) const {
+std::shared_ptr<Result> UsesSuchThatStrategy::evaluateBoolean(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     auto leftRep = leftRef.getRep();
     auto rightRep = rightRef.getRep();

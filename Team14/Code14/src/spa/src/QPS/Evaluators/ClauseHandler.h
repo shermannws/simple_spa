@@ -8,8 +8,7 @@
 
 
 /**
- * @class ClauseHandler is the interface for PQLEvaluator to evaluate clauses
- * with different strategies
+ * @class ClauseHandler is the interface for PQLEvaluator to evaluate clauses with different strategies
  */
 class ClauseHandler {
 private:
@@ -37,11 +36,9 @@ public:
     void setStrategy(std::shared_ptr<Strategy> strategy);
 
     /**
-     * Executes the clause using the strategy and writes the result into the
-     * result object
+     * Executes the clause using the strategy and writes the result into the result object
      * @param clause the clause to be evaluated
-     * @param result the Result table to be populated with the results of the
-     * clause execution
+     * @param result the Result table to be populated with the results of the clause execution
      */
     std::shared_ptr<Result> executeClause(std::shared_ptr<Clause> clause) const;
 };

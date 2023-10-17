@@ -124,8 +124,7 @@ public:
     bool isOfEntRef();
 
     /**
-     * @brief Checks if this Ref is equal to other by comparing their rep, type,
-     * rootType and entityType
+     * @brief Checks if this Ref is equal to other by comparing their rep, type, rootType and entityType
      * @param other query entity object
      * @return Returns true if this == other, otherwise false
      */

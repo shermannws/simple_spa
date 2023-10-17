@@ -15,8 +15,7 @@ class PatternExtractorVisitor : public DesignExtractorVisitor,
 public:
     /**
      * Constructor for PatternExtractorVisitor.
-     * @param pkbWriter A shared ptr to a concrete implementation of PkbWriter
-     * class
+     * @param pkbWriter A shared ptr to a concrete implementation of PkbWriter class
      */
     PatternExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
@@ -26,8 +25,7 @@ public:
      * @param parents Parents of the AssignNode
      * @param proc Procedure containing the AssignNode
      */
-    void visitAssignNode(AssignNode *node,
-                         std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                          std::shared_ptr<ASTNode> proc) const override;
 
     /**
@@ -36,8 +34,7 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitIfNode(IfNode *node,
-                     std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitIfNode(IfNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                      std::shared_ptr<ASTNode> proc) const override;
 
     /**
@@ -46,18 +43,15 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitWhileNode(WhileNode *node,
-                        std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                         std::shared_ptr<ASTNode> proc) const override;
 
 private:
     /**
-     * Extracts all the variables from a conditional expression on both the LHS
-     * and RHS.
+     * Extracts all the variables from a conditional expression on both the LHS and RHS.
      * @param condExpr The conditional expression
      * @return A vector of variables
      */
     static std::shared_ptr<std::vector<std::shared_ptr<Variable>>>
-    getVariablesFromCondExpr(
-            std::shared_ptr<ConditionalExpressionNode> condExpr);
+    getVariablesFromCondExpr(std::shared_ptr<ConditionalExpressionNode> condExpr);
 };

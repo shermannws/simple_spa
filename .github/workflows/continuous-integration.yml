@@ -125,16 +125,13 @@ jobs:
         with:
           clang-format-version: '13'
           check-path: ./Team14/Code14/src/spa
-          fallback-style: 'Mozilla' # optional
       - name: Run clang-format style check for Unit Tests
         uses: jidicula/clang-format-action@v4.11.0
         with:
           clang-format-version: '13'
           check-path: ./Team14/Code14/src/unit_testing
-          fallback-style: 'Mozilla' # optional
       - name: Run clang-format style check for Integration Tests
         uses: jidicula/clang-format-action@v4.11.0
         with:
           clang-format-version: '13'
           check-path: ./Team14/Code14/src/integration_testing
-          fallback-style: 'Mozilla' # optional

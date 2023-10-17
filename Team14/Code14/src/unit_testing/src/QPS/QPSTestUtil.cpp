@@ -1,10 +1,8 @@
 #include "QPSTestUtil.h"
 
-std::shared_ptr<SuchThatClause>
-QPSTestUtil::createSuchThatClause(ClauseType type, RefType t1, RootType r1,
-                                  QueryEntityType e1, std::string rep1,
-                                  RefType t2, RootType r2, QueryEntityType e2,
-                                  std::string rep2) {
+std::shared_ptr<SuchThatClause> QPSTestUtil::createSuchThatClause(ClauseType type, RefType t1, RootType r1,
+                                                                  QueryEntityType e1, std::string rep1, RefType t2,
+                                                                  RootType r2, QueryEntityType e2, std::string rep2) {
     auto clause = std::make_shared<SuchThatClause>();
     clause->setType(type);
     auto p1 = Ref();
@@ -23,10 +21,9 @@ QPSTestUtil::createSuchThatClause(ClauseType type, RefType t1, RootType r1,
 }
 
 
-std::shared_ptr<PatternClause>
-QPSTestUtil::createPatternClause(ClauseType type, Synonym syn, RootType r1,
-                                 std::string rep1, ExpressionSpecType t2,
-                                 Expression rep2) {
+std::shared_ptr<PatternClause> QPSTestUtil::createPatternClause(ClauseType type, Synonym syn, RootType r1,
+                                                                std::string rep1, ExpressionSpecType t2,
+                                                                Expression rep2) {
     auto clause = std::make_shared<PatternClause>();
     clause->setType(type);
     clause->setSyn(syn);

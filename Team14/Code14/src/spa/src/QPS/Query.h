@@ -51,8 +51,7 @@ public:
 
     /**
      * @brief Adds a selected entity to the query.
-     * @param entity A shared pointer to the QueryEntity to be added as a
-     * selected entity.
+     * @param entity A shared pointer to the QueryEntity to be added as a selected entity.
      */
     void addSelect(const Synonym);
 
@@ -77,8 +76,7 @@ public:
     /**
      * @brief Retrieves a query entity based on its synonym.
      * @param syn The synonym of the entity to retrieve.
-     * @return A shared pointer to the QueryEntity with the specified synonym,
-     * or nullptr if not found.
+     * @return A shared pointer to the QueryEntity with the specified synonym, or nullptr if not found.
      */
     std::shared_ptr<QueryEntity> getEntity(const std::string &syn) const;
 
@@ -86,8 +84,7 @@ public:
      * @brief Retrieves the map of synonyms to entity declarations in the query.
      * @return An unordered map of synonym to entity
      */
-    std::unordered_map<std::string, std::shared_ptr<QueryEntity>>
-    getDeclarations() const;
+    std::unordered_map<std::string, std::shared_ptr<QueryEntity>> getDeclarations() const;
 
     /**
      * @brief Retrieves the vector of selected entities in the query.

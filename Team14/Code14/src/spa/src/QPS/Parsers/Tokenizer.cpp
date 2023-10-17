@@ -7,13 +7,10 @@
 #include "Tokenizer.h"
 
 
-std::vector<std::string> specials{"(", ")", ";", ",", "_", "+",
-                                  "-", "*", "/", "%", "\""};
+std::vector<std::string> specials{"(", ")", ";", ",", "_", "+", "-", "*", "/", "%", "\""};
 std::vector<std::string> stars{"Follows", "Parent", "Next", "Calls"};
 
-Tokenizer::Tokenizer(const std::string &input) : curr(0) {
-    this->input = input;
-}
+Tokenizer::Tokenizer(const std::string &input) : curr(0) { this->input = input; }
 
 int Tokenizer::peekChar() {
     if (!isCurrValid()) { throw SyntaxException("No more char"); }

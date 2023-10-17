@@ -7,18 +7,15 @@
 #include "PKB/EntityStores/EntityStore.h"
 
 /**
- * @brief A class that stores Relationships in the SIMPLE source program using
- * two Hashmaps as the underlying data structure
- * @details This class is a template class that takes in two Entity subclasses
- * as a template parameter This class is the superclass of ModifiesProcStores,
- * UsesProcStores
+ * @brief A class that stores Relationships in the SIMPLE source program using two Hashmaps as the underlying data
+ * structure
+ * @details This class is a template class that takes in two Entity subclasses as a template parameter
+ * This class is the superclass of ModifiesProcStores, UsesProcStores
  * @tparam T The type of Entity that the EntityMapStore stores on the left
  * @tparam U The type of Entity that the EntityMapStore stores on the right
  */
 template<typename T, typename U>
-class RelationshipStore
-    : public DoubleMapStore<T, U, EntityStore<U>, EntityStore<T>, Entity,
-                            Entity> {
+class RelationshipStore : public DoubleMapStore<T, U, EntityStore<U>, EntityStore<T>, Entity, Entity> {
 public:
     /**
      * @brief Construct a new EntityMapStore object

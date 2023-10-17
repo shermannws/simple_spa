@@ -55,8 +55,7 @@ public:
      * @param parent A vector of parent nodes
      * @param children A vector of children nodes
      */
-    CFGNode(StatementNumber statementNumber,
-            std::vector<std::shared_ptr<CFGNode>> parents,
+    CFGNode(StatementNumber statementNumber, std::vector<std::shared_ptr<CFGNode>> parents,
             std::vector<std::shared_ptr<CFGNode>> children);
 
     /**
@@ -90,8 +89,7 @@ public:
     void addChildNode(const std::shared_ptr<CFGNode> &child);
 
     /**
-     * Removes a child node from this CFGNode by reference. Used in CFG
-     * building.
+     * Removes a child node from this CFGNode by reference. Used in CFG building.
      * @param child CFGNode to be removed as a child of this CFGNode
      */
     void removeChildNode(const std::shared_ptr<CFGNode> &child);

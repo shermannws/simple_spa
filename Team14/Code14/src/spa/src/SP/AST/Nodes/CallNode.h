@@ -8,8 +8,7 @@
 class CallNode;// forward declaration
 
 /**
- * Visitor interface linked to CallNode, used to implement the Acyclic Visitor
- * pattern.
+ * Visitor interface linked to CallNode, used to implement the Acyclic Visitor pattern.
  */
 class CallNodeVisitor {
 public:
@@ -19,8 +18,7 @@ public:
      * @param parents Parents of the CallNode
      * @param proc Procedure containing the CallNode
      */
-    virtual void visitCallNode(CallNode *node,
-                               std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitCallNode(CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                                std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -41,8 +39,7 @@ public:
      * @param statementNumber The statement number of this statement
      * @param procedureName The name of the procedure called
      */
-    explicit CallNode(StatementNumber statementNumber,
-                      ProcedureName procedureName);
+    explicit CallNode(StatementNumber statementNumber, ProcedureName procedureName);
 
     /**
      * Returns the name of the procedure called.
@@ -50,8 +47,7 @@ public:
      */
     ProcedureName getProcedureName();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor,
-                std::vector<std::shared_ptr<ASTNode>> parents,
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
                 std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
