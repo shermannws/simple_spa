@@ -45,7 +45,7 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
 
 Result PQLEvaluator::evaluate(Query& query) {
     std::shared_ptr<Result> result = evaluateConstraintClauses(query);
-    if (!result) {
+    if (!result) { // no constraint clauses
         result = evaluateResultClause(query, query.getSelect());
         return *result;
     }
@@ -55,13 +55,14 @@ Result PQLEvaluator::evaluate(Query& query) {
         return *result;
     }
 
+    //TRUE OR NON-EMPTY RESULT TABLE
     // CASE RESULT-CLAUSE IN RESULT TABLE, check if ALL synonym in select is in result table
     std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(query.getSelect(), result);
     if (unevaluatedSyn.size() == 0){
         return *result;
     }
 
-    // CASE TRUE OR NON-EMPTY TABLE, evaluate select independently
+    // CASE SOME RESULT-CLAUSE NOT IN RESULT TABLE
     auto synResult = evaluateResultClause(query, unevaluatedSyn); // TODO project curr result first before combine?
     auto finalResult = resultHandler->getCombined(result, synResult);
     return *finalResult;
@@ -114,17 +115,21 @@ std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const std::shared_ptr<Query
 }
 
 std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(const Query& query, std::vector<Synonym> resultSyns) {
+    if (resultSyns.empty()) { // BOOLEAN result clause
+        return std::make_shared<Result>(true);
+    }
+
+    // tuple result clause
     std::vector<std::shared_ptr<Result>> results;
     for (auto &syn : resultSyns) {
         results.push_back(evaluateSelect(query.getEntity(syn)));
     }
-    auto synResult = resultHandler->cast(results[0]); // Initialize with the first element
+    auto tupleResult = resultHandler->cast(results[0]); // Initialize with the first element
     for (size_t i = 1; i < results.size(); ++i) { // Combine with next until end of list
-        synResult = resultHandler->getCombined(synResult, results[i]);
+        tupleResult = resultHandler->getCombined(tupleResult, results[i]);
     }
-    return synResult;
+    return tupleResult;
 }
-
 
 std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity>& queryEntity) {
     QueryEntityType entityType = queryEntity->getType();
