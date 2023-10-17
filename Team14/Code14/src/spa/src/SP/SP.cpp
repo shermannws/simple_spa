@@ -57,11 +57,11 @@ void SP::startSPProcessing(std::string& input) {
         pkbWriter->triggerTransitiveCalc();
 
         // Build CFGs
-        auto [heads, cfgs] = CFGBuilder::buildAllCFG(root);
+        auto cfgMap = CFGBuilder::buildAllCFG(root);
 
         // Handle CFG-related relationships and save CFG to PKB
         CFGExtractor cfgExtractor(pkbWriter);
-        cfgExtractor.extractRelationships(heads, cfgs);
+        cfgExtractor.extractRelationships(cfgMap);
     } catch (const SyntaxError& e) {
         std::cout << "\n" << e.what() << "\n\n" << "Terminating program due to invalid SIMPLE code." << std::endl;
         std::exit(EXIT_FAILURE); // Exit the program with an error code

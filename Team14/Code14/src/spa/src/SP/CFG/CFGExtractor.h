@@ -17,11 +17,9 @@ private:
      */
     std::shared_ptr<PkbWriter> pkbWriter;
 
-    void saveCFGToPKB(const std::unordered_map<ProcedureName, Statement>& heads,
-            const std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>& cfgs);
+    void saveCFGToPKB(const std::unordered_map<ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>>& cfgMap);
 
-    void extractNextRelationship(const std::shared_ptr<CFGNode>& head,
-            const std::unordered_map<Statement, std::shared_ptr<CFGNode>>& cfg);
+    void extractNextRelationship(const std::shared_ptr<CFGNode>& head, const std::vector<std::shared_ptr<CFGNode>>& cfgNodes);
 public:
     /**
      * Creates a CFGExtractor and instantiates it with a PkbWriter.
@@ -29,6 +27,5 @@ public:
      */
     explicit CFGExtractor(std::shared_ptr<PkbWriter> pkbWriter);
 
-    void extractRelationships(const std::unordered_map<ProcedureName, Statement>& heads, const std::unordered_map<ProcedureName,
-            std::unordered_map<Statement, std::shared_ptr<CFGNode>>>& cfgs);
+    void extractRelationships(const std::unordered_map<ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>>& cfgMap);
 };

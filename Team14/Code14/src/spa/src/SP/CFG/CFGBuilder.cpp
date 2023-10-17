@@ -3,29 +3,21 @@
 #include "Commons/CFG/DummyCFGNode.h"
 #include "SP/AST/Nodes/StatementNode.h"
 
-std::pair<std::unordered_map<ProcedureName, Statement>,
-std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>>
+std::unordered_map<ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>>
 CFGBuilder::buildAllCFG(const std::shared_ptr<ProgramNode>& astRootNode) {
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> procedureToCFGMap;
-    std::unordered_map<ProcedureName, Statement> procedureToStatementMap;
+    std::unordered_map<ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>> cfgMap;
     for (auto& procedureNode : astRootNode->getProcedures()) {
         ProcedureName procedureName = procedureNode->getProcedureName();
-        procedureToCFGMap[procedureName] = buildCFGForProcedure(procedureNode);
-
-        auto statementListNode = procedureNode->getStatementList();
-        auto firstStatementNode = statementListNode->getStatements().front();
-        StatementType statementType = StatementTypeFactory::getStatementTypeFrom(firstStatementNode->getStatementType());
-        Statement statement = Statement(firstStatementNode->getStatementNumber(), statementType);
-        procedureToStatementMap[procedureName] = statement;
+        cfgMap[procedureName] = buildCFGForProcedure(procedureNode);
     }
 
-    return std::make_pair(procedureToStatementMap, procedureToCFGMap);
+    return cfgMap;
 }
 
-std::unordered_map<Statement, std::shared_ptr<CFGNode>>
+std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>
 CFGBuilder::buildCFGForProcedure(const std::shared_ptr<ProcedureNode>& procedureNode) {
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> statementToCFGNodeMap;
-    auto [head, tail] = buildStatementListSubgraph(statementToCFGNodeMap, procedureNode->getStatementList());
+    std::vector<std::shared_ptr<CFGNode>> cfgNodes;
+    auto [head, tail] = buildStatementListSubgraph(cfgNodes, procedureNode->getStatementList());
 
     // remove dummy tail if the last statement of the procedure is an if statement
     if (auto dummyTail = std::dynamic_pointer_cast<DummyCFGNode>(tail)) {
@@ -34,11 +26,11 @@ CFGBuilder::buildCFGForProcedure(const std::shared_ptr<ProcedureNode>& procedure
             parent->removeChildNode(dummyTail);
         }
     }
-    return statementToCFGNodeMap;
+    return std::make_pair(head, cfgNodes);
 }
 
 std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
-CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNode>> &map,
+CFGBuilder::buildStatementListSubgraph(std::vector<std::shared_ptr<CFGNode>>& cfgNodes,
                                        const std::shared_ptr<StatementListNode> &statementListNode) {
     // Used to save head and tail nodes of this subgraph to be returned
     std::shared_ptr<CFGNode> head;
@@ -50,11 +42,11 @@ CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared
 
     for (const auto& statementNode : statementListNode->getStatements()) {
         if (statementNode->getStatementType() == StatementNodeType::If) {
-            std::tie(childHead, childTail) = buildIfSubgraph(map, std::static_pointer_cast<IfNode>(statementNode));
+            std::tie(childHead, childTail) = buildIfSubgraph(cfgNodes, std::static_pointer_cast<IfNode>(statementNode));
         } else if (statementNode->getStatementType() == StatementNodeType::While) {
-            std::tie(childHead, childTail) = buildWhileSubgraph(map, std::static_pointer_cast<WhileNode>(statementNode));
+            std::tie(childHead, childTail) = buildWhileSubgraph(cfgNodes, std::static_pointer_cast<WhileNode>(statementNode));
         } else {
-            std::tie(childHead, childTail) = buildStatementSubgraph(map, statementNode);
+            std::tie(childHead, childTail) = buildStatementSubgraph(cfgNodes, statementNode);
         }
 
         if (tail) {
@@ -83,22 +75,19 @@ CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared
 }
 
 std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
-CFGBuilder::buildStatementSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNode>> &map,
-                                               const std::shared_ptr<StatementNode> &statementNode) {
+CFGBuilder::buildStatementSubgraph(std::vector<std::shared_ptr<CFGNode>>& cfgNodes, const std::shared_ptr<StatementNode> &statementNode) {
     StatementType statementType = StatementTypeFactory::getStatementTypeFrom(statementNode->getStatementType());
-    Statement statement = Statement(statementNode->getStatementNumber(), statementType);
     auto cfgNode = std::make_shared<CFGNode>(statementNode->getStatementNumber(), statementType);
-    map[statement] = cfgNode;
+    cfgNodes.push_back(cfgNode);
     return {cfgNode, cfgNode};
 }
 
 std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
-CFGBuilder::buildIfSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNode>> &map,
-                            const std::shared_ptr<IfNode> &ifNode) {
-    auto [cfgNode, _] = buildStatementSubgraph(map, ifNode);
+CFGBuilder::buildIfSubgraph(std::vector<std::shared_ptr<CFGNode>>& cfgNodes, const std::shared_ptr<IfNode> &ifNode) {
+    auto [cfgNode, _] = buildStatementSubgraph(cfgNodes, ifNode);
 
-    auto [thenHeadNode, thenTailNode] = buildStatementListSubgraph(map, ifNode->getThenStatementList());
-    auto [elseHeadNode, elseTailNode] = buildStatementListSubgraph(map, ifNode->getElseStatementList());
+    auto [thenHeadNode, thenTailNode] = buildStatementListSubgraph(cfgNodes, ifNode->getThenStatementList());
+    auto [elseHeadNode, elseTailNode] = buildStatementListSubgraph(cfgNodes, ifNode->getElseStatementList());
 
     auto dummyTail = std::make_shared<DummyCFGNode>();
 
@@ -140,11 +129,10 @@ CFGBuilder::buildIfSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNod
 }
 
 std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
-CFGBuilder::buildWhileSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNode>> &map,
-                               const std::shared_ptr<WhileNode> &whileNode) {
-    auto [cfgNode, _] = buildStatementSubgraph(map, whileNode);
+CFGBuilder::buildWhileSubgraph(std::vector<std::shared_ptr<CFGNode>>& cfgNodes, const std::shared_ptr<WhileNode> &whileNode) {
+    auto [cfgNode, _] = buildStatementSubgraph(cfgNodes, whileNode);
 
-    auto [headNode, tailNode] = buildStatementListSubgraph(map, whileNode->getStatementList());
+    auto [headNode, tailNode] = buildStatementListSubgraph(cfgNodes, whileNode->getStatementList());
 
     // connect while to head of stmtlst
     cfgNode->addChildNode(headNode);

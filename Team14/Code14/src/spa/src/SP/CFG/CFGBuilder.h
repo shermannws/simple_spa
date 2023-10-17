@@ -18,7 +18,7 @@ private:
      * @param procedureNode The root (ASTNode) of the procedure subtree to create a CFG for
      * @return Unordered map of Statement to CFGNode
      */
-    static std::unordered_map<Statement, std::shared_ptr<CFGNode>> buildCFGForProcedure(
+    static std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>> buildCFGForProcedure(
             const std::shared_ptr<ProcedureNode>& procedureNode);
 
     /**
@@ -28,7 +28,7 @@ private:
      * @return The head and tail nodes of this subgraph
      */
     static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildStatementListSubgraph(
-            std::unordered_map<Statement, std::shared_ptr<CFGNode>>& map, const std::shared_ptr<StatementListNode>& statementListNode);
+            std::vector<std::shared_ptr<CFGNode>>& cfgNodes, const std::shared_ptr<StatementListNode>& statementListNode);
 
     /**
      * Builds a CFG subgraph for a statement (assign, call, print, read, if, while).
@@ -37,7 +37,7 @@ private:
      * @return The head and tail nodes of this subgraph
      */
     static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildStatementSubgraph(
-            std::unordered_map<Statement, std::shared_ptr<CFGNode>>& map, const std::shared_ptr<StatementNode>& statementNode);
+            std::vector<std::shared_ptr<CFGNode>>& cfgNodes, const std::shared_ptr<StatementNode>& statementNode);
 
     /**
      * Builds a CFG subgraph for an if statement and its statement lists.
@@ -46,7 +46,7 @@ private:
      * @return The head and tail nodes of this subgraph
      */
     static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildIfSubgraph(
-            std::unordered_map<Statement, std::shared_ptr<CFGNode>>& map, const std::shared_ptr<IfNode>& ifNode);
+            std::vector<std::shared_ptr<CFGNode>>& cfgNodes, const std::shared_ptr<IfNode>& ifNode);
 
     /**
      * Builds a CFG subgraph for a while statement and its statement list.
@@ -55,7 +55,7 @@ private:
      * @return The head and tail nodes of this subgraph
      */
     static std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>> buildWhileSubgraph(
-            std::unordered_map<Statement, std::shared_ptr<CFGNode>>& map, const std::shared_ptr<WhileNode>& whileNode);
+            std::vector<std::shared_ptr<CFGNode>>& cfgNodes, const std::shared_ptr<WhileNode>& whileNode);
 public:
     /**
      * Builds a CFG for each procedure in the AST given.
@@ -67,7 +67,6 @@ public:
      * (1) Unordered map of ProcedureName to Statement, and
      * (2) Unordered map of ProcedureName to an unordered map of Statement to CFGNode
      */
-    static std::pair<std::unordered_map<ProcedureName, Statement>,
-            std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>>
-            buildAllCFG(const std::shared_ptr<ProgramNode>& ASTRootNode);
+    static std::unordered_map<ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>>
+    buildAllCFG(const std::shared_ptr<ProgramNode>& ASTRootNode);
 };
