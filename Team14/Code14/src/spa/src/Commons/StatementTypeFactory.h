@@ -10,12 +10,9 @@
 class StatementTypeFactory {
 private:
     /**
-     * @brief A map of StatementNodeType to a function that returns a
-     * StatementNode object
+     * @brief A map of StatementNodeType to a function that returns a StatementNode object
      */
-    static std::unordered_map<StatementNodeType,
-                              std::function<StatementType(void)>>
-            functionMap;
+	static std::unordered_map<StatementNodeType, std::function<StatementType(void)>> functionMap;
 
 public:
     /**

@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "../AppConstants.h"
 #include "Entity.h"
+#include "../AppConstants.h"
 
 /**
  * @brief A Variable is a variable in the SIMPLE programming language

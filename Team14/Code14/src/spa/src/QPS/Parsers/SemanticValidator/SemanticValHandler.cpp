@@ -2,13 +2,13 @@
 
 SemanticValHandler::SemanticValHandler() : nextHandler(nullptr) {}
 
-std::shared_ptr<SemanticValHandler>
-SemanticValHandler::setNext(std::shared_ptr<SemanticValHandler> handler) {
+std::shared_ptr<SemanticValHandler> SemanticValHandler::setNext(std::shared_ptr<SemanticValHandler> handler) {
     nextHandler = handler;
     return nextHandler;
 }
 
-void SemanticValHandler::handle(const Query &query,
-                                std::shared_ptr<Clause> clause) {
-    if (nextHandler) { return nextHandler->handle(query, clause); }
+void SemanticValHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
+    if (nextHandler) {
+        return nextHandler->handle(query, clause);
+    }
 }

@@ -19,8 +19,7 @@ public:
      * @param rightRef The second parameter of the SuchThatClause to evaluate
      * @return The result of the SuchThatClause evaluation as a Result object
      */
-    std::shared_ptr<Result> evaluateSynSyn(Ref &leftRef,
-                                           Ref &rightRef) const override;
+    std::shared_ptr<Result> evaluateSynSyn(Ref &leftRef, Ref &rightRef) const override;
 
     /**
      * @brief Evaluates SuchThatClause that follows the syntax Next*(s, )
@@ -28,8 +27,7 @@ public:
      * @param rightRef The second parameter of the SuchThatClause to evaluate
      * @return The result of the SuchThatClause evaluation as a Result object
      */
-    std::shared_ptr<Result> evaluateSynAny(Ref &leftRef,
-                                           Ref &rightRef) const override;
+    std::shared_ptr<Result> evaluateSynAny(Ref &leftRef, Ref &rightRef) const override;
 
     /**
      * @brief Evaluates SuchThatClause that follows the syntax Next*( , s)
@@ -37,8 +35,7 @@ public:
      * @param rightRef The second parameter of the SuchThatClause to evaluate
      * @return The result of the SuchThatClause evaluation as a Result object
      */
-    std::shared_ptr<Result> evaluateAnySyn(Ref &leftRef,
-                                           Ref &rightRef) const override;
+    std::shared_ptr<Result> evaluateAnySyn(Ref &leftRef, Ref &rightRef) const override;
 
     /**
      * @brief Evaluates SuchThatClause that results in boolean
@@ -46,6 +43,5 @@ public:
      * @param rightRef The second parameter of the SuchThatClause to evaluate
      * @return The result of the SuchThatClause evaluation as a Result object
      */
-    std::shared_ptr<Result> evaluateBoolean(Ref &leftRef,
-                                            Ref &rightRef) const override;
+    std::shared_ptr<Result> evaluateBoolean(Ref &leftRef, Ref &rightRef) const override;
 };

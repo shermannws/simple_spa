@@ -1,10 +1,10 @@
 #include <vector>
 
-#include "SP/AST/Nodes/ProgramNode.h"
+#include "catch.hpp"
 #include "SP/SPParser.h"
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
-#include "catch.hpp"
+#include "SP/AST/Nodes/ProgramNode.h"
 
 TEST_CASE("Valid program with single statements") {
     SPParser parser;
@@ -17,7 +17,8 @@ TEST_CASE("Valid program with single statements") {
                 SPToken(TokenType::Name, "read"),
                 SPToken(TokenType::Name, "var1"),
                 SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                SPToken(TokenType::CloseCurlyParenthesis, "}")
+        };
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
 
@@ -29,7 +30,8 @@ TEST_CASE("Valid program with single statements") {
                 SPToken(TokenType::Name, "print"),
                 SPToken(TokenType::Name, "var1"),
                 SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                SPToken(TokenType::CloseCurlyParenthesis, "}")
+        };
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
 
@@ -48,7 +50,8 @@ TEST_CASE("Valid program with single statements") {
                 SPToken(TokenType::Integer, "3"),
                 SPToken(TokenType::CloseRoundParenthesis, ")"),
                 SPToken(TokenType::Semicolon, ";"),
-                SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                SPToken(TokenType::CloseCurlyParenthesis, "}")
+        };
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
 
@@ -68,7 +71,8 @@ TEST_CASE("Valid program with single statements") {
                 SPToken(TokenType::Name, "then"),
                 // then statement list
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "x"), SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "x"),
+                SPToken(TokenType::Equals, "="),
                 SPToken(TokenType::Name, "v"),
                 SPToken(TokenType::Semicolon, ";"),
                 SPToken(TokenType::CloseCurlyParenthesis, "}"),
@@ -76,12 +80,14 @@ TEST_CASE("Valid program with single statements") {
                 SPToken(TokenType::Name, "else"),
                 // else statement list
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "x"), SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "x"),
+                SPToken(TokenType::Equals, "="),
                 SPToken(TokenType::Integer, "1"),
                 SPToken(TokenType::Semicolon, ";"),
                 SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                SPToken(TokenType::CloseCurlyParenthesis, "}")
+        };
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
 
@@ -100,12 +106,14 @@ TEST_CASE("Valid program with single statements") {
 
                 // statement list
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "a"), SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "a"),
+                SPToken(TokenType::Equals, "="),
                 SPToken(TokenType::Name, "r"),
                 SPToken(TokenType::Semicolon, ";"),
                 SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                SPToken(TokenType::CloseCurlyParenthesis, "}")
+        };
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
 }
@@ -118,13 +126,16 @@ TEST_CASE("Valid program with multiple statements") {
             SPToken(TokenType::Name, "procedure"),
             SPToken(TokenType::OpenCurlyParenthesis, "{"),
             // read statement
-            SPToken(TokenType::Name, "read"), SPToken(TokenType::Name, "var1"),
+            SPToken(TokenType::Name, "read"),
+            SPToken(TokenType::Name, "var1"),
             SPToken(TokenType::Semicolon, ";"),
             // print statement
-            SPToken(TokenType::Name, "print"), SPToken(TokenType::Name, "var1"),
+            SPToken(TokenType::Name, "print"),
+            SPToken(TokenType::Name, "var1"),
             SPToken(TokenType::Semicolon, ";"),
             // assign statement
-            SPToken(TokenType::Name, "x"), SPToken(TokenType::Equals, "="),
+            SPToken(TokenType::Name, "x"),
+            SPToken(TokenType::Equals, "="),
             SPToken(TokenType::Integer, "1"),
             SPToken(TokenType::ArithmeticOperator, "/"),
             SPToken(TokenType::OpenRoundParenthesis, "("),
@@ -142,12 +153,15 @@ TEST_CASE("Valid program with multiple statements") {
             SPToken(TokenType::CloseRoundParenthesis, ")"),
             SPToken(TokenType::Name, "then"),
             SPToken(TokenType::OpenCurlyParenthesis, "{"),
-            SPToken(TokenType::Name, "x"), SPToken(TokenType::Equals, "="),
-            SPToken(TokenType::Name, "v"), SPToken(TokenType::Semicolon, ";"),
+            SPToken(TokenType::Name, "x"),
+            SPToken(TokenType::Equals, "="),
+            SPToken(TokenType::Name, "v"),
+            SPToken(TokenType::Semicolon, ";"),
             SPToken(TokenType::CloseCurlyParenthesis, "}"),
             SPToken(TokenType::Name, "else"),
             SPToken(TokenType::OpenCurlyParenthesis, "{"),
-            SPToken(TokenType::Name, "x"), SPToken(TokenType::Equals, "="),
+            SPToken(TokenType::Name, "x"),
+            SPToken(TokenType::Equals, "="),
             SPToken(TokenType::Integer, "1"),
             SPToken(TokenType::Semicolon, ";"),
             SPToken(TokenType::CloseCurlyParenthesis, "}"),
@@ -159,13 +173,16 @@ TEST_CASE("Valid program with multiple statements") {
             SPToken(TokenType::Name, "1"),
             SPToken(TokenType::CloseRoundParenthesis, ")"),
             SPToken(TokenType::OpenCurlyParenthesis, "{"),
-            SPToken(TokenType::Name, "print"), SPToken(TokenType::Name, "var1"),
+            SPToken(TokenType::Name, "print"),
+            SPToken(TokenType::Name, "var1"),
             SPToken(TokenType::Semicolon, ";"),
-            SPToken(TokenType::Name, "read"), SPToken(TokenType::Name, "var2"),
+            SPToken(TokenType::Name, "read"),
+            SPToken(TokenType::Name, "var2"),
             SPToken(TokenType::Semicolon, ";"),
             SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-            SPToken(TokenType::CloseCurlyParenthesis, "}")};
+            SPToken(TokenType::CloseCurlyParenthesis, "}")
+    };
     REQUIRE_NOTHROW(parser.parse(tokens));
 }
 
@@ -186,12 +203,14 @@ TEST_CASE("Valid program to test conditional expressions") {
                 SPToken(TokenType::CloseRoundParenthesis, ")"),
                 // statement list
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "a"), SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "a"),
+                SPToken(TokenType::Equals, "="),
                 SPToken(TokenType::Name, "r"),
                 SPToken(TokenType::Semicolon, ";"),
                 SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                SPToken(TokenType::CloseCurlyParenthesis, "}")
+        };
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
 
@@ -212,12 +231,14 @@ TEST_CASE("Valid program to test conditional expressions") {
                 SPToken(TokenType::CloseRoundParenthesis, ")"),
                 // statement list
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "a"), SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "a"),
+                SPToken(TokenType::Equals, "="),
                 SPToken(TokenType::Name, "r"),
                 SPToken(TokenType::Semicolon, ";"),
                 SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                SPToken(TokenType::CloseCurlyParenthesis, "}")
+        };
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
 
@@ -243,12 +264,14 @@ TEST_CASE("Valid program to test conditional expressions") {
                 SPToken(TokenType::CloseRoundParenthesis, ")"),
                 // statement list
                 SPToken(TokenType::OpenCurlyParenthesis, "{"),
-                SPToken(TokenType::Name, "a"), SPToken(TokenType::Equals, "="),
+                SPToken(TokenType::Name, "a"),
+                SPToken(TokenType::Equals, "="),
                 SPToken(TokenType::Name, "r"),
                 SPToken(TokenType::Semicolon, ";"),
                 SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                SPToken(TokenType::CloseCurlyParenthesis, "}")
+        };
         REQUIRE_NOTHROW(parser.parse(tokens));
     }
 
@@ -279,7 +302,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -314,7 +338,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -352,7 +377,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -393,7 +419,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
     }
@@ -433,7 +460,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -476,7 +504,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -519,7 +548,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -567,7 +597,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -607,7 +638,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -642,7 +674,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -682,7 +715,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -717,7 +751,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -727,8 +762,7 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Name, "procedure"),
                     SPToken(TokenType::OpenCurlyParenthesis, "{"),
                     SPToken(TokenType::Name, "while"),
-                    // Conditional expression
-                    // ((((...)&&(...))&&((...)&&(...)))||(((...)&&(...))&&((...)&&(...))))
+                    // Conditional expression ((((...)&&(...))&&((...)&&(...)))||(((...)&&(...))&&((...)&&(...))))
                     SPToken(TokenType::OpenRoundParenthesis, "("),
                     SPToken(TokenType::OpenRoundParenthesis, "("),
                     SPToken(TokenType::OpenRoundParenthesis, "("),
@@ -798,7 +832,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -808,8 +843,7 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Name, "procedure"),
                     SPToken(TokenType::OpenCurlyParenthesis, "{"),
                     SPToken(TokenType::Name, "while"),
-                    // Conditional expression
-                    // ((!((...)&&(...)))||(!((...)&&(...))))
+                    // Conditional expression ((!((...)&&(...)))||(!((...)&&(...))))
                     SPToken(TokenType::OpenRoundParenthesis, "("),
                     SPToken(TokenType::OpenRoundParenthesis, "("),
                     SPToken(TokenType::ConditionalOperator, "!"),
@@ -853,7 +887,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -863,8 +898,7 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Name, "procedure"),
                     SPToken(TokenType::OpenCurlyParenthesis, "{"),
                     SPToken(TokenType::Name, "while"),
-                    // Conditional expression
-                    // ((((...)&&(...))&&((...)&&(...)))||(!((...)&&(...))))
+                    // Conditional expression ((((...)&&(...))&&((...)&&(...)))||(!((...)&&(...))))
                     SPToken(TokenType::OpenRoundParenthesis, "("),
                     SPToken(TokenType::OpenRoundParenthesis, "("),
                     SPToken(TokenType::OpenRoundParenthesis, "("),
@@ -921,7 +955,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
 
@@ -931,8 +966,7 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Name, "procedure"),
                     SPToken(TokenType::OpenCurlyParenthesis, "{"),
                     SPToken(TokenType::Name, "while"),
-                    // Conditional expression
-                    // ((!((...)&&(...)))||(((...)&&(...))&&((...)&&(...))))
+                    // Conditional expression ((!((...)&&(...)))||(((...)&&(...))&&((...)&&(...))))
                     SPToken(TokenType::OpenRoundParenthesis, "("),
                     SPToken(TokenType::OpenRoundParenthesis, "("),
                     SPToken(TokenType::ConditionalOperator, "!"),
@@ -989,7 +1023,8 @@ TEST_CASE("Valid program to test conditional expressions") {
                     SPToken(TokenType::Semicolon, ";"),
                     SPToken(TokenType::CloseCurlyParenthesis, "}"),
 
-                    SPToken(TokenType::CloseCurlyParenthesis, "}")};
+                    SPToken(TokenType::CloseCurlyParenthesis, "}")
+            };
             REQUIRE_NOTHROW(parser.parse(tokens));
         }
     }

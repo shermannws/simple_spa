@@ -1,7 +1,7 @@
-#include "PKB/Pkb.h"
-#include "QPS/Evaluators/PQLEvaluator.h"
-#include "QPS/Parsers/PQLParser.h"
 #include "catch.hpp"
+#include "PKB/Pkb.h"
+#include "QPS/Parsers/PQLParser.h"
+#include "QPS/Evaluators/PQLEvaluator.h"
 
 using namespace std;
 
@@ -57,12 +57,9 @@ TEST_CASE("Test integration of PKB with QPS - Get all Procedure") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Procedure> procedureA =
-            make_shared<Procedure>(Procedure("ProcedureA"));
-    shared_ptr<Procedure> procedureB =
-            make_shared<Procedure>(Procedure("ProcedureB"));
-    shared_ptr<Procedure> procedureC =
-            make_shared<Procedure>(Procedure("ProcedureC"));
+    shared_ptr<Procedure> procedureA = make_shared<Procedure>(Procedure("ProcedureA"));
+    shared_ptr<Procedure> procedureB = make_shared<Procedure>(Procedure("ProcedureB"));
+    shared_ptr<Procedure> procedureC = make_shared<Procedure>(Procedure("ProcedureC"));
 
     pkbWriter->addProcedure(procedureA);
     pkbWriter->addProcedure(procedureB);
@@ -75,24 +72,18 @@ TEST_CASE("Test integration of PKB with QPS - Get all Procedure") {
     auto results = evaluator.formatResult(queryObj, resultObj);
 
     REQUIRE(results.size() == 3);
-    REQUIRE(find(results.begin(), results.end(), "ProcedureA") !=
-            results.end());
-    REQUIRE(find(results.begin(), results.end(), "ProcedureB") !=
-            results.end());
-    REQUIRE(find(results.begin(), results.end(), "ProcedureC") !=
-            results.end());
+    REQUIRE(find(results.begin(), results.end(), "ProcedureA") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "ProcedureB") != results.end());
+    REQUIRE(find(results.begin(), results.end(), "ProcedureC") != results.end());
 }
 
 TEST_CASE("Test integration of PKB with QPS - Get all Stmt") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Statement> printStatement =
-            make_shared<Statement>(Statement(1, StatementType::Print));
-    shared_ptr<Statement> readStatement =
-            make_shared<Statement>(Statement(2, StatementType::Read));
-    shared_ptr<Statement> assignStatement =
-            make_shared<Statement>(Statement(3, StatementType::Assign));
+    shared_ptr<Statement> printStatement = make_shared<Statement>(Statement(1, StatementType::Print));
+    shared_ptr<Statement> readStatement = make_shared<Statement>(Statement(2, StatementType::Read));
+    shared_ptr<Statement> assignStatement = make_shared<Statement>(Statement(3, StatementType::Assign));
 
     pkbWriter->addPrintStatement(printStatement);
     pkbWriter->addReadStatement(readStatement);
@@ -115,12 +106,9 @@ TEST_CASE("Test integration of PKB with QPS - Get all Assign") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Statement> assignStatement1 =
-            make_shared<Statement>(Statement(1, StatementType::Assign));
-    shared_ptr<Statement> assignStatement2 =
-            make_shared<Statement>(Statement(2, StatementType::Assign));
-    shared_ptr<Statement> assignStatement3 =
-            make_shared<Statement>(Statement(3, StatementType::Assign));
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
+    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
 
     pkbWriter->addAssignStatement(assignStatement1);
     pkbWriter->addAssignStatement(assignStatement2);
@@ -158,12 +146,9 @@ TEST_CASE("Test integration of PKB with QPS - Assign With Pattern") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Statement> assignStatement1 =
-            make_shared<Statement>(Statement(1, StatementType::Assign));
-    shared_ptr<Statement> assignStatement2 =
-            make_shared<Statement>(Statement(2, StatementType::Assign));
-    shared_ptr<Statement> assignStatement3 =
-            make_shared<Statement>(Statement(3, StatementType::Assign));
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
+    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
 
     pkbWriter->addAssignStatement(assignStatement1);
     pkbWriter->addAssignStatement(assignStatement2);
@@ -184,17 +169,13 @@ TEST_CASE("Test integration of PKB with QPS - Assign With Pattern") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no "
-          "result") {
+TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no result") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Statement> printStatement1 =
-            make_shared<Statement>(Statement(1, StatementType::Print));
-    shared_ptr<Statement> printStatement2 =
-            make_shared<Statement>(Statement(2, StatementType::Print));
-    shared_ptr<Statement> printStatement3 =
-            make_shared<Statement>(Statement(3, StatementType::Print));
+    shared_ptr<Statement> printStatement1 = make_shared<Statement>(Statement(1, StatementType::Print));
+    shared_ptr<Statement> printStatement2 = make_shared<Statement>(Statement(2, StatementType::Print));
+    shared_ptr<Statement> printStatement3 = make_shared<Statement>(Statement(3, StatementType::Print));
 
     pkbWriter->addPrintStatement(printStatement1);
     pkbWriter->addPrintStatement(printStatement2);
@@ -210,8 +191,7 @@ TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no "
 }
 
 
-TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no "
-          "result, no stmts in pkb") {
+TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no result, no stmts in pkb") {
     Pkb pkb = Pkb();
 
     PQLParser parser("assign a; Select a pattern a(_, _)");
@@ -227,12 +207,9 @@ TEST_CASE("Test integration of PKB with QPS - Follows (1, s)") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Statement> assignStatement1 =
-            make_shared<Statement>(Statement(1, StatementType::Stmt));
-    shared_ptr<Statement> assignStatement2 =
-            make_shared<Statement>(Statement(2, StatementType::Stmt));
-    shared_ptr<Statement> assignStatement3 =
-            make_shared<Statement>(Statement(3, StatementType::Stmt));
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Stmt));
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Stmt));
+    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Stmt));
 
     pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2, true);
     pkbWriter->addFollowsRelationship(assignStatement2, assignStatement3, true);
@@ -268,12 +245,9 @@ TEST_CASE("Test integration of PKB with QPS - Follows (s, 1)") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Statement> assignStatement1 =
-            make_shared<Statement>(Statement(1, StatementType::Assign));
-    shared_ptr<Statement> assignStatement2 =
-            make_shared<Statement>(Statement(2, StatementType::Assign));
-    shared_ptr<Statement> assignStatement3 =
-            make_shared<Statement>(Statement(3, StatementType::Assign));
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
+    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
 
     pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2, true);
     pkbWriter->addFollowsRelationship(assignStatement2, assignStatement3, true);
@@ -309,10 +283,8 @@ TEST_CASE("Test integration of PKB with QPS - Follows (1, 2)") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Statement> assignStatement1 =
-            make_shared<Statement>(Statement(1, StatementType::Assign));
-    shared_ptr<Statement> assignStatement2 =
-            make_shared<Statement>(Statement(2, StatementType::Assign));
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
 
     pkbWriter->addAssignStatement(assignStatement1);
     pkbWriter->addAssignStatement(assignStatement2);
@@ -345,15 +317,13 @@ TEST_CASE("Test integration of PKB with QPS - Uses (a, 'x')") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Statement> assignStatement1 =
-            make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
     shared_ptr<Variable> variableX = make_shared<Variable>(Variable("x"));
     shared_ptr<Variable> variableY = make_shared<Variable>(Variable("y"));
     shared_ptr<Variable> variableZ = make_shared<Variable>(Variable("z"));
     shared_ptr<string> expression1 = make_shared<string>("y + z");
 
-    shared_ptr<Statement> assignStatement2 =
-            make_shared<Statement>(Statement(2, StatementType::Assign));
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
     shared_ptr<Variable> variableA = make_shared<Variable>(Variable("a"));
     shared_ptr<Variable> variableB = make_shared<Variable>(Variable("b"));
     shared_ptr<string> expression2 = make_shared<string>("b * y");
@@ -365,8 +335,7 @@ TEST_CASE("Test integration of PKB with QPS - Uses (a, 'x')") {
 
     PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
 
-    //    PQLParser parser1("assign a; variable v; Select v such that Uses (a,
-    //    v)");
+//    PQLParser parser1("assign a; variable v; Select v such that Uses (a, v)");
     PQLParser parser1("assign a; Select a such that Uses (a, \"x\")");
     Query queryObj1 = parser1.parse();
     Result resultObj1 = evaluator.evaluate(queryObj1);
@@ -396,15 +365,13 @@ TEST_CASE("Test integration of PKB with QPS - Uses (a, x)") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Statement> assignStatement1 =
-            make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
     shared_ptr<Variable> variableX = make_shared<Variable>(Variable("x"));
     shared_ptr<Variable> variableY = make_shared<Variable>(Variable("y"));
     shared_ptr<Variable> variableZ = make_shared<Variable>(Variable("z"));
     shared_ptr<string> expression1 = make_shared<string>("y + z");
 
-    shared_ptr<Statement> assignStatement2 =
-            make_shared<Statement>(Statement(2, StatementType::Assign));
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
     shared_ptr<Variable> variableA = make_shared<Variable>(Variable("a"));
     shared_ptr<Variable> variableB = make_shared<Variable>(Variable("b"));
     shared_ptr<string> expression2 = make_shared<string>("b * y");
@@ -450,23 +417,20 @@ TEST_CASE("Test multiclause") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
-    shared_ptr<Statement> assignStatement1 =
-            make_shared<Statement>(Statement(1, StatementType::Assign));
+    shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
     shared_ptr<Variable> variableX = make_shared<Variable>(Variable("x"));
     shared_ptr<Variable> variableY = make_shared<Variable>(Variable("y"));
     shared_ptr<Variable> variableZ = make_shared<Variable>(Variable("z"));
     shared_ptr<string> expression1 = make_shared<string>("y + z");
     shared_ptr<string> expression3 = make_shared<string>("((y)+(z))");
 
-    shared_ptr<Statement> assignStatement2 =
-            make_shared<Statement>(Statement(2, StatementType::Assign));
+    shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
     shared_ptr<Variable> variableA = make_shared<Variable>(Variable("a"));
     shared_ptr<Variable> variableB = make_shared<Variable>(Variable("b"));
     shared_ptr<string> expression2 = make_shared<string>("b * y");
     shared_ptr<string> expression4 = make_shared<string>("((b)*(y))");
 
-    shared_ptr<Statement> assignStatement3 =
-            make_shared<Statement>(Statement(3, StatementType::Assign));
+    shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
     shared_ptr<Variable> variableC = make_shared<Variable>(Variable("c"));
     shared_ptr<string> expression5 = make_shared<string>("c+1");
     shared_ptr<string> expression6 = make_shared<string>("((c)+(1))");
@@ -490,8 +454,7 @@ TEST_CASE("Test multiclause") {
     PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
 
     // combining
-    PQLParser parser1("assign a; variable v; Select v such that Uses (a, v) "
-                      "pattern a(_, \"b * y\")");
+    PQLParser parser1("assign a; variable v; Select v such that Uses (a, v) pattern a(_, \"b * y\")");
     Query queryObj1 = parser1.parse();
     Result resultObj1 = evaluator.evaluate(queryObj1);
     auto results1 = evaluator.formatResult(queryObj1, resultObj1);
@@ -500,8 +463,7 @@ TEST_CASE("Test multiclause") {
     REQUIRE(find(results1.begin(), results1.end(), "y") != results1.end());
     REQUIRE(find(results1.begin(), results1.end(), "b") != results1.end());
 
-    PQLParser parser2("assign a; variable x; Select a such that Follows(1,2) "
-                      "pattern a(_, _\"z\"_)");
+    PQLParser parser2("assign a; variable x; Select a such that Follows(1,2) pattern a(_, _\"z\"_)");
     Query queryObj2 = parser2.parse();
     Result resultObj2 = evaluator.evaluate(queryObj2);
     auto results2 = evaluator.formatResult(queryObj2, resultObj2);
@@ -510,22 +472,20 @@ TEST_CASE("Test multiclause") {
     REQUIRE(find(results2.begin(), results2.end(), "1") != results2.end());
 
 
-    shared_ptr<Statement> printStatement1 =
-            make_shared<Statement>(Statement(4, StatementType::Print));
-    shared_ptr<Statement> printStatement2 =
-            make_shared<Statement>(Statement(5, StatementType::Print));
+    shared_ptr<Statement> printStatement1 = make_shared<Statement>(Statement(4, StatementType::Print));
+    shared_ptr<Statement> printStatement2 = make_shared<Statement>(Statement(5, StatementType::Print));
 
     pkbWriter->addPrintStatement(printStatement1);
     pkbWriter->addPrintStatement(printStatement2);
     pkbWriter->addUsesRelationship(printStatement1, variableX);
     pkbWriter->addUsesRelationship(printStatement2, variableY);
 
-    PQLParser parser3(
-            R"(assign a; print pr; Select a such that Uses(pr, _) pattern a("c", _"1"_))");
+    PQLParser parser3(R"(assign a; print pr; Select a such that Uses(pr, _) pattern a("c", _"1"_))");
     Query queryObj3 = parser3.parse();
     Result resultObj3 = evaluator.evaluate(queryObj3);
     auto results3 = evaluator.formatResult(queryObj3, resultObj3);
 
     REQUIRE(results3.size() == 1);
     REQUIRE(find(results3.begin(), results3.end(), "3") != results3.end());
+
 }

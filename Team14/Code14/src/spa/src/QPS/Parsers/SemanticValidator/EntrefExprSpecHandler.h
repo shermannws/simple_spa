@@ -10,8 +10,7 @@
 class EntrefExprSpecHandler : public SemanticValHandler {
 public:
     /**
-     * @brief Handles (entRef, expression-spec) semantic validation of the
-     * Clause in the Query
+     * @brief Handles (entRef, expression-spec) semantic validation of the Clause in the Query
      * @param query The Query object
      * @param clause The shared pointer of the Clause
      */

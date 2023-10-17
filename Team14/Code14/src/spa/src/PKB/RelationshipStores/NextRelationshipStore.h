@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Commons/Entities/Statement.h"
 #include "RelationshipStore.h"
+#include "Commons/Entities/Statement.h"
 
 /**
  * @brief A class that stores NextRelationships

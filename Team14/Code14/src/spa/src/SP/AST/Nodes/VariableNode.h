@@ -5,11 +5,10 @@
 #include "Commons/AppConstants.h"
 #include "ExpressionNode.h"
 
-class VariableNode;// forward declaration
+class VariableNode; // forward declaration
 
 /**
- * Visitor interface linked to VariableNode, used to implement the Acyclic
- * Visitor pattern.
+ * Visitor interface linked to VariableNode, used to implement the Acyclic Visitor pattern.
  */
 class VariableNodeVisitor {
 public:
@@ -19,10 +18,7 @@ public:
      * @param parents Parents of the VariableNode
      * @param proc The procedure that the VariableNode is in
      */
-    virtual void
-    visitVariableNode(VariableNode *node,
-                      std::vector<std::shared_ptr<ASTNode>> parents,
-                      std::shared_ptr<ASTNode> proc) const = 0;
+    virtual void visitVariableNode(VariableNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
 };
 
 /**
@@ -49,9 +45,7 @@ public:
      */
     VariableName getVarName();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor,
-                std::vector<std::shared_ptr<ASTNode>> parents,
-                std::shared_ptr<ASTNode> proc) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 

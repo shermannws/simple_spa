@@ -2,12 +2,11 @@
 
 #include <cassert>
 
-#include "PKB/Managers/ConditionPatternManager.h"
 #include "PKB/PatternStore/WhilePatternStore.h"
+#include "PKB/Managers/ConditionPatternManager.h"
 
 /**
- * @class WhilePatternManager is responsible for storing and retrieving the
- * While statement patterns
+ * @class WhilePatternManager is responsible for storing and retrieving the While statement patterns
  * @brief Manages the While statement patterns
  */
 class WhilePatternManager : public ConditionPatternManager<WhilePatternStore> {
@@ -23,7 +22,5 @@ public:
      * @param stmt The While statement
      * @param vars The vector of control variable in the While statement
      */
-    void storeWhilePattern(
-            std::shared_ptr<Statement> stmt,
-            std::shared_ptr<std::vector<std::shared_ptr<Variable>>> vars);
+     void storeWhilePattern(std::shared_ptr<Statement> stmt, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> vars);
 };

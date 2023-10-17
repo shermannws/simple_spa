@@ -73,14 +73,19 @@ public:
             CHAR_DIVIDE,
             CHAR_MODULO,
             CHAR_OPEN_ROUND_PARENTHESIS,
-            CHAR_CLOSE_ROUND_PARENTHESIS};
+            CHAR_CLOSE_ROUND_PARENTHESIS
+    };
 
-    inline static const std::unordered_set<std::string>
-            TERM_ARITHMETIC_OPERATOR_STRING_SET = {STRING_TIMES, STRING_DIVIDE,
-                                                   STRING_MODULO};
+    inline static const std::unordered_set<std::string> TERM_ARITHMETIC_OPERATOR_STRING_SET = {
+            STRING_TIMES,
+            STRING_DIVIDE,
+            STRING_MODULO
+    };
 
-    inline static const std::unordered_set<std::string>
-            EXPR_ARITHMETIC_OPERATOR_STRING_SET = {STRING_PLUS, STRING_MINUS};
+    inline static const std::unordered_set<std::string> EXPR_ARITHMETIC_OPERATOR_STRING_SET = {
+            STRING_PLUS,
+            STRING_MINUS
+    };
 
     inline static const StatementNumber INITIAL_STATEMENT_NUMBER = 1;
     inline static const StatementNumber DUMMY_CFGNODE_STATEMENT_NUMBER = -1;

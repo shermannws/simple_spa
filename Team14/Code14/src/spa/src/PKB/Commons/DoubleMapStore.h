@@ -1,13 +1,12 @@
 #pragma once
 
-#include <memory>
 #include <unordered_map>
+#include <memory>
 
 #include "PKB/Commons/SetStore.h"
 
 /**
- * @brief A class that stores objects using two Hashmaps as the underlying data
- * structure
+ * @brief A class that stores objects using two Hashmaps as the underlying data structure
  * @tparam K1 The type of object that the DoubleMapStore stores on the left
  * @tparam K2 The type of object that the DoubleMapStore stores on the right
  * @tparam V1 The type of store that is used to store K2 in the leftToRightStore
@@ -15,27 +14,28 @@
  * @tparam H1 The type of hash used to hash the key in the leftToRightStore
  * @tparam H2 The type of hash used to hash the key in the rightToLeftStore
  */
-template<typename K1, typename K2, typename V1, typename V2, typename H1,
-         typename H2>
+template <typename K1, typename K2, typename V1, typename V2, typename H1, typename H2>
 class DoubleMapStore {
 private:
     /**
-     * @brief The unordered_map that stores K1 to K2 pairs using V1 as the
-     * underlying data structure
+     * @brief The unordered_map that stores K1 to K2 pairs using V1 as the underlying data structure
      */
-    std::unordered_map<std::shared_ptr<K1>, std::shared_ptr<V1>,
-                       std::hash<std::shared_ptr<H1>>,
-                       std::equal_to<std::shared_ptr<H1>>>
-            leftToRightStore;
+    std::unordered_map<
+            std::shared_ptr<K1>,
+            std::shared_ptr<V1>,
+            std::hash<std::shared_ptr<H1>>,
+            std::equal_to<std::shared_ptr<H1>>
+    > leftToRightStore;
 
     /**
-     * @brief The unordered_map that stores K2 to K1 pairs using V2 as the
-     * underlying data structure
+     * @brief The unordered_map that stores K2 to K1 pairs using V2 as the underlying data structure
      */
-    std::unordered_map<std::shared_ptr<K2>, std::shared_ptr<V2>,
-                       std::hash<std::shared_ptr<H2>>,
-                       std::equal_to<std::shared_ptr<H2>>>
-            rightToLeftStore;
+    std::unordered_map<
+            std::shared_ptr<K2>,
+            std::shared_ptr<V2>,
+            std::hash<std::shared_ptr<H2>>,
+            std::equal_to<std::shared_ptr<H2>>
+    > rightToLeftStore;
 
 public:
     /**
@@ -70,33 +70,25 @@ public:
      * @brief Returns the start iterator to the leftToRight store
      * @return The start iterator to the leftToRight store
      */
-    typename std::unordered_map<std::shared_ptr<K1>,
-                                std::shared_ptr<V1>>::iterator
-    getLeftToRightBeginIterator();
+    typename std::unordered_map<std::shared_ptr<K1>, std::shared_ptr<V1>>::iterator getLeftToRightBeginIterator();
 
     /**
      * @brief Returns the end iterator to the leftToRight store
      * @return The end iterator to the leftToRight store
      */
-    typename std::unordered_map<std::shared_ptr<K1>,
-                                std::shared_ptr<V1>>::iterator
-    getLeftToRightEndIterator();
+    typename std::unordered_map<std::shared_ptr<K1>, std::shared_ptr<V1>>::iterator getLeftToRightEndIterator();
 
     /**
      * @brief Returns the start iterator to the rightToLeft store
      * @return The start iterator to the rightToLeft store
      */
-    typename std::unordered_map<std::shared_ptr<K2>,
-                                std::shared_ptr<V2>>::iterator
-    getRightToLeftBeginIterator();
+    typename std::unordered_map<std::shared_ptr<K2>, std::shared_ptr<V2>>::iterator getRightToLeftBeginIterator();
 
     /**
      * @brief Returns the end iterator to the rightToLeft store
      * @return The end iterator to the rightToLeft store
      */
-    typename std::unordered_map<std::shared_ptr<K2>,
-                                std::shared_ptr<V2>>::iterator
-    getRightToLeftEndIterator();
+    typename std::unordered_map<std::shared_ptr<K2>, std::shared_ptr<V2>>::iterator getRightToLeftEndIterator();
 
     /**
      * @brief Returns whether the DoubleMapStore is empty

@@ -11,7 +11,6 @@ private:
      * @brief The error message of the SemanticException
      */
     std::string errorMsg;
-
 public:
     /**
      * @brief The constructor of SemanticException
@@ -20,8 +19,8 @@ public:
     explicit SemanticException(std::string msg);
 
     /**
-     * @brief Returns the error message of the exception when the exception is
-     * thrown
+     * @brief Returns the error message of the exception when the exception is thrown
      */
-    virtual const char *what() const throw();
+    virtual const char* what() const throw();
 };
+

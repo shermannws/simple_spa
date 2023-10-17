@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Commons/Entities/Constant.h"
 #include "EntityStore.h"
+#include "Commons/Entities/Constant.h"
 
 /**
  * @brief A class that stores all the constants in the SIMPLE source program

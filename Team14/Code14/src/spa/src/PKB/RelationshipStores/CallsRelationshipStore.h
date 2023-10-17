@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Commons/Entities/Procedure.h"
 #include "PKB/RelationshipStores/RelationshipStore.h"
+#include "Commons/Entities/Procedure.h"
 
 /**
  * @brief A class that stores CallsRelationships

@@ -6,8 +6,7 @@
 #include "SPTokenType.h"
 
 /**
- * SPTokens which are created by the SPTokenizer when it tokenizes the SIMPLE
- * input source program.
+ * SPTokens which are created by the SPTokenizer when it tokenizes the SIMPLE input source program.
  */
 class SPToken {
 private:
@@ -27,7 +26,7 @@ public:
      * @param type Type of the token
      * @param value Value of the token as a string
      */
-    SPToken(TokenType type, std::string value);
+    SPToken(TokenType type, std::string  value);
 
     /**
      * Creates and initialises an empty SPToken.

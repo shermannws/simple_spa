@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Commons/AppConstants.h"
 #include "Entity.h"
 #include "EntityType.h"
+#include "Commons/AppConstants.h"
 
 /**
  * @brief A Constant is a constant in the SIMPLE programming language
  * @details A Constant is a constant in the SIMPLE programming language
  */
-class Constant : public Entity {
+class Constant: public Entity {
 public:
     /**
      * @brief Construct a new Constant object

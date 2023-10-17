@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Commons/Entities/Variable.h"
 #include "EntityStore.h"
+#include "Commons/Entities/Variable.h"
 
 class VariableStore : public EntityStore<Variable> {
 public:

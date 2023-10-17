@@ -1,7 +1,7 @@
 #pragma once
 
-#include <memory>
 #include <string>
+#include <memory>
 
 #include "Token.h"
 
@@ -25,7 +25,7 @@ public:
      * @brief The constructor of Tokenizer
      * @param input The input string
      */
-    explicit Tokenizer(const std::string &input);
+    explicit Tokenizer(const std::string& input);
 
     /**
      * @brief Peeks the next Char

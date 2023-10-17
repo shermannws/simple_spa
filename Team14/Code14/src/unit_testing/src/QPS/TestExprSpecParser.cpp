@@ -92,15 +92,14 @@ TEST_CASE("extractExpressionSpec") {
         std::string input = "\"09999\"";
         auto tokenizer = std::make_shared<Tokenizer>(input);
         auto parser = std::make_shared<ExprSpecParser>(tokenizer);
-        REQUIRE_THROWS_WITH(parser->extractExpressionSpec(),
-                            "Invalid expression spec");
+        REQUIRE_THROWS_WITH(parser->extractExpressionSpec(), "Invalid expression spec");
     }
 
     SECTION("invalid expressions") {
         std::string input = "\"x+(y-z\"";
         auto tokenizer = std::make_shared<Tokenizer>(input);
         auto parser = std::make_shared<ExprSpecParser>(tokenizer);
-        REQUIRE_THROWS_WITH(parser->extractExpressionSpec(),
-                            "not enough factors");
+        REQUIRE_THROWS_WITH(parser->extractExpressionSpec(), "not enough factors");
     }
+
 }

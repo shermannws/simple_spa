@@ -1,7 +1,7 @@
 #include <memory>
 
-#include "PKB/Managers/EntitiesManager.h"
 #include "catch.hpp"
+#include "PKB/Managers/EntitiesManager.h"
 
 using namespace std;
 
@@ -35,4 +35,6 @@ TEST_CASE("Test Entities Retrieval") {
     REQUIRE(manager.getAllWhile().size() == 1);
     REQUIRE(manager.getAllWhile().at(0) == Entity(statement2));
     REQUIRE(manager.getAllIf().empty());
+
+
 }

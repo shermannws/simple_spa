@@ -5,4 +5,5 @@
 /**
  * Interface for all conditional expression node types.
  */
-class ConditionalExpressionNode : public ASTNode {};
+class ConditionalExpressionNode : public ASTNode {
+};

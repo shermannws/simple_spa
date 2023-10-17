@@ -1,16 +1,15 @@
 #pragma once
 
+#include "DesignExtractorVisitor.h"
 #include "../../AST/Nodes/CallNode.h"
 #include "../../AST/Nodes/ProcedureNode.h"
-#include "DesignExtractorVisitor.h"
 
 class CallsExtractorVisitor : public DesignExtractorVisitor,
-                              public CallNodeVisitor {
+        public CallNodeVisitor {
 public:
     /**
      * Constructor for CallsExtractorVisitor.
-     * @param pkbWriter A shared ptr to a concrete implementation of PkbWriter
-     * class
+     * @param pkbWriter A shared ptr to a concrete implementation of PkbWriter class
      */
     CallsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
@@ -20,7 +19,5 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitCallNode(CallNode *node,
-                       std::vector<std::shared_ptr<ASTNode>> parents,
-                       std::shared_ptr<ASTNode> proc) const override;
+    void visitCallNode(CallNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const override;
 };

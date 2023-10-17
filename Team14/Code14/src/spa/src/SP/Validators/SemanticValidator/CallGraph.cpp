@@ -14,8 +14,8 @@ bool CallGraph::hasCycle() {
     std::unordered_set<std::string> visited;
     std::unordered_set<std::string> currentPath;
 
-    for (const auto &node: nodes) {
-        const std::string &procedureName = node.first;
+    for (const auto& node: nodes) {
+        const std::string& procedureName = node.first;
         if (visited.count(procedureName) == 0) {
             if (hasCycleDFS(procedureName, visited, currentPath)) {
                 return true;
@@ -25,16 +25,18 @@ bool CallGraph::hasCycle() {
     return false;
 }
 
-bool CallGraph::hasCycleDFS(const std::string &currentProcedure,
-                            std::unordered_set<std::string> &visited,
-                            std::unordered_set<std::string> &currentPath) {
+bool CallGraph::hasCycleDFS(
+        const std::string& currentProcedure,
+        std::unordered_set<std::string>& visited,
+        std::unordered_set<std::string>& currentPath) {
     visited.insert(currentProcedure);
     currentPath.insert(currentProcedure);
 
-    for (const std::string &callee: edges[currentProcedure]) {
-        if (currentPath.count(callee) > 0) { return true; }
-        if (visited.count(callee) == 0 &&
-            hasCycleDFS(callee, visited, currentPath)) {
+    for (const std::string& callee : edges[currentProcedure]) {
+        if (currentPath.count(callee) > 0) {
+            return true;
+        }
+        if (visited.count(callee) == 0 && hasCycleDFS(callee, visited, currentPath)) {
             return true;
         }
     }
@@ -42,3 +44,4 @@ bool CallGraph::hasCycleDFS(const std::string &currentProcedure,
     currentPath.erase(currentProcedure);
     return false;
 }
+

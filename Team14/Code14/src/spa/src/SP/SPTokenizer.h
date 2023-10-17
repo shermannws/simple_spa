@@ -1,13 +1,13 @@
 #pragma once
 
-#include <stdexcept>
 #include <string>
-#include <utility>
 #include <vector>
+#include <utility>
+#include <stdexcept>
 
 #include "Commons/AppConstants.h"
-#include "SPToken.h"
 #include "SPTokenType.h"
+#include "SPToken.h"
 
 /**
  * An SP subcomponent to tokenize the input SIMPLE source program string.
@@ -42,8 +42,7 @@ private:
     void tokenizeInteger();
 
     /**
-     * Takes the next char in the input string to create various Parenthesis
-     * tokens.
+     * Takes the next char in the input string to create various Parenthesis tokens.
      */
     void tokenizeParenthesis();
 
@@ -59,32 +58,27 @@ private:
     void tokenizeEquals();
 
     /**
-     * Takes the next char in the input string to create a ArithmeticOperator
-     * token.
+     * Takes the next char in the input string to create a ArithmeticOperator token.
      */
     void tokenizeArithmeticOperator();
 
     /**
-     * Takes in the next char/chars in the input string to create a
-     * ConditionalOperator token.
+     * Takes in the next char/chars in the input string to create a ConditionalOperator token.
      */
     void tokenizeConditionalOperator();
 
     /**
-     * Takes in the next char/chars in the input string to create a
-     * RelationalOperator token.
+     * Takes in the next char/chars in the input string to create a RelationalOperator token.
      */
     void tokenizeRelationalOperator();
 
     /**
-     * Checks the next char and calls either tokenizeRelationalOperator() or
-     * tokenizeConditionalOperator().
+     * Checks the next char and calls either tokenizeRelationalOperator() or tokenizeConditionalOperator().
      */
     void tokenizeNot();
 
     /**
-     * Checks the current char in the string input without incrementing the
-     * counter.
+     * Checks the current char in the string input without incrementing the counter.
      * @return The character as an int
      */
     int peekChar();
@@ -102,8 +96,7 @@ private:
     bool isCurrValid();
 
     /**
-     * Checks the next char in the string input without incrementing the
-     * counter.
+     * Checks the next char in the string input without incrementing the counter.
      * @return
      */
     int peekNextChar();
@@ -116,8 +109,8 @@ public:
     explicit SPTokenizer(std::string input);
 
     /**
-     * Tokenizes the string input source program by checking each char and
-     * creating tokens, serving as the entry point to the rest of the tokenizer.
+     * Tokenizes the string input source program by checking each char and creating tokens,
+     * serving as the entry point to the rest of the tokenizer.
      * @return
      */
     std::vector<SPToken> tokenize();

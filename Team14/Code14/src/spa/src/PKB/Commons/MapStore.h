@@ -1,15 +1,14 @@
 #pragma once
 
-#include <memory>
 #include <unordered_map>
+#include <memory>
 
 /**
- * @brief A class that stores objects using a map as the underlying data
- * structure
+ * @brief A class that stores objects using a map as the underlying data structure
  * @tparam K The type of object that the MapStore stores as the key
  * @tparam V The type of object that the MapStore stores as the value
  */
-template<typename K, typename V>
+template <typename K, typename V>
 class MapStore {
 private:
     /**
@@ -35,14 +34,13 @@ public:
      * @brief Returns the start iterator to the map store
      * @return The start iterator to the map store
      */
-    typename std::unordered_map<K, std::shared_ptr<V>>::iterator
-    getBeginIterator();
+    typename std::unordered_map<K, std::shared_ptr<V>>::iterator getBeginIterator();
 
     /**
      * @brief Returns the end iterator to the map store
      * @return The end iterator to the map store
      */
-    typename std::unordered_map<K, std::shared_ptr<V>>::iterator
-    getEndIterator();
+    typename std::unordered_map<K, std::shared_ptr<V>>::iterator getEndIterator();
+
 };
 #include "MapStore.hpp"

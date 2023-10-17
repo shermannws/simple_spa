@@ -3,20 +3,20 @@
 #include <memory>
 
 #include "PKB/Managers/AssignPatternManager.h"
-#include "PKB/Managers/CFGManager.h"
-#include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/EntitiesManager.h"
+#include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
-#include "PKB/Managers/IfPatternManager.h"
-#include "PKB/Managers/ModifiesProcRelationshipManager.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
-#include "PKB/Managers/NextRelationshipManager.h"
 #include "PKB/Managers/ParentRelationshipManager.h"
+#include "PKB/Managers/CallsRelationshipManager.h"
+#include "PKB/Managers/ModifiesProcRelationshipManager.h"
+#include "PKB/Managers/UsesProcRelationshipManager.h"
+#include "PKB/Managers/IfPatternManager.h"
+#include "PKB/Managers/WhilePatternManager.h"
+#include "PKB/Managers/NextRelationshipManager.h"
+#include "PKB/Managers/CFGManager.h"
 #include "PKB/Managers/PkbReaderManager.h"
 #include "PKB/Managers/PkbWriterManager.h"
-#include "PKB/Managers/UsesProcRelationshipManager.h"
-#include "PKB/Managers/UsesRelationshipManager.h"
-#include "PKB/Managers/WhilePatternManager.h"
 #include "PKB/PkbReader.h"
 #include "PKB/PkbWriter.h"
 
@@ -57,15 +57,14 @@ private:
     std::shared_ptr<ParentRelationshipManager> parentRelationshipManager;
 
     /**
-     * @brief The CallsRelationshipManager of the PKB
-     */
+	 * @brief The CallsRelationshipManager of the PKB
+	 */
     std::shared_ptr<CallsRelationshipManager> callsRelationshipManager;
 
-    /**
+	/**
      * @brief The ModifiesProcRelationshipManager of the PKB
      */
-    std::shared_ptr<ModifiesProcRelationshipManager>
-            modifiesProcRelationshipManager;
+    std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager;
 
     /**
      * @brief The UsesProcRelationshipManager of the PKB
@@ -98,8 +97,8 @@ private:
     std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
 
     /**
-     * @brief The CFGManager of the PKB
-     */
+	 * @brief The CFGManager of the PKB
+	 */
     std::shared_ptr<CFGManager> cfgManager;
 
 public:

@@ -1,15 +1,14 @@
 #pragma once
 
-#include "./PKB/PkbReader.h"
-#include "QPS/Query.h"
 #include "Result.h"
-#include "Strategies/AssignPatternStrategy.h"
+#include "QPS/Query.h"
 #include "Strategies/Strategy.h"
+#include "Strategies/AssignPatternStrategy.h"
+#include "./PKB/PkbReader.h"
 
 
 /**
- * @class ClauseHandler is the interface for PQLEvaluator to evaluate clauses
- * with different strategies
+ * @class ClauseHandler is the interface for PQLEvaluator to evaluate clauses with different strategies
  */
 class ClauseHandler {
 private:
@@ -22,7 +21,6 @@ private:
      * The pkbReader called to retrieve required data for executing clause
      */
     std::shared_ptr<PkbReader> pkbReader;
-
 public:
     /**
      * Constructor for ClauseHandler
@@ -37,11 +35,9 @@ public:
     void setStrategy(std::shared_ptr<Strategy> strategy);
 
     /**
-     * Executes the clause using the strategy and writes the result into the
-     * result object
+     * Executes the clause using the strategy and writes the result into the result object
      * @param clause the clause to be evaluated
-     * @param result the Result table to be populated with the results of the
-     * clause execution
+     * @param result the Result table to be populated with the results of the clause execution
      */
     std::shared_ptr<Result> executeClause(std::shared_ptr<Clause> clause) const;
 };

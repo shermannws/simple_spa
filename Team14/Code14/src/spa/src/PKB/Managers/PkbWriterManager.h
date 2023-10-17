@@ -3,18 +3,18 @@
 #include <memory>
 
 #include "PKB/Managers/AssignPatternManager.h"
-#include "PKB/Managers/CFGManager.h"
-#include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/EntitiesManager.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
-#include "PKB/Managers/IfPatternManager.h"
-#include "PKB/Managers/ModifiesProcRelationshipManager.h"
-#include "PKB/Managers/ModifiesRelationshipManager.h"
-#include "PKB/Managers/NextRelationshipManager.h"
-#include "PKB/Managers/ParentRelationshipManager.h"
-#include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
+#include "PKB/Managers/ModifiesRelationshipManager.h"
+#include "PKB/Managers/ParentRelationshipManager.h"
+#include "PKB/Managers/ModifiesProcRelationshipManager.h"
+#include "PKB/Managers/UsesProcRelationshipManager.h"
+#include "PKB/Managers/CallsRelationshipManager.h"
+#include "PKB/Managers/IfPatternManager.h"
 #include "PKB/Managers/WhilePatternManager.h"
+#include "PKB/Managers/NextRelationshipManager.h"
+#include "PKB/Managers/CFGManager.h"
 #include "PKB/PkbTypes.h"
 #include "PKB/RelationshipStores/RelationshipStore.h"
 
@@ -54,15 +54,14 @@ private:
     std::shared_ptr<ParentRelationshipManager> parentRelationshipManager;
 
     /**
-     * @brief The calls relationship manager.
-     */
+	 * @brief The calls relationship manager.
+	 */
     std::shared_ptr<CallsRelationshipManager> callsRelationshipManager;
 
     /**
      * @brief The modifies (proc-variable) relationship manager.
      */
-    std::shared_ptr<ModifiesProcRelationshipManager>
-            modifiesProcRelationshipManager;
+    std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager;
 
     /**
      * @brief The uses (proc-variable) relationship manager.
@@ -90,28 +89,24 @@ private:
     std::shared_ptr<CFGManager> cfgManager;
 
     /**
-     * @brief The map of procedure to statements where statements modifies/uses
-     * whatever modifies/uses by the procedure.
+	 * @brief The map of procedure to statements where statements modifies/uses whatever modifies/uses by the procedure.
      * @note This will be cleared after the transitive calculation is done.
-     */
+	 */
     RelationshipStore<Procedure, Statement> tempProcedureToStatementsMap;
 
     /**
      * @brief Triggers transitivity calculation for Calls* relationship.
-     * @note This method should be called after all calls relationships have
-     * been added.
+     * @note This method should be called after all calls relationships have been added.
      */
     void triggerCallsTransitiveCalculation();
 
     /**
-     * @brief Triggers transitivity calculation for Modifies and Uses (proc-var
-     * relationships)
+     * @brief Triggers transitivity calculation for Modifies and Uses (proc-var relationships)
      */
     void triggerProcToVarTransitiveCalculation();
 
     /**
-     * @brief Triggers transitivity calculation for Modifies and Uses (stmt-var
-     * relationships) arising from call statements
+     * @brief Triggers transitivity calculation for Modifies and Uses (stmt-var relationships) arising from call statements
      */
     void triggerStmtToVarTransitiveCalculation();
 
@@ -125,10 +120,8 @@ public:
      * @param modifiesRelationshipManager The modifies relationship manager.
      * @param parentRelationshipManager The parent relationship manager.
      * @param callsRelatioShipManager The calls relationship manager.
-     * @param modifiesProcRelationshipManager The modifies procedure
-     * relationship manager.
-     * @param usesProcRelationshipManager The uses procedure relationship
-     * manager.
+     * @param modifiesProcRelationshipManager The modifies procedure relationship manager.
+     * @param usesProcRelationshipManager The uses procedure relationship manager.
      * @param ifPatternManager The if pattern manager.
      * @param whilePatternManager The while pattern manager.
      * @param nextRelationshipManager The next relationship manager.
@@ -137,22 +130,18 @@ public:
     PkbWriterManager(
             std::shared_ptr<AssignPatternManager> assignmentManager,
             std::shared_ptr<EntitiesManager> entitiesManager,
-            std::shared_ptr<FollowsRelationshipManager>
-                    followsRelationshipManager,
+            std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
-            std::shared_ptr<ModifiesRelationshipManager>
-                    modifiesRelationshipManager,
-            std::shared_ptr<ParentRelationshipManager>
-                    parentRelationshipManager,
+            std::shared_ptr<ModifiesRelationshipManager> modifiesRelationshipManager,
+            std::shared_ptr<ParentRelationshipManager> parentRelationshipManager,
             std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
-            std::shared_ptr<ModifiesProcRelationshipManager>
-                    modifiesProcRelationshipManager,
-            std::shared_ptr<UsesProcRelationshipManager>
-                    usesProcRelationshipManager,
+            std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
+            std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
             std::shared_ptr<IfPatternManager> ifPatternManager,
             std::shared_ptr<WhilePatternManager> whilePatternManager,
             std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
-            std::shared_ptr<CFGManager> cfgManager);
+            std::shared_ptr<CFGManager> cfgManager
+    );
 
     /**
      * @brief Adds a constant to the PKB.
@@ -182,95 +171,79 @@ public:
      * @brief Adds a assign statement to the PKB.
      * @param s The shared pointer to the assign statement to be added.
      */
-    void addAssignPattern(std::shared_ptr<Statement> s,
-                          std::shared_ptr<Variable> lhs,
-                          std::shared_ptr<Expression> rhs);
+    void addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs);
 
     /**
      * @brief Adds a follows relationship to the PKB.
      * @param s1 The shared pointer to the first statement.
      * @param s2 The shared pointer to the second statement.
-     * @param isDirect A boolean value indicating if the follows relationship is
-     * direct.
+     * @param isDirect A boolean value indicating if the follows relationship is direct.
      */
-    void addFollowsRelationship(std::shared_ptr<Statement> s1,
-                                std::shared_ptr<Statement> s2, bool isDirect);
+    void addFollowsRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect);
 
     /**
      * @brief Adds a uses relationship to the PKB.
      * @param s The shared pointer to the statement.
      * @param v The shared pointer to the variable.
      */
-    void addUsesRelationship(std::shared_ptr<Statement> s,
-                             std::shared_ptr<Variable> v);
+    void addUsesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v);
 
     /**
      * @brief Adds a modifies relationship to the PKB.
      * @param s The shared pointer to the statement.
      * @param v The shared pointer to the variable.
      */
-    void addModifiesRelationship(std::shared_ptr<Statement> s,
-                                 std::shared_ptr<Variable> v);
+    void addModifiesRelationship(std::shared_ptr<Statement> s, std::shared_ptr<Variable> v);
 
     /**
      * @brief Adds a parent relationship to the PKB.
      * @param s1 The shared pointer to the first statement.
      * @param s2 The shared pointer to the second statement.
-     * @param isDirect A boolean value indicating if the parent relationship is
-     * direct.
+     * @param isDirect A boolean value indicating if the parent relationship is direct.
      */
-    void addParentRelationship(std::shared_ptr<Statement> s1,
-                               std::shared_ptr<Statement> s2, bool isDirect);
+    void addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect);
 
     /**
-     * @brief Adds a calls relationship to the PKB.
-     * @param s1 The shared pointer to the first statement.
-     * @param s2 The shared pointer to the second statement.
-     */
-    void addCallsRelationship(std::shared_ptr<Procedure> p1,
-                              std::shared_ptr<Procedure> p2);
+	 * @brief Adds a calls relationship to the PKB.
+	 * @param s1 The shared pointer to the first statement.
+	 * @param s2 The shared pointer to the second statement.
+	 */
+    void addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2);
 
     /**
      * @brief Adds a modifies procedure relationship to the PKB.
      * @param p The shared pointer to the procedure.
      * @param v The shared pointer to the variable.
      */
-    void addModifiesProcRelationship(std::shared_ptr<Procedure> p,
-                                     std::shared_ptr<Variable> v);
+    void addModifiesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v);
 
     /**
      * @brief Adds a uses procedure relationship to the PKB.
      * @param p The shared pointer to the procedure.
      * @param v The shared pointer to the variable.
      */
-    void addUsesProcRelationship(std::shared_ptr<Procedure> p,
-                                 std::shared_ptr<Variable> v);
+    void addUsesProcRelationship(std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v);
 
     /**
      * @brief Adds an if pattern to the PKB.
      * @param s The shared pointer to the statement.
      * @param v The shared pointer to the vector of variables.
      */
-    void
-    addIfPattern(std::shared_ptr<Statement> s,
-                 std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v);
+    void addIfPattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v);
 
     /**
      * @brief Adds a while pattern to the PKB.
      * @param s The shared pointer to the statement.
      * @param v The shared pointer to the vector of variables.
      */
-    void
-    addWhilePattern(std::shared_ptr<Statement> s,
-                    std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v);
+    void addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v);
 
     /**
      * @brief Adds procedure to statements map into tempProcedureStatementMap.
      * @param p The procedure.
      * @param s The statements to be added.
      */
-    void addProcedureToStatementsMap(std::shared_ptr<Procedure> p,
-                                     std::vector<std::shared_ptr<Statement>> s);
+    void addProcedureToStatementsMap(std::shared_ptr<Procedure> p, std::vector<std::shared_ptr<Statement>> s);
 
     /**
      * @brief Triggers transitivity calculation for Relationships
@@ -282,20 +255,16 @@ public:
      * @param s1 The shared pointer to the first statement.
      * @param s2 The shared pointer to the second statement.
      */
-    void addNextRelationship(std::shared_ptr<Statement> s1,
-                             std::shared_ptr<Statement> s2);
+    void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2);
 
     /**
-     * @brief Sets the `cfgMap` received as argument as the CFGs for each
-     * procedures
+     * @brief Sets the `cfgMap` received as argument as the CFGs for each procedures
      * @param cfgMap The map of procedure name to CFGNode
      */
-    void setCFGMap(
-            std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap);
+    void setCFGMap(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap);
 
     /**
-     * @brief Clears the PKB of any cache information that should not persist
-     * across queries
+     * @brief Clears the PKB of any cache information that should not persist across queries
      */
     void clearCache();
 };

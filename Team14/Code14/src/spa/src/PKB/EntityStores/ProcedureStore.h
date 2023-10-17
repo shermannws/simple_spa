@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Commons/Entities/Procedure.h"
 #include "EntityStore.h"
+#include "Commons/Entities/Procedure.h"
 
 /**
  * @brief A class that stores all the procedures in the SIMPLE source program

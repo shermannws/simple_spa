@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Commons/Entities/Statement.h"
 #include "EntityStore.h"
+#include "Commons/Entities/Statement.h"
 
 /**
  * @brief A class that stores all the statements in the SIMPLE source program
