@@ -45,10 +45,6 @@ ResultList PQLEvaluator::formatResult(Query& query, Result& result) {
 
 Result PQLEvaluator::evaluate(Query& query) {
     std::shared_ptr<Result> result = evaluateConstraintClauses(query);
-    if (!result) { // no constraint clauses
-        result = evaluateResultClause(query, query.getSelect());
-        return *result;
-    }
 
     // CASE FALSE
     if (result->isFalse()){
@@ -58,7 +54,7 @@ Result PQLEvaluator::evaluate(Query& query) {
     //TRUE OR NON-EMPTY RESULT TABLE
     // CASE RESULT-CLAUSE IN RESULT TABLE, check if ALL synonym in select is in result table
     std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(query.getSelect(), result);
-    if (unevaluatedSyn.size() == 0){
+    if (unevaluatedSyn.empty()){
         return *result;
     }
 
@@ -89,8 +85,9 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
 }
 
 std::shared_ptr<Result> PQLEvaluator::evaluateConstraintClauses(const Query& query) {
+    auto result = std::make_shared<Result>(true); // Initialize with TRUE
     if (query.getSuchThat().empty() && query.getPattern().empty()) {
-        return nullptr;
+        return result;
     }
 
     std::vector<std::shared_ptr<Result>> results;
@@ -100,9 +97,8 @@ std::shared_ptr<Result> PQLEvaluator::evaluateConstraintClauses(const Query& que
     for (const auto& clause : query.getPattern()) {
         results.push_back(evaluateClause(clause));
     }
-    auto result = resultHandler->cast(results[0]); // Initialize with the first element //TODO extract this? (DRY)
-    for (size_t i = 1; i < results.size(); ++i) { // Combine with next until end of list
-        result = resultHandler->getCombined(result, results[i]);
+    for (auto const &res: results) { // Combine until end of list
+        result = resultHandler->getCombined(result, res);
     }
     return result;
 }
@@ -115,18 +111,13 @@ std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const std::shared_ptr<Query
 }
 
 std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(const Query& query, std::vector<Synonym> resultSyns) {
-    if (resultSyns.empty()) { // BOOLEAN result clause
-        return std::make_shared<Result>(true);
-    }
-
-    // tuple result clause
     std::vector<std::shared_ptr<Result>> results;
     for (auto &syn : resultSyns) {
         results.push_back(evaluateSelect(query.getEntity(syn)));
     }
-    auto tupleResult = resultHandler->cast(results[0]); // Initialize with the first element
-    for (size_t i = 1; i < results.size(); ++i) { // Combine with next until end of list
-        tupleResult = resultHandler->getCombined(tupleResult, results[i]);
+    auto tupleResult = std::make_shared<Result>(true); // Initialize with TRUE
+    for (auto const &res: results) { // Combine until end of list
+        tupleResult = resultHandler->getCombined(tupleResult, res);
     }
     return tupleResult;
 }

@@ -51,6 +51,14 @@ private:
      */
     bool isMatch(const std::vector<Entity>& row1, const std::vector<Entity>& row2, const std::unordered_map<int, int>& commons);
 
+    /**
+    * Casts a Result object into a False Boolean Result if it is an Empty Tuple Result,
+    * otherwise returns the original result
+    * @param result shared pointer to the Result object being casted
+    * @return shared pointer to the casted Result object
+    */
+    std::shared_ptr<Result> cast(std::shared_ptr<Result> result);
+
 public:
     /**
      * Constructor for ResultHandler class
@@ -66,13 +74,6 @@ public:
      */
     std::shared_ptr<Result> getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 
-    /**
-     * Casts a Result object into a False Boolean Result if it is an Empty Tuple Result,
-     * otherwise returns the original result
-     * @param result shared pointer to the Result object being casted
-     * @return shared pointer to the casted Result object
-     */
-    std::shared_ptr<Result> cast(std::shared_ptr<Result> result);
 };
 
 
