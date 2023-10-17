@@ -32,7 +32,6 @@ public:
     /**
      * @brief Construct a new Entity object
      * @param entityValue The string value of the entity
-     * @param isInt True if the entity is of type int, false otherwise
      * @param entityType The Entity Type of the Entity of enum type `EntityType`
      * @return A new Entity object
      */
@@ -41,9 +40,8 @@ public:
     /**
      * @brief Construct a new Entity object
      * @param entityValue The string value of the entity
-     * @param attrValue The secondary string value of the entity
-     * @param isInt True if the entity is of type int, false otherwise
      * @param entityType The Entity Type of the Entity of enum type `EntityType`
+     * @param attrValue The secondary string value of the entity
      * @return A new Entity object
      */
     Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType,
