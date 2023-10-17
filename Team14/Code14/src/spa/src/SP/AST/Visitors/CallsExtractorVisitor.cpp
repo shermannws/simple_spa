@@ -18,8 +18,8 @@ void CallsExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::share
 
     // Add procedure to statement mapping
     std::vector<std::shared_ptr<Statement>> statementsToAdd;
-    CallStatement currStatement(node->getStatementNumber(), node->getProcedureName());
-    statementsToAdd.push_back(std::make_shared<CallStatement>(currStatement));
+    auto currStatement = std::make_shared<CallStatement>(node->getStatementNumber(), node->getProcedureName());
+    statementsToAdd.push_back(currStatement);
 
     // Add procedure to parent statements mapping for UsesP and ModifiesP
     for (auto parent = parents.rbegin(); parent != parents.rend(); parent++) {

@@ -28,6 +28,7 @@ public:
      * @brief Construct a new Statement object
      * @param lineNo The line number of the statement as StatementNumber (int)
      * @param statementType The Statement Type of the Statement object of enum type `StatementType`
+     * @param attrValue The secondary value of the statement
      * @return A new Statement object
      */
     Statement(StatementNumber lineNo, StatementType statementType, AttrValue attrValue);

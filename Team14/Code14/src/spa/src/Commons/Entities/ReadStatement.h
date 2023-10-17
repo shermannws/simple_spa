@@ -13,7 +13,7 @@ public:
     /**
      * @brief Construct a new ReadStatement object
      * @param lineNo The line number of the statement as StatementNumber (int)
-     * @param attrValue The name of the variable read
+     * @param varName The name of the variable read
      * @return A new ReadStatement object
      */
     ReadStatement(StatementNumber lineNo, AttrValue varName);

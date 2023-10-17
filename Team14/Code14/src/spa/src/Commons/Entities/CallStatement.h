@@ -13,7 +13,7 @@ public:
     /**
      * @brief Construct a new CallStatement object
      * @param lineNo The line number of the statement as StatementNumber (int)
-     * @param attrValue The name of the procedure called
+     * @param procName The name of the procedure called
      * @return A new CallStatement object
      */
     CallStatement(StatementNumber lineNo, AttrValue procName);
