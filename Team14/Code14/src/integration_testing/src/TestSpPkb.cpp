@@ -402,7 +402,7 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
 }
 
 
-TEST_CASE("Test CFG Extractor - test CFG saving and Next extraction") {
+TEST_CASE("Test CFG Extractor - test Next extraction") {
     std::string sourceProgram =
             "procedure Proc1 {"
             "   x = 1 + 2 * y - (1 / var) % 5;"     // stmt 1
