@@ -32,13 +32,9 @@ std::vector<Entity> PkbReaderManager::getAllRead() const { return this->entityMa
 
 std::vector<Entity> PkbReaderManager::getAllPrint() const { return this->entityManager->getAllPrint(); }
 
-std::vector<Entity> PkbReaderManager::getAllWhile() const {
-    return this->entityManager->getAllWhile();
-}
+std::vector<Entity> PkbReaderManager::getAllWhile() const { return this->entityManager->getAllWhile(); }
 
-std::vector<Entity> PkbReaderManager::getAllIf() const {
-    return this->entityManager->getAllIf();
-}
+std::vector<Entity> PkbReaderManager::getAllIf() const { return this->entityManager->getAllIf(); }
 
 std::vector<Entity> PkbReaderManager::getAllCall() const { return this->entityManager->getAllCall(); }
 
@@ -440,9 +436,7 @@ bool PkbReaderManager::hasAfterStarStmt(Statement &statement) const {
     return this->nextRelationshipManager->isFormer(statement);
 }
 
-std::vector<Entity> PkbReaderManager::getAllIfPatternStmts() const {
-    return this->ifPatternManager->getAllStmts();
-}
+std::vector<Entity> PkbReaderManager::getAllIfPatternStmts() const { return this->ifPatternManager->getAllStmts(); }
 
 std::vector<Entity> PkbReaderManager::getIfStmtsByVar(Variable &var) const {
     return this->ifPatternManager->getStmtsByVar(var);
