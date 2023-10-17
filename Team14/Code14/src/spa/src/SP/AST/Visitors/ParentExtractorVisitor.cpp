@@ -1,6 +1,7 @@
 #include "ParentExtractorVisitor.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
+#include "Commons/StatementFactory.h"
 #include "Commons/StatementTypeFactory.h"
 
 ParentExtractorVisitor::ParentExtractorVisitor(std::shared_ptr<PkbWriter> writer) { this->pkbWriter = writer; }
@@ -12,18 +13,13 @@ void ParentExtractorVisitor::visitStatementListNode(StatementListNode *node,
 
     bool isDirect = true;
     for (auto parent = parents.rbegin(); parent != parents.rend(); parent++) {
-        auto parentPtr = std::dynamic_pointer_cast<StatementNode>(*parent);
+        auto parentPtr = std::static_pointer_cast<StatementNode>(*parent);
         assert(parentPtr != nullptr);
-        Statement parentStatement =
-                Statement(parentPtr->getStatementNumber(),
-                          StatementTypeFactory::getStatementTypeFrom(parentPtr->getStatementType()));
+        std::shared_ptr<Statement> parentStatement = StatementFactory::createStatementFromStatementNode(parentPtr);
 
         for (auto stmt = stmts.begin(); stmt != stmts.end(); stmt++) {
-            Statement childStatement =
-                    Statement((*stmt)->getStatementNumber(),
-                              StatementTypeFactory::getStatementTypeFrom((*stmt)->getStatementType()));
-            this->pkbWriter->addParentRelationship(std::make_shared<Statement>(parentStatement),
-                                                   std::make_shared<Statement>(childStatement), isDirect);
+            std::shared_ptr<Statement> childStatement = StatementFactory::createStatementFromStatementNode(*stmt);
+            this->pkbWriter->addParentRelationship(parentStatement, childStatement, isDirect);
         }
 
         isDirect = false;

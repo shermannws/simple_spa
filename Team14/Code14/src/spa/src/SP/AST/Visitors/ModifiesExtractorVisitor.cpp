@@ -1,7 +1,8 @@
 #include <functional>
 
+#include "Commons/Entities/AssignStatement.h"
+#include "Commons/Entities/ReadStatement.h"
 #include "Commons/Entities/Statement.h"
-#include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
 #include "ModifiesExtractorVisitor.h"
 #include "VisitorUtility.h"
@@ -19,13 +20,13 @@ ModifiesExtractorVisitor::ModifiesExtractorVisitor(std::shared_ptr<PkbWriter> wr
 void ModifiesExtractorVisitor::visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                                                std::shared_ptr<ASTNode> proc) const {
     return VisitorUtility::addAllVariableRelationshipFrom(node->getVar(),
-                                                          Statement(node->getStatementNumber(), StatementType::Assign),
+                                                          std::make_shared<AssignStatement>(node->getStatementNumber()),
                                                           parents, this->funcStmt, proc, this->funcProc);
 }
 
 void ModifiesExtractorVisitor::visitReadNode(ReadNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                                              std::shared_ptr<ASTNode> proc) const {
-    return VisitorUtility::addAllVariableRelationshipFrom(node->getVar(),
-                                                          Statement(node->getStatementNumber(), StatementType::Read),
-                                                          parents, this->funcStmt, proc, this->funcProc);
+    return VisitorUtility::addAllVariableRelationshipFrom(
+            node->getVar(), std::make_shared<ReadStatement>(node->getStatementNumber(), node->getVar()->getVarName()),
+            parents, this->funcStmt, proc, this->funcProc);
 }
