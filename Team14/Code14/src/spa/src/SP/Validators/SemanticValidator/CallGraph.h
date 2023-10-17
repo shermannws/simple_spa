@@ -23,7 +23,10 @@ private:
 
 public:
     CallGraph();
+
     void addNode(const std::shared_ptr<ProcedureNode> &node);
+
     void addEdge(const std::string &caller, const std::string &callee);
+
     bool hasCycle();
 };

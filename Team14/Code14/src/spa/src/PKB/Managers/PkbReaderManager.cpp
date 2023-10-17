@@ -12,13 +12,14 @@ PkbReaderManager::PkbReaderManager(std::shared_ptr<AssignPatternManager> assignm
                                    std::shared_ptr<IfPatternManager> ifPatternManager,
                                    std::shared_ptr<WhilePatternManager> whilePatternManager,
                                    std::shared_ptr<NextRelationshipManager> nextRelationshipManager)
-    : assignmentManager(assignmentManager), entityManager(entityManager),
-      followsRelationshipManager(followsRelationshipManager), usesRelationshipManager(usesRelationshipManager),
-      modifiesRelationshipManager(modifiesRelationshipManager), parentRelationshipManager(parentRelationshipManager),
-      callsRelationshipManager(callsRelationshipManager),
-      modifiesProcRelationshipManager(modifiesProcRelationshipManager),
-      usesProcRelationshipManager(usesProcRelationshipManager), ifPatternManager(ifPatternManager),
-      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager){};
+        : assignmentManager(assignmentManager), entityManager(entityManager),
+          followsRelationshipManager(followsRelationshipManager), usesRelationshipManager(usesRelationshipManager),
+          modifiesRelationshipManager(modifiesRelationshipManager),
+          parentRelationshipManager(parentRelationshipManager),
+          callsRelationshipManager(callsRelationshipManager),
+          modifiesProcRelationshipManager(modifiesProcRelationshipManager),
+          usesProcRelationshipManager(usesProcRelationshipManager), ifPatternManager(ifPatternManager),
+          whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager) {};
 
 std::vector<Entity> PkbReaderManager::getAllVariables() const { return this->entityManager->getAllVariables(); }
 

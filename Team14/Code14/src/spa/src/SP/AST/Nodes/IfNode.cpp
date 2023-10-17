@@ -3,8 +3,8 @@
 IfNode::IfNode(StatementNumber statementNumber, std::shared_ptr<ConditionalExpressionNode> conditionalExpression,
                std::shared_ptr<StatementListNode> thenStatementList,
                std::shared_ptr<StatementListNode> elseStatementList)
-    : StatementNode(statementNumber), conditionalExpression(std::move(conditionalExpression)),
-      thenStatementList(std::move(thenStatementList)), elseStatementList(std::move(elseStatementList)) {}
+        : StatementNode(statementNumber), conditionalExpression(std::move(conditionalExpression)),
+          thenStatementList(std::move(thenStatementList)), elseStatementList(std::move(elseStatementList)) {}
 
 std::shared_ptr<ConditionalExpressionNode> IfNode::getConditionalExpression() { return conditionalExpression; }
 

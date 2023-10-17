@@ -16,14 +16,15 @@ PkbWriterManager::PkbWriterManager(std::shared_ptr<AssignPatternManager> assignm
                                    std::shared_ptr<WhilePatternManager> whilePatternManager,
                                    std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
                                    std::shared_ptr<CFGManager> cfgManager)
-    : assignmentManager(assignmentManager), entitiesManager(entitiesManager),
-      followsRelationshipManager(followsRelationshipManager), usesRelationshipManager(usesRelationshipManager),
-      modifiesRelationshipManager(modifiesRelationshipManager), parentRelationshipManager(parentRelationshipManager),
-      callsRelationshipManager(callsRelationshipManager),
-      modifiesProcRelationshipManager(modifiesProcRelationshipManager),
-      usesProcRelationshipManager(usesProcRelationshipManager), ifPatternManager(ifPatternManager),
-      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager),
-      cfgManager(cfgManager) {}
+        : assignmentManager(assignmentManager), entitiesManager(entitiesManager),
+          followsRelationshipManager(followsRelationshipManager), usesRelationshipManager(usesRelationshipManager),
+          modifiesRelationshipManager(modifiesRelationshipManager),
+          parentRelationshipManager(parentRelationshipManager),
+          callsRelationshipManager(callsRelationshipManager),
+          modifiesProcRelationshipManager(modifiesProcRelationshipManager),
+          usesProcRelationshipManager(usesProcRelationshipManager), ifPatternManager(ifPatternManager),
+          whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager),
+          cfgManager(cfgManager) {}
 
 void PkbWriterManager::addConstant(std::shared_ptr<Constant> c) { this->entitiesManager->storeConstant(c); }
 

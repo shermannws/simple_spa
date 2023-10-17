@@ -5,7 +5,7 @@
 Entity::Entity() {}
 
 Entity::Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType)
-    : entityValue(entityValue), entityType(entityType) {}
+        : entityValue(entityValue), entityType(entityType) {}
 
 EntityType Entity::getEntityType() const { return this->entityType; }
 

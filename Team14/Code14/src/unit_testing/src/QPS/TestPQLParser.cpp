@@ -102,8 +102,7 @@ TEST_CASE("processSelect Errors") {
             PQLParser parser(testcase.first);
             REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
         }
-    }
-    SECTION("SemanticException") {
+    }SECTION("SemanticException") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assign a; Select s", "Undeclared synonym in Select clause");
         testcases.emplace_back("assign Synonym; Select synonym", "Undeclared synonym in Select clause");

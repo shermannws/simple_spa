@@ -14,4 +14,5 @@ void ConstantNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor,
         constantVisitor->visitConstantNode(this, parents, proc);
     }
 }
+
 std::string ConstantNode::toString() { return std::string("(").append(this->getValue()).append(")"); }

@@ -42,4 +42,5 @@ public:
      */
     typename std::unordered_map<K, std::shared_ptr<V>>::iterator getEndIterator();
 };
+
 #include "MapStore.hpp"

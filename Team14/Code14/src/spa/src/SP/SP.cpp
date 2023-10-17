@@ -51,8 +51,8 @@ void SP::startSPProcessing(std::string &input) {
         std::shared_ptr<PatternExtractorVisitor> patternExtractor =
                 std::make_shared<PatternExtractorVisitor>(pkbWriter);
         std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = {
-                entityExtractor, followsExtractor, usesExtractor,   modifiesExtractor,
-                parentExtractor, callsExtractor,   patternExtractor};
+                entityExtractor, followsExtractor, usesExtractor, modifiesExtractor,
+                parentExtractor, callsExtractor, patternExtractor};
 
         //Traverse the AST from root node
         Traverser traverser(visitors);
@@ -67,10 +67,10 @@ void SP::startSPProcessing(std::string &input) {
         // Handle CFG-related relationships and save CFG to PKB
         CFGExtractor cfgExtractor(pkbWriter);
         cfgExtractor.extractRelationships(cfgMap);
-    } catch (const SyntaxError& e) {
+    } catch (const SyntaxError &e) {
         std::cout << "\n" << e.what() << "\n\n" << "Terminating program due to invalid SIMPLE code." << std::endl;
         std::exit(EXIT_FAILURE); // Exit the program with an error code
-    } catch (const SemanticError& e) {
+    } catch (const SemanticError &e) {
         std::cout << "\n" << e.what() << "\n\n" << "Terminating program due to invalid SIMPLE code." << std::endl;
         std::exit(EXIT_FAILURE); // Exit the program with an error code
     }

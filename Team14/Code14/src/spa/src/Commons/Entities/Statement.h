@@ -21,6 +21,7 @@ public:
      * CPP requires this to use Statement as a value in an (unordered) map
      */
     Statement();
+
     /**
      * @brief Construct a new Statement object
      * @param lineNo The line number of the statement as StatementNumber (int)

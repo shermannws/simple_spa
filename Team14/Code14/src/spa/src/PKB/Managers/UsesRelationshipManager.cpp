@@ -1,3 +1,3 @@
 #include "UsesRelationshipManager.h"
 
-UsesRelationshipManager::UsesRelationshipManager() : StmtToVarRelationshipManager(){};
+UsesRelationshipManager::UsesRelationshipManager() : StmtToVarRelationshipManager() {};

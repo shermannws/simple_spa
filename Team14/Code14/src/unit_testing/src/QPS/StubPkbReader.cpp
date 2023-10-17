@@ -10,18 +10,18 @@ std::vector<Entity> StubPkbReader::getAllProcedures() const { return std::vector
 
 std::vector<Entity> StubPkbReader::getAllStatements() const {
     return std::vector<Entity>{
-            Statement(1, StatementType::If),     Statement(2, StatementType::While), Statement(3, StatementType::Call),
+            Statement(1, StatementType::If), Statement(2, StatementType::While), Statement(3, StatementType::Call),
             Statement(4, StatementType::Assign), Statement(5, StatementType::Read),
     };
 }
 
 std::vector<Entity> StubPkbReader::getAllRead() const {
     return std::vector<Entity>({
-            Statement(88, StatementType::Read),
-            Statement(24, StatementType::Read),
-            Statement(36, StatementType::Read),
-            Statement(14, StatementType::Read),
-    });
+                                       Statement(88, StatementType::Read),
+                                       Statement(24, StatementType::Read),
+                                       Statement(36, StatementType::Read),
+                                       Statement(14, StatementType::Read),
+                               });
 }
 
 std::vector<Entity> StubPkbReader::getAllPrint() const { return std::vector<Entity>(); }
@@ -36,9 +36,9 @@ std::vector<Entity> StubPkbReader::getAllWhile() const {
 
 std::vector<Entity> StubPkbReader::getAllIf() const {
     return std::vector<Entity>({
-            Statement(101, StatementType::If),
-            Statement(102, StatementType::If),
-    });
+                                       Statement(101, StatementType::If),
+                                       Statement(102, StatementType::If),
+                               });
 }
 
 std::vector<Entity> StubPkbReader::getAllCall() const { return std::vector<Entity>(); }
@@ -418,8 +418,8 @@ std::vector<Entity> StubPkbReader::getNextStarTypeStmt(StatementType type, State
 std::vector<Entity> StubPkbReader::getNextTypeWildcard(StatementType type) const {
     if (type == StatementType::If) {
         return std::vector<Entity>({
-                Statement(11, StatementType::If),
-        });
+                                           Statement(11, StatementType::If),
+                                   });
     }
     return std::vector<Entity>();
 }
@@ -427,8 +427,8 @@ std::vector<Entity> StubPkbReader::getNextTypeWildcard(StatementType type) const
 std::vector<Entity> StubPkbReader::getNextStarTypeWildcard(StatementType type) const {
     if (type == StatementType::While) {
         return std::vector<Entity>({
-                Statement(20, StatementType::While),
-        });
+                                           Statement(20, StatementType::While),
+                                   });
     }
     return std::vector<Entity>();
 }
@@ -450,10 +450,10 @@ std::vector<Entity> StubPkbReader::getNextStarStmtType(Statement &statement, Sta
 std::vector<Entity> StubPkbReader::getNextWildcardType(StatementType type) const {
     if (type == StatementType::Assign) {
         return std::vector<Entity>({
-                Statement(10, StatementType::Assign),
-                Statement(12, StatementType::Assign),
-                Statement(13, StatementType::Assign),
-        });
+                                           Statement(10, StatementType::Assign),
+                                           Statement(12, StatementType::Assign),
+                                           Statement(13, StatementType::Assign),
+                                   });
     }
     return std::vector<Entity>();
 }
@@ -461,10 +461,10 @@ std::vector<Entity> StubPkbReader::getNextWildcardType(StatementType type) const
 std::vector<Entity> StubPkbReader::getNextStarWildcardType(StatementType type) const {
     if (type == StatementType::Read) {
         return std::vector<Entity>({
-                Statement(10, StatementType::Read),
-                Statement(12, StatementType::Read),
-                Statement(15, StatementType::Read),
-        });
+                                           Statement(10, StatementType::Read),
+                                           Statement(12, StatementType::Read),
+                                           Statement(15, StatementType::Read),
+                                   });
     }
     return std::vector<Entity>();
 }

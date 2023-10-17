@@ -3,11 +3,11 @@
 CFGNode::CFGNode(StatementNumber statementNumber) : statementNumber(std::move(statementNumber)) {}
 
 CFGNode::CFGNode(StatementNumber statementNumber, StatementType statementType)
-    : statementNumber(std::move(statementNumber)), statementType(statementType) {}
+        : statementNumber(std::move(statementNumber)), statementType(statementType) {}
 
 CFGNode::CFGNode(StatementNumber statementNumber, std::vector<std::shared_ptr<CFGNode>> parents,
                  std::vector<std::shared_ptr<CFGNode>> children)
-    : statementNumber(std::move(statementNumber)), parents(std::move(parents)), children(std::move(children)) {}
+        : statementNumber(std::move(statementNumber)), parents(std::move(parents)), children(std::move(children)) {}
 
 StatementNumber CFGNode::getStatementNumber() { return this->statementNumber; }
 

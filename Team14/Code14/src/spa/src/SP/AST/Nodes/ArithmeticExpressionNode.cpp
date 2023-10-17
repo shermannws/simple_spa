@@ -5,8 +5,8 @@
 ArithmeticExpressionNode::ArithmeticExpressionNode(ArithmeticOperatorType operatorType,
                                                    std::shared_ptr<ExpressionNode> leftExpression,
                                                    std::shared_ptr<ExpressionNode> rightExpression)
-    : operatorType(operatorType), leftExpression(std::move(leftExpression)),
-      rightExpression(std::move(rightExpression)) {}
+        : operatorType(operatorType), leftExpression(std::move(leftExpression)),
+          rightExpression(std::move(rightExpression)) {}
 
 ArithmeticOperatorType ArithmeticExpressionNode::getOperatorType() { return operatorType; }
 
@@ -18,6 +18,7 @@ ArithmeticOperatorType ArithmeticExpressionNode::translateOperatorTypeString(con
     assert(stringToOperatorTypeMap.find(operatorTypeString) != stringToOperatorTypeMap.end());
     return stringToOperatorTypeMap.at(operatorTypeString);
 }
+
 std::vector<std::shared_ptr<ASTNode>> ArithmeticExpressionNode::getAllChildNodes() {
     std::vector<std::shared_ptr<ASTNode>> children{leftExpression, rightExpression};
     return children;

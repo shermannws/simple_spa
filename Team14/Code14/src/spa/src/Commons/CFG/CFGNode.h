@@ -36,6 +36,7 @@ private:
 public:
     // Added to allow this class to be used in dynamic_cast expression
     virtual ~CFGNode() = default;
+
     /**
      * Creates and initialises a CFGNode.
      * @param statementNumber The statement number of the node

@@ -31,4 +31,5 @@ public:
      */
     void storeRelationship(std::shared_ptr<T> left, std::shared_ptr<U> right);
 };
+
 #include "RelationshipStore.hpp"

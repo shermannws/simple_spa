@@ -2,8 +2,8 @@
 
 WhileNode::WhileNode(StatementNumber statementNumber, std::shared_ptr<ConditionalExpressionNode> conditionalExpression,
                      std::shared_ptr<StatementListNode> statementList)
-    : StatementNode(statementNumber), conditionalExpression(std::move(conditionalExpression)),
-      statementList(std::move(statementList)) {}
+        : StatementNode(statementNumber), conditionalExpression(std::move(conditionalExpression)),
+          statementList(std::move(statementList)) {}
 
 std::shared_ptr<ConditionalExpressionNode> WhileNode::getConditionalExpression() { return conditionalExpression; }
 

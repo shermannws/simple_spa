@@ -3,8 +3,8 @@
 RelativeExpressionNode::RelativeExpressionNode(ComparisonOperatorType comparisonOperatorType,
                                                std::shared_ptr<ExpressionNode> leftExpression,
                                                std::shared_ptr<ExpressionNode> rightExpression)
-    : comparisonOperatorType(comparisonOperatorType), leftExpression(std::move(leftExpression)),
-      rightExpression(std::move(rightExpression)) {}
+        : comparisonOperatorType(comparisonOperatorType), leftExpression(std::move(leftExpression)),
+          rightExpression(std::move(rightExpression)) {}
 
 ComparisonOperatorType RelativeExpressionNode::getComparisonOperatorType() { return comparisonOperatorType; }
 

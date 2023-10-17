@@ -4,7 +4,7 @@
 #include "QPS/QPSUtil.h"
 
 FollowsSuchThatStrategy::FollowsSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader)
-    : SuchThatStrategy(std::move(pkbReader)) {}
+        : SuchThatStrategy(std::move(pkbReader)) {}
 
 std::shared_ptr<Result> FollowsSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();

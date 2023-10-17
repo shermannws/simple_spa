@@ -132,33 +132,33 @@ private:
     inline static std::unordered_map<
             StatementNodeType, std::function<bool(std::shared_ptr<StatementNode>, std::shared_ptr<StatementNode>)>>
             statementNodeTypeToStatementComparer = {
-                    {StatementNodeType::Assign,
-                     [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
-                         return isSameAssign(std::dynamic_pointer_cast<AssignNode>(s1),
-                                             std::dynamic_pointer_cast<AssignNode>(s2));
-                     }},
-                    {StatementNodeType::Print,
-                     [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
-                         return isSamePrint(std::dynamic_pointer_cast<PrintNode>(s1),
-                                            std::dynamic_pointer_cast<PrintNode>(s2));
-                     }},
-                    {StatementNodeType::Read,
-                     [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
-                         return isSameRead(std::dynamic_pointer_cast<ReadNode>(s1),
-                                           std::dynamic_pointer_cast<ReadNode>(s2));
-                     }},
-                    {StatementNodeType::If,
-                     [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
-                         return isSameIf(std::dynamic_pointer_cast<IfNode>(s1), std::dynamic_pointer_cast<IfNode>(s2));
-                     }},
-                    {StatementNodeType::While,
-                     [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
-                         return isSameWhile(std::dynamic_pointer_cast<WhileNode>(s1),
-                                            std::dynamic_pointer_cast<WhileNode>(s2));
-                     }},
-                    {StatementNodeType::Call,
-                     [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
-                         return isSameCall(std::dynamic_pointer_cast<CallNode>(s1),
-                                           std::dynamic_pointer_cast<CallNode>(s2));
-                     }}};
+            {StatementNodeType::Assign,
+                    [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
+                        return isSameAssign(std::dynamic_pointer_cast<AssignNode>(s1),
+                                            std::dynamic_pointer_cast<AssignNode>(s2));
+                    }},
+            {StatementNodeType::Print,
+                    [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
+                        return isSamePrint(std::dynamic_pointer_cast<PrintNode>(s1),
+                                           std::dynamic_pointer_cast<PrintNode>(s2));
+                    }},
+            {StatementNodeType::Read,
+                    [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
+                        return isSameRead(std::dynamic_pointer_cast<ReadNode>(s1),
+                                          std::dynamic_pointer_cast<ReadNode>(s2));
+                    }},
+            {StatementNodeType::If,
+                    [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
+                        return isSameIf(std::dynamic_pointer_cast<IfNode>(s1), std::dynamic_pointer_cast<IfNode>(s2));
+                    }},
+            {StatementNodeType::While,
+                    [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
+                        return isSameWhile(std::dynamic_pointer_cast<WhileNode>(s1),
+                                           std::dynamic_pointer_cast<WhileNode>(s2));
+                    }},
+            {StatementNodeType::Call,
+                    [](const std::shared_ptr<StatementNode> &s1, const std::shared_ptr<StatementNode> &s2) -> bool {
+                        return isSameCall(std::dynamic_pointer_cast<CallNode>(s1),
+                                          std::dynamic_pointer_cast<CallNode>(s2));
+                    }}};
 };

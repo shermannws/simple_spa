@@ -12,7 +12,8 @@ private:
     std::shared_ptr<PkbReader> pkbReader;
 
 public:
-    explicit AssignPatternStrategy(std::shared_ptr<PkbReader> pkbReader) : pkbReader(pkbReader){};
+    explicit AssignPatternStrategy(std::shared_ptr<PkbReader> pkbReader) : pkbReader(pkbReader) {};
+
     /**
      * @brief Evaluates the clause using pkbReader methods relating to AssignPattern
      * @param clause The shared pointer of the Clause to be evaluated
