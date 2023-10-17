@@ -1,13 +1,13 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include <utility>
 #include <stdexcept>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "Commons/AppConstants.h"
-#include "SPTokenType.h"
 #include "SPToken.h"
+#include "SPTokenType.h"
 
 /**
  * An SP subcomponent to tokenize the input SIMPLE source program string.

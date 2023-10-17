@@ -16,6 +16,7 @@ private:
     using CFGNode::CFGNode;
     using CFGNode::getStatementNumber;
     using CFGNode::getStatementType;
+
 public:
     /**
      * Creates a DummyCFGNode.

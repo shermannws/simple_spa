@@ -1,12 +1,12 @@
 #include <string>
 
-#include "catch.hpp"
-#include "SP/Validators/SyntacticValidator/SyntacticValidator.h"
 #include "SP/SPTokenizer.h"
+#include "SP/Validators/SyntacticValidator/SyntacticValidator.h"
+#include "catch.hpp"
 
 TEST_CASE("SyntacticValidator - Valid syntax") {
 
-    SECTION("Single Read statement")  {
+    SECTION("Single Read statement") {
         std::string input = "procedure testProcedure {read num1;}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -14,7 +14,7 @@ TEST_CASE("SyntacticValidator - Valid syntax") {
         REQUIRE_NOTHROW(validator.validate());
     }
 
-    SECTION("Single Print statement")  {
+    SECTION("Single Print statement") {
         std::string input = "procedure testProcedure {print num1;}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -22,7 +22,7 @@ TEST_CASE("SyntacticValidator - Valid syntax") {
         REQUIRE_NOTHROW(validator.validate());
     }
 
-    SECTION("Two different statement")  {
+    SECTION("Two different statement") {
         std::string input = "procedure testProcedure {read num1; print num2;}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -30,7 +30,7 @@ TEST_CASE("SyntacticValidator - Valid syntax") {
         REQUIRE_NOTHROW(validator.validate());
     }
 
-    SECTION("Single Assign statement")  {
+    SECTION("Single Assign statement") {
         std::string input = "procedure testProcedure {x = 1;}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -38,7 +38,7 @@ TEST_CASE("SyntacticValidator - Valid syntax") {
         REQUIRE_NOTHROW(validator.validate());
     }
 
-    SECTION("Assign statement with expr")  {
+    SECTION("Assign statement with expr") {
         std::string input = "procedure testProcedure {x = 1 + 1;}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -46,7 +46,7 @@ TEST_CASE("SyntacticValidator - Valid syntax") {
         REQUIRE_NOTHROW(validator.validate());
     }
 
-    SECTION("Assign statement with complex expr")  {
+    SECTION("Assign statement with complex expr") {
         std::string input = "procedure testProcedure {x = a + b - 1 * d / 5 % f;}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -54,7 +54,7 @@ TEST_CASE("SyntacticValidator - Valid syntax") {
         REQUIRE_NOTHROW(validator.validate());
     }
 
-    SECTION("Assign statement with parentheses")  {
+    SECTION("Assign statement with parentheses") {
         std::string input = "procedure testProcedure {x = (1 + 1);}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -62,7 +62,7 @@ TEST_CASE("SyntacticValidator - Valid syntax") {
         REQUIRE_NOTHROW(validator.validate());
     }
 
-    SECTION("Assign statement with parentheses 2")  {
+    SECTION("Assign statement with parentheses 2") {
         std::string input = "procedure testProcedure {x = (1 * 1) + 1;}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -70,7 +70,7 @@ TEST_CASE("SyntacticValidator - Valid syntax") {
         REQUIRE_NOTHROW(validator.validate());
     }
 
-    SECTION("Assign statement with nested parentheses")  {
+    SECTION("Assign statement with nested parentheses") {
         std::string input = "procedure testProcedure {x = (1 * (1)) + 1;}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -86,8 +86,7 @@ TEST_CASE("SyntacticValidator - Invalid syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(),
-                            "Syntax error: StmtLst cannot be empty");
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: StmtLst cannot be empty");
     }
 
     SECTION("Empty Procedure 2") {
@@ -95,8 +94,7 @@ TEST_CASE("SyntacticValidator - Invalid syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(),
-                            "Syntax error: StmtLst cannot be empty");
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: StmtLst cannot be empty");
     }
 
     SECTION("No procedure terminal") {
@@ -104,8 +102,7 @@ TEST_CASE("SyntacticValidator - Invalid syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(),
-                            "Syntax error: Expected 'procedure'");
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected 'procedure'");
     }
 
     SECTION("Expecting next procedure") {
@@ -113,8 +110,7 @@ TEST_CASE("SyntacticValidator - Invalid syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(),
-                            "Syntax error: Expected 'procedure'");
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected 'procedure'");
     }
 
     SECTION("Invalid statement") {
@@ -122,8 +118,7 @@ TEST_CASE("SyntacticValidator - Invalid syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(),
-                            "Syntax error: Invalid Stmt");
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Stmt");
     }
 
     SECTION("Invalid expr") {
@@ -131,13 +126,12 @@ TEST_CASE("SyntacticValidator - Invalid syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(),
-                            "Syntax error: Expected TokenType CloseRoundParenthesis");
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected TokenType CloseRoundParenthesis");
     }
 }
 
 TEST_CASE("SyntacticValidator - Valid IF syntax") {
-    SECTION("basic if syntax")  {
+    SECTION("basic if syntax") {
         std::string input = "procedure testWhile {if (0 == 1) then { count = count + 1; } else { call readx ;}}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -145,8 +139,9 @@ TEST_CASE("SyntacticValidator - Valid IF syntax") {
         REQUIRE_NOTHROW(validator.validate());
     }
 
-    SECTION("longer if syntax")  {
-        std::string input = "procedure testWhile {if (((x != 0) && (y != 0)) || (term > term2)) then { count = count + 1; } else { call readx ;}}";
+    SECTION("longer if syntax") {
+        std::string input = "procedure testWhile {if (((x != 0) && (y != 0)) || (term > term2)) then { count = count + "
+                            "1; } else { call readx ;}}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
@@ -218,7 +213,8 @@ TEST_CASE("SyntacticValidator - Invalid WHILE syntax RELATIONAL expr") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+        REQUIRE_THROWS_WITH(validator.validate(),
+                            "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
     }
 
     SECTION("Nested single relational expr") {
@@ -226,7 +222,7 @@ TEST_CASE("SyntacticValidator - Invalid WHILE syntax RELATIONAL expr") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid nesting in conditional expression" );
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid nesting in conditional expression");
     }
 
     SECTION("Invalid nesting on RHS") {
@@ -247,7 +243,7 @@ TEST_CASE("SyntacticValidator - Invalid WHILE syntax RELATIONAL expr") {
 }
 
 TEST_CASE("SyntacticValidator - Valid WHILE syntax CONDITIONAL expr") {
-    SECTION("NOT conditional expr"){
+    SECTION("NOT conditional expr") {
         std::string input = "procedure testWhile {while ( !(a>b)  ) { a = r; }}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -271,7 +267,7 @@ TEST_CASE("SyntacticValidator - Valid WHILE syntax CONDITIONAL expr") {
         REQUIRE_NOTHROW(validator.validate());
     }
 
-    SECTION("NOT conditional expr, nested"){
+    SECTION("NOT conditional expr, nested") {
         std::string input = "procedure testWhile {while ( !( !(  !(a>b) )  ) ) { a = r; }}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -279,7 +275,7 @@ TEST_CASE("SyntacticValidator - Valid WHILE syntax CONDITIONAL expr") {
         REQUIRE_NOTHROW(validator.validate());
     }
 
-    SECTION("AND conditional expr, nested"){
+    SECTION("AND conditional expr, nested") {
         std::string input = "procedure testWhile {while ( !( !(  !(a>b) )  ) ) { a = r; }}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -288,7 +284,8 @@ TEST_CASE("SyntacticValidator - Valid WHILE syntax CONDITIONAL expr") {
     }
 
     SECTION("Complex nested expr") {
-        std::string input = "procedure testWhile {while (     (((k + 0)>(r)) || (b != a)) && (!(a != 0))      ) { a = r; }}";
+        std::string input =
+                "procedure testWhile {while (     (((k + 0)>(r)) || (b != a)) && (!(a != 0))      ) { a = r; }}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
@@ -302,11 +299,10 @@ TEST_CASE("SyntacticValidator - Valid WHILE syntax CONDITIONAL expr") {
         SyntacticValidator validator(tokens);
         REQUIRE_NOTHROW(validator.validate());
     }
-
 }
 
 TEST_CASE("SyntacticValidator - Invalid WHILE syntax CONDITIONAL expr") {
-    SECTION("invalid not expression"){
+    SECTION("invalid not expression") {
         std::string input = "procedure testWhile {while (!a) { a = r; }}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -314,7 +310,7 @@ TEST_CASE("SyntacticValidator - Invalid WHILE syntax CONDITIONAL expr") {
         REQUIRE_THROWS_WITH(validator.validate(), "Syntax Error: Expected rel_expr in Relation Expression");
     }
 
-    SECTION("invalid expression"){
+    SECTION("invalid expression") {
         std::string input = "procedure testWhile {while ( ((A > B)) && (C < D) )  { a = r; }}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
@@ -322,4 +318,3 @@ TEST_CASE("SyntacticValidator - Invalid WHILE syntax CONDITIONAL expr") {
         REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid nesting in conditional expression");
     }
 }
-

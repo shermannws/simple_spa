@@ -2,13 +2,13 @@
 
 #include <unordered_map>
 
-#include "Commons/CFG/CFGNode.h"
 #include "Commons/AppConstants.h"
+#include "Commons/CFG/CFGNode.h"
 #include "Commons/Entities/Statement.h"
-#include "SP/AST/Nodes/ProgramNode.h"
-#include "SP/AST/Nodes/ProcedureNode.h"
-#include "SP/AST/Nodes/StatementListNode.h"
 #include "SP/AST/Nodes/IfNode.h"
+#include "SP/AST/Nodes/ProcedureNode.h"
+#include "SP/AST/Nodes/ProgramNode.h"
+#include "SP/AST/Nodes/StatementListNode.h"
 #include "SP/AST/Nodes/WhileNode.h"
 
 class CFGBuilder {

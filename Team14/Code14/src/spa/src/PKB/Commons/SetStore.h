@@ -1,25 +1,21 @@
 #pragma once
 
+#include <memory>
 #include <unordered_set>
 #include <vector>
-#include <memory>
 
 /*!
  * @brief A template class that stores objects in a Set
  * @tparam T The type of the object that the SetStore stores
  * @tparam H The type of hash used to hash the stored object
  */
-template <typename T, typename H>
+template<typename T, typename H>
 class SetStore {
 protected:
     /**
      * @brief The unordered_set that stores all the objects
      */
-    std::unordered_set<
-        std::shared_ptr<T>,
-        std::hash<std::shared_ptr<H>>,
-        std::equal_to<std::shared_ptr<H>>
-    > storage;
+    std::unordered_set<std::shared_ptr<T>, std::hash<std::shared_ptr<H>>, std::equal_to<std::shared_ptr<H>>> storage;
 
 public:
     /**
