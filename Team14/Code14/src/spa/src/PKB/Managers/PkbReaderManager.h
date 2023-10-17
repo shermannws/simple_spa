@@ -10,7 +10,9 @@
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/ModifiesProcRelationshipManager.h"
-#include "PKB/Managers/AssignmentManager.h"
+#include "PKB/Managers/AssignPatternManager.h"
+#include "PKB/Managers/IfPatternManager.h"
+#include "PKB/Managers/WhilePatternManager.h"
 #include "PKB/Managers/NextRelationshipManager.h"
 #include "PKB/PkbTypes.h"
 
@@ -22,7 +24,7 @@ private:
     /**
      * @brief The assignment manager.
      */
-    std::shared_ptr<AssignmentManager> assignmentManager;
+    std::shared_ptr<AssignPatternManager> assignmentManager;
 
     /**
      * @brief The entities manager.
@@ -65,6 +67,16 @@ private:
     std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager;
 
     /**
+     * @brief The if pattern manager.
+     */
+    std::shared_ptr<IfPatternManager> ifPatternManager;
+
+    /**
+     * @brief The while pattern manager.
+     */
+    std::shared_ptr<WhilePatternManager> whilePatternManager;
+
+    /**
      * @brief The next relationship manager.
      */
     std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
@@ -80,11 +92,13 @@ public:
      * @param callsRelationshipManager The calls relationship manager.
      * @param modifiesProcRelationshipManager The modifies procedure relationship manager.
      * @param usesProcRelationshipManager The uses procedure relationship manager.
+     * @param ifPatternManager The if pattern manager.
+     * @param whilePatternManager The while pattern manager.
      * @param nextRelationshipManager The next relationship manager.
      * @return The PkbReaderManager object.
      */
     PkbReaderManager(
-            std::shared_ptr<AssignmentManager> assignmentManager,
+            std::shared_ptr<AssignPatternManager> assignmentManager,
             std::shared_ptr<EntitiesManager> entityManager,
             std::shared_ptr<FollowsRelationshipManager> followsRelationshipManager,
             std::shared_ptr<UsesRelationshipManager> usesRelationshipManager,
@@ -93,6 +107,8 @@ public:
             std::shared_ptr<CallsRelationshipManager> callsRelationshipManager,
             std::shared_ptr<ModifiesProcRelationshipManager> modifiesProcRelationshipManager,
             std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
+            std::shared_ptr<IfPatternManager> ifPatternManager,
+            std::shared_ptr<WhilePatternManager> whilePatternManager,
             std::shared_ptr<NextRelationshipManager> nextRelationshipManager
     );
 
@@ -893,5 +909,31 @@ public:
      * @return True if the given statement is executed before any statement, false otherwise
      */
     bool hasAfterStarStmt(Statement& statement) const;
+
+    /**
+     * Returns a vector of If Statements with the given variable as a control variable
+     * @param var The variable to be checked
+     * @return A vector of If Statements
+     */
+    std::vector<Entity> getIfStmtsByVar(Variable& var) const;
+
+    /**
+     * Returns a vector of vectors containing If Statement and Variable pairs where the variable is the control variable of the If Statement
+     * @return A vector of vectors containing If Statement and Variable pairs
+     */
+    std::vector<std::vector<Entity>> getAllIfStmtVarPair() const;
+
+    /**
+     * Returns a vector of While Statements with the given variable as a control variable
+     * @param var The variable to be checked
+     * @return A vector of While Statements
+     */
+    std::vector<Entity> getWhileStmtsByVar(Variable& var) const;
+
+    /**
+     * Returns a vector of vectors containing While Statement and Variable pairs where the variable is the control variable of the While Statement
+     * @return A vector of vectors containing While Statement and Variable pairs
+     */
+    std::vector<std::vector<Entity>> getAllWhileStmtVarPair() const;
 
 };

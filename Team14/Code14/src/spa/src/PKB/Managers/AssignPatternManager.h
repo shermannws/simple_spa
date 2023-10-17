@@ -6,8 +6,9 @@
 #include <utility>
 #include <regex>
 #include <algorithm>
+#include <cassert>
 
-#include "PKB/PatternStore/AssignmentPatternStore.h"
+#include "PKB/PatternStore/AssignPatternStore.h"
 #include "PKB/Commons/Assignment.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
@@ -16,16 +17,16 @@
 #include "PKB/PkbTypes.h"
 
 /**
- * The AssignmentManager class is used to store and retrieve Assignment entities
+ * The AssignPatternManager class is used to store and retrieve Assignment entities
  * from the PKB. It is also used to query for Assignment entities that match a
  * given pattern.
  */
-class AssignmentManager {
+class AssignPatternManager {
 private:
     /**
-     * The AssignmentPatternStore that stores all the Assignment objects
+     * The AssignPatternStore that stores all the Assignment objects
      */
-    std::shared_ptr<AssignmentPatternStore> assignmentStore;
+    std::shared_ptr<AssignPatternStore> assignmentStore;
 
     /**
      * Matches the expression with the pattern using regex. Returns true if the Expression matches the pattern, else false.
@@ -45,16 +46,16 @@ private:
     std::regex parsePattern(Expression& pattern) const;
 public:
     /**
-     * Constructs an AssignmentManager object
-     * @return An AssignmentManager object
+     * Constructs an AssignPatternManager object
+     * @return An AssignPatternManager object
      */
-    AssignmentManager();
+    AssignPatternManager();
 
     /**
      * Stores a new Assignment object into the PKB
      * @param assignment The Assignment object to be stored
      */
-    void addAssignment(std::shared_ptr<Assignment> assignment);
+    void storeAssignPattern(std::shared_ptr<Assignment> assignment);
 
     /**
      * Returns a vector of Statements from all the Assignment objects in the store. Represents all the Statements that are assignments

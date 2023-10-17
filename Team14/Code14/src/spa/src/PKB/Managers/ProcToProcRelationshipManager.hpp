@@ -11,7 +11,8 @@ void ProcToProcRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedu
 
 template <typename S>
 std::vector<std::vector<Entity>> ProcToProcRelationshipManager<S>::getRelationshipPair(bool requireDirect) const {
-    return ManagerUtils::getPairNoMatch<Procedure, Procedure>(requireDirect ? *relationshipStore : *starRelationshipStore);
+    return ManagerUtils::getPairsNoMatch<Procedure, Procedure>(
+            requireDirect ? *relationshipStore : *starRelationshipStore);
 }
 
 template <typename S>

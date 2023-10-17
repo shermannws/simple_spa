@@ -56,7 +56,7 @@ public:
      * @brief Returns the EntityValue (of type string) of the Entity object
      * @return The EntityValue (of type string) of the Entity object
      */
-    EntityValue* getEntityValue() const;
+    EntityValue getEntityValue() const;
 
     /**
      * @brief Returns true if the Entity object is equal to the other Entity object, false otherwise

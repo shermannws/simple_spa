@@ -12,7 +12,7 @@ void StmtrefProcVarHandler::handle(const Query &query, std::shared_ptr<Clause> c
     Ref& leftRef = suchThat->getFirstParam();
     Ref& rightRef = suchThat->getSecondParam();
 
-    if (QPSUtil::stmtrefProcVarClauseTypes.find(type) == QPSUtil::stmtrefProcVarClauseTypes.end()) {
+    if (QPSUtil::typeToArgTypeMap[type] != StmtrefProcVar) {
         return SemanticValHandler::handle(query, clause);
     }
 

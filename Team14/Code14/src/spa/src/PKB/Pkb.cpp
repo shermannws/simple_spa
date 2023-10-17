@@ -3,7 +3,7 @@
 #include "PKB/PkbConcreteWriter.h"
 
 Pkb::Pkb() {
-    this->assignmentManager = std::make_shared<AssignmentManager>(AssignmentManager());
+    this->assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());
     this->entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
     this->followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
     this->usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
@@ -12,7 +12,10 @@ Pkb::Pkb() {
     this->callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
     this->modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
     this->usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
+    this->ifPatternManager = std::make_shared<IfPatternManager>();
+    this->whilePatternManager = std::make_shared<WhilePatternManager>();
     this->nextRelationshipManager = std::make_shared<NextRelationshipManager>();
+    this->cfgManager = std::make_shared<CFGManager>();
 
     this->pkbReaderManager = std::make_shared<PkbReaderManager>(
             PkbReaderManager(
@@ -25,6 +28,8 @@ Pkb::Pkb() {
                     this->callsRelationshipManager,
                     this->modifiesProcRelationshipManager,
                     this->usesProcRelationshipManager,
+                    this->ifPatternManager,
+                    this->whilePatternManager,
                     this->nextRelationshipManager
             )
     );
@@ -39,7 +44,10 @@ Pkb::Pkb() {
                     this->callsRelationshipManager,
                     this->modifiesProcRelationshipManager,
                     this->usesProcRelationshipManager,
-                    this->nextRelationshipManager
+                    this->ifPatternManager,
+                    this->whilePatternManager,
+                    this->nextRelationshipManager,
+                    this->cfgManager
             )
     );
 };

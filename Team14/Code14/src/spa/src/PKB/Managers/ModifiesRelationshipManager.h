@@ -1,13 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <utility>
-#include <vector>
-
 #include "PKB/RelationshipStores/ModifiesRelationshipStore.h"
-#include "PKB/Managers/AssignmentManager.h"
-#include "Commons/Entities/Statement.h"
-#include "Commons/Entities/Variable.h"
 #include "PKB/Managers/StmtToVarRelationshipManager.h"
 
 /**

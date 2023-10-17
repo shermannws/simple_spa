@@ -11,19 +11,19 @@ EntityType Entity::getEntityType() const {
     return this->entityType;
 }
 
-EntityValue* Entity::getEntityValue() const {
-    return this->entityValue.get();
+EntityValue Entity::getEntityValue() const {
+    return *this->entityValue;
 }
 
 bool Entity::operator==(const HashableKey& other) const {
     if (const Entity* otherKey = dynamic_cast<const Entity*>(&other)) {
-        return *this->getEntityValue() == *otherKey->getEntityValue();
+        return this->getEntityValue() == otherKey->getEntityValue();
     }
     return false;
 }
 
 std::size_t std::hash<Entity>::operator()(const Entity& entity) const {
-    return std::hash<std::string>()(*(entity.getEntityValue()));
+    return std::hash<std::string>()(entity.getEntityValue());
 }
 
 std::size_t std::hash<std::shared_ptr<Entity>>::operator()(const std::shared_ptr<Entity> entityPtr) const {

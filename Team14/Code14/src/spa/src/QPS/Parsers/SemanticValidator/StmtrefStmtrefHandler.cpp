@@ -11,7 +11,7 @@ void StmtrefStmtrefHandler::handle(const Query &query, std::shared_ptr<Clause> c
     Ref& leftRef = suchThat->getFirstParam();
     Ref& rightRef = suchThat->getSecondParam();
 
-    if (QPSUtil::stmtrefClauseTypes.find(type) == QPSUtil::stmtrefClauseTypes.end()) {
+    if (QPSUtil::typeToArgTypeMap[type] != StmtrefStmtref) {
         return SemanticValHandler::handle(query, clause);
     }
 

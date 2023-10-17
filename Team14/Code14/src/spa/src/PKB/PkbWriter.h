@@ -2,17 +2,17 @@
 
 #include <memory>
 
-#include "PKB/Managers/AssignmentManager.h"
+#include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/EntityStores/ConstantStore.h"
 #include "PKB/EntityStores/ProcedureStore.h"
 #include "PKB/EntityStores/StatementStore.h"
 #include "PKB/EntityStores/VariableStore.h"
 #include "PKB/RelationshipStores/FollowsRelationshipStore.h"
 #include "PKB/RelationshipStores/UsesRelationshipStore.h"
-#include "../Commons/Entities/Constant.h"
-#include "../Commons/Entities/Procedure.h"
-#include "../Commons/Entities/Variable.h"
-#include "../Commons/Entities/Statement.h"
+#include "Commons/Entities/Constant.h"
+#include "Commons/Entities/Procedure.h"
+#include "Commons/Entities/Variable.h"
+#include "Commons/Entities/Statement.h"
 #include "PKB/Managers/PkbWriterManager.h"
 #include "PKB/PkbTypes.h"
 
@@ -122,8 +122,23 @@ public:
     virtual void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) = 0;
 
     /*!
+     * Sets the `cfgMap` received as argument as the CFGs for each procedures
+     */
+    virtual void setCFGMap(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap) = 0;
+
+    /*!
      * Clears any Cache in the PKB that is used for Query Processing
      *
      */
     virtual void clearCache() = 0;
+
+    /*!
+     * Adds new If Pattern into the PKB
+     */
+    virtual void addIfPattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) = 0;
+
+    /*!
+     * Adds new While Pattern into the PKB
+     */
+    virtual void addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) = 0;
 };
