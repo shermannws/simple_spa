@@ -1,29 +1,29 @@
-#include <memory>
 #include <iostream>
+#include <memory>
 
-#include "catch.hpp"
 #include "SP/AST/Nodes/ASTNode.h"
-#include "SP/AST/Nodes/ProgramNode.h"
-#include "SP/AST/Nodes/ProcedureNode.h"
-#include "SP/AST/Nodes/StatementListNode.h"
-#include "SP/AST/Nodes/StatementNode.h"
-#include "SP/AST/Nodes/AssignNode.h"
-#include "SP/AST/Nodes/PrintNode.h"
-#include "SP/AST/Nodes/ReadNode.h"
-#include "SP/AST/Nodes/IfNode.h"
-#include "SP/AST/Nodes/WhileNode.h"
-#include "SP/AST/Nodes/CallNode.h"
-#include "SP/AST/Nodes/ExpressionNode.h"
 #include "SP/AST/Nodes/ArithmeticExpressionNode.h"
 #include "SP/AST/Nodes/ArithmeticOperatorType.h"
-#include "SP/AST/Nodes/VariableNode.h"
-#include "SP/AST/Nodes/ConstantNode.h"
-#include "SP/AST/Nodes/ConditionalExpressionNode.h"
+#include "SP/AST/Nodes/AssignNode.h"
 #include "SP/AST/Nodes/BinaryConditionalExpressionNode.h"
-#include "SP/AST/Nodes/UnaryConditionalExpressionNode.h"
-#include "SP/AST/Nodes/RelativeExpressionNode.h"
-#include "SP/AST/Nodes/ComparisonOperatorType.h"
 #include "SP/AST/Nodes/BinaryConditionalExpressionType.h"
+#include "SP/AST/Nodes/CallNode.h"
+#include "SP/AST/Nodes/ComparisonOperatorType.h"
+#include "SP/AST/Nodes/ConditionalExpressionNode.h"
+#include "SP/AST/Nodes/ConstantNode.h"
+#include "SP/AST/Nodes/ExpressionNode.h"
+#include "SP/AST/Nodes/IfNode.h"
+#include "SP/AST/Nodes/PrintNode.h"
+#include "SP/AST/Nodes/ProcedureNode.h"
+#include "SP/AST/Nodes/ProgramNode.h"
+#include "SP/AST/Nodes/ReadNode.h"
+#include "SP/AST/Nodes/RelativeExpressionNode.h"
+#include "SP/AST/Nodes/StatementListNode.h"
+#include "SP/AST/Nodes/StatementNode.h"
+#include "SP/AST/Nodes/UnaryConditionalExpressionNode.h"
+#include "SP/AST/Nodes/VariableNode.h"
+#include "SP/AST/Nodes/WhileNode.h"
+#include "catch.hpp"
 
 TEST_CASE("Test ExpressionNode family") {
     VariableName varName1 = "Variable1";
@@ -67,8 +67,8 @@ TEST_CASE("Test ExpressionNode family") {
     REQUIRE(childNodes2 == std::vector<std::shared_ptr<ASTNode>>{constNode1, varNode1});
 
     // arithmetic exp left, var right
-    auto arithmeticExpressionNode3 =
-            std::make_shared<ArithmeticExpressionNode>(ArithmeticOperatorType::Modulo, arithmeticExpressionNode1, varNode2);
+    auto arithmeticExpressionNode3 = std::make_shared<ArithmeticExpressionNode>(ArithmeticOperatorType::Modulo,
+                                                                                arithmeticExpressionNode1, varNode2);
     REQUIRE(arithmeticExpressionNode3->getOperatorType() == ArithmeticOperatorType::Modulo);
     REQUIRE(arithmeticExpressionNode3->getLeftExpression() == arithmeticExpressionNode1);
     REQUIRE(arithmeticExpressionNode3->getRightExpression() == varNode2);
@@ -76,8 +76,8 @@ TEST_CASE("Test ExpressionNode family") {
     REQUIRE(childNodes3 == std::vector<std::shared_ptr<ASTNode>>{arithmeticExpressionNode1, varNode2});
 
     // arithmetic exp left, const right
-    auto arithmeticExpressionNode4 =
-            std::make_shared<ArithmeticExpressionNode>(ArithmeticOperatorType::Plus, arithmeticExpressionNode2, constNode2);
+    auto arithmeticExpressionNode4 = std::make_shared<ArithmeticExpressionNode>(ArithmeticOperatorType::Plus,
+                                                                                arithmeticExpressionNode2, constNode2);
     REQUIRE(arithmeticExpressionNode4->getOperatorType() == ArithmeticOperatorType::Plus);
     REQUIRE(arithmeticExpressionNode4->getLeftExpression() == arithmeticExpressionNode2);
     REQUIRE(arithmeticExpressionNode4->getRightExpression() == constNode2);
@@ -85,8 +85,8 @@ TEST_CASE("Test ExpressionNode family") {
     REQUIRE(childNodes4 == std::vector<std::shared_ptr<ASTNode>>{arithmeticExpressionNode2, constNode2});
 
     // var left, arithmetic exp right
-    auto arithmeticExpressionNode5 =
-            std::make_shared<ArithmeticExpressionNode>(ArithmeticOperatorType::Minus, varNode2, arithmeticExpressionNode2);
+    auto arithmeticExpressionNode5 = std::make_shared<ArithmeticExpressionNode>(ArithmeticOperatorType::Minus, varNode2,
+                                                                                arithmeticExpressionNode2);
     REQUIRE(arithmeticExpressionNode5->getOperatorType() == ArithmeticOperatorType::Minus);
     REQUIRE(arithmeticExpressionNode5->getLeftExpression() == varNode2);
     REQUIRE(arithmeticExpressionNode5->getRightExpression() == arithmeticExpressionNode2);
@@ -94,8 +94,8 @@ TEST_CASE("Test ExpressionNode family") {
     REQUIRE(childNodes5 == std::vector<std::shared_ptr<ASTNode>>{varNode2, arithmeticExpressionNode2});
 
     // const left, arithmetic exp right
-    auto arithmeticExpressionNode6 =
-            std::make_shared<ArithmeticExpressionNode>(ArithmeticOperatorType::Divide, constNode2, arithmeticExpressionNode2);
+    auto arithmeticExpressionNode6 = std::make_shared<ArithmeticExpressionNode>(ArithmeticOperatorType::Divide,
+                                                                                constNode2, arithmeticExpressionNode2);
     REQUIRE(arithmeticExpressionNode6->getOperatorType() == ArithmeticOperatorType::Divide);
     REQUIRE(arithmeticExpressionNode6->getLeftExpression() == constNode2);
     REQUIRE(arithmeticExpressionNode6->getRightExpression() == arithmeticExpressionNode2);
@@ -121,8 +121,8 @@ TEST_CASE("Test ExpressionNode family") {
     REQUIRE(childNodes8 == std::vector<std::shared_ptr<ASTNode>>{varNode1, varNode2});
 
     // arithmetic exp left, arithmetic exp right
-    auto arithmeticExpressionNode9 =
-            std::make_shared<ArithmeticExpressionNode>(ArithmeticOperatorType::Times, arithmeticExpressionNode5, arithmeticExpressionNode6);
+    auto arithmeticExpressionNode9 = std::make_shared<ArithmeticExpressionNode>(
+            ArithmeticOperatorType::Times, arithmeticExpressionNode5, arithmeticExpressionNode6);
     REQUIRE(arithmeticExpressionNode9->getOperatorType() == ArithmeticOperatorType::Times);
     REQUIRE(arithmeticExpressionNode9->getLeftExpression() == arithmeticExpressionNode5);
     REQUIRE(arithmeticExpressionNode9->getRightExpression() == arithmeticExpressionNode6);
@@ -184,34 +184,32 @@ TEST_CASE("Test ConditionalExpressionNode family") {
             // Check the left and right expressions
             REQUIRE(relativeNode->getLeftExpression() == expNode1);
             REQUIRE(relativeNode->getRightExpression() == expNode2);
-            REQUIRE(relativeNode->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{ expNode1, expNode2 });
+            REQUIRE(relativeNode->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{expNode1, expNode2});
         }
 
         SECTION("Polymorphic behavior tests") {
-            std::shared_ptr<ConditionalExpressionNode> condNode = std::make_shared<RelativeExpressionNode>(
-                    ComparisonOperatorType::LessThan, expNode1, expNode2);
+            std::shared_ptr<ConditionalExpressionNode> condNode =
+                    std::make_shared<RelativeExpressionNode>(ComparisonOperatorType::LessThan, expNode1, expNode2);
         }
     }
 
     SECTION("UnaryConditionalExpression tests") {
         // Create a ConditionalExpressionNode instance for testing
-        std::shared_ptr<ConditionalExpressionNode> conditionalExp = std::make_shared<RelativeExpressionNode>(
-                ComparisonOperatorType::GreaterThanEqual, expNode3, expNode4);
+        std::shared_ptr<ConditionalExpressionNode> conditionalExp =
+                std::make_shared<RelativeExpressionNode>(ComparisonOperatorType::GreaterThanEqual, expNode3, expNode4);
 
         std::shared_ptr<UnaryConditionalExpressionNode> unaryNode =
                 std::make_shared<UnaryConditionalExpressionNode>(conditionalExp);
 
         REQUIRE(unaryNode->getConditionalExpression() == conditionalExp);
-        REQUIRE(unaryNode->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{ conditionalExp });
+        REQUIRE(unaryNode->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{conditionalExp});
 
-        SECTION("Polymorphic behavior tests") {
-            std::shared_ptr<ConditionalExpressionNode> condNode = unaryNode;
-        }
+        SECTION("Polymorphic behavior tests") { std::shared_ptr<ConditionalExpressionNode> condNode = unaryNode; }
     }
 
     SECTION("BinaryConditionalExpression tests") {
-        std::shared_ptr<ConditionalExpressionNode> leftConditionalExp = std::make_shared<RelativeExpressionNode>(
-                ComparisonOperatorType::GreaterThanEqual, expNode3, expNode4);
+        std::shared_ptr<ConditionalExpressionNode> leftConditionalExp =
+                std::make_shared<RelativeExpressionNode>(ComparisonOperatorType::GreaterThanEqual, expNode3, expNode4);
 
         std::shared_ptr<ConditionalExpressionNode> rightConditionalExp =
                 std::make_shared<UnaryConditionalExpressionNode>(leftConditionalExp);
@@ -221,7 +219,8 @@ TEST_CASE("Test ConditionalExpressionNode family") {
              type <= static_cast<int>(BinaryConditionalExpressionType::Or); ++type) {
             BinaryConditionalExpressionType binaryType = static_cast<BinaryConditionalExpressionType>(type);
             std::shared_ptr<BinaryConditionalExpressionNode> binaryNode =
-                    std::make_shared<BinaryConditionalExpressionNode>(binaryType, leftConditionalExp, rightConditionalExp);
+                    std::make_shared<BinaryConditionalExpressionNode>(binaryType, leftConditionalExp,
+                                                                      rightConditionalExp);
 
             // Check the BinaryConditionalExpressionType
             REQUIRE(binaryNode->getBinaryConditionalExpressionType() == binaryType);
@@ -253,12 +252,12 @@ TEST_CASE("Test statement family") {
     auto readNode = std::make_shared<ReadNode>(statementNumber++, varNode);
     REQUIRE(readNode->getVar() == varNode);
     REQUIRE(readNode->getStatementType() == StatementNodeType::Read);
-    REQUIRE(readNode->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{ varNode });
+    REQUIRE(readNode->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{varNode});
 
     auto printNode = std::make_shared<PrintNode>(statementNumber++, varNode);
     REQUIRE(printNode->getVar() == varNode);
     REQUIRE(printNode->getStatementType() == StatementNodeType::Print);
-    REQUIRE(printNode->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{ varNode });
+    REQUIRE(printNode->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{varNode});
 
     auto callNode = std::make_shared<CallNode>(statementNumber++, procedureName);
     REQUIRE(callNode->getProcedureName() == procedureName);
@@ -270,38 +269,36 @@ TEST_CASE("Test statement family") {
     REQUIRE(assignNode1->getVar() == varNode);
     REQUIRE(assignNode1->getExpression() == expressionNode);
     REQUIRE(assignNode1->getStatementType() == StatementNodeType::Assign);
-    REQUIRE(assignNode1->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{ varNode, expressionNode });
+    REQUIRE(assignNode1->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{varNode, expressionNode});
 
     // RHS arithmeticExpressionNode
     auto assignNode2 = std::make_shared<AssignNode>(statementNumber++, varNode, arithmeticExpressionNode);
     REQUIRE(assignNode2->getVar() == varNode);
     REQUIRE(assignNode2->getExpression() == arithmeticExpressionNode);
     REQUIRE(assignNode2->getStatementType() == StatementNodeType::Assign);
-    REQUIRE(assignNode2->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{ varNode, arithmeticExpressionNode });
+    REQUIRE(assignNode2->getAllChildNodes() ==
+            std::vector<std::shared_ptr<ASTNode>>{varNode, arithmeticExpressionNode});
 
     // RHS constNode
     auto assignNode3 = std::make_shared<AssignNode>(statementNumber++, varNode, constNode);
     REQUIRE(assignNode3->getVar() == varNode);
     REQUIRE(assignNode3->getExpression() == constNode);
     REQUIRE(assignNode3->getStatementType() == StatementNodeType::Assign);
-    REQUIRE(assignNode3->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{ varNode, constNode });
+    REQUIRE(assignNode3->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{varNode, constNode});
 
     // RHS varNode
     auto assignNode4 = std::make_shared<AssignNode>(statementNumber++, varNode, varNode);
     REQUIRE(assignNode4->getVar() == varNode);
     REQUIRE(assignNode4->getExpression() == varNode);
     REQUIRE(assignNode4->getStatementType() == StatementNodeType::Assign);
-    REQUIRE(assignNode4->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{ varNode, varNode });
+    REQUIRE(assignNode4->getAllChildNodes() == std::vector<std::shared_ptr<ASTNode>>{varNode, varNode});
 
     std::vector<std::shared_ptr<StatementNode>> statements1 = {
-            readNode, printNode,
+            readNode,
+            printNode,
     };
-    std::vector<std::shared_ptr<StatementNode>> statements2 = {
-            assignNode2, assignNode3, assignNode4
-    };
-    std::vector<std::shared_ptr<StatementNode>> statements3 = {
-            assignNode1, callNode
-    };
+    std::vector<std::shared_ptr<StatementNode>> statements2 = {assignNode2, assignNode3, assignNode4};
+    std::vector<std::shared_ptr<StatementNode>> statements3 = {assignNode1, callNode};
 
     auto statementListNode1 = std::make_shared<StatementListNode>(statements1);
     auto statementListNode2 = std::make_shared<StatementListNode>(statements2);
@@ -314,51 +311,45 @@ TEST_CASE("Test statement family") {
     std::shared_ptr<ExpressionNode> expNode2 = std::make_shared<ConstantNode>(constVal2);
     std::shared_ptr<ConditionalExpressionNode> condExpNode =
             std::make_shared<RelativeExpressionNode>(ComparisonOperatorType::GreaterThanEqual, expNode1, expNode2);
-    auto ifNode =
-            std::make_shared<IfNode>(statementNumber++, condExpNode, statementListNode1, statementListNode2);
+    auto ifNode = std::make_shared<IfNode>(statementNumber++, condExpNode, statementListNode1, statementListNode2);
     REQUIRE(ifNode->getStatementType() == StatementNodeType::If);
-    std::vector<std::shared_ptr<ASTNode>> ifChildren = { condExpNode, statementListNode1, statementListNode2 };
+    std::vector<std::shared_ptr<ASTNode>> ifChildren = {condExpNode, statementListNode1, statementListNode2};
     REQUIRE(ifNode->getAllChildNodes() == ifChildren);
     REQUIRE(ifNode->getConditionalExpression() == condExpNode);
     REQUIRE(ifNode->getThenStatementList() == statementListNode1);
     REQUIRE(ifNode->getElseStatementList() == statementListNode2);
 
-    auto whileNode =
-            std::make_shared<WhileNode>(statementNumber++, condExpNode, statementListNode1);
+    auto whileNode = std::make_shared<WhileNode>(statementNumber++, condExpNode, statementListNode1);
     REQUIRE(whileNode->getStatementType() == StatementNodeType::While);
-    std::vector<std::shared_ptr<ASTNode>> whileChildren = { condExpNode, statementListNode1 };
+    std::vector<std::shared_ptr<ASTNode>> whileChildren = {condExpNode, statementListNode1};
     REQUIRE(whileNode->getAllChildNodes() == whileChildren);
     REQUIRE(whileNode->getConditionalExpression() == condExpNode);
     REQUIRE(whileNode->getStatementList() == statementListNode1);
 
-    //add if and while tests
+    // add if and while tests
     auto procedureNode1 = std::make_shared<ProcedureNode>("Procedure1", statementListNode1);
     auto procedureNode2 = std::make_shared<ProcedureNode>("Procedure2", statementListNode2);
     auto procedureNode1Copy = procedureNode1;
     REQUIRE(procedureNode1 != procedureNode2);
     REQUIRE(procedureNode1 == procedureNode1Copy);
 
-    std::vector<std::shared_ptr<ProcedureNode>> procedures = {
-            procedureNode1, procedureNode2
-    };
+    std::vector<std::shared_ptr<ProcedureNode>> procedures = {procedureNode1, procedureNode2};
     auto programNode = std::make_shared<ProgramNode>(procedures);
 
     SECTION("Test that all nodes are subtypes of ASTNode") {
-        std::vector<std::shared_ptr<ASTNode>> astNodes = {
-                varNode,
-                constNode,
-                arithmeticExpressionNode,
-                expressionNode,
-                readNode,
-                printNode,
-                assignNode2,
-                ifNode,
-                whileNode,
-                callNode,
-                statementListNode1,
-                procedureNode1,
-                programNode
-        };
+        std::vector<std::shared_ptr<ASTNode>> astNodes = {varNode,
+                                                          constNode,
+                                                          arithmeticExpressionNode,
+                                                          expressionNode,
+                                                          readNode,
+                                                          printNode,
+                                                          assignNode2,
+                                                          ifNode,
+                                                          whileNode,
+                                                          callNode,
+                                                          statementListNode1,
+                                                          procedureNode1,
+                                                          programNode};
     }
 }
 
@@ -374,8 +365,7 @@ TEST_CASE("Test AST node getters") {
     REQUIRE(constNode->getValue() == value);
 
     ArithmeticOperatorType operatorType = ArithmeticOperatorType::Times;
-    auto arithmeticExpressionNode =
-            std::make_shared<ArithmeticExpressionNode>(operatorType, varNode, constNode);
+    auto arithmeticExpressionNode = std::make_shared<ArithmeticExpressionNode>(operatorType, varNode, constNode);
     REQUIRE(arithmeticExpressionNode->getOperatorType() == operatorType);
     REQUIRE(arithmeticExpressionNode->getRightExpression() == constNode);
     REQUIRE(arithmeticExpressionNode->getLeftExpression() == varNode);
@@ -396,9 +386,7 @@ TEST_CASE("Test AST node getters") {
     REQUIRE(assignNode->getVar() == varNode);
     REQUIRE(assignNode->getExpression() == arithmeticExpressionNode);
 
-    std::vector<std::shared_ptr<StatementNode>> statements = {
-            readNode, printNode, assignNode
-    };
+    std::vector<std::shared_ptr<StatementNode>> statements = {readNode, printNode, assignNode};
     auto statementListNode = std::make_shared<StatementListNode>(statements);
     REQUIRE(statementListNode->getStatements() == statements);
 
@@ -407,9 +395,7 @@ TEST_CASE("Test AST node getters") {
     REQUIRE(procedureNode->getProcedureName() == procedureName);
     REQUIRE(procedureNode->getStatementList() == statementListNode);
 
-    std::vector<std::shared_ptr<ProcedureNode>> procedures = {
-            procedureNode
-    };
+    std::vector<std::shared_ptr<ProcedureNode>> procedures = {procedureNode};
     auto programNode = std::make_shared<ProgramNode>(procedures);
     REQUIRE(programNode->getProcedures() == procedures);
 }
@@ -423,17 +409,21 @@ TEST_CASE("Test ExpressionNode toString() method") {
     // test case of (2+v)
     std::shared_ptr<ExpressionNode> constantNode2 = std::make_shared<ConstantNode>(ConstantNode("2"));
     std::shared_ptr<ExpressionNode> varV = std::make_shared<VariableNode>(VariableNode("v"));
-    std::shared_ptr<ExpressionNode> expression2 = std::make_shared<ArithmeticExpressionNode>(ArithmeticExpressionNode(ArithmeticOperatorType::Plus, constantNode2, varV));
+    std::shared_ptr<ExpressionNode> expression2 = std::make_shared<ArithmeticExpressionNode>(
+            ArithmeticExpressionNode(ArithmeticOperatorType::Plus, constantNode2, varV));
     assert(expression2->toString() == "((2)+(v))");
 
     // test case of ((2+v)*(10/g)-8)
     std::shared_ptr<ExpressionNode> constantNode10 = std::make_shared<ConstantNode>(ConstantNode("10"));
     std::shared_ptr<ExpressionNode> varG = std::make_shared<VariableNode>(VariableNode("g"));
-    std::shared_ptr<ExpressionNode> expression3 = std::make_shared<ArithmeticExpressionNode>(ArithmeticExpressionNode(ArithmeticOperatorType::Divide, constantNode10, varG));
+    std::shared_ptr<ExpressionNode> expression3 = std::make_shared<ArithmeticExpressionNode>(
+            ArithmeticExpressionNode(ArithmeticOperatorType::Divide, constantNode10, varG));
 
-    std::shared_ptr<ExpressionNode> expression4 = std::make_shared<ArithmeticExpressionNode>(ArithmeticExpressionNode(ArithmeticOperatorType::Times, expression2, expression3));
+    std::shared_ptr<ExpressionNode> expression4 = std::make_shared<ArithmeticExpressionNode>(
+            ArithmeticExpressionNode(ArithmeticOperatorType::Times, expression2, expression3));
 
     std::shared_ptr<ExpressionNode> constantNode8 = std::make_shared<ConstantNode>(ConstantNode("8"));
-    std::shared_ptr<ExpressionNode> expression5 = std::make_shared<ArithmeticExpressionNode>(ArithmeticExpressionNode(ArithmeticOperatorType::Minus, expression4, constantNode8));
+    std::shared_ptr<ExpressionNode> expression5 = std::make_shared<ArithmeticExpressionNode>(
+            ArithmeticExpressionNode(ArithmeticOperatorType::Minus, expression4, constantNode8));
     assert(expression5->toString() == "((((2)+(v))*((10)/(g)))-(8))");
 }

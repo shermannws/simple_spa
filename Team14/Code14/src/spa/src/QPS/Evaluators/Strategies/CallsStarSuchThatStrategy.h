@@ -41,5 +41,4 @@ public:
      * @return The result of the SuchThatClause evaluation as a Result object
      */
     std::shared_ptr<Result> evaluateBoolean(Ref &leftRef, Ref &rightRef) const override;
-
 };

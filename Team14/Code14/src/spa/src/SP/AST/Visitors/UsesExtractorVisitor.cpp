@@ -4,19 +4,18 @@
 #include "Commons/Entities/IfStatement.h"
 #include "Commons/Entities/WhileStatement.h"
 #include "Commons/Entities/Procedure.h"
+#include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "VisitorUtility.h"
 
 UsesExtractorVisitor::UsesExtractorVisitor(std::shared_ptr<PkbWriter> writer) {
-	this->pkbWriter = writer;
-	this->funcStmt =
-		[this](std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) -> void {
-		this->pkbWriter->addUsesRelationship(s, v);
-		};
-	this->funcProc =
-		[this](std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) -> void {
-		this->pkbWriter->addUsesProcRelationship(p, v);
-		};
+    this->pkbWriter = writer;
+    this->funcStmt = [this](std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) -> void {
+        this->pkbWriter->addUsesRelationship(s, v);
+    };
+    this->funcProc = [this](std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) -> void {
+        this->pkbWriter->addUsesProcRelationship(p, v);
+    };
 }
 
 void UsesExtractorVisitor::visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const {

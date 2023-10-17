@@ -14,6 +14,7 @@ private:
      * @brief The shared pointer of the next handler linked to this handler
      */
     std::shared_ptr<SemanticValHandler> nextHandler;
+
 public:
     /**
      * The constructor of SemanticValHandler
@@ -37,5 +38,5 @@ public:
      * @param query The Query object
      * @param clause The shared pointer of the Clause
      */
-    virtual void handle(const Query& query, std::shared_ptr<Clause> clause) = 0;
+    virtual void handle(const Query &query, std::shared_ptr<Clause> clause) = 0;
 };

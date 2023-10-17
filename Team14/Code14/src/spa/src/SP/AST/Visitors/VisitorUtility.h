@@ -1,11 +1,11 @@
 #pragma once
 
-#include <memory>
 #include <functional>
+#include <memory>
 
-#include "SP/AST/Nodes/ASTNode.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
+#include "SP/AST/Nodes/ASTNode.h"
 
 class VisitorUtility {
 public:

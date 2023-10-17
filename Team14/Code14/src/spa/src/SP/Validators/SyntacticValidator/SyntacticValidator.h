@@ -3,9 +3,9 @@
 #include <string>
 #include <vector>
 
+#include "Commons/AppConstants.h"
 #include "ConditionalValidator.h"
 #include "SP/SPToken.h"
-#include "Commons/AppConstants.h"
 
 /**
  * An SP subcomponent to validate the syntax of the tokenized source program.
@@ -148,7 +148,7 @@ public:
      * Creates and initialises a SyntacticValidator.
      * @param tokens Tokens of the simple source program to be checked
      */
-    SyntacticValidator(const std::vector<SPToken>& tokens);
+    SyntacticValidator(const std::vector<SPToken> &tokens);
 
     /**
      * Validates the vector of tokens via a recursive descent by providing an entry point.

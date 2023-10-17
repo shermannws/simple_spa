@@ -17,9 +17,9 @@ void VisitorUtility::addAllVariableRelationshipFrom(
 	std::stack<std::shared_ptr<ASTNode>> frontier;
 	frontier.push(root);
 
-	while (!frontier.empty()) {
-		std::shared_ptr<ASTNode> current = frontier.top();
-		frontier.pop();
+    while (!frontier.empty()) {
+        std::shared_ptr<ASTNode> current = frontier.top();
+        frontier.pop();
 
 		auto ptr = std::dynamic_pointer_cast<VariableNode>(current);
 		if (ptr) {
@@ -43,9 +43,7 @@ void VisitorUtility::addAllVariableRelationshipFrom(
 			);
 		}
 
-		std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();
-		for (auto it = childrenOfCurrent.rbegin(); it != childrenOfCurrent.rend(); it++) {
-			frontier.push(*it);
-		}
-	}
+        std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();
+        for (auto it = childrenOfCurrent.rbegin(); it != childrenOfCurrent.rend(); it++) { frontier.push(*it); }
+    }
 }

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "QPS/Evaluators/Result.h"
-#include "QPS/Clauses/Clause.h"
 #include "./PKB/PkbReader.h"
 #include "Commons/Entities/StatementType.h"
+#include "QPS/Clauses/Clause.h"
+#include "QPS/Evaluators/Result.h"
 
 /**
  * Strategy interface for each type of clause e.g. UsesStrategy, FollowsStrategy, AssignPatternStrategy, etc

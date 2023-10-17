@@ -4,23 +4,19 @@
 
 void StmtrefStmtrefHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
-    if (!suchThat) {
-        return SemanticValHandler::handle(query, clause);
-    }
+    if (!suchThat) { return SemanticValHandler::handle(query, clause); }
     ClauseType type = suchThat->getType();
-    Ref& leftRef = suchThat->getFirstParam();
-    Ref& rightRef = suchThat->getSecondParam();
+    Ref &leftRef = suchThat->getFirstParam();
+    Ref &rightRef = suchThat->getSecondParam();
 
-    if (QPSUtil::stmtrefClauseTypes.find(type) == QPSUtil::stmtrefClauseTypes.end()) {
-        return SemanticValHandler::handle(query, clause);
-    }
+    if (QPSUtil::typeToArgTypeMap[type] != StmtrefStmtref) { return SemanticValHandler::handle(query, clause); }
 
     handleRefType(leftRef, rightRef);
 
     return SemanticValHandler::handle(query, clause);
 }
 
-void StmtrefStmtrefHandler::handleRefType(Ref& leftRef, Ref& rightRef) {
+void StmtrefStmtrefHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
     RootType leftRootType = leftRef.getRootType();
     RootType rightRootType = rightRef.getRootType();
     switch (leftRootType) {

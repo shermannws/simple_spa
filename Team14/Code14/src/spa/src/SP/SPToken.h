@@ -26,7 +26,7 @@ public:
      * @param type Type of the token
      * @param value Value of the token as a string
      */
-    SPToken(TokenType type, std::string  value);
+    SPToken(TokenType type, std::string value);
 
     /**
      * Creates and initialises an empty SPToken.

@@ -11,6 +11,7 @@ protected:
      * Shared pointer to the PKB reader which retrieves the required information for query evaluation
      */
     std::shared_ptr<PkbReader> pkbReader;
+
 public:
     /**
      * @brief Explicit constructor of SuchThatStrategy
