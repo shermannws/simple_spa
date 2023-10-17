@@ -6,6 +6,6 @@
 
 class ASTGenerator {
 public:
-	//Helper method to generate AST from string source code
-	static std::shared_ptr<ProgramNode> generate(std::string& s);
+    // Helper method to generate AST from string source code
+    static std::shared_ptr<ProgramNode> generate(std::string &s);
 };

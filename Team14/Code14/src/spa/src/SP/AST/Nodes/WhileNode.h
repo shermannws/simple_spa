@@ -3,11 +3,11 @@
 #include <memory>
 
 #include "Commons/AppConstants.h"
-#include "StatementNode.h"
 #include "ConditionalExpressionNode.h"
 #include "StatementListNode.h"
+#include "StatementNode.h"
 
-class WhileNode; // forward declaration
+class WhileNode;// forward declaration
 
 /**
  * Visitor interface linked to WhileNode, used to implement the Acyclic Visitor pattern.
@@ -20,14 +20,15 @@ public:
      * @param parents Parents of the WhileNode
      * @param proc Procedure containing the WhileNode
      */
-    virtual void visitWhileNode(WhileNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
+    virtual void visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+                                std::shared_ptr<ASTNode> proc) const = 0;
 };
 
 /**
  * ASTNode to represent a while statement.
  * Inherits from the StatementNode abstract class.
  */
-class WhileNode: public StatementNode {
+class WhileNode : public StatementNode {
 private:
     /**
      * The conditional expression of the while statement.
@@ -47,8 +48,8 @@ public:
      * @param statementList The statement list of the while statement
      */
     explicit WhileNode(StatementNumber statementNumber,
-                    std::shared_ptr<ConditionalExpressionNode> conditionalExpression,
-                    std::shared_ptr<StatementListNode> statementList);
+                       std::shared_ptr<ConditionalExpressionNode> conditionalExpression,
+                       std::shared_ptr<StatementListNode> statementList);
 
     /**
      * Returns the conditional expression of the while statement.
@@ -62,7 +63,8 @@ public:
      */
     std::shared_ptr<StatementListNode> getStatementList();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
+                std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 

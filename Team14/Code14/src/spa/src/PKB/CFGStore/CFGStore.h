@@ -1,7 +1,7 @@
 #pragma once
 
-#include "PKB/Commons/MapStore.h"
 #include "Commons/CFG/CFGNode.h"
+#include "PKB/Commons/MapStore.h"
 
 class CFGStore : public MapStore<ProcedureName, CFGNode> {
 public:

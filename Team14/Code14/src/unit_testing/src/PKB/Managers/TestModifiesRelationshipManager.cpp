@@ -1,8 +1,8 @@
 #include <memory>
 
-#include "catch.hpp"
-#include "PKB/Managers/ModifiesRelationshipManager.h"
 #include "PKB/Commons/Assignment.h"
+#include "PKB/Managers/ModifiesRelationshipManager.h"
+#include "catch.hpp"
 
 using namespace std;
 

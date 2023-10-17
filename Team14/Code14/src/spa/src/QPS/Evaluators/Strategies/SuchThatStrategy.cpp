@@ -1,7 +1,7 @@
 #include "SuchThatStrategy.h"
 
-#include <utility>
 #include "QPS/Clauses/SuchThatClause.h"
+#include <utility>
 
 SuchThatStrategy::SuchThatStrategy(std::shared_ptr<PkbReader> pkbReader) : pkbReader(std::move(pkbReader)) {}
 
@@ -12,15 +12,8 @@ std::shared_ptr<Result> SuchThatStrategy::evaluateClause(std::shared_ptr<Clause>
     bool isLeftSynonym = leftRef.isRootType(RootType::Synonym);
     bool isRightSynonym = rightRef.isRootType(RootType::Synonym);
 
-    if (isLeftSynonym && isRightSynonym) {
-        return evaluateSynSyn(leftRef, rightRef);
-    }
-    if (isLeftSynonym) {
-        return evaluateSynAny(leftRef, rightRef);
-    }
-    if (isRightSynonym) {
-        return evaluateAnySyn(leftRef, rightRef);
-    }
+    if (isLeftSynonym && isRightSynonym) { return evaluateSynSyn(leftRef, rightRef); }
+    if (isLeftSynonym) { return evaluateSynAny(leftRef, rightRef); }
+    if (isRightSynonym) { return evaluateAnySyn(leftRef, rightRef); }
     return evaluateBoolean(leftRef, rightRef);
 }
-

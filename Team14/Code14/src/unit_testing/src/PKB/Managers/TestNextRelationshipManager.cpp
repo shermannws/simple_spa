@@ -1,7 +1,7 @@
 #include <memory>
 
-#include "catch.hpp"
 #include "PKB/Managers/NextRelationshipManager.h"
+#include "catch.hpp"
 
 using namespace std;
 
@@ -19,12 +19,18 @@ TEST_CASE("Test Next/Next* Relationship Retrieval") {
         nextRelationshipManager.storeRelationship(statement1, statement2, true);
         nextRelationshipManager.storeRelationship(statement2, statement3, true);
 
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, true).size() == 2);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, false).size() == 3);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Call, true).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Call, false).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Print, true).size() == 0);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Print, false).size() == 1);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, true).size() ==
+                2);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, false).size() ==
+                3);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Call, true).size() ==
+                1);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Call, false).size() ==
+                1);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Print, true).size() ==
+                0);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Print, false)
+                        .size() == 1);
 
         REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::Stmt, *statement1, false).size() == 0);
         REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::Stmt, *statement2, true).size() == 1);
@@ -89,19 +95,25 @@ TEST_CASE("Test Next/Next* Relationship Retrieval") {
 
         REQUIRE(nextRelationshipManager.hasRelationship() == false);
 
-        //1 -- > 2 -- > 1
+        // 1 -- > 2 -- > 1
         shared_ptr<Statement> statement1 = make_shared<Statement>(Statement(1, StatementType::While));
         shared_ptr<Statement> statement2 = make_shared<Statement>(Statement(2, StatementType::Call));
 
         nextRelationshipManager.storeRelationship(statement1, statement2, true);
         nextRelationshipManager.storeRelationship(statement2, statement1, true);
 
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::While, true).size() == 0);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::While, false).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::Call, true).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::Call, false).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, true).size() == 2);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, false).size() == 4);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::While, true).size() ==
+                0);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::While, false).size() ==
+                1);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::Call, true).size() ==
+                1);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::Call, false).size() ==
+                1);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, true).size() ==
+                2);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, false).size() ==
+                4);
 
         REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::While, *statement1, false).size() == 1);
         REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::While, *statement1, true).size() == 0);
@@ -153,9 +165,9 @@ TEST_CASE("Test Next/Next* Relationship Retrieval") {
 
         REQUIRE(nextRelationshipManager.hasRelationship() == false);
 
-        //1 -- > 2 -- > 3 --> 4,5
-        //                <--
-        //                --------> 6
+        // 1 -- > 2 -- > 3 --> 4,5
+        //                 <--
+        //                 --------> 6
         shared_ptr<Statement> statement1 = make_shared<Statement>(Statement(1, StatementType::Call));
         shared_ptr<Statement> statement2 = make_shared<Statement>(Statement(2, StatementType::Call));
         shared_ptr<Statement> statement3 = make_shared<Statement>(Statement(3, StatementType::While));
@@ -170,13 +182,20 @@ TEST_CASE("Test Next/Next* Relationship Retrieval") {
         nextRelationshipManager.storeRelationship(statement5, statement3, true);
         nextRelationshipManager.storeRelationship(statement3, statement6, true);
 
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Call, StatementType::Call, false).size() == 3);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::While, false).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Read, StatementType::Read, false).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Read, StatementType::Print, false).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::Stmt, false).size() == 4);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Call, StatementType::Stmt, false).size() == 9);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Print, false).size() == 5);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Call, StatementType::Call, false).size() ==
+                3);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::While, false).size() ==
+                1);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Read, StatementType::Read, false).size() ==
+                1);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Read, StatementType::Print, false).size() ==
+                1);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::While, StatementType::Stmt, false).size() ==
+                4);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Call, StatementType::Stmt, false).size() ==
+                9);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Print, false).size() ==
+                5);
         nextRelationshipManager.clearNextStarStore();
 
         REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::Call, *statement1, false).size() == 0);
@@ -218,8 +237,8 @@ TEST_CASE("Test Next/Next* Relationship Retrieval") {
 
         REQUIRE(nextRelationshipManager.hasRelationship() == false);
 
-        //1c -- > 2c -- > 3if --> 4pn --> 6c
-        //                    --> 5rd -->
+        // 1c -- > 2c -- > 3if --> 4pn --> 6c
+        //                     --> 5rd -->
         shared_ptr<Statement> statement1 = make_shared<Statement>(Statement(1, StatementType::Call));
         shared_ptr<Statement> statement2 = make_shared<Statement>(Statement(2, StatementType::Call));
         shared_ptr<Statement> statement3 = make_shared<Statement>(Statement(3, StatementType::If));
@@ -234,13 +253,17 @@ TEST_CASE("Test Next/Next* Relationship Retrieval") {
         nextRelationshipManager.storeRelationship(statement4, statement6, true);
         nextRelationshipManager.storeRelationship(statement5, statement6, true);
 
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Call, StatementType::Call, false).size() == 3);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Call, StatementType::Call, false).size() ==
+                3);
         REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::If, StatementType::If, false).size() == 0);
         REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::If, StatementType::Read, false).size() == 1);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::If, StatementType::Print, false).size() == 1);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::If, StatementType::Print, false).size() ==
+                1);
         REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::If, StatementType::Stmt, false).size() == 3);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Print, StatementType::Read, false).size() == 0);
-        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Print, StatementType::Stmt, false).size() == 1);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Print, StatementType::Read, false).size() ==
+                0);
+        REQUIRE(nextRelationshipManager.getRelationshipPair(StatementType::Print, StatementType::Stmt, false).size() ==
+                1);
         nextRelationshipManager.clearNextStarStore();
 
         REQUIRE(nextRelationshipManager.getRelationshipTypeStmt(StatementType::Call, *statement1, false).size() == 0);

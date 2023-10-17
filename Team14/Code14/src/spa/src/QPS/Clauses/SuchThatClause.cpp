@@ -4,7 +4,7 @@
 
 SuchThatClause::SuchThatClause() = default;
 
-SuchThatClause::SuchThatClause(const std::shared_ptr<Token>& absToken) {
+SuchThatClause::SuchThatClause(const std::shared_ptr<Token> &absToken) {
     StringRep rep = absToken->getRep();
     if (QPSUtil::repClauseTypeMap.find(rep) == QPSUtil::repClauseTypeMap.end()) {
         throw SyntaxException("Invalid token, abstraction expected");
@@ -12,19 +12,13 @@ SuchThatClause::SuchThatClause(const std::shared_ptr<Token>& absToken) {
     this->setType(QPSUtil::repClauseTypeMap[rep]);
 }
 
-void SuchThatClause::setSecondParam(Ref& ref) {
-    secondParam = ref;
-}
+void SuchThatClause::setSecondParam(Ref &ref) { secondParam = ref; }
 
-Ref& SuchThatClause::getSecondParam() {
-    return secondParam;
-}
+Ref &SuchThatClause::getSecondParam() { return secondParam; }
 
 std::vector<Synonym> SuchThatClause::getSynonyms() const {
     std::vector<Synonym> synonyms;
-    if (firstParam.getRootType() == RootType::Synonym) {
-        synonyms.push_back(firstParam.getRep());
-    }
+    if (firstParam.getRootType() == RootType::Synonym) { synonyms.push_back(firstParam.getRep()); }
     // only add RHS synonym if it is different from LHS
     if (secondParam.getRootType() == RootType::Synonym && !(firstParam == secondParam)) {
         synonyms.push_back(secondParam.getRep());
@@ -32,13 +26,10 @@ std::vector<Synonym> SuchThatClause::getSynonyms() const {
     return synonyms;
 }
 
-bool SuchThatClause::operator==(const Clause& other) const {
+bool SuchThatClause::operator==(const Clause &other) const {
     try {
-        const auto& otherPattern = dynamic_cast<const SuchThatClause&>(other);
-        return (type == otherPattern.type) &&
-               (firstParam == otherPattern.firstParam) &&
-               (secondParam==otherPattern.secondParam);
-    } catch (std::bad_cast& e) {
-        return false;
-    }
+        const auto &otherPattern = dynamic_cast<const SuchThatClause &>(other);
+        return (type == otherPattern.type) && (firstParam == otherPattern.firstParam) &&
+               (secondParam == otherPattern.secondParam);
+    } catch (std::bad_cast &e) { return false; }
 }
