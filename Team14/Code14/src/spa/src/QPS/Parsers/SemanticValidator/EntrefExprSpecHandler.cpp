@@ -5,7 +5,7 @@
 void EntrefExprSpecHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
     auto patternClause = std::dynamic_pointer_cast<PatternClause>(clause);
 
-    if (patternClause->getType() != ClauseType::Assign) { // TODO: possible to delete this
+    if (patternClause->getType() != ClauseType::Assign) {// TODO: possible to delete this
         throw SemanticException("Unsupported pattern clause, expected an assign synonym");
     }
 

@@ -23,6 +23,7 @@ private:
      * @brief The boolean that specifies whether a third parameter exists
      */
     bool thirdParam;
+
 public:
     /**
      * @brief The constructor of PatternClause

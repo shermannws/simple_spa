@@ -140,12 +140,9 @@ std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
         }
         next = tokenizer->popToken();
         clause->setThirdParam(true);
-
     }
 
-    if (!next->isToken(TokenType::Rparenthesis)) {
-        throw SyntaxException("Expected right parenthesis");
-    }
+    if (!next->isToken(TokenType::Rparenthesis)) { throw SyntaxException("Expected right parenthesis"); }
 
     validatePatternStructure(clause);
     return clause;

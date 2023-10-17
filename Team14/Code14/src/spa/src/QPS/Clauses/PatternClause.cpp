@@ -2,25 +2,17 @@
 
 #include <utility>
 
-PatternClause::PatternClause() : Clause() {
-    this->thirdParam = false;
-};
+PatternClause::PatternClause() : Clause() { this->thirdParam = false; };
 
 void PatternClause::setSecondParam(ExpressionSpec &expr) { secondParam = expr; }
 
 ExpressionSpec &PatternClause::getSecondParam() { return secondParam; }
 
-void PatternClause::setThirdParam(bool exists) {
-    thirdParam = exists;
-}
+void PatternClause::setThirdParam(bool exists) { thirdParam = exists; }
 
-bool PatternClause::hasThirdParam() const {
-    return thirdParam;
-}
+bool PatternClause::hasThirdParam() const { return thirdParam; }
 
-void PatternClause::setSyn(Synonym synonym) {
-    syn = synonym;
-}
+void PatternClause::setSyn(Synonym synonym) { syn = synonym; }
 
 Synonym PatternClause::getSyn() { return syn; }
 

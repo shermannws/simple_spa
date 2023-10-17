@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Strategy.h"
 #include "QPS/Clauses/PatternClause.h"
+#include "Strategy.h"
 
 /**
  * The Strategy class of If Pattern clause
@@ -9,8 +9,9 @@
 class IfPatternStrategy : public Strategy {
 private:
     std::shared_ptr<PkbReader> pkbReader;
+
 public:
-    explicit IfPatternStrategy(std::shared_ptr<PkbReader> pkbReader) : pkbReader(pkbReader) {};
+    explicit IfPatternStrategy(std::shared_ptr<PkbReader> pkbReader) : pkbReader(pkbReader){};
     /**
      * @brief Evaluates the clause using pkbReader methods relating to If Pattern
      * @param clause The shared pointer of the Clause to be evaluated
@@ -19,4 +20,3 @@ public:
      */
     std::shared_ptr<Result> evaluateClause(std::shared_ptr<Clause> clause) const override;
 };
-

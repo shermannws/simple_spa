@@ -8,11 +8,9 @@ void NoExprHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
         return SemanticValHandler::handle(query, clause);
     }
 
-    if (clauseType != ClauseType::If && pattern->hasThirdParam()) {
-        throw SemanticException("Invalid syn-if");
-    }
+    if (clauseType != ClauseType::If && pattern->hasThirdParam()) { throw SemanticException("Invalid syn-if"); }
 
-    Ref& leftRef = pattern->getFirstParam();
+    Ref &leftRef = pattern->getFirstParam();
     RefType lhsType = RefType::EntRef;
     leftRef.setType(lhsType);
 
@@ -20,7 +18,7 @@ void NoExprHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
         throw SemanticException("Invalid LHS in Pattern, synonym does not represent variable");
     }
 
-    ExpressionSpec& secondParam = pattern->getSecondParam();
+    ExpressionSpec &secondParam = pattern->getSecondParam();
     if (secondParam.first != ExpressionSpecType::Wildcard) {
         throw SemanticException("Invalid second param in if/while pattern, wildcard expected");
     }

@@ -29,9 +29,7 @@ void SynonymHandler::handle(const Query &query, std::shared_ptr<Clause> clause) 
     if (pattern) {
         // validate Entity Synonym declared
         EntityPtr entity = query.getEntity(pattern->getSyn());
-        if (!entity) {
-            throw SemanticException("Undeclared synonym in pattern clause entity");
-        }
+        if (!entity) { throw SemanticException("Undeclared synonym in pattern clause entity"); }
         QueryEntityType entityType = entity->getType();
         if (QPSUtil::entityToClauseMap.find(entityType) == QPSUtil::entityToClauseMap.end()) {
             throw SemanticException("Unsupported pattern clause");
