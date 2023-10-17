@@ -3,7 +3,8 @@
 #include "Commons/Entities/StatementType.h"
 #include "QPS/QPSUtil.h"
 
-ParentSuchThatStrategy::ParentSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader) : SuchThatStrategy(std::move(pkbReader)) {}
+ParentSuchThatStrategy::ParentSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader)
+    : SuchThatStrategy(std::move(pkbReader)) {}
 
 std::shared_ptr<Result> ParentSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
@@ -16,7 +17,7 @@ std::shared_ptr<Result> ParentSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref
     auto leftSyn = leftRef.getRep();
     auto rightSyn = rightRef.getRep();
     res->setTuples(pkbReader->getParentPair(QPSUtil::entityToStmtMap.at(leftEntityType),
-                                           QPSUtil::entityToStmtMap.at(rightEntityType)));
+                                            QPSUtil::entityToStmtMap.at(rightEntityType)));
 
     return res;
 }
@@ -70,4 +71,3 @@ std::shared_ptr<Result> ParentSuchThatStrategy::evaluateBoolean(Ref &leftRef, Re
     }
     return res;
 }
-

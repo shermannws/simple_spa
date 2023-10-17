@@ -1,12 +1,12 @@
 #pragma once
 
+#include <algorithm>
 #include <memory>
 #include <vector>
-#include <algorithm>
 
-#include "PKB/Managers/ManagerUtils.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
+#include "PKB/Managers/ManagerUtils.h"
 
 /**
  * @class StmtToVarRelationshipManager is responsible for storing and retrieving the relationships
@@ -15,7 +15,7 @@
  * @brief Manages the relationships
  * @note A relationship is a relationship between a statement and a variable
  */
-template <typename S>
+template<typename S>
 class StmtToVarRelationshipManager {
 private:
     /**
@@ -38,7 +38,8 @@ public:
     void storeRelationship(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable);
 
     /**
-     * Returns a vector of Statement, Variable pair where the statement is related to the variable. Retrieves the relationship where the statement is of the given type
+     * Returns a vector of Statement, Variable pair where the statement is related to the variable. Retrieves the
+     * relationship where the statement is of the given type
      * @param type The type of the statement
      * @return A vector of Statement, Variable pair stored in a vector
      */
@@ -50,7 +51,7 @@ public:
      * @param var The variable that is related to the statements
      * @return A vector of statements
      */
-    std::vector<Entity> getRelationshipTypeIdent(StatementType type, Variable& var) const;
+    std::vector<Entity> getRelationshipTypeIdent(StatementType type, Variable &var) const;
 
     /**
      * Returns a vector of statements of the given statement type which is related to any variable
@@ -64,7 +65,7 @@ public:
      * @param stmt The statement that is related to the variables
      * @return A vector of variables
      */
-    std::vector<Entity> getRelationshipVar(Statement& stmt) const;
+    std::vector<Entity> getRelationshipVar(Statement &stmt) const;
 
     /**
      * Returns a boolean value indicating if the given statement is related to the given variable
@@ -72,14 +73,14 @@ public:
      * @param var The variable that is related to the statement
      * @return True if the statement is related to the variable, else false
      */
-    bool isRelationship(Statement& stmt, Variable& var) const;
+    bool isRelationship(Statement &stmt, Variable &var) const;
 
     /**
      * Returns a boolean value indicating if the given statement is related to any variable
      * @param stmt The statement that is related to the variable
      * @return True if the statement is related to any variable, else false
      */
-    bool hasRelationship(Statement& stmt) const;
+    bool hasRelationship(Statement &stmt) const;
 };
 
 #include "StmtToVarRelationshipManager.hpp"

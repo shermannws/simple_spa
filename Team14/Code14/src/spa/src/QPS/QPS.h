@@ -15,18 +15,19 @@ private:
      * Shared pointer to the PKB reader.
      */
     std::shared_ptr<PkbReader> pkbReader;
+
 public:
     /**
-    * @brief Explicit constructor for the QPS class.
-    * @param pkbReader A shared pointer to the PKB reader.
-    */
+     * @brief Explicit constructor for the QPS class.
+     * @param pkbReader A shared pointer to the PKB reader.
+     */
     explicit QPS(std::shared_ptr<PkbReader> pkbReader);
 
     /**
-    * @brief Evaluates a query and produces a list of results.
-    * Processes the given query and populates the results list with the query's results.
-    * @param query The query to evaluate.
-    * @param results A list to store the results of the query.
-    */
-    void evaluate(std::string& query, std::list<std::string>& results);
+     * @brief Evaluates a query and produces a list of results.
+     * Processes the given query and populates the results list with the query's results.
+     * @param query The query to evaluate.
+     * @param results A list to store the results of the query.
+     */
+    void evaluate(std::string &query, std::list<std::string> &results);
 };

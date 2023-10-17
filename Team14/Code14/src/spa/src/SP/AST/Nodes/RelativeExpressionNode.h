@@ -4,11 +4,11 @@
 #include <unordered_map>
 
 #include "Commons/AppConstants.h"
-#include "ConditionalExpressionNode.h"
 #include "ComparisonOperatorType.h"
+#include "ConditionalExpressionNode.h"
 #include "ExpressionNode.h"
 
-class RelativeExpressionNode; // forward declaration
+class RelativeExpressionNode;// forward declaration
 
 /**
  * Visitor interface linked to RelativeExpressionNode,
@@ -22,7 +22,9 @@ public:
      * @param parents Parents of the RelativeExpressionNode
      * @param proc Procedure containing the RelativeExpressionNode
      */
-    virtual void visitRelativeExpressionNode(RelativeExpressionNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const = 0;
+    virtual void visitRelativeExpressionNode(RelativeExpressionNode *node,
+                                             std::vector<std::shared_ptr<ASTNode>> parents,
+                                             std::shared_ptr<ASTNode> proc) const = 0;
 };
 
 /**
@@ -50,13 +52,12 @@ private:
      * Map of comparison operator string to ComparisonOperatorType.
      */
     inline static const std::unordered_map<std::string, ComparisonOperatorType> stringToOperatorTypeMap = {
-            { AppConstants::STRING_GREATER_THAN, ComparisonOperatorType::GreaterThan },
-            { AppConstants::STRING_GREATER_EQUAL, ComparisonOperatorType::GreaterThanEqual },
-            { AppConstants::STRING_LESS_THAN, ComparisonOperatorType::LessThan },
-            { AppConstants::STRING_LESS_EQUAL, ComparisonOperatorType::LessThanEqual },
-            { AppConstants::STRING_DOUBLE_EQUAL, ComparisonOperatorType::Equal },
-            { AppConstants::STRING_NOT_EQUAL, ComparisonOperatorType::NotEqual }
-    };
+            {AppConstants::STRING_GREATER_THAN, ComparisonOperatorType::GreaterThan},
+            {AppConstants::STRING_GREATER_EQUAL, ComparisonOperatorType::GreaterThanEqual},
+            {AppConstants::STRING_LESS_THAN, ComparisonOperatorType::LessThan},
+            {AppConstants::STRING_LESS_EQUAL, ComparisonOperatorType::LessThanEqual},
+            {AppConstants::STRING_DOUBLE_EQUAL, ComparisonOperatorType::Equal},
+            {AppConstants::STRING_NOT_EQUAL, ComparisonOperatorType::NotEqual}};
 
 public:
     /**
@@ -66,8 +67,8 @@ public:
      * @param rightExpression The RHS expression (arithmetic, variable, constant)
      */
     explicit RelativeExpressionNode(ComparisonOperatorType comparisonOperatorType,
-                                             std::shared_ptr<ExpressionNode> leftExpression,
-                                             std::shared_ptr<ExpressionNode> rightExpression);
+                                    std::shared_ptr<ExpressionNode> leftExpression,
+                                    std::shared_ptr<ExpressionNode> rightExpression);
 
     /**
      * Returns the comparison operator.
@@ -93,9 +94,10 @@ public:
      * @param operatorTypeString The string representing a comparison operator
      * @return The ComparisonOperatorType value corresponding to the string
      */
-    static ComparisonOperatorType translateComparisonOperatorType(const std::string& operatorTypeString);
+    static ComparisonOperatorType translateComparisonOperatorType(const std::string &operatorTypeString);
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
+                std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

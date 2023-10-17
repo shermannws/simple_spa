@@ -23,22 +23,14 @@ typedef std::string StringRep;
 
 
 /* enum class for the valid types of expr-spec */
-enum ExpressionSpecType {
-    Wildcard,
-    PartialMatch,
-    ExactMatch
-};
+enum ExpressionSpecType { Wildcard, PartialMatch, ExactMatch };
 /* Type alias for a string representing an expression */
 typedef std::string Expression;
 /* Type alias for a pair of ExpressionSpecType and Expression representing an expr-spec */
 typedef std::pair<ExpressionSpecType, Expression> ExpressionSpec;
 
 /* Enum class for clause argument type used in Semantic Validation Handlers*/
-enum ClauseArgType {
-    StmtrefProcVar,
-    StmtrefStmtref,
-    ProcProc
-};
+enum ClauseArgType { StmtrefProcVar, StmtrefStmtref, ProcProc };
 
 // Result typedefs
 class Entity;

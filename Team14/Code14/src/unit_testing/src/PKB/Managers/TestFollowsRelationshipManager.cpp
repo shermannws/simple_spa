@@ -1,7 +1,7 @@
 #include <memory>
 
-#include "catch.hpp"
 #include "PKB/Managers/FollowsRelationshipManager.h"
+#include "catch.hpp"
 
 using namespace std;
 
@@ -19,9 +19,12 @@ TEST_CASE("Test Follows Relationship Retrieval") {
     followsRelationshipManager.storeRelationship(statement1, statement3, false);
 
     REQUIRE(followsRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, true).size() == 2);
-    REQUIRE(followsRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, false).size() == 3);
-    REQUIRE(followsRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Call, true).size() == 1);
-    REQUIRE(followsRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Print, false).size() == 1);
+    REQUIRE(followsRelationshipManager.getRelationshipPair(StatementType::Stmt, StatementType::Stmt, false).size() ==
+            3);
+    REQUIRE(followsRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Call, true).size() ==
+            1);
+    REQUIRE(followsRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Print, false).size() ==
+            1);
     REQUIRE(followsRelationshipManager.getRelationshipPair(StatementType::Assign, StatementType::Print, true).empty());
 
     REQUIRE(followsRelationshipManager.getRelationshipTypeStmt(StatementType::Stmt, *statement3, true).size() == 1);

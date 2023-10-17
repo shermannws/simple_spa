@@ -4,7 +4,8 @@
 #include "QPS/QPSUtil.h"
 
 
-ParentStarSuchThatStrategy::ParentStarSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader) : SuchThatStrategy(std::move(pkbReader)) {}
+ParentStarSuchThatStrategy::ParentStarSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader)
+    : SuchThatStrategy(std::move(pkbReader)) {}
 
 std::shared_ptr<Result> ParentStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
@@ -17,7 +18,7 @@ std::shared_ptr<Result> ParentStarSuchThatStrategy::evaluateSynSyn(Ref &leftRef,
     auto leftSyn = leftRef.getRep();
     auto rightSyn = rightRef.getRep();
     res->setTuples(pkbReader->getParentStarPair(QPSUtil::entityToStmtMap.at(leftEntityType),
-                                               QPSUtil::entityToStmtMap.at(rightEntityType)));
+                                                QPSUtil::entityToStmtMap.at(rightEntityType)));
 
     return res;
 }

@@ -1,12 +1,12 @@
 #include "CFGBuilder.h"
-#include "Commons/StatementTypeFactory.h"
 #include "Commons/CFG/DummyCFGNode.h"
+#include "Commons/StatementTypeFactory.h"
 #include "SP/AST/Nodes/StatementNode.h"
 
 std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>>
-CFGBuilder::buildAllCFG(const std::shared_ptr<ProgramNode>& astRootNode) {
+CFGBuilder::buildAllCFG(const std::shared_ptr<ProgramNode> &astRootNode) {
     std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> procedureToCFGMap;
-    for (auto& procedureNode : astRootNode->getProcedures()) {
+    for (auto &procedureNode: astRootNode->getProcedures()) {
         ProcedureName procedureName = procedureNode->getProcedureName();
         procedureToCFGMap[procedureName] = buildCFGForProcedure(procedureNode);
     }
@@ -15,13 +15,13 @@ CFGBuilder::buildAllCFG(const std::shared_ptr<ProgramNode>& astRootNode) {
 }
 
 std::unordered_map<Statement, std::shared_ptr<CFGNode>>
-CFGBuilder::buildCFGForProcedure(const std::shared_ptr<ProcedureNode>& procedureNode) {
+CFGBuilder::buildCFGForProcedure(const std::shared_ptr<ProcedureNode> &procedureNode) {
     std::unordered_map<Statement, std::shared_ptr<CFGNode>> statementToCFGNodeMap;
     auto [head, tail] = buildStatementListSubgraph(statementToCFGNodeMap, procedureNode->getStatementList());
 
     // remove dummy tail if the last statement of the procedure is an if statement
     if (auto dummyTail = std::dynamic_pointer_cast<DummyCFGNode>(tail)) {
-        for (const auto& parent : dummyTail->getParentNodes()) {
+        for (const auto &parent: dummyTail->getParentNodes()) {
             // delete dummyTail from parent
             parent->removeChildNode(dummyTail);
         }
@@ -34,17 +34,18 @@ CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared
                                        const std::shared_ptr<StatementListNode> &statementListNode) {
     // Used to save head and tail nodes of this subgraph to be returned
     std::shared_ptr<CFGNode> head;
-    std::shared_ptr<CFGNode> tail;  // also used as a pointer to the previous tail, see below
+    std::shared_ptr<CFGNode> tail;// also used as a pointer to the previous tail, see below
 
     // Intermediate nodes used for processing
     std::shared_ptr<CFGNode> childHead;
     std::shared_ptr<CFGNode> childTail;
 
-    for (const auto& statementNode : statementListNode->getStatements()) {
+    for (const auto &statementNode: statementListNode->getStatements()) {
         if (statementNode->getStatementType() == StatementNodeType::If) {
             std::tie(childHead, childTail) = buildIfSubgraph(map, std::static_pointer_cast<IfNode>(statementNode));
         } else if (statementNode->getStatementType() == StatementNodeType::While) {
-            std::tie(childHead, childTail) = buildWhileSubgraph(map, std::static_pointer_cast<WhileNode>(statementNode));
+            std::tie(childHead, childTail) =
+                    buildWhileSubgraph(map, std::static_pointer_cast<WhileNode>(statementNode));
         } else {
             std::tie(childHead, childTail) = buildStatementSubgraph(map, statementNode);
         }
@@ -52,22 +53,20 @@ CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared
         if (tail) {
             // if previous tail was a dummy tail, merge it with current childhead
             if (auto dummyTail = std::dynamic_pointer_cast<DummyCFGNode>(tail)) {
-                for (const auto& parent : dummyTail->getParentNodes()) {
+                for (const auto &parent: dummyTail->getParentNodes()) {
                     childHead->addParentNode(parent);
                     parent->addChildNode(childHead);
                     // delete dummyTail from parent
                     parent->removeChildNode(dummyTail);
                 }
-            } else { // else, attach previous tail with (current) child head
+            } else {// else, attach previous tail with (current) child head
                 tail->addChildNode(childHead);
                 childHead->addParentNode(tail);
             }
         }
 
         // update head and tails
-        if (head == nullptr) {
-            head = childHead;
-        }
+        if (head == nullptr) { head = childHead; }
         tail = childTail;
     }
 
@@ -76,7 +75,7 @@ CFGBuilder::buildStatementListSubgraph(std::unordered_map<Statement, std::shared
 
 std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
 CFGBuilder::buildStatementSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNode>> &map,
-                                               const std::shared_ptr<StatementNode> &statementNode) {
+                                   const std::shared_ptr<StatementNode> &statementNode) {
     StatementType statementType = StatementTypeFactory::getStatementTypeFrom(statementNode->getStatementType());
     Statement statement = Statement(statementNode->getStatementNumber(), statementType);
     auto cfgNode = std::make_shared<CFGNode>(statementNode->getStatementNumber(), statementType);
@@ -104,7 +103,7 @@ CFGBuilder::buildIfSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNod
 
     // connect end of then stmtlst to dummy tail
     if (auto dummyThenTail = std::dynamic_pointer_cast<DummyCFGNode>(thenTailNode)) {
-        for (const auto& parent : dummyThenTail->getParentNodes()) {
+        for (const auto &parent: dummyThenTail->getParentNodes()) {
             dummyTail->addParentNode(parent);
             parent->addChildNode(dummyTail);
             // delete dummyTail from parent
@@ -117,7 +116,7 @@ CFGBuilder::buildIfSubgraph(std::unordered_map<Statement, std::shared_ptr<CFGNod
 
     // connect end of else stmtlst to dummy tail
     if (auto dummyElseTail = std::dynamic_pointer_cast<DummyCFGNode>(elseTailNode)) {
-        for (const auto& parent : dummyElseTail->getParentNodes()) {
+        for (const auto &parent: dummyElseTail->getParentNodes()) {
             dummyTail->addParentNode(parent);
             parent->addChildNode(dummyTail);
             // delete dummyTail from parent
@@ -144,7 +143,7 @@ CFGBuilder::buildWhileSubgraph(std::unordered_map<Statement, std::shared_ptr<CFG
 
     // connect end of stmtlst to while
     if (auto dummyTail = std::dynamic_pointer_cast<DummyCFGNode>(tailNode)) {
-        for (const auto& parent : dummyTail->getParentNodes()) {
+        for (const auto &parent: dummyTail->getParentNodes()) {
             cfgNode->addParentNode(parent);
             parent->addChildNode(cfgNode);
             // delete dummyTail from parent
