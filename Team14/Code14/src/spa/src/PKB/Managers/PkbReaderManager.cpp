@@ -440,12 +440,20 @@ bool PkbReaderManager::hasAfterStarStmt(Statement &statement) const {
     return this->nextRelationshipManager->isFormer(statement);
 }
 
+std::vector<Entity> PkbReaderManager::getAllIfPatternStmts() const {
+    return this->ifPatternManager->getAllStmts();
+}
+
 std::vector<Entity> PkbReaderManager::getIfStmtsByVar(Variable &var) const {
     return this->ifPatternManager->getStmtsByVar(var);
 };
 
 std::vector<std::vector<Entity>> PkbReaderManager::getAllIfStmtVarPair() const {
     return this->ifPatternManager->getAllStmtVarPair();
+}
+
+std::vector<Entity> PkbReaderManager::getAllWhilePatternStmts() const {
+    return this->whilePatternManager->getAllStmts();
 }
 
 std::vector<Entity> PkbReaderManager::getWhileStmtsByVar(Variable &var) const {

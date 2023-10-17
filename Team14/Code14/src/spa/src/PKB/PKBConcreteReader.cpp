@@ -400,12 +400,20 @@ bool PkbConcreteReader::hasAfterStarStmt(Statement &statement) const {
     return this->readerManager->hasAfterStarStmt(statement);
 }
 
+std::vector<Entity> PkbConcreteReader::getAllIfPatternStmts() const {
+    return this->readerManager->getAllIfPatternStmts();
+}
+
 std::vector<Entity> PkbConcreteReader::getIfStmtsByVar(Variable &var) const {
     return this->readerManager->getIfStmtsByVar(var);
 };
 
 std::vector<std::vector<Entity>> PkbConcreteReader::getAllIfStmtVarPair() const {
     return this->readerManager->getAllIfStmtVarPair();
+}
+
+std::vector<Entity> PkbConcreteReader::getAllWhilePatternStmts() const {
+    return this->readerManager->getAllWhilePatternStmts();
 }
 
 std::vector<Entity> PkbConcreteReader::getWhileStmtsByVar(Variable &var) const {

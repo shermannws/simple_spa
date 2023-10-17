@@ -619,13 +619,15 @@ TEST_CASE("If Pattern") {
     Statement s = Statement(1, StatementType::If);
     Variable v = Variable("x");
 
-    REQUIRE(reader->getAllIf().empty());
+    REQUIRE(reader->getAllIfPatternStmts().empty());
     REQUIRE(reader->getIfStmtsByVar(v).empty());
     REQUIRE(reader->getAllIfStmtVarPair().empty());
 
     writer->addIfPattern(make_shared<Statement>(s),
                          make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>(v)));
 
+    REQUIRE(reader->getAllIfPatternStmts().size() == 1);
+    REQUIRE(reader->getAllIfPatternStmts()[0] == s);
     REQUIRE(reader->getIfStmtsByVar(v).size() == 1);
     REQUIRE(reader->getIfStmtsByVar(v)[0] == s);
     REQUIRE(reader->getAllIfStmtVarPair().size() == 1);
@@ -641,13 +643,15 @@ TEST_CASE("While Pattern") {
     Statement s = Statement(1, StatementType::While);
     Variable v = Variable("x");
 
-    REQUIRE(reader->getAllWhile().empty());
+    REQUIRE(reader->getAllWhilePatternStmts().empty());
     REQUIRE(reader->getWhileStmtsByVar(v).empty());
     REQUIRE(reader->getAllWhileStmtVarPair().empty());
 
     writer->addWhilePattern(make_shared<Statement>(s),
                             make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>(v)));
 
+    REQUIRE(reader->getAllWhilePatternStmts().size() == 1);
+    REQUIRE(reader->getAllWhilePatternStmts()[0] == s);
     REQUIRE(reader->getWhileStmtsByVar(v).size() == 1);
     REQUIRE(reader->getWhileStmtsByVar(v)[0] == s);
     REQUIRE(reader->getAllWhileStmtVarPair().size() == 1);
