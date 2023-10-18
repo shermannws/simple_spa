@@ -1,5 +1,7 @@
-#include "PatternExtractorVisitor.h"
+#include <stack>
+
 #include "Commons/StatementTypeFactory.h"
+#include "PatternExtractorVisitor.h"
 
 PatternExtractorVisitor::PatternExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter) { this->pkbWriter = pkbWriter; }
 
@@ -14,31 +16,37 @@ void PatternExtractorVisitor::visitIfNode(IfNode *node, std::vector<std::shared_
                                           std::shared_ptr<ASTNode> proc) const {
     auto currentStmt = std::make_shared<Statement>(
             node->getStatementNumber(), StatementTypeFactory::getStatementTypeFrom(node->getStatementType()));
-    std::shared_ptr<ConditionalExpressionNode> condExpr =
-            std::dynamic_pointer_cast<ConditionalExpressionNode>(node->getConditionalExpression());
+    auto variablesUsedByIf = getVariablesFromCondExpr(node->getConditionalExpression());
 
-    this->pkbWriter->addIfPattern(currentStmt, getVariablesFromCondExpr(condExpr));
+    if (variablesUsedByIf->empty()) { return; }
+    this->pkbWriter->addIfPattern(currentStmt, variablesUsedByIf);
 }
 
 void PatternExtractorVisitor::visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
                                              std::shared_ptr<ASTNode> proc) const {
     auto currentStmt = std::make_shared<Statement>(
             node->getStatementNumber(), StatementTypeFactory::getStatementTypeFrom(node->getStatementType()));
-    std::shared_ptr<ConditionalExpressionNode> condExpr =
-            std::dynamic_pointer_cast<ConditionalExpressionNode>(node->getConditionalExpression());
+    auto variablesUsedByWhile = getVariablesFromCondExpr(node->getConditionalExpression());
 
-    this->pkbWriter->addWhilePattern(currentStmt, getVariablesFromCondExpr(condExpr));
+    if (variablesUsedByWhile->empty()) { return; }
+    this->pkbWriter->addWhilePattern(currentStmt, variablesUsedByWhile);
 }
 
 std::shared_ptr<std::vector<std::shared_ptr<Variable>>>
 PatternExtractorVisitor::getVariablesFromCondExpr(std::shared_ptr<ConditionalExpressionNode> condExpr) {
-    std::vector<std::shared_ptr<Variable>> variableNodes;
-    std::vector<std::shared_ptr<ASTNode>> childNodes = condExpr->getAllChildNodes();
+    std::vector<std::shared_ptr<Variable>> variables;
+    std::stack<std::shared_ptr<ASTNode>> frontier;
+    frontier.push(condExpr);
 
-    for (const auto &childNode: childNodes) {
-        if (std::shared_ptr<Variable> variable = std::dynamic_pointer_cast<Variable>(childNode)) {
-            variableNodes.push_back(variable);
-        }
+    while (!frontier.empty()) {
+        std::shared_ptr<ASTNode> current = frontier.top();
+        frontier.pop();
+
+        VariableNode *ptr = dynamic_cast<VariableNode *>(current.get());
+        if (ptr) { variables.push_back(std::make_shared<Variable>(ptr->getVarName())); }
+
+        std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();
+        for (auto it = childrenOfCurrent.rbegin(); it != childrenOfCurrent.rend(); it++) { frontier.push(*it); }
     }
-    return std::make_shared<std::vector<std::shared_ptr<Variable>>>(variableNodes);
+    return std::make_shared<std::vector<std::shared_ptr<Variable>>>(variables);
 }
