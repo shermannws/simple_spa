@@ -9,9 +9,11 @@ typedef int StatementNumber;
 typedef std::string ConstantValue;
 typedef std::string FormattedExpression;
 typedef std::string EntityValue;
+typedef std::string AttrValue;
 
 class AppConstants {
 public:
+    inline static const std::string STRING_EMPTY = "";
     // Entities
     inline static const std::string STRING_PROCEDURE = "procedure";
     inline static const std::string STRING_STATEMENT = "stmt";

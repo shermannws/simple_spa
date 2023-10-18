@@ -5,9 +5,17 @@
 Entity::Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType)
     : entityValue(entityValue), entityType(entityType) {}
 
+Entity::Entity(const std::shared_ptr<EntityValue> entityValue, EntityType entityType,
+               const std::shared_ptr<AttrValue> attrValue)
+    : entityValue(entityValue), entityType(entityType), attrValue(attrValue) {}
+
 EntityType Entity::getEntityType() const { return this->entityType; }
 
 EntityValue Entity::getEntityValue() const { return *this->entityValue; }
+
+AttrValue Entity::getAttrValue() const {
+    return this->attrValue == nullptr ? AppConstants::STRING_EMPTY : *(this->attrValue);
+}
 
 bool Entity::operator==(const HashableKey &other) const {
     if (const Entity *otherKey = dynamic_cast<const Entity *>(&other)) {

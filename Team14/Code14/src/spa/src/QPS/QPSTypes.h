@@ -12,6 +12,7 @@ typedef std::string Synonym;
 
 // Query typedefs
 class QueryEntity;
+
 /* Type alias for a shared pointer to QueryEntity */
 typedef std::shared_ptr<QueryEntity> EntityPtr;
 /* Type alias for an unordered map of string to shared pointer to QueryEntity */
@@ -34,6 +35,7 @@ enum ClauseArgType { StmtrefProcVar, StmtrefStmtref, ProcProc };
 
 // Result typedefs
 class Entity;
+
 /* Type alias for an unordered map representing synonym-to-index mapping for a Result table header*/
 typedef std::unordered_map<Synonym, int> SynonymMap;
 /* Type alias for a list of strings representing the formatted result */
