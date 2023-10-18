@@ -646,6 +646,133 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
     }
 }
 
+TEST_CASE("Test WithStrategy") {
+    // evaluateSynSyn
+    SECTION("leftRef == rightRef") {
+        PQLParser parser("read r; Select r with r.varName = r.varName");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 4);
+        REQUIRE(find(results.begin(), results.end(), "88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "14") != results.end());
+    }
+
+    SECTION("different synonyms name comparison") {
+        PQLParser parser("read r; variable v; Select v with r.varName = v.varName");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 4);
+        REQUIRE(find(results.begin(), results.end(), "var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var88") != results.end());
+    }
+
+    SECTION("different synonyms integer comparison") {
+        PQLParser parser("call call; constant constant; Select call with call.stmt# = constant.value");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "7") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "21") != results.end());
+    }
+
+    // evaluateSynAny
+    SECTION("SynAny name comparison") {
+        PQLParser parser(R"(call call; Select call with call.procName = "Proc3")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "21") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "22") != results.end());
+    }
+
+    SECTION("SynAny integer comparison") {
+        PQLParser parser("if if; Select if with if.stmt# = 100");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.empty());
+    }
+
+    // evaluateAnySyn
+    SECTION("AnySyn name comparison") {
+        PQLParser parser(R"(print print; Select print with "var7" = print.varName)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "7") != results.end());
+    }
+
+    SECTION("AnySyn integer comparison") {
+        PQLParser parser("constant constant; Select constant with 21 = constant.value");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "21") != results.end());
+    }
+
+    // evaluateBoolean
+    SECTION("BOOLEAN name comparison") {
+        PQLParser parser(R"(procedure procedure; Select procedure with "hello" = "hello")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "proc1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "proc2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "proc3") != results.end());
+    }
+
+    SECTION("BOOLEAN integer comparison") {
+        PQLParser parser("stmt s; Select s with 21 = 21");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 5);
+        REQUIRE(find(results.begin(), results.end(), "1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "4") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "5") != results.end());
+    }
+}
+
 TEST_CASE("Test QPS Flow - Assign With Pattern") {
     PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
 

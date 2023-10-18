@@ -10,6 +10,7 @@
 #include "QPS/Evaluators/Strategies/ParentStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/ParentSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/UsesSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/WithStrategy.h"
 
 std::unordered_map<std::string, TokenType> QPSUtil::strToTokenTypeMap = {
         {"(", TokenType::Lparenthesis}, {")", TokenType::Rparenthesis}, {"+", TokenType::Plus},
@@ -110,6 +111,10 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
                 {ClauseType::Assign,
                  [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
                      return std::make_shared<AssignPatternStrategy>(pkbReader);
+                 }},
+                {ClauseType::With,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<WithStrategy>(pkbReader);
                  }},
 };
 

@@ -66,11 +66,12 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
 }
 
 std::shared_ptr<Result> PQLEvaluator::evaluateConstraintClauses(const Query &query) {
-    if (query.getSuchThat().empty() && query.getPattern().empty()) { return nullptr; }
+    if (query.getSuchThat().empty() && query.getPattern().empty() && query.getWith().empty()) { return nullptr; }
 
     std::vector<std::shared_ptr<Result>> results;
     for (const auto &clause: query.getSuchThat()) { results.push_back(evaluateClause(clause)); }
     for (const auto &clause: query.getPattern()) { results.push_back(evaluateClause(clause)); }
+    for (const auto &clause: query.getWith()) { results.push_back(evaluateClause(clause)); }
     auto result = resultHandler->cast(results[0]);// Initialize with the first element
     for (size_t i = 1; i < results.size(); ++i) { // Combine with next until end of list
         result = resultHandler->getCombined(result, results[i]);
