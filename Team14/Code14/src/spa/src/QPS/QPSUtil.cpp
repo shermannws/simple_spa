@@ -100,9 +100,9 @@ std::unordered_map<AttrName, std::unordered_set<QueryEntityType>> QPSUtil::attrN
          std::unordered_set<QueryEntityType>{QueryEntityType::Variable, QueryEntityType::Read, QueryEntityType::Print}},
         {"value", std::unordered_set<QueryEntityType>{QueryEntityType::Constant}}};
 
-std::unordered_map<AttrName, std::unordered_set<StatementType>> QPSUtil::getAttrValue = {
-        {"procName", std::unordered_set<StatementType>{StatementType::Call}},
-        {"varName", std::unordered_set<StatementType>{StatementType::Read, StatementType::Print}}};
+// std::unordered_map<AttrName, std::unordered_set<StatementType>> QPSUtil::getAttrValue = {
+//        {"procName", std::unordered_set<StatementType>{StatementType::Call}},
+//        {"varName", std::unordered_set<StatementType>{StatementType::Read, StatementType::Print}}};
 
 Synonym QPSUtil::getSyn(std::string elem) {
     std::size_t dotPos = elem.find('.');
@@ -117,15 +117,26 @@ AttrName QPSUtil::getAttrName(std::string elem) {
     if (dotPos != std::string::npos) {// attrRef
         return elem.substr(dotPos + 1);
     }
-    return elem;
+    return "";
 }
 
-// bool QPSUtil::isAttrRef(std::string elem, Entity& entity) {
-//     auto attrName = getAttrName(elem);
-//     auto type = entity.getEntityType();
-//     if (type == EntityType::Statement && getAttrValue[attrName].count(entity.getStatementType()) > 0) {
-//         return true;
-//     }
-//     return false;
-// }
+std::unordered_map<AttrName, std::function<std::string(Entity)>> QPSUtil::getValueFunc = {
+        {"procName",
+         [](const Entity &e) -> std::string {
+             if (e.getEntityType() == EntityType::Procedure) {
+                 return e.getEntityValue();
+             } else {// call.procName
+                 return e.getAttrValue();
+             }
+         }},
+        {"varName",
+         [](const Entity &e) -> std::string {
+             if (e.getEntityType() == EntityType::Variable) {
+                 return e.getEntityValue();
+             } else {// read.varName & printVarName
+                 return e.getAttrValue();
+             }
+         }},
+        {"value", [](const Entity &e) -> std::string { return e.getEntityValue(); }},
+        {"stmt#", [](const Entity &e) -> std::string { return e.getEntityValue(); }}};
 

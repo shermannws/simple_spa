@@ -42,10 +42,12 @@ public:
      */
     static std::unordered_map<AttrName, std::unordered_set<QueryEntityType>> attrNameToTypeMap;
 
-    /**
-     * @brief An unordered map of attrName and stmt types that requires returning attrValue instead of Entity value;
-     */
-    static std::unordered_map<AttrName, std::unordered_set<StatementType>> getAttrValue;
+//    /**
+//     * @brief An unordered map of attrName and stmt types that requires returning attrValue instead of Entity value;
+//     */
+//    static std::unordered_map<AttrName, std::unordered_set<StatementType>> getValueFunc;
+
+    static std::unordered_map<AttrName, std::function<std::string(Entity)>> getValueFunc;
 
     static Synonym getSyn(std::string elem);
 

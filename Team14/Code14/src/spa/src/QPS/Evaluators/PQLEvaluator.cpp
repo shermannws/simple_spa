@@ -28,12 +28,17 @@ ResultList PQLEvaluator::formatResult(Query &query, Result &result) {
     for (auto &tuple: result.getTuples()) {
         std::vector<std::string> tmp;
         for (Synonym &syn: selects) {
-            if (indicesMap.find(syn) != indicesMap.end()) {// TODO refactor into transformation.apply for each row
-                int idx = indicesMap.at(syn);
+            auto attrName = QPSUtil::getAttrName(syn);
+            auto elemSyn = syn;
+            if (!attrName.empty()) {
+                elemSyn = QPSUtil::getSyn(syn); // get Synonym without attrName
+            }
+            if (indicesMap.find(elemSyn) != indicesMap.end()) {// TODO refactor into transformation.apply for each row
+                int idx = indicesMap.at(elemSyn);
                 std::string value = tuple[idx].getEntityValue();
-                // if (isAttrRef(syn, tuple[idx])) {
-                // value = tuple[idx].getAttrValue();
-                //}
+                if (!attrName.empty()) { // if attrRef
+                    value = QPSUtil::getValueFunc[attrName](tuple[idx]);
+                }
                 tmp.emplace_back(value);
             }
 
