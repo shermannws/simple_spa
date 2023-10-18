@@ -808,6 +808,26 @@ TEST_CASE("if pattern") {
         REQUIRE(find(results.begin(), results.end(), "var3") != results.end());
     }
 
+    SECTION("getAllIfStmtVarPair for pattern if(v,_,_) unrelated synonym in select") {
+        PQLParser parser("if ifs; variable v, x; Select x pattern ifs(v, _, _)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 8);
+        REQUIRE(find(results.begin(), results.end(), "var1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var5") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var38") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var88") != results.end());
+    }
+
+
     SECTION("getIfStmtsByVar for pattern if(\"var\",_,_)") {
         PQLParser parser("if if; Select if pattern if(\"ifPatternVar\",_,_)");
         Query queryObj = parser.parse();

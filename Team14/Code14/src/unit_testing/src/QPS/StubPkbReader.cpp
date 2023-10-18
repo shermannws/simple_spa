@@ -2,7 +2,18 @@
 
 StubPkbReader::StubPkbReader() = default;
 
-std::vector<Entity> StubPkbReader::getAllVariables() const { return std::vector<Entity>(); }
+std::vector<Entity> StubPkbReader::getAllVariables() const {
+    return std::vector<Entity>({
+            Variable("var1"),
+            Variable("var2"),
+            Variable("var5"),
+            Variable("var14"),
+            Variable("var24"),
+            Variable("var36"),
+            Variable("var38"),
+            Variable("var88"),
+    });
+}
 
 std::vector<Entity> StubPkbReader::getAllConstants() const { return std::vector<Entity>(); }
 
