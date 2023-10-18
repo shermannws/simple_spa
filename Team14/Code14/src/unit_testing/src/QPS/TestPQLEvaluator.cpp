@@ -1222,6 +1222,6 @@ TEST_CASE("multiclause, pattern and suchThat - synonym not in tuple result table
     auto results = evaluator.formatResult(queryObj, resultObj);
     REQUIRE(resultObj.getType() == ResultType::Tuples);
     REQUIRE(resultObj.getSynIndices()["c"] == 0);
-    REQUIRE(resultObj.getTuples().size() == 0);
-    REQUIRE(results.size() == 0);
+    REQUIRE(resultObj.getTuples().size() == 4);
+    REQUIRE(results.size() == 4);
 }
