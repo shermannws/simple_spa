@@ -11,6 +11,9 @@
 #include "SP/AST/Nodes/StatementListNode.h"
 #include "SP/AST/Nodes/WhileNode.h"
 
+/**
+ * Builder class to build CFGs.
+ */
 class CFGBuilder {
 private:
     /**

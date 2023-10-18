@@ -1,15 +1,17 @@
 #include "CFGNode.h"
 
-CFGNode::CFGNode(StatementNumber statementNumber) : statementNumber(std::move(statementNumber)) {}
+#include <utility>
+
+CFGNode::CFGNode(StatementNumber statementNumber)
+    : statementNumber(statementNumber), statementType(StatementType::Stmt), attrValue(AppConstants::STRING_EMPTY) {}
 
 CFGNode::CFGNode(StatementNumber statementNumber, StatementType statementType)
-    : statementNumber(std::move(statementNumber)), statementType(statementType) {}
+    : statementNumber(statementNumber), statementType(statementType), attrValue(AppConstants::STRING_EMPTY) {}
 
-CFGNode::CFGNode(StatementNumber statementNumber, std::vector<std::shared_ptr<CFGNode>> parents,
-                 std::vector<std::shared_ptr<CFGNode>> children)
-    : statementNumber(std::move(statementNumber)), parents(std::move(parents)), children(std::move(children)) {}
+CFGNode::CFGNode(StatementNumber statementNumber, StatementType statementType, AttrValue attrValue)
+    : statementNumber(statementNumber), statementType(statementType), attrValue(std::move(attrValue)) {}
 
-StatementNumber CFGNode::getStatementNumber() { return this->statementNumber; }
+StatementNumber CFGNode::getStatementNumber() const { return this->statementNumber; }
 
 std::vector<std::shared_ptr<CFGNode>> CFGNode::getParentNodes() { return this->parents; }
 
@@ -23,4 +25,6 @@ void CFGNode::removeChildNode(const std::shared_ptr<CFGNode> &child) {
     this->children.erase(std::remove(this->children.begin(), this->children.end(), child), this->children.end());
 }
 
-StatementType CFGNode::getStatementType() { return this->statementType; }
+StatementType CFGNode::getStatementType() const { return this->statementType; }
+
+AttrValue CFGNode::getAttrValue() const { return this->attrValue; }
