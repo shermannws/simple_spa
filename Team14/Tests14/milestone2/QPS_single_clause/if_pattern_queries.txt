@@ -26,7 +26,7 @@ x, e, f, g
 6 - select unrelated var, var syn, wildcard, wildcard
 if ifs; variable v, x;
 Select x pattern ifs(v, _, _)
-x, y, z, a, b, c, d, e, f, g
+x, y, z, a, b, c, d, e, f, g, h, if, while
 5000
 7 - select ifs, non-existent var string, wildcard, wildcard
 if ifs;
@@ -34,8 +34,8 @@ Select ifs pattern ifs("nonexistentvar", _, _)
 none
 5000
 8 - select unrelated if, wildcard, wildcard, wildcard
-if ifs, allif;
-Select allif pattern ifs(_, _, _)
+if ifs, allifs;
+Select allifs pattern ifs(_, _, _)
 1, 4, 9, 14
 5000
 9 - invalid arg2, var syn, partial var, wildcard
@@ -114,12 +114,12 @@ Select ifs pattern ifs("invalid^varname",_,_)
 SyntaxError
 5000
 24 - invalid pattern declaration, undeclared variable
-if ifs; variable v
+if ifs; variable v;
 Select ifs pattern if(_,_,_)
 SyntaxError
 5000
 25 - invalid pattern, pattern syn is not if
-if ifs; variable v
+if ifs; variable v;
 Select ifs pattern v(_,_,_)
 SyntaxError
 5000
