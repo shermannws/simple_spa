@@ -1,0 +1,94 @@
+. procedure.procName = procedure.procName
+procedure p, p1;
+Select p with p.procName = p1.procName
+call, print
+5000
+. procedure.procName = call.procName
+. procedure.procName = variable.varName
+. procedure.procName = read.varName
+. procedure.procName = print.varName
+. procedure.procName = IDENT
+. call.procName = call.procName
+. call.procName = variable.varName
+. call.procName = read.varName
+. call.procName = print.varName
+. call.procName = IDENT
+. variable.varName = variable.varName
+. variable.varName = read.varName
+. variable.varName = print.varName
+. variable.varName = IDENT
+. read.varName = read.varName
+. read.varName = print.varName
+. read.varName = IDENT
+. print.varName = print.varName
+. print.varName = IDENT
+. IDENT = IDENT
+
+. constant.value = constant.value
+. constant.value = stmt.stmt#
+. constant.value = read.stmt#
+. constant.value = print.stmt#
+. constant.value = call.stmt#
+. constant.value = while.stmt#
+. constant.value = if.stmt#
+. constant.value = assign.stmt#
+. constant.value = INTEGER
+
+. stmt.stmt# = stmt.stmt#
+. stmt.stmt# = read.stmt#
+. stmt.stmt# = print.stmt#
+. stmt.stmt# = call.stmt#
+. stmt.stmt# = while.stmt#
+. stmt.stmt# = if.stmt#
+. stmt.stmt# = assign.stmt#
+. stmt.stmt# = INTEGER
+
+. read.stmt# = read.stmt#
+. read.stmt# = print.stmt#
+. read.stmt# = call.stmt#
+. read.stmt# = while.stmt#
+. read.stmt# = if.stmt#
+. read.stmt# = assign.stmt#
+. read.stmt# = INTEGER
+
+. print.stmt# = print.stmt#
+. print.stmt# = call.stmt#
+. print.stmt# = while.stmt#
+. print.stmt# = if.stmt#
+. print.stmt# = assign.stmt#
+. print.stmt# = INTEGER
+
+. call.stmt# = call.stmt#
+. call.stmt# = while.stmt#
+. call.stmt# = if.stmt#
+. call.stmt# = assign.stmt#
+. call.stmt# = INTEGER
+
+. while.stmt# = while.stmt#
+. while.stmt# = if.stmt#
+. while.stmt# = assign.stmt#
+. while.stmt# = INTEGER
+
+. if.stmt# = if.stmt#
+. if.stmt# = assign.stmt#
+. if.stmt# = INTEGER
+
+. assign.stmt# assign.stmt#
+. assign.stmt# INTEGER
+
+. INEGER INTEGER
+
+
+
+
+
+
+
+
+
+SemanticError
+- wrong attrName
+- wrong comparison
+
+
+SyntaxError

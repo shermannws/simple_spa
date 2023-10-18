@@ -1,0 +1,17 @@
+procedure call {
+	call print;
+	read read;
+	if (!(!(!(x != y)))) then {
+		print a;
+	} else {
+		print b;
+	}
+}
+
+procedure print {
+	print call;
+	call = 1 + 2;
+	while (8 == x) {
+		read k;
+	}
+}
