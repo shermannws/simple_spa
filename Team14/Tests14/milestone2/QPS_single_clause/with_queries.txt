@@ -548,3 +548,13 @@ print pn; assign a;
 Select a with pn.varName = a.stmt#
 SemanticError
 5000
+111 - SemanticError (Wrong comparison): print.varName = INTEGER
+print pn;
+Select pn with pn.varName = 1
+SemanticError
+5000
+112 - SemanticError (Wrong comparison): if.stmt# = NAME
+if ifs;
+Select ifs with if.stmt# = "3"
+SemanticError
+5000
