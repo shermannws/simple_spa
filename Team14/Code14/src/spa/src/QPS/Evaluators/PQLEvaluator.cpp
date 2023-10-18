@@ -6,7 +6,7 @@
 #include "QPS/QPSUtil.h"
 #include "QPS/QueryEntity.h"
 
-using transformFunc = std::function<std::string(Entity&)>;
+using transformFunc = std::function<std::string(Entity &)>;
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader)
     : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
@@ -42,7 +42,7 @@ std::vector<std::pair<int, transformFunc>> PQLEvaluator::getTransformations(Syno
         std::pair<int, transformFunc> transformation;
         if (attrName.empty()) {// case synonym
             transformation.first = inputMap[elem];
-            transformation.second = [](Entity& ent) { return ent.getEntityValue(); };
+            transformation.second = [](Entity &ent) { return ent.getEntityValue(); };
         } else {                             // case attrRef
             auto syn = QPSUtil::getSyn(elem);// get Syn without attrName
             transformation.first = inputMap[syn];
@@ -135,30 +135,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(const Query &query, s
     return tupleResult;
 }
 
-std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity> &queryEntity) {// TODO use Map to funcs
+std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity> &queryEntity) {
     QueryEntityType entityType = queryEntity->getType();
-    switch (entityType) {
-        case QueryEntityType::Procedure:
-            return pkbReader->getAllProcedures();
-        case QueryEntityType::Stmt:
-            return pkbReader->getAllStatements();
-        case QueryEntityType::Assign:
-            return pkbReader->getAllAssign();
-        case QueryEntityType::Variable:
-            return pkbReader->getAllVariables();
-        case QueryEntityType::Constant:
-            return pkbReader->getAllConstants();
-        case QueryEntityType::While:
-            return pkbReader->getAllWhile();
-        case QueryEntityType::If:
-            return pkbReader->getAllIf();
-        case QueryEntityType::Read:
-            return pkbReader->getAllRead();
-        case QueryEntityType::Print:
-            return pkbReader->getAllPrint();
-        case QueryEntityType::Call:
-            return pkbReader->getAllCall();
-        default:
-            throw std::runtime_error("Not supported entity type in query select clause");
-    }
+    return QPSUtil::entityGetterMap[entityType](pkbReader);
 }

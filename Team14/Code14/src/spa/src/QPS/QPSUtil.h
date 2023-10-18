@@ -33,6 +33,12 @@ public:
             strategyCreatorMap;
 
     /**
+     * @brief An unordered map of query entity type to the corresponding pkb getAll func
+     */
+    static std::unordered_map<QueryEntityType, std::function<std::vector<Entity>(std::shared_ptr<PkbReader>)>>
+            entityGetterMap;
+
+    /**
      * @brief An unordered map that maps QueryEntityType to the corresponding StatementType
      */
     static std::unordered_map<QueryEntityType, StatementType> entityToStmtMap;
