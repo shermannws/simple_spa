@@ -42,7 +42,7 @@ PatternExtractorVisitor::getVariablesFromCondExpr(std::shared_ptr<ConditionalExp
         std::shared_ptr<ASTNode> current = frontier.top();
         frontier.pop();
 
-        VariableNode *ptr = dynamic_cast<VariableNode *>(current.get());
+        std::shared_ptr<VariableNode> ptr = std::dynamic_pointer_cast<VariableNode>(current);
         if (ptr) { variables.push_back(std::make_shared<Variable>(ptr->getVarName())); }
 
         std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();
