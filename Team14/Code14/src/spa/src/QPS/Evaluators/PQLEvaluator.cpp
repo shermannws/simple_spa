@@ -6,7 +6,7 @@
 #include "QPS/QPSUtil.h"
 #include "QPS/QueryEntity.h"
 
-using transformFunc = std::function<std::string(Entity)>;
+using transformFunc = std::function<std::string(Entity&)>;
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader)
     : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
@@ -42,7 +42,7 @@ std::vector<std::pair<int, transformFunc>> PQLEvaluator::getTransformations(Syno
         std::pair<int, transformFunc> transformation;
         if (attrName.empty()) {// case synonym
             transformation.first = inputMap[elem];
-            transformation.second = [](Entity ent) { return ent.getEntityValue(); };
+            transformation.second = [](Entity& ent) { return ent.getEntityValue(); };
         } else {                             // case attrRef
             auto syn = QPSUtil::getSyn(elem);// get Syn without attrName
             transformation.first = inputMap[syn];

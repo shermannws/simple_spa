@@ -100,10 +100,6 @@ std::unordered_map<AttrName, std::unordered_set<QueryEntityType>> QPSUtil::attrN
          std::unordered_set<QueryEntityType>{QueryEntityType::Variable, QueryEntityType::Read, QueryEntityType::Print}},
         {"value", std::unordered_set<QueryEntityType>{QueryEntityType::Constant}}};
 
-// std::unordered_map<AttrName, std::unordered_set<StatementType>> QPSUtil::getAttrValue = {
-//        {"procName", std::unordered_set<StatementType>{StatementType::Call}},
-//        {"varName", std::unordered_set<StatementType>{StatementType::Read, StatementType::Print}}};
-
 Synonym QPSUtil::getSyn(std::string elem) {
     std::size_t dotPos = elem.find('.');
     if (dotPos != std::string::npos) {// attrRef
@@ -138,5 +134,6 @@ std::unordered_map<AttrName, std::function<std::string(Entity)>> QPSUtil::getVal
              }
          }},
         {"value", [](const Entity &e) -> std::string { return e.getEntityValue(); }},
-        {"stmt#", [](const Entity &e) -> std::string { return e.getEntityValue(); }}};
+        {"stmt#", [](const Entity &e) -> std::string { return e.getEntityValue(); }}
+};
 

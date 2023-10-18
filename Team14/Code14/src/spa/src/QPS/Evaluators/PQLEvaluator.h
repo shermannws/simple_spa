@@ -10,7 +10,7 @@
 #include "Result.h"
 #include "ResultHandler.h"
 
-using transformFunc = std::function<std::string(Entity)>;
+using transformFunc = std::function<std::string(Entity&)>;
 
 /**
  * @brief PQL (Program Query Language) evaluator class.
