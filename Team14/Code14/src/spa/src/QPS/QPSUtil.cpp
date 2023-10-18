@@ -134,6 +134,4 @@ std::unordered_map<AttrName, std::function<std::string(Entity)>> QPSUtil::getVal
              }
          }},
         {"value", [](const Entity &e) -> std::string { return e.getEntityValue(); }},
-        {"stmt#", [](const Entity &e) -> std::string { return e.getEntityValue(); }}
-};
-
+        {"stmt#", [](const Entity &e) -> std::string { return e.getEntityValue(); }}};

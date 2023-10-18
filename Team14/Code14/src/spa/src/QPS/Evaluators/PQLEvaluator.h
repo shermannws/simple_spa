@@ -10,7 +10,7 @@
 #include "Result.h"
 #include "ResultHandler.h"
 
-using transformFunc = std::function<std::string(Entity&)>;
+using transformFunc = std::function<std::string(Entity &)>;
 
 /**
  * @brief PQL (Program Query Language) evaluator class.
@@ -87,23 +87,26 @@ private:
      * @param transformations pair of index of entity to transform and toString function to apply
      * @return the vector of transformation results
      */
-    std::vector<std::string> project(std::vector<Entity> row, std::vector<std::pair<int, transformFunc>> transformations);
+    std::vector<std::string> project(std::vector<Entity> row,
+                                     std::vector<std::pair<int, transformFunc>> transformations);
 
     /**
-     * creates a vector of transformations to convert a row from a result table into the format specified by resultClause
-     * a transformation is a pair of int, transformFunc where int represents index of entity
+     * creates a vector of transformations to convert a row from a result table into the format specified by
+     * resultClause a transformation is a pair of int, transformFunc where int represents index of entity
      * @param inputMap synonym indices of input tuples
      * @param resultClause vector of synonyms we want to build
      * @return
      */
-    std::vector<std::pair<int, transformFunc>> getTransformations(SynonymMap inputMap, std::vector<Synonym> resultClause);
+    std::vector<std::pair<int, transformFunc>> getTransformations(SynonymMap inputMap,
+                                                                  std::vector<Synonym> resultClause);
 
     /**
      * concatenates a vector of strings with a whitespace as the connector
      * @param strings vector of strings to join
      * @return resultant string
      */
-    std::string concat (std::vector<std::string> strings);
+    std::string concat(std::vector<std::string> strings);
+
 public:
     /**
      * @brief Explicit constructor for the PQLEvaluator class.
@@ -125,5 +128,4 @@ public:
      * @return The formatted result list
      */
     ResultList formatResult(Query &query, Result &result);
-
 };

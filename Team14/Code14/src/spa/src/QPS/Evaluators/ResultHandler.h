@@ -53,11 +53,11 @@ private:
                  const std::unordered_map<int, int> &commons);
 
     /**
-    * Casts a Result object into a False Boolean Result if it is an Empty Tuple Result,
-    * otherwise returns the original result
-    * @param result shared pointer to the Result object being casted
-    * @return shared pointer to the casted Result object
-    */
+     * Casts a Result object into a False Boolean Result if it is an Empty Tuple Result,
+     * otherwise returns the original result
+     * @param result shared pointer to the Result object being casted
+     * @return shared pointer to the casted Result object
+     */
     std::shared_ptr<Result> cast(std::shared_ptr<Result> result);
 
 public:
@@ -74,5 +74,4 @@ public:
      * @return the resultant table
      */
     std::shared_ptr<Result> getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
-
 };

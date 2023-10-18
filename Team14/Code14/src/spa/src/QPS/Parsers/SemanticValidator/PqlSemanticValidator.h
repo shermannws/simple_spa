@@ -56,5 +56,4 @@ private:
     void validateResultElem(const Query &query, Synonym elem);
 
     bool isBooleanResult(const Query &query, std::vector<Synonym> resultClause);
-
 };

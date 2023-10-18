@@ -60,5 +60,4 @@ public:
      * @return the empty string for synonym elements, the attrName without the synonym for attrRef elements
      */
     static AttrName getAttrName(std::string elem);
-
 };
