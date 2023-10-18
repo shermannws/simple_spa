@@ -1,7 +1,7 @@
-#include "catch.hpp"
 #include "PKB/Pkb.h"
-#include "QPS/Parsers/PQLParser.h"
 #include "QPS/Evaluators/PQLEvaluator.h"
+#include "QPS/Parsers/PQLParser.h"
+#include "catch.hpp"
 
 using namespace std;
 
@@ -335,7 +335,7 @@ TEST_CASE("Test integration of PKB with QPS - Uses (a, 'x')") {
 
     PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
 
-//    PQLParser parser1("assign a; variable v; Select v such that Uses (a, v)");
+    //    PQLParser parser1("assign a; variable v; Select v such that Uses (a, v)");
     PQLParser parser1("assign a; Select a such that Uses (a, \"x\")");
     Query queryObj1 = parser1.parse();
     Result resultObj1 = evaluator.evaluate(queryObj1);
@@ -487,5 +487,4 @@ TEST_CASE("Test multiclause") {
 
     REQUIRE(results3.size() == 1);
     REQUIRE(find(results3.begin(), results3.end(), "3") != results3.end());
-
 }

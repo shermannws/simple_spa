@@ -8,7 +8,5 @@ std::shared_ptr<SemanticValHandler> SemanticValHandler::setNext(std::shared_ptr<
 }
 
 void SemanticValHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
-    if (nextHandler) {
-        return nextHandler->handle(query, clause);
-    }
+    if (nextHandler) { return nextHandler->handle(query, clause); }
 }

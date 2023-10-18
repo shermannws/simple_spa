@@ -4,13 +4,13 @@
 
 SemanticValidator::SemanticValidator() = default;
 
-void SemanticValidator::validate(const std::shared_ptr<ProgramNode>& root) {
+void SemanticValidator::validate(const std::shared_ptr<ProgramNode> &root) {
 
     std::vector<std::shared_ptr<ProcedureNode>> procedures = root->getProcedures();
     std::unordered_set<std::string> procedureNames;
 
     // insert procedure names into set and check for duplicates
-    for (const auto& procedure : procedures) {
+    for (const auto &procedure: procedures) {
         std::string name = procedure->getProcedureName();
 
         if (procedureNames.count(name) > 0) {
@@ -44,13 +44,9 @@ void SemanticValidator::validate(const std::shared_ptr<ProgramNode>& root) {
 
         // Add child of current node into the frontier
         std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();
-        for (auto it = childrenOfCurrent.rbegin(); it != childrenOfCurrent.rend(); it++) {
-            frontier.push(*it);
-        }
+        for (auto it = childrenOfCurrent.rbegin(); it != childrenOfCurrent.rend(); it++) { frontier.push(*it); }
     }
     // End of DFS algorithm
 
-    if (callGraph.hasCycle()) {
-        throw SemanticError("Semantic error: Cyclic procedure calls detected");
-    }
+    if (callGraph.hasCycle()) { throw SemanticError("Semantic error: Cyclic procedure calls detected"); }
 }

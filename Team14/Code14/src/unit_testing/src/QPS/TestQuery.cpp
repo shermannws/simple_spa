@@ -31,7 +31,6 @@ TEST_CASE("Query class tests") {
         std::vector<Synonym> select = query.getSelect();
         REQUIRE(select.size() == 1);
         REQUIRE(select[0] == "v");
-
     }
 
     SECTION("Test getEntity") {
@@ -44,5 +43,4 @@ TEST_CASE("Query class tests") {
         REQUIRE(entity == entity1);
         REQUIRE(query.getEntity("unknownSynonym") == nullptr);
     }
-
 }

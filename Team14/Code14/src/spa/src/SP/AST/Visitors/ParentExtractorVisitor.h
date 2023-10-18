@@ -1,10 +1,9 @@
 #pragma once
 
-#include "DesignExtractorVisitor.h"
 #include "../../AST/Nodes/StatementListNode.h"
+#include "DesignExtractorVisitor.h"
 
-class ParentExtractorVisitor : public DesignExtractorVisitor,
-    public StatementListNodeVisitor {
+class ParentExtractorVisitor : public DesignExtractorVisitor, public StatementListNodeVisitor {
 public:
     /*!
      * Constructor for ParentExtractorVisitor.
@@ -18,5 +17,6 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitStatementListNode(StatementListNode* node, std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) const override;
+    void visitStatementListNode(StatementListNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+                                std::shared_ptr<ASTNode> proc) const override;
 };

@@ -1,14 +1,14 @@
 #pragma once
 
+#include <algorithm>
 #include <memory>
 #include <vector>
-#include <algorithm>
 
-#include "PKB/Managers/ManagerUtils.h"
-#include "PKB/Managers/EntitiesManager.h"
 #include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Variable.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
+#include "PKB/Managers/EntitiesManager.h"
+#include "PKB/Managers/ManagerUtils.h"
 
 /**
  * @class ProcToVarRelationshipManager is responsible for storing and retrieving the relationships
@@ -18,13 +18,14 @@
  * @note A relationship is a relationship between a procedure and a variable
  * @tparam S The type of the relationship store
  */
-template <typename S>
+template<typename S>
 class ProcToVarRelationshipManager {
 private:
     /**
      * @brief The relationship store
      */
     std::shared_ptr<S> relationshipStore;
+
 public:
     /**
      * @brief Constructs a ProcToVarRelationshipManager object
@@ -50,7 +51,7 @@ public:
      * @param var The variable that is related to the statements
      * @return A vector of procedure
      */
-    std::vector<Entity> getRelationshipIdent(Variable& var) const;
+    std::vector<Entity> getRelationshipIdent(Variable &var) const;
 
     /**
      * Returns a vector of procedures which is related to any variable
@@ -63,7 +64,7 @@ public:
      * @param procedure The procedure that is related to the variables
      * @return A vector of variables
      */
-    std::vector<Entity> getRelationshipVar(Procedure& procedure) const;
+    std::vector<Entity> getRelationshipVar(Procedure &procedure) const;
 
     /**
      * Returns a boolean value indicating if the given procedure is related to the given variable
@@ -71,19 +72,19 @@ public:
      * @param var The variable that is related to the procedure
      * @return True if the procedure is related to the variable, else false
      */
-    bool isRelationship(Procedure& procedure, Variable& var) const;
+    bool isRelationship(Procedure &procedure, Variable &var) const;
 
     /**
      * Returns a boolean value indicating if the given procedure is related to any variable
      * @param procedure The procedure that is related to the variable
      * @return True if the procedure is related to any variable, else false
      */
-    bool hasRelationship(Procedure& procedure) const;
+    bool hasRelationship(Procedure &procedure) const;
 
     /**
      * Calculates and populate the ProcToVarRelationship relationshipStore with the given CallsRelationshipManager
      * @param callManager The CallsRelationshipManager
-	 */
+     */
     void calculateProcVarRelationshipForCallers(std::shared_ptr<CallsRelationshipManager> callManager);
 
     /**
