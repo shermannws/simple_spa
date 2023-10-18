@@ -104,11 +104,11 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     REQUIRE(*(entitiesManager->getVariable(std::make_shared<Variable>(Variable("num1")))) ==
             *(std::make_shared<Variable>("num1")));
 
-    REQUIRE(*(entitiesManager->getStatement(std::make_shared<Statement>(AssignStatement(1)))) ==
+    REQUIRE(*(entitiesManager->getStatement(std::make_shared<Statement>(1, StatementType::Assign))) ==
             *(std::make_shared<AssignStatement>(1)));
-    REQUIRE(*(entitiesManager->getStatement(std::make_shared<Statement>(ReadStatement(2, varName)))) ==
+    REQUIRE(*(entitiesManager->getStatement(std::make_shared<Statement>(2, StatementType::Read))) ==
             *(std::make_shared<ReadStatement>(2, varName)));
-    REQUIRE(*(entitiesManager->getStatement(std::make_shared<Statement>(PrintStatement(3, varName)))) ==
+    REQUIRE(*(entitiesManager->getStatement(std::make_shared<Statement>(3, StatementType::Print))) ==
             *(std::make_shared<PrintStatement>(3, varName)));
 
     REQUIRE(*(entitiesManager->getConstant(std::make_shared<Constant>(Constant("1")))) ==
@@ -208,11 +208,11 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     auto stmt2 = Statement(2, StatementType::If);
     auto stmt3 = Statement(3, StatementType::Assign);
     auto stmt4 = Statement(4, StatementType::Assign);
-    auto stmt5 = Statement(5, StatementType::Read, "h");
-    auto stmt6 = Statement(6, StatementType::Print, "i");
+    auto stmt5 = Statement(5, StatementType::Read);
+    auto stmt6 = Statement(6, StatementType::Print);
     auto stmt7 = Statement(7, StatementType::While);
     auto stmt8 = Statement(8, StatementType::Assign);
-    auto stmt9 = Statement(9, StatementType::Read, "j");
+    auto stmt9 = Statement(9, StatementType::Read);
     auto stmt10 = Statement(10, StatementType::Assign);
 
     auto varA = Variable("a");
@@ -376,47 +376,47 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
     auto varG = Variable("g");
 
     // Check Procedure
-    REQUIRE(*(entitiesManager->getProcedure(std::make_shared<Procedure>(Procedure("kk")))) ==
-            *(std::make_shared<Procedure>("kk")));
-    REQUIRE(*(entitiesManager->getProcedure(std::make_shared<Procedure>(Procedure("jj")))) ==
-            *(std::make_shared<Procedure>("jj")));
+    CHECK(*(entitiesManager->getProcedure(std::make_shared<Procedure>(Procedure("kk")))) ==
+          *(std::make_shared<Procedure>("kk")));
+    CHECK(*(entitiesManager->getProcedure(std::make_shared<Procedure>(Procedure("jj")))) ==
+          *(std::make_shared<Procedure>("jj")));
 
     // Check Modifies with Procedure
-    REQUIRE(modifiesProcRelationshipManager->isRelationship(proc1, varC));
-    REQUIRE(modifiesProcRelationshipManager->isRelationship(proc2, varF));
+    CHECK(modifiesProcRelationshipManager->isRelationship(proc1, varC));
+    CHECK(modifiesProcRelationshipManager->isRelationship(proc2, varF));
 
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varA));
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varB));
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varD));
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varE));
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varF));
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc1, varG));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc1, varA));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc1, varB));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc1, varD));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc1, varE));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc1, varF));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc1, varG));
 
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varA));
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varB));
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varC));
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varD));
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varE));
-    REQUIRE(!modifiesProcRelationshipManager->isRelationship(proc2, varG));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc2, varA));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc2, varB));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc2, varC));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc2, varD));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc2, varE));
+    CHECK(!modifiesProcRelationshipManager->isRelationship(proc2, varG));
 
     // Check Uses with Procedure
-    REQUIRE(usesProcRelationshipManager->isRelationship(proc1, varA));
-    REQUIRE(usesProcRelationshipManager->isRelationship(proc1, varB));
-    REQUIRE(usesProcRelationshipManager->isRelationship(proc1, varD));
-    REQUIRE(usesProcRelationshipManager->isRelationship(proc1, varE));
+    CHECK(usesProcRelationshipManager->isRelationship(proc1, varA));
+    CHECK(usesProcRelationshipManager->isRelationship(proc1, varB));
+    CHECK(usesProcRelationshipManager->isRelationship(proc1, varD));
+    CHECK(usesProcRelationshipManager->isRelationship(proc1, varE));
 
-    REQUIRE(usesProcRelationshipManager->isRelationship(proc2, varG));
+    CHECK(usesProcRelationshipManager->isRelationship(proc2, varG));
 
-    REQUIRE(!usesProcRelationshipManager->isRelationship(proc1, varC));
-    REQUIRE(!usesProcRelationshipManager->isRelationship(proc1, varF));
-    REQUIRE(!usesProcRelationshipManager->isRelationship(proc1, varG));
+    CHECK(!usesProcRelationshipManager->isRelationship(proc1, varC));
+    CHECK(!usesProcRelationshipManager->isRelationship(proc1, varF));
+    CHECK(!usesProcRelationshipManager->isRelationship(proc1, varG));
 
-    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varA));
-    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varB));
-    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varC));
-    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varD));
-    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varE));
-    REQUIRE(!usesProcRelationshipManager->isRelationship(proc2, varF));
+    CHECK(!usesProcRelationshipManager->isRelationship(proc2, varA));
+    CHECK(!usesProcRelationshipManager->isRelationship(proc2, varB));
+    CHECK(!usesProcRelationshipManager->isRelationship(proc2, varC));
+    CHECK(!usesProcRelationshipManager->isRelationship(proc2, varD));
+    CHECK(!usesProcRelationshipManager->isRelationship(proc2, varE));
+    CHECK(!usesProcRelationshipManager->isRelationship(proc2, varF));
 }
 
 
@@ -503,38 +503,38 @@ TEST_CASE("Test CFG Extractor - test Next extraction") {
     auto statement16 = Statement(16, StatementType::Assign);
 
     // Check stores - positive cases
-    REQUIRE(nextRelationshipManager->isRelationship(statement1, statement2, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement2, statement3, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement3, statement4, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement4, statement5, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement4, statement6, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement5, statement7, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement6, statement7, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement7, statement8, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement8, statement7, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement12, statement13, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement12, statement14, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement15, statement16, true));
-    REQUIRE(nextRelationshipManager->isRelationship(statement16, statement15, true));
+    CHECK(nextRelationshipManager->isRelationship(statement1, statement2, true));
+    CHECK(nextRelationshipManager->isRelationship(statement2, statement3, true));
+    CHECK(nextRelationshipManager->isRelationship(statement3, statement4, true));
+    CHECK(nextRelationshipManager->isRelationship(statement4, statement5, true));
+    CHECK(nextRelationshipManager->isRelationship(statement4, statement6, true));
+    CHECK(nextRelationshipManager->isRelationship(statement5, statement7, true));
+    CHECK(nextRelationshipManager->isRelationship(statement6, statement7, true));
+    CHECK(nextRelationshipManager->isRelationship(statement7, statement8, true));
+    CHECK(nextRelationshipManager->isRelationship(statement8, statement7, true));
+    CHECK(nextRelationshipManager->isRelationship(statement12, statement13, true));
+    CHECK(nextRelationshipManager->isRelationship(statement12, statement14, true));
+    CHECK(nextRelationshipManager->isRelationship(statement15, statement16, true));
+    CHECK(nextRelationshipManager->isRelationship(statement16, statement15, true));
 
     // Check stores - negative cases - across procedures
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement1, statement9, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement8, statement9, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement9, statement10, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement10, statement11, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement11, statement12, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement12, statement15, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement1, statement9, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement8, statement9, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement9, statement10, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement10, statement11, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement11, statement12, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement12, statement15, true));
 
     // Check stores - negative cases - within procedures
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement1, statement1, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement11, statement11, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement1, statement8, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement4, statement7, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement13, statement14, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement1, statement3, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement2, statement4, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement3, statement5, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement3, statement6, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement5, statement8, true));
-    REQUIRE_FALSE(nextRelationshipManager->isRelationship(statement6, statement8, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement1, statement1, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement11, statement11, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement1, statement8, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement4, statement7, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement13, statement14, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement1, statement3, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement2, statement4, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement3, statement5, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement3, statement6, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement5, statement8, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement6, statement8, true));
 }
