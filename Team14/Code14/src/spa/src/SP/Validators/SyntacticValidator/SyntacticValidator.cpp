@@ -4,15 +4,13 @@
 SyntacticValidator::SyntacticValidator(const std::vector<SPToken> &tokens) : tokens(tokens), curr(0) {}
 
 std::vector<SPToken> SyntacticValidator::validate() {
-    while (isCurrValid()) {
-        validateProcedure();
-    }
+    while (isCurrValid()) { validateProcedure(); }
     return tokens;
 }
 
 void SyntacticValidator::validateProcedure() {
     SPToken token = peekToken();
-    if (token.getType() == TokenType::Name && token.getValue() == AppConstants::STRING_PROCEDURE ) {
+    if (token.getType() == TokenType::Name && token.getValue() == AppConstants::STRING_PROCEDURE) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected '" + AppConstants::STRING_PROCEDURE + "'");
@@ -37,9 +35,8 @@ void SyntacticValidator::validateStmtLst() {
         } else if (peekNextToken().getType() == TokenType::Equals) {
             validateAssign();
         } else if (token.getType() == TokenType::Name) {
-            if (token.getValue() == AppConstants::STRING_READ ||
-                    token.getValue() == AppConstants::STRING_PRINT ||
-                    token.getValue() == AppConstants::STRING_CALL) {
+            if (token.getValue() == AppConstants::STRING_READ || token.getValue() == AppConstants::STRING_PRINT ||
+                token.getValue() == AppConstants::STRING_CALL) {
                 validateReadPrintCall();
             } else if (token.getValue() == AppConstants::STRING_WHILE) {
                 validateWhile();
@@ -55,7 +52,7 @@ void SyntacticValidator::validateStmtLst() {
 }
 
 void SyntacticValidator::validateReadPrintCall() {
-    popToken(); // terminals validated by validateStmtLst()
+    popToken();// terminals validated by validateStmtLst()
     validateName();
     validateSemicolon();
 }
@@ -73,8 +70,7 @@ void SyntacticValidator::validateExpr() {
 
     // Recursively check for the next valid term or arithmetic operator til reach end of exp
     validateTerm();
-    if (peekNextToken().getType() != TokenType::Semicolon &&
-        peekToken().getType() == TokenType::ArithmeticOperator) {
+    if (peekNextToken().getType() != TokenType::Semicolon && peekToken().getType() == TokenType::ArithmeticOperator) {
         validateArithmeticOperator();
         validateExpr();
     }
@@ -96,13 +92,11 @@ void SyntacticValidator::validateTerm() {
 }
 
 void SyntacticValidator::validateWhile() {
-    popToken(); // 'while' terminal validated by validateStmtLst()
+    popToken();// 'while' terminal validated by validateStmtLst()
 
     // Read all tokens until "{"
     std::vector<SPToken> expression;
-    while (peekToken().getType() != TokenType::OpenCurlyParenthesis) {
-        expression.push_back(popToken());
-    }
+    while (peekToken().getType() != TokenType::OpenCurlyParenthesis) { expression.push_back(popToken()); }
 
     // Pass expression '(' conditional expr ')' into validator
     ConditionalValidator conditionalValidator(expression);
@@ -114,13 +108,11 @@ void SyntacticValidator::validateWhile() {
 }
 
 void SyntacticValidator::validateIf() {
-    popToken(); // 'if' terminal validated by validateStmtLst()
+    popToken();// 'if' terminal validated by validateStmtLst()
 
     // Read all tokens until "then {"
     std::vector<SPToken> expression;
-    while (peekNextToken().getType() != TokenType::OpenCurlyParenthesis) {
-        expression.push_back(popToken());
-    }
+    while (peekNextToken().getType() != TokenType::OpenCurlyParenthesis) { expression.push_back(popToken()); }
 
     // Pass expression '(' conditional expr ')' into validator
     ConditionalValidator conditionalValidator(expression);
@@ -138,8 +130,7 @@ void SyntacticValidator::validateIf() {
 }
 
 void SyntacticValidator::validateThen() {
-    if (peekToken().getType() == TokenType::Name &&
-        peekToken().getValue() == AppConstants::STRING_THEN) {
+    if (peekToken().getType() == TokenType::Name && peekToken().getValue() == AppConstants::STRING_THEN) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected 'then' in if statement");
@@ -147,8 +138,7 @@ void SyntacticValidator::validateThen() {
 }
 
 void SyntacticValidator::validateElse() {
-    if (peekToken().getType() == TokenType::Name &&
-        peekToken().getValue() == AppConstants::STRING_ELSE) {
+    if (peekToken().getType() == TokenType::Name && peekToken().getValue() == AppConstants::STRING_ELSE) {
         popToken();
     } else {
         throw SyntaxError("Syntax error: Expected 'else' in if statement");
@@ -239,13 +229,9 @@ void SyntacticValidator::validateArithmeticOperator() {
     }
 }
 
-SPToken SyntacticValidator::peekToken() {
-    return tokens[curr];
-}
+SPToken SyntacticValidator::peekToken() { return tokens[curr]; }
 
-SPToken SyntacticValidator::peekNextToken() {
-    return tokens[curr + 1];
-}
+SPToken SyntacticValidator::peekNextToken() { return tokens[curr + 1]; }
 
 SPToken SyntacticValidator::popToken() {
     SPToken res = peekToken();
@@ -253,6 +239,4 @@ SPToken SyntacticValidator::popToken() {
     return res;
 }
 
-bool SyntacticValidator::isCurrValid() {
-    return curr >= 0 && curr < (int)tokens.size();
-}
+bool SyntacticValidator::isCurrValid() { return curr >= 0 && curr < (int) tokens.size(); }

@@ -81,6 +81,7 @@ private:
      */
     std::vector<Synonym> getUnevaluatedSyn(const std::vector<Synonym> resultClause, std::shared_ptr<Result> result);
 
+
 public:
     /**
      * @brief Explicit constructor for the PQLEvaluator class.
@@ -106,4 +107,5 @@ public:
     //    std::vector<std::string> project(std::vector<std::pair<int, transformFunc>> transformations,
     //    std::vector<Entity>& tuple); std::vector<std::pair<int, transformFunc>> getTransformation(SynonymMap
     //    synIndices, std::vector<Synonym> selectTuple);
+
 };

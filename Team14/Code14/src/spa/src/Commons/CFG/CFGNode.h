@@ -1,8 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <utility>
-#include <memory>
 #include <vector>
 
 #include "Commons/AppConstants.h"
@@ -36,6 +36,7 @@ private:
 public:
     // Added to allow this class to be used in dynamic_cast expression
     virtual ~CFGNode() = default;
+
     /**
      * Creates and initialises a CFGNode.
      * @param statementNumber The statement number of the node
@@ -80,19 +81,19 @@ public:
      * Adds a parent node to this CFGNode.
      * @param parent CFGNode to be added as a parent of this CFGNode
      */
-    void addParentNode(const std::shared_ptr<CFGNode>& parent);
+    void addParentNode(const std::shared_ptr<CFGNode> &parent);
 
     /**
      * Adds a child node to this CFGNode.
      * @param child CFGNode to be added as a child of this CFGNode
      */
-    void addChildNode(const std::shared_ptr<CFGNode>& child);
+    void addChildNode(const std::shared_ptr<CFGNode> &child);
 
     /**
      * Removes a child node from this CFGNode by reference. Used in CFG building.
      * @param child CFGNode to be removed as a child of this CFGNode
      */
-    void removeChildNode(const std::shared_ptr<CFGNode>& child);
+    void removeChildNode(const std::shared_ptr<CFGNode> &child);
 
     /**
      * Returns the statement type of this CFGNode

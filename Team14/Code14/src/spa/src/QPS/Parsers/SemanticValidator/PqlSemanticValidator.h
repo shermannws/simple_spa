@@ -27,6 +27,7 @@ public:
      */
     void validateResultClause(Query &query);
 
+
     /**
      * @brief Validates all the clauses in the given query
      * @param query the query object
@@ -55,4 +56,5 @@ private:
     void validateResultElem(const Query &query, Synonym elem);
 
     bool isBooleanResult(const Query &query, std::vector<Synonym> resultClause);
+
 };

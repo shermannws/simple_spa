@@ -1,7 +1,7 @@
 #pragma once
 
-#include "PKB/RelationshipStores/UsesRelationshipStore.h"
 #include "PKB/Managers/StmtToVarRelationshipManager.h"
+#include "PKB/RelationshipStores/UsesRelationshipStore.h"
 
 /**
  * @class UsesRelationshipManager is responsible for storing and retrieving the Uses relationships
@@ -16,5 +16,4 @@ public:
      * @return A UsesRelationshipManager object
      */
     UsesRelationshipManager();
-
 };

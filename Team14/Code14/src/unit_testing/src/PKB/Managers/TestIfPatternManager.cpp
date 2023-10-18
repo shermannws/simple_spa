@@ -1,5 +1,5 @@
-#include "catch.hpp"
 #include "PKB/Managers/IfPatternManager.h"
+#include "catch.hpp"
 
 using namespace std;
 
@@ -17,7 +17,9 @@ TEST_CASE("Test If Pattern Storage") {
     Statement ifStmt = Statement(1, StatementType::If);
     Variable var = Variable("x");
 
-    REQUIRE_NOTHROW(ifPatternManager.storeIfPattern(make_shared<Statement>(ifStmt), make_shared<vector<shared_ptr<Variable>>>(vector<shared_ptr<Variable>>{make_shared<Variable>(var)})));
+    REQUIRE_NOTHROW(ifPatternManager.storeIfPattern(
+            make_shared<Statement>(ifStmt),
+            make_shared<vector<shared_ptr<Variable>>>(vector<shared_ptr<Variable>>{make_shared<Variable>(var)})));
 }
 
 TEST_CASE("Test If Pattern Retrieval") {
@@ -30,9 +32,12 @@ TEST_CASE("Test If Pattern Retrieval") {
     shared_ptr<Variable> varY = make_shared<Variable>(Variable("y"));
     shared_ptr<Variable> varZ = make_shared<Variable>(Variable("z"));
 
-    shared_ptr<vector<shared_ptr<Variable>>> vars1 = make_shared<vector<shared_ptr<Variable>>>(vector<shared_ptr<Variable>>{varX, varY, varZ});
-    shared_ptr<vector<shared_ptr<Variable>>> vars2 = make_shared<vector<shared_ptr<Variable>>>(vector<shared_ptr<Variable>>{varX, varY});
-    shared_ptr<vector<shared_ptr<Variable>>> vars3 = make_shared<vector<shared_ptr<Variable>>>(vector<shared_ptr<Variable>>{varZ});
+    shared_ptr<vector<shared_ptr<Variable>>> vars1 =
+            make_shared<vector<shared_ptr<Variable>>>(vector<shared_ptr<Variable>>{varX, varY, varZ});
+    shared_ptr<vector<shared_ptr<Variable>>> vars2 =
+            make_shared<vector<shared_ptr<Variable>>>(vector<shared_ptr<Variable>>{varX, varY});
+    shared_ptr<vector<shared_ptr<Variable>>> vars3 =
+            make_shared<vector<shared_ptr<Variable>>>(vector<shared_ptr<Variable>>{varZ});
 
     ifPatternManager.storeIfPattern(ifStmt1, vars1);
     ifPatternManager.storeIfPattern(ifStmt2, vars2);

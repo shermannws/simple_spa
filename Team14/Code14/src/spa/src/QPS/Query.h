@@ -1,13 +1,13 @@
 #pragma once
 
-#include <vector>
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
-#include "QueryEntity.h"
-#include "QPS/Clauses/SuchThatClause.h"
 #include "QPS/Clauses/PatternClause.h"
+#include "QPS/Clauses/SuchThatClause.h"
 #include "QPSTypes.h"
+#include "QueryEntity.h"
 
 /**
  * @brief Represents a PQL query
@@ -36,6 +36,7 @@ private:
      * Vector of pattern clauses
      */
     std::vector<std::shared_ptr<PatternClause>> patternClauses;
+
 public:
     /**
      * @brief Default constructor for the Query class.
@@ -46,7 +47,7 @@ public:
      * @brief Adds a design entity declaration to the query's declaration map
      * @param entity A shared pointer to the QueryEntity to be added
      */
-    void addDeclaration(const std::shared_ptr<QueryEntity>& entity);
+    void addDeclaration(const std::shared_ptr<QueryEntity> &entity);
 
     /**
      * @brief Adds a selected entity to the query.
@@ -79,7 +80,7 @@ public:
      * @param syn The synonym of the entity to retrieve.
      * @return A shared pointer to the QueryEntity with the specified synonym, or nullptr if not found.
      */
-    std::shared_ptr<QueryEntity> getEntity(const std::string& syn) const;
+    std::shared_ptr<QueryEntity> getEntity(const std::string &syn) const;
 
     /**
      * @brief Retrieves the map of synonyms to entity declarations in the query.
@@ -94,15 +95,14 @@ public:
     std::vector<Synonym> getSelect() const;
 
     /**
-    * @brief Retrieves the vector of such-that clauses in the query.
-    * @return A vector of shared pointers to the SuchThatClauses.
-    */
+     * @brief Retrieves the vector of such-that clauses in the query.
+     * @return A vector of shared pointers to the SuchThatClauses.
+     */
     std::vector<std::shared_ptr<SuchThatClause>> getSuchThat() const;
 
     /**
-    * @brief Retrieves the vector of pattern clauses in the query.
-    * @return A vector of shared pointers to the PatternClauses.
-    */
+     * @brief Retrieves the vector of pattern clauses in the query.
+     * @return A vector of shared pointers to the PatternClauses.
+     */
     std::vector<std::shared_ptr<PatternClause>> getPattern() const;
-
 };

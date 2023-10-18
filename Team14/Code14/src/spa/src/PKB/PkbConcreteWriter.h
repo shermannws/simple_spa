@@ -3,8 +3,8 @@
 #include <memory>
 
 #include "PKB/Managers/PkbWriterManager.h"
-#include "PKB/PkbWriter.h"
 #include "PKB/PkbTypes.h"
+#include "PKB/PkbWriter.h"
 
 /**
  * @brief The facade class is responsible for writing from the PKB.
@@ -53,9 +53,10 @@ public:
     void addAssignStatement(std::shared_ptr<Statement> s) override;
 
     /*!
-     * Add new Assign Pattern into the PKB 
+     * Add new Assign Pattern into the PKB
      */
-    void addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs, std::shared_ptr<Expression> rhs) override;
+    void addAssignPattern(std::shared_ptr<Statement> s, std::shared_ptr<Variable> lhs,
+                          std::shared_ptr<Expression> rhs) override;
 
     /*!
      * Adds new Follows Relationship into the PKB
@@ -93,8 +94,8 @@ public:
     void addParentRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2, bool isDirect) override;
 
     /*!
-	 * Adds new Calls Relationship into the PKB
-	 */
+     * Adds new Calls Relationship into the PKB
+     */
     void addCallsRelationship(std::shared_ptr<Procedure> p1, std::shared_ptr<Procedure> p2) override;
 
     /*!
@@ -105,7 +106,8 @@ public:
     /*!
      * Adds new While Pattern into the PKB
      */
-    void addWhilePattern(std::shared_ptr<Statement> s, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) override;
+    void addWhilePattern(std::shared_ptr<Statement> s,
+                         std::shared_ptr<std::vector<std::shared_ptr<Variable>>> v) override;
 
     /*!
      * Stores a map of procedures to a vector of statements that modifies/uses whatever the procedure modifies/uses

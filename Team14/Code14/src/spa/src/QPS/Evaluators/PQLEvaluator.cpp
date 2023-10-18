@@ -12,8 +12,9 @@ PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader)
     : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
       resultHandler(std::make_shared<ResultHandler>()) {}
 
-ResultList PQLEvaluator::formatResult(Query &query, Result &result) {// TODO support bool & tuple, if selects.size = 0
-                                                                     // -> TRUE/FALSE based on result table empty/bool
+
+ResultList PQLEvaluator::formatResult(Query &query, Result &result) {
+
     std::vector<Synonym> selects = query.getSelect();
 
     if (selects.empty()) {// case BOOLEAN query
@@ -29,12 +30,13 @@ ResultList PQLEvaluator::formatResult(Query &query, Result &result) {// TODO sup
         for (Synonym &syn: selects) {
             if (indicesMap.find(syn) != indicesMap.end()) {// TODO refactor into transformation.apply for each row
                 int idx = indicesMap.at(syn);
-                std::string value = *tuple[idx].getEntityValue();
+                std::string value = tuple[idx].getEntityValue();
                 // if (isAttrRef(syn, tuple[idx])) {
-                // value = *tuple[idx].getAttrValue();
+                // value = tuple[idx].getAttrValue();
                 //}
                 tmp.emplace_back(value);
             }
+
         }
         FormattedResult concat =
                 std::accumulate(tmp.begin(), tmp.end(), std::string(), [](std::string &a, const std::string &b) {

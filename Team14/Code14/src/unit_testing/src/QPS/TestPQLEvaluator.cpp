@@ -35,6 +35,7 @@ TEST_CASE("Test formatResult") {
         std::list<std::string> formattedResults = evaluator.formatResult(query, r);
 
         std::list<std::string> expected{"my_variable", "another_variable"};
+
         REQUIRE(find(formattedResults.begin(), formattedResults.end(), "my_variable 1") != formattedResults.end());
         REQUIRE(find(formattedResults.begin(), formattedResults.end(), "another_variable 5") != formattedResults.end());
     }
@@ -1173,3 +1174,4 @@ TEST_CASE("tuple result-clause query") {
     //        REQUIRE(resultObj.getBoolResult() == true);
     //    }
 }
+

@@ -4,5 +4,5 @@
 
 class SemanticError : public std::runtime_error {
 public:
-    explicit SemanticError(const std::string& message);
+    explicit SemanticError(const std::string &message);
 };

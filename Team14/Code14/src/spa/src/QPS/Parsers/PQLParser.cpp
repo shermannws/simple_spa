@@ -46,6 +46,7 @@ std::vector<Synonym> PQLParser::parseDeclarations(Query &query) {
     return synonyms;
 }
 
+
 void PQLParser::parseResultClause(Query &query) {
     std::unordered_map<TokenType, processClausefunc> resultExtractorMap{
             {TokenType::Word, [&](Query &query) { return processElem(query); }},

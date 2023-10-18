@@ -60,6 +60,7 @@ void PqlSemanticValidator::validateConstraintClauses(const Query &query) {
     for (const auto &clause: query.getPattern()) { validateClauseSemantics(query, clause); }
 }
 
+
 void PqlSemanticValidator::validateClauseSemantics(const Query &query, const std::shared_ptr<SuchThatClause> clause) {
     std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
     std::shared_ptr<StmtrefStmtrefHandler> stmtrefHandler = std::make_shared<StmtrefStmtrefHandler>();

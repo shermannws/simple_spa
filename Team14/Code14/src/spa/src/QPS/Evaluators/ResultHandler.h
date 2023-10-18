@@ -3,8 +3,8 @@
 #include <list>
 #include <string>
 
-#include "Result.h"
 #include "QPS/Query.h"
+#include "Result.h"
 
 /**
  * @class ResultHandler class generates a result table from the combining two tables
@@ -49,7 +49,8 @@ private:
      * @param row2 row from table 2
      * @return boolean
      */
-    bool isMatch(const std::vector<Entity>& row1, const std::vector<Entity>& row2, const std::unordered_map<int, int>& commons);
+    bool isMatch(const std::vector<Entity> &row1, const std::vector<Entity> &row2,
+                 const std::unordered_map<int, int> &commons);
 
     /**
     * Casts a Result object into a False Boolean Result if it is an Empty Tuple Result,
@@ -75,5 +76,3 @@ public:
     std::shared_ptr<Result> getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 
 };
-
-

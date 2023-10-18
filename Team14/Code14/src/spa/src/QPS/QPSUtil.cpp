@@ -92,6 +92,7 @@ std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
         {QueryEntityType::While, StatementType::While},   {QueryEntityType::Stmt, StatementType::Stmt},
         {QueryEntityType::Call, StatementType::Call}};
 
+
 std::unordered_map<AttrName, std::unordered_set<QueryEntityType>> QPSUtil::attrNameToTypeMap = {
         {"stmt#", QPSUtil::stmtRefEntities},
         {"procName", std::unordered_set<QueryEntityType>{QueryEntityType::Procedure, QueryEntityType::Call}},
@@ -127,3 +128,4 @@ AttrName QPSUtil::getAttrName(std::string elem) {
 //     }
 //     return false;
 // }
+

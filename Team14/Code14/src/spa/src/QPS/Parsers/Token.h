@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
 
 /**
  * @brief The enum class of TokenType
@@ -54,7 +54,7 @@ public:
      * @brief The constructor of Token
      * @param rep The string representation of the Token
      */
-    explicit Token(const std::string& rep);
+    explicit Token(const std::string &rep);
 
     /**
      * @brief Returns the string representation of the Token
@@ -73,7 +73,7 @@ public:
      * @param str The expected string
      * @return The result of the check in boolean
      */
-    bool isToken(const std::string& str);
+    bool isToken(const std::string &str);
 
     /**
      * @brief Checks if the token is of TokenType ttype

@@ -1,7 +1,7 @@
 #include <memory>
 
-#include "catch.hpp"
 #include "PKB/Managers/PkbWriterManager.h"
+#include "catch.hpp"
 
 using namespace std;
 
@@ -22,21 +22,11 @@ TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation
         auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
         auto cfgManager = std::make_shared<CFGManager>();
 
-        PkbWriterManager pkbWriterManager = PkbWriterManager(
-            assignmentManager,
-            entitiesManager,
-            followsRelationshipManager,
-            usesRelationshipManager,
-            modifiesRelationshipManager,
-            parentRelationshipManager,
-            callsRelationshipManager,
-            modifiesProcRelationshipManager,
-            usesProcRelationshipManager,
-            ifPatternManager,
-            whilePatternManager,
-            nextRelationshipManager,
-            cfgManager
-        );
+        PkbWriterManager pkbWriterManager =
+                PkbWriterManager(assignmentManager, entitiesManager, followsRelationshipManager,
+                                 usesRelationshipManager, modifiesRelationshipManager, parentRelationshipManager,
+                                 callsRelationshipManager, modifiesProcRelationshipManager, usesProcRelationshipManager,
+                                 ifPatternManager, whilePatternManager, nextRelationshipManager, cfgManager);
 
         // A -> modifies a, b, c
         // B -> uses x, y, z
@@ -49,12 +39,18 @@ TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation
         Variable variableY = Variable("y");
         Variable variableZ = Variable("z");
 
-        modifiesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureA), std::make_shared<Variable>(variableA));
-        modifiesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureA), std::make_shared<Variable>(variableB));
-        modifiesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureA), std::make_shared<Variable>(variableC));
-        usesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureB), std::make_shared<Variable>(variableX));
-        usesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureB), std::make_shared<Variable>(variableY));
-        usesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureB), std::make_shared<Variable>(variableZ));
+        modifiesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureA),
+                                                           std::make_shared<Variable>(variableA));
+        modifiesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureA),
+                                                           std::make_shared<Variable>(variableB));
+        modifiesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureA),
+                                                           std::make_shared<Variable>(variableC));
+        usesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureB),
+                                                       std::make_shared<Variable>(variableX));
+        usesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureB),
+                                                       std::make_shared<Variable>(variableY));
+        usesProcRelationshipManager->storeRelationship(std::make_shared<Procedure>(procedureB),
+                                                       std::make_shared<Variable>(variableZ));
 
         // Stmt 1,2 -> A
         // Stmt 3,4 -> B
@@ -64,29 +60,21 @@ TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation
         Statement statement4 = Statement(4, StatementType::Call);
 
         pkbWriterManager.addProcedureToStatementsMap(
-            std::make_shared<Procedure>(procedureA),
-            {
-                std::make_shared<Statement>(statement1),
-                std::make_shared<Statement>(statement2)
-            }
-        );
+                std::make_shared<Procedure>(procedureA),
+                {std::make_shared<Statement>(statement1), std::make_shared<Statement>(statement2)});
         pkbWriterManager.addProcedureToStatementsMap(
-            std::make_shared<Procedure>(procedureB),
-            {
-                std::make_shared<Statement>(statement3),
-                std::make_shared<Statement>(statement4)
-            }
-        );
+                std::make_shared<Procedure>(procedureB),
+                {std::make_shared<Statement>(statement3), std::make_shared<Statement>(statement4)});
 
 
-        //BEFORE STATE - Modifies
+        // BEFORE STATE - Modifies
         REQUIRE(modifiesRelationshipManager->isRelationship(statement1, variableA) == false);
         REQUIRE(modifiesRelationshipManager->isRelationship(statement1, variableB) == false);
         REQUIRE(modifiesRelationshipManager->isRelationship(statement1, variableC) == false);
         REQUIRE(modifiesRelationshipManager->isRelationship(statement1, variableX) == false);
         REQUIRE(modifiesRelationshipManager->isRelationship(statement1, variableY) == false);
-        REQUIRE(modifiesRelationshipManager->isRelationship(statement1, variableZ) == false);                                                                                                                   
-                                                              
+        REQUIRE(modifiesRelationshipManager->isRelationship(statement1, variableZ) == false);
+
         REQUIRE(modifiesRelationshipManager->isRelationship(statement2, variableA) == false);
         REQUIRE(modifiesRelationshipManager->isRelationship(statement2, variableB) == false);
         REQUIRE(modifiesRelationshipManager->isRelationship(statement2, variableC) == false);
@@ -108,7 +96,7 @@ TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation
         REQUIRE(modifiesRelationshipManager->isRelationship(statement4, variableY) == false);
         REQUIRE(modifiesRelationshipManager->isRelationship(statement4, variableZ) == false);
 
-        //BEFORE STATE - Uses
+        // BEFORE STATE - Uses
         REQUIRE(usesRelationshipManager->isRelationship(statement1, variableA) == false);
         REQUIRE(usesRelationshipManager->isRelationship(statement1, variableB) == false);
         REQUIRE(usesRelationshipManager->isRelationship(statement1, variableC) == false);
@@ -139,7 +127,7 @@ TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation
 
         pkbWriterManager.triggerTransitiveCalc();
 
-        //AFTER STATE - Modifies
+        // AFTER STATE - Modifies
         REQUIRE(modifiesRelationshipManager->isRelationship(statement1, variableA) == true);
         REQUIRE(modifiesRelationshipManager->isRelationship(statement1, variableB) == true);
         REQUIRE(modifiesRelationshipManager->isRelationship(statement1, variableC) == true);
@@ -168,7 +156,7 @@ TEST_CASE("Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation
         REQUIRE(modifiesRelationshipManager->isRelationship(statement4, variableY) == false);
         REQUIRE(modifiesRelationshipManager->isRelationship(statement4, variableZ) == false);
 
-        //AFTER STATE - Uses
+        // AFTER STATE - Uses
         REQUIRE(usesRelationshipManager->isRelationship(statement1, variableA) == false);
         REQUIRE(usesRelationshipManager->isRelationship(statement1, variableB) == false);
         REQUIRE(usesRelationshipManager->isRelationship(statement1, variableC) == false);
@@ -214,24 +202,15 @@ TEST_CASE("Test setting new map in the CFGStore") {
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
     auto cfgManager = std::make_shared<CFGManager>();
 
-    PkbWriterManager pkbWriterManager = PkbWriterManager(
-            assignmentManager,
-            entitiesManager,
-            followsRelationshipManager,
-            usesRelationshipManager,
-            modifiesRelationshipManager,
-            parentRelationshipManager,
-            callsRelationshipManager,
-            modifiesProcRelationshipManager,
-            usesProcRelationshipManager,
-            ifPatternManager,
-            whilePatternManager,
-            nextRelationshipManager,
-            cfgManager
-    );
+    PkbWriterManager pkbWriterManager =
+            PkbWriterManager(assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
+                             modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
+                             modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager,
+                             whilePatternManager, nextRelationshipManager, cfgManager);
 
-    std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> temp = std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>>();
-    temp.insert({ "main" , std::make_shared<CFGNode>(1) });
+    std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> temp =
+            std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>>();
+    temp.insert({"main", std::make_shared<CFGNode>(1)});
 
     REQUIRE_NOTHROW(pkbWriterManager.setCFGMap(temp));
 }

@@ -176,3 +176,4 @@ TEST_CASE("attrName") {
     REQUIRE(t->getRep() == "stmt#");
     REQUIRE(t->getType() == TokenType::Word);
 }
+
