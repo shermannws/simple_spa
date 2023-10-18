@@ -6,7 +6,7 @@
 #include "QPS/QPSUtil.h"
 #include "QPS/QueryEntity.h"
 
-//using transformFunc = std::function<std::string(Entity &)>;
+// using transformFunc = std::function<std::string(Entity &)>;
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader)
     : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
@@ -26,12 +26,12 @@ ResultList PQLEvaluator::formatResult(Query &query, Result &result) {// TODO sup
     ResultSet results;
     for (auto &tuple: result.getTuples()) {
         std::vector<std::string> tmp;
-        for (Synonym & syn : selects) {
-            if (indicesMap.find(syn) != indicesMap.end()) { //TODO refactor into transformation.apply for each row
+        for (Synonym &syn: selects) {
+            if (indicesMap.find(syn) != indicesMap.end()) {// TODO refactor into transformation.apply for each row
                 int idx = indicesMap.at(syn);
                 std::string value = *tuple[idx].getEntityValue();
-                //if (isAttrRef(syn, tuple[idx])) {
-                    //value = *tuple[idx].getAttrValue();
+                // if (isAttrRef(syn, tuple[idx])) {
+                // value = *tuple[idx].getAttrValue();
                 //}
                 tmp.emplace_back(value);
             }
@@ -47,23 +47,23 @@ ResultList PQLEvaluator::formatResult(Query &query, Result &result) {// TODO sup
     return list_results;
 }
 
-//std::vector<std::string> PQLEvaluator::project(std::vector<std::pair<int, transformFunc>> transformations,
-//                                               std::vector<Entity> &tuple) {
-//    std::vector<std::string> projection;
-//    for (auto &elem: transformations) { projection.emplace_back(elem.second(tuple[elem.first])); }
-//    return projection;
-//}
+// std::vector<std::string> PQLEvaluator::project(std::vector<std::pair<int, transformFunc>> transformations,
+//                                                std::vector<Entity> &tuple) {
+//     std::vector<std::string> projection;
+//     for (auto &elem: transformations) { projection.emplace_back(elem.second(tuple[elem.first])); }
+//     return projection;
+// }
 //
-//std::vector<std::pair<int, transformFunc>> PQLEvaluator::getTransformation(SynonymMap synIndices,
-//                                                                           std::vector<Synonym> selectTuple) {
-//    std::vector<std::pair<int, transformFunc>> transformations;
-//    for (Synonym &syn: selectTuple) {
-//        int index = synIndices.at(syn);
-//        transformations.emplace_back(
-//                std::make_pair(index, [](Entity &ent) { return *ent.getEntityValue(); }));// or getAttrvalue
-//    }
-//    return transformations;
-//}
+// std::vector<std::pair<int, transformFunc>> PQLEvaluator::getTransformation(SynonymMap synIndices,
+//                                                                            std::vector<Synonym> selectTuple) {
+//     std::vector<std::pair<int, transformFunc>> transformations;
+//     for (Synonym &syn: selectTuple) {
+//         int index = synIndices.at(syn);
+//         transformations.emplace_back(
+//                 std::make_pair(index, [](Entity &ent) { return *ent.getEntityValue(); }));// or getAttrvalue
+//     }
+//     return transformations;
+// }
 
 Result PQLEvaluator::evaluate(Query &query) {
     std::shared_ptr<Result> result = evaluateConstraintClauses(query);

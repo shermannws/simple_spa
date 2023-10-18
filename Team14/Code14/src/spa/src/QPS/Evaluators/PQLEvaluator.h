@@ -3,14 +3,14 @@
 #include <list>
 #include <string>
 
-#include "Result.h"
-#include "QPS/Query.h"
-#include "ClauseHandler.h"
-#include "ResultHandler.h"
 #include "./PKB/PkbReader.h"
+#include "ClauseHandler.h"
 #include "QPS/QPSTypes.h"
+#include "QPS/Query.h"
+#include "Result.h"
+#include "ResultHandler.h"
 
-//using transformFunc = std::function<std::string(Entity&)>;
+// using transformFunc = std::function<std::string(Entity&)>;
 
 /**
  * @brief PQL (Program Query Language) evaluator class.
@@ -41,7 +41,7 @@ private:
      * @param queryEntity A pointer to the query entity to retrieve instances for.
      * @return A vector of entities representing all instances of the query entity.
      */
-    std::vector<Entity> getAll(const EntityPtr& queryEntity);
+    std::vector<Entity> getAll(const EntityPtr &queryEntity);
 
     /**
      * @brief Evaluates a clause and updates the result accordingly.
@@ -63,7 +63,7 @@ private:
      * @param resultSyns the vector of synonyms representing the subset of result clause to be evaluated
      * @return shared pointer to result object
      */
-    std::shared_ptr<Result> evaluateResultClause(const Query& query, std::vector<Synonym> resultSyns);
+    std::shared_ptr<Result> evaluateResultClause(const Query &query, std::vector<Synonym> resultSyns);
 
     /**
      * @brief Evaluates all the constraint clauses of a query into a combined result, returns nullptr if
@@ -71,7 +71,7 @@ private:
      * @param query the query object to evaluate
      * @return shared pointer to result object
      */
-    std::shared_ptr<Result> evaluateConstraintClauses(const Query& query);
+    std::shared_ptr<Result> evaluateConstraintClauses(const Query &query);
 
     /**
      * @brief returns the vector of synonyms in the result clause that is not present in the result object
@@ -79,7 +79,7 @@ private:
      * @param result result object
      * @return vector of unevaluated synonyms
      */
-    std::vector<Synonym> getUnevaluatedSyn (const std::vector<Synonym> resultClause, std::shared_ptr<Result> result);
+    std::vector<Synonym> getUnevaluatedSyn(const std::vector<Synonym> resultClause, std::shared_ptr<Result> result);
 
 public:
     /**
@@ -93,16 +93,17 @@ public:
      * @param query The PQL query to evaluate.
      * @return The result of the PQL query evaluation as a Result object
      */
-    Result evaluate(Query& query);
+    Result evaluate(Query &query);
 
     /**
-    * @brief Formats the result of a PQL query based on the given query and result table.
-    * @param query The PQL query.
-    * @param result The result of the PQL query evaluation.
-    * @return The formatted result list
-    */
-    ResultList formatResult(Query& query, Result& result);
+     * @brief Formats the result of a PQL query based on the given query and result table.
+     * @param query The PQL query.
+     * @param result The result of the PQL query evaluation.
+     * @return The formatted result list
+     */
+    ResultList formatResult(Query &query, Result &result);
 
-//    std::vector<std::string> project(std::vector<std::pair<int, transformFunc>> transformations, std::vector<Entity>& tuple);
-//    std::vector<std::pair<int, transformFunc>> getTransformation(SynonymMap synIndices, std::vector<Synonym> selectTuple);
+    //    std::vector<std::string> project(std::vector<std::pair<int, transformFunc>> transformations,
+    //    std::vector<Entity>& tuple); std::vector<std::pair<int, transformFunc>> getTransformation(SynonymMap
+    //    synIndices, std::vector<Synonym> selectTuple);
 };

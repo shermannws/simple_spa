@@ -16,10 +16,10 @@ TEST_CASE("Tokenizer Test") {
 
         REQUIRE(tokenizer.getCurr() == 4);
 
-        REQUIRE(tokenizer.peekChar() == 32); // space after stmt
+        REQUIRE(tokenizer.peekChar() == 32);// space after stmt
         REQUIRE(tokenizer.popToken()->getRep() == "s");
 
-        REQUIRE(tokenizer.popChar() == 59); // pop ";" in int
+        REQUIRE(tokenizer.popChar() == 59);// pop ";" in int
         tokenizer.popString();
 
         REQUIRE(tokenizer.peekString() == "S");
@@ -127,7 +127,6 @@ TEST_CASE("Tokenizer Test") {
         REQUIRE(tokenizer.popToken()->getRep() == "\"");
         REQUIRE(tokenizer.popToken()->getType() == TokenType::Empty);
     }
-
 }
 
 TEST_CASE("attrName") {
@@ -176,6 +175,4 @@ TEST_CASE("attrName") {
     t = tokenizer.popToken();
     REQUIRE(t->getRep() == "stmt#");
     REQUIRE(t->getType() == TokenType::Word);
-
 }
-
