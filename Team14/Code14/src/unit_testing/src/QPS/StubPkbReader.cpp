@@ -1,6 +1,6 @@
 #include "StubPkbReader.h"
-#include "Commons/Entities/ReadStatement.h"
 #include "Commons/Entities/CallStatement.h"
+#include "Commons/Entities/ReadStatement.h"
 
 StubPkbReader::StubPkbReader() = default;
 
@@ -46,10 +46,9 @@ std::vector<Entity> StubPkbReader::getAllIf() const {
 std::vector<Entity> StubPkbReader::getAllCall() const { return std::vector<Entity>(); }
 
 std::vector<std::vector<Entity>> StubPkbReader::getUsesStmtPair(StatementType type) const {
-    if (type == StatementType::Call){
-        return std::vector<std::vector<Entity>>({
-                {CallStatement(1, "proc1"),Variable("var1")},
-                {CallStatement(2, "proc2"),Variable("var2")}});
+    if (type == StatementType::Call) {
+        return std::vector<std::vector<Entity>>(
+                {{CallStatement(1, "proc1"), Variable("var1")}, {CallStatement(2, "proc2"), Variable("var2")}});
     }
     std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var")};
     std::vector<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var")};
