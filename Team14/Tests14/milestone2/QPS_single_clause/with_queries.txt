@@ -309,8 +309,8 @@ Select c with c.stmt# = a.stmt#
 none
 5000
 63. call.stmt# = INTEGER
-call c;
-Select c with c.stmt# = 1
+call BOOLEAN;
+Select BOOLEAN with BOOLEAN.stmt# = 1
 1
 5000
 64. while.stmt# = while.stmt#
@@ -506,5 +506,45 @@ SemanticError
 102. SemanticError (Wrong attr): stmt.value
 stmt s;
 Select s with s.value = 10
+SemanticError
+5000
+103. SemanticError (Wrong comparison): procedure.proName = constant.value
+procedure p; constant c;
+Select c with p.procName = c.value
+SemanticError
+5000
+104. SemanticError (Wrong comparison): call.procName = stmt.stmt#
+call c; stmt s;
+Select s with c.procName = s.stmt#
+SemanticError
+5000
+105. SemanticError (Wrong comparison): variable.varName = read.stmt#
+variable v; read r;
+Select r with v.varName = r.stmt#
+SemanticError
+5000
+106. SemanticError (Wrong comparison): read.varName = print.stmt#
+read r; print pn;
+Select pn with r.varName = pn.stmt#
+SemanticError
+5000
+107. SemanticError (Wrong comparison): print.varName = call.stmt#
+print pn; call c;
+Select c with pn.varName = c.stmt#
+SemanticError
+5000
+108. SemanticError (Wrong comparison): variable.varName = while.stmt#
+variable v; while w;
+Select w with v.varName = w.stmt#
+SemanticError
+5000
+109. SemanticError (Wrong comparison): read.varName = if.stmt#
+read r; if ifs;
+Select ifs with r.varName = ifs.stmt#
+SemanticError
+5000
+110. SemanticError (Wrong comparison): print.varName = assign.stmt#
+print pn; assign a;
+Select a with pn.varName = a.stmt#
 SemanticError
 5000
