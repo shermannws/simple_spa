@@ -1,19 +1,17 @@
 procedure call {
-1	call print;
-2	read read;
-3	if (!(!(!(x != y)))) then {
-4		print a;
-	} else {
-5		print b;
+	call print;
+	read read;
+	if (!(!(!(x != y)))) then {
+		print a;	} else {
+		print b;
 	}
 }
 
 procedure print {
-6	print call;
-7	call = 1 + 2 + 3 + 4 + 7 + 100;
-8	while (8 == x) {
-9		read k;
+	print call;
+	call = 1 + 2 + 3 + 4 + 7 + 100;
+	while (8 == x) {
+		read k;
 	}
-10	read print;
-11  read print;
+	read print;
 }
