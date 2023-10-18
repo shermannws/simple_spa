@@ -1,5 +1,6 @@
 #include "SynonymHandler.h"
 #include "QPS/Exceptions/SemanticException.h"
+#include "QPS/QPSUtil.h"
 
 void SynonymHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
     Ref &leftRef = clause->getFirstParam();
@@ -29,6 +30,12 @@ void SynonymHandler::handle(const Query &query, std::shared_ptr<Clause> clause) 
         // validate Entity Synonym declared
         EntityPtr entity = query.getEntity(pattern->getSyn());
         if (!entity) { throw SemanticException("Undeclared synonym in pattern clause entity"); }
+        QueryEntityType entityType = entity->getType();
+        if (QPSUtil::entityToClauseMap.find(entityType) == QPSUtil::entityToClauseMap.end()) {
+            throw SemanticException("Unsupported pattern clause");
+        }
+        ClauseType clauseType = QPSUtil::entityToClauseMap[entityType];
+        pattern->setType(clauseType);
     }
 
     return SemanticValHandler::handle(query, clause);
