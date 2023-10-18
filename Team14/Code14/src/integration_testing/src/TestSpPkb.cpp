@@ -454,6 +454,7 @@ TEST_CASE("Test CFG Extractor - test Next extraction") {
                                 "   while (z <= w) { "// stmt 15
                                 "       x = 2; "      // stmt 16
                                 "   } "
+                                "   call Proc1;"// stmt 17
                                 "}";
 
     std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceProgram);
@@ -501,6 +502,7 @@ TEST_CASE("Test CFG Extractor - test Next extraction") {
     auto statement14 = Statement(14, StatementType::Read);
     auto statement15 = Statement(15, StatementType::While);
     auto statement16 = Statement(16, StatementType::Assign);
+    auto statement17 = Statement(17, StatementType::Call);
 
     // Check stores - positive cases
     CHECK(nextRelationshipManager->isRelationship(statement1, statement2, true));
@@ -516,6 +518,7 @@ TEST_CASE("Test CFG Extractor - test Next extraction") {
     CHECK(nextRelationshipManager->isRelationship(statement12, statement14, true));
     CHECK(nextRelationshipManager->isRelationship(statement15, statement16, true));
     CHECK(nextRelationshipManager->isRelationship(statement16, statement15, true));
+    CHECK(nextRelationshipManager->isRelationship(statement15, statement17, true));
 
     // Check stores - negative cases - across procedures
     CHECK_FALSE(nextRelationshipManager->isRelationship(statement1, statement9, true));
@@ -537,4 +540,18 @@ TEST_CASE("Test CFG Extractor - test Next extraction") {
     CHECK_FALSE(nextRelationshipManager->isRelationship(statement3, statement6, true));
     CHECK_FALSE(nextRelationshipManager->isRelationship(statement5, statement8, true));
     CHECK_FALSE(nextRelationshipManager->isRelationship(statement6, statement8, true));
+    CHECK_FALSE(nextRelationshipManager->isRelationship(statement16, statement17, true));
+
+    // Check correct Statement subclass saved
+    auto statements1 = nextRelationshipManager->getRelationshipStmtType(statement15, StatementType::Call, true);
+    CHECK(statements1.size() == 1);
+    CHECK(statements1.at(0).getAttrValue() == "Proc1");
+
+    auto statements2 = nextRelationshipManager->getRelationshipStmtType(statement12, StatementType::Print, true);
+    CHECK(statements2.size() == 1);
+    CHECK(statements2.at(0).getAttrValue() == "p");
+
+    auto statements3 = nextRelationshipManager->getRelationshipStmtType(statement1, StatementType::Read, true);
+    CHECK(statements3.size() == 1);
+    CHECK(statements3.at(0).getAttrValue() == "x");
 }
