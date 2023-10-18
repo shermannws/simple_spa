@@ -1192,7 +1192,6 @@ TEST_CASE("tuple result-clause query") {
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 0);
     }
-
 }
 
 
@@ -1210,11 +1209,10 @@ TEST_CASE("attrRef result-clause query") {
         REQUIRE(find(results.begin(), results.end(), "line24") != results.end());
         REQUIRE(find(results.begin(), results.end(), "line36") != results.end());
         REQUIRE(find(results.begin(), results.end(), "line14") != results.end());
-
     }
 
     SECTION("multiple attrRef in tuple with 1 clause") {
-        PQLParser parser("read re; call c; variable v; Select <re.varName, c.procName> such that Uses(c, v)"); //or c,v
+        PQLParser parser("read re; call c; variable v; Select <re.varName, c.procName> such that Uses(c, v)");// or c,v
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -1230,7 +1228,6 @@ TEST_CASE("attrRef result-clause query") {
         REQUIRE(find(results.begin(), results.end(), "line24 proc2") != results.end());
         REQUIRE(find(results.begin(), results.end(), "line36 proc2") != results.end());
         REQUIRE(find(results.begin(), results.end(), "line14 proc2") != results.end());
-
     }
 
     SECTION("multiple attrRef and synonym in tuple, with constraint clause") {
@@ -1251,6 +1248,5 @@ TEST_CASE("attrRef result-clause query") {
         REQUIRE(find(results.begin(), results.end(), "line24 proc2 var2") != results.end());
         REQUIRE(find(results.begin(), results.end(), "line36 proc2 var2") != results.end());
         REQUIRE(find(results.begin(), results.end(), "line14 proc2 var2") != results.end());
-
     }
 }
