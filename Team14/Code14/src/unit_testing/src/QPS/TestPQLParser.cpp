@@ -1305,24 +1305,18 @@ TEST_CASE("processWithClause") {
         REQUIRE(rightRef.getRep() == "c2");
         REQUIRE(rightRef.getAttrName() == AttrName::Value);
     }
-
 }
 
 TEST_CASE("Invalid processWithClause SyntaxError") {
-    SECTION ("Invalid general structure") {
+    SECTION("Invalid general structure") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("assign a; print d;\nSelect a with ",
-                               "Invalid Ref");
-        testcases.emplace_back("assign a; print d;\nSelect a with 1 2",
-                               "No equal sign");
-        testcases.emplace_back("assign a; print d;\nSelect a with 1 =",
-                               "Invalid Ref");
-        testcases.emplace_back("assign a; print d;\nSelect a with 1 = .",
-                               "Invalid Ref");
-        testcases.emplace_back("assign a; print d;\nSelect a with = 1",
-                               "Invalid Ref");
+        testcases.emplace_back("assign a; print d;\nSelect a with ", "Invalid Ref");
+        testcases.emplace_back("assign a; print d;\nSelect a with 1 2", "No equal sign");
+        testcases.emplace_back("assign a; print d;\nSelect a with 1 =", "Invalid Ref");
+        testcases.emplace_back("assign a; print d;\nSelect a with 1 = .", "Invalid Ref");
+        testcases.emplace_back("assign a; print d;\nSelect a with = 1", "Invalid Ref");
 
-        for (const auto& testcase : testcases) {
+        for (const auto &testcase: testcases) {
             PQLParser parser(testcase.first);
             REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
         }
@@ -1330,16 +1324,12 @@ TEST_CASE("Invalid processWithClause SyntaxError") {
 
     SECTION("Invalid withRef type") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("assign a; print d;\nSelect a with c = 3",
-                               "Invalid LHS withRef");
-        testcases.emplace_back("assign a; print d;\nSelect a with _ = \"ident\"",
-                               "Invalid LHS withRef");
-        testcases.emplace_back("assign a; print d;\nSelect a with 1 = variable",
-                               "Invalid RHS withRef");
-        testcases.emplace_back("assign a; print d;\nSelect a with \"ident\" = _",
-                               "Invalid RHS withRef");
+        testcases.emplace_back("assign a; print d;\nSelect a with c = 3", "Invalid LHS withRef");
+        testcases.emplace_back("assign a; print d;\nSelect a with _ = \"ident\"", "Invalid LHS withRef");
+        testcases.emplace_back("assign a; print d;\nSelect a with 1 = variable", "Invalid RHS withRef");
+        testcases.emplace_back("assign a; print d;\nSelect a with \"ident\" = _", "Invalid RHS withRef");
 
-        for (const auto& testcase : testcases) {
+        for (const auto &testcase: testcases) {
             PQLParser parser(testcase.first);
             REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
         }
@@ -1347,18 +1337,13 @@ TEST_CASE("Invalid processWithClause SyntaxError") {
 
     SECTION("Invalid attrName") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("assign a; print d;\nSelect a with 1 = a.",
-                               "Invalid attrName");
-        testcases.emplace_back("assign a; print d;\nSelect a with 1 = a.stmt",
-                               "Invalid attrName");
-        testcases.emplace_back("assign a; print d;\nSelect a with d.varname = \"ident\"",
-                               "Invalid attrName");
-        testcases.emplace_back("assign a; print d;\nSelect a with 1 = a.procname",
-                               "Invalid attrName");
-        testcases.emplace_back("assign a; print d;\nSelect a with 1 = a.val",
-                               "Invalid attrName");
+        testcases.emplace_back("assign a; print d;\nSelect a with 1 = a.", "Invalid attrName");
+        testcases.emplace_back("assign a; print d;\nSelect a with 1 = a.stmt", "Invalid attrName");
+        testcases.emplace_back("assign a; print d;\nSelect a with d.varname = \"ident\"", "Invalid attrName");
+        testcases.emplace_back("assign a; print d;\nSelect a with 1 = a.procname", "Invalid attrName");
+        testcases.emplace_back("assign a; print d;\nSelect a with 1 = a.val", "Invalid attrName");
 
-        for (const auto& testcase : testcases) {
+        for (const auto &testcase: testcases) {
             PQLParser parser(testcase.first);
             REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
         }
@@ -1370,14 +1355,15 @@ TEST_CASE("Invalid processWithClause SemanticError") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assign a; print d; procedure p; constant c;\nSelect a with p.procName = c.value",
                                "Different attribute value types");
-        testcases.emplace_back("assign a; if if; procedure p; constant c; variable v;\nSelect a with v.varName = if.stmt#",
-                               "Different attribute value types");
+        testcases.emplace_back(
+                "assign a; if if; procedure p; constant c; variable v;\nSelect a with v.varName = if.stmt#",
+                "Different attribute value types");
         testcases.emplace_back("assign a; call c;\nSelect a with a.stmt# = c.procName",
                                "Different attribute value types");
         testcases.emplace_back("assign a; print d; procedure p; constant c;\nSelect a with c.value = d.varName",
                                "Different attribute value types");
 
-        for (const auto& testcase : testcases) {
+        for (const auto &testcase: testcases) {
             PQLParser parser(testcase.first);
             REQUIRE_THROWS_AS(parser.parse(), SemanticException);
         }
@@ -1393,7 +1379,7 @@ TEST_CASE("Invalid processWithClause SemanticError") {
         testcases.emplace_back("assign a; print d; procedure p; constant c;\nSelect a with d.value = 3",
                                "Invalid attribute of the synonym");
 
-        for (const auto& testcase : testcases) {
+        for (const auto &testcase: testcases) {
             PQLParser parser(testcase.first);
             REQUIRE_THROWS_AS(parser.parse(), SemanticException);
         }

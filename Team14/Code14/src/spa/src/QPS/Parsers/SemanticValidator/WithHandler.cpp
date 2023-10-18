@@ -2,11 +2,9 @@
 
 void WithHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
     auto with = std::dynamic_pointer_cast<WithClause>(clause);
-    if (!with) {
-        return SemanticValHandler::handle(query, clause);
-    }
-    Ref& leftRef = with->getFirstParam();
-    Ref& rightRef = with->getSecondParam();
+    if (!with) { return SemanticValHandler::handle(query, clause); }
+    Ref &leftRef = with->getFirstParam();
+    Ref &rightRef = with->getSecondParam();
 
     handleRefType(leftRef, rightRef);
 
@@ -14,8 +12,7 @@ void WithHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
 }
 
 void WithHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
-    if (!((leftRef.isOfName() && rightRef.isOfName())
-            || (leftRef.isOfInteger() && rightRef.isOfInteger()))) {
+    if (!((leftRef.isOfName() && rightRef.isOfName()) || (leftRef.isOfInteger() && rightRef.isOfInteger()))) {
         throw SemanticException("Different attribute value types");
     }
 

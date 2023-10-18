@@ -7,7 +7,7 @@
 /**
  * @brief PatternClause class that extends from Clause
  */
-class WithClause :  public Clause {
+class WithClause : public Clause {
 private:
 private:
     /**
@@ -25,13 +25,13 @@ public:
      * @brief The setter of the second parameter of the SuchThatClause
      * @param ref the Ref reference of the second parameter
      */
-    void setSecondParam(Ref& ref);
+    void setSecondParam(Ref &ref);
 
     /**
      * @brief The getter of the second parameter of the SuchThatClause
      * @return The Ref reference of the second parameter
      */
-    Ref& getSecondParam();
+    Ref &getSecondParam();
 
     /**
      * @brief returns the list of synonyms present in the with clause, used for
@@ -40,5 +40,5 @@ public:
      */
     std::vector<Synonym> getSynonyms() const override;
 
-    bool operator==(const Clause& other) const override;
+    bool operator==(const Clause &other) const override;
 };
