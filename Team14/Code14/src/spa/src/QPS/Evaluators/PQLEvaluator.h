@@ -10,6 +10,8 @@
 #include "./PKB/PkbReader.h"
 #include "QPS/QPSTypes.h"
 
+//using transformFunc = std::function<std::string(Entity&)>;
+
 /**
  * @brief PQL (Program Query Language) evaluator class.
  *
@@ -100,4 +102,7 @@ public:
     * @return The formatted result list
     */
     ResultList formatResult(Query& query, Result& result);
+
+//    std::vector<std::string> project(std::vector<std::pair<int, transformFunc>> transformations, std::vector<Entity>& tuple);
+//    std::vector<std::pair<int, transformFunc>> getTransformation(SynonymMap synIndices, std::vector<Synonym> selectTuple);
 };

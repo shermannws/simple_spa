@@ -84,6 +84,11 @@ std::unordered_map<AttrName, std::unordered_set<QueryEntityType>> QPSUtil::attrN
         {"value", std::unordered_set<QueryEntityType>{QueryEntityType::Constant}}
 };
 
+std::unordered_map<AttrName, std::unordered_set<StatementType>> QPSUtil::getAttrValue = {
+        {"procName", std::unordered_set<StatementType>{StatementType::Call}},
+        {"varName", std::unordered_set<StatementType>{StatementType::Read, StatementType::Print}}
+};
+
 Synonym QPSUtil::getSyn(std::string elem) {
     std::size_t dotPos = elem.find('.');
     if (dotPos != std::string::npos){ // attrRef
@@ -99,3 +104,12 @@ AttrName QPSUtil::getAttrName(std::string elem) {
     }
     return elem;
 }
+
+//bool QPSUtil::isAttrRef(std::string elem, Entity& entity) {
+//    auto attrName = getAttrName(elem);
+//    auto type = entity.getEntityType();
+//    if (type == EntityType::Statement && getAttrValue[attrName].count(entity.getStatementType()) > 0) {
+//        return true;
+//    }
+//    return false;
+//}

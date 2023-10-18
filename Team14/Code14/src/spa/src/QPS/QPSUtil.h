@@ -41,8 +41,15 @@ public:
      */
     static std::unordered_map<AttrName, std::unordered_set<QueryEntityType>> attrNameToTypeMap;
 
+    /**
+     * @brief An unordered map of attrName and stmt types that requires returning attrValue instead of Entity value;
+     */
+    static std::unordered_map<AttrName, std::unordered_set<StatementType>> getAttrValue;
+
     static Synonym getSyn(std::string elem);
 
     static AttrName getAttrName(std::string elem);
+
+    //bool isAttrRef(std::string elem, Entity& entity);
 
 };
