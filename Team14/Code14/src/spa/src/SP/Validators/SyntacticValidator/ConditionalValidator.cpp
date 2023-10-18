@@ -1,10 +1,10 @@
 #include "ConditionalValidator.h"
 
-ConditionalValidator::ConditionalValidator(const std::vector<SPToken> &tokens) : tokens(tokens){}
+ConditionalValidator::ConditionalValidator(const std::vector<SPToken> &tokens) : tokens(tokens) {}
 
 void ConditionalValidator::validate() {
     std::deque<SPToken> tokensDeque(tokens.begin(), tokens.end());
-    
+
     // Check if first is "(" and last is ")"
     if (tokensDeque.front().getType() != TokenType::OpenRoundParenthesis) {
         throw SyntaxError("Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
@@ -40,9 +40,7 @@ void ConditionalValidator::validateConditionalExpression(std::deque<SPToken> &ex
 
         // Decide what to do with the subexpression
         // Option 1 - just remove closing parentheses
-        if (closingParenthesisIndex == expression.size() - 1) {
-            validateConditionalExpression(subExpression);
-        }
+        if (closingParenthesisIndex == expression.size() - 1) { validateConditionalExpression(subExpression); }
 
         // Option 2 - check next token after the initial ')', split left and right
         if (closingParenthesisIndex < expression.size() - 1) {
@@ -64,9 +62,7 @@ void ConditionalValidator::validateConditionalExpression(std::deque<SPToken> &ex
             // Option 2.3 arithmetic expr (for cases like '( (A+B) + C > D )' )
             else if (nextToken.getType() == TokenType::ArithmeticOperator) {
                 validateRelationalExpression(rightSubExpression);
-            }
-
-            else {
+            } else {
                 throw SyntaxError("Syntax error: Missing / wrong operator");
             }
         }
@@ -82,26 +78,22 @@ void ConditionalValidator::validateConditionalExpression(std::deque<SPToken> &ex
     }
 }
 
-void ConditionalValidator::validateRelationalExpression(std::deque<SPToken>& expression) {
+void ConditionalValidator::validateRelationalExpression(std::deque<SPToken> &expression) {
     std::deque<SPToken> LHS, RHS;
     std::string operatorAsString;
     std::tie(LHS, RHS, operatorAsString) = splitExpression(expression, TokenType::RelationalOperator);
 
-    if (LHS.empty() || RHS.empty()) {
-        throw SyntaxError("Syntax Error: Expected rel_expr in Relation Expression");
-    }
+    if (LHS.empty() || RHS.empty()) { throw SyntaxError("Syntax Error: Expected rel_expr in Relation Expression"); }
     validateExpr(LHS);
     validateExpr(RHS);
 }
 
-void ConditionalValidator::validateExpr(std::deque<SPToken>& tokens) {
-    if (tokens.empty()) {
-        throw SyntaxError("Syntax error: Empty expression");
-    }
+void ConditionalValidator::validateExpr(std::deque<SPToken> &tokens) {
+    if (tokens.empty()) { throw SyntaxError("Syntax error: Empty expression"); }
 
     validateTerm(tokens);
 
-    if(!tokens.empty() && tokens.front().getType() != TokenType::ArithmeticOperator) {
+    if (!tokens.empty() && tokens.front().getType() != TokenType::ArithmeticOperator) {
         throw SyntaxError("Syntax error: Expected arithmetic operator while checking relational expr");
     }
 
@@ -111,14 +103,12 @@ void ConditionalValidator::validateExpr(std::deque<SPToken>& tokens) {
     }
 }
 
-void ConditionalValidator::validateTerm(std::deque<SPToken>& tokens) {
-    if (tokens.empty()) {
-        throw SyntaxError("Syntax error: Empty term");
-    }
+void ConditionalValidator::validateTerm(std::deque<SPToken> &tokens) {
+    if (tokens.empty()) { throw SyntaxError("Syntax error: Empty term"); }
 
-    SPToken& currToken = tokens.front();
+    SPToken &currToken = tokens.front();
 
-    if (currToken.getType() == TokenType::Name)  {
+    if (currToken.getType() == TokenType::Name) {
         validateName(tokens);
     } else if (currToken.getType() == TokenType::Integer) {
         validateInteger(tokens);
@@ -139,7 +129,7 @@ void ConditionalValidator::validateTerm(std::deque<SPToken>& tokens) {
     }
 }
 
-void ConditionalValidator::validateName(std::deque<SPToken>& tokens) {
+void ConditionalValidator::validateName(std::deque<SPToken> &tokens) {
     if (tokens.front().getType() == TokenType::Name) {
         tokens.pop_front();
     } else {
@@ -147,30 +137,28 @@ void ConditionalValidator::validateName(std::deque<SPToken>& tokens) {
     }
 }
 
-void ConditionalValidator::validateInteger(std::deque<SPToken>& tokens) {
+void ConditionalValidator::validateInteger(std::deque<SPToken> &tokens) {
     SPToken currToken = tokens.front();
 
     if (currToken.getType() == TokenType::Integer) {
         if (currToken.getValue()[0] == '0' && currToken.getValue().size() != 1) {
             throw SyntaxError("Syntax error: INTEGER cannot start with 0");
         }
-       tokens.pop_front();
+        tokens.pop_front();
     } else {
         throw SyntaxError("Syntax error: Expected TokenType INTEGER");
     }
 }
 
-size_t ConditionalValidator::findMatchingClosingParenthesis(std::deque<SPToken>& tokens) {
+size_t ConditionalValidator::findMatchingClosingParenthesis(std::deque<SPToken> &tokens) {
     int nestingLvl = 1;
 
     for (size_t i = 1; i < tokens.size(); i++) {
         if (tokens[i].getType() == TokenType::OpenRoundParenthesis) {
             nestingLvl++;
         } else if (tokens[i].getType() == TokenType::CloseRoundParenthesis) {
-            nestingLvl --;
-            if (nestingLvl == 0) {
-                return i;
-            }
+            nestingLvl--;
+            if (nestingLvl == 0) { return i; }
         }
     }
 
@@ -178,7 +166,8 @@ size_t ConditionalValidator::findMatchingClosingParenthesis(std::deque<SPToken>&
     return tokens.size();
 }
 
-std::tuple<std::deque<SPToken>, std::deque<SPToken>, std::string> ConditionalValidator::splitExpression(std::deque<SPToken>& expression, TokenType type) {
+std::tuple<std::deque<SPToken>, std::deque<SPToken>, std::string>
+ConditionalValidator::splitExpression(std::deque<SPToken> &expression, TokenType type) {
     std::deque<SPToken> LHS;
     std::deque<SPToken> RHS;
 
@@ -186,7 +175,7 @@ std::tuple<std::deque<SPToken>, std::deque<SPToken>, std::string> ConditionalVal
     std::string operatorAsString;
 
     // Construct LHS and RHS
-    for (SPToken token : expression) {
+    for (SPToken token: expression) {
         if (operatorFound) {
             RHS.push_back(token);
         } else {

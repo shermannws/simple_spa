@@ -9,9 +9,11 @@ typedef int StatementNumber;
 typedef std::string ConstantValue;
 typedef std::string FormattedExpression;
 typedef std::string EntityValue;
+typedef std::string AttrValue;
 
 class AppConstants {
 public:
+    inline static const std::string STRING_EMPTY = "";
     // Entities
     inline static const std::string STRING_PROCEDURE = "procedure";
     inline static const std::string STRING_STATEMENT = "stmt";
@@ -66,24 +68,20 @@ public:
     inline static const char CHAR_CLOSE_CURLY_PARENTHESIS = '}';
     inline static const char CHAR_SEMICOLON = ';';
 
-    inline static const std::unordered_set<char> MATH_SPECIAL_CHAR_SET = {
-            CHAR_PLUS,
-            CHAR_MINUS,
-            CHAR_TIMES,
-            CHAR_DIVIDE,
-            CHAR_MODULO,
-            CHAR_OPEN_ROUND_PARENTHESIS,
-            CHAR_CLOSE_ROUND_PARENTHESIS
-    };
+    inline static const std::unordered_set<char> MATH_SPECIAL_CHAR_SET = {CHAR_PLUS,
+                                                                          CHAR_MINUS,
+                                                                          CHAR_TIMES,
+                                                                          CHAR_DIVIDE,
+                                                                          CHAR_MODULO,
+                                                                          CHAR_OPEN_ROUND_PARENTHESIS,
+                                                                          CHAR_CLOSE_ROUND_PARENTHESIS};
 
     inline static const std::unordered_set<std::string> TERM_ARITHMETIC_OPERATOR_STRING_SET = {
-            STRING_TIMES,
-            STRING_DIVIDE,
-            STRING_MODULO
-    };
+            STRING_TIMES, STRING_DIVIDE, STRING_MODULO};
 
-    inline static const std::unordered_set<std::string> EXPR_ARITHMETIC_OPERATOR_STRING_SET = {
-            STRING_PLUS,
-            STRING_MINUS
-    };
+    inline static const std::unordered_set<std::string> EXPR_ARITHMETIC_OPERATOR_STRING_SET = {STRING_PLUS,
+                                                                                               STRING_MINUS};
+
+    inline static const StatementNumber INITIAL_STATEMENT_NUMBER = 1;
+    inline static const StatementNumber DUMMY_CFGNODE_STATEMENT_NUMBER = -1;
 };

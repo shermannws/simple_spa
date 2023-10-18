@@ -1,7 +1,7 @@
-#include "catch.hpp"
 #include "PKB/Pkb.h"
-#include "QPS/Parsers/PQLParser.h"
 #include "QPS/Evaluators/PQLEvaluator.h"
+#include "QPS/Parsers/PQLParser.h"
+#include "catch.hpp"
 
 using namespace std;
 
@@ -87,7 +87,8 @@ TEST_CASE("Test integration of PKB with QPS - Get all Stmt") {
 
     pkbWriter->addPrintStatement(printStatement);
     pkbWriter->addReadStatement(readStatement);
-    pkbWriter->addAssignStatement(assignStatement, nullptr, nullptr);
+    pkbWriter->addAssignStatement(assignStatement);
+    pkbWriter->addAssignPattern(assignStatement, nullptr, nullptr);
 
     PQLParser parser("stmt s; Select s");
     Query queryObj = parser.parse();
@@ -109,9 +110,12 @@ TEST_CASE("Test integration of PKB with QPS - Get all Assign") {
     shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
     shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
 
-    pkbWriter->addAssignStatement(assignStatement1, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement2, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement3, nullptr, nullptr);
+    pkbWriter->addAssignStatement(assignStatement1);
+    pkbWriter->addAssignStatement(assignStatement2);
+    pkbWriter->addAssignStatement(assignStatement3);
+    pkbWriter->addAssignPattern(assignStatement1, nullptr, nullptr);
+    pkbWriter->addAssignPattern(assignStatement2, nullptr, nullptr);
+    pkbWriter->addAssignPattern(assignStatement3, nullptr, nullptr);
 
     PQLParser parser("assign a; Select a");
     Query queryObj = parser.parse();
@@ -146,9 +150,12 @@ TEST_CASE("Test integration of PKB with QPS - Assign With Pattern") {
     shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
     shared_ptr<Statement> assignStatement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
 
-    pkbWriter->addAssignStatement(assignStatement1, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement2, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement3, nullptr, nullptr);
+    pkbWriter->addAssignStatement(assignStatement1);
+    pkbWriter->addAssignStatement(assignStatement2);
+    pkbWriter->addAssignStatement(assignStatement3);
+    pkbWriter->addAssignPattern(assignStatement1, nullptr, nullptr);
+    pkbWriter->addAssignPattern(assignStatement2, nullptr, nullptr);
+    pkbWriter->addAssignPattern(assignStatement3, nullptr, nullptr);
 
     PQLParser parser("assign a; Select a pattern a(_, _)");
     Query queryObj = parser.parse();
@@ -279,8 +286,11 @@ TEST_CASE("Test integration of PKB with QPS - Follows (1, 2)") {
     shared_ptr<Statement> assignStatement1 = make_shared<Statement>(Statement(1, StatementType::Assign));
     shared_ptr<Statement> assignStatement2 = make_shared<Statement>(Statement(2, StatementType::Assign));
 
-    pkbWriter->addAssignStatement(assignStatement1, nullptr, nullptr);
-    pkbWriter->addAssignStatement(assignStatement2, nullptr, nullptr);
+    pkbWriter->addAssignStatement(assignStatement1);
+    pkbWriter->addAssignStatement(assignStatement2);
+    pkbWriter->addAssignPattern(assignStatement1, nullptr, nullptr);
+    pkbWriter->addAssignPattern(assignStatement2, nullptr, nullptr);
+
     pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2, true);
     pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2, true);
 
@@ -325,7 +335,7 @@ TEST_CASE("Test integration of PKB with QPS - Uses (a, 'x')") {
 
     PQLEvaluator evaluator = PQLEvaluator(pkb.createPkbReader());
 
-//    PQLParser parser1("assign a; variable v; Select v such that Uses (a, v)");
+    //    PQLParser parser1("assign a; variable v; Select v such that Uses (a, v)");
     PQLParser parser1("assign a; Select a such that Uses (a, \"x\")");
     Query queryObj1 = parser1.parse();
     Result resultObj1 = evaluator.evaluate(queryObj1);
@@ -431,9 +441,13 @@ TEST_CASE("Test multiclause") {
     pkbWriter->addUsesRelationship(assignStatement2, variableY);
     pkbWriter->addUsesRelationship(assignStatement3, variableC);
 
-    pkbWriter->addAssignStatement(assignStatement1, variableX, expression3);
-    pkbWriter->addAssignStatement(assignStatement2, variableA, expression4);
-    pkbWriter->addAssignStatement(assignStatement3, variableC, expression6);
+    pkbWriter->addAssignStatement(assignStatement1);
+    pkbWriter->addAssignStatement(assignStatement2);
+    pkbWriter->addAssignStatement(assignStatement3);
+
+    pkbWriter->addAssignPattern(assignStatement1, variableX, expression3);
+    pkbWriter->addAssignPattern(assignStatement2, variableA, expression4);
+    pkbWriter->addAssignPattern(assignStatement3, variableC, expression6);
 
     pkbWriter->addFollowsRelationship(assignStatement1, assignStatement2, true);
 
@@ -473,5 +487,4 @@ TEST_CASE("Test multiclause") {
 
     REQUIRE(results3.size() == 1);
     REQUIRE(find(results3.begin(), results3.end(), "3") != results3.end());
-
 }

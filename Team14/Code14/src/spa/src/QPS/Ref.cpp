@@ -1,58 +1,37 @@
 #include <string>
 
-#include "Ref.h"
 #include "QPSUtil.h"
+#include "Ref.h"
 
-Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid),
-entityType(QueryEntityType::Invalid), attrName(AttrName::Invalid) {}
+Ref::Ref()
+    : type(RefType::Invalid), rootType(RootType::Invalid), entityType(QueryEntityType::Invalid),
+      attrName(AttrName::Invalid) {}
 
-void Ref::setRep(StringRep & rrep) {
-    rep = rrep;
-}
+void Ref::setRep(StringRep &rrep) { rep = rrep; }
 
-std::string Ref::getRep() const{
-    return rep;
-}
+std::string Ref::getRep() const { return rep; }
 
-void Ref::setAttrName(const std::string& name) {
-    attrName = QPSUtil::strToAttrNameMap[name];
-}
+void Ref::setAttrName(const std::string &name) { attrName = QPSUtil::strToAttrNameMap[name]; }
 
-AttrName Ref::getAttrName() const{
-    return attrName;
-}
+AttrName Ref::getAttrName() const { return attrName; }
 
-void Ref::setType(RefType& rrefType) {
-    type = rrefType;
-}
+void Ref::setType(RefType &rrefType) { type = rrefType; }
 
-RefType Ref::getType() const{
-    return type;
-}
+RefType Ref::getType() const { return type; }
 
-void Ref::setRootType(RootType& rrootType) {
-    rootType = rrootType;
-}
+void Ref::setRootType(RootType &rrootType) { rootType = rrootType; }
 
-RootType Ref::getRootType() const {
-    return rootType;
-}
+RootType Ref::getRootType() const { return rootType; }
 
-void Ref::setEntityType(QueryEntityType& eentityType) {
-    entityType = eentityType;
-}
+void Ref::setEntityType(QueryEntityType &eentityType) { entityType = eentityType; }
 
-QueryEntityType Ref::getEntityType() const{
-    return entityType;
-}
+QueryEntityType Ref::getEntityType() const { return entityType; }
 
-bool Ref::isRootType(RootType rrootType) {
-    return rootType == rrootType;
-}
+bool Ref::isRootType(RootType rrootType) { return rootType == rrootType; }
 
-bool Ref::operator==(const Ref& other) const {
-    return (rep == other.rep) && (type == other.type)
-        && (rootType == other.rootType) && (entityType == other.entityType) && (attrName == other.attrName);
+bool Ref::operator==(const Ref &other) const {
+    return (rep == other.rep) && (type == other.type) && (rootType == other.rootType) &&
+           (entityType == other.entityType) && (attrName == other.attrName);
 }
 
 bool Ref::isOfStmtRef() {

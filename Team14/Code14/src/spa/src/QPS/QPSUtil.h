@@ -1,15 +1,16 @@
 #pragma once
 
-#include "QueryEntity.h"
-#include "Ref.h"
 #include "QPS/Clauses/Clause.h"
 #include "QPS/Evaluators/Strategies/Strategy.h"
+#include "QueryEntity.h"
+#include "Ref.h"
 
 /**
  * @brief QPSUtil class
  */
 class QPSUtil {
 public:
+    static std::unordered_map<StringRep, ClauseType> repClauseTypeMap;
     /**
      * @brief An unordered map that maps a string to TokenType
      */
@@ -26,19 +27,9 @@ public:
     static std::unordered_map<QueryEntityType, RefType> entityRefMap;
 
     /**
-    * @brief An unordered set of clause types that follow the pattern (stmtref/proc, var)
-    */
-    static std::unordered_set<ClauseType> stmtrefProcVarClauseTypes;
-
-    /**
-     * @brief An unordered set of clause types that follow the pattern (stmtref, stmtref)
+     * @brief An unordered map that maps ClauseType to ClauseArgType;
      */
-    static std::unordered_set<ClauseType> stmtrefClauseTypes;
-
-    /**
-    * @brief An unordered set of clause types that follow the pattern (proc-Entref, proc-Entref)
-    */
-    static std::unordered_set<ClauseType>procRefClauseTypes;
+    static std::unordered_map<ClauseType, ClauseArgType> typeToArgTypeMap;
 
     /**
      * @brief An unordered map that maps QueryEntityType to the set of valid AttrNames
@@ -53,7 +44,8 @@ public:
     /**
      * @brief An unordered map of ClauseType and its corresponding strategy creator function
      */
-    static std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>> strategyCreatorMap;
+    static std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>>
+            strategyCreatorMap;
 
     /**
      * @brief An unordered map that maps QueryEntityType to the corresponding StatementType

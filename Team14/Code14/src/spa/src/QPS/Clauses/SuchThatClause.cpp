@@ -1,43 +1,24 @@
 #include "SuchThatClause.h"
 #include "QPS/Exceptions/SyntaxException.h"
+#include "QPS/QPSUtil.h"
 
 SuchThatClause::SuchThatClause() = default;
 
-SuchThatClause::SuchThatClause(const std::shared_ptr<Token>& absToken) {
-    if (absToken->isToken("Uses")) {
-        this->setType(ClauseType::Uses);
-    } else if (absToken->isToken("Modifies")) {
-        this->setType(ClauseType::Modifies);
-    } else if (absToken->isToken("Follows")) {
-        this->setType(ClauseType::Follows);
-    } else if (absToken->isToken("Follows*")) {
-        this->setType(ClauseType::FollowsStar);
-    } else if (absToken->isToken("Parent")) {
-        this->setType(ClauseType::Parent);
-    } else if (absToken->isToken("Parent*")) {
-        this->setType(ClauseType::ParentStar);
-    } else if (absToken->isToken("Calls")) {
-        this->setType(ClauseType::Calls);
-    } else if (absToken->isToken("Calls*")) {
-        this->setType(ClauseType::CallsStar);
-    } else {
+SuchThatClause::SuchThatClause(const std::shared_ptr<Token> &absToken) {
+    StringRep rep = absToken->getRep();
+    if (QPSUtil::repClauseTypeMap.find(rep) == QPSUtil::repClauseTypeMap.end()) {
         throw SyntaxException("Invalid token, abstraction expected");
     }
+    this->setType(QPSUtil::repClauseTypeMap[rep]);
 }
 
-void SuchThatClause::setSecondParam(Ref& ref) {
-    secondParam = ref;
-}
+void SuchThatClause::setSecondParam(Ref &ref) { secondParam = ref; }
 
-Ref& SuchThatClause::getSecondParam() {
-    return secondParam;
-}
+Ref &SuchThatClause::getSecondParam() { return secondParam; }
 
 std::vector<Synonym> SuchThatClause::getSynonyms() const {
     std::vector<Synonym> synonyms;
-    if (firstParam.getRootType() == RootType::Synonym) {
-        synonyms.push_back(firstParam.getRep());
-    }
+    if (firstParam.getRootType() == RootType::Synonym) { synonyms.push_back(firstParam.getRep()); }
     // only add RHS synonym if it is different from LHS
     if (secondParam.getRootType() == RootType::Synonym && !(firstParam == secondParam)) {
         synonyms.push_back(secondParam.getRep());
@@ -45,13 +26,10 @@ std::vector<Synonym> SuchThatClause::getSynonyms() const {
     return synonyms;
 }
 
-bool SuchThatClause::operator==(const Clause& other) const {
+bool SuchThatClause::operator==(const Clause &other) const {
     try {
-        const auto& otherPattern = dynamic_cast<const SuchThatClause&>(other);
-        return (type == otherPattern.type) &&
-               (firstParam == otherPattern.firstParam) &&
-               (secondParam==otherPattern.secondParam);
-    } catch (std::bad_cast& e) {
-        return false;
-    }
+        const auto &otherPattern = dynamic_cast<const SuchThatClause &>(other);
+        return (type == otherPattern.type) && (firstParam == otherPattern.firstParam) &&
+               (secondParam == otherPattern.secondParam);
+    } catch (std::bad_cast &e) { return false; }
 }

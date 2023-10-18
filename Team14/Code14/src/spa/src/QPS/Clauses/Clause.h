@@ -14,6 +14,8 @@ enum class ClauseType {
     FollowsStar,
     Parent,
     ParentStar,
+    Next,
+    NextStar,
     Calls,
     CallsStar,
     Assign,
@@ -35,6 +37,7 @@ protected:
      * @brief The first parameter of the Clause in Ref
      */
     Ref firstParam;
+
 public:
     /**
      * @brief The constructor of Clause
@@ -62,19 +65,19 @@ public:
      * @brief The setter of the first parameter of the Clause
      * @param ref The Ref reference of the first parameter
      */
-    void setFirstParam(Ref& ref);
+    void setFirstParam(Ref &ref);
 
     /**
      * @brief The getter of the first parameter of the Clause
      * @return The Ref reference of the first parameter
      */
-    Ref& getFirstParam();
+    Ref &getFirstParam();
 
     /**
-    * @brief returns the list of synonyms present in the clause, used for
-    * defining the corresponding Result table header of the clause
-    * @return vector of Synonyms
-    */
+     * @brief returns the list of synonyms present in the clause, used for
+     * defining the corresponding Result table header of the clause
+     * @return vector of Synonyms
+     */
     virtual std::vector<Synonym> getSynonyms() const = 0;
 
     /**
@@ -82,5 +85,5 @@ public:
      * @param other The other Clause object to compare against
      * @return True if the Clause object is equal to the other Clause object
      */
-    virtual bool operator==(const Clause& other) const = 0;
+    virtual bool operator==(const Clause &other) const = 0;
 };

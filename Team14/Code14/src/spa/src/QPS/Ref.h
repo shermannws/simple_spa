@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "QueryEntity.h"
 #include "QPSTypes.h"
+#include "QueryEntity.h"
 
 /**
  * @brief The enum class of RefType
@@ -20,9 +20,9 @@ enum class RefType {
  */
 enum class RootType {
     Integer, // StmtRef & WithRef
-    Wildcard, // StmtRef & EntRef
+    Wildcard,// StmtRef & EntRef
     Synonym, // StmtRef & EntRef
-    Ident, // EntRef & WithRef
+    Ident,   // EntRef & WithRef
     AttrRef, // WithRef
     Invalid
 };
@@ -30,13 +30,7 @@ enum class RootType {
 /**
  * @brief The enum class of AttrName
  */
-enum class AttrName {
-    ProcName,
-    VarName,
-    Value,
-    StmtNo,
-    Invalid
-};
+enum class AttrName { ProcName, VarName, Value, StmtNo, Invalid };
 
 /**
  * @brief Ref class
@@ -67,6 +61,7 @@ private:
      * @brief The QueryEntityType of the Ref
      */
     QueryEntityType entityType;
+
 public:
     /**
      * @brief The constructor of Ref
@@ -107,31 +102,31 @@ public:
      * @brief The setter of the string representation of the Ref
      * @param rrep The StringRep reference
      */
-    void setRep(StringRep& rrep);
+    void setRep(StringRep &rrep);
 
     /**
      * @brief The setter of the RefType of the Ref
      * @param rrefType The RefType reference
      */
-    void setType(RefType& rrefType);
+    void setType(RefType &rrefType);
 
     /**
      * @brief The setter of the RootType of the Ref
      * @param rrootType The RootType reference
      */
-    void setRootType(RootType& rrootType);
+    void setRootType(RootType &rrootType);
 
     /**
      * @brief The setter of the QueryEntityType of the Ref
      * @param eentityType The QueryEntityType reference
      */
-    void setEntityType(QueryEntityType& eentityType);
+    void setEntityType(QueryEntityType &eentityType);
 
     /**
      * @brief The setter of the AttrName of the Ref
      * @param eentityType The QueryEntityType reference
      */
-    void setAttrName(const std::string& name);
+    void setAttrName(const std::string &name);
 
     /**
      * @brief Checks if the RootType of the Ref is rrootType
@@ -158,14 +153,14 @@ public:
      */
     bool isOfWithRef();
 
+    bool isOfName();
+
+    bool isOfInteger();
+
     /**
      * @brief Checks if this Ref is equal to other by comparing their rep, type, rootType and entityType
      * @param other query entity object
      * @return Returns true if this == other, otherwise false
      */
-    bool operator==(const Ref& other) const;
-
-    bool isOfName();
-
-    bool isOfInteger();
+    bool operator==(const Ref &other) const;
 };

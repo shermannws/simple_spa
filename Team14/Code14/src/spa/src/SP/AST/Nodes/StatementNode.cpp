@@ -2,6 +2,4 @@
 
 StatementNode::StatementNode(StatementNumber statementNumber) : statementNumber(statementNumber) {}
 
-StatementNumber StatementNode::getStatementNumber() {
-    return statementNumber;
-}
+StatementNumber StatementNode::getStatementNumber() { return statementNumber; }

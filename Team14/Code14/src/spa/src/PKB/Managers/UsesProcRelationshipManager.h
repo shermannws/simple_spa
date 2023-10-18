@@ -4,10 +4,10 @@
 #include <utility>
 #include <vector>
 
-#include "ProcToVarRelationshipManager.h"
-#include "PKB/RelationshipStores/UsesProcRelationshipStore.h"
 #include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Variable.h"
+#include "PKB/RelationshipStores/UsesProcRelationshipStore.h"
+#include "ProcToVarRelationshipManager.h"
 
 /**
  * @class UsesProcRelationshipManager is responsible for storing and retrieving the Uses relationships (Procedure)
