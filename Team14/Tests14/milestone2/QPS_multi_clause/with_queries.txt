@@ -1,16 +1,16 @@
 1 - No shared synonym v1
 call c; read r; stmt s, s1;
-Select c with c.procName = r.varName such that Follows(s, s1);
+Select c with c.procName = r.varName such that Follows(s, s1)
 1
 5000
 2 - No shared synonym v2
 call c; read r;
-Select c with c.procName = r.varName such that Follows*(1, 3);
+Select c with c.procName = r.varName such that Follows*(1, 3)
 1
 5000
 3 - No shared synonym v3
 call c; read r; stmt s;
-Select r with c.procName = r.varName such that Follows*(1, s);
+Select r with c.procName = r.varName such that Follows*(1, s)
 10
 5000
 4 - 1 shared synonym v1
@@ -34,29 +34,29 @@ Select w with r.varName = "print" such that Parent(w, r) and Follows(w, s)
 none
 5000
 8 - 1 shared synonym v5
-while w; stmt s; print pn; variable v;
-Select v with pn.varName = v.varName such that Uses("call", v) and Follows*(8, 10)
+while w; stmt s; print pn; variable v; read r;
+Select v with pn.varName = v.varName such that Uses("call", v) and Follows*(8, 10) with v.varName = r.varName
 print
 5000
 9 - 2 shared synonym v1
 print pn; variable v; assign a; stmt s;
-Select v such that pn.varName = v.varName such that Parent(s, pn) and Uses(a,v)
+Select v with pn.varName = v.varName such that Parent(s, pn) and Uses(a,v)
 a
 5000
 10 - 2 shared synonym v2
 while w; read r; assign a;
-Select r.varName such that Parent(w, r) such that Follows(a,w) with r.varName = "k"
-k
+Select r such that Parent(w, r) such that Follows(a,w) with r.varName = "k"
+9
 5000
 11 - 2 shared synonym v2.1
 while w; read r; assign a;
-Select r.varName such that Parent(w, r) such that Follows(6,w) with r.varName = "k"
+Select r such that Parent(w, r) such that Follows(6,w) with r.varName = "k"
 none
 5000
 12 - 2 shared synonym v3
 while w; stmt s; print pn; variable v;
 Select v such that Follows*(w, pn) with pn.varName = v.varName such that Uses("call", v)
-print
+print, extra
 5000
 13 - 2 shared synonym v4
 print pn; variable v; read r;
