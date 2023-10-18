@@ -6,7 +6,7 @@ Select w pattern w(v, _)
 2 - select w, wildcard, wildcard
 while w;
 Select w pattern w(_, _)
-2, 5, 8, 10, 13
+5, 8, 13
 5000
 3 - select w, var string, wildcard
 while w;
@@ -85,10 +85,10 @@ SyntaxError
 17 - invalid pattern, undeclared variable
 while w;
 Select w pattern w(v, _)
-SemanticError
+SyntaxError
 5000
 18 - invalid pattern, pattern syn is not while
 while w; variable v
 Select w pattern v(_, _)
-SemanticError
+SyntaxError
 5000

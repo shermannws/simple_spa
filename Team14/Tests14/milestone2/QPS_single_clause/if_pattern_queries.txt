@@ -6,7 +6,7 @@ Select ifs pattern ifs(v, _, _)
 2 - select ifs, wildcard, wildcard, wildcard
 if ifs; variable v;
 Select ifs pattern ifs(_, _, _)
-1, 4, 9, 14
+4, 9, 14
 5000
 3 - select ifs, var string, wildcard, wildcard
 if ifs; variable v;
@@ -23,98 +23,103 @@ if ifs; variable v;
 Select v pattern ifs(v, _, _)
 x, e, f, g
 5000
-6 - select unrelated, var syn, wildcard, wildcard
+6 - select unrelated var, var syn, wildcard, wildcard
 if ifs; variable v, x;
 Select x pattern ifs(v, _, _)
 x, y, z, a, b, c, d, e, f, g
 5000
-61 - select unrelated, non-existent var string, wildcard, wildcard
-if ifs; variable v;
+7 - select ifs, non-existent var string, wildcard, wildcard
+if ifs;
 Select ifs pattern ifs("nonexistentvar", _, _)
 none
 5000
-7 - invalid arg2, var syn, partial var, wildcard
+8 - select unrelated if, wildcard, wildcard, wildcard
+if ifs, allif;
+Select allif pattern ifs(_, _, _)
+1, 4, 9, 14
+5000
+9 - invalid arg2, var syn, partial var, wildcard
 if ifs; variable v;
 Select ifs pattern ifs(v, _"x"_, _)
 SyntaxError
 5000
-8 - invalid arg2, var syn, partial const, wildcard
+10 - invalid arg2, var syn, partial const, wildcard
 if ifs; variable v;
 Select ifs pattern ifs(v, _"2"_, _)
 SyntaxError
 5000
-9 - invalid arg2, var syn, var syn, wildcard
+11 - invalid arg2, var syn, var syn, wildcard
 if ifs; variable v1, v2;
 Select ifs pattern ifs(v1, v2, _)
 SyntaxError
 5000
-10 - invalid arg2, var syn, const syn, wildcard
+12 - invalid arg2, var syn, const syn, wildcard
 if ifs; variable v1;
 Select ifs pattern ifs(v1, 1, _)
 SyntaxError
 5000
-11 - invalid arg2, var syn, empty, wildcard
+13 - invalid arg2, var syn, empty, wildcard
 if ifs; variable v1;
 Select ifs pattern ifs(v1, , _)
 SyntaxError
 5000
-12 - invalid arg3, var syn, wildcard, partial var
+14 - invalid arg3, var syn, wildcard, partial var
 if ifs; variable v;
 Select ifs pattern ifs(v, _, _"x"_)
 SyntaxError
 5000
-13 - invalid arg3, var syn, wildcard, partial const
+15 - invalid arg3, var syn, wildcard, partial const
 if ifs; variable v;
 Select ifs pattern ifs(v, _, _"1"_)
 SyntaxError
 5000
-14 - invalid arg3, var syn, wildcard, var syn
+16 - invalid arg3, var syn, wildcard, var syn
 if ifs; variable v1, v2;
 Select ifs pattern ifs(v1, _, v2)
 SyntaxError
 5000
-15 - invalid arg3, var syn, wildcard, const syn
+17 - invalid arg3, var syn, wildcard, const syn
 if ifs; variable v;
 Select ifs pattern ifs(v,_, 1)
 SyntaxError
 5000
-16 - invalid arg3, var syn, wildcard, empty
+18 - invalid arg3, var syn, wildcard, empty
 if ifs; variable v;
 Select ifs pattern ifs(v,_, )
 SyntaxError
 5000
-17 - invalid arg1, empty, wildcard, wildcard
+19 - invalid arg1, empty, wildcard, wildcard
 if ifs;
 Select ifs pattern ifs( ,_,_)
 SyntaxError
 5000
-18 - invalid arg1, char string missing open inverted comma, wildcard, wildcard
+20 - invalid arg1, char string missing open inverted comma, wildcard, wildcard
 if ifs;
 Select ifs pattern ifs(a",_,_)
 SyntaxError
 5000
-19 - invalid arg1, char string missing close inverted comma, wildcard, wildcard
+21 - invalid arg1, char string missing close inverted comma, wildcard, wildcard
 if ifs;
 Select ifs pattern ifs("a,_,_)
 SyntaxError
 5000
-20 - invalid arg1, expr string, wildcard, wildcard
+22 - invalid arg1, expr string, wildcard, wildcard
 if ifs;
 Select ifs pattern ifs("a + b",_,_)
 SyntaxError
 5000
-21 - invalid arg1, invalid var name, wildcard, wildcard
+23 - invalid arg1, invalid var name, wildcard, wildcard
 if ifs;
 Select ifs pattern ifs("invalid^varname",_,_)
-SemanticError
+SyntaxError
 5000
-22 - invalid pattern declaration, undeclared variable
+24 - invalid pattern declaration, undeclared variable
 if ifs; variable v
 Select ifs pattern if(_,_,_)
-SemanticError
+SyntaxError
 5000
-23 - invalid pattern, pattern syn is not if
+25 - invalid pattern, pattern syn is not if
 if ifs; variable v
 Select ifs pattern v(_,_,_)
-SemanticError
+SyntaxError
 5000
