@@ -507,7 +507,13 @@ bool StubPkbReader::hasAfterStarStmt(Statement &statement) const {
     return false;
 }
 
-std::vector<Entity> StubPkbReader::getAllIfPatternStmts() const { return std::vector<Entity>{}; };
+std::vector<Entity> StubPkbReader::getAllIfPatternStmts() const {
+    return std::vector<Entity>({
+            Statement(101, StatementType::If),
+            Statement(102, StatementType::If),
+            Statement(103, StatementType::If),
+    });
+};
 
 std::vector<Entity> StubPkbReader::getIfStmtsByVar(Variable &var) const {
     if (var.getEntityValue() == "ifPatternVar") {

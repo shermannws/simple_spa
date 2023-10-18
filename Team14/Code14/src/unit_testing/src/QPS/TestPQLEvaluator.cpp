@@ -790,9 +790,10 @@ TEST_CASE("if pattern") {
         PQLEvaluator evaluator = PQLEvaluator(stubReader);
         auto resultObj = evaluator.evaluate(queryObj);
         auto results = evaluator.formatResult(queryObj, resultObj);
-        REQUIRE(results.size() == 2);
+        REQUIRE(results.size() == 3);
         REQUIRE(find(results.begin(), results.end(), "101") != results.end());
         REQUIRE(find(results.begin(), results.end(), "102") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "103") != results.end());
     }
 
     SECTION("getAllIfStmtVarPair for pattern if(v,_,_)") {

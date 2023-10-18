@@ -6,7 +6,7 @@ std::shared_ptr<Result> IfPatternStrategy::evaluateClause(std::shared_ptr<Clause
     std::shared_ptr<Result> result = std::make_shared<Result>();
 
     if (firstArg.isRootType(RootType::Wildcard)) {
-        auto tuples = pkbReader->getAllIf();
+        auto tuples = pkbReader->getAllIfPatternStmts();
         result->setTuples(tuples);
     } else if (firstArg.isRootType(RootType::Synonym)) {
         auto tuples = pkbReader->getAllIfStmtVarPair();
