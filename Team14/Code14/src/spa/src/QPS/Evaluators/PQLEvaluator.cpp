@@ -6,7 +6,7 @@
 #include "QPS/QPSUtil.h"
 #include "QPS/QueryEntity.h"
 
-// using transformFunc = std::function<std::string(Entity &)>;
+using transformFunc = std::function<std::string(Entity)>;
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader)
     : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
@@ -14,7 +14,6 @@ PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader)
 
 
 ResultList PQLEvaluator::formatResult(Query &query, Result &result) {
-
     std::vector<Synonym> selects = query.getSelect();
 
     if (selects.empty()) {// case BOOLEAN query
@@ -25,52 +24,50 @@ ResultList PQLEvaluator::formatResult(Query &query, Result &result) {
     // case tuple query
     SynonymMap indicesMap = result.getSynIndices();
     ResultSet results;
+    auto transformations = getTransformations(indicesMap, selects);
     for (auto &tuple: result.getTuples()) {
-        std::vector<std::string> tmp;
-        for (Synonym &syn: selects) {
-            auto attrName = QPSUtil::getAttrName(syn);
-            auto elemSyn = syn;
-            if (!attrName.empty()) {
-                elemSyn = QPSUtil::getSyn(syn); // get Synonym without attrName
-            }
-            if (indicesMap.find(elemSyn) != indicesMap.end()) {// TODO refactor into transformation.apply for each row
-                int idx = indicesMap.at(elemSyn);
-                std::string value = tuple[idx].getEntityValue();
-                if (!attrName.empty()) { // if attrRef
-                    value = QPSUtil::getValueFunc[attrName](tuple[idx]);
-                }
-                tmp.emplace_back(value);
-            }
-
-        }
-        FormattedResult concat =
-                std::accumulate(tmp.begin(), tmp.end(), std::string(), [](std::string &a, const std::string &b) {
-                    return a += (a.empty() ? "" : " ") + b;
-                });// handles formatting of more than two variables in select clause
-
-        if (!concat.empty() && results.find(concat) == results.end()) { results.insert(concat); }
+        auto tmp = project(tuple, transformations);
+        auto formattedResult = concat(tmp);
+        if (!formattedResult.empty()) { results.insert(formattedResult); }
     }
     ResultList list_results(results.begin(), results.end());
     return list_results;
 }
 
-// std::vector<std::string> PQLEvaluator::project(std::vector<std::pair<int, transformFunc>> transformations,
-//                                                std::vector<Entity> &tuple) {
-//     std::vector<std::string> projection;
-//     for (auto &elem: transformations) { projection.emplace_back(elem.second(tuple[elem.first])); }
-//     return projection;
-// }
-//
-// std::vector<std::pair<int, transformFunc>> PQLEvaluator::getTransformation(SynonymMap synIndices,
-//                                                                            std::vector<Synonym> selectTuple) {
-//     std::vector<std::pair<int, transformFunc>> transformations;
-//     for (Synonym &syn: selectTuple) {
-//         int index = synIndices.at(syn);
-//         transformations.emplace_back(
-//                 std::make_pair(index, [](Entity &ent) { return *ent.getEntityValue(); }));// or getAttrvalue
-//     }
-//     return transformations;
-// }
+std::vector<std::pair<int, transformFunc>> PQLEvaluator::getTransformations(SynonymMap inputMap,
+                                                                            std::vector<Synonym> resultClause) {
+    std::vector<std::pair<int, transformFunc>> transformations;
+    for (Synonym &elem: resultClause) {
+        auto attrName = QPSUtil::getAttrName(elem);
+        std::pair<int, transformFunc> transformation;
+        if (attrName.empty()) {// case synonym
+            transformation.first = inputMap[elem];
+            transformation.second = [](Entity ent) { return ent.getEntityValue(); };
+        } else {                             // case attrRef
+            auto syn = QPSUtil::getSyn(elem);// get Syn without attrName
+            transformation.first = inputMap[syn];
+            transformation.second = QPSUtil::getValueFunc[attrName];
+        }
+        transformations.push_back(transformation);
+    }
+    return transformations;
+}
+
+std::vector<std::string> PQLEvaluator::project(std::vector<Entity> row,
+                                               std::vector<std::pair<int, transformFunc>> transformations) {
+    std::vector<std::string> projection;
+    for (auto &elem: transformations) {
+        auto result = elem.second(row[elem.first]);
+        projection.push_back(result);
+    }
+    return projection;
+}
+
+std::string PQLEvaluator::concat(std::vector<std::string> strings) {
+    auto result = std::accumulate(strings.begin(), strings.end(), std::string(),
+                                  [](std::string &a, const std::string &b) { return a += (a.empty() ? "" : " ") + b; });
+    return result;
+}
 
 Result PQLEvaluator::evaluate(Query &query) {
     std::shared_ptr<Result> result = evaluateConstraintClauses(query);
@@ -84,7 +81,8 @@ Result PQLEvaluator::evaluate(Query &query) {
     if (unevaluatedSyn.empty()) { return *result; }
 
     // CASE SOME RESULT-CLAUSE NOT IN RESULT TABLE
-    auto synResult = evaluateResultClause(query, unevaluatedSyn);// TODO project curr result first before combine?
+    auto synResult =
+            evaluateResultClause(query, unevaluatedSyn);// TODO optimise:project curr result first before combine?
     auto finalResult = resultHandler->getCombined(result, synResult);
     return *finalResult;
 }
