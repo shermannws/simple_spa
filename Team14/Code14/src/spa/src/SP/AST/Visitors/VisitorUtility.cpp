@@ -1,16 +1,15 @@
 #include <stack>
 
 #include "Commons/StatementFactory.h"
-#include "SP/AST/Nodes/ProcedureNode.h"
 #include "SP/AST/Nodes/StatementNode.h"
 #include "SP/AST/Nodes/VariableNode.h"
 #include "VisitorUtility.h"
 
 void VisitorUtility::addAllVariableRelationshipFrom(
         const std::shared_ptr<ASTNode> &root, const std::shared_ptr<Statement> &s,
-        const std::vector<std::shared_ptr<ASTNode>> &parents,
+        const std::vector<std::shared_ptr<Statement>> &parents,
         const std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> &funcStmt,
-        const std::shared_ptr<ASTNode> &proc,
+        const std::shared_ptr<Procedure> &proc,
         const std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> &funcProc) {
     std::stack<std::shared_ptr<ASTNode>> frontier;
     frontier.push(root);
@@ -26,16 +25,10 @@ void VisitorUtility::addAllVariableRelationshipFrom(
             auto variable = std::make_shared<Variable>(ptr->getVarName());
             funcStmt(s, variable);
             // Add indirect relationships between parent and variable
-            for (const auto &parent: parents) {
-                auto parentPtr = std::static_pointer_cast<StatementNode>(parent);
-                assert(parentPtr != nullptr);
-                funcStmt(StatementFactory::createStatementFromStatementNode(parentPtr), variable);
-            }
+            for (const auto &parent: parents) { funcStmt(parent, variable); }
 
             // Add proc-var relationships
-            auto procedurePtr = std::static_pointer_cast<ProcedureNode>(proc);
-            assert(procedurePtr != nullptr);
-            funcProc(std::make_shared<Procedure>(procedurePtr->getProcedureName()), variable);
+            funcProc(proc, variable);
         }
 
         std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();
