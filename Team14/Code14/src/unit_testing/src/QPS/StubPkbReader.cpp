@@ -2,7 +2,18 @@
 
 StubPkbReader::StubPkbReader() = default;
 
-std::vector<Entity> StubPkbReader::getAllVariables() const { return std::vector<Entity>(); }
+std::vector<Entity> StubPkbReader::getAllVariables() const {
+    return std::vector<Entity>({
+            Variable("var1"),
+            Variable("var2"),
+            Variable("var5"),
+            Variable("var14"),
+            Variable("var24"),
+            Variable("var36"),
+            Variable("var38"),
+            Variable("var88"),
+    });
+}
 
 std::vector<Entity> StubPkbReader::getAllConstants() const { return std::vector<Entity>(); }
 
@@ -496,12 +507,25 @@ bool StubPkbReader::hasAfterStarStmt(Statement &statement) const {
     return false;
 }
 
-std::vector<Entity> StubPkbReader::getAllIfPatternStmts() const { return std::vector<Entity>{}; };
+std::vector<Entity> StubPkbReader::getAllIfPatternStmts() const {
+    return std::vector<Entity>({
+            Statement(101, StatementType::If),
+            Statement(102, StatementType::If),
+            Statement(103, StatementType::If),
+    });
+};
 
-std::vector<Entity> StubPkbReader::getIfStmtsByVar(Variable &var) const { return std::vector<Entity>{}; };
+std::vector<Entity> StubPkbReader::getIfStmtsByVar(Variable &var) const {
+    if (var.getEntityValue() == "ifPatternVar") {
+        return std::vector<Entity>(
+                {Statement(3, StatementType::If), Statement(59, StatementType::If), Statement(100, StatementType::If)});
+    }
+    return std::vector<Entity>{};
+};
 
 std::vector<std::vector<Entity>> StubPkbReader::getAllIfStmtVarPair() const {
-    return std::vector<std::vector<Entity>>{};
+    return std::vector<std::vector<Entity>>(
+            {{Statement(1, StatementType::If), Variable("var2")}, {Statement(3, StatementType::If), Variable("var3")}});
 }
 
 std::vector<Entity> StubPkbReader::getAllWhilePatternStmts() const { return std::vector<Entity>{}; };

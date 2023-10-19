@@ -5,11 +5,12 @@
 void EntrefExprSpecHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
     auto patternClause = std::dynamic_pointer_cast<PatternClause>(clause);
 
-    if (!patternClause) { return SemanticValHandler::handle(query, clause); }
-
-    EntityPtr entity = query.getEntity(patternClause->getSyn());
-    if (entity->getType() != QueryEntityType::Assign) {
+    if (patternClause->getType() != ClauseType::Assign) {// TODO: possible to delete this
         throw SemanticException("Unsupported pattern clause, expected an assign synonym");
+    }
+
+    if (patternClause->hasThirdParam()) {
+        throw SemanticException("Unsupported assign pattern clause, third param found");
     }
 
     Ref &leftRef = clause->getFirstParam();

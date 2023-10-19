@@ -19,6 +19,8 @@ enum class ClauseType {
     Calls,
     CallsStar,
     Assign,
+    While,
+    If,
     Invalid
 };
 

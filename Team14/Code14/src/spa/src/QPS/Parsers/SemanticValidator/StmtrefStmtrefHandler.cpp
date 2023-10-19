@@ -12,8 +12,6 @@ void StmtrefStmtrefHandler::handle(const Query &query, std::shared_ptr<Clause> c
     if (QPSUtil::typeToArgTypeMap[type] != StmtrefStmtref) { return SemanticValHandler::handle(query, clause); }
 
     handleRefType(leftRef, rightRef);
-
-    return SemanticValHandler::handle(query, clause);
 }
 
 void StmtrefStmtrefHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
