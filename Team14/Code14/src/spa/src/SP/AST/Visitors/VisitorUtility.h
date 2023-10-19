@@ -15,9 +15,9 @@ public:
      * also adds all Statement-Variable Relationship between all parent statement and variable
      * @param subtree The node to traverse down to find variable node
      * @param s The statement to store that is in direct relationship with the variable
-     * @param parents A vector of parent ASTNode that has indirect Statement-Variable relationship
+     * @param parents A vector of parent statements that has indirect Statement-Variable relationship
      * @param funcStmt The function to call to store the Statement-Variable relationship
-     * @param proc The procedure node that the subtree is in
+     * @param proc The procedure that the subtree is in
      * @param funcProc The function to call to store the Procedure-Variable relationship
      */
     static void addAllVariableRelationshipFrom(
