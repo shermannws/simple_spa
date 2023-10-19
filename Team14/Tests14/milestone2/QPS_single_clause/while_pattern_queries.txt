@@ -27,68 +27,79 @@ y, x, a, b, c, d, e, f, g, h
 while w; variable v; assign a;
 Select a pattern w(v, _)
 3, 6, 7, 11, 12, 15, 16
-61 - select unrelated, non-existent var string, wildcard
+5000
+7 - select unrelated, non-existent var string, wildcard
 while w; variable v; assign a;
 Select a pattern w("nonexistent", _)
 none
 5000
-7 - invalid RHS, var syn, partial var
+8 - select unrelated while, var syn, wildcard
+while w, w1; variable v;
+Select w1 pattern w(v, _)
+2, 5, 8, 10, 13
+5000
+9 - select var syn, var syn, wildcard
+while w; variable v, x;
+Select x pattern w(v, _)
+x, y, z, a, b, c, d, e, f, g, h, if, while
+5000
+10 - invalid RHS, var syn, partial var
 while w; variable v;
 Select w pattern w(v, _"a"_)
 SyntaxError
 5000
-8 - invalid RHS, var syn, partial const
+11 - invalid RHS, var syn, partial const
 while w; variable v;
 Select w pattern w(v, _"1"_)
 SyntaxError
 5000
-9 - invalid RHS, var syn, var syn
+12 - invalid RHS, var syn, var syn
 while w; variable v, x;
 Select w pattern w(v, x)
 SyntaxError
 5000
-10 - invalid RHS, var syn, const syn
+13 - invalid RHS, var syn, const syn
 while w; variable v;
 Select w pattern w(v, 1)
 SyntaxError
 5000
-11 - invalid RHS, var syn, empty
+14 - invalid RHS, var syn, empty
 while w; variable v;
 Select w pattern w(v, )
 SyntaxError
 5000
-12 - invalid LHS, empty, wildcard
+15 - invalid LHS, empty, wildcard
 while w;
 Select w pattern w(, _)
 SyntaxError
 5000
-13 - invalid LHS, char string missing open inverted comma, wildcard
+16 - invalid LHS, char string missing open inverted comma, wildcard
 while w;
 Select w pattern w(v", _)
 SyntaxError
 5000
-14 - invalid LHS, char string missing close inverted comma, wildcard
+17 - invalid LHS, char string missing close inverted comma, wildcard
 while w;
 Select w pattern w("v, _)
 SyntaxError
 5000
-15 - invalid LHS, expr string, wildcard
+18 - invalid LHS, expr string, wildcard
 while w;
 Select w pattern w("x > 1", _)
 SyntaxError
 5000
-16 - invalid LHS, invalid var name, wildcard
+19 - invalid LHS, invalid var name, wildcard
 while w;
 Select w pattern w("invalid&*varname", _)
 SyntaxError
 5000
-17 - invalid pattern, undeclared variable
+20 - invalid pattern, undeclared variable
 while w;
 Select w pattern w(v, _)
-SyntaxError
+SemanticError
 5000
-18 - invalid pattern, pattern syn is not while
-while w; variable v
+21 - invalid pattern, pattern syn is not while
+while w; variable v;
 Select w pattern v(_, _)
-SyntaxError
+SemanticError
 5000

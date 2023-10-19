@@ -116,10 +116,10 @@ SyntaxError
 24 - invalid pattern declaration, undeclared variable
 if ifs; variable v;
 Select ifs pattern if(_,_,_)
-SyntaxError
+SemanticError
 5000
 25 - invalid pattern, pattern syn is not if
 if ifs; variable v;
 Select ifs pattern v(_,_,_)
-SyntaxError
+SemanticError
 5000
