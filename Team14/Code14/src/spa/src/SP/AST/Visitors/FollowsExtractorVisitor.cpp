@@ -6,7 +6,7 @@ FollowsExtractorVisitor::FollowsExtractorVisitor(std::shared_ptr<PkbWriter> writ
 
 void FollowsExtractorVisitor::visitStatementListNode(StatementListNode *node,
                                                      std::vector<std::shared_ptr<Statement>> parents,
-                                                     std::shared_ptr<ASTNode> proc) const {
+                                                     std::shared_ptr<Procedure> proc) const {
     auto stmts = node->getStatements();
 
     // Add all pairwise statements that obeys Follow* relationship

@@ -26,7 +26,7 @@ public:
      * @param proc Procedure containing the AssignNode
      */
     void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<Statement>> parents,
-                         std::shared_ptr<ASTNode> proc) const override;
+                         std::shared_ptr<Procedure> proc) const override;
 
     /**
      * Visits the IfNode and adds the pattern into the PKB.
@@ -35,7 +35,7 @@ public:
      * @param proc The procedure node which the node is in
      */
     void visitIfNode(IfNode *node, std::vector<std::shared_ptr<Statement>> parents,
-                     std::shared_ptr<ASTNode> proc) const override;
+                     std::shared_ptr<Procedure> proc) const override;
 
     /**
      * Visits a WhileNode and adds the pattern into the PKB
@@ -44,7 +44,7 @@ public:
      * @param proc The procedure node which the node is in
      */
     void visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<Statement>> parents,
-                        std::shared_ptr<ASTNode> proc) const override;
+                        std::shared_ptr<Procedure> proc) const override;
 
 private:
     /**

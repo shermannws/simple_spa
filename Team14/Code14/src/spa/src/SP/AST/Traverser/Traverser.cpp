@@ -10,8 +10,8 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
     // DFS Algorithm where frontier is a stack
     // Execute DFS search algorithm with the program node as the root node
 
-    // currentProcedure is used to keep track of the current procedure node
-    std::shared_ptr<ProcedureNode> currentProcedure = nullptr;
+    // currentProcedure is used to keep track of the current procedure
+    std::shared_ptr<Procedure> currentProcedure = nullptr;
 
     // Add the first node to the frontier
     frontier.push({root, {}});
@@ -24,7 +24,7 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
         frontier.pop();
 
         if (auto currentCasted = std::dynamic_pointer_cast<ProcedureNode>(current)) {
-            currentProcedure = currentCasted;
+            currentProcedure = std::make_shared<Procedure>(currentCasted->getProcedureName());
         }
 
         // current node to accept all the visitors and do its respective work

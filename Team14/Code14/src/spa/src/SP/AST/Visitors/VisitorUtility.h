@@ -3,6 +3,7 @@
 #include <functional>
 #include <memory>
 
+#include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "SP/AST/Nodes/ASTNode.h"
@@ -23,6 +24,6 @@ public:
             const std::shared_ptr<ASTNode> &subtree, const std::shared_ptr<Statement> &s,
             const std::vector<std::shared_ptr<Statement>> &parents,
             const std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> &funcStmt,
-            const std::shared_ptr<ASTNode> &proc,
+            const std::shared_ptr<Procedure> &proc,
             const std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> &funcProc);
 };

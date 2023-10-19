@@ -18,5 +18,5 @@ public:
      * @param proc The procedure node which the node is in
      */
     void visitStatementListNode(StatementListNode *node, std::vector<std::shared_ptr<Statement>> parents,
-                                std::shared_ptr<ASTNode> proc) const override;
+                                std::shared_ptr<Procedure> proc) const override;
 };

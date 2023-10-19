@@ -6,15 +6,12 @@
 CallsExtractorVisitor::CallsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter) { this->pkbWriter = pkbWriter; }
 
 void CallsExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::shared_ptr<Statement>> parents,
-                                          std::shared_ptr<ASTNode> proc) const {
+                                          std::shared_ptr<Procedure> proc) const {
 
-    std::shared_ptr<ProcedureNode> callerNode = std::static_pointer_cast<ProcedureNode>(proc);
-    Procedure caller = Procedure(callerNode->getProcedureName());
     Procedure callee = Procedure(node->getProcedureName());
-    std::shared_ptr<Procedure> callerPtr = std::make_shared<Procedure>(caller);
     std::shared_ptr<Procedure> calleePtr = std::make_shared<Procedure>(callee);
 
-    this->pkbWriter->addCallsRelationship(callerPtr, calleePtr);
+    this->pkbWriter->addCallsRelationship(proc, calleePtr);
 
     // Add procedure to statement mapping
     std::vector<std::shared_ptr<Statement>> statementsToAdd;

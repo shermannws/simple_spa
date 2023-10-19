@@ -15,7 +15,7 @@ std::vector<std::shared_ptr<ASTNode>> UnaryConditionalExpressionNode::getAllChil
 
 void UnaryConditionalExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor,
                                             std::vector<std::shared_ptr<Statement>> parents,
-                                            std::shared_ptr<ASTNode> proc) {
+                                            std::shared_ptr<Procedure> proc) {
     if (auto uceVisitor = std::dynamic_pointer_cast<UnaryConditionalExpressionNodeVisitor>(visitor)) {
         uceVisitor->visitUnaryConditionalExpressionNode(this, parents, proc);
     }

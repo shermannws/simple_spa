@@ -23,7 +23,7 @@ public:
      */
     virtual void visitArithmeticExpressionNode(ArithmeticExpressionNode *node,
                                                std::vector<std::shared_ptr<Statement>> parents,
-                                               std::shared_ptr<ASTNode> proc) const = 0;
+                                               std::shared_ptr<Procedure> proc) const = 0;
 };
 
 /**
@@ -105,7 +105,7 @@ public:
     static ArithmeticOperatorType translateOperatorTypeString(const std::string &operatorTypeString);
 
     void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
-                std::shared_ptr<ASTNode> proc) override;
+                std::shared_ptr<Procedure> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 
