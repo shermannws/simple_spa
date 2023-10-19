@@ -19,9 +19,7 @@ void CallsExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::share
     statementsToAdd.push_back(currStatement);
 
     // Add procedure to parent statements mapping for UsesP and ModifiesP
-    for (auto parent = parents.rbegin(); parent != parents.rend(); parent++) {
-        statementsToAdd.push_back(*parent);
-    }
+    for (auto parent = parents.rbegin(); parent != parents.rend(); parent++) { statementsToAdd.push_back(*parent); }
 
     this->pkbWriter->addProcedureToStatementsMap(calleePtr, statementsToAdd);
 }

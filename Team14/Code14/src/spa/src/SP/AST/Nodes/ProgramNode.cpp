@@ -11,8 +11,8 @@ std::vector<std::shared_ptr<ASTNode>> ProgramNode::getAllChildNodes() {
     return children;
 }
 
-void ProgramNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
-                         std::shared_ptr<Procedure> proc) {
+void ProgramNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor,
+                         std::vector<std::shared_ptr<Statement>> parents, std::shared_ptr<Procedure> proc) {
     if (auto programVisitor = std::dynamic_pointer_cast<ProgramNodeVisitor>(visitor)) {
         programVisitor->visitProgramNode(this, parents, proc);
     }

@@ -25,9 +25,7 @@ void VisitorUtility::addAllVariableRelationshipFrom(
             auto variable = std::make_shared<Variable>(ptr->getVarName());
             funcStmt(s, variable);
             // Add indirect relationships between parent and variable
-            for (const auto &parent: parents) {
-                funcStmt(parent, variable);
-            }
+            for (const auto &parent: parents) { funcStmt(parent, variable); }
 
             // Add proc-var relationships
             funcProc(proc, variable);

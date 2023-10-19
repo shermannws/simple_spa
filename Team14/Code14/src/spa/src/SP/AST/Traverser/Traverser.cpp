@@ -1,8 +1,8 @@
 #include "Traverser.h"
+#include "Commons/StatementFactory.h"
 #include "SP/AST/Nodes/IfNode.h"
 #include "SP/AST/Nodes/ProcedureNode.h"
 #include "SP/AST/Nodes/WhileNode.h"
-#include "Commons/StatementFactory.h"
 
 Traverser::Traverser(std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors) : visitors(visitors){};
 
