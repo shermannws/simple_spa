@@ -6,23 +6,13 @@ void SynonymHandler::handle(const Query &query, std::shared_ptr<Clause> clause) 
     Ref &leftRef = clause->getFirstParam();
     RootType leftRootType = leftRef.getRootType();
 
-    if (leftRootType == RootType::Synonym) {
-        std::shared_ptr<QueryEntity> entity = query.getEntity(leftRef.getRep());
-        if (!entity) { throw SemanticException("Invalid LHS, undeclared synonym found"); }
-        QueryEntityType entityType = entity->getType();
-        leftRef.setEntityType(entityType);
-    }
+    if (leftRootType == RootType::Synonym) { handleRefSyn(query, leftRef); }
 
     auto suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
     if (suchThat) {
         Ref &rightRef = suchThat->getSecondParam();
         RootType rightRootType = rightRef.getRootType();
-        if (rightRootType == RootType::Synonym) {
-            std::shared_ptr<QueryEntity> entity = query.getEntity(rightRef.getRep());
-            if (!entity) { throw SemanticException("Invalid RHS, undeclared synonym found"); }
-            QueryEntityType entityType = entity->getType();
-            rightRef.setEntityType(entityType);
-        }
+        if (rightRootType == RootType::Synonym) { handleRefSyn(query, rightRef); }
     }
 
     auto pattern = std::dynamic_pointer_cast<PatternClause>(clause);
@@ -39,4 +29,11 @@ void SynonymHandler::handle(const Query &query, std::shared_ptr<Clause> clause) 
     }
 
     return SemanticValHandler::handle(query, clause);
+}
+
+void SynonymHandler::handleRefSyn(const Query &query, Ref &ref) {
+    std::shared_ptr<QueryEntity> entity = query.getEntity(ref.getRep());
+    if (!entity) { throw SemanticException("Invalid ref synonym, undeclared synonym found"); }
+    QueryEntityType entityType = entity->getType();
+    ref.setEntityType(entityType);
 }
