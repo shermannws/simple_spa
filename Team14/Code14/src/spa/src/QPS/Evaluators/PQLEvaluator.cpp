@@ -81,8 +81,7 @@ Result PQLEvaluator::evaluate(Query &query) {
     if (unevaluatedSyn.empty()) { return *result; }
 
     // CASE SOME RESULT-CLAUSE NOT IN RESULT TABLE
-    auto synResult =
-            evaluateResultClause(query, unevaluatedSyn);// TODO optimise:project curr result first before combine?
+    auto synResult = evaluateResultClause(query, unevaluatedSyn);
     auto finalResult = resultHandler->getCombined(result, synResult);
     return *finalResult;
 }
@@ -93,7 +92,7 @@ std::vector<Synonym> PQLEvaluator::getUnevaluatedSyn(const std::vector<Synonym> 
     std::vector<Synonym> unevaluated;
     for (auto &elem: resultClause) {
         auto syn = QPSUtil::getSyn(elem);
-        if (synMap.count(syn) == 0) { unevaluated.push_back(syn); }
+        if (!synMap.count(syn)) { unevaluated.push_back(syn); }
     }
     return unevaluated;
 }

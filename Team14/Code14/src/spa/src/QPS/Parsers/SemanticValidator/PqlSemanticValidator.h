@@ -49,11 +49,33 @@ private:
      */
     void validateClauseSemantics(const Query &query, std::shared_ptr<PatternClause> clause);
 
+    /**
+     * @brief validates a synonym in the result-clause, throws semantic error if synonym is semantically invalid
+     * @param query query that contains the result-clause
+     * @param elem synonym element to validate
+     */
     void validateResultSynonym(const Query &query, Synonym elem);
 
+    /**
+     * @brief validates a attrRef in the result-clause,throws semantic error if attrRef is semantically invalid
+     * @param query query that contains the result-clause
+     * @param elem attrRef element to validate
+     * @param dotPos index of '.' in the attrRef
+     */
     void validateResultAttrRef(const Query &query, Synonym elem, size_t dotPos);
 
+    /**
+     * @brief validates an element in the result-clause of the query, throws semantic error if element is semantically
+     * invalid
+     * @param query query that contains the result-clause
+     * @param elem element to validate
+     */
     void validateResultElem(const Query &query, Synonym elem);
 
-    bool isBooleanResult(const Query &query, std::vector<Synonym> resultClause);
+    /**
+     * @brief Checks if the query has a boolean result-clause
+     * @param query query to check
+     * @return true if result-clause is boolean, otherwise false
+     */
+    bool isBooleanResult(const Query &query);
 };

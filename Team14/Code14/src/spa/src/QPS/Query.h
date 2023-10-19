@@ -55,6 +55,9 @@ public:
      */
     void addSelect(const Synonym);
 
+    /**
+     * @brief sets the Query selects for BOOLEAN result-clause queries
+     */
     void setBooleanResult();
 
     /**
