@@ -1192,6 +1192,21 @@ TEST_CASE("tuple result-clause query") {
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 0);
     }
+
+    SECTION("duplicate synonym in tuple") {
+        PQLParser parser("read re; Select <re, re>");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 4);
+        REQUIRE(find(results.begin(), results.end(), "88 88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "24 24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "36 36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "14 14") != results.end());
+    }
 }
 
 
@@ -1248,5 +1263,20 @@ TEST_CASE("attrRef result-clause query") {
         REQUIRE(find(results.begin(), results.end(), "line24 proc2 var2") != results.end());
         REQUIRE(find(results.begin(), results.end(), "line36 proc2 var2") != results.end());
         REQUIRE(find(results.begin(), results.end(), "line14 proc2 var2") != results.end());
+    }
+
+    SECTION("duplicate attr ref in tuple") {
+        PQLParser parser("read re; Select <re, re.varName, re.varName>");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 4);
+        REQUIRE(find(results.begin(), results.end(), "88 line88 line88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "24 line24 line24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "36 line36 line36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "14 line14 line14") != results.end());
     }
 }
