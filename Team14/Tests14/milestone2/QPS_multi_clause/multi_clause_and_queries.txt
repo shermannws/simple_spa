@@ -1,77 +1,97 @@
 1 - same such that clause type, such that - and - and (equivalent as q2, 3)
 assign a; while w;
-Select a such that Modifies (a, "x") and Parent* (w, a) and Next* (1, a)
-
+Select a such that Modifies (a, "x") and Parent* (w, a) and Next* (2, a)
+12, 14, 21
 5000
 2 - same such that clause type, such that - and, such that
 assign a; while w;
-Select a such that Parent* (w, a) and Modifies (a, "x") such that Next* (1, a)
-
+Select a such that Parent* (w, a) and Modifies (a, "x") such that Next* (2, a)
+12, 14, 21
 5000
 3 - same such that clause type, such that, such that - and
 assign a; while w;
-Select a such that Next* (1, a) such that Modifies (a, "x") and Parent* (w, a)
-
+Select a such that Next* (2, a) such that Modifies (a, "x") and Parent* (w, a)
+12, 14, 21
 5000
-4 - same pattern clause type, pattern - and - and
-
-
+4 - select common v, same pattern clause type, pattern - and - and
+assign a; if ifs; while w; variable v;
+Select v pattern ifs(v, _, _) and pattern a(v, _) and pattern w(v, _)
+a, c
 5000
-5 - same pattern clause type, pattern - and, pattern
-
-
+5 - select common v, same pattern clause type, pattern - and, pattern
+assign a; if ifs; while w; variable v;
+Select v pattern ifs(v, _, _) and pattern a(v, _) pattern w(v, _)
+a, c
 5000
-6 - same pattern clause type, pattern, pattern - and
-
-
+6 - select common v, same pattern clause type, pattern, pattern - and
+assign a; if ifs; while w; variable v;
+Select v pattern ifs(v, _, _) pattern a(v, _) and pattern w(v, _)
+a, c
 5000
-7 - same with clause type, with - and - and
-
-
+7 - select common c, same with clause type, with - and - and
+call c; stmt c; variable v;
+Select c with c.stmt# = s.stmt# and with c.procName = p.procName and with c.procName = v.varName
+1, 16, 22
 5000
-8 - same with clause type, with - and, with
-
-
+8 - select common c, same with clause type, with - and, with
+call c; stmt c; variable v;
+Select c with c.stmt# = s.stmt# and with c.procName = p.procName with c.procName = v.varName
+1, 16, 22
 5000
-9 - same with clause type, with, with - and
-
-
+9 - select common c, same with clause type, with, with - and
+call c; stmt c; variable v;
+Select c with c.stmt# = s.stmt# with c.procName = p.procName and with c.procName = v.varName
+1, 16, 22
+5000
+9 - select p, same with clause type, with, with - and
+call c; stmt c; variable v;
+Select p with c.stmt# = s.stmt# with c.procName = p.procName and with c.procName = v.varName
+helper, callee
 5000
 10 - different clause type, pattern, such that - and
-
-
+variable v; if ifs;
+Select v pattern ifs(_, v) such that Uses ("callee", v) and Follows (20,21)
+a, b
 5000
 11 - different clause type, such that - and, pattern
-
-
+variable v; if ifs;
+Select v such that Uses ("callee", v) and Follows (20,21) pattern ifs(_, v)
+a, b
 5000
 12 - different clause type, such that, such that, pattern
-
-
+variable v; if ifs;
+Select v such that Uses ("callee", v) such that Follows (20,21) pattern ifs(_, v)
+a, b
 5000
 13 - different clause type, with, pattern - and
-
-
+assign a; if ifs; variable v;
+Select v with ifs.stmt# = 6 pattern ifs(_, _, _) and pattern a(_, v)
+c, d
 5000
 14 - different clause type, pattern - and, with
-
-
+assign a; if ifs; variable v;
+Select v pattern ifs(_, _, _) and pattern a(_, v) with ifs.stmt# = 24
+a, b
 5000
 15 - different clause type, pattern, pattern, with
-
-
+assign a; variable v; stmt s; while w;
+Select v pattern while(_, _) pattern a(_, v) with w.stmt# = s.stmt#
+a, b, c
 5000
 16 - different clause type, such that, with - and
-
-
+procedure p, q; variable v;
+Select q such that calls*(p, q) with p.procName = "caller" and q.procName = v.varName
+callee, helper
 5000
 17 - different clause type, with - and, such that
-
-
+procedure p, q; variable v;
+Select q with p.procName = "caller" and q.procName = v.varName such that calls*(p, q)
+callee, helper
 5000
 18 - different clause type, with, with, such that
-
-
+procedure p, q; variable v;
+Select q with p.procName = "caller" with q.procName = v.varName such that calls*(p, q)
+callee, helper
 5000
 19 - all 3 different clause types, such that - and, with - and, pattern - and, such that, with, pattern
 
