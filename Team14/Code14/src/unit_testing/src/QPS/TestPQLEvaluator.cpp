@@ -844,6 +844,60 @@ TEST_CASE("if pattern") {
     }
 }
 
+TEST_CASE("while pattern") {
+    SECTION("getAllWhile for pattern while (_,_)") {
+        PQLParser parser("while w; Select w pattern w(_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "847") != results.end());
+    }
+
+    SECTION("getAllWhileStmtVarPair for pattern while(v,_,_)") {
+        PQLParser parser("while w; variable v; Select v pattern w(v,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "var860") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var861") != results.end());
+    }
+
+    SECTION("getWhileStmtsByVar for pattern while(\"v\",_,_)") {
+        PQLParser parser("while w; Select w pattern w(\"x\",_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "873") != results.end());
+    }
+
+
+    SECTION("getIfStmtsByVar for pattern if(\"var\",_,_)") {
+        PQLParser parser("if if; Select if pattern if(\"ifPatternVar\",_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "59") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "100") != results.end());
+    }
+}
+
 TEST_CASE("Calls and Calls* clauses") {
     SECTION("boolean results, Calls (_,_)") {
         // Calls(_,_) - hasCalls()

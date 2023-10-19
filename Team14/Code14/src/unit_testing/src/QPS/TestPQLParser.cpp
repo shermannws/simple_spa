@@ -1223,6 +1223,52 @@ TEST_CASE("processPatternClause") {
         REQUIRE(rightRef.second.empty());
     }
 
+    SECTION("Valid while pattern wildcard lhs") {
+        PQLParser parser("while w; Select w pattern w(_,_)");
+        Query query = parser.parse();
+
+        std::shared_ptr<PatternClause> actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause->getFirstParam();
+        ExpressionSpec rightRef = actualClause->getSecondParam();
+        REQUIRE(actualClause->getType() == ClauseType::While);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.first == ExpressionSpecType::Wildcard);
+        REQUIRE(rightRef.second.empty());
+    }
+
+    SECTION("Valid while pattern ident lhs") {
+        PQLParser parser("while w; Select w pattern w(\"x\",_)");
+        Query query = parser.parse();
+
+        std::shared_ptr<PatternClause> actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause->getFirstParam();
+        ExpressionSpec rightRef = actualClause->getSecondParam();
+        REQUIRE(actualClause->getType() == ClauseType::While);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Ident);
+        REQUIRE(leftRef.getRep() == "x");
+        REQUIRE(rightRef.first == ExpressionSpecType::Wildcard);
+        REQUIRE(rightRef.second.empty());
+    }
+
+    SECTION("Valid while pattern var synonym lhs") {
+        PQLParser parser("while w; variable v; Select w pattern w(v,_)");
+        Query query = parser.parse();
+
+        std::shared_ptr<PatternClause> actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause->getFirstParam();
+        ExpressionSpec rightRef = actualClause->getSecondParam();
+        REQUIRE(actualClause->getType() == ClauseType::While);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getRep() == "v");
+        REQUIRE(rightRef.first == ExpressionSpecType::Wildcard);
+        REQUIRE(rightRef.second.empty());
+    }
+
+
     SECTION("invalid pattern") {
         PQLParser parser("assign a; variable v;\nSelect a pattern a(\"y\",_ _)");
         REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
@@ -1266,6 +1312,9 @@ TEST_CASE("processPatternClause") {
         parser = PQLParser("if i; variable v;\nSelect a pattern i(v,_,\"hello\")");
         REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
 
+        parser = PQLParser("while w; variable v; Select w pattern w(_, v)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
         parser = PQLParser("assign a; variable v;\nSelect a pattern v(_,_)");
         REQUIRE_THROWS_AS(parser.parse(), SemanticException);
 
@@ -1288,6 +1337,15 @@ TEST_CASE("processPatternClause") {
         REQUIRE_THROWS_AS(parser.parse(), SemanticException);
 
         parser = PQLParser("while w; constant v;\nSelect w pattern w(v,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("while w; Select a pattern while(_,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("while w; constant c; Select a pattern w(c,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("while w; Select w pattern w(_, _, _)");// should be assumed as if pattern
         REQUIRE_THROWS_AS(parser.parse(), SemanticException);
     }
 }

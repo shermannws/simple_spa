@@ -1,5 +1,7 @@
 #include "StubPkbReader.h"
 
+#include "Commons/Entities/WhileStatement.h"
+
 StubPkbReader::StubPkbReader() = default;
 
 std::vector<Entity> StubPkbReader::getAllVariables() const {
@@ -528,10 +530,18 @@ std::vector<std::vector<Entity>> StubPkbReader::getAllIfStmtVarPair() const {
             {{Statement(1, StatementType::If), Variable("var2")}, {Statement(3, StatementType::If), Variable("var3")}});
 }
 
-std::vector<Entity> StubPkbReader::getAllWhilePatternStmts() const { return std::vector<Entity>{}; };
+std::vector<Entity> StubPkbReader::getAllWhilePatternStmts() const {
+    return std::vector<Entity>({WhileStatement(847)});
+}
 
-std::vector<Entity> StubPkbReader::getWhileStmtsByVar(Variable &var) const { return std::vector<Entity>{}; }
+std::vector<Entity> StubPkbReader::getWhileStmtsByVar(Variable &var) const {
+    if (var.getEntityValue() == "x") { return std::vector<Entity>{WhileStatement(873)}; }
+    return std::vector<Entity>{};
+}
 
 std::vector<std::vector<Entity>> StubPkbReader::getAllWhileStmtVarPair() const {
-    return std::vector<std::vector<Entity>>{};
+    return std::vector<std::vector<Entity>>{
+            {WhileStatement(860), Variable("var860")},
+            {WhileStatement(861), Variable("var861")},
+    };
 }

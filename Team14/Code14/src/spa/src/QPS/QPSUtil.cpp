@@ -11,6 +11,7 @@
 #include "QPS/Evaluators/Strategies/ParentStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/ParentSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/UsesSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/WhilePatternStrategy.h"
 
 std::unordered_map<StringRep, ClauseType> QPSUtil::repClauseTypeMap = {
         {"Uses", ClauseType::Uses},       {"Modifies", ClauseType::Modifies},
@@ -93,6 +94,10 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
                                        {ClauseType::If,
                                         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
                                             return std::make_shared<IfPatternStrategy>(pkbReader);
+                                        }},
+                                       {ClauseType::While,
+                                        [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                                            return std::make_shared<WhilePatternStrategy>(pkbReader);
                                         }}};
 
 std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
