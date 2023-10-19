@@ -19,6 +19,11 @@ private:
      */
     Synonym syn;
 
+    /**
+     * @brief The boolean that specifies whether a third parameter exists
+     */
+    bool thirdParam;
+
 public:
     /**
      * @brief The constructor of PatternClause
@@ -36,6 +41,18 @@ public:
      * @return The ExpressionSpec reference of the second parameter
      */
     ExpressionSpec &getSecondParam();
+
+    /**
+     * @brief The setter of the boolean of third parameter
+     * @param exists The boolean that specifies whether a third parameter exists
+     */
+    void setThirdParam(bool exists);
+
+    /**
+     * @brief The getter of the boolean thirdParam
+     * @return The boolean that specifies whether a third parameter exists
+     */
+    bool hasThirdParam() const;
 
     /**
      * @brief The setter of the synonym of the PatternClause

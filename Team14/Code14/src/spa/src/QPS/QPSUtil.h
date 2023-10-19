@@ -10,7 +10,16 @@
  */
 class QPSUtil {
 public:
+    /**
+     * @brief An unordered map that maps StringRep to the corresponding ClauseType
+     */
     static std::unordered_map<StringRep, ClauseType> repClauseTypeMap;
+
+    /**
+     * @brief An unordered map that maps QueryEntityType to the corresponding ClauseType
+     */
+    static std::unordered_map<QueryEntityType, ClauseType> entityToClauseMap;
+
     /**
      * @brief An unordered map that maps QueryEntityType to the corresponding RefType
      */

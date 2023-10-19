@@ -13,8 +13,6 @@ void StmtrefProcVarHandler::handle(const Query &query, std::shared_ptr<Clause> c
     if (QPSUtil::typeToArgTypeMap[type] != StmtrefProcVar) { return SemanticValHandler::handle(query, clause); }
 
     handleRefType(leftRef, rightRef);
-
-    return SemanticValHandler::handle(query, clause);
 }
 
 void StmtrefProcVarHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
