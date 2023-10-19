@@ -18,7 +18,8 @@ public:
      * @param parents Parents of the ProgramNode
      * @param proc nullptr as ProgramNNode is not contained within a procedure
      */
-    virtual void visitProgramNode(ProgramNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitProgramNode(const std::shared_ptr<ProgramNode> &node,
+                                  std::vector<std::shared_ptr<ASTNode>> parents,
                                   std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -26,7 +27,7 @@ public:
  * ASTNode to represent a program.
  * This is the type of the root node of the AST.
  */
-class ProgramNode : public ASTNode {
+class ProgramNode : public ASTNode, public std::enable_shared_from_this<ProgramNode> {
 private:
     /**
      * The vector of procedures in the program.

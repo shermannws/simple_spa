@@ -19,7 +19,7 @@ public:
      * @param parents Parents of the PrintNode
      * @param proc The procedure that the PrintNode is in
      */
-    virtual void visitPrintNode(PrintNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitPrintNode(const std::shared_ptr<PrintNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                                 std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -27,7 +27,7 @@ public:
  * ASTNode to represent a print statement.
  * Inherits from the StatementNode abstract class.
  */
-class PrintNode : public StatementNode {
+class PrintNode : public StatementNode, public std::enable_shared_from_this<PrintNode> {
 private:
     /**
      * The variable whose value is printed.

@@ -5,7 +5,8 @@
 
 CallsExtractorVisitor::CallsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter) { this->pkbWriter = pkbWriter; }
 
-void CallsExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+void CallsExtractorVisitor::visitCallNode(const std::shared_ptr<CallNode> &node,
+                                          std::vector<std::shared_ptr<ASTNode>> parents,
                                           std::shared_ptr<ASTNode> proc) const {
 
     std::shared_ptr<ProcedureNode> callerNode = std::static_pointer_cast<ProcedureNode>(proc);

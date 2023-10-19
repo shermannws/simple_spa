@@ -18,7 +18,7 @@ public:
      * @param parents Parents of the CallNode
      * @param proc Procedure containing the CallNode
      */
-    virtual void visitCallNode(CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitCallNode(const std::shared_ptr<CallNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                                std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -26,7 +26,7 @@ public:
  * ASTNode to represent a call statement.
  * Inherits from the StatementNode abstract class.
  */
-class CallNode : public StatementNode {
+class CallNode : public StatementNode, public std::enable_shared_from_this<CallNode> {
 private:
     /**
      * The name of the procedure called.

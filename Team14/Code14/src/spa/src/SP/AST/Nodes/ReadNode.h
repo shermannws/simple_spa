@@ -19,7 +19,7 @@ public:
      * @param parents Parents of the ReadNode
      * @param proc The procedure that the ReadNode is contained within
      */
-    virtual void visitReadNode(ReadNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitReadNode(const std::shared_ptr<ReadNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                                std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -27,7 +27,7 @@ public:
  * ASTNode to represent a read statement.
  * Inherits from the StatementNode abstract class.
  */
-class ReadNode : public StatementNode {
+class ReadNode : public StatementNode, public std::enable_shared_from_this<ReadNode> {
 private:
     /**
      * The variable that a value is read into.

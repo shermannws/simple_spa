@@ -20,7 +20,7 @@ public:
      * @param parents Parents of the AssignNode
      * @param proc Procedure containing the AssignNode
      */
-    virtual void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitAssignNode(const std::shared_ptr<AssignNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                                  std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -28,7 +28,7 @@ public:
  * ASTNode to represent an assignment statement.
  * Inherits from the StatementNode abstract class.
  */
-class AssignNode : public StatementNode {
+class AssignNode : public StatementNode, public std::enable_shared_from_this<AssignNode> {
 private:
     /**
      * The variable that is assigned to.

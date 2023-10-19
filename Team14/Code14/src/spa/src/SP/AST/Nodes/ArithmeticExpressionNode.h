@@ -21,7 +21,7 @@ public:
      * @param parents Parents of the ArithmeticExpressionNode
      * @param proc Procedure containing the ArithmeticExpressionNode
      */
-    virtual void visitArithmeticExpressionNode(ArithmeticExpressionNode *node,
+    virtual void visitArithmeticExpressionNode(const std::shared_ptr<ArithmeticExpressionNode> &node,
                                                std::vector<std::shared_ptr<ASTNode>> parents,
                                                std::shared_ptr<ASTNode> proc) const = 0;
 };
@@ -30,7 +30,7 @@ public:
  * ASTNode to represent an arithmetic expression.
  * Implements the ExpressionNode interface.
  */
-class ArithmeticExpressionNode : public ExpressionNode {
+class ArithmeticExpressionNode : public ExpressionNode, public std::enable_shared_from_this<ArithmeticExpressionNode> {
 private:
     /**
      * The type of arithmetic operator for the arithmetic expression.

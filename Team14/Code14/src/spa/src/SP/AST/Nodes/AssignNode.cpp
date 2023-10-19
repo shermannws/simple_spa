@@ -21,6 +21,6 @@ StatementNodeType AssignNode::getStatementType() { return StatementNodeType::Ass
 void AssignNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
                         std::shared_ptr<ASTNode> proc) {
     if (auto assignVisitor = std::dynamic_pointer_cast<AssignNodeVisitor>(visitor)) {
-        assignVisitor->visitAssignNode(this, parents, proc);
+        assignVisitor->visitAssignNode(std::enable_shared_from_this<AssignNode>::shared_from_this(), parents, proc);
     }
 }

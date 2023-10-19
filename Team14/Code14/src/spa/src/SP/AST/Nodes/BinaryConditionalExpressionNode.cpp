@@ -35,6 +35,7 @@ void BinaryConditionalExpressionNode::accept(std::shared_ptr<DesignExtractorVisi
                                              std::vector<std::shared_ptr<ASTNode>> parents,
                                              std::shared_ptr<ASTNode> proc) {
     if (auto bceVisitor = std::dynamic_pointer_cast<BinaryConditionalExpressionNodeVisitor>(visitor)) {
-        bceVisitor->visitBinaryConditionalExpressionNode(this, parents, proc);
+        bceVisitor->visitBinaryConditionalExpressionNode(
+                std::enable_shared_from_this<BinaryConditionalExpressionNode>::shared_from_this(), parents, proc);
     }
 }

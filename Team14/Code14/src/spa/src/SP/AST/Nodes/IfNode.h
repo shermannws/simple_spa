@@ -20,7 +20,7 @@ public:
      * @param parents Parents of the IfNode
      * @param proc The procedure that the IfNode is in
      */
-    virtual void visitIfNode(IfNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitIfNode(const std::shared_ptr<IfNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                              std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -28,7 +28,7 @@ public:
  * ASTNode to represent an if statement.
  * Inherits from the StatementNode abstract class.
  */
-class IfNode : public StatementNode {
+class IfNode : public StatementNode, public std::enable_shared_from_this<IfNode> {
 private:
     /**
      * The conditional expression of the if statement.

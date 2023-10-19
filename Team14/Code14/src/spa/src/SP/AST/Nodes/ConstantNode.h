@@ -16,7 +16,8 @@ public:
      * @param parents Parents of the ConstantNode
      * @param proc The procedure that the ConstantNode is in
      */
-    virtual void visitConstantNode(ConstantNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitConstantNode(const std::shared_ptr<ConstantNode> &node,
+                                   std::vector<std::shared_ptr<ASTNode>> parents,
                                    std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -24,7 +25,7 @@ public:
  * ASTNode to represent a constant.
  * Implements the ExpressionNode interface.
  */
-class ConstantNode : public ExpressionNode {
+class ConstantNode : public ExpressionNode, public std::enable_shared_from_this<ConstantNode> {
 private:
     /**
      * The value of the constant.

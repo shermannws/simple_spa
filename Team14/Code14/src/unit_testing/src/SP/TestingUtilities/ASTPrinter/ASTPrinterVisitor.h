@@ -40,7 +40,7 @@ public:
      */
     ASTPrinterVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
-    void visitProgramNode(ProgramNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitProgramNode(const std::shared_ptr<ProgramNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                           std::shared_ptr<ASTNode> proc) const override;
 
     /*!
@@ -48,47 +48,50 @@ public:
      * @param node The node to be visited
      * @param parents A vector of parent nodes for this node
      */
-    void visitProcedureNode(ProcedureNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitProcedureNode(const std::shared_ptr<ProcedureNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                             std::shared_ptr<ASTNode> proc) const override;
 
-    void visitStatementListNode(StatementListNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitStatementListNode(const std::shared_ptr<StatementListNode> &node,
+                                std::vector<std::shared_ptr<ASTNode>> parents,
                                 std::shared_ptr<ASTNode> proc) const override;
 
-    void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitAssignNode(const std::shared_ptr<AssignNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                          std::shared_ptr<ASTNode> proc) const override;
 
-    void visitReadNode(ReadNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitReadNode(const std::shared_ptr<ReadNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                        std::shared_ptr<ASTNode> proc) const override;
 
-    void visitPrintNode(PrintNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitPrintNode(const std::shared_ptr<PrintNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                         std::shared_ptr<ASTNode> proc) const override;
 
-    void visitVariableNode(VariableNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitVariableNode(const std::shared_ptr<VariableNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                            std::shared_ptr<ASTNode> proc) const override;
 
-    void visitConstantNode(ConstantNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitConstantNode(const std::shared_ptr<ConstantNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                            std::shared_ptr<ASTNode> proc) const override;
 
-    void visitCallNode(CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitCallNode(const std::shared_ptr<CallNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                        std::shared_ptr<ASTNode> proc) const override;
 
-    void visitIfNode(IfNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitIfNode(const std::shared_ptr<IfNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                      std::shared_ptr<ASTNode> proc) const override;
 
-    void visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitWhileNode(const std::shared_ptr<WhileNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
                         std::shared_ptr<ASTNode> proc) const override;
 
-    void visitArithmeticExpressionNode(ArithmeticExpressionNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitArithmeticExpressionNode(const std::shared_ptr<ArithmeticExpressionNode> &node,
+                                       std::vector<std::shared_ptr<ASTNode>> parents,
                                        std::shared_ptr<ASTNode> proc) const override;
 
-    void visitBinaryConditionalExpressionNode(BinaryConditionalExpressionNode *node,
+    void visitBinaryConditionalExpressionNode(const std::shared_ptr<BinaryConditionalExpressionNode> &node,
                                               std::vector<std::shared_ptr<ASTNode>> parents,
                                               std::shared_ptr<ASTNode> proc) const override;
 
-    void visitUnaryConditionalExpressionNode(UnaryConditionalExpressionNode *node,
+    void visitUnaryConditionalExpressionNode(const std::shared_ptr<UnaryConditionalExpressionNode> &node,
                                              std::vector<std::shared_ptr<ASTNode>> parents,
                                              std::shared_ptr<ASTNode> proc) const override;
 
-    void visitRelativeExpressionNode(RelativeExpressionNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitRelativeExpressionNode(const std::shared_ptr<RelativeExpressionNode> &node,
+                                     std::vector<std::shared_ptr<ASTNode>> parents,
                                      std::shared_ptr<ASTNode> proc) const override;
 };
