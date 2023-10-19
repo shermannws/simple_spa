@@ -17,7 +17,7 @@ public:
      * @param parents The parent nodes of this ASTNode
      * @param proc The procedure node which this ASTNode belongs to
      */
-    virtual void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
                         std::shared_ptr<ASTNode> proc) = 0;
 
     /**

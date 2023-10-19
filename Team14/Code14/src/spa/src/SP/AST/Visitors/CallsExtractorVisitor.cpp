@@ -5,7 +5,7 @@
 
 CallsExtractorVisitor::CallsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter) { this->pkbWriter = pkbWriter; }
 
-void CallsExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+void CallsExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::shared_ptr<Statement>> parents,
                                           std::shared_ptr<ASTNode> proc) const {
 
     std::shared_ptr<ProcedureNode> callerNode = std::static_pointer_cast<ProcedureNode>(proc);
@@ -23,10 +23,7 @@ void CallsExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::share
 
     // Add procedure to parent statements mapping for UsesP and ModifiesP
     for (auto parent = parents.rbegin(); parent != parents.rend(); parent++) {
-        auto parentPtr = std::static_pointer_cast<StatementNode>(*parent);
-        assert(parentPtr != nullptr);
-        std::shared_ptr<Statement> statement = StatementFactory::createStatementFromStatementNode(parentPtr);
-        statementsToAdd.push_back(statement);
+        statementsToAdd.push_back(*parent);
     }
 
     this->pkbWriter->addProcedureToStatementsMap(calleePtr, statementsToAdd);

@@ -14,7 +14,7 @@ std::vector<std::shared_ptr<ASTNode>> ReadNode::getAllChildNodes() {
 
 StatementNodeType ReadNode::getStatementType() { return StatementNodeType::Read; }
 
-void ReadNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
+void ReadNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
                       std::shared_ptr<ASTNode> proc) {
     if (auto readVisitor = std::dynamic_pointer_cast<ReadNodeVisitor>(visitor)) {
         readVisitor->visitReadNode(this, parents, proc);

@@ -2,6 +2,7 @@
 #include "SP/AST/Nodes/IfNode.h"
 #include "SP/AST/Nodes/ProcedureNode.h"
 #include "SP/AST/Nodes/WhileNode.h"
+#include "Commons/StatementFactory.h"
 
 Traverser::Traverser(std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors) : visitors(visitors){};
 
@@ -17,7 +18,7 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
     while (!frontier.empty()) {
         // get from top of stack as the current node
         std::shared_ptr<ASTNode> current = frontier.top().first;
-        std::vector<std::shared_ptr<ASTNode>> parents = frontier.top().second;
+        std::vector<std::shared_ptr<Statement>> parents = frontier.top().second;
 
         // pop the current node that is being worked on in this loop
         frontier.pop();
@@ -30,10 +31,10 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
         for (std::shared_ptr<DesignExtractorVisitor> v: visitors) { current->accept(v, parents, currentProcedure); }
 
         // update parents vector if current node is a parent node
-        std::vector<std::shared_ptr<ASTNode>> newParents = parents;
-        if (auto currentCasted = std::dynamic_pointer_cast<IfNode>(current)) { newParents.emplace_back(currentCasted); }
-        if (auto currentCasted = std::dynamic_pointer_cast<WhileNode>(current)) {
-            newParents.emplace_back(currentCasted);
+        std::vector<std::shared_ptr<Statement>> newParents = parents;
+        auto currentCasted = std::dynamic_pointer_cast<StatementNode>(current);
+        if (currentCasted && currentCasted->isParentNode()) {
+            newParents.emplace_back(StatementFactory::createStatementFromStatementNode(currentCasted));
         }
 
         // add child of current node into the frontier

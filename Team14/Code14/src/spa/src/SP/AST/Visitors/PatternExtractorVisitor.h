@@ -25,7 +25,7 @@ public:
      * @param parents Parents of the AssignNode
      * @param proc Procedure containing the AssignNode
      */
-    void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<Statement>> parents,
                          std::shared_ptr<ASTNode> proc) const override;
 
     /**
@@ -34,7 +34,7 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitIfNode(IfNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitIfNode(IfNode *node, std::vector<std::shared_ptr<Statement>> parents,
                      std::shared_ptr<ASTNode> proc) const override;
 
     /**
@@ -43,7 +43,7 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<Statement>> parents,
                         std::shared_ptr<ASTNode> proc) const override;
 
 private:

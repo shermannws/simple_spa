@@ -15,7 +15,7 @@ std::vector<std::shared_ptr<ASTNode>> ProcedureNode::getAllChildNodes() {
 }
 
 void ProcedureNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor,
-                           std::vector<std::shared_ptr<ASTNode>> parents, std::shared_ptr<ASTNode> proc) {
+                           std::vector<std::shared_ptr<Statement>> parents, std::shared_ptr<ASTNode> proc) {
     if (auto procedureVisitor = std::dynamic_pointer_cast<ProcedureNodeVisitor>(visitor)) {
         procedureVisitor->visitProcedureNode(this, parents, proc);
     }

@@ -19,7 +19,7 @@ public:
      * @param parents Parents of the ReadNode
      * @param proc The procedure that the ReadNode is contained within
      */
-    virtual void visitReadNode(ReadNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitReadNode(ReadNode *node, std::vector<std::shared_ptr<Statement>> parents,
                                std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -48,7 +48,7 @@ public:
      */
     std::shared_ptr<VariableNode> getVar();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
                 std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;

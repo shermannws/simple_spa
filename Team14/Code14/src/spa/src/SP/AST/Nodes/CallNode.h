@@ -18,7 +18,7 @@ public:
      * @param parents Parents of the CallNode
      * @param proc Procedure containing the CallNode
      */
-    virtual void visitCallNode(CallNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    virtual void visitCallNode(CallNode *node, std::vector<std::shared_ptr<Statement>> parents,
                                std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -47,7 +47,7 @@ public:
      */
     ProcedureName getProcedureName();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
                 std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;

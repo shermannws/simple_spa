@@ -18,7 +18,7 @@ std::vector<std::shared_ptr<ASTNode>> AssignNode::getAllChildNodes() {
 
 StatementNodeType AssignNode::getStatementType() { return StatementNodeType::Assign; }
 
-void AssignNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
+void AssignNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
                         std::shared_ptr<ASTNode> proc) {
     if (auto assignVisitor = std::dynamic_pointer_cast<AssignNodeVisitor>(visitor)) {
         assignVisitor->visitAssignNode(this, parents, proc);

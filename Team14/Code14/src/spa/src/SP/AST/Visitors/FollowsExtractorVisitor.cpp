@@ -5,7 +5,7 @@
 FollowsExtractorVisitor::FollowsExtractorVisitor(std::shared_ptr<PkbWriter> writer) { this->pkbWriter = writer; }
 
 void FollowsExtractorVisitor::visitStatementListNode(StatementListNode *node,
-                                                     std::vector<std::shared_ptr<ASTNode>> parents,
+                                                     std::vector<std::shared_ptr<Statement>> parents,
                                                      std::shared_ptr<ASTNode> proc) const {
     auto stmts = node->getStatements();
 

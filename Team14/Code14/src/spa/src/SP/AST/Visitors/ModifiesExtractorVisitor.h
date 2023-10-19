@@ -31,7 +31,7 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<Statement>> parents,
                          std::shared_ptr<ASTNode> proc) const override;
 
     /*!
@@ -40,6 +40,6 @@ public:
      * @param parents A vector of parent nodes for this node
      * @param proc The procedure node which the node is in
      */
-    void visitReadNode(ReadNode *node, std::vector<std::shared_ptr<ASTNode>> parents,
+    void visitReadNode(ReadNode *node, std::vector<std::shared_ptr<Statement>> parents,
                        std::shared_ptr<ASTNode> proc) const override;
 };

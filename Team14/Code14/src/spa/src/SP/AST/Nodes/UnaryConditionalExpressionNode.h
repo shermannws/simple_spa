@@ -19,7 +19,7 @@ public:
      * @param proc Procedure containing the UnaryConditionalExpressionNode
      */
     virtual void visitUnaryConditionalExpressionNode(UnaryConditionalExpressionNode *node,
-                                                     std::vector<std::shared_ptr<ASTNode>> parents,
+                                                     std::vector<std::shared_ptr<Statement>> parents,
                                                      std::shared_ptr<ASTNode> proc) const = 0;
 };
 
@@ -49,7 +49,7 @@ public:
      */
     std::shared_ptr<ConditionalExpressionNode> getConditionalExpression();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
                 std::shared_ptr<ASTNode> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;

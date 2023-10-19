@@ -19,7 +19,7 @@ std::vector<std::shared_ptr<ASTNode>> IfNode::getAllChildNodes() {
 
 StatementNodeType IfNode::getStatementType() { return StatementNodeType::If; }
 
-void IfNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
+void IfNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
                     std::shared_ptr<ASTNode> proc) {
     if (auto ifVisitor = std::dynamic_pointer_cast<IfNodeVisitor>(visitor)) {
         ifVisitor->visitIfNode(this, parents, proc);
