@@ -1,0 +1,560 @@
+1. procedure.procName = procedure.procName
+procedure p, p1;
+Select BOOLEAN with p.procName = p1.procName
+TRUE
+5000
+2 - procedure.procName = call.procName
+procedure p; call c;
+Select BOOLEAN with c.procName = p.procName
+TRUE
+5000
+3 - procedure.procName = variable.varName
+procedure p; variable v;
+Select BOOLEAN with v.varName = p.procName
+TRUE
+5000
+4 - procedure.procName = read.varName
+procedure p; read r;
+Select BOOLEAN with p.procName = r.varName
+TRUE
+5000
+5 - procedure.procName = print.varName
+procedure p; print pn; variable v;
+Select BOOLEAN with p.procName = pn.varName
+TRUE
+5000
+6 - procedure.procName = IDENT
+procedure p;
+Select BOOLEAN with p.procName = "CALL"
+FALSE
+5000
+7 - call.procName = call.procName
+call c, c1;
+Select BOOLEAN with c.procName = c1.procName
+TRUE
+5000
+8 - call.procName = variable.varName
+call c; variable v;
+Select BOOLEAN with v.varName = c.procName
+TRUE
+5000
+9 - call.procName = read.varName
+call c; read r;
+Select BOOLEAN with c.procName = r.varName
+TRUE
+5000
+10 - call.procName = print.varName
+call c; print pn, pn2;
+Select BOOLEAN with c.procName = pn.varName
+FALSE
+5000
+11 - call.procName = IDENT
+call c;
+Select BOOLEAN with c.procName = "print"
+TRUE
+5000
+12 - variable.varName = variable.varName
+variable v, v1;
+Select BOOLEAN with v.varName = v1.varName
+TRUE
+5000
+13 - variable.varName = read.varName
+variable v; read r;
+Select BOOLEAN with v.varName = r.varName
+TRUE
+5000
+14 - variable.varName = print.varName
+variable v; print pn, pn2;
+Select BOOLEAN with v.varName = pn.varName
+TRUE
+5000
+15 - variable.varName = IDENT
+variable v;
+Select BOOLEAN with v.varName = "A"
+FALSE
+5000
+16 - read.varName = read.varName
+read r;
+Select BOOLEAN with r.varName = r.varName
+TRUE
+5000
+17 - read.varName = print.varName
+read r; print pn;
+Select BOOLEAN with r.varName = pn.varName
+FALSE
+5000
+18 - read.varName = IDENT
+read r, r1;
+Select BOOLEAN with r.varName = "k"
+TRUE
+5000
+19 - print.varName = print.varName
+print pn; print pn1;
+Select BOOLEAN with pn.varName = pn1.varName
+TRUE
+5000
+20 - print.varName = IDENT
+print pn;
+Select BOOLEAN with pn.varName = "call"
+TRUE
+5000
+21 - IDENT = IDENT
+procedure with;
+Select BOOLEAN with "x" = "x"
+TRUE
+5000
+22 - IDENT = IDENT
+procedure with;
+Select BOOLEAN with "x" = "y"
+FALSE
+5000
+23 - constant.value = constant.value
+constant c, c1;
+Select BOOLEAN with c.value = c1.value
+TRUE
+5000
+24 - constant.value = stmt.stmt#
+constant c; stmt s;
+Select BOOLEAN with c.value = s.stmt#
+TRUE
+5000
+25 - constant.value = read.stmt#
+constant c; read r;
+Select BOOLEAN with c.value = r.stmt#
+TRUE
+5000
+26 - constant.value = read.stmt#
+constant c; read r;
+Select BOOLEAN with r.stmt# = c.value
+TRUE
+5000
+27 - constant.value = print.stmt#
+constant c; print pn;
+Select BOOLEAN with c.value = pn.stmt#
+TRUE
+5000
+28 - constant.value = print.stmt#
+constant c; print pn;
+Select BOOLEAN with pn.stmt# = c.value
+TRUE
+5000
+29 - constant.value = call.stmt#
+constant c; call c1;
+Select BOOLEAN with c.value = c1.stmt#
+TRUE
+5000
+30 - constant.value = call.stmt#
+constant c; call c1;
+Select BOOLEAN with  c1.stmt# = c.value
+TRUE
+5000
+31 - constant.value = while.stmt#
+constant c; while w;
+Select BOOLEAN with c.value = w.stmt#
+TRUE
+5000
+32 - constant.value = if.stmt#
+constant c; if ifs;
+Select BOOLEAN with c.value = ifs.stmt#
+TRUE
+5000
+33 - constant.value = assign.stmt#
+constant c; assign a;
+Select BOOLEAN with c.value = a.stmt#
+TRUE
+5000
+34 - constant.value = INTEGER
+constant c;
+Select BOOLEAN with c.value = 1
+TRUE
+5000
+35 - constant.value = INTEGER
+constant c;
+Select BOOLEAN with c.value = 1001
+FALSE
+5000
+36 - stmt.stmt# = stmt.stmt#
+stmt s, s1;
+Select BOOLEAN with s.stmt# = s1.stmt#
+TRUE
+5000
+37 - stmt.stmt# = read.stmt#
+stmt s; read r;
+Select BOOLEAN with s.stmt# = r.stmt#
+TRUE
+5000
+38 - stmt.stmt# = print.stmt#
+stmt s; print pn;
+Select BOOLEAN with s.stmt# = pn.stmt#
+TRUE
+5000
+39 - stmt.stmt# = call.stmt#
+stmt s; call c;
+Select BOOLEAN with s.stmt# = c.stmt#
+TRUE
+5000
+40 - stmt.stmt# = while.stmt#
+stmt s; while w;
+Select BOOLEAN with s.stmt# = w.stmt#
+TRUE
+5000
+41 - stmt.stmt# = if.stmt#
+stmt s; if ifs;
+Select BOOLEAN with s.stmt# = ifs.stmt#
+TRUE
+5000
+42 - stmt.stmt# = assign.stmt#
+stmt s; assign a;
+Select BOOLEAN with s.stmt# = a.stmt#
+TRUE
+5000
+43 - stmt.stmt# = INTEGER
+stmt s, s1;
+Select BOOLEAN with s.stmt# = 1
+TRUE
+5000
+44 - read.stmt# = read.stmt#
+read r, r1;
+Select BOOLEAN with r.stmt# = r1.stmt#
+TRUE
+5000
+45 - read.stmt# = read.stmt#
+read r;
+Select BOOLEAN with r.stmt# = r.stmt#
+TRUE
+5000
+46 - read.stmt# = print.stmt#
+read r; print pn;
+Select BOOLEAN with r.stmt# = pn.stmt#
+FALSE
+5000
+47 - read.stmt# = call.stmt#
+read r; call c;
+Select BOOLEAN with r.stmt# = c.stmt#
+FALSE
+5000
+48 - read.stmt# = while.stmt#
+read r; while w;
+Select BOOLEAN with r.stmt# = w.stmt#
+FALSE
+5000
+49 - read.stmt# = if.stmt#
+read r; if ifs;
+Select BOOLEAN with r.stmt# = ifs.stmt#
+FALSE
+5000
+50 - read.stmt# = assign.stmt#
+read r; assign a;
+Select BOOLEAN with r.stmt# = a.stmt#
+FALSE
+5000
+51 - read.stmt# = INTEGER
+read r;
+Select BOOLEAN with r.stmt# = 10
+TRUE
+5000
+52 - print.stmt# = print.stmt#
+print pn;
+Select BOOLEAN with pn.stmt# = pn.stmt#
+TRUE
+5000
+53 - print.stmt# = print.stmt#
+print pn, pn1;
+Select BOOLEAN with pn.stmt# = pn1.stmt#
+TRUE
+5000
+54 - print.stmt# = call.stmt#
+print pn; call c;
+Select BOOLEAN with pn.stmt# = c.stmt#
+FALSE
+5000
+55 - print.stmt# = while.stmt#
+print pn; while w;
+Select BOOLEAN with pn.stmt# = w.stmt#
+FALSE
+5000
+56 - print.stmt# = if.stmt#
+print pn; if ifs;
+Select BOOLEAN with pn.stmt# = ifs.stmt#
+FALSE
+5000
+57 - print.stmt# = assign.stmt#
+print pn; assign a;
+Select BOOLEAN with pn.stmt# = a.stmt#
+FALSE
+5000
+58 - print.stmt# = INTEGER
+print pn;
+Select BOOLEAN with pn.stmt# = 10
+FALSE
+5000
+59 - call.stmt# = call.stmt#
+call c, c1;
+Select BOOLEAN with c.stmt# = c1.stmt#
+TRUE
+5000
+60 - call.stmt# = while.stmt#
+call c; while w;
+Select BOOLEAN with c.stmt# = w.stmt#
+FALSE
+5000
+61 - call.stmt# = if.stmt#
+call c; if ifs;
+Select BOOLEAN with c.stmt# = ifs.stmt#
+FALSE
+5000
+62 - call.stmt# = assign.stmt#
+call c; assign a;
+Select BOOLEAN with c.stmt# = a.stmt#
+FALSE
+5000
+63 - call.stmt# = INTEGER
+call c;
+Select BOOLEAN with c.stmt# = 2
+FALSE
+5000
+64 - while.stmt# = while.stmt#
+while w, w1;
+Select BOOLEAN with w.stmt# = w1.stmt#
+TRUE
+5000
+65 - while.stmt# = if.stmt#
+while w; if ifs;
+Select BOOLEAN with ifs.stmt# = w.stmt#
+FALSE
+5000
+66 - while.stmt# = assign.stmt#
+while w; assign a;
+Select BOOLEAN with a.stmt# = w.stmt# 
+FALSE
+5000
+67 - while.stmt# = INTEGER
+while w;
+Select BOOLEAN with w.stmt# = 8
+TRUE
+5000
+68 - if.stmt# = if.stmt#
+if ifs, ifs1;
+Select BOOLEAN with ifs.stmt# = ifs1.stmt#
+TRUE
+5000
+69 - if.stmt# = assign.stmt#
+if ifs; assign a;
+Select BOOLEAN with ifs.stmt# = a.stmt#
+FALSE
+5000
+70 - if.stmt# = INTEGER
+if ifs;
+Select BOOLEAN with ifs.stmt# = 3
+TRUE
+5000
+71 - assign.stmt# = assign.stmt#
+assign a, a1;
+Select BOOLEAN with a.stmt# = a1.stmt#
+TRUE
+5000
+72 - assign.stmt# = assign.stmt#
+assign a;
+Select BOOLEAN with a.stmt# = a.stmt#
+TRUE
+5000
+73 - assign.stmt# = INTEGER
+assign a;
+Select BOOLEAN with a.stmt# = 7
+TRUE
+5000
+74 - assign.stmt# = INTEGER
+assign a;
+Select BOOLEAN with a.stmt# = 1
+FALSE
+5000
+75 - INEGER = INTEGER
+stmt s;
+Select BOOLEAN with 1 = 1
+TRUE
+5000
+76 - INEGER = INTEGER
+stmt s;
+Select BOOLEAN with 1 = 2
+FALSE
+5000
+77 - SemanticError (Wrong attr): procedure.varName
+procedure p;
+Select BOOLEAN p.varName = "call"
+SemanticError
+5000
+78 - SemanticError (Wrong attr): procedure.stmt#
+procedure p;
+Select BOOLEAN with p.stmt# = 1
+SemanticError
+5000
+79 - SemanticError (Wrong attr): procedure.value
+procedure p;
+Select BOOLEAN p.value = "call"
+SemanticError
+5000
+80 - SemanticError (Wrong attr): call.varName
+call c;
+Select BOOLEAN c.varName = "print"
+SemanticError
+5000
+81 - SemanticError (Wrong attr): call.value
+call c;
+Select BOOLEAN with c.value = 1
+SemanticError
+5000
+82 - SemanticError (Wrong attr): variable.procName
+variable v;
+Select BOOLEAN with v.procName = "x"
+SemanticError
+5000
+83 - SemanticError (Wrong attr): variable.value
+variable v;
+Select BOOLEAN with v.value = 1
+SemanticError
+5000
+84 - SemanticError (Wrong attr): read.procName
+read r;
+Select BOOLEAN with r.procName = "read"
+SemanticError
+5000
+85 - SemanticError (Wrong attr): read.value
+read r;
+Select BOOLEAN with r.value = 9
+SemanticError
+5000
+86 - SemanticError (Wrong attr): print.procName
+print pn;
+Select BOOLEAN with pn.procName = "a"
+SemanticError
+5000
+87 - SemanticError (Wrong attr): print.value
+print pn;
+Select BOOLEAN with pn.value = "a"
+SemanticError
+5000
+88 - SemanticError (Wrong attr): if.procName
+if if;
+Select BOOLEAN with if.procName = "x"
+SemanticError
+5000
+89 - SemanticError (Wrong attr): if.varName
+if if;
+Select BOOLEAN with if.varName = "x"
+SemanticError
+5000
+90 - SemanticError (Wrong attr): if.value
+if if;
+Select BOOLEAN with if.value = 3
+SemanticError
+5000
+91 - SemanticError (Wrong attr): while.procName
+while w;
+Select BOOLEAN with w.procName = "x"
+SemanticError
+5000
+92 - SemanticError (Wrong attr): while.varName
+while w;
+Select BOOLEAN with w.varName = "x"
+SemanticError
+5000
+93 - SemanticError (Wrong attr): while.value
+while w;
+Select BOOLEAN with w.value = 10
+SemanticError
+5000
+94 - SemanticError (Wrong attr): assign.procName
+assign a;
+Select BOOLEAN with a.procName = "print"
+SemanticError
+5000
+95 - SemanticError (Wrong attr): assign.varName
+assign a;
+Select BOOLEAN with a.varName = "call"
+SemanticError
+5000
+96 - SemanticError (Wrong attr): assign.value
+assign a;
+Select BOOLEAN with a.value = 10
+SemanticError
+5000
+97 - SemanticError (Wrong attr): constant.procName
+constant c;
+Select BOOLEAN with c.procName = "print"
+SemanticError
+5000
+98 - SemanticError (Wrong attr): constant.varName
+constant c;
+Select BOOLEAN c.varName = "print"
+SemanticError
+5000
+99 - SemanticError (Wrong attr): constant.stmt#
+constant c;
+Select BOOLEAN with c.stmt# = 1
+SemanticError
+5000
+100 - SemanticError (Wrong attr): stmt.procName
+stmt s;
+Select BOOLEAN with s.procName = "print"
+SemanticError
+5000
+101 - SemanticError (Wrong attr): stmt.varName
+stmt s;
+Select BOOLEAN with s.varName = "k"
+SemanticError
+5000
+102 - SemanticError (Wrong attr): stmt.value
+stmt s;
+Select BOOLEAN with s.value = 10
+SemanticError
+5000
+103 - SemanticError (Wrong comparison): procedure.proName = constant.value
+procedure p; constant c;
+Select BOOLEAN with p.procName = c.value
+SemanticError
+5000
+104 - SemanticError (Wrong comparison): call.procName = stmt.stmt#
+call c; stmt s;
+Select BOOLEAN with c.procName = s.stmt#
+SemanticError
+5000
+105 - SemanticError (Wrong comparison): variable.varName = read.stmt#
+variable v; read r;
+Select BOOLEAN with v.varName = r.stmt#
+SemanticError
+5000
+106 - SemanticError (Wrong comparison): read.varName = print.stmt#
+read r; print pn;
+Select BOOLEAN with r.varName = pn.stmt#
+SemanticError
+5000
+107 - SemanticError (Wrong comparison): print.varName = call.stmt#
+print pn; call c;
+Select BOOLEAN with pn.varName = c.stmt#
+SemanticError
+5000
+108 - SemanticError (Wrong comparison): variable.varName = while.stmt#
+variable v; while w;
+Select BOOLEAN with v.varName = w.stmt#
+SemanticError
+5000
+109 - SemanticError (Wrong comparison): read.varName = if.stmt#
+read r; if ifs;
+Select BOOLEAN with r.varName = ifs.stmt#
+SemanticError
+5000
+110 - SemanticError (Wrong comparison): print.varName = assign.stmt#
+print pn; assign a;
+Select BOOLEAN with pn.varName = a.stmt#
+SemanticError
+5000
+111 - SemanticError (Wrong comparison): print.varName = INTEGER
+print pn;
+Select BOOLEAN with pn.varName = 1
+SemanticError
+5000
+112 - SemanticError (Wrong comparison): if.stmt# = NAME
+if ifs;
+Select BOOLEAN with if.stmt# = "3"
+SemanticError
+5000
