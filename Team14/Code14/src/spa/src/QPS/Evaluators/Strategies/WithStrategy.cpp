@@ -56,9 +56,7 @@ std::vector<std::vector<Entity>> WithStrategy::join(std::vector<Entity> v1, Attr
 
     for (const auto &e1: v1) {
         for (const auto &e2: v2) {
-            if (QPSUtil::getValueFunc[a1](e1) == QPSUtil::getValueFunc[a2](e2)) {
-                res.push_back({e1, e2});
-            }
+            if (QPSUtil::getValueFunc[a1](e1) == QPSUtil::getValueFunc[a2](e2)) { res.push_back({e1, e2}); }
         }
     }
 
