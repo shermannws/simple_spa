@@ -7,7 +7,7 @@
 #include "Tokenizer.h"
 
 
-std::vector<std::string> specials{"(", ")", ";", ",", "_", "+", "-", "*", "/", "%", "\""};
+std::vector<std::string> specials{"(", ")", ";", ",", "_", "+", "-", "*", "/", "%", "\"", "<", ">", "."};
 std::vector<std::string> stars{"Follows", "Parent", "Next", "Calls"};
 
 Tokenizer::Tokenizer(const std::string &input) : curr(0) { this->input = input; }
@@ -68,6 +68,12 @@ std::shared_ptr<Token> Tokenizer::popToken() {
         if (isCurrValid() && res == "such" && peekToken()->getRep() == "that") {
             res += " that";
             popToken();
+        }
+
+        // handler stmt# as one token
+        if (isCurrValid() && peekString() == "#") {
+            std::string temp = peekString();
+            if (res == "stmt") { res += popString(); }
         }
 
         return std::make_shared<Token>(res);

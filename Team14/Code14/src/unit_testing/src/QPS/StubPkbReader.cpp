@@ -1,4 +1,6 @@
 #include "StubPkbReader.h"
+#include "Commons/Entities/CallStatement.h"
+#include "Commons/Entities/ReadStatement.h"
 
 #include "Commons/Entities/WhileStatement.h"
 
@@ -30,10 +32,10 @@ std::vector<Entity> StubPkbReader::getAllStatements() const {
 
 std::vector<Entity> StubPkbReader::getAllRead() const {
     return std::vector<Entity>({
-            Statement(88, StatementType::Read),
-            Statement(24, StatementType::Read),
-            Statement(36, StatementType::Read),
-            Statement(14, StatementType::Read),
+            ReadStatement(88, "line88"),
+            ReadStatement(24, "line24"),
+            ReadStatement(36, "line36"),
+            ReadStatement(14, "line14"),
     });
 }
 
@@ -57,6 +59,10 @@ std::vector<Entity> StubPkbReader::getAllIf() const {
 std::vector<Entity> StubPkbReader::getAllCall() const { return std::vector<Entity>(); }
 
 std::vector<std::vector<Entity>> StubPkbReader::getUsesStmtPair(StatementType type) const {
+    if (type == StatementType::Call) {
+        return std::vector<std::vector<Entity>>(
+                {{CallStatement(1, "proc1"), Variable("var1")}, {CallStatement(2, "proc2"), Variable("var2")}});
+    }
     std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var")};
     std::vector<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var")};
     return std::vector<std::vector<Entity>>({pair1, pair2});

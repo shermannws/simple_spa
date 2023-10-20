@@ -100,8 +100,75 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
                                             return std::make_shared<WhilePatternStrategy>(pkbReader);
                                         }}};
 
+std::unordered_map<QueryEntityType, std::function<std::vector<Entity>(std::shared_ptr<PkbReader>)>>
+        QPSUtil::entityGetterMap = {
+                {QueryEntityType::Procedure,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllProcedures(); }},
+                {QueryEntityType::Stmt,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllStatements(); }},
+                {QueryEntityType::Assign,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllAssign(); }},
+                {QueryEntityType::Variable,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllVariables(); }},
+                {QueryEntityType::Constant,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllConstants(); }},
+                {QueryEntityType::While,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllWhile(); }},
+                {QueryEntityType::If,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllIf(); }},
+                {QueryEntityType::Read,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllRead(); }},
+                {QueryEntityType::Print,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllPrint(); }},
+                {QueryEntityType::Call,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllCall(); }}};
+
 std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
         {QueryEntityType::Assign, StatementType::Assign}, {QueryEntityType::Print, StatementType::Print},
         {QueryEntityType::Read, StatementType::Read},     {QueryEntityType::If, StatementType::If},
         {QueryEntityType::While, StatementType::While},   {QueryEntityType::Stmt, StatementType::Stmt},
         {QueryEntityType::Call, StatementType::Call}};
+
+
+std::unordered_map<AttrName, std::unordered_set<QueryEntityType>> QPSUtil::attrNameToTypeMap = {
+        {"stmt#", QPSUtil::stmtRefEntities},
+        {"procName", std::unordered_set<QueryEntityType>{QueryEntityType::Procedure, QueryEntityType::Call}},
+        {"varName",
+         std::unordered_set<QueryEntityType>{QueryEntityType::Variable, QueryEntityType::Read, QueryEntityType::Print}},
+        {"value", std::unordered_set<QueryEntityType>{QueryEntityType::Constant}}};
+
+Synonym QPSUtil::getSyn(std::string elem) {
+    std::size_t dotPos = elem.find('.');
+    if (dotPos != std::string::npos) {// attrRef
+        return elem.substr(0, dotPos);
+    }
+    return elem;
+}
+
+AttrName QPSUtil::getAttrName(std::string elem) {
+    std::size_t dotPos = elem.find('.');
+    if (dotPos != std::string::npos) {// attrRef
+        return elem.substr(dotPos + 1);
+    }
+    return "";
+}
+
+std::unordered_map<AttrName, std::function<std::string(Entity)>> QPSUtil::getValueFunc = {
+        {"procName",
+         [](const Entity &e) -> std::string {
+             if (e.getEntityType() == EntityType::Procedure) {
+                 return e.getEntityValue();
+             } else {// call.procName
+                 return e.getAttrValue();
+             }
+         }},
+        {"varName",
+         [](const Entity &e) -> std::string {
+             if (e.getEntityType() == EntityType::Variable) {
+                 return e.getEntityValue();
+             } else {// read.varName & printVarName
+                 return e.getAttrValue();
+             }
+         }},
+        {"value", [](const Entity &e) -> std::string { return e.getEntityValue(); }},
+        {"stmt#", [](const Entity &e) -> std::string { return e.getEntityValue(); }}};
