@@ -1,0 +1,85 @@
+1 - no clause
+
+Select BOOLEAN
+TRUE
+5000
+2 - 1st clause is False
+
+Select BOOLEAN such that Uses(1, "false")
+FALSE
+5000
+3 - 1st clause is empty vector of vector of entities, 2nd clause is empty vector of entities
+assign assign; variable variable;
+Select BOOLEAN pattern assign(variable, "no-matching") with variable.varName = "hello"
+FALSE
+5000
+4 - 1st clause is non-empty vector of entities, 2nd clause is true
+call call;
+Select BOOLEAN Next(2, call) with call.procName = call.procName
+TRUE
+5000
+5 - 1st clause is empty vector of entities, 2nd clause is false
+stmt stmt; procedure procedure;
+Select BOOLEAN such that Follows(stmt, 1) and Calls(procedure, procedure)
+FALSE
+5000
+6 - 1st clause is false, 2nd clause is non-empty vector of vector of entities
+read read; constant constant;
+Select BOOLEAN with "one" = "two" and read.stmt# = constant.value
+FALSE
+5000
+7 - 1st clause is non-empty vector of vector of entities, 2nd clause is non-empty vector of entities
+if if; print print;
+Select BOOLEAN such that Parent*(if, print) pattern if("var",_,_)
+TRUE
+5000
+8 - 1st clause is non-empty vector of entities
+while while;
+Select BOOLEAN pattern while(_,_)
+TRUE
+5000
+9 - 1st clause is true, 2nd clause is non-empty vector of entities
+assign assign;
+Select BOOLEAN Modifies(7,"true") and Next*(assign,7)
+TRUE
+5000
+10 - 1st clause is false, 2nd clause is empty vector of entities
+print print;
+Select BOOLEAN such that Follows*(2,4) with print.varName = "hello"
+FALSE
+5000
+11 - 1st clause is non-empty vector of vector of entities, 2nd clause is false
+assign assign; variable variable;
+Select BOOLEAN pattern assign(variable,"exact+matching") such that Calls("caller", "callee")
+FALSE
+5000
+12 - 1st clause is non-empty vector of entities, 2nd clause is non-empty vector of vector of entities
+variable var; procedure p, q;
+Select BOOLEAN such that Uses(7, var) and Calls*(p, q)
+TRUE
+5000
+13 - 1st clause is empty vector of entities, 2nd clause is empty vector of vector of entities
+stmt s; procedure p; print print;
+Select BOOLEAN such that Follows*(50,s) with p.procName = print.varName
+FALSE
+5000
+14 - 1st clause is true, 2nd clause is an empty vector
+stmt s; procedure p; print print;
+Select BOOLEAN such that Next(1,s) with p.procName = print.varName
+TRUE
+5000
+15 - SemanticError bool, considered as synonym
+
+Select bool
+SemanticError
+5000
+16 - SemanticError boolean lowercase, considered as synonym
+
+Select boolean
+SemanticError
+5000
+17 - BOOLEAN as a synonym instead
+stmt BOOLEAN;
+Select BOOLEAN
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+5000
