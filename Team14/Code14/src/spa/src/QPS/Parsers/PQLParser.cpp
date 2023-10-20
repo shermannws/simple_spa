@@ -180,7 +180,7 @@ void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> cl
             break;
         case ClauseType::Calls:
         case ClauseType::CallsStar:
-            if (!leftRef.isOfEntRef()) { throw SyntaxException("Invalid RHS entRef"); }
+            if (!leftRef.isOfEntRef()) { throw SyntaxException("Invalid LHS entRef"); }
             if (!rightRef.isOfEntRef()) { throw SyntaxException("Invalid RHS entRef"); }
             break;
         default:

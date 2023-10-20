@@ -73,7 +73,6 @@ public:
      */
     void addClause(std::shared_ptr<PatternClause> clause);
 
-
     /**
      * @brief Adds a pattern clause to the query.
      * @param clause A shared pointer to the PatternClause to be added.

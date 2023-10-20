@@ -10,6 +10,14 @@
  */
 class QPSUtil {
 public:
+    /**
+     * @brief An unordered set of design entities in string
+     */
+    static std::unordered_set<std::string> designEntities;
+
+    /**
+     * @brief An unordered map that maps StringRep to its corresponding ClauseType
+     */
     static std::unordered_map<StringRep, ClauseType> repClauseTypeMap;
     /**
      * @brief An unordered map that maps a string to TokenType
@@ -58,5 +66,8 @@ public:
     static std::unordered_map<QueryEntityType, std::function<std::vector<Entity>(std::shared_ptr<PkbReader>)>>
             entityToGetterMap;
 
+    /**
+     * @brief An unordered map that maps AttrName to the getter function of a specific entity value
+     */
     static std::unordered_map<AttrName, std::function<std::string(Entity)>> attrNameToStringMap;
 };

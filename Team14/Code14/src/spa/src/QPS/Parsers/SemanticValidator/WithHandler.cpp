@@ -8,25 +8,31 @@ void WithHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
 
     handleRefType(leftRef, rightRef);
 
+
     return SemanticValHandler::handle(query, clause);
 }
 
 void WithHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
-    if (!((leftRef.isOfName() && rightRef.isOfName()) || (leftRef.isOfInteger() && rightRef.isOfInteger()))) {
-        throw SemanticException("Different attribute value types");
-    }
+    auto refType = RefType::WithRef;
+    leftRef.setType(refType);
+    rightRef.setType(refType);
 
-    if (leftRef.isRootType(RootType::AttrRef)) {
-        auto attrNameSet = QPSUtil::entityToAttrNamesMap[leftRef.getEntityType()];
-        if (attrNameSet.find(leftRef.getAttrName()) == attrNameSet.end()) {
-            throw SemanticException("Invalid attribute of the synonym");
-        }
-    }
+    validateSameType(leftRef, rightRef);
 
-    if (rightRef.isRootType(RootType::AttrRef)) {
-        auto attrNameSet = QPSUtil::entityToAttrNamesMap[rightRef.getEntityType()];
-        if (attrNameSet.find(rightRef.getAttrName()) == attrNameSet.end()) {
-            throw SemanticException("Invalid attribute of the synonym");
-        }
+    if (leftRef.isRootType(RootType::AttrRef)) { validateAttrRef(leftRef); }
+
+    if (rightRef.isRootType(RootType::AttrRef)) { validateAttrRef(rightRef); }
+}
+
+void WithHandler::validateSameType(Ref &leftRef, Ref &rightRef) {
+    auto areBothOfName = leftRef.isOfName() && rightRef.isOfName();
+    auto areBothOfInteger = leftRef.isOfInteger() && rightRef.isOfInteger();
+    if (!areBothOfName && !areBothOfInteger) { throw SemanticException("Different attribute value types"); }
+}
+
+void WithHandler::validateAttrRef(Ref &attrRef) {
+    auto attrNameSet = QPSUtil::entityToAttrNamesMap[attrRef.getEntityType()];
+    if (attrNameSet.find(attrRef.getAttrName()) == attrNameSet.end()) {
+        throw SemanticException("Invalid attribute of the synonym");
     }
 }

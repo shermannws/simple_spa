@@ -5,30 +5,29 @@
 #include "Clause.h"
 
 /**
- * @brief PatternClause class that extends from Clause
+ * @brief WithClause class that extends from Clause
  */
 class WithClause : public Clause {
 private:
-private:
     /**
-     * @brief The second parameter of the SuchThatClause
+     * @brief The second parameter of the WithClause
      */
     Ref secondParam;
 
 public:
     /**
-     * @brief The constructor of PatternClause
+     * @brief The constructor of WithClause
      */
     WithClause();
 
     /**
-     * @brief The setter of the second parameter of the SuchThatClause
+     * @brief The setter of the second parameter of the WithClause
      * @param ref the Ref reference of the second parameter
      */
     void setSecondParam(Ref &ref);
 
     /**
-     * @brief The getter of the second parameter of the SuchThatClause
+     * @brief The getter of the second parameter of the WithClause
      * @return The Ref reference of the second parameter
      */
     Ref &getSecondParam();
@@ -40,5 +39,10 @@ public:
      */
     std::vector<Synonym> getSynonyms() const override;
 
+    /**
+     * @brief Returns true if the Clause object is equal to the other Clause object, false otherwise
+     * @param other The other Clause object to compare against
+     * @return True if the Clause object is equal to the other Clause object
+     */
     bool operator==(const Clause &other) const override;
 };

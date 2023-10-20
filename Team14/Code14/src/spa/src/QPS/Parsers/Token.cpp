@@ -35,9 +35,7 @@ bool Token::isToken(const std::string &str) { return rep == str && type == Token
 bool Token::isToken(TokenType ttype) { return type == ttype; }
 
 bool Token::isDesignEntity() {
-    return type == TokenType::Word &&
-           (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" || rep == "assign" ||
-            rep == "while" || rep == "if" || rep == "variable" || rep == "constant" || rep == "call");
+    return type == TokenType::Word && QPSUtil::designEntities.find(rep) != QPSUtil::designEntities.end();
 }
 
 bool Token::isAttrName() {

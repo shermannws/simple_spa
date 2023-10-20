@@ -16,4 +16,10 @@ std::vector<Synonym> WithClause::getSynonyms() const {
     return synonyms;
 }
 
-bool WithClause::operator==(const Clause &other) const { return false; };
+bool WithClause::operator==(const Clause &other) const {
+    try {
+        const auto &otherPattern = dynamic_cast<const WithClause &>(other);
+        return (type == otherPattern.type) && (firstParam == otherPattern.firstParam) &&
+               (secondParam == otherPattern.secondParam);
+    } catch (std::bad_cast &e) { return false; }
+};

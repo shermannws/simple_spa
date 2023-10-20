@@ -12,25 +12,53 @@
 #include "QPS/Evaluators/Strategies/UsesSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/WithStrategy.h"
 
-std::unordered_map<std::string, TokenType> QPSUtil::strToTokenTypeMap = {
-        {"(", TokenType::Lparenthesis}, {")", TokenType::Rparenthesis}, {"+", TokenType::Plus},
-        {"-", TokenType::Minus},        {"*", TokenType::Asterisk},     {"/", TokenType::Slash},
-        {"%", TokenType::Percent},      {";", TokenType::Semicolon},    {",", TokenType::Comma},
-        {"\"", TokenType::Quote},       {"_", TokenType::Underscore},   {".", TokenType::Dot},
-        {"=", TokenType::Equal},
+std::unordered_set<std::string> QPSUtil::designEntities = {
+        AppConstants::STRING_PROCEDURE,
+        AppConstants::STRING_STATEMENT,
+        AppConstants::STRING_READ,
+        AppConstants::STRING_PRINT,
+        AppConstants::STRING_ASSIGN,
+        AppConstants::STRING_CALL,
+        AppConstants::STRING_WHILE,
+        AppConstants::STRING_IF,
+        AppConstants::STRING_VARIABLE,
+        AppConstants::STRING_CONSTANT,
+
 };
 
-std::unordered_map<std::string, AttrName> QPSUtil::strToAttrNameMap = {{"procName", AttrName::ProcName},
-                                                                       {"varName", AttrName::VarName},
-                                                                       {"value", AttrName::Value},
-                                                                       {"stmt#", AttrName::StmtNo}};
+std::unordered_map<std::string, TokenType> QPSUtil::strToTokenTypeMap = {
+        {AppConstants::STRING_OPEN_ROUND_PARENTHESIS, TokenType::Lparenthesis},
+        {AppConstants::STRING_CLOSE_ROUND_PARENTHESIS, TokenType::Rparenthesis},
+        {AppConstants::STRING_PLUS, TokenType::Plus},
+        {AppConstants::STRING_MINUS, TokenType::Minus},
+        {AppConstants::STRING_TIMES, TokenType::Asterisk},
+        {AppConstants::STRING_DIVIDE, TokenType::Slash},
+        {AppConstants::STRING_MODULO, TokenType::Percent},
+        {AppConstants::STRING_SEMICOLON, TokenType::Semicolon},
+        {AppConstants::STRING_COMMA, TokenType::Comma},
+        {AppConstants::STRING_QUOTE, TokenType::Quote},
+        {AppConstants::STRING_UNDERSCORE, TokenType::Underscore},
+        {AppConstants::STRING_DOT, TokenType::Dot},
+        {AppConstants::STRING_EQUAL, TokenType::Equal},
+};
+
+std::unordered_map<std::string, AttrName> QPSUtil::strToAttrNameMap = {
+        {AppConstants::STRING_PROCNAME, AttrName::ProcName},
+        {AppConstants::STRING_VARNAME, AttrName::VarName},
+        {AppConstants::STRING_VALUE, AttrName::Value},
+        {AppConstants::STRING_STMTNO, AttrName::StmtNo}};
 
 std::unordered_map<StringRep, ClauseType> QPSUtil::repClauseTypeMap = {
-        {"Uses", ClauseType::Uses},       {"Modifies", ClauseType::Modifies},
-        {"Follows", ClauseType::Follows}, {"Follows*", ClauseType::FollowsStar},
-        {"Parent", ClauseType::Parent},   {"Parent*", ClauseType::ParentStar},
-        {"Calls", ClauseType::Calls},     {"Calls*", ClauseType::CallsStar},
-        {"Next", ClauseType::Next},       {"Next*", ClauseType::NextStar},
+        {AppConstants::STRING_USES, ClauseType::Uses},
+        {AppConstants::STRING_MODIFIES, ClauseType::Modifies},
+        {AppConstants::STRING_FOLLOWS, ClauseType::Follows},
+        {AppConstants::STRING_FOLLOWSSTAR, ClauseType::FollowsStar},
+        {AppConstants::STRING_PARENT, ClauseType::Parent},
+        {AppConstants::STRING_PARENTSTAR, ClauseType::ParentStar},
+        {AppConstants::STRING_CALLS, ClauseType::Calls},
+        {AppConstants::STRING_CALLSSTAR, ClauseType::CallsStar},
+        {AppConstants::STRING_NEXT, ClauseType::Next},
+        {AppConstants::STRING_NEXTSTAR, ClauseType::NextStar},
 };
 
 std::unordered_map<ClauseType, ClauseArgType> QPSUtil::typeToArgTypeMap = {
@@ -48,7 +76,6 @@ std::unordered_map<QueryEntityType, std::unordered_set<AttrName>> QPSUtil::entit
         {QueryEntityType::Print, std::unordered_set{AttrName::VarName, AttrName::StmtNo}},
         {QueryEntityType::Variable, std::unordered_set{AttrName::VarName}},
         {QueryEntityType::Stmt, std::unordered_set{AttrName::StmtNo}},
-        {QueryEntityType::Call, std::unordered_set{AttrName::StmtNo}},
         {QueryEntityType::While, std::unordered_set{AttrName::StmtNo}},
         {QueryEntityType::If, std::unordered_set{AttrName::StmtNo}},
         {QueryEntityType::Assign, std::unordered_set{AttrName::StmtNo}},

@@ -13,7 +13,7 @@ std::shared_ptr<Result> WithStrategy::evaluateClause(std::shared_ptr<Clause> cla
 
     if (isLeftAttrRef && isRightAttrRef) { return evaluateSynSyn(leftRef, rightRef); }
     if (isLeftAttrRef) { return evaluateSynAny(leftRef, rightRef); }
-    if (isRightAttrRef) { return evaluateAnySyn(leftRef, rightRef); }
+    if (isRightAttrRef) { return evaluateSynAny(rightRef, leftRef); }
     return evaluateBoolean(leftRef, rightRef);
 }
 
@@ -34,19 +34,10 @@ std::shared_ptr<Result> WithStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef
     return res;
 }
 
-std::shared_ptr<Result> WithStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
+std::shared_ptr<Result> WithStrategy::evaluateSynAny(Ref &synRef, Ref &anyRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
-    auto leftEntityType = leftRef.getEntityType();
-    auto tuples = join(QPSUtil::entityToGetterMap[leftEntityType](pkbReader), leftRef.getAttrName(), rightRef.getRep());
-    res->setTuples(tuples);
-    return res;
-}
-
-std::shared_ptr<Result> WithStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
-    std::shared_ptr<Result> res = std::make_shared<Result>();
-    auto rightEntityType = rightRef.getEntityType();
-    auto tuples =
-            join(QPSUtil::entityToGetterMap[rightEntityType](pkbReader), rightRef.getAttrName(), leftRef.getRep());
+    auto synEntityType = synRef.getEntityType();
+    auto tuples = filter(QPSUtil::entityToGetterMap[synEntityType](pkbReader), synRef.getAttrName(), anyRef.getRep());
     res->setTuples(tuples);
     return res;
 }
@@ -74,7 +65,7 @@ std::vector<std::vector<Entity>> WithStrategy::join(std::vector<Entity> v1, Attr
     return res;
 }
 
-std::vector<Entity> WithStrategy::join(std::vector<Entity> v, AttrName a, StringRep rep) const {
+std::vector<Entity> WithStrategy::filter(std::vector<Entity> v, AttrName a, StringRep rep) const {
     std::vector<Entity> res;
     for (const auto &e: v) {
         if (QPSUtil::attrNameToStringMap[a](e) == rep) { res.push_back(e); }
