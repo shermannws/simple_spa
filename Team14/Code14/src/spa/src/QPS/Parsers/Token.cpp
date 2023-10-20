@@ -33,6 +33,12 @@ Token::Token(const std::string &input) {
         this->type = TokenType::Quote;
     } else if (rep == "_") {
         this->type = TokenType::Underscore;
+    } else if (rep == ".") {
+        this->type = TokenType::Dot;
+    } else if (rep == "<") {
+        this->type = TokenType::Ltuple;
+    } else if (rep == ">") {
+        this->type = TokenType::Rtuple;
     } else if (!rep.empty()) {
         this->type = TokenType::Word;
     } else {
@@ -57,6 +63,10 @@ bool Token::isDesignEntity() {
     return type == TokenType::Word &&
            (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" || rep == "assign" ||
             rep == "while" || rep == "if" || rep == "variable" || rep == "constant" || rep == "call");
+}
+
+bool Token::isAttrName() {
+    return type == TokenType::Word && (rep == "procName" || rep == "varName" || rep == "value" || rep == "stmt#");
 }
 
 bool Token::isIdent() {

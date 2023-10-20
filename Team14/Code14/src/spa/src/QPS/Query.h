@@ -56,6 +56,11 @@ public:
     void addSelect(const Synonym);
 
     /**
+     * @brief sets the Query selects for BOOLEAN result-clause queries
+     */
+    void setBooleanResult();
+
+    /**
      * @brief Adds a such-that clause to the query.
      * @param clause A shared pointer to the SuchThatClause to be added.
      */

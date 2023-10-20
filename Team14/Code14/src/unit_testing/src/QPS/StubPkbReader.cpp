@@ -1,8 +1,23 @@
 #include "StubPkbReader.h"
+#include "Commons/Entities/CallStatement.h"
+#include "Commons/Entities/ReadStatement.h"
+
+#include "Commons/Entities/WhileStatement.h"
 
 StubPkbReader::StubPkbReader() = default;
 
-std::vector<Entity> StubPkbReader::getAllVariables() const { return std::vector<Entity>(); }
+std::vector<Entity> StubPkbReader::getAllVariables() const {
+    return std::vector<Entity>({
+            Variable("var1"),
+            Variable("var2"),
+            Variable("var5"),
+            Variable("var14"),
+            Variable("var24"),
+            Variable("var36"),
+            Variable("var38"),
+            Variable("var88"),
+    });
+}
 
 std::vector<Entity> StubPkbReader::getAllConstants() const { return std::vector<Entity>(); }
 
@@ -17,10 +32,10 @@ std::vector<Entity> StubPkbReader::getAllStatements() const {
 
 std::vector<Entity> StubPkbReader::getAllRead() const {
     return std::vector<Entity>({
-            Statement(88, StatementType::Read),
-            Statement(24, StatementType::Read),
-            Statement(36, StatementType::Read),
-            Statement(14, StatementType::Read),
+            ReadStatement(88, "line88"),
+            ReadStatement(24, "line24"),
+            ReadStatement(36, "line36"),
+            ReadStatement(14, "line14"),
     });
 }
 
@@ -44,6 +59,10 @@ std::vector<Entity> StubPkbReader::getAllIf() const {
 std::vector<Entity> StubPkbReader::getAllCall() const { return std::vector<Entity>(); }
 
 std::vector<std::vector<Entity>> StubPkbReader::getUsesStmtPair(StatementType type) const {
+    if (type == StatementType::Call) {
+        return std::vector<std::vector<Entity>>(
+                {{CallStatement(1, "proc1"), Variable("var1")}, {CallStatement(2, "proc2"), Variable("var2")}});
+    }
     std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var")};
     std::vector<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var")};
     return std::vector<std::vector<Entity>>({pair1, pair2});
@@ -496,18 +515,39 @@ bool StubPkbReader::hasAfterStarStmt(Statement &statement) const {
     return false;
 }
 
-std::vector<Entity> StubPkbReader::getAllIfPatternStmts() const { return std::vector<Entity>{}; };
+std::vector<Entity> StubPkbReader::getAllIfPatternStmts() const {
+    return std::vector<Entity>({
+            Statement(101, StatementType::If),
+            Statement(102, StatementType::If),
+            Statement(103, StatementType::If),
+    });
+};
 
-std::vector<Entity> StubPkbReader::getIfStmtsByVar(Variable &var) const { return std::vector<Entity>{}; };
+std::vector<Entity> StubPkbReader::getIfStmtsByVar(Variable &var) const {
+    if (var.getEntityValue() == "ifPatternVar") {
+        return std::vector<Entity>(
+                {Statement(3, StatementType::If), Statement(59, StatementType::If), Statement(100, StatementType::If)});
+    }
+    return std::vector<Entity>{};
+};
 
 std::vector<std::vector<Entity>> StubPkbReader::getAllIfStmtVarPair() const {
-    return std::vector<std::vector<Entity>>{};
+    return std::vector<std::vector<Entity>>(
+            {{Statement(1, StatementType::If), Variable("var2")}, {Statement(3, StatementType::If), Variable("var3")}});
 }
 
-std::vector<Entity> StubPkbReader::getAllWhilePatternStmts() const { return std::vector<Entity>{}; };
+std::vector<Entity> StubPkbReader::getAllWhilePatternStmts() const {
+    return std::vector<Entity>({WhileStatement(847)});
+}
 
-std::vector<Entity> StubPkbReader::getWhileStmtsByVar(Variable &var) const { return std::vector<Entity>{}; }
+std::vector<Entity> StubPkbReader::getWhileStmtsByVar(Variable &var) const {
+    if (var.getEntityValue() == "x") { return std::vector<Entity>{WhileStatement(873)}; }
+    return std::vector<Entity>{};
+}
 
 std::vector<std::vector<Entity>> StubPkbReader::getAllWhileStmtVarPair() const {
-    return std::vector<std::vector<Entity>>{};
+    return std::vector<std::vector<Entity>>{
+            {WhileStatement(860), Variable("var860")},
+            {WhileStatement(861), Variable("var861")},
+    };
 }

@@ -32,7 +32,17 @@ private:
     /**
      * @brief parses result clause and adds the selected synonyms to the query object
      */
-    Synonym parseResultClause(Query &query);
+    void parseResultClause(Query &query);
+
+    /**
+     * @brief parses a tuple result clause and adds the tuple elements to the query
+     */
+    void processTuple(Query &query);
+
+    /**
+     * @brief parses a single element of result clause and adds the element to the query
+     */
+    void processElem(Query &query);
 
     /**
      * @brief parses the chain of constraint clause and adds the clauses to the query object
@@ -67,6 +77,11 @@ private:
      */
     void validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause);
 
+    /**
+     * @brief Validates Pattern Clause structure according to the existence of thirdParam
+     * @param clause The shared pointer of PatternClause to validate
+     */
+    void validatePatternStructure(const std::shared_ptr<PatternClause> clause);
     /**
      * @brief Returns the next token as Ref if it is Integer, Identity, Wildcard or Synonym,
      * otherwise throws a SyntaxException

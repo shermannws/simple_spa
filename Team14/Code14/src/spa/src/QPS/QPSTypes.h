@@ -10,6 +10,9 @@
 /* Type alias for a string representing a synonym of an entity*/
 typedef std::string Synonym;
 
+/* Type alias for a string representing type of attrName*/
+typedef std::string AttrName;
+
 // Query typedefs
 class QueryEntity;
 

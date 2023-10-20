@@ -29,8 +29,9 @@ void ASTPrinter::traverseAndPrint(std::shared_ptr<ProgramNode> root) {
         // current node to accept visitor
         current->accept(visitor, parents, nullptr);
 
-        std::vector<std::shared_ptr<ASTNode>> newParents = parents;
-        newParents.emplace_back(current);
+        std::vector<std::shared_ptr<Statement>> newParents = parents;
+        // dummy statement to populate 1 additional indentation level
+        newParents.emplace_back(std::make_shared<Statement>(0, StatementType::Stmt));
 
         // add child of current node into the frontier
         std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();
