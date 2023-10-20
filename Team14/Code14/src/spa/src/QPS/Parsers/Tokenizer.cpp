@@ -7,7 +7,6 @@
 #include "Token.h"
 #include "Tokenizer.h"
 
-
 std::vector<std::string> specials{AppConstants::STRING_OPEN_ROUND_PARENTHESIS,
                                   AppConstants::STRING_CLOSE_ROUND_PARENTHESIS,
                                   AppConstants::STRING_PLUS,
@@ -20,7 +19,9 @@ std::vector<std::string> specials{AppConstants::STRING_OPEN_ROUND_PARENTHESIS,
                                   AppConstants::STRING_QUOTE,
                                   AppConstants::STRING_UNDERSCORE,
                                   AppConstants::STRING_DOT,
-                                  AppConstants::STRING_EQUAL};
+                                  AppConstants::STRING_EQUAL,
+                                  AppConstants::STRING_LTUPLE,
+                                  AppConstants::STRING_RTUPLE};
 
 std::vector<std::string> stars{AppConstants::STRING_FOLLOWS, AppConstants::STRING_PARENT, AppConstants::STRING_NEXT,
                                AppConstants::STRING_CALLS};

@@ -72,6 +72,9 @@ public:
     inline static const std::string STRING_QUOTE = "\"";
     inline static const std::string STRING_UNDERSCORE = "_";
     inline static const std::string STRING_DOT = ".";
+    inline static const std::string STRING_LTUPLE = "<";
+    inline static const std::string STRING_RTUPLE = ">";
+
 
     inline static const char CHAR_GREATER_THAN = '>';
     inline static const char CHAR_LESS_THAN = '<';

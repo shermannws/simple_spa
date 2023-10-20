@@ -16,9 +16,9 @@ using namespace std;
 std::shared_ptr<StubPkbReader> stubPkbReader = std::make_shared<StubPkbReader>();
 
 TEST_CASE("Test formatResult") {
-
-    SECTION("Uses query single tuple") {
-        PQLParser parser("assign a; variable x; Select x such that Uses(a, x)");
+    // TODO  test BOOLEAN, attrRef, tuplle with attrRef elem
+    SECTION("Uses query multiple synonym tuple") {
+        PQLParser parser("assign a; variable x; Select <x, a> such that Uses(a, x)");
         Query query = parser.parse();
         ResultType type = ResultType::Tuples;
         Result r = Result();
@@ -35,8 +35,9 @@ TEST_CASE("Test formatResult") {
         std::list<std::string> formattedResults = evaluator.formatResult(query, r);
 
         std::list<std::string> expected{"my_variable", "another_variable"};
-        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "my_variable") != formattedResults.end());
-        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "another_variable") != formattedResults.end());
+
+        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "my_variable 1") != formattedResults.end());
+        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "another_variable 5") != formattedResults.end());
     }
 
     SECTION("Follows query single tuple") {
@@ -60,6 +61,29 @@ TEST_CASE("Test formatResult") {
         std::list<std::string> expected{"1", "2"};
         REQUIRE(find(formattedResults.begin(), formattedResults.end(), "1") != formattedResults.end());
         REQUIRE(find(formattedResults.begin(), formattedResults.end(), "2") != formattedResults.end());
+    }
+
+    SECTION("Uses query multiple synonym tuple") {
+        PQLParser parser("assign a; variable x; Select <x, a> such that Uses(a, x)");
+        Query query = parser.parse();
+        ResultType type = ResultType::Tuples;
+        Result r = Result();
+        r.setType(std::vector<Synonym>{"a", "x"});
+
+        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
+        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
+
+        std::vector<std::vector<Entity>> tuples{v1, v2};
+        r.setTuples(tuples);
+
+        PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
+
+        std::list<std::string> formattedResults = evaluator.formatResult(query, r);
+
+        std::list<std::string> expected{"my_variable", "another_variable"};
+
+        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "my_variable 1") != formattedResults.end());
+        REQUIRE(find(formattedResults.begin(), formattedResults.end(), "another_variable 5") != formattedResults.end());
     }
 }
 
@@ -806,7 +830,7 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("pattern a(wildcard , expr-spec)") {// getAssignStmtsByRhs, hasRhsWildCard == false
+TEST_CASE("assign pattern a(wildcard , expr-spec)") {// getAssignStmtsByRhs, hasRhsWildCard == false
     PQLParser parser("assign a; Select a pattern a(_, \"x   + y\")");
     Query queryObj = parser.parse();
 
@@ -819,7 +843,7 @@ TEST_CASE("pattern a(wildcard , expr-spec)") {// getAssignStmtsByRhs, hasRhsWild
     REQUIRE(find(results.begin(), results.end(), "5") != results.end());
 }
 
-TEST_CASE("pattern a(wildcard , _expr-spec_)") {// getAssignStmtsByRhs, hasRhsWildCard == true
+TEST_CASE("assign pattern a(wildcard , _expr-spec_)") {// getAssignStmtsByRhs, hasRhsWildCard == true
     PQLParser parser("assign a; Select a pattern a(_, _\"a/(b+c)\"_)");
     Query queryObj = parser.parse();
 
@@ -832,7 +856,7 @@ TEST_CASE("pattern a(wildcard , _expr-spec_)") {// getAssignStmtsByRhs, hasRhsWi
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("pattern a(var_synonym, wildcard)") {// getAllAssignStmtVarPair()
+TEST_CASE("assign pattern a(var_synonym, wildcard)") {// getAllAssignStmtVarPair()
     PQLParser parser("assign a; variable v; Select a pattern a(v, _)");
     Query queryObj = parser.parse();
 
@@ -845,7 +869,7 @@ TEST_CASE("pattern a(var_synonym, wildcard)") {// getAllAssignStmtVarPair()
     REQUIRE(find(results.begin(), results.end(), "2") != results.end());
 }
 
-TEST_CASE("pattern a(var_synonym, _expr-spec_)") {// getAssignStmtsVarPairByRhs, hasWildCard == true
+TEST_CASE("assign pattern a(var_synonym, _expr-spec_)") {// getAssignStmtsVarPairByRhs, hasWildCard == true
     PQLParser parser("assign a; variable v; Select a pattern a(v, _\"(a-b)+c\"_)");
     Query queryObj = parser.parse();
 
@@ -858,7 +882,7 @@ TEST_CASE("pattern a(var_synonym, _expr-spec_)") {// getAssignStmtsVarPairByRhs,
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("pattern a(var_synonym, expr-spec)") {// getAssignStmtsVarPairByRhs, hasWildcard == false
+TEST_CASE("assign pattern a(var_synonym, expr-spec)") {// getAssignStmtsVarPairByRhs, hasWildcard == false
     PQLParser parser("assign a; variable v; Select v pattern a(v, \"a-b*c\")");
     Query queryObj = parser.parse();
 
@@ -872,7 +896,7 @@ TEST_CASE("pattern a(var_synonym, expr-spec)") {// getAssignStmtsVarPairByRhs, h
     REQUIRE(find(results.begin(), results.end(), "var3") != results.end());
 }
 
-TEST_CASE("pattern a(char_string , wildcard)") {// getAssignStmtsByLhs
+TEST_CASE("assign pattern a(char_string , wildcard)") {// getAssignStmtsByLhs
     PQLParser parser("assign a; Select a pattern a(\"x\", _)");
     Query queryObj = parser.parse();
 
@@ -884,7 +908,7 @@ TEST_CASE("pattern a(char_string , wildcard)") {// getAssignStmtsByLhs
     REQUIRE(find(results.begin(), results.end(), "6") != results.end());
 }
 
-TEST_CASE("pattern a(char_string , expr-spec)") {// getAssignStmtsByLhsRhs, hasRhsWildcard = true
+TEST_CASE("assign pattern a(char_string , expr-spec)") {// getAssignStmtsByLhsRhs, hasRhsWildcard = true
     PQLParser parser("assign a; Select a pattern a(\"x\", _\"(a-b)\"_)");
     Query queryObj = parser.parse();
 
@@ -897,7 +921,7 @@ TEST_CASE("pattern a(char_string , expr-spec)") {// getAssignStmtsByLhsRhs, hasR
     REQUIRE(find(results.begin(), results.end(), "100000") != results.end());
 }
 
-TEST_CASE("pattern, select synonym not in clause ") {// getAssignStmtsByLhsRhs, hasRhsWildcard = false
+TEST_CASE("assign pattern, select synonym not in clause ") {// getAssignStmtsByLhsRhs, hasRhsWildcard = false
     PQLParser parser("assign a; variable v; Select v pattern a(\"noneCase\", \"(a-b)\")");
     Query queryObj = parser.parse();
 
@@ -906,6 +930,123 @@ TEST_CASE("pattern, select synonym not in clause ") {// getAssignStmtsByLhsRhs, 
     auto resultObj = evaluator.evaluate(queryObj);
     auto results = evaluator.formatResult(queryObj, resultObj);
     REQUIRE(results.size() == 0);
+}
+
+TEST_CASE("if pattern") {
+    SECTION("getAllIf for pattern if(_,_,_)") {
+        PQLParser parser("if if; Select if pattern if(_,_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "101") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "102") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "103") != results.end());
+    }
+
+    SECTION("getAllIfStmtVarPair for pattern if(v,_,_)") {
+        PQLParser parser("variable v; if if; Select v pattern if(v,_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var3") != results.end());
+    }
+
+    SECTION("getAllIfStmtVarPair for pattern if(v,_,_) unrelated synonym in select") {
+        PQLParser parser("if ifs; variable v, x; Select x pattern ifs(v, _, _)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 8);
+        REQUIRE(find(results.begin(), results.end(), "var1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var5") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var38") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var88") != results.end());
+    }
+
+
+    SECTION("getIfStmtsByVar for pattern if(\"var\",_,_)") {
+        PQLParser parser("if if; Select if pattern if(\"ifPatternVar\",_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "59") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "100") != results.end());
+    }
+}
+
+TEST_CASE("while pattern") {
+    SECTION("getAllWhile for pattern while (_,_)") {
+        PQLParser parser("while w; Select w pattern w(_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "847") != results.end());
+    }
+
+    SECTION("getAllWhileStmtVarPair for pattern while(v,_,_)") {
+        PQLParser parser("while w; variable v; Select v pattern w(v,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 2);
+        REQUIRE(find(results.begin(), results.end(), "var860") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var861") != results.end());
+    }
+
+    SECTION("getWhileStmtsByVar for pattern while(\"v\",_,_)") {
+        PQLParser parser("while w; Select w pattern w(\"x\",_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "873") != results.end());
+    }
+
+
+    SECTION("getIfStmtsByVar for pattern if(\"var\",_,_)") {
+        PQLParser parser("if if; Select if pattern if(\"ifPatternVar\",_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "59") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "100") != results.end());
+    }
 }
 
 TEST_CASE("Calls and Calls* clauses") {
@@ -1152,7 +1293,7 @@ TEST_CASE("multiclause, pattern and suchThat - True Result table ") {
 }
 
 TEST_CASE("multiclause, pattern and suchThat - synonym in tuple result table") {
-    // assign a, a1; variable v; Select a such that Follows*(a,20) pattern a (v,_"1+multiclauseTest"_) and a(v,_) such
+    // assign a, a1; variable v; Select a such that Follows*(a,20) pattern a (v,_"1+multiclauseTest"_) and a1(v,_) such
     // that Parent(1,10)
 
     auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a", RootType::Synonym, "v",
@@ -1191,7 +1332,7 @@ TEST_CASE("multiclause, pattern and suchThat - synonym in tuple result table") {
 }
 
 TEST_CASE("multiclause, pattern and suchThat - synonym not in tuple result table") {
-    // assign a, a1; variable v; constant c; Select c such that Follows*(a,20) pattern a (v,_"1+multiclauseTest"_) and
+    // assign a, a1; variable v; constant c; Select c such that pattern a (v,_"1+multiclauseTest"_) and
     // a(v,_) such that Parent(1,10)
 
     auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a", RootType::Synonym, "v",
@@ -1221,7 +1362,165 @@ TEST_CASE("multiclause, pattern and suchThat - synonym not in tuple result table
     auto resultObj = evaluator.evaluate(queryObj);
     auto results = evaluator.formatResult(queryObj, resultObj);
     REQUIRE(resultObj.getType() == ResultType::Tuples);
-    REQUIRE(resultObj.getSynIndices()["c"] == 0);
-    REQUIRE(resultObj.getTuples().size() == 4);
     REQUIRE(results.size() == 4);
+}
+
+TEST_CASE("boolean result clause query") {
+    SECTION("no constraint clauses") {
+        PQLParser parser("Select BOOLEAN");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getBoolResult() == true);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "TRUE") != results.end());
+    }
+
+    SECTION("false constraint clauses") {
+        PQLParser parser("stmt s1, s2; Select BOOLEAN such that Parent*(s1,s2)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getBoolResult() == false);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "FALSE") != results.end());
+    }
+
+    SECTION("non empty result of constraint clauses") {
+        PQLParser parser("assign a; Select BOOLEAN pattern a(_,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(!resultObj.getTuples().empty());
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "TRUE") != results.end());
+    }
+}
+
+TEST_CASE("tuple result-clause query") {
+    SECTION("no constraint clauses") {
+        PQLParser parser("read re; if i; Select <i, re>");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getTuples().size() == 8);
+        REQUIRE(find(results.begin(), results.end(), "101 88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "101 24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "101 36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "101 14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "102 88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "102 24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "102 36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "102 14") != results.end());
+    }
+
+    SECTION("empty result table (false)") {
+        PQLParser parser("read re; if i; constant c; Select <i, re, c.value> with c.value = 1");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.empty());
+    }
+
+    SECTION("duplicate synonym in tuple") {
+        PQLParser parser("read re; Select <re, re>");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 4);
+        REQUIRE(find(results.begin(), results.end(), "88 88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "24 24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "36 36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "14 14") != results.end());
+    }
+}
+
+
+TEST_CASE("attrRef result-clause query") {
+    SECTION("single attrRef,no constraint clauses") {
+        PQLParser parser("read re; Select re.varName");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getTuples().size() == 4);
+        REQUIRE(find(results.begin(), results.end(), "var88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var14") != results.end());
+    }
+
+    SECTION("multiple attrRef in tuple with 1 clause") {
+        PQLParser parser("read re; call c; variable v; Select <re.varName, c.procName> such that Uses(c, v)");// or c,v
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 8);
+        REQUIRE(find(results.begin(), results.end(), "var88 proc1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var24 proc1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var36 proc1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var14 proc1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var88 proc2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var24 proc2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var36 proc2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var14 proc2") != results.end());
+    }
+
+    SECTION("multiple attrRef and synonym in tuple, with constraint clause") {
+        PQLParser parser("read re; call c; variable v; Select <re.varName, c.procName,v> such that Uses(c, v)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 8);
+        REQUIRE(find(results.begin(), results.end(), "var88 proc1 var1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var24 proc1 var1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var36 proc1 var1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var14 proc1 var1") != results.end());
+
+        REQUIRE(find(results.begin(), results.end(), "var88 proc2 var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var24 proc2 var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var36 proc2 var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "var14 proc2 var2") != results.end());
+    }
+
+    SECTION("duplicate attr ref in tuple") {
+        PQLParser parser("read re; Select <re, re.varName, re.varName>");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 4);
+        REQUIRE(find(results.begin(), results.end(), "88 var88 var88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "24 var24 var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "36 var36 var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "14 var14 var14") != results.end());
+    }
 }

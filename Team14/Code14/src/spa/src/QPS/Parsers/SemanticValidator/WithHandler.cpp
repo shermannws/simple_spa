@@ -31,8 +31,9 @@ void WithHandler::validateSameType(Ref &leftRef, Ref &rightRef) {
 }
 
 void WithHandler::validateAttrRef(Ref &attrRef) {
-    auto attrNameSet = QPSUtil::entityToAttrNamesMap[attrRef.getEntityType()];
-    if (attrNameSet.find(attrRef.getAttrName()) == attrNameSet.end()) {
+    auto entitySet = QPSUtil::attrNameToTypeMap[attrRef.getAttrName()];
+    auto entityType = attrRef.getEntityType();
+    if (entitySet.find(entityType) == entitySet.end()) {
         throw SemanticException("Invalid attribute of the synonym");
     }
 }

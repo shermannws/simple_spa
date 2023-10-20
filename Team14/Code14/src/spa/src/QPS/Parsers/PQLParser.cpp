@@ -18,12 +18,12 @@ PQLParser::PQLParser(const std::string &PQLQuery) {
 Query PQLParser::parse() {
     Query query = Query();
     std::vector<Synonym> declarations = parseDeclarations(query);
-    Synonym select = parseResultClause(query);
+    parseResultClause(query);
     parseClauses(query);
 
     PqlSemanticValidator semanticValidator = PqlSemanticValidator();
     semanticValidator.validateDeclarations(declarations);
-    semanticValidator.validateResultClause(query, select);
+    semanticValidator.validateResultClause(query);
     semanticValidator.validateConstraintClauses(query);
     return query;
 }
@@ -47,18 +47,51 @@ std::vector<Synonym> PQLParser::parseDeclarations(Query &query) {
     return synonyms;
 }
 
-Synonym PQLParser::parseResultClause(Query &query) {
+
+void PQLParser::parseResultClause(Query &query) {
+    std::unordered_map<TokenType, processClausefunc> resultExtractorMap{
+            {TokenType::Word, [&](Query &query) { return processElem(query); }},
+            {TokenType::Ltuple, [&](Query &query) { return processTuple(query); }}};
+
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken("Select")) {
         throw SyntaxException("Expected Select clause but found '" + next->getRep() + "'");
     }
 
-    next = tokenizer->popToken();
-    if (!next->isIdent()) { throw SyntaxException("Invalid synonym syntax"); }
+    next = tokenizer->peekToken();
+    if (!next->isIdent() && !next->isToken(TokenType::Ltuple)) { throw SyntaxException("Invalid synonym syntax"); }
 
-    Synonym syn = next->getRep();
-    query.addSelect(next->getRep());
-    return syn;
+    resultExtractorMap[next->getType()](query);
+}
+
+void PQLParser::processTuple(Query &query) {
+    tokenizer->popToken();// consume Ltuple
+    processElem(query);   // expect non-empty list
+
+    while (tokenizer->peekToken()->isToken(TokenType::Comma)) {
+        tokenizer->popToken();// consume comma
+        processElem(query);
+    }
+
+    auto rTuple = tokenizer->popToken();// consume Rtuple
+    if (!rTuple->isToken(TokenType::Rtuple)) { throw SyntaxException("Expected closing tuple bracket"); }
+}
+
+void PQLParser::processElem(Query &query) {
+    auto syn = tokenizer->popToken();// expect Syn
+    if (!syn->isIdent()) { throw SyntaxException("invalid synonym in elem"); }
+
+    auto next = tokenizer->peekToken();// check following token
+
+    if (next->isToken(TokenType::Dot)) {
+        tokenizer->popToken();                // consume dot
+        auto attrName = tokenizer->popToken();// expect attrName
+        if (!attrName->isAttrName()) { throw SyntaxException("invalid attrName found"); }
+        Synonym elem = syn->getRep().append(".").append(attrName->getRep());
+        query.addSelect(elem);
+        return;
+    }
+    query.addSelect(syn->getRep());
 }
 
 void PQLParser::parseClauses(Query &query) {
@@ -140,7 +173,18 @@ std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
     } catch (...) { throw SyntaxException("Invalid expression spec syntax"); }
 
     next = tokenizer->popToken();
-    if (!next->isToken(TokenType::Rparenthesis)) { throw SyntaxException("expected right parenthesis"); }
+    if (next->isToken(TokenType::Comma)) {
+        next = tokenizer->popToken();
+        if (!next->isToken(TokenType::Underscore)) {
+            throw SyntaxException("Invalid pattern syntax, expected underscore");
+        }
+        next = tokenizer->popToken();
+        clause->setThirdParam(true);
+    }
+
+    if (!next->isToken(TokenType::Rparenthesis)) { throw SyntaxException("Expected right parenthesis"); }
+
+    validatePatternStructure(clause);
     return clause;
 }
 
@@ -154,6 +198,15 @@ std::shared_ptr<WithClause> PQLParser::extractWithClause() {
     clause->setSecondParam(rightRef);
     validateWithRefType(leftRef, rightRef);
     return clause;
+}
+
+void PQLParser::validatePatternStructure(const std::shared_ptr<PatternClause> clause) {
+    if (clause->hasThirdParam()) {
+        ExpressionSpec spec = clause->getSecondParam();
+        if (spec.first != ExpressionSpecType::Wildcard) {
+            throw SyntaxException("Invalid pattern structure, wildcard as second param expected");
+        }
+    }
 }
 
 void PQLParser::validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause) {

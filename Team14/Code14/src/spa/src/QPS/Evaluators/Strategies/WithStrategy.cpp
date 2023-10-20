@@ -25,10 +25,10 @@ std::shared_ptr<Result> WithStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef
     auto rightRep = rightRef.getRep();
 
     if (leftRef == rightRef) {// same attr ref
-        res->setTuples(QPSUtil::entityToGetterMap[leftEntityType](pkbReader));
+        res->setTuples(QPSUtil::entityGetterMap[leftEntityType](pkbReader));
     } else {// different synonyms
-        auto tuples = join(QPSUtil::entityToGetterMap[leftEntityType](pkbReader), leftRef.getAttrName(),
-                           QPSUtil::entityToGetterMap[rightEntityType](pkbReader), rightRef.getAttrName());
+        auto tuples = join(QPSUtil::entityGetterMap[leftEntityType](pkbReader), leftRef.getAttrName(),
+                           QPSUtil::entityGetterMap[rightEntityType](pkbReader), rightRef.getAttrName());
         res->setTuples(tuples);
     }
     return res;
@@ -37,7 +37,7 @@ std::shared_ptr<Result> WithStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef
 std::shared_ptr<Result> WithStrategy::evaluateSynAny(Ref &synRef, Ref &anyRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     auto synEntityType = synRef.getEntityType();
-    auto tuples = filter(QPSUtil::entityToGetterMap[synEntityType](pkbReader), synRef.getAttrName(), anyRef.getRep());
+    auto tuples = filter(QPSUtil::entityGetterMap[synEntityType](pkbReader), synRef.getAttrName(), anyRef.getRep());
     res->setTuples(tuples);
     return res;
 }
@@ -56,7 +56,7 @@ std::vector<std::vector<Entity>> WithStrategy::join(std::vector<Entity> v1, Attr
 
     for (const auto &e1: v1) {
         for (const auto &e2: v2) {
-            if (QPSUtil::attrNameToStringMap[a1](e1) == QPSUtil::attrNameToStringMap[a2](e2)) {
+            if (QPSUtil::getValueFunc[a1](e1) == QPSUtil::getValueFunc[a2](e2)) {
                 res.push_back({e1, e2});
             }
         }
@@ -68,7 +68,7 @@ std::vector<std::vector<Entity>> WithStrategy::join(std::vector<Entity> v1, Attr
 std::vector<Entity> WithStrategy::filter(std::vector<Entity> v, AttrName a, StringRep rep) const {
     std::vector<Entity> res;
     for (const auto &e: v) {
-        if (QPSUtil::attrNameToStringMap[a](e) == rep) { res.push_back(e); }
+        if (QPSUtil::getValueFunc[a](e) == rep) { res.push_back(e); }
     }
 
     return res;

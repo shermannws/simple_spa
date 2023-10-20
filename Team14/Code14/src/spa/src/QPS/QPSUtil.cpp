@@ -4,26 +4,21 @@
 #include "QPS/Evaluators/Strategies/CallsSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/FollowsStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/FollowsSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/IfPatternStrategy.h"
 #include "QPS/Evaluators/Strategies/ModifiesSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/NextStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/NextSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/ParentStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/ParentSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/UsesSuchThatStrategy.h"
+#include "QPS/Evaluators/Strategies/WhilePatternStrategy.h"
 #include "QPS/Evaluators/Strategies/WithStrategy.h"
 
 std::unordered_set<std::string> QPSUtil::designEntities = {
-        AppConstants::STRING_PROCEDURE,
-        AppConstants::STRING_STATEMENT,
-        AppConstants::STRING_READ,
-        AppConstants::STRING_PRINT,
-        AppConstants::STRING_ASSIGN,
-        AppConstants::STRING_CALL,
-        AppConstants::STRING_WHILE,
-        AppConstants::STRING_IF,
-        AppConstants::STRING_VARIABLE,
+        AppConstants::STRING_PROCEDURE, AppConstants::STRING_STATEMENT, AppConstants::STRING_READ,
+        AppConstants::STRING_PRINT,     AppConstants::STRING_ASSIGN,    AppConstants::STRING_CALL,
+        AppConstants::STRING_WHILE,     AppConstants::STRING_IF,        AppConstants::STRING_VARIABLE,
         AppConstants::STRING_CONSTANT,
-
 };
 
 std::unordered_map<std::string, TokenType> QPSUtil::strToTokenTypeMap = {
@@ -40,6 +35,8 @@ std::unordered_map<std::string, TokenType> QPSUtil::strToTokenTypeMap = {
         {AppConstants::STRING_UNDERSCORE, TokenType::Underscore},
         {AppConstants::STRING_DOT, TokenType::Dot},
         {AppConstants::STRING_EQUAL, TokenType::Equal},
+        {AppConstants::STRING_LTUPLE, TokenType::Ltuple},
+        {AppConstants::STRING_RTUPLE, TokenType::Rtuple},
 };
 
 std::unordered_map<std::string, AttrName> QPSUtil::strToAttrNameMap = {
@@ -61,25 +58,18 @@ std::unordered_map<StringRep, ClauseType> QPSUtil::repClauseTypeMap = {
         {AppConstants::STRING_NEXTSTAR, ClauseType::NextStar},
 };
 
+std::unordered_map<QueryEntityType, ClauseType> QPSUtil::entityToClauseMap = {
+        {QueryEntityType::Assign, ClauseType::Assign},
+        {QueryEntityType::While, ClauseType::While},
+        {QueryEntityType::If, ClauseType::If},
+};
+
 std::unordered_map<ClauseType, ClauseArgType> QPSUtil::typeToArgTypeMap = {
         {ClauseType::Uses, StmtrefProcVar},    {ClauseType::Modifies, StmtrefProcVar},
         {ClauseType::Follows, StmtrefStmtref}, {ClauseType::FollowsStar, StmtrefStmtref},
         {ClauseType::Parent, StmtrefStmtref},  {ClauseType::ParentStar, StmtrefStmtref},
         {ClauseType::Next, StmtrefStmtref},    {ClauseType::NextStar, StmtrefStmtref},
         {ClauseType::Calls, ProcProc},         {ClauseType::CallsStar, ProcProc},
-};
-
-std::unordered_map<QueryEntityType, std::unordered_set<AttrName>> QPSUtil::entityToAttrNamesMap = {
-        {QueryEntityType::Call, std::unordered_set{AttrName::ProcName, AttrName::StmtNo}},
-        {QueryEntityType::Procedure, std::unordered_set{AttrName::ProcName}},
-        {QueryEntityType::Read, std::unordered_set{AttrName::VarName, AttrName::StmtNo}},
-        {QueryEntityType::Print, std::unordered_set{AttrName::VarName, AttrName::StmtNo}},
-        {QueryEntityType::Variable, std::unordered_set{AttrName::VarName}},
-        {QueryEntityType::Stmt, std::unordered_set{AttrName::StmtNo}},
-        {QueryEntityType::While, std::unordered_set{AttrName::StmtNo}},
-        {QueryEntityType::If, std::unordered_set{AttrName::StmtNo}},
-        {QueryEntityType::Assign, std::unordered_set{AttrName::StmtNo}},
-        {QueryEntityType::Constant, std::unordered_set{AttrName::Value}},
 };
 
 std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
@@ -139,11 +129,42 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
                  [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
                      return std::make_shared<AssignPatternStrategy>(pkbReader);
                  }},
+                {ClauseType::If,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<IfPatternStrategy>(pkbReader);
+                 }},
+                {ClauseType::While,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<WhilePatternStrategy>(pkbReader);
+                 }},
                 {ClauseType::With,
                  [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
                      return std::make_shared<WithStrategy>(pkbReader);
                  }},
 };
+
+std::unordered_map<QueryEntityType, std::function<std::vector<Entity>(std::shared_ptr<PkbReader>)>>
+        QPSUtil::entityGetterMap = {
+                {QueryEntityType::Procedure,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllProcedures(); }},
+                {QueryEntityType::Stmt,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllStatements(); }},
+                {QueryEntityType::Assign,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllAssign(); }},
+                {QueryEntityType::Variable,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllVariables(); }},
+                {QueryEntityType::Constant,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllConstants(); }},
+                {QueryEntityType::While,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllWhile(); }},
+                {QueryEntityType::If,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllIf(); }},
+                {QueryEntityType::Read,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllRead(); }},
+                {QueryEntityType::Print,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllPrint(); }},
+                {QueryEntityType::Call,
+                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllCall(); }}};
 
 std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
         {QueryEntityType::Assign, StatementType::Assign}, {QueryEntityType::Print, StatementType::Print},
@@ -151,41 +172,31 @@ std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
         {QueryEntityType::While, StatementType::While},   {QueryEntityType::Stmt, StatementType::Stmt},
         {QueryEntityType::Call, StatementType::Call}};
 
-std::unordered_map<QueryEntityType, std::function<std::vector<Entity>(std::shared_ptr<PkbReader>)>>
-        QPSUtil::entityToGetterMap = {
-                {QueryEntityType::Procedure,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::vector<Entity> {
-                     return pkbReader->getAllProcedures();
-                 }},
-                {QueryEntityType::Stmt,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::vector<Entity> {
-                     return pkbReader->getAllStatements();
-                 }},
-                {QueryEntityType::Assign,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::vector<Entity> { return pkbReader->getAllAssign(); }},
-                {QueryEntityType::Variable,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::vector<Entity> {
-                     return pkbReader->getAllVariables();
-                 }},
-                {QueryEntityType::Constant,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::vector<Entity> {
-                     return pkbReader->getAllConstants();
-                 }},
-                {QueryEntityType::While,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::vector<Entity> { return pkbReader->getAllWhile(); }},
-                {QueryEntityType::If,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::vector<Entity> { return pkbReader->getAllIf(); }},
-                {QueryEntityType::Read,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::vector<Entity> { return pkbReader->getAllRead(); }},
-                {QueryEntityType::Print,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::vector<Entity> { return pkbReader->getAllPrint(); }},
-                {QueryEntityType::Call,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::vector<Entity> { return pkbReader->getAllCall(); }},
 
+std::unordered_map<AttrName, std::unordered_set<QueryEntityType>> QPSUtil::attrNameToTypeMap = {
+        {AttrName::StmtNo, QPSUtil::stmtRefEntities},
+        {AttrName::ProcName, std::unordered_set<QueryEntityType>{QueryEntityType::Procedure, QueryEntityType::Call}},
+        {AttrName::VarName,
+         std::unordered_set<QueryEntityType>{QueryEntityType::Variable, QueryEntityType::Read, QueryEntityType::Print}},
+        {AttrName::Value, std::unordered_set<QueryEntityType>{QueryEntityType::Constant}}};
 
-};
+Synonym QPSUtil::getSyn(std::string elem) {
+    std::size_t dotPos = elem.find('.');
+    if (dotPos != std::string::npos) {// attrRef
+        return elem.substr(0, dotPos);
+    }
+    return elem;
+}
 
-std::unordered_map<AttrName, std::function<std::string(Entity)>> QPSUtil::attrNameToStringMap = {
+std::string QPSUtil::getAttrName(std::string elem) {
+    std::size_t dotPos = elem.find('.');
+    if (dotPos != std::string::npos) {// attrRef
+        return elem.substr(dotPos + 1);
+    }
+    return "";
+}
+
+std::unordered_map<AttrName, std::function<std::string(Entity)>> QPSUtil::getValueFunc = {
         {AttrName::ProcName,
          [](const Entity &e) -> std::string {
              if (e.getEntityType() == EntityType::Procedure) {

@@ -1105,7 +1105,7 @@ TEST_CASE("Invalid processSuchThat cases") {
 }
 
 TEST_CASE("processPatternClause") {
-    SECTION("Valid wildcard pattern") {
+    SECTION("Valid wildcard assign pattern") {
         PQLParser parser("assign a; variable v;\nSelect a pattern a(_,_)");
         Query query = parser.parse();
 
@@ -1120,7 +1120,7 @@ TEST_CASE("processPatternClause") {
         REQUIRE(rightRef.second.empty());
     }
 
-    SECTION("Valid pattern, Synonym entRef and exact match") {
+    SECTION("Valid assign pattern, Synonym entRef and exact match") {
         PQLParser parser("assign a; variable v;\nSelect a pattern a(v,\"x * (b * a + (n + (1%c))) \")");
         Query query = parser.parse();
 
@@ -1135,7 +1135,7 @@ TEST_CASE("processPatternClause") {
         REQUIRE(rightRef.second == "((x)*(((b)*(a))+((n)+((1)%(c)))))");
     }
 
-    SECTION("Valid pattern, Synonym entRef and exact match") {
+    SECTION("Valid assign pattern, Synonym entRef and exact match") {
         PQLParser parser("assign a; variable v;\nSelect a pattern a(\"y\",_\"x\"_)");
         Query query = parser.parse();
 
@@ -1150,7 +1150,7 @@ TEST_CASE("processPatternClause") {
         REQUIRE(rightRef.second == "(x)");
     }
 
-    SECTION("Valid pattern, Synonym entRef and exact match") {
+    SECTION("Valid assign pattern, Synonym entRef and exact match") {
         PQLParser parser("assign a; variable v;\nSelect a such that Uses(a, v) pattern a(\"y\",_\"x\"_)");
         Query query = parser.parse();
 
@@ -1178,6 +1178,97 @@ TEST_CASE("processPatternClause") {
         REQUIRE(rightRef1.getRep() == "v");
     }
 
+    SECTION("Valid if pattern syntax firstparam:variable") {
+        PQLParser parser("if ifs; variable v;\nSelect ifs pattern ifs(v,_,_)");
+        Query query = parser.parse();
+
+        std::shared_ptr<PatternClause> actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause->getFirstParam();
+        ExpressionSpec rightRef = actualClause->getSecondParam();
+        REQUIRE(actualClause->getType() == ClauseType::If);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getRep() == "v");
+        REQUIRE(rightRef.first == ExpressionSpecType::Wildcard);
+        REQUIRE(rightRef.second.empty());
+    }
+
+    SECTION("Valid if pattern syntax firstparam:ident") {
+        PQLParser parser("if ifs;\nSelect ifs pattern ifs(\"variable\",_,_)");
+        Query query = parser.parse();
+
+        std::shared_ptr<PatternClause> actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause->getFirstParam();
+        ExpressionSpec rightRef = actualClause->getSecondParam();
+        REQUIRE(actualClause->getType() == ClauseType::If);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Ident);
+        REQUIRE(leftRef.getRep() == "variable");
+        REQUIRE(rightRef.first == ExpressionSpecType::Wildcard);
+        REQUIRE(rightRef.second.empty());
+    }
+
+    SECTION("Valid if pattern syntax firstparam:wildcard") {
+        PQLParser parser("if ifs;\nSelect ifs pattern ifs(_,_,_)");
+        Query query = parser.parse();
+
+        std::shared_ptr<PatternClause> actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause->getFirstParam();
+        ExpressionSpec rightRef = actualClause->getSecondParam();
+        REQUIRE(actualClause->getType() == ClauseType::If);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.first == ExpressionSpecType::Wildcard);
+        REQUIRE(rightRef.second.empty());
+    }
+
+    SECTION("Valid while pattern wildcard lhs") {
+        PQLParser parser("while w; Select w pattern w(_,_)");
+        Query query = parser.parse();
+
+        std::shared_ptr<PatternClause> actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause->getFirstParam();
+        ExpressionSpec rightRef = actualClause->getSecondParam();
+        REQUIRE(actualClause->getType() == ClauseType::While);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.first == ExpressionSpecType::Wildcard);
+        REQUIRE(rightRef.second.empty());
+    }
+
+    SECTION("Valid while pattern ident lhs") {
+        PQLParser parser("while w; Select w pattern w(\"x\",_)");
+        Query query = parser.parse();
+
+        std::shared_ptr<PatternClause> actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause->getFirstParam();
+        ExpressionSpec rightRef = actualClause->getSecondParam();
+        REQUIRE(actualClause->getType() == ClauseType::While);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Ident);
+        REQUIRE(leftRef.getRep() == "x");
+        REQUIRE(rightRef.first == ExpressionSpecType::Wildcard);
+        REQUIRE(rightRef.second.empty());
+    }
+
+    SECTION("Valid while pattern var synonym lhs") {
+        PQLParser parser("while w; variable v; Select w pattern w(v,_)");
+        Query query = parser.parse();
+
+        std::shared_ptr<PatternClause> actualClause = query.getPattern()[0];
+        Ref leftRef = actualClause->getFirstParam();
+        ExpressionSpec rightRef = actualClause->getSecondParam();
+        REQUIRE(actualClause->getType() == ClauseType::While);
+        REQUIRE(leftRef.getType() == RefType::EntRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getRep() == "v");
+        REQUIRE(rightRef.first == ExpressionSpecType::Wildcard);
+        REQUIRE(rightRef.second.empty());
+    }
+
+
     SECTION("invalid pattern") {
         PQLParser parser("assign a; variable v;\nSelect a pattern a(\"y\",_ _)");
         REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
@@ -1203,6 +1294,27 @@ TEST_CASE("processPatternClause") {
         parser = PQLParser("assign a; variable v;\nSelect a pattern v(\"y\" _)");
         REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
 
+        parser = PQLParser("assign a; variable v;\nSelect a pattern a(\"y\",_,)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("assign a; variable v;\nSelect a pattern a(\"y\",_,_");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("if i; variable v;\nSelect a pattern i(_,1,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("if i; variable v;\nSelect a pattern i(v,_,1)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("if i; variable v;\nSelect a pattern i(v,_,syn)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("if i; variable v;\nSelect a pattern i(v,_,\"hello\")");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+        parser = PQLParser("while w; variable v; Select w pattern w(_, v)");
+        REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
         parser = PQLParser("assign a; variable v;\nSelect a pattern v(_,_)");
         REQUIRE_THROWS_AS(parser.parse(), SemanticException);
 
@@ -1210,6 +1322,30 @@ TEST_CASE("processPatternClause") {
         REQUIRE_THROWS_AS(parser.parse(), SemanticException);
 
         parser = PQLParser("assign a; variable v;\nSelect a pattern a(v1,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("assign a;\nSelect a pattern i(_,_,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("assign i;\nSelect i pattern i(_,_,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("while w; variable v;\nSelect w pattern w(v, \"x\")");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("stmt s; variable v;\nSelect s pattern s(v,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("while w; constant v;\nSelect w pattern w(v,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("while w; Select a pattern while(_,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("while w; constant c; Select a pattern w(c,_)");
+        REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+
+        parser = PQLParser("while w; Select w pattern w(_, _, _)");// should be assumed as if pattern
         REQUIRE_THROWS_AS(parser.parse(), SemanticException);
     }
 }
@@ -1513,4 +1649,41 @@ TEST_CASE("valid multi-clause queries") {
         REQUIRE(*stClauses[0] == *sc1);
         REQUIRE(*stClauses[1] == *sc2);
     }
+}
+
+TEST_CASE("tuple and boolean result clause") {
+
+    PQLParser parser("assign a, b, c, d; Select<a  , b  , c> ");
+    Query query = parser.parse();
+
+    REQUIRE(query.getSelect().size() == 3);
+
+    parser = PQLParser("assign a, b, c, d; Select<a.stmt#  , b> ");
+    auto query2 = parser.parse();
+
+    REQUIRE(query2.getSelect().size() == 2);
+    REQUIRE(query2.getSelect()[0] == "a.stmt#");
+
+    parser = PQLParser("procedure a, b, c, d; Select a.procName ");
+    auto query3 = parser.parse();
+    REQUIRE(query3.getSelect().size() == 1);
+    REQUIRE(query3.getSelect()[0] == "a.procName");
+
+    parser = PQLParser("variable v; constant k; procedure p; read r; print pr; call c; Select <p.procName, c.procName, "
+                       "v.varName, r.varName, pr.varName, k.value> ");
+    auto query4 = parser.parse();
+    REQUIRE(query4.getSelect().size() == 6);
+
+    parser = PQLParser("stmt stmt; read read; print print; call call; while while; if if; assign assign; Select "
+                       "<stmt.stmt#, read.stmt#, print.stmt#, call.stmt#, while.stmt#, if.stmt#, assign.stmt#>");
+    auto query5 = parser.parse();
+    REQUIRE(query5.getSelect().size() == 7);
+
+    parser = PQLParser("Select BOOLEAN");// TODO validate boolean by removing from Select
+    auto query6 = parser.parse();
+    REQUIRE(query6.getSelect().size() == 0);
+
+    parser = PQLParser("assign BOOLEAN; Select BOOLEAN");
+    auto query7 = parser.parse();
+    REQUIRE(query7.getSelect().size() == 1);
 }

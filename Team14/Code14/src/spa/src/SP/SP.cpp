@@ -1,4 +1,5 @@
 #include <iostream>
+#include <utility>
 
 #include "SP.h"
 #include "SP/AST/Traverser/Traverser.h"
@@ -10,6 +11,7 @@
 #include "SP/AST/Visitors/PatternExtractorVisitor.h"
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/CFG/CFGBuilder.h"
+#include "SP/CFG/CFGExtractor.h"
 #include "SP/Errors/SemanticError.h"
 #include "SP/Errors/SyntaxError.h"
 #include "SP/Validators/SemanticValidator/SemanticValidator.h"
@@ -17,20 +19,20 @@
 #include "SPParser.h"
 #include "SPTokenizer.h"
 
-SP::SP(std::shared_ptr<PkbWriter> pkbWriter) : pkbWriter(pkbWriter) {}
+SP::SP(std::shared_ptr<PkbWriter> pkbWriter) : pkbWriter(std::move(pkbWriter)) {}
 
 void SP::startSPProcessing(std::string &input) {
     try {
         // Tokenize the string input
-        SPTokenizer tokenizer = SPTokenizer(input);
+        SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
 
         // Syntactic Validator takes in tokens
-        SyntacticValidator syntacticValidator = SyntacticValidator(tokens);
+        SyntacticValidator syntacticValidator(tokens);
         syntacticValidator.validate();
 
         // Parse the tokens
-        SPParser parser = SPParser();
+        SPParser parser;
         std::shared_ptr<ProgramNode> root = parser.parse(tokens);
 
         // Semantically validate from the root node
@@ -53,15 +55,18 @@ void SP::startSPProcessing(std::string &input) {
                 parentExtractor, callsExtractor,   patternExtractor};
 
         // Traverse the AST from root node
-        Traverser traverser = Traverser(visitors);
+        Traverser traverser(visitors);
         traverser.traverse(root);
 
         // Trigger PKB to do transitivity calculations
         pkbWriter->triggerTransitiveCalc();
 
         // Build CFGs
-        std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
-                CFGBuilder::buildAllCFG(root);
+        auto cfgMap = CFGBuilder::buildAllCFG(root);
+
+        // Handle CFG-related relationships and save CFG to PKB
+        CFGExtractor cfgExtractor(pkbWriter);
+        cfgExtractor.extractRelationships(cfgMap);
     } catch (const SyntaxError &e) {
         std::cout << "\n"
                   << e.what() << "\n\n"
