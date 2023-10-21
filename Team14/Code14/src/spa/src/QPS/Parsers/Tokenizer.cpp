@@ -2,13 +2,31 @@
 #include <string>
 #include <vector>
 
+#include "Commons/AppConstants.h"
 #include "QPS/Exceptions/SyntaxException.h"
 #include "Token.h"
 #include "Tokenizer.h"
 
+std::vector<std::string> specials{AppConstants::STRING_OPEN_ROUND_PARENTHESIS,
+                                  AppConstants::STRING_CLOSE_ROUND_PARENTHESIS,
+                                  AppConstants::STRING_PLUS,
+                                  AppConstants::STRING_MINUS,
+                                  AppConstants::STRING_TIMES,
+                                  AppConstants::STRING_DIVIDE,
+                                  AppConstants::STRING_MODULO,
+                                  AppConstants::STRING_SEMICOLON,
+                                  AppConstants::STRING_COMMA,
+                                  AppConstants::STRING_QUOTE,
+                                  AppConstants::STRING_UNDERSCORE,
+                                  AppConstants::STRING_DOT,
+                                  AppConstants::STRING_EQUAL,
+                                  AppConstants::STRING_LTUPLE,
+                                  AppConstants::STRING_RTUPLE};
 
-std::vector<std::string> specials{"(", ")", ";", ",", "_", "+", "-", "*", "/", "%", "\"", "<", ">", "."};
-std::vector<std::string> stars{"Follows", "Parent", "Next", "Calls"};
+std::vector<std::string> stars{AppConstants::STRING_FOLLOWS, AppConstants::STRING_PARENT, AppConstants::STRING_NEXT,
+                               AppConstants::STRING_CALLS};
+
+std::vector<std::string> hashtags{AppConstants::STRING_STATEMENT};
 
 Tokenizer::Tokenizer(const std::string &input) : curr(0) { this->input = input; }
 
@@ -64,16 +82,17 @@ std::shared_ptr<Token> Tokenizer::popToken() {
             if (it_star != stars.end()) { res += popString(); }
         }
 
+        // handle # abstraction as one token
+        if (isCurrValid() && peekString() == "#") {
+            std::string temp = peekString();
+            auto it_star = std::find(hashtags.begin(), hashtags.end(), res);
+            if (it_star != hashtags.end()) { res += popString(); }
+        }
+
         // handle such that as one token
         if (isCurrValid() && res == "such" && peekToken()->getRep() == "that") {
             res += " that";
             popToken();
-        }
-
-        // handler stmt# as one token
-        if (isCurrValid() && peekString() == "#") {
-            std::string temp = peekString();
-            if (res == "stmt") { res += popString(); }
         }
 
         return std::make_shared<Token>(res);

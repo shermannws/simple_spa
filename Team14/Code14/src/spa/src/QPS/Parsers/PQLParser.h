@@ -60,6 +60,11 @@ private:
     void processPatternClause(Query &query);
 
     /**
+     * @brief parses a chain of with clause and adds the clauses to the query
+     */
+    void processWithClause(Query &query);
+
+    /**
      * @brief Returns a SuchThatClause if syntax is valid, otherwise throws a SyntaxException
      * @return clause the shared pointer of SuchThat Clause
      */
@@ -72,10 +77,28 @@ private:
     std::shared_ptr<PatternClause> extractPatternClause();
 
     /**
+     * @brief Returns a WithClause if syntax is valid, otherwise throws a SyntaxException
+     * @param return the shared pointer of Pattern Clause
+     */
+    std::shared_ptr<WithClause> extractWithClause();
+
+    /**
      * @brief Validates SuchThatRefType LHS & RHS according to ClauseType
      * @param clause the shared pointer of SuchThatClause to validate
      */
     void validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause);
+
+    /**
+     * @brief Validates WithClauseRefType LHS & RHS according to ClauseType
+     * @param clause the shared pointer of WithClause to validate
+     */
+    void validateWithRefType(Ref &leftRef, Ref &rightRef);
+
+    /**
+     * @brief Validates Pattern Clause structure according to the existence of thirdParam
+     * @param clause The shared pointer of PatternClause to validate
+     */
+    void validatePatternStructure(const std::shared_ptr<PatternClause> clause);
 
     /**
      * @brief Returns the next token as Ref if it is Integer, Identity, Wildcard or Synonym,

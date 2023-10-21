@@ -1,5 +1,7 @@
 #include "Statement.h"
 
+Statement::Statement() : Entity() {}
+
 Statement::Statement(StatementNumber lineNo, StatementType statementType)
     : Entity(std::make_shared<EntityValue>(std::to_string(lineNo)), EntityType::Statement) {
     this->statementType = statementType;

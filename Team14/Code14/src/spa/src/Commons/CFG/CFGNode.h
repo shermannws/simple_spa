@@ -33,6 +33,12 @@ private:
      */
     StatementType statementType;
 
+    /**
+     * A field to store related information that a CFGNode may have.
+     * For example, Call CFGNodes will store procName, Read and Print CFGNodes will store varName
+     */
+    AttrValue attrValue;
+
 public:
     // Added to allow this class to be used in dynamic_cast expression
     virtual ~CFGNode() = default;
@@ -53,17 +59,16 @@ public:
     /**
      * Creates and initialises a CFGNode.
      * @param statementNumber The statement number of the node
-     * @param parent A vector of parent nodes
-     * @param children A vector of children nodes
+     * @param statementType The type of the statement represented by the node
+     * @param attrValue Related information that this CFGNode should hold
      */
-    CFGNode(StatementNumber statementNumber, std::vector<std::shared_ptr<CFGNode>> parents,
-            std::vector<std::shared_ptr<CFGNode>> children);
+    CFGNode(StatementNumber statementNumber, StatementType statementType, AttrValue attrValue);
 
     /**
      * Returns the statement number of the node.
      * @return The statement number of the node
      */
-    StatementNumber getStatementNumber();
+    StatementNumber getStatementNumber() const;
 
     /**
      * Returns the parent nodes of the current CFGNode.
@@ -96,8 +101,14 @@ public:
     void removeChildNode(const std::shared_ptr<CFGNode> &child);
 
     /**
-     * Returns the statement type of this CFGNode
+     * Returns the statement type of this CFGNode.
      * @return Statement type of the CFGNode
      */
-    StatementType getStatementType();
+    StatementType getStatementType() const;
+
+    /**
+     * Returns the attribute value of this CFGNode.
+     * @return AttrValue of the CFGNode
+     */
+    AttrValue getAttrValue() const;
 };

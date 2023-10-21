@@ -27,7 +27,6 @@ public:
      */
     void validateResultClause(Query &query);
 
-
     /**
      * @brief Validates all the clauses in the given query
      * @param query the query object
@@ -50,10 +49,17 @@ private:
     void validateClauseSemantics(const Query &query, std::shared_ptr<PatternClause> clause);
 
     /**
+     * @brief Validates WithClause semantically, throws a SemanticException if semantically invalid
+     * @param query the Query object
+     * @param clause the shared pointer of WithClause to validate
+     */
+    void validateClauseSemantics(const Query &query, std::shared_ptr<WithClause> clause);
+
+    /**
      * @brief validates a synonym in the result-clause, throws semantic error if synonym is semantically invalid
      * @param query query that contains the result-clause
      * @param elem synonym element to validate
-     */
+     **/
     void validateResultSynonym(const Query &query, Synonym elem);
 
     /**

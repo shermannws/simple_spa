@@ -1,11 +1,13 @@
 #include "PqlSemanticValidator.h"
 #include "EntrefExprSpecHandler.h"
+#include "NoExprHandler.h"
 #include "ProcProcHandler.h"
 #include "QPS/Clauses/SuchThatClause.h"
 #include "QPS/Exceptions/SemanticException.h"
 #include "StmtrefProcVarHandler.h"
 #include "StmtrefStmtrefHandler.h"
 #include "SynonymHandler.h"
+#include "WithHandler.h"
 
 PqlSemanticValidator::PqlSemanticValidator() = default;
 
@@ -41,7 +43,7 @@ void PqlSemanticValidator::validateResultSynonym(const Query &query, Synonym ele
 
 void PqlSemanticValidator::validateResultAttrRef(const Query &query, Synonym elem, size_t dotPos) {
     Synonym syn = elem.substr(0, dotPos);
-    AttrName attrName = elem.substr(dotPos + 1);
+    AttrName attrName = QPSUtil::strToAttrNameMap[elem.substr(dotPos + 1)];
     EntityPtr entity = query.getEntity(syn);
     if (!entity) { throw SemanticException("Undeclared synonym in Select clause"); }
     auto expectedEntityTypes = QPSUtil::attrNameToTypeMap[attrName];
@@ -59,6 +61,7 @@ bool PqlSemanticValidator::isBooleanResult(const Query &query) {
 void PqlSemanticValidator::validateConstraintClauses(const Query &query) {
     for (const auto &clause: query.getSuchThat()) { validateClauseSemantics(query, clause); }
     for (const auto &clause: query.getPattern()) { validateClauseSemantics(query, clause); }
+    for (const auto &clause: query.getWith()) { validateClauseSemantics(query, clause); }
 }
 
 
@@ -73,7 +76,15 @@ void PqlSemanticValidator::validateClauseSemantics(const Query &query, const std
 
 void PqlSemanticValidator::validateClauseSemantics(const Query &query, const std::shared_ptr<PatternClause> clause) {
     std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
+    std::shared_ptr<NoExprHandler> noExprHandler = std::make_shared<NoExprHandler>();
     std::shared_ptr<EntrefExprSpecHandler> EntExprHandler = std::make_shared<EntrefExprSpecHandler>();
-    synonymHandler->setNext(EntExprHandler);
+    synonymHandler->setNext(noExprHandler)->setNext(EntExprHandler);
+    synonymHandler->handle(query, clause);
+}
+
+void PqlSemanticValidator::validateClauseSemantics(const Query &query, const std::shared_ptr<WithClause> clause) {
+    std::shared_ptr<SynonymHandler> synonymHandler = std::make_shared<SynonymHandler>();
+    std::shared_ptr<WithHandler> withHandler = std::make_shared<WithHandler>();
+    synonymHandler->setNext(withHandler);
     synonymHandler->handle(query, clause);
 }

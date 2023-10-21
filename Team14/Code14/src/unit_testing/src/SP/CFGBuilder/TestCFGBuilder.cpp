@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <memory>
 #include <unordered_map>
 
@@ -24,6 +25,17 @@ bool isSameStatements(const std::vector<std::shared_ptr<CFGNode>> &parents,
     return parentStmtNums == correctParentStmtNums;
 }
 
+/**
+ * Helper function to sort a vector of shared pointers to CFGNodes.
+ * @param cfgNodes A vector of shared pointers to CFGNodes
+ */
+void sortCFGNodes(std::vector<std::shared_ptr<CFGNode>> &cfgNodes) {
+    auto lambda = [](const std::shared_ptr<CFGNode> node1, const std::shared_ptr<CFGNode> node2) -> bool {
+        return node1->getStatementNumber() < node2->getStatementNumber();
+    };
+    std::sort(cfgNodes.begin(), cfgNodes.end(), lambda);
+}
+
 TEST_CASE("Test single procedure") {
     std::string sourceProgram = "procedure Proc1 {"
                                 "x = 1 + 2 * y - (1 / var) % 5;"// stmt 1
@@ -43,33 +55,26 @@ TEST_CASE("Test single procedure") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
-            CFGBuilder::buildAllCFG(rootNode);
+    auto cfgs = CFGBuilder::buildAllCFG(rootNode);
+
+    // Check CFGs
     REQUIRE(cfgs.size() == 1);
     REQUIRE(cfgs.count("Proc1") == 1);
 
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
-    REQUIRE(proc1CFG.size() == 8);
+    auto &[cfgHead, proc1CFGNodes] = cfgs["Proc1"];
+    REQUIRE(cfgHead->getStatementNumber() == 1);
+    REQUIRE(proc1CFGNodes.size() == 8);
 
-    // map stmtnum to stmttype
-    std::vector<std::pair<StatementNumber, StatementType>> numToTypeVector = {
-            {1, StatementType::Assign}, {2, StatementType::Read},   {3, StatementType::Print},
-            {4, StatementType::If},     {5, StatementType::Assign}, {6, StatementType::Assign},
-            {7, StatementType::While},  {8, StatementType::Print},
-    };
+    sortCFGNodes(proc1CFGNodes);
 
-    for (auto [stmtNum, stmtType]: numToTypeVector) {
-        auto stmt = Statement(stmtNum, stmtType);
-        REQUIRE(proc1CFG.count(stmt) == 1);
-    }
-    auto node1 = proc1CFG[Statement(1, StatementType::Assign)];
-    auto node2 = proc1CFG[Statement(2, StatementType::Read)];
-    auto node3 = proc1CFG[Statement(3, StatementType::Print)];
-    auto node4 = proc1CFG[Statement(4, StatementType::If)];
-    auto node5 = proc1CFG[Statement(5, StatementType::Assign)];
-    auto node6 = proc1CFG[Statement(6, StatementType::Assign)];
-    auto node7 = proc1CFG[Statement(7, StatementType::While)];
-    auto node8 = proc1CFG[Statement(8, StatementType::Print)];
+    auto node1 = proc1CFGNodes[0];
+    auto node2 = proc1CFGNodes[1];
+    auto node3 = proc1CFGNodes[2];
+    auto node4 = proc1CFGNodes[3];
+    auto node5 = proc1CFGNodes[4];
+    auto node6 = proc1CFGNodes[5];
+    auto node7 = proc1CFGNodes[6];
+    auto node8 = proc1CFGNodes[7];
 
     // Statement 1
     REQUIRE(node1->getStatementType() == StatementType::Assign);
@@ -150,18 +155,42 @@ TEST_CASE("Test multiple procedures") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
-            CFGBuilder::buildAllCFG(rootNode);
+    auto cfgs = CFGBuilder::buildAllCFG(rootNode);
+
+    // Check CFGs
     REQUIRE(cfgs.size() == 6);
+    REQUIRE(cfgs.count("Proc1") == 1);
+    REQUIRE(cfgs.count("Proc2") == 1);
+    REQUIRE(cfgs.count("Proc3") == 1);
+    REQUIRE(cfgs.count("Proc4") == 1);
+    REQUIRE(cfgs.count("Proc5") == 1);
+    REQUIRE(cfgs.count("Proc6") == 1);
+
+    auto &[proc1CFGHead, proc1CFGNodes] = cfgs["Proc1"];
+    auto &[proc2CFGHead, proc2CFGNodes] = cfgs["Proc2"];
+    auto &[proc3CFGHead, proc3CFGNodes] = cfgs["Proc3"];
+    auto &[proc4CFGHead, proc4CFGNodes] = cfgs["Proc4"];
+    auto &[proc5CFGHead, proc5CFGNodes] = cfgs["Proc5"];
+    auto &[proc6CFGHead, proc6CFGNodes] = cfgs["Proc6"];
+    REQUIRE(proc1CFGHead->getStatementNumber() == 1);
+    REQUIRE(proc2CFGHead->getStatementNumber() == 2);
+    REQUIRE(proc3CFGHead->getStatementNumber() == 3);
+    REQUIRE(proc4CFGHead->getStatementNumber() == 4);
+    REQUIRE(proc5CFGHead->getStatementNumber() == 5);
+    REQUIRE(proc6CFGHead->getStatementNumber() == 8);
+    REQUIRE(proc1CFGNodes.size() == 1);
+    REQUIRE(proc2CFGNodes.size() == 1);
+    REQUIRE(proc3CFGNodes.size() == 1);
+    REQUIRE(proc4CFGNodes.size() == 1);
+    REQUIRE(proc5CFGNodes.size() == 3);
+    REQUIRE(proc6CFGNodes.size() == 2);
+
+    // Proc1 to 4 has only one statement each, no need to sort
+    sortCFGNodes(proc5CFGNodes);
+    sortCFGNodes(proc6CFGNodes);
 
     SECTION("Test Proc1") {
-        REQUIRE(cfgs.count("Proc1") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
-        REQUIRE(proc1CFG.size() == 1);
-
-        auto stmt = Statement(1, StatementType::Assign);
-        REQUIRE(proc1CFG.count(stmt) == 1);
-        auto node1 = proc1CFG[stmt];
+        auto &node1 = proc1CFGNodes[0];
 
         REQUIRE(node1->getStatementType() == StatementType::Assign);
         REQUIRE(node1->getStatementNumber() == 1);
@@ -170,13 +199,7 @@ TEST_CASE("Test multiple procedures") {
     }
 
     SECTION("Test Proc2") {
-        REQUIRE(cfgs.count("Proc2") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc2CFG = cfgs["Proc2"];
-        REQUIRE(proc2CFG.size() == 1);
-
-        auto stmt = Statement(2, StatementType::Read);
-        REQUIRE(proc2CFG.count(stmt) == 1);
-        auto node2 = proc2CFG[stmt];
+        auto &node2 = proc2CFGNodes[0];
 
         REQUIRE(node2->getStatementType() == StatementType::Read);
         REQUIRE(node2->getStatementNumber() == 2);
@@ -185,13 +208,7 @@ TEST_CASE("Test multiple procedures") {
     }
 
     SECTION("Test Proc3") {
-        REQUIRE(cfgs.count("Proc3") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc3CFG = cfgs["Proc3"];
-        REQUIRE(proc3CFG.size() == 1);
-
-        auto stmt = Statement(3, StatementType::Print);
-        REQUIRE(proc3CFG.count(stmt) == 1);
-        auto node3 = proc3CFG[stmt];
+        auto &node3 = proc3CFGNodes[0];
 
         REQUIRE(node3->getStatementType() == StatementType::Print);
         REQUIRE(node3->getStatementNumber() == 3);
@@ -200,13 +217,7 @@ TEST_CASE("Test multiple procedures") {
     }
 
     SECTION("Test Proc4") {
-        REQUIRE(cfgs.count("Proc4") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc4CFG = cfgs["Proc4"];
-        REQUIRE(proc4CFG.size() == 1);
-
-        auto stmt = Statement(4, StatementType::Call);
-        REQUIRE(proc4CFG.count(stmt) == 1);
-        auto node4 = proc4CFG[stmt];
+        auto &node4 = proc4CFGNodes[0];
 
         REQUIRE(node4->getStatementType() == StatementType::Call);
         REQUIRE(node4->getStatementNumber() == 4);
@@ -215,19 +226,9 @@ TEST_CASE("Test multiple procedures") {
     }
 
     SECTION("Test Proc5") {
-        REQUIRE(cfgs.count("Proc5") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc5CFG = cfgs["Proc5"];
-        REQUIRE(proc5CFG.size() == 3);
-
-        auto stmtIf = Statement(5, StatementType::If);
-        auto stmtThen = Statement(6, StatementType::Print);
-        auto stmtElse = Statement(7, StatementType::Read);
-        REQUIRE(proc5CFG.count(stmtIf) == 1);
-        REQUIRE(proc5CFG.count(stmtThen) == 1);
-        REQUIRE(proc5CFG.count(stmtElse) == 1);
-        auto node5 = proc5CFG[stmtIf];
-        auto node6 = proc5CFG[stmtThen];
-        auto node7 = proc5CFG[stmtElse];
+        auto &node5 = proc5CFGNodes[0];
+        auto &node6 = proc5CFGNodes[1];
+        auto &node7 = proc5CFGNodes[2];
 
         REQUIRE(node5->getStatementType() == StatementType::If);
         REQUIRE(node5->getStatementNumber() == 5);
@@ -250,16 +251,8 @@ TEST_CASE("Test multiple procedures") {
     }
 
     SECTION("Test Proc6") {
-        REQUIRE(cfgs.count("Proc6") == 1);
-        std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc6CFG = cfgs["Proc6"];
-        REQUIRE(proc6CFG.size() == 2);
-
-        auto stmtWhile = Statement(8, StatementType::While);
-        auto stmtAssign = Statement(9, StatementType::Assign);
-        REQUIRE(proc6CFG.count(stmtWhile) == 1);
-        REQUIRE(proc6CFG.count(stmtAssign) == 1);
-        auto node8 = proc6CFG[stmtWhile];
-        auto node9 = proc6CFG[stmtAssign];
+        auto &node8 = proc6CFGNodes[0];
+        auto &node9 = proc6CFGNodes[1];
 
         REQUIRE(node8->getStatementType() == StatementType::While);
         REQUIRE(node8->getStatementNumber() == 8);
@@ -312,18 +305,20 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
-            CFGBuilder::buildAllCFG(rootNode);
-    REQUIRE(cfgs.size() == 1);
+    auto cfgs = CFGBuilder::buildAllCFG(rootNode);
 
+    // Check CFGs
+    REQUIRE(cfgs.size() == 1);
     REQUIRE(cfgs.count("Proc1") == 1);
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
-    REQUIRE(proc1CFG.size() == 12);
+
+    auto &[cfgHead, proc1CFGNodes] = cfgs["Proc1"];
+    REQUIRE(cfgHead->getStatementNumber() == 1);
+    REQUIRE(proc1CFGNodes.size() == 12);
+
+    sortCFGNodes(proc1CFGNodes);
 
     // stmt 1
-    auto stmt1 = Statement(1, StatementType::If);
-    REQUIRE(proc1CFG.count(stmt1) == 1);
-    auto node1 = proc1CFG[stmt1];
+    auto &node1 = proc1CFGNodes[0];
     REQUIRE(node1->getStatementType() == StatementType::If);
     REQUIRE(node1->getStatementNumber() == 1);
     REQUIRE(node1->getParentNodes().empty());
@@ -332,9 +327,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
 
 
     // stmt 2
-    auto stmt2 = Statement(2, StatementType::If);
-    REQUIRE(proc1CFG.count(stmt2) == 1);
-    auto node2 = proc1CFG[stmt2];
+    auto &node2 = proc1CFGNodes[1];
     REQUIRE(node2->getStatementType() == StatementType::If);
     REQUIRE(node2->getStatementNumber() == 2);
     REQUIRE(node2->getParentNodes().size() == 1);
@@ -344,9 +337,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
 
 
     // stmt 3
-    auto stmt3 = Statement(3, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt3) == 1);
-    auto node3 = proc1CFG[stmt3];
+    auto &node3 = proc1CFGNodes[2];
     REQUIRE(node3->getStatementType() == StatementType::Print);
     REQUIRE(node3->getStatementNumber() == 3);
     REQUIRE(node3->getParentNodes().size() == 1);
@@ -355,9 +346,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     REQUIRE(isSameStatements(node3->getChildrenNodes(), {12}));
 
     // stmt 4
-    auto stmt4 = Statement(4, StatementType::If);
-    REQUIRE(proc1CFG.count(stmt4) == 1);
-    auto node4 = proc1CFG[stmt4];
+    auto &node4 = proc1CFGNodes[3];
     REQUIRE(node4->getStatementType() == StatementType::If);
     REQUIRE(node4->getStatementNumber() == 4);
     REQUIRE(node4->getParentNodes().size() == 1);
@@ -367,9 +356,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
 
 
     // stmt 5
-    auto stmt5 = Statement(5, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt5) == 1);
-    auto node5 = proc1CFG[stmt5];
+    auto &node5 = proc1CFGNodes[4];
     REQUIRE(node5->getStatementType() == StatementType::Print);
     REQUIRE(node5->getStatementNumber() == 5);
     REQUIRE(node5->getParentNodes().size() == 1);
@@ -378,9 +365,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     REQUIRE(isSameStatements(node5->getChildrenNodes(), {12}));
 
     // stmt 6
-    auto stmt6 = Statement(6, StatementType::If);
-    REQUIRE(proc1CFG.count(stmt6) == 1);
-    auto node6 = proc1CFG[stmt6];
+    auto &node6 = proc1CFGNodes[5];
     REQUIRE(node6->getStatementType() == StatementType::If);
     REQUIRE(node6->getStatementNumber() == 6);
     REQUIRE(node6->getParentNodes().size() == 1);
@@ -390,9 +375,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
 
 
     // stmt 7
-    auto stmt7 = Statement(7, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt7) == 1);
-    auto node7 = proc1CFG[stmt7];
+    auto &node7 = proc1CFGNodes[6];
     REQUIRE(node7->getStatementType() == StatementType::Print);
     REQUIRE(node7->getStatementNumber() == 7);
     REQUIRE(node7->getParentNodes().size() == 1);
@@ -401,9 +384,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     REQUIRE(isSameStatements(node7->getChildrenNodes(), {12}));
 
     // stmt 8
-    auto stmt8 = Statement(8, StatementType::Read);
-    REQUIRE(proc1CFG.count(stmt8) == 1);
-    auto node8 = proc1CFG[stmt8];
+    auto &node8 = proc1CFGNodes[7];
     REQUIRE(node8->getStatementType() == StatementType::Read);
     REQUIRE(node8->getStatementNumber() == 8);
     REQUIRE(node8->getParentNodes().size() == 1);
@@ -412,9 +393,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     REQUIRE(isSameStatements(node8->getChildrenNodes(), {12}));
 
     // stmt 9
-    auto stmt9 = Statement(9, StatementType::If);
-    REQUIRE(proc1CFG.count(stmt9) == 1);
-    auto node9 = proc1CFG[stmt9];
+    auto &node9 = proc1CFGNodes[8];
     REQUIRE(node9->getStatementType() == StatementType::If);
     REQUIRE(node9->getStatementNumber() == 9);
     REQUIRE(node9->getParentNodes().size() == 1);
@@ -424,9 +403,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
 
 
     // stmt 10
-    auto stmt10 = Statement(10, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt10) == 1);
-    auto node10 = proc1CFG[stmt10];
+    auto &node10 = proc1CFGNodes[9];
     REQUIRE(node10->getStatementType() == StatementType::Print);
     REQUIRE(node10->getStatementNumber() == 10);
     REQUIRE(node10->getParentNodes().size() == 1);
@@ -435,9 +412,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     REQUIRE(isSameStatements(node10->getChildrenNodes(), {12}));
 
     // stmt 11
-    auto stmt11 = Statement(11, StatementType::Read);
-    REQUIRE(proc1CFG.count(stmt11) == 1);
-    auto node11 = proc1CFG[stmt11];
+    auto &node11 = proc1CFGNodes[10];
     REQUIRE(node11->getStatementType() == StatementType::Read);
     REQUIRE(node11->getStatementNumber() == 11);
     REQUIRE(node11->getParentNodes().size() == 1);
@@ -446,9 +421,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     REQUIRE(isSameStatements(node11->getChildrenNodes(), {12}));
 
     // stmt 12
-    auto stmt12 = Statement(12, StatementType::Assign);
-    REQUIRE(proc1CFG.count(stmt12) == 1);
-    auto node12 = proc1CFG[stmt12];
+    auto &node12 = proc1CFGNodes[11];
     REQUIRE(node12->getStatementType() == StatementType::Assign);
     REQUIRE(node12->getStatementNumber() == 12);
     REQUIRE(node12->getParentNodes().size() == 6);
@@ -491,18 +464,20 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
-            CFGBuilder::buildAllCFG(rootNode);
-    REQUIRE(cfgs.size() == 1);
+    auto cfgs = CFGBuilder::buildAllCFG(rootNode);
 
+    // Check CFGs
+    REQUIRE(cfgs.size() == 1);
     REQUIRE(cfgs.count("Proc1") == 1);
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
-    REQUIRE(proc1CFG.size() == 11);
+
+    auto &[cfgHead, proc1CFGNodes] = cfgs["Proc1"];
+    REQUIRE(cfgHead->getStatementNumber() == 1);
+    REQUIRE(proc1CFGNodes.size() == 11);
+
+    sortCFGNodes(proc1CFGNodes);
 
     // stmt 3
-    auto stmt3 = Statement(3, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt3) == 1);
-    auto node3 = proc1CFG[stmt3];
+    auto &node3 = proc1CFGNodes[2];
     REQUIRE(node3->getStatementType() == StatementType::Print);
     REQUIRE(node3->getStatementNumber() == 3);
     REQUIRE(node3->getParentNodes().size() == 1);
@@ -510,9 +485,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     REQUIRE(node3->getChildrenNodes().empty());
 
     // stmt 5
-    auto stmt5 = Statement(5, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt5) == 1);
-    auto node5 = proc1CFG[stmt5];
+    auto &node5 = proc1CFGNodes[4];
     REQUIRE(node5->getStatementType() == StatementType::Print);
     REQUIRE(node5->getStatementNumber() == 5);
     REQUIRE(node5->getParentNodes().size() == 1);
@@ -520,9 +493,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     REQUIRE(node5->getChildrenNodes().empty());
 
     // stmt 7
-    auto stmt7 = Statement(7, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt7) == 1);
-    auto node7 = proc1CFG[stmt7];
+    auto &node7 = proc1CFGNodes[6];
     REQUIRE(node7->getStatementType() == StatementType::Print);
     REQUIRE(node7->getStatementNumber() == 7);
     REQUIRE(node7->getParentNodes().size() == 1);
@@ -530,9 +501,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     REQUIRE(node7->getChildrenNodes().empty());
 
     // stmt 8
-    auto stmt8 = Statement(8, StatementType::Read);
-    REQUIRE(proc1CFG.count(stmt8) == 1);
-    auto node8 = proc1CFG[stmt8];
+    auto &node8 = proc1CFGNodes[7];
     REQUIRE(node8->getStatementType() == StatementType::Read);
     REQUIRE(node8->getStatementNumber() == 8);
     REQUIRE(node8->getParentNodes().size() == 1);
@@ -540,9 +509,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     REQUIRE(node8->getChildrenNodes().empty());
 
     // stmt 10
-    auto stmt10 = Statement(10, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt10) == 1);
-    auto node10 = proc1CFG[stmt10];
+    auto &node10 = proc1CFGNodes[9];
     REQUIRE(node10->getStatementType() == StatementType::Print);
     REQUIRE(node10->getStatementNumber() == 10);
     REQUIRE(node10->getParentNodes().size() == 1);
@@ -550,9 +517,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     REQUIRE(node10->getChildrenNodes().empty());
 
     // stmt 11
-    auto stmt11 = Statement(11, StatementType::Read);
-    REQUIRE(proc1CFG.count(stmt11) == 1);
-    auto node11 = proc1CFG[stmt11];
+    auto &node11 = proc1CFGNodes[10];
     REQUIRE(node11->getStatementType() == StatementType::Read);
     REQUIRE(node11->getStatementNumber() == 11);
     REQUIRE(node11->getParentNodes().size() == 1);
@@ -585,18 +550,20 @@ TEST_CASE("Test nested whiles") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
-            CFGBuilder::buildAllCFG(rootNode);
-    REQUIRE(cfgs.size() == 1);
+    auto cfgs = CFGBuilder::buildAllCFG(rootNode);
 
+    // Check CFGs
+    REQUIRE(cfgs.size() == 1);
     REQUIRE(cfgs.count("Proc1") == 1);
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
-    REQUIRE(proc1CFG.size() == 12);
+
+    auto &[cfgHead, proc1CFGNodes] = cfgs["Proc1"];
+    REQUIRE(cfgHead->getStatementNumber() == 1);
+    REQUIRE(proc1CFGNodes.size() == 12);
+
+    sortCFGNodes(proc1CFGNodes);
 
     // stmt 1
-    auto stmt1 = Statement(1, StatementType::While);
-    REQUIRE(proc1CFG.count(stmt1) == 1);
-    auto node1 = proc1CFG[stmt1];
+    auto &node1 = proc1CFGNodes[0];
     REQUIRE(node1->getStatementType() == StatementType::While);
     REQUIRE(node1->getStatementNumber() == 1);
     REQUIRE(node1->getParentNodes().size() == 1);
@@ -605,9 +572,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node1->getChildrenNodes(), {2}));
 
     // stmt 2
-    auto stmt2 = Statement(2, StatementType::While);
-    REQUIRE(proc1CFG.count(stmt2) == 1);
-    auto node2 = proc1CFG[stmt2];
+    auto &node2 = proc1CFGNodes[1];
     REQUIRE(node2->getStatementType() == StatementType::While);
     REQUIRE(node2->getStatementNumber() == 2);
     REQUIRE(node2->getParentNodes().size() == 2);
@@ -616,9 +581,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node2->getChildrenNodes(), {3, 10}));
 
     // stmt 3
-    auto stmt3 = Statement(3, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt3) == 1);
-    auto node3 = proc1CFG[stmt3];
+    auto &node3 = proc1CFGNodes[2];
     REQUIRE(node3->getStatementType() == StatementType::Print);
     REQUIRE(node3->getStatementNumber() == 3);
     REQUIRE(node3->getParentNodes().size() == 1);
@@ -627,9 +590,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node3->getChildrenNodes(), {4}));
 
     // stmt 4
-    auto stmt4 = Statement(4, StatementType::While);
-    REQUIRE(proc1CFG.count(stmt4) == 1);
-    auto node4 = proc1CFG[stmt4];
+    auto &node4 = proc1CFGNodes[3];
     REQUIRE(node4->getStatementType() == StatementType::While);
     REQUIRE(node4->getStatementNumber() == 4);
     REQUIRE(node4->getParentNodes().size() == 2);
@@ -638,9 +599,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node4->getChildrenNodes(), {5, 9}));
 
     // stmt 5
-    auto stmt5 = Statement(5, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt5) == 1);
-    auto node5 = proc1CFG[stmt5];
+    auto &node5 = proc1CFGNodes[4];
     REQUIRE(node5->getStatementType() == StatementType::Print);
     REQUIRE(node5->getStatementNumber() == 5);
     REQUIRE(node5->getParentNodes().size() == 1);
@@ -649,9 +608,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node5->getChildrenNodes(), {6}));
 
     // stmt 6
-    auto stmt6 = Statement(6, StatementType::While);
-    REQUIRE(proc1CFG.count(stmt6) == 1);
-    auto node6 = proc1CFG[stmt6];
+    auto &node6 = proc1CFGNodes[5];
     REQUIRE(node6->getStatementType() == StatementType::While);
     REQUIRE(node6->getStatementNumber() == 6);
     REQUIRE(node6->getParentNodes().size() == 2);
@@ -660,9 +617,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node6->getChildrenNodes(), {4, 7}));
 
     // stmt 7
-    auto stmt7 = Statement(7, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt7) == 1);
-    auto node7 = proc1CFG[stmt7];
+    auto &node7 = proc1CFGNodes[6];
     REQUIRE(node7->getStatementType() == StatementType::Print);
     REQUIRE(node7->getStatementNumber() == 7);
     REQUIRE(node7->getParentNodes().size() == 1);
@@ -671,9 +626,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node7->getChildrenNodes(), {8}));
 
     // stmt 8
-    auto stmt8 = Statement(8, StatementType::Read);
-    REQUIRE(proc1CFG.count(stmt8) == 1);
-    auto node8 = proc1CFG[stmt8];
+    auto &node8 = proc1CFGNodes[7];
     REQUIRE(node8->getStatementType() == StatementType::Read);
     REQUIRE(node8->getStatementNumber() == 8);
     REQUIRE(node8->getParentNodes().size() == 1);
@@ -682,9 +635,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node8->getChildrenNodes(), {6}));
 
     // stmt 9
-    auto stmt9 = Statement(9, StatementType::Assign);
-    REQUIRE(proc1CFG.count(stmt9) == 1);
-    auto node9 = proc1CFG[stmt9];
+    auto &node9 = proc1CFGNodes[8];
     REQUIRE(node9->getStatementType() == StatementType::Assign);
     REQUIRE(node9->getStatementNumber() == 9);
     REQUIRE(node9->getParentNodes().size() == 1);
@@ -693,9 +644,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node9->getChildrenNodes(), {2}));
 
     // stmt 10
-    auto stmt10 = Statement(10, StatementType::While);
-    REQUIRE(proc1CFG.count(stmt10) == 1);
-    auto node10 = proc1CFG[stmt10];
+    auto &node10 = proc1CFGNodes[9];
     REQUIRE(node10->getStatementType() == StatementType::While);
     REQUIRE(node10->getStatementNumber() == 10);
     REQUIRE(node10->getParentNodes().size() == 2);
@@ -704,9 +653,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node10->getChildrenNodes(), {1, 11}));
 
     // stmt 11
-    auto stmt11 = Statement(11, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt11) == 1);
-    auto node11 = proc1CFG[stmt11];
+    auto &node11 = proc1CFGNodes[10];
     REQUIRE(node11->getStatementType() == StatementType::Print);
     REQUIRE(node11->getStatementNumber() == 11);
     REQUIRE(node11->getParentNodes().size() == 1);
@@ -715,9 +662,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node11->getChildrenNodes(), {12}));
 
     // stmt 12
-    auto stmt12 = Statement(12, StatementType::Read);
-    REQUIRE(proc1CFG.count(stmt12) == 1);
-    auto node12 = proc1CFG[stmt12];
+    auto &node12 = proc1CFGNodes[11];
     REQUIRE(node12->getStatementType() == StatementType::Read);
     REQUIRE(node12->getStatementNumber() == 12);
     REQUIRE(node12->getParentNodes().size() == 1);
@@ -756,18 +701,20 @@ TEST_CASE("Test nested whiles and ifs") {
     SPParser parser;
     auto rootNode = parser.parse(tokens);
 
-    std::unordered_map<ProcedureName, std::unordered_map<Statement, std::shared_ptr<CFGNode>>> cfgs =
-            CFGBuilder::buildAllCFG(rootNode);
-    REQUIRE(cfgs.size() == 1);
+    auto cfgs = CFGBuilder::buildAllCFG(rootNode);
 
+    // Check CFGs
+    REQUIRE(cfgs.size() == 1);
     REQUIRE(cfgs.count("Proc1") == 1);
-    std::unordered_map<Statement, std::shared_ptr<CFGNode>> proc1CFG = cfgs["Proc1"];
-    REQUIRE(proc1CFG.size() == 13);
+
+    auto &[cfgHead, proc1CFGNodes] = cfgs["Proc1"];
+    REQUIRE(cfgHead->getStatementNumber() == 1);
+    REQUIRE(proc1CFGNodes.size() == 13);
+
+    sortCFGNodes(proc1CFGNodes);
 
     // stmt 1
-    auto stmt1 = Statement(1, StatementType::If);
-    REQUIRE(proc1CFG.count(stmt1) == 1);
-    auto node1 = proc1CFG[stmt1];
+    auto &node1 = proc1CFGNodes[0];
     REQUIRE(node1->getStatementType() == StatementType::If);
     REQUIRE(node1->getStatementNumber() == 1);
     REQUIRE(node1->getParentNodes().empty());
@@ -775,9 +722,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node1->getChildrenNodes(), {2, 12}));
 
     // stmt 2
-    auto stmt2 = Statement(2, StatementType::While);
-    REQUIRE(proc1CFG.count(stmt2) == 1);
-    auto node2 = proc1CFG[stmt2];
+    auto &node2 = proc1CFGNodes[1];
     REQUIRE(node2->getStatementType() == StatementType::While);
     REQUIRE(node2->getStatementNumber() == 2);
     REQUIRE(node2->getParentNodes().size() == 3);
@@ -786,9 +731,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node2->getChildrenNodes(), {3, 9}));
 
     // stmt 3
-    auto stmt3 = Statement(3, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt3) == 1);
-    auto node3 = proc1CFG[stmt3];
+    auto &node3 = proc1CFGNodes[2];
     REQUIRE(node3->getStatementType() == StatementType::Print);
     REQUIRE(node3->getStatementNumber() == 3);
     REQUIRE(node3->getParentNodes().size() == 1);
@@ -797,9 +740,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node3->getChildrenNodes(), {4}));
 
     // stmt 4
-    auto stmt4 = Statement(4, StatementType::If);
-    REQUIRE(proc1CFG.count(stmt4) == 1);
-    auto node4 = proc1CFG[stmt4];
+    auto &node4 = proc1CFGNodes[3];
     REQUIRE(node4->getStatementType() == StatementType::If);
     REQUIRE(node4->getStatementNumber() == 4);
     REQUIRE(node4->getParentNodes().size() == 1);
@@ -808,9 +749,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node4->getChildrenNodes(), {5, 8}));
 
     // stmt 5
-    auto stmt5 = Statement(5, StatementType::While);
-    REQUIRE(proc1CFG.count(stmt5) == 1);
-    auto node5 = proc1CFG[stmt5];
+    auto &node5 = proc1CFGNodes[4];
     REQUIRE(node5->getStatementType() == StatementType::While);
     REQUIRE(node5->getStatementNumber() == 5);
     REQUIRE(node5->getParentNodes().size() == 2);
@@ -819,9 +758,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node5->getChildrenNodes(), {2, 6}));
 
     // stmt 6
-    auto stmt6 = Statement(6, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt6) == 1);
-    auto node6 = proc1CFG[stmt6];
+    auto &node6 = proc1CFGNodes[5];
     REQUIRE(node6->getStatementType() == StatementType::Print);
     REQUIRE(node6->getStatementNumber() == 6);
     REQUIRE(node6->getParentNodes().size() == 1);
@@ -830,9 +767,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node6->getChildrenNodes(), {7}));
 
     // stmt 7
-    auto stmt7 = Statement(7, StatementType::Read);
-    REQUIRE(proc1CFG.count(stmt7) == 1);
-    auto node7 = proc1CFG[stmt7];
+    auto &node7 = proc1CFGNodes[6];
     REQUIRE(node7->getStatementType() == StatementType::Read);
     REQUIRE(node7->getStatementNumber() == 7);
     REQUIRE(node7->getParentNodes().size() == 1);
@@ -841,9 +776,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node7->getChildrenNodes(), {5}));
 
     // stmt 8
-    auto stmt8 = Statement(8, StatementType::Assign);
-    REQUIRE(proc1CFG.count(stmt8) == 1);
-    auto node8 = proc1CFG[stmt8];
+    auto &node8 = proc1CFGNodes[7];
     REQUIRE(node8->getStatementType() == StatementType::Assign);
     REQUIRE(node8->getStatementNumber() == 8);
     REQUIRE(node8->getParentNodes().size() == 1);
@@ -852,9 +785,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node8->getChildrenNodes(), {2}));
 
     // stmt 9
-    auto stmt9 = Statement(9, StatementType::While);
-    REQUIRE(proc1CFG.count(stmt9) == 1);
-    auto node9 = proc1CFG[stmt9];
+    auto &node9 = proc1CFGNodes[8];
     REQUIRE(node9->getStatementType() == StatementType::While);
     REQUIRE(node9->getStatementNumber() == 9);
     REQUIRE(node9->getParentNodes().size() == 2);
@@ -863,9 +794,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node9->getChildrenNodes(), {10}));
 
     // stmt 10
-    auto stmt10 = Statement(10, StatementType::Print);
-    REQUIRE(proc1CFG.count(stmt10) == 1);
-    auto node10 = proc1CFG[stmt10];
+    auto &node10 = proc1CFGNodes[9];
     REQUIRE(node10->getStatementType() == StatementType::Print);
     REQUIRE(node10->getStatementNumber() == 10);
     REQUIRE(node10->getParentNodes().size() == 1);
@@ -874,9 +803,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node10->getChildrenNodes(), {11}));
 
     // stmt 11
-    auto stmt11 = Statement(11, StatementType::Read);
-    REQUIRE(proc1CFG.count(stmt11) == 1);
-    auto node11 = proc1CFG[stmt11];
+    auto &node11 = proc1CFGNodes[10];
     REQUIRE(node11->getStatementType() == StatementType::Read);
     REQUIRE(node11->getStatementNumber() == 11);
     REQUIRE(node11->getParentNodes().size() == 1);
@@ -885,9 +812,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node11->getChildrenNodes(), {9}));
 
     // stmt 12
-    auto stmt12 = Statement(12, StatementType::While);
-    REQUIRE(proc1CFG.count(stmt12) == 1);
-    auto node12 = proc1CFG[stmt12];
+    auto &node12 = proc1CFGNodes[11];
     REQUIRE(node12->getStatementType() == StatementType::While);
     REQUIRE(node12->getStatementNumber() == 12);
     REQUIRE(node12->getParentNodes().size() == 2);
@@ -896,9 +821,7 @@ TEST_CASE("Test nested whiles and ifs") {
     REQUIRE(isSameStatements(node12->getChildrenNodes(), {13}));
 
     // stmt 13
-    auto stmt13 = Statement(13, StatementType::Read);
-    REQUIRE(proc1CFG.count(stmt13) == 1);
-    auto node13 = proc1CFG[stmt13];
+    auto &node13 = proc1CFGNodes[12];
     REQUIRE(node13->getStatementType() == StatementType::Read);
     REQUIRE(node13->getStatementNumber() == 13);
     REQUIRE(node13->getParentNodes().size() == 1);

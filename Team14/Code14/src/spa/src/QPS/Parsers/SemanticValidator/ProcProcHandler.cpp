@@ -10,8 +10,6 @@ void ProcProcHandler::handle(const Query &query, std::shared_ptr<Clause> clause)
     if (QPSUtil::typeToArgTypeMap[type] != ProcProc) { return SemanticValHandler::handle(query, clause); }
 
     handleRefType(leftRef, rightRef);
-
-    return SemanticValHandler::handle(query, clause);
 }
 
 void ProcProcHandler::handleRefType(Ref &leftRef, Ref &rightRef) {
