@@ -1686,4 +1686,23 @@ TEST_CASE("tuple and boolean result clause") {
     parser = PQLParser("assign BOOLEAN; Select BOOLEAN");
     auto query7 = parser.parse();
     REQUIRE(query7.getSelect().size() == 1);
+
+    parser = PQLParser("assign BOOLEAN; Select <BOOLEAN>");
+    auto query8 = parser.parse();
+    REQUIRE(query8.getSelect().size() == 1);
+
+    parser = PQLParser("assign BOOLEAN; call c;Select <BOOLEAN, c>");
+    auto query9 = parser.parse();
+    REQUIRE(query9.getSelect().size() == 2);
+}
+
+TEST_CASE("invalid result clause") {
+    PQLParser parser("Select <>");
+    REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+    parser = PQLParser("assign a; variable v; Select a,v ");
+    REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+
+    parser = PQLParser("Select <BOOLEAN>");
+    REQUIRE_THROWS_AS(parser.parse(), SemanticException);
 }

@@ -6,6 +6,7 @@
 Query::Query() {
     declarations = DeclarationMap();
     selects = std::vector<Synonym>();
+    isMultiTuple = false;
 }
 
 std::shared_ptr<QueryEntity> Query::getEntity(const Synonym &syn) const {
@@ -21,6 +22,10 @@ std::shared_ptr<QueryEntity> Query::getEntity(const Synonym &syn) const {
 void Query::addSelect(const Synonym synonym) { selects.push_back(synonym); }
 
 void Query::setBooleanResult() { selects = std::vector<Synonym>(); }
+
+void Query::setMultiTupleResult() { isMultiTuple = true; }
+
+bool Query::isMultiTupleResult() const { return isMultiTuple; }
 
 void Query::addDeclaration(const EntityPtr &entity) { declarations.insert({entity->getSynonym(), entity}); }
 
