@@ -15,7 +15,7 @@ FALSE
 5000
 4 - 1st clause is non-empty vector of entities, 2nd clause is true
 call call;
-Select BOOLEAN Next(2, call) with call.procName = call.procName
+Select BOOLEAN such that Next(2, call) with call.procName = call.procName
 TRUE
 5000
 5 - 1st clause is empty vector of entities, 2nd clause is false
@@ -40,7 +40,7 @@ TRUE
 5000
 9 - 1st clause is true, 2nd clause is non-empty vector of entities
 assign assign;
-Select BOOLEAN Modifies(7,"true") and Next*(assign,7)
+Select BOOLEAN such that Modifies(7,"true") and Next*(assign,7)
 TRUE
 5000
 10 - 1st clause is false, 2nd clause is empty vector of entities
@@ -66,7 +66,7 @@ FALSE
 14 - 1st clause is true, 2nd clause is an empty vector
 stmt s; procedure p; print print;
 Select BOOLEAN such that Next(1,s) with p.procName = print.varName
-TRUE
+FALSE
 5000
 15 - SemanticError bool, considered as synonym
 
@@ -82,4 +82,19 @@ SemanticError
 stmt BOOLEAN;
 Select BOOLEAN
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+5000
+18 - extra Ltuple
+assign a; while w;
+Select <BOOLEAN such that Modifies (a, "x") and Parent* (w, a)
+SyntaxError
+5000
+19 - BOOLEAN in tuple
+
+Select <BOOLEAN>
+SemanticError
+5000
+20 - extra Rtuple
+
+Select BOOLEAN>
+SyntaxError
 5000
