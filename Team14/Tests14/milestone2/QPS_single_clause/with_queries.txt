@@ -388,6 +388,11 @@ procedure p;
 Select p with p.stmt# = 1
 SemanticError
 5000
+78.1 - SemanticError (Wrong attr): procedure.stmt#
+procedure p;
+Select p.stmt#
+SemanticError
+5000
 79 - SemanticError (Wrong attr): procedure.value
 procedure p;
 Select p.value
@@ -403,9 +408,19 @@ call c;
 Select c with c.value = 2
 SemanticError
 5000
+81.1 - SemanticError (Wrong attr): call.value
+call c;
+Select c.value
+SemanticError
+5000
 82 - SemanticError (Wrong attr): variable.procName
 variable v;
 Select v with v.procName = "x"
+SemanticError
+5000
+82.1 - SemanticError (Wrong attr): variable.procName
+variable v;
+Select v.procName
 SemanticError
 5000
 83 - SemanticError (Wrong attr): variable.value
@@ -418,6 +433,11 @@ read r;
 Select r with r.procName = "read"
 SemanticError
 5000
+84.1 - SemanticError (Wrong attr): read.procName
+read r;
+Select r.procName
+SemanticError
+5000
 85 - SemanticError (Wrong attr): read.value
 read r;
 Select r.value
@@ -426,6 +446,11 @@ SemanticError
 86 - SemanticError (Wrong attr): print.procName
 print pn;
 Select pn with pn.procName = "a"
+SemanticError
+5000
+86.1 - SemanticError (Wrong attr): print.procName
+print pn;
+Select pn.procName
 SemanticError
 5000
 87 - SemanticError (Wrong attr): print.value
@@ -438,6 +463,11 @@ if if;
 Select if with if.procName = "x"
 SemanticError
 5000
+88.1 - SemanticError (Wrong attr): if.procName
+if if;
+Select if.procName
+SemanticError
+5000
 89 - SemanticError (Wrong attr): if.varName
 if if;
 Select if.varName
@@ -448,9 +478,19 @@ if if;
 Select if with if.value = 10
 SemanticError
 5000
+90.1 - SemanticError (Wrong attr): if.value
+if if;
+Select if.value
+SemanticError
+5000
 91 - SemanticError (Wrong attr): while.procName
 while w;
 Select w with w.procName = "x"
+SemanticError
+5000
+91.1 - SemanticError (Wrong attr): while.procName
+while w;
+Select w.procName
 SemanticError
 5000
 92 - SemanticError (Wrong attr): while.varName
@@ -458,9 +498,19 @@ while w;
 Select w with w.varName = "x"
 SemanticError
 5000
+92.1 - SemanticError (Wrong attr): while.varName
+while w;
+Select w.varName
+SemanticError
+5000
 93 - SemanticError (Wrong attr): while.value
 while w;
 Select w with w.value = 10
+SemanticError
+5000
+93.1 - SemanticError (Wrong attr): while.value
+while w;
+Select w.value
 SemanticError
 5000
 94 - SemanticError (Wrong attr): assign.procName
@@ -468,7 +518,17 @@ assign a;
 Select a with a.procName = "print"
 SemanticError
 5000
+94.1 - SemanticError (Wrong attr): assign.procName
+assign a;
+Select a.procName
+SemanticError
+5000
 95 - SemanticError (Wrong attr): assign.varName
+assign a;
+Select a with a.varName = "x"
+SemanticError
+5000
+95.1 - SemanticError (Wrong attr): assign.varName
 assign a;
 Select a.varName
 SemanticError
@@ -478,12 +538,27 @@ assign a;
 Select a with a.value = 10
 SemanticError
 5000
+96.1 - SemanticError (Wrong attr): assign.value
+assign a;
+Select a.value
+SemanticError
+5000
 97 - SemanticError (Wrong attr): constant.procName
+constant c;
+Select c with c.procName = "print"
+SemanticError
+5000
+97.1 - SemanticError (Wrong attr): constant.procName
 constant c;
 Select c.procName
 SemanticError
 5000
 98 - SemanticError (Wrong attr): constant.varName
+constant c;
+Select c with c.varName = "x"
+SemanticError
+5000
+98.1 - SemanticError (Wrong attr): constant.varName
 constant c;
 Select c.varName
 SemanticError
@@ -493,9 +568,19 @@ constant c;
 Select c with c.stmt# = 1
 SemanticError
 5000
+99.1 - SemanticError (Wrong attr): constant.stmt#
+constant c;
+Select c.stmt#
+SemanticError
+5000
 100 - SemanticError (Wrong attr): stmt.procName
 stmt s;
 Select s with s.procName = "print"
+SemanticError
+5000
+100.1 - SemanticError (Wrong attr): stmt.procName
+stmt s;
+Select s.procName
 SemanticError
 5000
 101 - SemanticError (Wrong attr): stmt.varName
@@ -503,9 +588,19 @@ stmt s;
 Select s with s.varName = "k"
 SemanticError
 5000
+101.1 - SemanticError (Wrong attr): stmt.varName
+stmt s;
+Select s.varName with 1 = 1
+SemanticError
+5000
 102 - SemanticError (Wrong attr): stmt.value
 stmt s;
 Select s with s.value = 10
+SemanticError
+5000
+102.1 - SemanticError (Wrong attr): stmt.value
+stmt s;
+Select s.value with "k" = "k"
 SemanticError
 5000
 103 - SemanticError (Wrong comparison): procedure.proName = constant.value
