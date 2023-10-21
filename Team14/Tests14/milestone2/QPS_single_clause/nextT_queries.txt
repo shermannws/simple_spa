@@ -1,0 +1,90 @@
+1 - Next* (wildcard, wildcard)
+
+Select BOOLEAN such that Next*(_,_)
+TRUE
+5000
+2 - Next* (wildcard, syn)
+read re;
+Select re.varName such that Next*(_,re)
+a12, a16, a23
+5000
+3 - Next* (wildcard, int)
+procedure p;
+Select p such that Next*(_,13)
+NextT, NextT2
+5000
+4 - Next* (int, int) - non-first stmt in else block can be executed after if cond evaluation
+call c;
+Select c such that Next*(2, 9)
+8, 13
+5000
+5 - Next* (int, int) - stmt in diff nesting level
+
+Select BOOLEAN such that Next*(4, 7)
+TRUE
+5000
+6 - Next* (int,syn)
+assign a;
+Select a such that Next*(1, a)
+5, 6
+5000
+7 - Next* (int, syn) - possible stmts after a nested while cond evaluation
+stmt s;
+Select s such that Next*(19,s)
+19, 20, 21, 22, 23, 24, 25, 26, 27, 14, 15, 16, 17, 18
+5000
+8 - Next* (int, wildcard)
+if if;
+Select if such that Next*(13,_)
+none
+5000
+9 - Next* (syn, syn)
+if ifs; print pr;
+Select <ifs,pr> such that Next*(ifs, pr)
+2 4, 2 7, 2 9, 2 11, 3 4, 3 7, 3 11, 10 11, 22 21
+5000
+10 - Next* (syn, wildcard)
+assign a;
+Select a such that Next*(a, _)
+5, 6, 15, 17, 20, 24, 25, 27
+5000
+11 - Next* (syn, int)
+if ifs;
+Select ifs.stmt# such that Next*(ifs, 21)
+22
+5000
+12 - Next* (int, int) where lhs = rhs
+while w;
+Select w such that Next*(22, 22)
+14, 18, 19, 26
+5000
+13 - Next* (syn, syn) where lhs = rhs
+assign a;
+Select a such that Next*(a, a)
+15, 17, 20, 24, 27
+5000
+14 - negative test - s2 executed after s1 but are in diff procedures
+call c; assign a;
+Select c such that Next*(c, a)
+none
+5000
+15 - negative case - s2 executed after s1 but diff procedure (not returned)
+
+Select BOOLEAN such that Next*(13, 14)
+FALSE
+5000
+16 - semantic error undeclared syn
+constant k; call c;
+Select k such that Next*(re,c)
+SemanticError
+5000
+17 - semantic error non-stmt syn used as arg
+constant k; call c;
+Select k such that Next*(k,c)
+SemanticError
+5000
+18 - multiple Next* clauses
+read re; while w; assign a; if ifs;
+Select re such that Next*(ifs, re) and Next*(24, re)
+16, 23
+5000
