@@ -20,9 +20,9 @@ void PqlSemanticValidator::validateDeclarations(const std::vector<Synonym> &syno
 
 void PqlSemanticValidator::validateResultClause(Query &query) {
     auto resultClause = query.getSelect();
-    if (isBooleanResult(query)) {// if tuple result-cl
+    if (isBooleanResult(query)) {
         query.setBooleanResult();
-    } else {
+    } else {// tuple result clause
         for (const auto &elem: resultClause) { validateResultElem(query, elem); }
     }
 }
@@ -54,8 +54,7 @@ void PqlSemanticValidator::validateResultAttrRef(const Query &query, Synonym ele
 
 bool PqlSemanticValidator::isBooleanResult(const Query &query) {
     auto resultClause = query.getSelect();
-    return (!query.isMultiTupleResult() && resultClause.size() == 1 && resultClause[0] == "BOOLEAN" &&
-            !query.getEntity("BOOLEAN"));
+    return (!query.isMultiTupleResult() && resultClause[0] == "BOOLEAN" && !query.getEntity("BOOLEAN"));
 }
 
 
