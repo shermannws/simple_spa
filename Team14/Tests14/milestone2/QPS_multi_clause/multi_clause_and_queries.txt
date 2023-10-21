@@ -94,26 +94,31 @@ Select q with p.procName = "caller" with q.procName = v.varName such that calls*
 callee, helper
 5000
 19 - all 3 different clause types, such that - and, with - and, pattern - and, such that, with, pattern
-
-
+procedure p; variable v; while w; assign a;
+Select a such that Modifies (a, v) and Parent* (w, a) with v.varName = "z" and w.stmt# = "8" pattern w(_, _) and pattern a(_, "assign")
+11
 5000
 20 - syntactically invalid and connector 'and such that'
-
-
+assign a; while w;
+Select a such that Parent* (w, a) and Modifies (a, "y") and such that Next*(5, a)
+SyntaxError
 5000
 21 - syntactically invalid and connector 'such that and pattern'
-
-
+assign a; while w;
+Select a such that Parent* (w, a) and pattern(_,_)
+SyntaxError
 5000
 22 - syntactically invalid and connector 'pattern and such that'
-
-
+assign a; while w;
+Select a pattern(_,_) and such that Parent* (w, a)
+SyntaxError
 5000
 23 - syntactically invalid and connector 'such that - and with'
-
-
+assign a; while w;
+Select a such that Parent* (w, a) and with w.stmt# = "10"
+SyntaxError
 5000
 24 - syntactically invalid and connector 'and and'
-
-
+assign a; if ifs; variable v;
+Select v pattern ifs(_, _, _) and and pattern a(_, v)
 5000
