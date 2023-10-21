@@ -19,9 +19,17 @@ std::vector<Entity> StubPkbReader::getAllVariables() const {
     });
 }
 
-std::vector<Entity> StubPkbReader::getAllConstants() const { return std::vector<Entity>(); }
+std::vector<Entity> StubPkbReader::getAllConstants() const {
+    return std::vector<Entity>({Constant("3"), Constant("7"), Constant("21"), Constant("63")});
+}
 
-std::vector<Entity> StubPkbReader::getAllProcedures() const { return std::vector<Entity>(); }
+std::vector<Entity> StubPkbReader::getAllProcedures() const {
+    return std::vector<Entity>({
+            Procedure("proc1"),
+            Procedure("proc2"),
+            Procedure("proc3"),
+    });
+}
 
 std::vector<Entity> StubPkbReader::getAllStatements() const {
     return std::vector<Entity>{
@@ -32,14 +40,22 @@ std::vector<Entity> StubPkbReader::getAllStatements() const {
 
 std::vector<Entity> StubPkbReader::getAllRead() const {
     return std::vector<Entity>({
-            ReadStatement(88, "line88"),
-            ReadStatement(24, "line24"),
-            ReadStatement(36, "line36"),
-            ReadStatement(14, "line14"),
+            Statement(88, StatementType::Read, "var88"),
+            Statement(24, StatementType::Read, "var24"),
+            Statement(36, StatementType::Read, "var36"),
+            Statement(14, StatementType::Read, "var14"),
     });
 }
 
-std::vector<Entity> StubPkbReader::getAllPrint() const { return std::vector<Entity>(); }
+std::vector<Entity> StubPkbReader::getAllPrint() const {
+    return std::vector<Entity>({
+            Statement(1, StatementType::Print, "var1"),
+            Statement(3, StatementType::Print, "var3"),
+            Statement(5, StatementType::Print, "var5"),
+            Statement(7, StatementType::Print, "var7"),
+            Statement(9, StatementType::Print, "var9"),
+    });
+}
 
 std::vector<Entity> StubPkbReader::getAllWhile() const {
     return std::vector<Entity>{
@@ -56,7 +72,11 @@ std::vector<Entity> StubPkbReader::getAllIf() const {
     });
 }
 
-std::vector<Entity> StubPkbReader::getAllCall() const { return std::vector<Entity>(); }
+std::vector<Entity> StubPkbReader::getAllCall() const {
+    return std::vector<Entity>({Statement(7, StatementType::Call, "Proc1"), Statement(10, StatementType::Call, "Proc2"),
+                                Statement(21, StatementType::Call, "Proc3"),
+                                Statement(22, StatementType::Call, "Proc3")});
+}
 
 std::vector<std::vector<Entity>> StubPkbReader::getUsesStmtPair(StatementType type) const {
     if (type == StatementType::Call) {

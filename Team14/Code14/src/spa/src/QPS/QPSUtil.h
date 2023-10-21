@@ -11,7 +11,12 @@
 class QPSUtil {
 public:
     /**
-     * @brief An unordered map that maps StringRep to the corresponding ClauseType
+     * @brief An unordered set of design entities in string
+     */
+    static std::unordered_set<std::string> designEntities;
+
+    /**
+     * @brief An unordered map that maps StringRep to its corresponding ClauseType
      */
     static std::unordered_map<StringRep, ClauseType> repClauseTypeMap;
 
@@ -19,6 +24,16 @@ public:
      * @brief An unordered map that maps QueryEntityType to the corresponding ClauseType
      */
     static std::unordered_map<QueryEntityType, ClauseType> entityToClauseMap;
+
+    /**
+     * @brief An unordered map that maps a string to TokenType
+     */
+    static std::unordered_map<std::string, TokenType> strToTokenTypeMap;
+
+    /**
+     * @brief An unordered map that maps a string to AttrName
+     */
+    static std::unordered_map<std::string, AttrName> strToAttrNameMap;
 
     /**
      * @brief An unordered map that maps QueryEntityType to the corresponding RefType
@@ -74,5 +89,5 @@ public:
      * @param elem the element string
      * @return the empty string for synonym elements, the attrName without the synonym for attrRef elements
      */
-    static AttrName getAttrName(std::string elem);
+    static std::string getAttrName(std::string elem);
 };
