@@ -11,6 +11,7 @@
 enum class RefType {
     StmtRef,
     EntRef,
+    WithRef,
     Invalid,
 };
 
@@ -18,12 +19,18 @@ enum class RefType {
  * @brief The enum class of RootType
  */
 enum class RootType {
-    Integer, // StmtRef
+    Integer, // StmtRef & WithRef
     Wildcard,// StmtRef & EntRef
     Synonym, // StmtRef & EntRef
-    Ident,   // EntRef
+    Ident,   // EntRef & WithRef
+    AttrRef, // WithRef
     Invalid
 };
+
+/**
+ * @brief The enum class of AttrName
+ */
+enum class AttrName { ProcName, VarName, Value, StmtNo, Invalid };
 
 /**
  * @brief Ref class
@@ -34,6 +41,11 @@ private:
      * @brief The string representation of the Ref
      */
     StringRep rep;
+
+    /**
+     * @brief The AttrName of the Ref if its RootType is AttrRef
+     */
+    AttrName attrName;
 
     /**
      * @brief The RefType of the Ref
@@ -81,6 +93,12 @@ public:
     QueryEntityType getEntityType() const;
 
     /**
+     * @brief The getter of the AttrName of the Ref
+     * @return The StringRep of the Ref
+     */
+    AttrName getAttrName() const;
+
+    /**
      * @brief The setter of the string representation of the Ref
      * @param rrep The StringRep reference
      */
@@ -105,6 +123,12 @@ public:
     void setEntityType(QueryEntityType &eentityType);
 
     /**
+     * @brief The setter of the AttrName of the Ref
+     * @param eentityType The QueryEntityType reference
+     */
+    void setAttrName(const std::string &name);
+
+    /**
      * @brief Checks if the RootType of the Ref is rrootType
      * @param rrootType The RootType to compare with
      * @return Returns true if the rootType is rrootType, otherwise false
@@ -122,6 +146,16 @@ public:
      * @return Returns true if the rootType is of entRef, otherwise false
      */
     bool isOfEntRef();
+
+    /**
+     * Checks if the rootType of the Ref is of WithRef
+     * @return Returns true if the rootType is of WithRef, otherwise false
+     */
+    bool isOfWithRef();
+
+    bool isOfName();
+
+    bool isOfInteger();
 
     /**
      * @brief Checks if this Ref is equal to other by comparing their rep, type, rootType and entityType

@@ -10,7 +10,7 @@
  * ProcProcHandler class that extends from SemanticValHandler
  */
 class ProcProcHandler : public SemanticValHandler {
-public:
+private:
     /**
      * @brief Handles the Refs of the clause by checking the semantics and setting the appropriate RefType
      * @param leftRef The first parameter of the Clause
@@ -18,6 +18,7 @@ public:
      */
     void handleRefType(Ref &leftRef, Ref &rightRef);
 
+public:
     /**
      * @brief Handles (proc-entRef,proc-entRef) semantic validation of the Clause
      * @param query The Query object
