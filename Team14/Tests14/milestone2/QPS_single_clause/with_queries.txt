@@ -368,12 +368,12 @@ assign a;
 Select a with a.stmt# = 1
 none
 5000
-75 - INEGER = INTEGER
+75 - INTEGER = INTEGER
 stmt s;
 Select s with 1 = 1
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
-76 - INEGER = INTEGER
+76 - INTEGER = INTEGER
 stmt s;
 Select s with 1 = 2
 none
@@ -603,7 +603,7 @@ stmt s;
 Select s.value with "k" = "k"
 SemanticError
 5000
-103 - SemanticError (Wrong comparison): procedure.proName = constant.value
+103 - SemanticError (Wrong comparison): procedure.procName = constant.value
 procedure p; constant c;
 Select c with p.procName = c.value
 SemanticError

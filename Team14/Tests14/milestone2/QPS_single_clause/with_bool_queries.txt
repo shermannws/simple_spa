@@ -368,12 +368,12 @@ assign a;
 Select BOOLEAN with a.stmt# = 1
 FALSE
 5000
-75 - INEGER = INTEGER
+75 - INTEGER = INTEGER
 stmt s;
 Select BOOLEAN with 1 = 1
 TRUE
 5000
-76 - INEGER = INTEGER
+76 - INTEGER = INTEGER
 stmt s;
 Select BOOLEAN with 1 = 2
 FALSE
@@ -508,7 +508,7 @@ stmt s;
 Select BOOLEAN with s.value = 10
 SemanticError
 5000
-103 - SemanticError (Wrong comparison): procedure.proName = constant.value
+103 - SemanticError (Wrong comparison): procedure.procName = constant.value
 procedure p; constant c;
 Select BOOLEAN with p.procName = c.value
 SemanticError
