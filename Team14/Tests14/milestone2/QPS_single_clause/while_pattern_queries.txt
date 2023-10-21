@@ -121,15 +121,20 @@ SemanticError
 25 - invalid, 3 arguments
 while w; variable v;
 Select w pattern w(v ,"2", _)
-SemanticError
+SyntaxError
 5000
 26 - invalid, 3 arguments
 while w; variable v;
 Select w pattern w(v ,_"x"_, _)
-SemanticError
+SyntaxError
+5000
+27 - invalid, 3 arguments
+while w; variable v;
+Select w pattern w(v ,_, "y")
+SyntaxError
 5000
 27 - invalid, 3 arguments
 while w; variable v;
 Select w pattern w(v ,_"x"_, "y")
-SemanticError
+SyntaxError
 5000
