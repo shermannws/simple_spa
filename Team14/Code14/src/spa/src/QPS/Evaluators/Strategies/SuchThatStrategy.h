@@ -53,8 +53,7 @@ public:
 
     /**
      * @brief Evaluates SuchThatClause and returns a Result
-     * @param leftRef The first parameter of the SuchThatClause to evaluate
-     * @param rightRef The second parameter of the SuchThatClause to evaluate
+     * @param clause The SuchThatClause to evaluate
      * @return The result of the SuchThatClause evaluation as a Result object
      */
     std::shared_ptr<Result> evaluateClause(std::shared_ptr<Clause> clause) const override;

@@ -28,6 +28,15 @@ void SynonymHandler::handle(const Query &query, std::shared_ptr<Clause> clause) 
         pattern->setType(clauseType);
     }
 
+    auto with = std::dynamic_pointer_cast<WithClause>(clause);
+    if (with) {
+        if (leftRef.isRootType(RootType::AttrRef)) { handleRefSyn(query, leftRef); }
+
+        Ref &rightRef = with->getSecondParam();
+        if (rightRef.isRootType(RootType::AttrRef)) { handleRefSyn(query, rightRef); }
+        return SemanticValHandler::handle(query, clause);
+    }
+
     return SemanticValHandler::handle(query, clause);
 }
 

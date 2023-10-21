@@ -28,6 +28,24 @@ public:
     inline static const std::string STRING_VARIABLE = "variable";
     inline static const std::string STRING_CONSTANT = "constant";
 
+    // ClauseTypes
+    inline static const std::string STRING_USES = "Uses";
+    inline static const std::string STRING_MODIFIES = "Modifies";
+    inline static const std::string STRING_FOLLOWS = "Follows";
+    inline static const std::string STRING_FOLLOWSSTAR = "Follows*";
+    inline static const std::string STRING_PARENT = "Parent";
+    inline static const std::string STRING_PARENTSTAR = "Parent*";
+    inline static const std::string STRING_CALLS = "Calls";
+    inline static const std::string STRING_CALLSSTAR = "Calls*";
+    inline static const std::string STRING_NEXT = "Next";
+    inline static const std::string STRING_NEXTSTAR = "Next*";
+
+    // AttrNames
+    inline static const std::string STRING_PROCNAME = "procName";
+    inline static const std::string STRING_VARNAME = "varName";
+    inline static const std::string STRING_VALUE = "value";
+    inline static const std::string STRING_STMTNO = "stmt#";
+
     inline static const std::string STRING_INTEGER_REGEX = "^[0-9]+$";
 
     inline static const std::string STRING_GREATER_THAN = ">";
@@ -50,6 +68,13 @@ public:
     inline static const std::string STRING_OPEN_CURLY_PARENTHESIS = "{";
     inline static const std::string STRING_CLOSE_CURLY_PARENTHESIS = "}";
     inline static const std::string STRING_SEMICOLON = ";";
+    inline static const std::string STRING_COMMA = ",";
+    inline static const std::string STRING_QUOTE = "\"";
+    inline static const std::string STRING_UNDERSCORE = "_";
+    inline static const std::string STRING_DOT = ".";
+    inline static const std::string STRING_LTUPLE = "<";
+    inline static const std::string STRING_RTUPLE = ">";
+
 
     inline static const char CHAR_GREATER_THAN = '>';
     inline static const char CHAR_LESS_THAN = '<';

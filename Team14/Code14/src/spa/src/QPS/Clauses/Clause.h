@@ -21,6 +21,7 @@ enum class ClauseType {
     Assign,
     While,
     If,
+    With,
     Invalid
 };
 

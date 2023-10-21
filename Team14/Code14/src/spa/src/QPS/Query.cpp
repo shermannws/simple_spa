@@ -34,6 +34,10 @@ void Query::addClause(std::shared_ptr<SuchThatClause> clause) { suchThatClauses.
 
 void Query::addClause(std::shared_ptr<PatternClause> clause) { patternClauses.push_back(clause); }
 
+void Query::addClause(std::shared_ptr<WithClause> clause) { withClauses.push_back(clause); }
+
 std::vector<std::shared_ptr<SuchThatClause>> Query::getSuchThat() const { return suchThatClauses; }
 
 std::vector<std::shared_ptr<PatternClause>> Query::getPattern() const { return patternClauses; }
+
+std::vector<std::shared_ptr<WithClause>> Query::getWith() const { return withClauses; }

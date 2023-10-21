@@ -46,7 +46,7 @@ std::vector<std::pair<int, transformFunc>> PQLEvaluator::getTransformations(Syno
         } else {                             // case attrRef
             auto syn = QPSUtil::getSyn(elem);// get Syn without attrName
             transformation.first = inputMap[syn];
-            transformation.second = QPSUtil::getValueFunc[attrName];
+            transformation.second = QPSUtil::getValueFunc[QPSUtil::strToAttrNameMap[attrName]];
         }
         transformations.push_back(transformation);
     }
@@ -106,11 +106,12 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
 
 std::shared_ptr<Result> PQLEvaluator::evaluateConstraintClauses(const Query &query) {
     auto result = std::make_shared<Result>(true);// Initialize with TRUE
-    if (query.getSuchThat().empty() && query.getPattern().empty()) { return result; }
+    if (query.getSuchThat().empty() && query.getPattern().empty() && query.getWith().empty()) { return result; }
 
     std::vector<std::shared_ptr<Result>> results;
     for (const auto &clause: query.getSuchThat()) { results.push_back(evaluateClause(clause)); }
     for (const auto &clause: query.getPattern()) { results.push_back(evaluateClause(clause)); }
+    for (const auto &clause: query.getWith()) { results.push_back(evaluateClause(clause)); }
     for (auto const &res: results) {// Combine until end of list
         result = resultHandler->getCombined(result, res);
     }
@@ -136,5 +137,8 @@ std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(const Query &query, s
 
 std::vector<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity> &queryEntity) {
     QueryEntityType entityType = queryEntity->getType();
+    if (QPSUtil::entityGetterMap.find(entityType) == QPSUtil::entityGetterMap.end()) {
+        throw std::runtime_error("Not supported entity type in query select clause");
+    }
     return QPSUtil::entityGetterMap[entityType](pkbReader);
 }

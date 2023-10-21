@@ -1,4 +1,5 @@
 #include "Token.h"
+#include "QPS/QPSUtil.h"
 
 #include <regex>
 #include <string>
@@ -11,34 +12,8 @@ std::unordered_map<TokenType, int> operatorPrecedence = {
 
 Token::Token(const std::string &input) {
     this->rep = input;
-    if (rep == "(") {
-        this->type = TokenType::Lparenthesis;
-    } else if (rep == ")") {
-        this->type = TokenType::Rparenthesis;
-    } else if (rep == "+") {
-        this->type = TokenType::Plus;
-    } else if (rep == "-") {
-        this->type = TokenType::Minus;
-    } else if (rep == "*") {
-        this->type = TokenType::Asterisk;
-    } else if (rep == "/") {
-        this->type = TokenType::Slash;
-    } else if (rep == "%") {
-        this->type = TokenType::Percent;
-    } else if (rep == ";") {
-        this->type = TokenType::Semicolon;
-    } else if (rep == ",") {
-        this->type = TokenType::Comma;
-    } else if (rep == "\"") {
-        this->type = TokenType::Quote;
-    } else if (rep == "_") {
-        this->type = TokenType::Underscore;
-    } else if (rep == ".") {
-        this->type = TokenType::Dot;
-    } else if (rep == "<") {
-        this->type = TokenType::Ltuple;
-    } else if (rep == ">") {
-        this->type = TokenType::Rtuple;
+    if (QPSUtil::strToTokenTypeMap.find(rep) != QPSUtil::strToTokenTypeMap.end()) {
+        this->type = QPSUtil::strToTokenTypeMap[rep];
     } else if (!rep.empty()) {
         this->type = TokenType::Word;
     } else {
@@ -60,13 +35,11 @@ bool Token::isToken(const std::string &str) { return rep == str && type == Token
 bool Token::isToken(TokenType ttype) { return type == ttype; }
 
 bool Token::isDesignEntity() {
-    return type == TokenType::Word &&
-           (rep == "procedure" || rep == "stmt" || rep == "read" || rep == "print" || rep == "assign" ||
-            rep == "while" || rep == "if" || rep == "variable" || rep == "constant" || rep == "call");
+    return type == TokenType::Word && QPSUtil::designEntities.find(rep) != QPSUtil::designEntities.end();
 }
 
 bool Token::isAttrName() {
-    return type == TokenType::Word && (rep == "procName" || rep == "varName" || rep == "value" || rep == "stmt#");
+    return type == TokenType::Word && (QPSUtil::strToAttrNameMap.find(rep) != QPSUtil::strToAttrNameMap.end());
 }
 
 bool Token::isIdent() {
