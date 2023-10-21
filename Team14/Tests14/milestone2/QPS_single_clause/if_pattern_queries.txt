@@ -134,12 +134,12 @@ Select ifs pattern ifs("x" ,_)
 SemanticError
 5000
 28 - invalid, 2 arguments
-if ifs; variable v
+if ifs; variable v;
 Select ifs pattern ifs(v ,_)
 SemanticError
 5000
 29 - invalid, 2 arguments
-if ifs; variable v
+if ifs; variable v;
 Select ifs pattern ifs(v ,_"2"_)
 SemanticError
 5000
