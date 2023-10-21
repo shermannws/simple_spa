@@ -65,6 +65,7 @@ void PQLParser::parseResultClause(Query &query) {
 }
 
 void PQLParser::processTuple(Query &query) {
+    query.setMultiTupleResult();
     tokenizer->popToken();// consume Ltuple
     processElem(query);   // expect non-empty list
 

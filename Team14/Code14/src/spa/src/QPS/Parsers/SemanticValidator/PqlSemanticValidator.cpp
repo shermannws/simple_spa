@@ -54,7 +54,8 @@ void PqlSemanticValidator::validateResultAttrRef(const Query &query, Synonym ele
 
 bool PqlSemanticValidator::isBooleanResult(const Query &query) {
     auto resultClause = query.getSelect();
-    return (resultClause.size() == 1 && resultClause[0] == "BOOLEAN" && !query.getEntity("BOOLEAN"));
+    return (!query.isMultiTupleResult() && resultClause.size() == 1 && resultClause[0] == "BOOLEAN" &&
+            !query.getEntity("BOOLEAN"));
 }
 
 

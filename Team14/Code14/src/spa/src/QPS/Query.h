@@ -29,6 +29,11 @@ private:
     std::vector<Synonym> selects;
 
     /**
+     * True if the result clause is a tuple of '<' elem ( ',' elem )* '>'
+     */
+    bool isMultiTuple;
+
+    /**
      * Vector of such that clauses
      */
     std::vector<std::shared_ptr<SuchThatClause>> suchThatClauses;
@@ -65,6 +70,16 @@ public:
      * @brief sets the Query selects for BOOLEAN result-clause queries
      */
     void setBooleanResult();
+
+    /**
+     * @brief sets the Query isMultiTuple to true
+     */
+    void setMultiTupleResult();
+
+    /**
+     * @brief returns true if the query's result clause is tuple of '<' elem ( ',' elem )* '>'
+     */
+    bool isMultiTupleResult() const;
 
     /**
      * @brief Adds a such-that clause to the query.
