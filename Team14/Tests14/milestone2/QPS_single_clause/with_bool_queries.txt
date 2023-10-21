@@ -380,7 +380,7 @@ FALSE
 5000
 77 - SemanticError (Wrong attr): procedure.varName
 procedure p;
-Select BOOLEAN p.varName = "call"
+Select BOOLEAN with p.varName = "call"
 SemanticError
 5000
 78 - SemanticError (Wrong attr): procedure.stmt#
@@ -390,12 +390,12 @@ SemanticError
 5000
 79 - SemanticError (Wrong attr): procedure.value
 procedure p;
-Select BOOLEAN p.value = "call"
+Select BOOLEAN with p.value = "call"
 SemanticError
 5000
 80 - SemanticError (Wrong attr): call.varName
 call c;
-Select BOOLEAN c.varName = "print"
+Select BOOLEAN with c.varName = "print"
 SemanticError
 5000
 81 - SemanticError (Wrong attr): call.value
@@ -485,7 +485,7 @@ SemanticError
 5000
 98 - SemanticError (Wrong attr): constant.varName
 constant c;
-Select BOOLEAN c.varName = "print"
+Select BOOLEAN with c.varName = "print"
 SemanticError
 5000
 99 - SemanticError (Wrong attr): constant.stmt#
@@ -555,6 +555,11 @@ SemanticError
 5000
 112 - SemanticError (Wrong comparison): if.stmt# = NAME
 if ifs;
-Select BOOLEAN with if.stmt# = "3"
+Select BOOLEAN with if.stmt# = "a3"
 SemanticError
+5000
+113 - SyntaxError - IDENT cannot start with number
+if ifs;
+Select BOOLEAN with if.stmt# = "3"
+SyntaxError
 5000

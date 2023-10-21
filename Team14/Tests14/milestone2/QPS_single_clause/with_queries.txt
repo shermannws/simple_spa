@@ -555,6 +555,11 @@ SemanticError
 5000
 112 - SemanticError (Wrong comparison): if.stmt# = NAME
 if ifs;
-Select ifs with if.stmt# = "3"
+Select ifs with if.stmt# = "a3"
 SemanticError
+5000
+113 - SyntaxError: if.stmt# = NAME/IDENT (but IDENT Cannot start with a number)
+if ifs;
+Select ifs with if.stmt# = "3"
+SyntaxError
 5000

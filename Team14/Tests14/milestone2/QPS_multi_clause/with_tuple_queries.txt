@@ -1,7 +1,7 @@
 1 - No shared synonym v1
 call c; read r; stmt s, s1;
 Select <c> with c.procName = r.varName such that Follows(s, s1)
-print
+1
 5000
 2 - No shared synonym v2
 call c; read r;
@@ -21,7 +21,7 @@ call 7, print 7
 5 - 1 shared synonym v2
 print pn; procedure p;
 Select <pn, pn> with pn.varName = p.procName such that Uses(pn, _)
-11 11
+6 6, 11 11
 5000
 6 - 1 shared synonym v3
 while w; stmt s; read r;
@@ -30,7 +30,7 @@ Select <r, r.varName, r.varName, r> with r.varName = "k" such that Parent(w, r) 
 5000
 7 - 1 shared synonym v4
 while w; stmt s; read r;
-Select <w, s> with r.varName = "print" such that Parent(w, r) and Follows(w, s)
+Select <w, s> with r.varName = "k" such that Parent(w, r) and Follows*(w, s)
 8 10, 8 11, 8 12
 5000
 8 - 1 shared synonym v5
@@ -81,5 +81,5 @@ SyntaxError
 17 - SemanticError - BOOLEAN in tuple/undefined synonym
 print pn; variable v; read r;
 Select <r, BOOLEAN> such that Modifies(r, v) with r.varName = pn.varName such that Uses(pn, v)
-SemanticErrorr
+SemanticError
 5000
