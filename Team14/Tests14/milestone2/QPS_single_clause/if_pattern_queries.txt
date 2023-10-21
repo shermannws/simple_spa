@@ -143,3 +143,33 @@ if ifs; variable v;
 Select ifs pattern ifs(v ,_"2"_)
 SemanticError
 5000
+30 - invalid, stmt synonym for first arg
+if ifs; stmt s;
+Select ifs pattern ifs(s, _, _)
+SemanticError
+5000
+31 - invalid, call synonym for first arg
+if ifs; call c;
+Select ifs pattern ifs(c, _, _)
+SemanticError
+5000
+32 - invalid, while synonym for first arg
+if ifs; while w;
+Select ifs pattern ifs(w, _, _)
+SemanticError
+5000
+33 - invalid, if synonym for first arg
+if ifs, wrongif;
+Select ifs pattern ifs(wrongif, _, _)
+SemanticError
+5000
+34 - invalid, assign syn for first arg
+if ifs; assign a;
+Select ifs pattern ifs(a, _, _)
+SemanticError
+5000
+35 - invalid, procedure synonym for first arg
+if ifs; procedure p;
+Select ifs pattern ifs(p, _, _)
+SemanticError
+5000
