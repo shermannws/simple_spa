@@ -103,27 +103,27 @@ while w; variable v;
 Select w pattern v(_, _)
 SemanticError
 5000
-23 - invalid, 3 arguments
+22 - invalid, 3 arguments
 while w;
 Select w pattern w(_, _, _)
 SemanticError
 5000
-24 - invalid, 3 arguments
+23 - invalid, 3 arguments
 while w;
 Select w pattern w("x" ,_, _)
 SemanticError
 5000
-25 - invalid, 3 arguments
+24 - invalid, 3 arguments
 while w; variable v;
 Select w pattern w(v ,_, _)
 SemanticError
 5000
-26 - invalid, 3 arguments
+25 - invalid, 3 arguments
 while w; variable v;
 Select w pattern w(v ,"2", _)
 SemanticError
 5000
-27 - invalid, 3 arguments
+26 - invalid, 3 arguments
 while w; variable v;
 Select w pattern w(v ,_"x"_, _)
 SemanticError
