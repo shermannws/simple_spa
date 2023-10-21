@@ -1,7 +1,7 @@
 #include <memory>
 
-#include "catch.hpp"
 #include "PKB/Managers/UsesProcRelationshipManager.h"
+#include "catch.hpp"
 
 using namespace std;
 
@@ -18,12 +18,18 @@ TEST_CASE("Test Uses Procedure-Variable Relationship Retrieval") {
     Procedure procedure4 = Procedure("proc4");
     Procedure procedure5 = Procedure("proc5");
 
-    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure1), std::make_shared<Variable>(variableX));
-    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure2), std::make_shared<Variable>(variableY));
-    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure3), std::make_shared<Variable>(variableZ));
-    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure4), std::make_shared<Variable>(variableX));
-    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure4), std::make_shared<Variable>(variableY));
-    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure4), std::make_shared<Variable>(variableZ));
+    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure1),
+                                                  std::make_shared<Variable>(variableX));
+    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure2),
+                                                  std::make_shared<Variable>(variableY));
+    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure3),
+                                                  std::make_shared<Variable>(variableZ));
+    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure4),
+                                                  std::make_shared<Variable>(variableX));
+    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure4),
+                                                  std::make_shared<Variable>(variableY));
+    usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure4),
+                                                  std::make_shared<Variable>(variableZ));
 
     REQUIRE(usesProcRelationshipManager.getRelationshipProcPair().size() == 6);
 
@@ -83,17 +89,21 @@ TEST_CASE("Test Uses Procedure-Variable Transitive Relationship Calculations") {
         Variable variableX = Variable("x");
 
         // 1-->2-->3
-        callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure1), std::make_shared<Procedure>(procedure2), true);
-        callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure2), std::make_shared<Procedure>(procedure3), true);
+        callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure1),
+                                                  std::make_shared<Procedure>(procedure2), true);
+        callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure2),
+                                                  std::make_shared<Procedure>(procedure3), true);
         callRelationshipManager.calculateTransitiveRelationship();
 
-        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure3), std::make_shared<Variable>(variableX));
+        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure3),
+                                                      std::make_shared<Variable>(variableX));
 
         REQUIRE(usesProcRelationshipManager.isRelationship(procedure1, variableX) == false);
         REQUIRE(usesProcRelationshipManager.isRelationship(procedure2, variableX) == false);
         REQUIRE(usesProcRelationshipManager.isRelationship(procedure3, variableX) == true);
 
-        usesProcRelationshipManager.calculateProcVarRelationshipForCallers(std::make_shared<CallsRelationshipManager>(callRelationshipManager));
+        usesProcRelationshipManager.calculateProcVarRelationshipForCallers(
+                std::make_shared<CallsRelationshipManager>(callRelationshipManager));
 
         REQUIRE(usesProcRelationshipManager.isRelationship(procedure1, variableX) == true);
         REQUIRE(usesProcRelationshipManager.isRelationship(procedure2, variableX) == true);
@@ -118,15 +128,23 @@ TEST_CASE("Test Uses Procedure-Variable Transitive Relationship Calculations") {
         // 1 --> 2
         // 3 --> 4
         // 5 --> 1
-        callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure1), std::make_shared<Procedure>(procedure2), true);
-        callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure3), std::make_shared<Procedure>(procedure4), true);
-        callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure5), std::make_shared<Procedure>(procedure1), true);
+        callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure1),
+                                                  std::make_shared<Procedure>(procedure2), true);
+        callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure3),
+                                                  std::make_shared<Procedure>(procedure4), true);
+        callRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure5),
+                                                  std::make_shared<Procedure>(procedure1), true);
 
-        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure1), std::make_shared<Variable>(variableX));
-        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure2), std::make_shared<Variable>(variableY));
-        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure3), std::make_shared<Variable>(variableZ));
-        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure4), std::make_shared<Variable>(variableA));
-        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure5), std::make_shared<Variable>(variableB));
+        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure1),
+                                                      std::make_shared<Variable>(variableX));
+        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure2),
+                                                      std::make_shared<Variable>(variableY));
+        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure3),
+                                                      std::make_shared<Variable>(variableZ));
+        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure4),
+                                                      std::make_shared<Variable>(variableA));
+        usesProcRelationshipManager.storeRelationship(std::make_shared<Procedure>(procedure5),
+                                                      std::make_shared<Variable>(variableB));
 
         callRelationshipManager.calculateTransitiveRelationship();
 
@@ -161,7 +179,8 @@ TEST_CASE("Test Uses Procedure-Variable Transitive Relationship Calculations") {
         REQUIRE(usesProcRelationshipManager.isRelationship(procedure5, variableZ) == false);
         REQUIRE(usesProcRelationshipManager.isRelationship(procedure5, variableA) == false);
 
-        usesProcRelationshipManager.calculateProcVarRelationshipForCallers(std::make_shared<CallsRelationshipManager>(callRelationshipManager));
+        usesProcRelationshipManager.calculateProcVarRelationshipForCallers(
+                std::make_shared<CallsRelationshipManager>(callRelationshipManager));
 
         REQUIRE(usesProcRelationshipManager.isRelationship(procedure1, variableX) == true);
         REQUIRE(usesProcRelationshipManager.isRelationship(procedure2, variableY) == true);

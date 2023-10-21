@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <array>
 #include <unordered_map>
+#include <vector>
 
 #include "Commons/Entities/Entity.h"
 #include "QPS/QPSTypes.h"
@@ -11,18 +11,13 @@
  * @brief Enumeration representing the type of result.
  * The result type can be Invalid, Boolean, or Tuples.
  */
-enum class ResultType {
-    Invalid,
-    Boolean,
-    Tuples
-};
+enum class ResultType { Invalid, Boolean, Tuples };
 
 /**
  * @brief Represents the result of a PQL clause evaluation.
  */
 class Result {
 private:
-
     /**
      * The type of result
      */
@@ -51,7 +46,8 @@ public:
     Result();
 
     /**
-     * @brief Constructor for a boolean Result instance, returns a Result object with Type Boolean and boolResult of value
+     * @brief Constructor for a boolean Result instance, returns a Result object with Type Boolean and boolResult of
+     * value
      * @param value boolean value of the result
      */
     Result(bool value);
@@ -84,17 +80,17 @@ public:
      * @brief Gets the synonym indices for the result.
      * @return The synonym indices (SynonymMap).
      */
-    SynonymMap& getSynIndices();
+    SynonymMap &getSynIndices();
 
-    void setTuples(const std::vector<Entity>& resultEntities);
+    void setTuples(const std::vector<Entity> &resultEntities);
 
-    void setTuples(const std::vector<std::vector<Entity>>& resultTuples);
+    void setTuples(const std::vector<std::vector<Entity>> &resultTuples);
 
     /**
      * @brief Gets the tuples in the result of the clause evaluation
      * @return The result tuples (ResultTuples).
      */
-    ResultTuples& getTuples();
+    ResultTuples &getTuples();
 
     /**
      * @brief returns true if a Result object represents a True boolean Result
@@ -103,20 +99,20 @@ public:
     bool isTrue();
 
     /**
-    * @brief returns true if a Result object represents a False boolean Result
-    * @return true if the result object is a False Boolean Result
-    */
+     * @brief returns true if a Result object represents a False boolean Result
+     * @return true if the result object is a False Boolean Result
+     */
     bool isFalse();
 
     /**
-    * @brief returns true if a Result object represents a Empty Tuple Result
-    * @return true if the result object is a Empty Tuple Result
-    */
+     * @brief returns true if a Result object represents a Empty Tuple Result
+     * @return true if the result object is a Empty Tuple Result
+     */
     bool isEmpty();
 
     /**
-    * @brief returns true if a Result object's type is Invalid
-    * @return true if the result object is Invalid
-    */
+     * @brief returns true if a Result object's type is Invalid
+     * @return true if the result object is Invalid
+     */
     bool isInvalid();
 };

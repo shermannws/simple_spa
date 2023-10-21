@@ -3,12 +3,14 @@
 #include <list>
 #include <string>
 
-#include "Result.h"
-#include "QPS/Query.h"
-#include "ClauseHandler.h"
-#include "ResultHandler.h"
 #include "./PKB/PkbReader.h"
+#include "ClauseHandler.h"
 #include "QPS/QPSTypes.h"
+#include "QPS/Query.h"
+#include "Result.h"
+#include "ResultHandler.h"
+
+using transformFunc = std::function<std::string(Entity &)>;
 
 /**
  * @brief PQL (Program Query Language) evaluator class.
@@ -39,7 +41,7 @@ private:
      * @param queryEntity A pointer to the query entity to retrieve instances for.
      * @return A vector of entities representing all instances of the query entity.
      */
-    std::vector<Entity> getAll(const EntityPtr& queryEntity);
+    std::vector<Entity> getAll(const EntityPtr &queryEntity);
 
     /**
      * @brief Evaluates a clause and updates the result accordingly.
@@ -49,11 +51,19 @@ private:
     std::shared_ptr<Result> evaluateClause(const std::shared_ptr<Clause> clause);
 
     /**
-     * @brief Evaluates the select clause of a query.
-     * @param query the query object to evaluate
+     * @brief Evaluates a select clause with the given entity as the result clause without any constraint clauses
+     * @param entity the selected entity to be evaluated
      * @return shared pointer to result object
      */
-    std::shared_ptr<Result> evaluateSelect(const Query& query);
+    std::shared_ptr<Result> evaluateSelect(const std::shared_ptr<QueryEntity> entity);
+
+    /**
+     * @brief Evaluates a subset of the result clause of a query
+     * @param query the query object whose result clause is being evaluated
+     * @param resultSyns the vector of synonyms representing the subset of result clause to be evaluated
+     * @return shared pointer to result object
+     */
+    std::shared_ptr<Result> evaluateResultClause(const Query &query, std::vector<Synonym> resultSyns);
 
     /**
      * @brief Evaluates all the constraint clauses of a query into a combined result, returns nullptr if
@@ -61,7 +71,41 @@ private:
      * @param query the query object to evaluate
      * @return shared pointer to result object
      */
-    std::shared_ptr<Result> evaluateConstraintClauses(const Query& query);
+    std::shared_ptr<Result> evaluateConstraintClauses(const Query &query);
+
+    /**
+     * @brief returns the vector of synonyms in the result clause that is not present in the result object
+     * @param resultClause vector of synonyms
+     * @param result result object
+     * @return vector of unevaluated synonyms
+     */
+    std::vector<Synonym> getUnevaluatedSyn(const std::vector<Synonym> resultClause, std::shared_ptr<Result> result);
+
+    /**
+     * applies the transformFunc to the entity at index equal to the int and stores the result in the returned vector
+     * @param row vector of entities to transform
+     * @param transformations pair of index of entity to transform and toString function to apply
+     * @return the vector of transformation results
+     */
+    std::vector<std::string> project(std::vector<Entity> row,
+                                     std::vector<std::pair<int, transformFunc>> transformations);
+
+    /**
+     * creates a vector of transformations to convert a row from a result table into the format specified by
+     * resultClause a transformation is a pair of int, transformFunc where int represents index of entity
+     * @param inputMap synonym indices of input tuples
+     * @param resultClause vector of synonyms we want to build
+     * @return
+     */
+    std::vector<std::pair<int, transformFunc>> getTransformations(SynonymMap inputMap,
+                                                                  std::vector<Synonym> resultClause);
+
+    /**
+     * concatenates a vector of strings with a whitespace as the connector
+     * @param strings vector of strings to join
+     * @return resultant string
+     */
+    std::string concat(std::vector<std::string> strings);
 
 public:
     /**
@@ -75,13 +119,13 @@ public:
      * @param query The PQL query to evaluate.
      * @return The result of the PQL query evaluation as a Result object
      */
-    Result evaluate(Query& query);
+    Result evaluate(Query &query);
 
     /**
-    * @brief Formats the result of a PQL query based on the given query and result table.
-    * @param query The PQL query.
-    * @param result The result of the PQL query evaluation.
-    * @return The formatted result list
-    */
-    ResultList formatResult(Query& query, Result& result);
+     * @brief Formats the result of a PQL query based on the given query and result table.
+     * @param query The PQL query.
+     * @param result The result of the PQL query evaluation.
+     * @return The formatted result list
+     */
+    ResultList formatResult(Query &query, Result &result);
 };

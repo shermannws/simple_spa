@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "Entity.h"
 #include "../AppConstants.h"
+#include "Entity.h"
 
 /**
  * @brief A Procedure is a procedure in the SIMPLE programming language

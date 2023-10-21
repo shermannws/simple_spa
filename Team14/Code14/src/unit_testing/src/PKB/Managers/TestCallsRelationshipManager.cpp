@@ -1,7 +1,7 @@
 #include <memory>
 
-#include "catch.hpp"
 #include "PKB/Managers/CallsRelationshipManager.h"
+#include "catch.hpp"
 
 using namespace std;
 
@@ -40,7 +40,7 @@ TEST_CASE("Test Calls Relationship Retrieval") {
     REQUIRE(callsRelationshipManager.isRelationship(*procedure1, *procedure4, false) == true);
     REQUIRE(callsRelationshipManager.isRelationship(*procedure2, *procedure4, false) == false);
     REQUIRE(callsRelationshipManager.isRelationship(*procedure3, *procedure4, false) == false);
-    
+
     REQUIRE(callsRelationshipManager.hasRelationship() == true);
 
     REQUIRE(callsRelationshipManager.isFormer(*procedure1) == true);

@@ -11,5 +11,5 @@ public:
      * Returns the expression as type string.
      * @return The string representing the expression
      */
-	virtual std::string toString() = 0;
+    virtual std::string toString() = 0;
 };

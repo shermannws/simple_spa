@@ -101,5 +101,4 @@ TEST_CASE("extractExpressionSpec") {
         auto parser = std::make_shared<ExprSpecParser>(tokenizer);
         REQUIRE_THROWS_WITH(parser->extractExpressionSpec(), "not enough factors");
     }
-
 }

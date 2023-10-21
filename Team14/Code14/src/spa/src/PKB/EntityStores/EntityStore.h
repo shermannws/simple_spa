@@ -11,7 +11,7 @@
  * This class is a super class of all the entity stores.
  * @tparam T The type of the Entity that the EntityStore stores
  */
-template <typename T>
+template<typename T>
 class EntityStore : public SetStore<T, Entity> {
 public:
     /**

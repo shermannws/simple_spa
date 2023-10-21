@@ -1,3 +1,4 @@
 #include "UsesProcRelationshipManager.h"
 
-UsesProcRelationshipManager::UsesProcRelationshipManager() : ProcToVarRelationshipManager<UsesProcRelationshipStore>() {}
+UsesProcRelationshipManager::UsesProcRelationshipManager()
+    : ProcToVarRelationshipManager<UsesProcRelationshipStore>() {}

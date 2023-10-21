@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
 #include <exception>
 #include <iostream>
+#include <string>
 
 /**
  * SyntaxException class that extends from std::exception
@@ -13,6 +13,7 @@ private:
      * @brief The error message of the SyntaxException
      */
     std::string errorMsg;
+
 public:
     /**
      * @brief The constructor of SyntaxException
@@ -23,6 +24,5 @@ public:
     /**
      * @brief Returns the error message of the exception when the exception is thrown
      */
-    virtual const char* what() const throw();
+    virtual const char *what() const throw();
 };
-

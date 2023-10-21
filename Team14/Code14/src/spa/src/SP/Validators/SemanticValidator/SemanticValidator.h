@@ -21,5 +21,5 @@ public:
      * 3. Recursive and cyclic calls are not allowed. i.e. A-->B-->C-->A or A-->A
      * @param root
      */
-    void validate(const std::shared_ptr<ProgramNode>& root);
+    void validate(const std::shared_ptr<ProgramNode> &root);
 };

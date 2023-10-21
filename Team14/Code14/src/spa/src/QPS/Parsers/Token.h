@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
 
 /**
  * @brief The enum class of TokenType
@@ -23,6 +23,10 @@ enum class TokenType {
     Comma,
     Quote,
     Underscore,
+    Dot,
+    Equal,
+    Ltuple,
+    Rtuple,
 
     // alphanumeric letter(s)
     Word,
@@ -51,7 +55,7 @@ public:
      * @brief The constructor of Token
      * @param rep The string representation of the Token
      */
-    explicit Token(const std::string& rep);
+    explicit Token(const std::string &rep);
 
     /**
      * @brief Returns the string representation of the Token
@@ -70,7 +74,7 @@ public:
      * @param str The expected string
      * @return The result of the check in boolean
      */
-    bool isToken(const std::string& str);
+    bool isToken(const std::string &str);
 
     /**
      * @brief Checks if the token is of TokenType ttype
@@ -84,6 +88,12 @@ public:
      * @return The result of the check in boolean
      */
     bool isDesignEntity();
+
+    /**
+     * @brief Checks if the token is of TokenType::Word and the string representation is of AttrName
+     * @return The result of the check in boolean
+     */
+    bool isAttrName();
 
     /**
      * @brief Checks if the string representation matches the pattern of an INTEGER

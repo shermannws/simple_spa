@@ -1,5 +1,6 @@
 #pragma once
-#include <PKB/PkbWriter.h>
+
+#include "PKB/PkbWriter.h"
 
 /**
  * Interface for all design extractors.

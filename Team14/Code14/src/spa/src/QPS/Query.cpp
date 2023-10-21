@@ -1,14 +1,15 @@
-#include <string>
 #include <memory>
+#include <string>
 
 #include "Query.h"
 
 Query::Query() {
     declarations = DeclarationMap();
     selects = std::vector<Synonym>();
+    isMultiTuple = false;
 }
 
-std::shared_ptr<QueryEntity> Query::getEntity(const Synonym& syn) const {
+std::shared_ptr<QueryEntity> Query::getEntity(const Synonym &syn) const {
     auto it = declarations.find(syn);
 
     if (it != declarations.end()) {
@@ -18,38 +19,30 @@ std::shared_ptr<QueryEntity> Query::getEntity(const Synonym& syn) const {
     }
 }
 
-void Query::addSelect(const Synonym synonym){
-    selects.push_back(synonym);
-}
+void Query::addSelect(const Synonym synonym) { selects.push_back(synonym); }
 
-void Query::addDeclaration(const EntityPtr& entity){
-    declarations.insert({entity->getSynonym(), entity});
-}
+void Query::setBooleanResult() { selects = std::vector<Synonym>(); }
 
-bool Query::hasDeclarations() const {
-    return !declarations.empty();
-}
+void Query::setMultiTupleResult() { isMultiTuple = true; }
 
-DeclarationMap Query::getDeclarations() const {
-    return declarations;
-}
+bool Query::isMultiTupleResult() const { return isMultiTuple; }
 
-std::vector<Synonym> Query::getSelect() const {
-    return selects;
-}
+void Query::addDeclaration(const EntityPtr &entity) { declarations.insert({entity->getSynonym(), entity}); }
 
-void Query::addClause(std::shared_ptr<SuchThatClause> clause) {
-    suchThatClauses.push_back(clause);
-}
+bool Query::hasDeclarations() const { return !declarations.empty(); }
 
-void Query::addClause(std::shared_ptr<PatternClause> clause) {
-    patternClauses.push_back(clause);
-}
+DeclarationMap Query::getDeclarations() const { return declarations; }
 
-std::vector<std::shared_ptr<SuchThatClause>> Query::getSuchThat() const {
-    return suchThatClauses;
-}
+std::vector<Synonym> Query::getSelect() const { return selects; }
 
-std::vector<std::shared_ptr<PatternClause>> Query::getPattern() const {
-    return patternClauses;
-}
+void Query::addClause(std::shared_ptr<SuchThatClause> clause) { suchThatClauses.push_back(clause); }
+
+void Query::addClause(std::shared_ptr<PatternClause> clause) { patternClauses.push_back(clause); }
+
+void Query::addClause(std::shared_ptr<WithClause> clause) { withClauses.push_back(clause); }
+
+std::vector<std::shared_ptr<SuchThatClause>> Query::getSuchThat() const { return suchThatClauses; }
+
+std::vector<std::shared_ptr<PatternClause>> Query::getPattern() const { return patternClauses; }
+
+std::vector<std::shared_ptr<WithClause>> Query::getWith() const { return withClauses; }

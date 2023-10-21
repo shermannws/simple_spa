@@ -1,19 +1,19 @@
 #pragma once
 
+#include <algorithm>
 #include <memory>
 #include <vector>
-#include <algorithm>
 
-#include "PKB/Managers/ManagerUtils.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
+#include "PKB/Managers/ManagerUtils.h"
 
 /**
  * @class ConditionPatterManager is responsible for storing and retrieving the statement patterns
  * This class is a template class that is inherited by the Pattern Managers
  * @brief Manages the patterns
  */
-template <typename S>
+template<typename S>
 class ConditionPatternManager {
 private:
     /**
@@ -27,7 +27,9 @@ protected:
      * @param statement The statement that is related to the variable
      * @param variable The variable that is related to the statement
      */
-    void storePattern(std::shared_ptr<Statement> statement, std::shared_ptr<std::vector<std::shared_ptr<Variable>>> variables);
+    void storePattern(std::shared_ptr<Statement> statement,
+                      std::shared_ptr<std::vector<std::shared_ptr<Variable>>> variables);
+
 public:
     /**
      * @brief Constructs a ConditionPatternManager object
@@ -36,9 +38,9 @@ public:
     ConditionPatternManager();
 
     /**
-    * Returns a vector of Statements in the store.
-    * @return A vector of all the Statement objects
-    */
+     * Returns a vector of Statements in the store.
+     * @return A vector of all the Statement objects
+     */
     std::vector<Entity> getAllStmts() const;
 
     /**
@@ -46,7 +48,7 @@ public:
      * @param var The variable to be matched against
      * @return A vector of Statement objects
      */
-    std::vector<Entity> getStmtsByVar(Variable& var) const;
+    std::vector<Entity> getStmtsByVar(Variable &var) const;
 
     /**
      * Returns a vector of vectors containing all the Statement and Variable pairs in the store

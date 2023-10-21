@@ -1,8 +1,8 @@
 #include <string>
 
-#include "catch.hpp"
-#include "SP/SPTokenizer.h"
 #include "Commons/AppConstants.h"
+#include "SP/SPTokenizer.h"
+#include "catch.hpp"
 
 TEST_CASE("SPTokenizer - Valid Tokens") {
 
@@ -67,7 +67,6 @@ TEST_CASE("SPTokenizer - Valid Tokens") {
         REQUIRE(tokens.at(7).getValue() == "1");
         REQUIRE(tokens.at(8).getType() == TokenType::Name);
         REQUIRE(tokens.at(8).getValue() == "x10");
-
     }
 
     SECTION("Parenthesis test") {
@@ -88,7 +87,6 @@ TEST_CASE("SPTokenizer - Valid Tokens") {
         REQUIRE(tokens.at(8).getType() == TokenType::OpenCurlyParenthesis);
         REQUIRE(tokens.at(9).getType() == TokenType::CloseCurlyParenthesis);
         REQUIRE(tokens.at(10).getType() == TokenType::CloseCurlyParenthesis);
-
     }
 
     SECTION("Semicolon and Equals test") {
@@ -126,7 +124,6 @@ TEST_CASE("SPTokenizer - Valid Tokens") {
         REQUIRE(tokens.at(7).getValue() == "/");
         REQUIRE(tokens.at(9).getType() == TokenType::ArithmeticOperator);
         REQUIRE(tokens.at(9).getValue() == "%");
-
     }
 
     SECTION("Conditional Not test") {
@@ -170,27 +167,27 @@ TEST_CASE("SPTokenizer - Valid Tokens") {
 TEST_CASE("Relational operator test") {
 
     SECTION("Greater than test 1") {
-    std::string input = "(var2 > var1)";
-    SPTokenizer tokenizer(input);
-    std::vector<SPToken> tokens = tokenizer.tokenize();
-    REQUIRE(tokens.at(2).getType() == TokenType::RelationalOperator);
-    REQUIRE(tokens.at(2).getValue() == AppConstants::STRING_GREATER_THAN);
+        std::string input = "(var2 > var1)";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        REQUIRE(tokens.at(2).getType() == TokenType::RelationalOperator);
+        REQUIRE(tokens.at(2).getValue() == AppConstants::STRING_GREATER_THAN);
     }
 
     SECTION("Greater than test 2") {
-    std::string input = "(var2>var1)";
-    SPTokenizer tokenizer(input);
-    std::vector<SPToken> tokens = tokenizer.tokenize();
-    REQUIRE(tokens.at(2).getType() == TokenType::RelationalOperator);
-    REQUIRE(tokens.at(2).getValue() == AppConstants::STRING_GREATER_THAN);
+        std::string input = "(var2>var1)";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        REQUIRE(tokens.at(2).getType() == TokenType::RelationalOperator);
+        REQUIRE(tokens.at(2).getValue() == AppConstants::STRING_GREATER_THAN);
     }
 
     SECTION("Less than test 1") {
-    std::string input = "(var2 < var1)";
-    SPTokenizer tokenizer(input);
-    std::vector<SPToken> tokens = tokenizer.tokenize();
-    REQUIRE(tokens.at(2).getType() == TokenType::RelationalOperator);
-    REQUIRE(tokens.at(2).getValue() == AppConstants::STRING_LESS_THAN);
+        std::string input = "(var2 < var1)";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        REQUIRE(tokens.at(2).getType() == TokenType::RelationalOperator);
+        REQUIRE(tokens.at(2).getValue() == AppConstants::STRING_LESS_THAN);
     }
 
     SECTION("Less than test 2") {

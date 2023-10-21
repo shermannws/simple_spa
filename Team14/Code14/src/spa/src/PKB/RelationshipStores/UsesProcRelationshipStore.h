@@ -1,8 +1,8 @@
 #pragma once
 
-#include "PKB/RelationshipStores/RelationshipStore.h"
 #include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Variable.h"
+#include "PKB/RelationshipStores/RelationshipStore.h"
 
 /**
  * @brief A class that stores UsesProcRelationships (UsesProcedureRelationships)

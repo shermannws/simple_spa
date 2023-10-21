@@ -17,39 +17,16 @@ Pkb::Pkb() {
     this->nextRelationshipManager = std::make_shared<NextRelationshipManager>();
     this->cfgManager = std::make_shared<CFGManager>();
 
-    this->pkbReaderManager = std::make_shared<PkbReaderManager>(
-            PkbReaderManager(
-                    this->assignmentManager,
-                    this->entitiesManager,
-                    this->followsRelationshipManager,
-                    this->usesRelationshipManager,
-                    this->modifiesRelationshipManager,
-                    this->parentRelationshipManager,
-                    this->callsRelationshipManager,
-                    this->modifiesProcRelationshipManager,
-                    this->usesProcRelationshipManager,
-                    this->ifPatternManager,
-                    this->whilePatternManager,
-                    this->nextRelationshipManager
-            )
-    );
-    this->pkbWriterManager = std::make_shared<PkbWriterManager>(
-            PkbWriterManager(
-                    this->assignmentManager,
-                    this->entitiesManager,
-                    this->followsRelationshipManager,
-                    this->usesRelationshipManager,
-                    this->modifiesRelationshipManager,
-                    this->parentRelationshipManager,
-                    this->callsRelationshipManager,
-                    this->modifiesProcRelationshipManager,
-                    this->usesProcRelationshipManager,
-                    this->ifPatternManager,
-                    this->whilePatternManager,
-                    this->nextRelationshipManager,
-                    this->cfgManager
-            )
-    );
+    this->pkbReaderManager = std::make_shared<PkbReaderManager>(PkbReaderManager(
+            this->assignmentManager, this->entitiesManager, this->followsRelationshipManager,
+            this->usesRelationshipManager, this->modifiesRelationshipManager, this->parentRelationshipManager,
+            this->callsRelationshipManager, this->modifiesProcRelationshipManager, this->usesProcRelationshipManager,
+            this->ifPatternManager, this->whilePatternManager, this->nextRelationshipManager));
+    this->pkbWriterManager = std::make_shared<PkbWriterManager>(PkbWriterManager(
+            this->assignmentManager, this->entitiesManager, this->followsRelationshipManager,
+            this->usesRelationshipManager, this->modifiesRelationshipManager, this->parentRelationshipManager,
+            this->callsRelationshipManager, this->modifiesProcRelationshipManager, this->usesProcRelationshipManager,
+            this->ifPatternManager, this->whilePatternManager, this->nextRelationshipManager, this->cfgManager));
 };
 
 std::shared_ptr<PkbReader> Pkb::createPkbReader() {
