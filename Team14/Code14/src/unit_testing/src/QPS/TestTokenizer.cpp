@@ -128,3 +128,51 @@ TEST_CASE("Tokenizer Test") {
         REQUIRE(tokenizer.popToken()->getType() == TokenType::Empty);
     }
 }
+
+TEST_CASE("attrName") {
+    std::string input = "procedure p; Select p.procName <> stmt#  ";
+
+    Tokenizer tokenizer(input);
+
+    std::shared_ptr<Token> t = tokenizer.popToken();
+    REQUIRE(t->getRep() == "procedure");
+    REQUIRE(t->getType() == TokenType::Word);
+
+    t = tokenizer.popToken();
+    REQUIRE(t->getRep() == "p");
+    REQUIRE(t->getType() == TokenType::Word);
+
+    t = tokenizer.popToken();
+    REQUIRE(t->getRep() == ";");
+    REQUIRE(t->getType() == TokenType::Semicolon);
+
+
+    t = tokenizer.popToken();
+    REQUIRE(t->getRep() == "Select");
+    REQUIRE(t->getType() == TokenType::Word);
+
+    t = tokenizer.popToken();
+    REQUIRE(t->getRep() == "p");
+    REQUIRE(t->getType() == TokenType::Word);
+
+    t = tokenizer.popToken();
+    REQUIRE(t->getRep() == ".");
+    REQUIRE(t->getType() == TokenType::Dot);
+
+
+    t = tokenizer.popToken();
+    REQUIRE(t->getRep() == "procName");
+    REQUIRE(t->getType() == TokenType::Word);
+
+    t = tokenizer.popToken();
+    REQUIRE(t->getRep() == "<");
+    REQUIRE(t->getType() == TokenType::Ltuple);
+
+    t = tokenizer.popToken();
+    REQUIRE(t->getRep() == ">");
+    REQUIRE(t->getType() == TokenType::Rtuple);
+
+    t = tokenizer.popToken();
+    REQUIRE(t->getRep() == "stmt#");
+    REQUIRE(t->getType() == TokenType::Word);
+}

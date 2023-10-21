@@ -1,11 +1,11 @@
 #include <vector>
 
+#include "../TestingUtilities/ASTComparer/ASTComparer.h"
+#include "../TestingUtilities/ASTPrinter/ASTPrinter.h"
 #include "SP/AST/Nodes/ProgramNode.h"
 #include "SP/SPParser.h"
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
-#include "TestingUtilities/ASTComparer/ASTComparer.h"
-#include "TestingUtilities/ASTPrinter/ASTPrinter.h"
 #include "catch.hpp"
 
 TEST_CASE("Test parse with one procedure, one read statement") {
