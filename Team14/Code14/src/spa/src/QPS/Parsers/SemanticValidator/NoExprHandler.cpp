@@ -8,7 +8,12 @@ void NoExprHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
         return SemanticValHandler::handle(query, clause);
     }
 
-    if (clauseType != ClauseType::If && pattern->hasThirdParam()) { throw SemanticException("Invalid syn-if"); }
+    if (clauseType == ClauseType::While && pattern->hasThirdParam()) {
+        throw SemanticException("Invalid while structure");
+    }
+    if (clauseType == ClauseType::If && !pattern->hasThirdParam()) {
+        throw SemanticException("Invalid if pattern structure");
+    }
 
     Ref &leftRef = pattern->getFirstParam();
     RefType lhsType = RefType::EntRef;
