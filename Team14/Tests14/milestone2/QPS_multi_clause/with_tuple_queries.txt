@@ -65,21 +65,26 @@ Select <r, r, pn, pn.stmt#, v> such that Modifies(r, v) with r.varName = pn.varN
 5000
 14 - Syntactically Invalid
 print pn; variable v; read r;
-Select <> such that Modifies(r, v) and Uses(pn, v) and r.varName = pn.varName
+Select <pn> such that Modifies(r, v) and Uses(pn, v) and r.varName = pn.varName
 SyntaxError
 5000
 15 - Syntactically Invalid
 print pn; variable v; read r;
-Select <> such that Modifies(r, v) and Uses(pn, v) such that r.varName = pn.varName
+Select <v> such that Modifies(r, v) and Uses(pn, v) such that r.varName = pn.varName
 SyntaxError
 5000
 16 - Syntactically Invalid
 print pn; variable v; read r; assign a;
-Select <> such that Modifies(r, v) pattern a ("call",_) and r.varName = pn.varName
+Select <v, v.varName> such that Modifies(r, v) pattern a ("call",_) and r.varName = pn.varName
 SyntaxError
 5000
 17 - SemanticError - BOOLEAN in tuple/undefined synonym
 print pn; variable v; read r;
 Select <r, BOOLEAN> such that Modifies(r, v) with r.varName = pn.varName such that Uses(pn, v)
+SemanticError
+5000
+18 - SemanticError - BOOLEAN in tuple/undefined synonym
+while w;
+Select <w, BOOLEAN>
 SemanticError
 5000
