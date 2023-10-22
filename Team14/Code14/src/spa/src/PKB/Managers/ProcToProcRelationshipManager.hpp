@@ -65,30 +65,7 @@ bool ProcToProcRelationshipManager<S>::isLatter(Procedure &procedure) const {
 
 template<typename S>
 void ProcToProcRelationshipManager<S>::calculateTransitiveRelationship() {
-    for (auto it = relationshipStore->getLeftToRightBeginIterator();
-         it != relationshipStore->getLeftToRightEndIterator(); ++it) {
-        auto former = it->first;
-        auto latterSet = it->second;
-        for (auto it2 = latterSet->getBeginIterator(); it2 != latterSet->getEndIterator(); ++it2) {
-            auto latter = *it2;
-            starRelationshipStore->storeRelationship(former, latter);
-            calculateTransitiveRelationshipHelper(former, latter);
-        }
-    }
-}
-
-template<typename S>
-void ProcToProcRelationshipManager<S>::calculateTransitiveRelationshipHelper(std::shared_ptr<Procedure> former,
-                                                                             std::shared_ptr<Procedure> latter) {
-    auto latterChildren = relationshipStore->getRightEntitiesOf(latter);
-    if (latterChildren == nullptr) { return; }
-    for (auto it = latterChildren->getBeginIterator(); it != latterChildren->getEndIterator(); ++it) {
-        auto newLatter = *it;
-        auto rightOfFormer = starRelationshipStore->getRightEntitiesOf(former);
-        if (rightOfFormer != nullptr && rightOfFormer->get(newLatter) != nullptr) { continue; }
-        starRelationshipStore->storeRelationship(former, newLatter);
-        calculateTransitiveRelationshipHelper(former, newLatter);
-    }
+    ManagerUtils::calculateTransitivity<S, Procedure>(this->relationshipStore, this->starRelationshipStore);
 }
 
 template<typename S>
