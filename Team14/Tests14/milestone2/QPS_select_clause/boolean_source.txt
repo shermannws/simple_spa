@@ -1,0 +1,29 @@
+procedure procedure {
+    x = 1 + 2;
+    if (a == x - 1) then {
+        call another;
+    } else {
+        print y;
+        read read;
+        y = 5 - (x * 5);
+        if (1 == var) then {
+            print a;
+        } else {
+            read a;
+            while (hello == 2) {
+                call test;
+                read true;
+            }
+        }
+    }
+    test = exact + matching;
+    another = exact + matching;
+}
+
+procedure another {
+    a = x + 1;
+}
+
+procedure test {
+    call another;
+}
