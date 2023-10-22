@@ -107,8 +107,11 @@ private:
      */
     std::string concat(std::vector<std::string> strings);
 
-    std::unordered_map<Synonym, std::unordered_set<Synonym>> buildSynGraph(Query& query, std::vector<std::shared_ptr<Clause>> clauses);
-    std::vector<std::unordered_set<std::shared_ptr<Clause>>> groupClauses(std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list, std::vector<std::shared_ptr<Clause>> clauses);
+    std::unordered_map<Synonym, std::unordered_set<Synonym>>
+    buildSynGraph(Query &query, std::vector<std::shared_ptr<Clause>> clauses);
+    std::vector<std::unordered_set<std::shared_ptr<Clause>>>
+    groupClauses(std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list,
+                 std::vector<std::shared_ptr<Clause>> clauses);
     bool isSelect(std::vector<Synonym> selects, std::shared_ptr<Result> res);
     bool evaluateBoolResults(std::vector<std::shared_ptr<Result>> results);
     std::shared_ptr<Result> evaluateMainResults(std::vector<std::shared_ptr<Result>> results);
@@ -116,7 +119,7 @@ private:
     std::shared_ptr<Result> evaluateBoolClauses(std::vector<std::shared_ptr<Clause>> clauseGroup);
     std::unordered_set<Synonym> getMainSynGroup(Query &query);
     void DFS(const std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list, const std::string &current,
-             std::unordered_set<std::string> &visited,  std::unordered_set<std::string> &connected);
+             std::unordered_set<std::string> &visited, std::unordered_set<std::string> &connected);
 
 public:
     /**
