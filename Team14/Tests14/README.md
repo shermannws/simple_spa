@@ -1,7 +1,7 @@
 # System Testing for SPA by Team 14
 
 ## Folder Structure
-The system test files are stored in subdirectories according to milestones (i.e. demo1, milestone1, milestone2 and milestone3)
+The system test files are stored in subdirectories according to milestones (i.e. milestone1, milestone2 and milestone3)
 
 ## milestone1 test cases
 The following are the subdirectories for `/milestone1`.
@@ -17,3 +17,19 @@ The following are the subdirectories for `/milestone1`.
   - Tests each statement type individually.
 - SIMPLE_typical
   - Tests common and edge SIMPLE program to ensure that our program can handle the cases.
+
+## milestone2 test cases
+The following are the subdirectories for `/milestone2`.
+- Extreme
+  - Contains unncessarily long test cases to test the performance of the program.
+- QPS_multi_clause
+  - Tests the combination of multiple clauses together.
+- QPS_select_clause
+  - Tests the differnt types of select clauses newly introduced in milestone2.
+- QPS_single_clause
+  - Tests each such that clause individually.
+  - Tests each pattern clause individually (assign/if/while pattern).
+  - Tests each with clause individually.
+- SIMPLE_bad_syntax
+  - Tests SIMPLE program with Syntax or Semantic Error.
+  - Note: The `_queries.txt` files in this subdirectory is empty as program would have terminated due to Error while parsing SIMPLE program.
