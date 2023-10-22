@@ -108,7 +108,7 @@ print p; read r;
 Select <p,r> such that Uses(p, "arg1") and Uses(r, "arg6")
 none
 5000
-23 - 2 selects 1 valid result table
+23 - 2 selects 1 valid result table (Invalid Select)
 procedure p;
 Select <p, BOOLEAN> such that Calls*("p1", p)
 SemanticError
