@@ -133,32 +133,32 @@ while w; variable v;
 Select w pattern w(v ,_, "y")
 SyntaxError
 5000
-27 - invalid, 3 arguments
+28 - invalid, 3 arguments
 while w; variable v;
 Select w pattern w(v ,_"x"_, "y")
 SyntaxError
 5000
-30 - invalid, 2 arguments, stmt synonym for first arg
+29 - invalid, 2 arguments, stmt synonym for first arg
 while w; stmt s;
 Select w pattern w(s, _)
 SemanticError
 5000
-31 - invalid, 2 arguments, call synonym for first arg
+30 - invalid, 2 arguments, call synonym for first arg
 while w; call c;
 Select w pattern w(c, _)
 SemanticError
 5000
-32 - invalid, 2 arguments, while synonym for first arg
+31 - invalid, 2 arguments, while synonym for first arg
 while w, w2;
 Select w pattern w(w2, _)
 SemanticError
 5000
-33 - invalid, 2 arguments, if synonym for first arg
+32 - invalid, 2 arguments, if synonym for first arg
 while w, if;
 Select w pattern w(if,_)
 SemanticError
 5000
-34 - invalid, 2 arguments, assign syn for first arg
+33 - invalid, 2 arguments, assign syn for first arg
 while w; assign a;
 Select w pattern w(a, _)
 SemanticError
