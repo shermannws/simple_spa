@@ -137,8 +137,14 @@ public:
     std::vector<std::shared_ptr<PatternClause>> getPattern() const;
 
     /**
-     * @brief Retrieves the vector of pattern clauses in the query.
-     * @return A vector of shared pointers to the PatternClauses.
+     * @brief Retrieves the vector of with clauses in the query.
+     * @return A vector of shared pointers to the WithClauses.
      */
     std::vector<std::shared_ptr<WithClause>> getWith() const;
+
+    /**
+     * @brief Retrieves the vector of pattern clauses in the query.
+     * @return A vector of shared pointers to the Clauses.
+     */
+    std::vector<std::shared_ptr<Clause>> getAllClause() const;
 };
