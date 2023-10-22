@@ -11,9 +11,9 @@
 class QPSUtil {
 public:
     /**
-     * @brief An unordered set of design entities in string
+     * @brief An unordered map that maps StringRep of a design entity to its corresponding QueryEntityType
      */
-    static std::unordered_set<std::string> designEntities;
+    static std::unordered_map<StringRep, QueryEntityType> designEntities;
 
     /**
      * @brief An unordered map that maps StringRep to its corresponding ClauseType

@@ -14,11 +14,17 @@
 #include "QPS/Evaluators/Strategies/WhilePatternStrategy.h"
 #include "QPS/Evaluators/Strategies/WithStrategy.h"
 
-std::unordered_set<std::string> QPSUtil::designEntities = {
-        AppConstants::STRING_PROCEDURE, AppConstants::STRING_STATEMENT, AppConstants::STRING_READ,
-        AppConstants::STRING_PRINT,     AppConstants::STRING_ASSIGN,    AppConstants::STRING_CALL,
-        AppConstants::STRING_WHILE,     AppConstants::STRING_IF,        AppConstants::STRING_VARIABLE,
-        AppConstants::STRING_CONSTANT,
+std::unordered_map<StringRep, QueryEntityType> QPSUtil::designEntities = {
+        {AppConstants::STRING_PROCEDURE, QueryEntityType::Procedure},
+        {AppConstants::STRING_STATEMENT, QueryEntityType::Stmt},
+        {AppConstants::STRING_READ, QueryEntityType::Read},
+        {AppConstants::STRING_PRINT, QueryEntityType::Print},
+        {AppConstants::STRING_ASSIGN, QueryEntityType::Assign},
+        {AppConstants::STRING_CALL, QueryEntityType::Call},
+        {AppConstants::STRING_WHILE, QueryEntityType::While},
+        {AppConstants::STRING_IF, QueryEntityType::If},
+        {AppConstants::STRING_VARIABLE, QueryEntityType::Variable},
+        {AppConstants::STRING_CONSTANT, QueryEntityType::Constant},
 };
 
 std::unordered_map<std::string, TokenType> QPSUtil::strToTokenTypeMap = {
