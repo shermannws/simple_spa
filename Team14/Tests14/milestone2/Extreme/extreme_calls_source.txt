@@ -1,0 +1,328 @@
+procedure p1 {
+call p2;
+call p3;
+call p4;
+call p5;
+call p6;
+call p7;
+call p8;
+call p9;
+call p10;
+call p11;
+call p12;
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p2 {
+call p3;
+call p4;
+call p5;
+call p6;
+call p7;
+call p8;
+call p9;
+call p10;
+call p11;
+call p12;
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p3 {
+call p4;
+call p5;
+call p6;
+call p7;
+call p8;
+call p9;
+call p10;
+call p11;
+call p12;
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p4 {
+call p5;
+call p6;
+call p7;
+call p8;
+call p9;
+call p10;
+call p11;
+call p12;
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p5 {
+call p6;
+call p7;
+call p8;
+call p9;
+call p10;
+call p11;
+call p12;
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p6 {
+call p7;
+call p8;
+call p9;
+call p10;
+call p11;
+call p12;
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p7 {
+call p8;
+call p9;
+call p10;
+call p11;
+call p12;
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p8 {
+call p9;
+call p10;
+call p11;
+call p12;
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p9 {
+call p10;
+call p11;
+call p12;
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p10 {
+call p11;
+call p12;
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p11 {
+call p12;
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p12 {
+call p13;
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p13 {
+call p14;
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p14 {
+call p15;
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p15 {
+call p16;
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p16 {
+call p17;
+call p18;
+call p19;
+call p20;
+}
+procedure p17 {
+call p18;
+call p19;
+call p20;
+}
+procedure p18 {
+call p19;
+call p20;
+}
+procedure p19 {
+call p20;
+}
+procedure p20 {
+call pp1;
+}
+procedure pp1 {
+call pp2;
+}
+procedure pp2 {
+call pp3;
+}
+procedure pp3 {
+call pp4;
+}
+procedure pp4 {
+call pp5;
+}
+procedure pp5 {
+call pp6;
+}
+procedure pp6 {
+call pp7;
+}
+procedure pp7 {
+call pp8;
+}
+procedure pp8 {
+call pp9;
+}
+procedure pp9 {
+call pp10;
+}
+procedure pp10 {
+call pp11;
+}
+procedure pp11 {
+call pp12;
+}
+procedure pp12 {
+call pp13;
+}
+procedure pp13 {
+call pp14;
+}
+procedure pp14 {
+call pp15;
+}
+procedure pp15 {
+call pp16;
+}
+procedure pp16 {
+call pp17;
+}
+procedure pp17 {
+call pp18;
+}
+procedure pp18 {
+call pp19;
+}
+procedure pp19 {
+call pp20;
+}
+procedure pp20 {
+call ppa1;
+}
+procedure ppa1 {
+call ppa2;
+call ppa3;
+call ppa4;
+call ppa5;
+call ppa6;
+call ppa7;
+call ppa8;
+call ppa9;
+}
+procedure ppa2 {
+call ppa3;
+}
+procedure ppa3 {
+call ppa4;
+}
+procedure ppa4 {
+call ppa5;
+}
+procedure ppa5 {
+call ppa6;
+}
+procedure ppa6 {
+call ppa7;
+}
+procedure ppa7 {
+call ppa8;
+}
+procedure ppa8 {
+call ppa9;
+}
+procedure ppa9 {
+call ppa10;
+}
+procedure ppa10 {
+read HELLOWORLD;
+}
