@@ -1,0 +1,135 @@
+1 - same such that clause type, such that - and - and (equivalent as q2, 3)
+assign a; while w; variable v;
+Select v such that Modifies (a, v) and Uses (w, v) and Next* (2, a)
+assign, number, x, a
+5000
+2 - same such that clause type, such that - and, such that
+assign a; while w; variable v;
+Select a such that Uses(w, v) and Modifies (a, v) such that Next* (2, a)
+4, 7, 12, 13, 14, 15, 17
+5000
+3 - same such that clause type, such that, such that - and
+assign a; while w; variable v;
+Select a such that Next* (2, a) such that Modifies (a, v) and Uses(w, v)
+4, 7, 12, 13, 14, 15, 17
+5000
+4 - select common v, same pattern clause type, pattern - and - and
+assign a; if ifs; while w; variable v;
+Select v pattern ifs(v, _, _) and a(v, _) and w(v, _)
+a, c
+5000
+5 - select common v, same pattern clause type, pattern - and, pattern
+assign a; if ifs; while w; variable v;
+Select v pattern ifs(v, _, _) and a(v, _) pattern w(v, _)
+a, c
+5000
+6 - select common v, same pattern clause type, pattern, pattern - and
+assign a; if ifs; while w; variable v;
+Select v pattern ifs(v, _, _) pattern a(v, _) and w(v, _)
+a, c
+5000
+7 - select common c, same with clause type, with - and - and
+call c; stmt s; procedure p; variable v;
+Select c with c.stmt# = s.stmt# and c.procName = p.procName and c.procName = v.varName
+1, 16, 18, 22
+5000
+8 - select common c, same with clause type, with - and, with
+call c; stmt s; procedure p; variable v;
+Select c with c.stmt# = s.stmt# and c.procName = p.procName with c.procName = v.varName
+1, 16, 18, 22
+5000
+9 - select common c, same with clause type, with, with - and
+call c; stmt s; procedure p; variable v;
+Select c with c.stmt# = s.stmt# with c.procName = p.procName and c.procName = v.varName
+1, 16, 18, 22
+5000
+10 - select p, same with clause type, with, with - and
+call c; stmt s; procedure p; variable v;
+Select p with c.stmt# = s.stmt# with c.procName = p.procName and c.procName = v.varName
+helper, callee
+5000
+11 - different clause type, pattern, such that - and
+variable v; if ifs;
+Select v pattern ifs(v, _) such that Uses ("callee", v) and Follows (20,21)
+a, b
+5000
+12 - different clause type, such that - and, pattern
+variable v; if ifs;
+Select v such that Uses ("callee", v) and Follows (20,21) pattern ifs(v, _)
+a, b
+5000
+13 - different clause type, such that, such that, pattern
+variable v; if ifs;
+Select v such that Uses ("callee", v) such that Follows (20,21) pattern ifs(v, _)
+a, b
+5000
+14 - different clause type, with, pattern - and
+assign a; if ifs; variable v;
+Select a with ifs.stmt# = 24 pattern ifs(v, _, _) and a(v, _)
+13, 27
+5000
+15 - different clause type, pattern - and, with
+assign a; if ifs; variable v;
+Select v pattern ifs(v, _, _) and a(v, _) with ifs.stmt# = 24
+a
+5000
+16 - different clause type, pattern, pattern, with
+assign a; variable v; stmt s; while w;
+Select a pattern w(v, _) pattern a(v, _) with w.stmt# = s.stmt#
+13, 27, 28
+5000
+17 - different clause type, such that, with - and
+procedure p, q; variable v;
+Select q such that Calls*(p, q) with p.procName = "caller" and q.procName = v.varName
+callee, helper
+5000
+18 - different clause type, with - and, such that
+procedure p, q; variable v;
+Select q with p.procName = "caller" and q.procName = v.varName such that Calls*(p, q)
+callee, helper
+5000
+19 - different clause type, with, with, such that
+procedure p, q; variable v;
+Select q with p.procName = "caller" with q.procName = v.varName such that Calls*(p, q)
+callee, helper
+5000
+20 - all 3 different clause types, such that - and, with - and, pattern - and, such that, with, pattern
+procedure p; variable v; while w; assign a;
+Select a such that Modifies (a, v) and Next* (1, a) with v.varName = "z" and w.stmt# = 8 pattern w(_, _) and a(_, _"assign"_)
+11
+5000
+21 - syntactically invalid and connector 'and such that'
+assign a; while w;
+Select a such that Parent* (w, a) and Modifies (a, "y") and such that Next*(5, a)
+SyntaxError
+5000
+22 - syntactically invalid and connector 'such that and pattern'
+assign a; while w;
+Select a such that Parent* (w, a) and pattern(_,_)
+SyntaxError
+5000
+23 - syntactically invalid and connector 'pattern and such that'
+assign a; while w;
+Select a pattern(_,_) and such that Parent* (w, a)
+SyntaxError
+5000
+24 - syntactically invalid and connector 'such that - and with'
+assign a; while w;
+Select a such that Parent* (w, a) and with w.stmt# = "10"
+SyntaxError
+5000
+25 - syntactically invalid and connector 'and and'
+assign a; if ifs; variable v;
+Select v pattern ifs(_, _, _) and and pattern a(_, v)
+SyntaxError
+5000
+26 - syntactically invalid 'pattern and pattern'
+assign a; if ifs; while w; variable v;
+Select v pattern ifs(v, _, _) and pattern a(v, _) and pattern w(v, _)
+SyntaxError
+5000
+27 - syntactically invalid 'with and with'
+assign a; if ifs; while w; variable v;
+Select c with c.stmt# = s.stmt# and with c.procName = p.procName and with c.procName = v.varName
+SyntaxError
+5000

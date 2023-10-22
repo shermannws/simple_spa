@@ -1,0 +1,62 @@
+procedure doSomething {
+    call helper;
+    read number;
+    print statement;
+    assign = 0;
+
+    while (a == 5 * b) {
+
+        if ((c > 5) && (d < 5)) then {
+            number = statement + assign;
+        }
+
+        else {
+            while (!(c == 2)) {
+                read x;
+                print y;
+                z = assign + y;
+                x = assign + v;
+
+            }
+
+            a = a + x;
+            x = assign + t;
+        }
+
+        number = number % 10;
+        call callee;
+    }
+
+    x = 5;
+}
+
+procedure caller {
+    call callee;
+    call callee2;
+}
+
+procedure callee {
+    z = number2 + x;
+    x = a + b;
+}
+
+procedure callee2 {
+    call helper;
+}
+
+procedure helper {
+    x = (5 * 10) + digit;
+    if (a == b) then {
+        y = a + b;
+    }
+    else {
+        z = c + d;
+    }
+    a = 10;
+    c = 10;
+}
+
+procedure uncalled {
+    print helper;
+    print callee;
+}

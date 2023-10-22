@@ -1,0 +1,40 @@
+procedure p {
+    if (1 == 2) then {
+        while (3 == 4) {
+            x = 1;
+        }
+    }
+
+    else {
+        if (x == 1) then {
+            while (y == x) {
+                z = 2;
+            }
+        }
+        else {
+            y = 3;
+        }
+    }
+}
+
+procedure q {
+    while ((5 != a + b) && (c > d)) {
+        if (!(e / f  > 6 + g)) then {
+            while (7 == 8) {
+                c = while;
+                d = if;
+            }
+        }
+
+        else {
+            while ( !(((a > b) && (c < d)) || ((e > f) && (g < h))) ) {
+                if (!(!(!(!(!(x == 0)))))) then {
+                    e = while;
+                }
+                else {
+                    f = if;
+                }
+            }
+        }
+    }
+}
