@@ -66,14 +66,6 @@ private:
     std::shared_ptr<Result> evaluateResultClause(const Query &query, std::vector<Synonym> resultSyns);
 
     /**
-     * @brief Evaluates all the constraint clauses of a query into a combined result, returns nullptr if
-     * there are no constraint clauses
-     * @param query the query object to evaluate
-     * @return shared pointer to result object
-     */
-    std::shared_ptr<Result> evaluateConstraintClauses(const Query &query);
-
-    /**
      * @brief returns the vector of synonyms in the result clause that is not present in the result object
      * @param resultClause vector of synonyms
      * @param result result object
@@ -107,19 +99,63 @@ private:
      */
     std::string concat(std::vector<std::string> strings);
 
-    std::unordered_map<Synonym, std::unordered_set<Synonym>>
-    buildSynGraph(Query &query, std::vector<std::shared_ptr<Clause>> clauses);
+    /**
+     *
+     * @param results
+     * @return
+     */
+    bool evaluateBoolResults(std::vector<std::shared_ptr<Result>> results);
+
+    /**
+     *
+     * @param results
+     * @return
+     */
+    std::shared_ptr<Result> evaluateMainResults(std::vector<std::shared_ptr<Result>> results);
+
+    /**
+     *
+     * @param clauseGroup
+     * @return
+     */
+    std::shared_ptr<Result> evaluateClauses(std::vector<std::shared_ptr<Clause>> clauseGroup);
+
+    /**
+     *
+     * @param adjacency_list
+     * @param clauses
+     * @return
+     */
     std::vector<std::unordered_set<std::shared_ptr<Clause>>>
     groupClauses(std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list,
                  std::vector<std::shared_ptr<Clause>> clauses);
-    bool isSelect(std::vector<Synonym> selects, std::shared_ptr<Result> res);
-    bool evaluateBoolResults(std::vector<std::shared_ptr<Result>> results);
-    std::shared_ptr<Result> evaluateMainResults(std::vector<std::shared_ptr<Result>> results);
-    std::shared_ptr<Result> evaluateMainClauses(std::vector<std::shared_ptr<Clause>> clauseGroup);
-    std::shared_ptr<Result> evaluateBoolClauses(std::vector<std::shared_ptr<Clause>> clauseGroup);
-    std::unordered_set<Synonym> getMainSynGroup(Query &query);
+
+    /**
+     *
+     * @param query
+     * @param clauses
+     * @return
+     */
+    std::unordered_map<Synonym, std::unordered_set<Synonym>>
+    buildSynGraph(Query &query, std::vector<std::shared_ptr<Clause>> clauses);
+
+    /**
+     *
+     * @param adjacency_list
+     * @param current
+     * @param visited
+     * @param connected
+     */
     void DFS(const std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list, const std::string &current,
              std::unordered_set<std::string> &visited, std::unordered_set<std::string> &connected);
+
+    /**
+     *
+     * @param selects
+     * @param res
+     * @return
+     */
+    bool intersect(std::vector<Synonym> selects, std::shared_ptr<Result> res);
 
 public:
     /**
