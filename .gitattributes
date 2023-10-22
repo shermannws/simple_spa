@@ -2,3 +2,5 @@
 * text=auto
 # Ignore git files in export releases
 .git*           export-ignore
+.env*           export-ignore
+.clang-format   export-ignore
