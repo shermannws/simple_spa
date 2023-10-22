@@ -107,6 +107,14 @@ private:
      */
     std::string concat(std::vector<std::string> strings);
 
+    std::pair<std::vector<std::shared_ptr<Clause>>, std::vector<std::shared_ptr<Clause>>>
+    groupClauses(Query &query, std::unordered_set<Synonym> &mainSynGroup);
+    std::shared_ptr<Result> evaluateMainClauses(std::vector<std::shared_ptr<Clause>> clauseGroup);
+    std::shared_ptr<Result> evaluateBoolClauses(std::vector<std::shared_ptr<Clause>> clauseGroup);
+    std::unordered_set<Synonym> getMainSynGroup(Query &query);
+    void DFS(const std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list, const std::string &current,
+             std::unordered_set<std::string> &visited);
+
 public:
     /**
      * @brief Explicit constructor for the PQLEvaluator class.

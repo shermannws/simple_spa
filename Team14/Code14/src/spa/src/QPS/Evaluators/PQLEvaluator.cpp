@@ -69,21 +69,121 @@ std::string PQLEvaluator::concat(std::vector<std::string> strings) {
     return result;
 }
 
+// Result PQLEvaluator::evaluate(Query &query) {
+//     std::shared_ptr<Result> result = evaluateConstraintClauses(query);
+//
+//     // CASE FALSE
+//     if (result->isFalse()) { return *result; }
+//
+//     // TRUE OR NON-EMPTY RESULT TABLE
+//     //  CASE RESULT-CLAUSE IN RESULT TABLE, check if ALL synonym in select is in result table
+//     std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(query.getSelect(), result);
+//     if (unevaluatedSyn.empty()) { return *result; }
+//
+//     // CASE SOME RESULT-CLAUSE NOT IN RESULT TABLE
+//     auto synResult = evaluateResultClause(query, unevaluatedSyn);
+//     auto finalResult = resultHandler->getCombined(result, synResult);
+//     return *finalResult;
+// }
+
 Result PQLEvaluator::evaluate(Query &query) {
-    std::shared_ptr<Result> result = evaluateConstraintClauses(query);
+    auto selectSynGroup = getMainSynGroup(query);
+    auto clauseGroups = groupClauses(query, selectSynGroup);
 
-    // CASE FALSE
-    if (result->isFalse()) { return *result; }
+    // evaluate non-SELECT clauses first
+    std::shared_ptr<Result> result = evaluateBoolClauses(clauseGroups.second); //
 
-    // TRUE OR NON-EMPTY RESULT TABLE
+    // CASE FALSE or no more clauses to evaluate
+    if (result->isFalse() || query.getSelect().empty()) { return *result; }
+
+    // TRUE OR NON-EMPTY bool clause results, continue evaluating SELECT clauses
+    result = evaluateMainClauses(clauseGroups.first);
+
     //  CASE RESULT-CLAUSE IN RESULT TABLE, check if ALL synonym in select is in result table
     std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(query.getSelect(), result);
     if (unevaluatedSyn.empty()) { return *result; }
 
-    // CASE SOME RESULT-CLAUSE NOT IN RESULT TABLE
+    // CASE SOME RESULT-CLAUSE NOT IN clauses
     auto synResult = evaluateResultClause(query, unevaluatedSyn);
     auto finalResult = resultHandler->getCombined(result, synResult);
     return *finalResult;
+}
+
+
+std::pair<std::vector<std::shared_ptr<Clause>>, std::vector<std::shared_ptr<Clause>>>
+PQLEvaluator::groupClauses(Query &query, std::unordered_set<Synonym> &mainSynGroup) {
+    std::pair<std::vector<std::shared_ptr<Clause>>, std::vector<std::shared_ptr<Clause>>> groups;
+    std::vector<std::shared_ptr<Clause>> clauses;// get all clauses
+    for (const auto &clause: query.getSuchThat()) { clauses.push_back(clause); }
+    for (const auto &clause: query.getPattern()) { clauses.push_back(clause); }
+    for (const auto &clause: query.getWith()) { clauses.push_back(clause); }
+    for (const auto &clause: clauses) {
+        auto syns = clause->getSynonyms();
+        if (syns.empty()) {
+            groups.second.push_back(clause);
+            continue;
+        }
+        if (mainSynGroup.count(syns[0])) {
+            groups.first.push_back(clause);
+            continue;
+        }
+        groups.second.push_back(clause);
+    }
+    return groups;
+}
+
+std::unordered_set<Synonym> PQLEvaluator::getMainSynGroup(Query &query) {
+    std::vector<Synonym> selects = query.getSelect();
+    if (selects.empty()) {
+        return {};// if bool, return empty
+    }
+
+    std::vector<Synonym> selectSyns;
+    for (Synonym &elem: selects) {
+        auto syn = QPSUtil::getSyn(elem);// get Synonyms without attrName
+        selectSyns.push_back(syn);
+    }
+
+    std::vector<std::vector<std::string>> synGroups = {selectSyns};
+    std::vector<std::shared_ptr<Clause>> clauses;// get all clauses
+    for (const auto &clause: query.getSuchThat()) {
+        clauses.push_back(clause);
+        synGroups.push_back(clause->getSynonyms());
+    }
+    for (const auto &clause: query.getPattern()) {
+        clauses.push_back(clause);
+        synGroups.push_back(clause->getSynonyms());
+    }
+    for (const auto &clause: query.getWith()) {
+        clauses.push_back(clause);
+        synGroups.push_back(clause->getSynonyms());
+    }
+
+
+    std::unordered_map<Synonym, std::unordered_set<Synonym>> graph;// build graph
+    for (const auto &group: synGroups) {
+        for (size_t i = 0; i < group.size(); ++i) {
+            if (!graph.count(group[i])) {graph[group[i]] = {};}
+            for (size_t j = 0; j < group.size(); ++j) {
+                if (i != j) {
+                    graph[group[i]].insert(group[j]);
+                }
+            }
+        }
+    }
+
+    // get all Synonyms connected to the select tuples
+    std::unordered_set<Synonym> visited;
+    DFS(graph, selectSyns[0], visited);
+    return visited;
+}
+
+void PQLEvaluator::DFS(const std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list,
+                       const std::string &current, std::unordered_set<std::string> &visited) {
+    visited.insert(current);
+    for (const std::string &neighbor: adjacency_list.at(current)) {
+        if (visited.find(neighbor) == visited.end()) { DFS(adjacency_list, neighbor, visited); }
+    }
 }
 
 std::vector<Synonym> PQLEvaluator::getUnevaluatedSyn(const std::vector<Synonym> resultClause,
@@ -117,6 +217,29 @@ std::shared_ptr<Result> PQLEvaluator::evaluateConstraintClauses(const Query &que
     }
     return result;
 }
+
+std::shared_ptr<Result> PQLEvaluator::evaluateMainClauses(std::vector<std::shared_ptr<Clause>> clauseGroup) {
+    auto result = std::make_shared<Result>(true);// Initialize with TRUE
+
+    for (auto const clause: clauseGroup) {
+        auto clauseResult = evaluateClause(clause);
+        result = resultHandler->getCombined(result, clauseResult);
+    }
+    return result;
+}
+
+std::shared_ptr<Result> PQLEvaluator::evaluateBoolClauses(std::vector<std::shared_ptr<Clause>> clauseGroup) {
+    auto result = std::make_shared<Result>(true);// Initialize with TRUE
+
+    for (auto const clause: clauseGroup) {
+        auto clauseResult = evaluateClause(clause);
+        if (clauseResult->isFalse() || clauseResult->isEmpty()) {
+            return resultHandler->getCombined(clauseResult, result);
+        }
+    }
+    return result;
+}
+
 
 std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const std::shared_ptr<QueryEntity> entity) {
     std::shared_ptr<Result> result = std::make_shared<Result>();
