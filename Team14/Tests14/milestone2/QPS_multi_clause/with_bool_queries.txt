@@ -1,0 +1,80 @@
+1 - No shared synonym v1
+call c; read r; stmt s, s1;
+Select BOOLEAN with c.procName = r.varName such that Follows(s, s1)
+TRUE
+5000
+2 - No shared synonym v2
+call c; read r;
+Select BOOLEAN with c.procName = r.varName such that Follows*(1, 3)
+TRUE
+5000
+3 - No shared synonym v3
+call c; read r; stmt s;
+Select BOOLEAN with c.procName = r.varName such that Follows*(1, s)
+TRUE
+5000
+4 - 1 shared synonym v1
+print pn; procedure p;
+Select BOOLEAN with pn.varName = p.procName such that Uses(pn, "print")
+TRUE
+5000
+5 - 1 shared synonym v2
+print pn; procedure p;
+Select BOOLEAN with pn.varName = p.procName such that Uses(pn, _)
+TRUE
+5000
+6 - 1 shared synonym v3
+while w; stmt s; read r;
+Select BOOLEAN with r.varName = "k" such that Parent(w, r) and Follows(w, s)
+TRUE
+5000
+7 - 1 shared synonym v4
+while w; stmt s; read r;
+Select BOOLEAN with r.varName = "print" such that Parent(w, r) and Follows(w, s)
+FALSE
+5000
+8 - 1 shared synonym v5
+while w; stmt s; print pn; variable v; read r;
+Select BOOLEAN with pn.varName = v.varName such that Uses("call", v) and Follows*(8, 10) with v.varName = r.varName
+TRUE
+5000
+9 - 2 shared synonym v1
+print pn; variable v; assign a; stmt s;
+Select BOOLEAN with pn.varName = v.varName such that Parent(s, pn) and Uses(a,v)
+TRUE
+5000
+10 - 2 shared synonym v2
+while w; read r; assign a;
+Select BOOLEAN such that Parent(w, r) such that Follows(a,w) with r.varName = "k"
+TRUE
+5000
+11 - 2 shared synonym v2.1
+while w; read r; assign a;
+Select BOOLEAN such that Parent(w, r) such that Follows(6,w) with r.varName = "k"
+FALSE
+5000
+12 - 2 shared synonym v3
+while w; stmt s; print pn; variable v;
+Select BOOLEAN such that Follows*(w, pn) with pn.varName = v.varName such that Uses("call", v)
+TRUE
+5000
+13 - 2 shared synonym v4
+print pn; variable v; read r;
+Select BOOLEAN such that Modifies(r, v) with r.varName = pn.varName such that Uses(pn, v)
+TRUE
+5000
+14 - Syntactically Invalid
+print pn; variable v; read r;
+Select BOOLEAN such that Modifies(r, v) and Uses(pn, v) and r.varName = pn.varName
+SyntaxError
+5000
+15 - Syntactically Invalid
+print pn; variable v; read r;
+Select BOOLEAN such that Modifies(r, v) and Uses(pn, v) such that r.varName = pn.varName
+SyntaxError
+5000
+16 - Syntactically Invalid
+print pn; variable v; read r; assign a;
+Select BOOLEAN such that Modifies(r, v) pattern a ("call",_) and r.varName = pn.varName
+SyntaxError
+5000

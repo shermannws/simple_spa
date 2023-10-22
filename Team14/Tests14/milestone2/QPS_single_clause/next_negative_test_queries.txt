@@ -1,0 +1,32 @@
+1 - Next (wildcard, wildcard) - when there are no next relationships in source code
+assign a;
+Select a such that Next(_,_)
+none
+5000
+2 - Next (wildcard, syn) - when there are no next relationships in source code
+assign a;
+Select a such that Next(a,_)
+none
+5000
+3 - Next (syn, int) - when there are no next relationships in source code
+call c;
+Select BOOLEAN such that Next(c,2)
+FALSE
+5000
+4 - Next* (int, int) - when there are no next relationships in source code
+
+Select BOOLEAN such that Next*(3, 2)
+FALSE
+5000
+5 - Next* (int, wildcard) - when there are no next relationships in source code
+
+Select BOOLEAN such that Next*(3, _)
+FALSE
+5000
+6 - Next* (syn, syn) - when there are no next relationships in source code
+read re;
+Select re such that Next*(2, 2)
+none
+5000
+
+
