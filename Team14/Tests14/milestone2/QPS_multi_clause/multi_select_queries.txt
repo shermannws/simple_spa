@@ -1,80 +1,120 @@
-1 - 2 Selects no clauses
+1 - 0 Select no clause
+stmt s;
+Select <>
+SyntaxError
+5000
+2 - 1 Select no clause
+while w;
+Select <w>
+5, 11
+5000
+3 - 1 Select one clause
+while w, w1;
+Select <w.stmt#> such that Next*(w, w1)
+5, 11
+5000
+4 - 1 Select no clause BOOLEAN
+if i;
+Select <BOOLEAN>
+SemanticError
+5000
+5 - 1 Select one clause BOOLEAN synonym
+if i, BOOLEAN;
+Select <BOOLEAN> such that Next*(i, BOOLEAN)
+13
+5000
+6 - 2 Selects no clauses
 assign a; print p;
 Select <a, p>
 3 2, 3 12, 3 15, 3 18, 7 2, 7 12, 7 15, 7 18, 9 2, 9 12, 9 15, 9 18, 16 2, 16 12, 16 15, 16 18, 19 2, 19 12, 19 15, 19 18, 20 2, 20 12, 20 15, 20 18
 5000
-2 - 2 Selects no clauses same entity
+7 - 2 Selects no clauses same entity
 call c;
 Select <c, c>
 6 6, 14 14
 5000
-3 - 2 Selects no clauses same entity different declaration
+8 - 2 Select no clause same entity different attr
+constant c;
+Select <c, c.value>
+0 0, 1 1, 10 10
+5000
+9 - 2 Selects no clauses same entity different declaration
 read r, r1;
 Select <r, r1>
 1 1, 1 8, 1 10, 1 17, 8 1, 8 8, 8 10, 8 17, 10 1, 10 8, 10 10, 10 17, 17 1, 17 8, 17 10, 17 17
 5000
-4 - 3 selects no clause
+10 - 3 selects no clause
 while w; if i; print p;
 Select <w, i, p>
 5 4 2, 5 4 12, 5 4 15, 5 4 18, 5 13 2, 5 13 12, 5 13 15, 5 13 18, 11 4 2, 11 4 12, 11 4 15, 11 4 18, 11 13 2, 11 13 12, 11 13 15, 11 13 18
 5000
-5 - 3 selects no clause same entity
+11 - 3 selects no clause same entity
 stmt s;
 Select <s, s, s>
 1 1 1, 2 2 2, 3 3 3, 4 4 4, 5 5 5, 6 6 6, 7 7 7, 8 8 8, 9 9 9, 10 10 10, 11 11 11, 12 12 12, 13 13 13, 14 14 14, 15 15 15, 16 16 16, 17 17 17, 18 18 18, 19 19 19, 20 20 20
 5000
-6 - 3 selects no clause same entity different declaration
+12 - 3 selects no clause same entity different declaration
 call c, c1, c2;
 Select <c, c1, c2>
 6 6 6, 6 6 14, 6 14 6, 6 14 14, 14 6 6, 14 6 14, 14 14 6, 14 14 14
 5000
-7 - 2 Selects with 1 attribute
+13 - 2 Selects with 1 attribute
 procedure p; variable v;
 Select <p.procName, v>
 p1 arg1, p1 arg2, p1 arg3, p1 arg4, p1 arg5, p1 p1, p1 p2, p1 p3, p1 procedure, p1 call, p1 if, p1 while, p1 read, p1 print, p2 arg1, p2 arg2, p2 arg3, p2 arg4, p2 arg5, p2 p1, p2 p2, p2 p3, p2 procedure, p2 call, p2 if, p2 while, p2 read, p2 print, p3 arg1, p3 arg2, p3 arg3, p3 arg4, p3 arg5, p3 p1, p3 p2, p3 p3, p3 procedure, p3 call, p3 if, p3 while, p3 read, p3 print
 5000
-8 - 2 Selects with 1 attribute same entity
+14 - 2 Selects with 1 attribute same entity
 call c;
 Select <c, c.procName>
 6 p2, 14 p3
 5000
-9 - 2 Selects with 2 attributes same entity
+15 - 2 Selects with 2 attributes same entity
 print p;
 Select <p.varName, p.stmt#>
 arg1 2, arg1 12, procedure 15, arg5 18
 5000
-10 - 2 Selects with 2 attributes different entity
+16 - 2 Selects with 2 attributes different entity
 read r; print p;
 Select <r.varName, p.varName>
 arg1 arg1, arg1 arg5, arg1 procedure, arg3 arg1, arg3 arg5, arg3 procedure, arg5 arg1, arg5 arg5, arg5 procedure
 5000
-11 - 2 Selects same result table
+17 - 2 Selects same result table
 assign a; variable v, v1;
 Select <v, v1.varName, a.stmt#> such that Modifies(a, v1) pattern a(v, _)
 arg2 arg2 3, arg2 arg2 7, arg4 arg4 9, arg1 arg1 16, p3 p3 19, procedure procedure 20
 5000
-12 - 2 Selects different result table
+18 - 2 Selects different result table
 while w; if i; stmt s;
 Select <w.stmt#, i.stmt#> such that Uses(i, "arg1") pattern i("arg2", _, _) such that Parent(s, w) pattern w(_, _)
 5 4
 5000
-13 - 3 selects different result table
+19 - 3 selects different result table
 assign a; print p; while w; read r; call c;
 Select <a, c, p> such that Parent*(w, c) and Follows(r, p) pattern a(_, _"(arg2 - arg3)*arg1"_)
 9 6 2, 9 14 2, 9 6 18, 9 14 18
 5000
-14 - 3 selects 2 same result table 1 different result table
+20 - 3 selects 2 same result table 1 different result table
 call c; read r; procedure p;
 Select <r, c, p> such that Next*(r, c)
 1 6 p1, 1 6 p2, 1 6 p3, 10 14 p1, 10 14 p2, 10 14 p3
 5000
-15 - 2 selects empty result table
+21 - 2 selects empty result table
 assign a; stmt s;
 Select <a, s> such that Parent*(20, s) pattern a("arg6", _)
 none
 5000
-16 - 2 selects 1 valid result table 1 empty result table
+22 - 2 selects 1 valid result table 1 empty result table
 print p; read r;
 Select <p,r> such that Uses(p, "arg1") and Uses(r, "arg6")
 none
+5000
+23 - 2 selects 1 valid result table
+procedure p;
+Select <p, BOOLEAN> such that Calls*("p1", p)
+SemanticError
+5000
+24 - 2 selects 1 valid result table
+procedure p, BOOLEAN;
+Select <p, BOOLEAN, BOOLEAN.procName> such that Calls*("p1", p)
+p2 p1 p1, p2 p2 p2, p2 p3 p3, p3 p1 p1, p3 p2 p2, p3 p3 p3
 5000
