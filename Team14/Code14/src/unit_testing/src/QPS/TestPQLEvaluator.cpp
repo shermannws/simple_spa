@@ -1519,14 +1519,3 @@ TEST_CASE("attrRef result-clause query") {
         REQUIRE(find(results.begin(), results.end(), "14 var14 var14") != results.end());
     }
 }
-
-TEST_CASE("debug") {
-    PQLParser parser("assign a, a1;\n"
-                     "Select a such that Follows(8, a1) pattern a1(\"a8\", _\"read\"_)");
-    Query queryObj = parser.parse();
-
-    auto stubReader = make_shared<StubPkbReader>();
-    PQLEvaluator evaluator = PQLEvaluator(stubReader);
-    auto resultObj = evaluator.evaluate(queryObj);
-    auto results = evaluator.formatResult(queryObj, resultObj);
-}
