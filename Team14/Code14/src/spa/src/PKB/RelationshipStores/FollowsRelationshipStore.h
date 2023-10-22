@@ -1,13 +1,13 @@
 #pragma once
 
+#include "Commons/Entities/Statement.h"
 #include "RelationshipStore.h"
-#include "PKB/Relationships/FollowsRelationship.h"
 
 /**
  * @brief A class that stores FollowsRelationships
  * @details A class that stores FollowsRelationships
  */
-class FollowsRelationshipStore : public RelationshipStore<FollowsRelationship> {
+class FollowsRelationshipStore : public RelationshipStore<Statement, Statement> {
 public:
     /**
      * @brief Construct a new FollowsRelationshipStore object

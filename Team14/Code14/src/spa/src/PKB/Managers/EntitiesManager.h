@@ -1,9 +1,5 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-#include <algorithm>
-
 #include "PKB/EntityStores/ConstantStore.h"
 #include "PKB/EntityStores/ProcedureStore.h"
 #include "PKB/EntityStores/StatementStore.h"
@@ -35,6 +31,7 @@ private:
      * @brief The VariableStore that stores all the variables in the SIMPLE source program
      */
     std::shared_ptr<VariableStore> variableStore;
+
 protected:
     /**
      * @brief Returns all the entities of type E in the EntityStore of type E
@@ -42,7 +39,7 @@ protected:
      * @param entityStore The EntityStore to retrieve the entities from
      * @return A vector of entities of type E
      */
-    template <typename E>
+    template<typename E>
     std::vector<Entity> getAllEntities(std::shared_ptr<EntityStore<E>>) const;
 
     /**
@@ -52,8 +49,9 @@ protected:
      * @param matcher The matcher function to match the entities against
      * @return A vector of entities of type E
      */
-    template <typename E>
-    std::vector<Entity> getEntities(std::shared_ptr<EntityStore<E>>, std::function<bool(E&)> matcher) const;
+    template<typename E>
+    std::vector<Entity> getEntities(std::shared_ptr<EntityStore<E>>, std::function<bool(E &)> matcher) const;
+
 public:
     /**
      * @brief Construct a new EntitiesManager object
@@ -136,6 +134,12 @@ public:
      * @return A vector of if statements
      */
     std::vector<Entity> getAllIf() const;
+
+    /**
+     * @brief Returns all the call statements in the SIMPLE source program
+     * @return A vector of call statements
+     */
+    std::vector<Entity> getAllCall() const;
 
     /**
      * @brief Returns the Statement object from the StatementStore that is equal to the Statement object passed in

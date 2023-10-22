@@ -1,18 +1,48 @@
 #pragma once
 
-#include "Strategy.h"
 #include "QPS/Clauses/SuchThatClause.h"
+#include "SuchThatStrategy.h"
 
 /**
  * The Strategy class of Parent in SuchThatClause
  */
-class ParentSuchThatStrategy : public Strategy {
+class ParentSuchThatStrategy : public SuchThatStrategy {
 public:
     /**
-     * @brief Evaluates the clause using pkbReader methods relating to Parent
-     * @param clause The shared pointer of the Clause to be evaluated
-     * @param pkbReader The pkbReader of which the methods are to be called
-     * @return The result of the clause evaluation
+     * @brief Explicit constructor of ParentSuchThatStrategy
+     * @param pkbReader The shared pointer to the PKB reader
      */
-    Result evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const override;
+    explicit ParentSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader);
+
+    /**
+     * @brief Evaluates SuchThatClause that follows the syntax Parent(s,s)
+     * @param leftRef The first parameter of the SuchThatClause to evaluate
+     * @param rightRef The second parameter of the SuchThatClause to evaluate
+     * @return The result of the SuchThatClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateSynSyn(Ref &leftRef, Ref &rightRef) const override;
+
+    /**
+     * @brief Evaluates SuchThatClause that follows the syntax Parent(s, )
+     * @param leftRef The first parameter of the SuchThatClause to evaluate
+     * @param rightRef The second parameter of the SuchThatClause to evaluate
+     * @return The result of the SuchThatClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateSynAny(Ref &leftRef, Ref &rightRef) const override;
+
+    /**
+     * @brief Evaluates SuchThatClause that follows the syntax Parent( , s)
+     * @param leftRef The first parameter of the SuchThatClause to evaluate
+     * @param rightRef The second parameter of the SuchThatClause to evaluate
+     * @return The result of the SuchThatClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateAnySyn(Ref &leftRef, Ref &rightRef) const override;
+
+    /**
+     * @brief Evaluates SuchThatClause that results in boolean
+     * @param leftRef The first parameter of the SuchThatClause to evaluate
+     * @param rightRef The second parameter of the SuchThatClause to evaluate
+     * @return The result of the SuchThatClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateBoolean(Ref &leftRef, Ref &rightRef) const override;
 };

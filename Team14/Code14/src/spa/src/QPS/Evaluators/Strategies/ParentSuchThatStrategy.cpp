@@ -1,73 +1,73 @@
 #include "ParentSuchThatStrategy.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
+#include "QPS/QPSUtil.h"
 
-Result ParentSuchThatStrategy::evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const {
-    std::shared_ptr<SuchThatClause> suchThat = std::dynamic_pointer_cast<SuchThatClause>(clause);
-    Ref leftRef = suchThat->getFirstParam();
-    RootType leftRootType = leftRef.getRootType();
-    QueryEntityType leftEntityType = leftRef.getEntityType();
-    Ref rightRef = suchThat->getSecondParam();
-    RootType rightRootType = rightRef.getRootType();
-    QueryEntityType rightEntityType = rightRef.getEntityType();
-    Result res;
+ParentSuchThatStrategy::ParentSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader)
+    : SuchThatStrategy(std::move(pkbReader)) {}
 
-    if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym && leftRef.getRep() == rightRef.getRep()) { // Parent(s,s)
-        res.setBoolResult(false);
-    } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Synonym) { // Parent(s1,s2)
-        std::string leftSyn = leftRef.getRep();
-        std::string rightSyn = rightRef.getRep();
-        res.setTuples(pkbReader->getParentPair(stmtMap.at(leftEntityType), stmtMap.at(rightEntityType)));
-
-        std::unordered_map<std::string, int> indices {{leftSyn, 0}, {rightSyn, 1}};
-        res.setSynIndices(indices);
-
-    } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Integer) { // Parent(s,1)
-        std::string syn = leftRef.getRep();
-        Statement s = Statement(stoi(rightRef.getRep()), StatementType::Stmt);
-        res.setTuples(pkbReader->getParentTypeStmt(stmtMap.at(leftEntityType), s));
-
-        std::unordered_map<std::string, int> indices{{syn, 0}};
-        res.setSynIndices(indices);
-
-    } else if (leftRootType == RootType::Synonym && rightRootType == RootType::Wildcard) { // Parent(s,_)
-        std::string syn = leftRef.getRep();
-        res.setTuples(pkbReader->getParentTypeWildcard(stmtMap.at(leftEntityType)));
-
-        std::unordered_map<std::string, int> indices{{syn, 0}};
-        res.setSynIndices(indices);
-
-    } else if (leftRootType == RootType::Integer && rightRootType == RootType::Synonym) { // Parent(1,s)
-        std::string syn = rightRef.getRep();
-        Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
-        res.setTuples(pkbReader->getParentStmtType(s, stmtMap.at(rightEntityType)));
-
-        std::unordered_map<std::string, int> indices{{syn, 0}};
-        res.setSynIndices(indices);
-
-    } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Synonym) { // Parent(_,s)
-        std::string syn = rightRef.getRep();
-        res.setTuples(pkbReader->getParentWildcardType(stmtMap.at(rightEntityType)));
-
-        std::unordered_map<std::string, int> indices{{syn, 0}};
-        res.setSynIndices(indices);
-
-    } else if (leftRootType == RootType::Integer && rightRootType == RootType::Wildcard) { // Parent(1,_)
-        Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
-        res.setBoolResult(pkbReader->hasChildStmt(s));
-
-    } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Integer) { // Parent(_,1)
-        Statement s = Statement(stoi(rightRef.getRep()), StatementType::Stmt);
-        res.setBoolResult(pkbReader->hasParentStmt(s));
-
-    } else if (leftRootType == RootType::Integer && rightRootType == RootType::Integer) { // Parent(1,2)
-        Statement s1 = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
-        Statement s2 = Statement(stoi(rightRef.getRep()), StatementType::Stmt);
-        res.setBoolResult(pkbReader->isParent(s1, s2));
-
-    } else if (leftRootType == RootType::Wildcard && rightRootType == RootType::Wildcard) { // Parent(_,_)
-        res.setBoolResult(pkbReader->hasParent());
+std::shared_ptr<Result> ParentSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
+    std::shared_ptr<Result> res = std::make_shared<Result>();
+    if (leftRef == rightRef) {
+        res->setTuples(std::vector<Entity>{});
+        return res;
     }
+    auto leftEntityType = leftRef.getEntityType();
+    auto rightEntityType = rightRef.getEntityType();
+    auto leftSyn = leftRef.getRep();
+    auto rightSyn = rightRef.getRep();
+    res->setTuples(pkbReader->getParentPair(QPSUtil::entityToStmtMap.at(leftEntityType),
+                                            QPSUtil::entityToStmtMap.at(rightEntityType)));
 
+    return res;
+}
+
+std::shared_ptr<Result> ParentSuchThatStrategy::evaluateSynAny(Ref &leftRef, Ref &rightRef) const {
+    std::shared_ptr<Result> res = std::make_shared<Result>();
+    auto leftEntityType = leftRef.getEntityType();
+    auto leftSyn = leftRef.getRep();
+    if (rightRef.isRootType(RootType::Integer)) {
+        auto rightRep = rightRef.getRep();
+        Statement s = Statement(stoi(rightRep), StatementType::Stmt);
+        res->setTuples(pkbReader->getParentTypeStmt(QPSUtil::entityToStmtMap.at(leftEntityType), s));
+    } else {
+        res->setTuples(pkbReader->getParentTypeWildcard(QPSUtil::entityToStmtMap.at(leftEntityType)));
+    }
+    return res;
+}
+
+std::shared_ptr<Result> ParentSuchThatStrategy::evaluateAnySyn(Ref &leftRef, Ref &rightRef) const {
+    std::shared_ptr<Result> res = std::make_shared<Result>();
+    auto rightEntityType = rightRef.getEntityType();
+    auto rightSyn = rightRef.getRep();
+    if (leftRef.isRootType(RootType::Integer)) {
+        auto leftRep = leftRef.getRep();
+        Statement s = Statement(stoi(leftRep), StatementType::Stmt);
+        res->setTuples(pkbReader->getParentStmtType(s, QPSUtil::entityToStmtMap.at(rightEntityType)));
+    } else {
+        res->setTuples(pkbReader->getParentWildcardType(QPSUtil::entityToStmtMap.at(rightEntityType)));
+    }
+    return res;
+}
+
+std::shared_ptr<Result> ParentSuchThatStrategy::evaluateBoolean(Ref &leftRef, Ref &rightRef) const {
+    std::shared_ptr<Result> res = std::make_shared<Result>();
+    bool isLeftInt = leftRef.isRootType(RootType::Integer);
+    bool isRightInt = rightRef.isRootType(RootType::Integer);
+    auto leftRep = leftRef.getRep();
+    auto rightRep = rightRef.getRep();
+    if (isLeftInt && isRightInt) {
+        Statement s1 = Statement(stoi(leftRep), StatementType::Stmt);
+        Statement s2 = Statement(stoi(rightRep), StatementType::Stmt);
+        res->setBoolResult(pkbReader->isParent(s1, s2));
+    } else if (isLeftInt) {
+        Statement s = Statement(stoi(leftRef.getRep()), StatementType::Stmt);
+        res->setBoolResult(pkbReader->hasChildStmt(s));
+    } else if (isRightInt) {
+        Statement s = Statement(stoi(rightRep), StatementType::Stmt);
+        res->setBoolResult(pkbReader->hasParentStmt(s));
+    } else {
+        res->setBoolResult(pkbReader->hasParent());
+    }
     return res;
 }

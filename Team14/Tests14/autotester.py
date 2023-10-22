@@ -1,20 +1,36 @@
 import os
 from collections import Counter
+from pathlib import Path
 
+if not os.getenv("AUTOTESTER_PATH"):
+    print("Loading .env file...")
+    from dotenv import load_dotenv
+    if not load_dotenv():
+        raise Exception("ERROR: Missing .env file")
+    print("Environment variables loaded successfully!")
+else:
+    print("Using pre-configured environment variables")
+
+MACOS = "posix"
+WINDOWS = "nt"
 QUERY_TAG = "<query>"
 SUCCESS_TAG = "<passed/>"
 FAILURE_TAG = "</failed>"
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
+SOURCE_SUFFIX = "_source.txt"
+QUERIES_SUFFIX = "_queries.txt"
+ERROR_PREFIX = "error_"
 TEST_SETTINGS = {
     "milestone1": True,
-    "milestone2": False,
+    "milestone2": True,
     "milestone3": False,
 }
-TEST_DIR = "./Tests14"
-AUTOTESTER_PATH = "./Code14/build/src/autotester/autotester"
-OUTPUT_PATH = "./Tests14/out.xml"
-EMPTY_FILE = "./Tests14/empty.txt"
+
+TEST_DIR = Path(os.getenv("TEST_DIR"))
+AUTOTESTER_PATH = Path(os.getenv("AUTOTESTER_PATH"))
+OUTPUT_PATH = Path(os.getenv("OUTPUT_PATH"))
+NULL_DEVICE = os.getenv("NULL_DEVICE")
 
 
 def validate_files(path, source_files, queries_files, error_files, valid_keys, error_keys):
@@ -22,27 +38,27 @@ def validate_files(path, source_files, queries_files, error_files, valid_keys, e
     for dir_path, directories, filenames in os.walk(path):
         prefix = dir_path.split(path, 1)[1]
         for filename in filenames:
-            if filename.startswith("error_"):
-                if filename.endswith("_queries.txt"):
+            if filename.startswith(ERROR_PREFIX):
+                if filename.endswith(QUERIES_SUFFIX):
                     continue
-                error_key = prefix + "/" + filename.rsplit("_source.txt", 1)[0]
-                error_files[error_key] = os.path.join(dir_path, filename)
-            elif filename.endswith("_source.txt"):
-                source_key = prefix + "/" + filename.rsplit("_source.txt", 1)[0]
+                error_key = prefix + "/" + filename.rsplit(SOURCE_SUFFIX, 1)[0]
+                error_files[error_key] = [os.path.join(dir_path, filename), os.path.join(dir_path, filename.rsplit(SOURCE_SUFFIX, 1)[0] + QUERIES_SUFFIX)]
+            elif filename.endswith(SOURCE_SUFFIX):
+                source_key = prefix + "/" + filename.rsplit(SOURCE_SUFFIX, 1)[0]
                 source_files[source_key] = os.path.join(dir_path, filename)
-            elif filename.endswith("_queries.txt"):
-                queries_key = prefix + "/" + filename.rsplit("_queries.txt", 1)[0]
+            elif filename.endswith(QUERIES_SUFFIX):
+                queries_key = prefix + "/" + filename.rsplit(QUERIES_SUFFIX, 1)[0]
                 queries_files[queries_key] = os.path.join(dir_path, filename)
 
         for key in source_files.keys():
             if key not in queries_files:
-                missing_files.append(f"{key}_queries.txt")
+                missing_files.append(f"{key}{QUERIES_SUFFIX}")
             else:
                 valid_keys.add(key)
 
         for key in queries_files.keys():
             if key not in source_files:
-                missing_files.append(f"{key}_source.txt")
+                missing_files.append(f"{key}{SOURCE_SUFFIX}")
             else:
                 valid_keys.add(key)
 
@@ -71,7 +87,6 @@ def run_tests(source_files, queries_files, valid_keys, error_files, error_keys, 
     print(f"{counter} of {len(valid_keys) + len(error_keys)} tests executed")
 
 
-
 def execute(key, source_filepath, query_filepath):
     if not os.path.exists(source_filepath):
         raise Exception(f"Missing path {source_filepath}")
@@ -80,7 +95,7 @@ def execute(key, source_filepath, query_filepath):
 
     command = f'{AUTOTESTER_PATH} {source_filepath} {query_filepath} {OUTPUT_PATH}'
 
-    command = command + "> /dev/null"
+    command = f"{command} > {NULL_DEVICE}"
 
     exit_code = os.system(command)
 
@@ -91,17 +106,25 @@ def execute(key, source_filepath, query_filepath):
         print(f"Success: Autotester execution successful for {key}")
 
 
-def execute_with_error(key, filepath, failures_list):
-    if not os.path.exists(filepath):
-        raise Exception(f"Missing path {filepath}")
+def execute_with_error(key, filepaths, failures_list):
+    source_path = filepaths[0]
+    queries_path = filepaths[1]
+    if not os.path.exists(source_path):
+        raise Exception(f"Missing path {source_path}")
 
-    command = f'{AUTOTESTER_PATH} {filepath} {EMPTY_FILE} {OUTPUT_PATH}'
+    command = f'{AUTOTESTER_PATH} {source_path} {queries_path} {OUTPUT_PATH}'
 
-    command = command + "> /dev/null"
+    command = f"{command} > {NULL_DEVICE}"
 
     exit_code = os.system(command)
+    if os.name == MACOS:
+        exit_code = os.WEXITSTATUS(exit_code)
+    elif os.name == WINDOWS:
+        # TODO: Exit code should be 1, but on Windows it is -1073740791
+        print(f"WARNING: Exit code should be 1, but on Windows it is -1073740791")
+        exit_code = 1 if exit_code == -1073740791 else exit_code
 
-    if os.WEXITSTATUS(exit_code) == EXIT_FAILURE:
+    if exit_code == EXIT_FAILURE:
         print(f"Success: Autotester execution failed for {key} as expected")
     else:
         raise Exception(

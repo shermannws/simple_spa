@@ -1,19 +1,38 @@
 #pragma once
 
-#include "Strategy.h"
+#include "PatternStrategy.h"
 #include "QPS/Clauses/PatternClause.h"
 
 /**
  * The Strategy class of Assign Pattern clause
  */
-class AssignPatternStrategy : public Strategy {
+class AssignPatternStrategy : public PatternStrategy {
 public:
     /**
-     * @brief Evaluates the clause using pkbReader methods relating to AssignPattern
-     * @param clause The shared pointer of the Clause to be evaluated
-     * @param pkbReader The pkbReader of which the methods are to be called
-     * @return The result of the clause evaluation
+     * @brief Explicit constructor of AssignPatternStrategy
+     * @param pkbReader The shared pointer to the PKB reader
      */
-    Result evaluateClause(std::shared_ptr<Clause> clause, std::shared_ptr<PkbReader> pkbReader) const override;
-};
+    explicit AssignPatternStrategy(std::shared_ptr<PkbReader> pkbReader);
 
+    /**
+     * @brief Evaluates PatternClause that follows the syntax pattern a(_,_)
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateWildcard(ExpressionSpec &secondArg) const override;
+
+    /**
+     * @brief Evaluates PatternClause that follows the syntax pattern a(v,_)
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateSyn(ExpressionSpec &secondArg) const override;
+
+    /**
+     * @brief Evaluates PatternClause that follows the syntax pattern a("var",expression-spec)
+     * @param firstArg The first argument of PatternClause to evaluate
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateVarIdent(Ref &firstArg, ExpressionSpec &secondArg) const override;
+};

@@ -1,0 +1,95 @@
+1 - Next (wildcard, wildcard)
+constant k;
+Select k such that Next(_,_)
+2, 3, 5, 6, 100, 11, 12, 14, 15, 18, 20, 26
+5000
+2 - Next (wildcard, syn)
+assign a;
+Select a such that Next(_,a)
+5, 6, 14, 18, 26
+5000
+3 - Next (wildcard, int)
+procedure p;
+Select p such that Next(_,11)
+none
+5000
+4 - Next (int, int) - stmt else block cannot be executed after stmt in if block
+constant k;
+Select k such that Next(21, 22)
+none
+5000
+5 - Next (int, int) - stmt in else block can be executed after if cond evaluation
+
+Select BOOLEAN such that Next(3, 6)
+TRUE
+5000
+6 - Next (int,syn)
+call c;
+Select c.procName such that Next(2, c)
+Next2
+5000
+7 - Next (int, syn) - possible stmts after a while cond evaluation
+stmt s;
+Select s such that Next(12,s)
+13, 23
+5000
+8 - Next (int, syn) - only while cond eval is possible after a last line of while block
+stmt s;
+Select s such that Next(18,s)
+15
+5000
+9 - Next (int, wildcard)
+if if;
+Select if such that Next(26,_)
+2, 3, 20
+5000
+10 - Next (syn, syn)
+if ifs; print pr;
+Select <ifs,pr> such that Next(ifs, pr)
+3 4, 20 21, 20 22
+5000
+11 - Next (syn, wildcard)
+read re;
+Select re such that Next(re, _)
+13, 16, 17, 24
+5000
+12 - Next (syn, int)
+while w;
+Select w.stmt# such that Next(w, 19)
+15
+5000
+13 - negative test - Next (int, int) where lhs = rhs
+while w;
+Select w such that Next(12, 12)
+none
+5000
+14 - negative test - Next (syn, syn) where lhs = rhs
+while w;
+Select w such that Next(w, w)
+none
+5000
+15 - negative test - s2 executed after s1 but are in diff procedures
+call c; assign a;
+Select c such that Next(c, a)
+none
+5000
+16 - negative case - s2 executed after s1 but diff procedure (not returned)
+
+Select BOOLEAN such that Next(8, 11)
+FALSE
+5000
+17 - semantic error undeclared syn
+constant k; call c;
+Select k such that Next(re,c)
+SemanticError
+5000
+18 - semantic error non-stmt syn used as arg
+constant k; call c;
+Select k such that Next(k,c)
+SemanticError
+5000
+19 - multiple Next clauses
+read re; while w;
+Select re such that Next(re, _) and Next(w, re)
+13, 16
+5000

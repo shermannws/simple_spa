@@ -1,0 +1,33 @@
+procedure a {
+	if (varA == 0) then {
+		while (varB == varBB) {
+			call b;		
+		}
+		read varC;
+	} else {
+		varD = varDD / 1;	
+	}
+	call c;
+
+	while (1==0) {
+		call d;
+	}
+}
+
+procedure b {
+	if (!(varE != varEE)) then {
+		varF = varFF * 1;
+	} else {
+		varG = varGG + 1;	
+	}
+	varJ = varJJ -1;
+}
+
+
+procedure c {
+	print varH;
+}
+
+procedure d {
+	read varI;
+}

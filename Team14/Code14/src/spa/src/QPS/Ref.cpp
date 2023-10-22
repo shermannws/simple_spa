@@ -1,37 +1,55 @@
 #include <string>
 
+#include "QPSUtil.h"
 #include "Ref.h"
 
-Ref::Ref() : type(RefType::Invalid), rootType(RootType::Invalid), entityType(QueryEntityType::Invalid) {}
+Ref::Ref()
+    : type(RefType::Invalid), rootType(RootType::Invalid), entityType(QueryEntityType::Invalid),
+      attrName(AttrName::Invalid) {}
 
-void Ref::setRep(StringRep & rrep) {
-    rep = rrep;
+void Ref::setRep(StringRep &rrep) { rep = rrep; }
+
+std::string Ref::getRep() const { return rep; }
+
+void Ref::setAttrName(const std::string &name) { attrName = QPSUtil::strToAttrNameMap[name]; }
+
+AttrName Ref::getAttrName() const { return attrName; }
+
+void Ref::setType(RefType &rrefType) { type = rrefType; }
+
+RefType Ref::getType() const { return type; }
+
+void Ref::setRootType(RootType &rrootType) { rootType = rrootType; }
+
+RootType Ref::getRootType() const { return rootType; }
+
+void Ref::setEntityType(QueryEntityType &eentityType) { entityType = eentityType; }
+
+QueryEntityType Ref::getEntityType() const { return entityType; }
+
+bool Ref::isRootType(RootType rrootType) { return rootType == rrootType; }
+
+bool Ref::operator==(const Ref &other) const {
+    return (rep == other.rep) && (type == other.type) && (rootType == other.rootType) &&
+           (entityType == other.entityType) && (attrName == other.attrName);
 }
 
-std::string Ref::getRep() {
-    return rep;
+bool Ref::isOfStmtRef() {
+    return isRootType(RootType::Synonym) || isRootType(RootType::Wildcard) || isRootType(RootType::Integer);
 }
 
-void Ref::setType(RefType& rrefType) {
-    type = rrefType;
+bool Ref::isOfEntRef() {
+    return isRootType(RootType::Synonym) || isRootType(RootType::Wildcard) || isRootType(RootType::Ident);
 }
 
-RefType Ref::getType() {
-    return type;
+bool Ref::isOfWithRef() {
+    return isRootType(RootType::Ident) || isRootType(RootType::Integer) || isRootType(RootType::AttrRef);
 }
 
-void Ref::setRootType(RootType& rrootType) {
-    rootType = rrootType;
+bool Ref::isOfName() {
+    return rootType == RootType::Ident || attrName == AttrName::ProcName || attrName == AttrName::VarName;
 }
 
-RootType Ref::getRootType() {
-    return rootType;
-}
-
-void Ref::setEntityType(QueryEntityType& eentityType) {
-    entityType = eentityType;
-}
-
-QueryEntityType Ref::getEntityType() {
-    return entityType;
+bool Ref::isOfInteger() {
+    return rootType == RootType::Integer || attrName == AttrName::Value || attrName == AttrName::StmtNo;
 }

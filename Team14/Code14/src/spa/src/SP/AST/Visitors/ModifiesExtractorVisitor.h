@@ -2,19 +2,22 @@
 
 #include <functional>
 
-#include "DesignExtractorVisitor.h"
 #include "../../AST/Nodes/AssignNode.h"
 #include "../../AST/Nodes/ReadNode.h"
+#include "DesignExtractorVisitor.h"
 
-class ModifiesExtractorVisitor : public DesignExtractorVisitor,
-    public AssignNodeVisitor,
-    public ReadNodeVisitor
-{
+class ModifiesExtractorVisitor : public DesignExtractorVisitor, public AssignNodeVisitor, public ReadNodeVisitor {
 private:
     /*!
-     * func is a lambda function used to abstract the call to PKB to add Modifies relationship.
+     * funcStmt is a lambda function used to abstract the call to PKB to add Modifies (stmt-var) relationship.
      */
-    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> func;
+    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> funcStmt;
+
+    /*!
+     * funcProc is a lambda function used to abstract the call to PKB to add Modifies (proc-var) relationship.
+     */
+    std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> funcProc;
+
 public:
     /*!
      * Constructor for ModifiesExtractorVisitor.
@@ -25,14 +28,18 @@ public:
     /*!
      * Visits an AssignNode and add variables used by the Assignment into PKB.
      * @param node The node to be visited
-     * @param parents A vector of parent nodes for this node
+     * @param parents A vector of parent statements for this node
+     * @param proc The procedure which the node is in
      */
-    void visitAssignNode(AssignNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
+    void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<Statement>> parents,
+                         std::shared_ptr<Procedure> proc) const override;
 
     /*!
      * Visits a ReadNode and add variable used into PKB.
      * @param node The node to be visited
-     * @param parents A vector of parent nodes for this node
+     * @param parents A vector of parent statements for this node
+     * @param proc The procedure which the node is in
      */
-    void visitReadNode(ReadNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const override;
+    void visitReadNode(ReadNode *node, std::vector<std::shared_ptr<Statement>> parents,
+                       std::shared_ptr<Procedure> proc) const override;
 };

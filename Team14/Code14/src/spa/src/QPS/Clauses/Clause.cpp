@@ -2,18 +2,10 @@
 
 Clause::Clause() {}
 
-void Clause::setType(ClauseType clauseType) {
-    type = clauseType;
-}
+void Clause::setType(ClauseType clauseType) { type = clauseType; }
 
-ClauseType Clause::getType() {
-   return type;
-}
+ClauseType Clause::getType() { return type; }
 
-void Clause::setFirstParam(Ref& ref) {
-    firstParam = ref;
-}
+void Clause::setFirstParam(Ref &ref) { firstParam = ref; }
 
-Ref& Clause::getFirstParam() {
-    return firstParam;
-}
+Ref &Clause::getFirstParam() { return firstParam; }

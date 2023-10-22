@@ -1,6 +1,6 @@
 #pragma once
 
-#include <assert.h>
+#include <cassert>
 #include <memory>
 #include <vector>
 
@@ -14,9 +14,11 @@ public:
     /**
      * Accepts the DesignExtractorVisitor and calls the visit method for this ASTNode.
      * @param visitor A design extractor visitor which implements the DesignExtractorVisitor interface
-     * @param parents The parent nodes of this ASTNode
+     * @param parents The parents of this ASTNode
+     * @param proc The procedure which this ASTNode belongs to
      */
-    virtual void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) = 0;
+    virtual void accept(std::shared_ptr<DesignExtractorVisitor> visitor,
+                        std::vector<std::shared_ptr<Statement>> parents, std::shared_ptr<Procedure> proc) = 0;
 
     /**
      * Returns all immediate child nodes of this ASTNode.

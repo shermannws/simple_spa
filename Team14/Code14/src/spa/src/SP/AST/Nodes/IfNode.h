@@ -3,11 +3,11 @@
 #include <memory>
 
 #include "Commons/AppConstants.h"
-#include "StatementNode.h"
 #include "ConditionalExpressionNode.h"
 #include "StatementListNode.h"
+#include "StatementNode.h"
 
-class IfNode; // forward declaration
+class IfNode;// forward declaration
 
 /**
  * Visitor interface linked to IfNode, used to implement the Acyclic Visitor pattern.
@@ -18,15 +18,17 @@ public:
      * Visits the IfNode for design extraction.
      * @param node IfNode to be visited
      * @param parents Parents of the IfNode
+     * @param proc The procedure that the IfNode is in
      */
-    virtual void visitIfNode(IfNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
+    virtual void visitIfNode(IfNode *node, std::vector<std::shared_ptr<Statement>> parents,
+                             std::shared_ptr<Procedure> proc) const = 0;
 };
 
 /**
  * ASTNode to represent an if statement.
  * Inherits from the StatementNode abstract class.
  */
-class IfNode: public StatementNode {
+class IfNode : public StatementNode {
 private:
     /**
      * The conditional expression of the if statement.
@@ -51,8 +53,7 @@ public:
      * @param thenStatementList The statement list for then branch
      * @param elseStatementList The statement list for else branch
      */
-    explicit IfNode(StatementNumber statementNumber,
-                    std::shared_ptr<ConditionalExpressionNode> conditionalExpression,
+    explicit IfNode(StatementNumber statementNumber, std::shared_ptr<ConditionalExpressionNode> conditionalExpression,
                     std::shared_ptr<StatementListNode> thenStatementList,
                     std::shared_ptr<StatementListNode> elseStatementList);
 
@@ -76,7 +77,8 @@ public:
      */
     std::shared_ptr<StatementListNode> getElseStatementList();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
+                std::shared_ptr<Procedure> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 

@@ -1,9 +1,8 @@
 #include <memory>
 
-#include "catch.hpp"
+#include "PKB/Commons/Assignment.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
-#include "PKB/AssignmentPatternStore/Assignment.h"
-#include "PKB/Relationships/ModifiesRelationship.h"
+#include "catch.hpp"
 
 using namespace std;
 
@@ -19,29 +18,29 @@ TEST_CASE("Test Modifies Relationship Retrieval") {
     shared_ptr<Statement> statement3 = make_shared<Statement>(Statement(3, StatementType::Assign));
     shared_ptr<Statement> statement4 = make_shared<Statement>(Statement(4, StatementType::Assign));
 
-    modifiesRelationshipManager.storeModifiesRelationship(statement1, variableX);
-    modifiesRelationshipManager.storeModifiesRelationship(statement2, variableX);
-    modifiesRelationshipManager.storeModifiesRelationship(statement3, variableX);
-    modifiesRelationshipManager.storeModifiesRelationship(statement3, variableY);
+    modifiesRelationshipManager.storeRelationship(statement1, variableX);
+    modifiesRelationshipManager.storeRelationship(statement2, variableX);
+    modifiesRelationshipManager.storeRelationship(statement3, variableX);
+    modifiesRelationshipManager.storeRelationship(statement3, variableY);
 
-    REQUIRE(modifiesRelationshipManager.getModifiesStmtPair(StatementType::Assign).size() == 3);
-    REQUIRE(modifiesRelationshipManager.getModifiesStmtPair(StatementType::Read).size() == 1);
+    REQUIRE(modifiesRelationshipManager.getRelationshipStmtPair(StatementType::Assign).size() == 3);
+    REQUIRE(modifiesRelationshipManager.getRelationshipStmtPair(StatementType::Read).size() == 1);
 
-    REQUIRE(modifiesRelationshipManager.getModifiesTypeIdent(StatementType::Assign, *variableX).size() == 2);
-    REQUIRE(modifiesRelationshipManager.getModifiesTypeIdent(StatementType::Assign, *variableY).size() == 1);
-    REQUIRE(modifiesRelationshipManager.getModifiesTypeIdent(StatementType::Read, *variableX).size() == 1);
+    REQUIRE(modifiesRelationshipManager.getRelationshipTypeIdent(StatementType::Assign, *variableX).size() == 2);
+    REQUIRE(modifiesRelationshipManager.getRelationshipTypeIdent(StatementType::Assign, *variableY).size() == 1);
+    REQUIRE(modifiesRelationshipManager.getRelationshipTypeIdent(StatementType::Read, *variableX).size() == 1);
 
-    REQUIRE(modifiesRelationshipManager.getModifiesStmt(StatementType::Stmt).size() == 3);
-    REQUIRE(modifiesRelationshipManager.getModifiesStmt(StatementType::Assign).size() == 2);
-    REQUIRE(modifiesRelationshipManager.getModifiesStmt(StatementType::Read).size() == 1);
+    REQUIRE(modifiesRelationshipManager.getRelationshipStmt(StatementType::Stmt).size() == 3);
+    REQUIRE(modifiesRelationshipManager.getRelationshipStmt(StatementType::Assign).size() == 2);
+    REQUIRE(modifiesRelationshipManager.getRelationshipStmt(StatementType::Read).size() == 1);
 
-    REQUIRE(modifiesRelationshipManager.getModifiesVar(*statement1).size() == 1);
-    REQUIRE(modifiesRelationshipManager.getModifiesVar(*statement2).size() == 1);
-    REQUIRE(modifiesRelationshipManager.getModifiesVar(*statement3).size() == 2);
+    REQUIRE(modifiesRelationshipManager.getRelationshipVar(*statement1).size() == 1);
+    REQUIRE(modifiesRelationshipManager.getRelationshipVar(*statement2).size() == 1);
+    REQUIRE(modifiesRelationshipManager.getRelationshipVar(*statement3).size() == 2);
 
-    REQUIRE(modifiesRelationshipManager.isStmtModifiesVar(*statement1, *variableX) == true);
-    REQUIRE(modifiesRelationshipManager.isStmtModifiesVar(*statement1, *variableY) == false);
+    REQUIRE(modifiesRelationshipManager.isRelationship(*statement1, *variableX) == true);
+    REQUIRE(modifiesRelationshipManager.isRelationship(*statement1, *variableY) == false);
 
-    REQUIRE(modifiesRelationshipManager.hasModifies(*statement1) == true);
-    REQUIRE(modifiesRelationshipManager.hasModifies(*statement4) == false);
+    REQUIRE(modifiesRelationshipManager.hasRelationship(*statement1) == true);
+    REQUIRE(modifiesRelationshipManager.hasRelationship(*statement4) == false);
 }

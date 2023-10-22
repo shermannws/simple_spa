@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Result.h"
-#include "QPS/Query.h"
-#include "Strategies/Strategy.h"
-#include "Strategies/AssignPatternStrategy.h"
 #include "./PKB/PkbReader.h"
+#include "QPS/Query.h"
+#include "Result.h"
+#include "Strategies/AssignPatternStrategy.h"
+#include "Strategies/Strategy.h"
 
 
 /**
@@ -21,6 +21,7 @@ private:
      * The pkbReader called to retrieve required data for executing clause
      */
     std::shared_ptr<PkbReader> pkbReader;
+
 public:
     /**
      * Constructor for ClauseHandler
@@ -39,5 +40,5 @@ public:
      * @param clause the clause to be evaluated
      * @param result the Result table to be populated with the results of the clause execution
      */
-    void executeClause(std::shared_ptr<Clause> clause, Result& result) const;
+    std::shared_ptr<Result> executeClause(std::shared_ptr<Clause> clause) const;
 };

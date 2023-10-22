@@ -1,0 +1,42 @@
+procedure Next {
+    line1 = 2;
+    if (line1 <= 2) then {
+        if (line1 > 3) then {
+            print a4;
+            a5 = a4 + 5 % 2;
+        }
+        else {
+            a6 = 6;
+        }
+        print a7;
+    }
+    else {
+        call Next2;
+        print a9;
+    }
+    print a10;
+}
+
+procedure Next2 {
+    line11 = a10 + 100 % 11;
+    while (12 < line11) {
+        read a13;
+        line11 = a13 + 14 % 14;
+        while (a13 != 15) {
+            read a16;
+            read a17;
+            a13 = a16 + a17 + 18;
+        }
+        print a19;
+        if (a19 == 20) then {
+            print a21;
+        } else {
+            print a22;
+        }
+    }
+    print a23;
+    read a24;
+    while (2 == a24){
+        a24 = a24 + 26;
+    }
+}

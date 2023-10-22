@@ -1,0 +1,105 @@
+1 - check Modifies(stmt, synonym)
+stmt s; variable v;
+Select s such that Modifies(s, v)
+1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14
+5000
+2 - check Modifies(stmt, wildcard)
+stmt s;
+Select s such that Modifies(s, _)
+1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14
+5000
+3 - check Modifies(stmt, varname)
+stmt s;
+Select s such that Modifies(s, "modified")
+3, 4, 6, 9, 13, 14
+5000
+4 - check Modifies(call, synonym)
+call call; variable v;
+Select call such that Modifies(call, v)
+4, 8, 9, 13
+5000
+5 - check Modifies(call, wildcard)
+call c, c1;
+Select c such that Modifies(c, _)
+4, 8, 9, 13
+5000
+6 - check Modifies(call, varname)
+call c, c1;
+Select c such that Modifies(c, "modified")
+4, 9, 13
+5000
+7 - check Modifies(if, synonym)
+if i; variable v;
+Select v such that Modifies(i, v)
+modified
+5000
+8 - check Modifies(if, wildcard)
+if i;
+Select i such that Modifies(i, _)
+3
+5000
+9 - check Modifies(if, varname)
+if i;
+Select i such that Modifies(i, "twelve")
+none
+5000
+10 - check Modifies(while, synonym)
+while w; variable v;
+Select v such that Modifies(w, v)
+call, twelve, modified
+5000
+11 - check Modifies(while, wildcard)
+while w;
+Select w such that Modifies(w, _)
+6, 7
+5000
+12 - check Modifies(while, varname)
+while w;
+Select w such that Modifies(w, "modified")
+6
+5000
+13 - check Modifies(stmtnum, synonym)
+variable v;
+Select v such that Modifies(4, v)
+modified
+5000
+14 - check Modifies(stmtnum, wildcard)
+procedure p;
+Select p such that Modifies(6, _)
+A, a, b, call, blah
+5000
+15 - check Modifies(stmtnum, varname)
+while while, while2;
+Select while such that Modifies(8, "call")
+6, 7, 17
+5000
+17 - check Modifies(wildcard, synonym) - negative case
+variable v;
+Select v such that Modifies(_, v)
+SemanticError
+5000
+18 - check Modifies(wildcard, wildcard) - negative case
+stmt s;
+Select s such that Modifies(_, _)
+SemanticError
+5000
+19 - check Modifies(wildcard, varname) - negative case
+read r;
+Select r such that Modifies(_, "var1")
+SemanticError
+5000
+20 - check Modifies(stmtnum, stmtnum) - negative case
+assign a;
+Select a such that Modifies(7, 8)
+SyntaxError
+5000
+21 - check Modifies(var synonym, varname) - negative case
+variable v;
+Select v such that Modifies(v, "var6")
+SemanticError
+5000
+22 - check Modifies(call, varname) with no synonym - negative case
+Select v
+such that Modifies(v, "var6")
+SemanticError
+5000

@@ -1,0 +1,110 @@
+1 - select a, wildcard, partial matching, expr '-' term '/' const_value
+assign a;
+Select a pattern a(_, _"a-b/3"_)
+1, 2
+5000
+2 - select a, variable syn, exact matching, expr '+' var_name
+assign a; variable v;
+Select a pattern a(v, "a+b")
+7
+5000
+3 - select v, variable syn, partial matching, expr '+' term '/' '(' expr ')'
+assign a; variable v;
+Select v pattern a(v, _"a+b/(a+b)"_)
+a, b
+5000
+4 - select v, variable syn, partial matching, const_value
+assign a; variable v;
+Select v pattern a(v, _"3"_)
+a, b, c, d, e
+5000
+5 - select unrelated, ident, partial matching, expr '-' var_name
+assign a; variable v; while w;
+Select w pattern a("c", _"a-b"_)
+6, 14
+5000
+51 - query 5 extension 1
+assign a; variable v; while w;
+Select a pattern a("c", _"a-b"_)
+19
+5000
+52 - query 5 extension 2
+assign a; variable v; while w;
+Select a pattern a(_, _"a-b"_)
+19
+5000
+6 - select unrelated, variable syn, exact matching, term '*' const_value
+assign a; variable v; stmt s;
+Select s pattern a(v, "a*3")
+
+5000
+7 - select unrelated, wildcard, partial matching, expr '+' term '*' '(' expr ')'
+assign a; if ifs;
+Select ifs pattern a(_, _"a+b*(a*3)"_)
+3, 8, 18
+5000
+8 - select unrelated, wildcard, exact matching, expr '+' term '%' const_value
+assign a, a1;
+Select a pattern a1(_, "a+b%3")
+1,2,4,5,7,9,10,11,12,13,15,16,17,19,20,21
+5000
+9 - select a, variable syn, partial matching, expr '-' term '%' var_name
+assign a; variable v;
+Select a pattern a(v, _"a-b%c"_)
+12
+5000
+10 - select a, variable syn, exact matching, expr '-' term '*' '(' expr ')'
+assign a; variable v;
+Select a pattern a(v, "a-b*(a*3)")
+
+5000
+11 - select a, wildcard, partial matching, term '*' var_name
+assign a;
+Select a pattern a(_,_"b*a"_)
+21
+5000
+12 - select a, ident, exact matching, expr '+' term '/' const_value
+assign a;
+Select a pattern a("b", "a+b/3")
+
+5000
+13 - select v, variable syn, partial matching, expr '+' term '%' const_value
+assign a; variable v;
+Select v pattern a(v, _"a+b%3"_)
+b
+5000
+14 - no right Quote
+assign a; variable v;
+Select v pattern a("test, _)
+SyntaxError
+5000
+15 - no right Quote
+assign a; variable v;
+Select v pattern a(v, _"a_)
+SyntaxError
+5000
+16 - extra Rparenthesis
+assign a; variable v;
+Select v pattern a(v, _"a+b%3)"_)
+SyntaxError
+5000
+17 - extra Rparenthesis
+assign a; variable v;
+Select v pattern a(v, _")"_)
+SyntaxError
+5000
+18 - empty expr in parentheses
+assign a; variable v;
+Select v pattern a(v, "a+b+()")
+SyntaxError
+5000
+19 - missing operand
+assign a; variable v;
+Select v pattern a(v, "a+b+")
+SyntaxError
+5000
+20 - missing operator
+assign a; variable v;
+Select v pattern a(v, "a b")
+SyntaxError
+5000

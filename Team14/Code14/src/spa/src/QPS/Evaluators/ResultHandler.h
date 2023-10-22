@@ -3,8 +3,8 @@
 #include <list>
 #include <string>
 
-#include "Result.h"
 #include "QPS/Query.h"
+#include "Result.h"
 
 /**
  * @class ResultHandler class generates a result table from the combining two tables
@@ -18,7 +18,7 @@ private:
      * @param r2 second result table
      * @return the resultant table from the join
      */
-    Result join(Result& r1, Result& r2);
+    std::shared_ptr<Result> join(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 
     /**
      * Gets a map of indices of the common synonyms between two tables
@@ -26,7 +26,7 @@ private:
      * @param r2 second result table
      * @return map of index of common synonyms in table 1 to index in table 2
      */
-    std::unordered_map<int, int> getCommonColumns(Result& r1, Result& r2);
+    std::unordered_map<int, int> getCommonColumns(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 
     /**
      * Builds a map of synonym to index for the resultant combined table
@@ -34,7 +34,7 @@ private:
      * @param r2 second result table
      * @return map of synonym to index
      */
-    SynonymMap buildSynIndices(Result& r1, Result& r2);
+    SynonymMap buildSynIndices(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 
     /**
      * Creates a vector of the synonyms in the order of their index in map
@@ -49,7 +49,16 @@ private:
      * @param row2 row from table 2
      * @return boolean
      */
-    bool isMatch(const std::vector<Entity>& row1, const std::vector<Entity>& row2, const std::unordered_map<int, int>& commons);
+    bool isMatch(const std::vector<Entity> &row1, const std::vector<Entity> &row2,
+                 const std::unordered_map<int, int> &commons);
+
+    /**
+     * Casts a Result object into a False Boolean Result if it is an Empty Tuple Result,
+     * otherwise returns the original result
+     * @param result shared pointer to the Result object being casted
+     * @return shared pointer to the casted Result object
+     */
+    std::shared_ptr<Result> cast(std::shared_ptr<Result> result);
 
 public:
     /**
@@ -64,7 +73,5 @@ public:
      * @param r2 second result table
      * @return the resultant table
      */
-    Result getCombined(Result& r1, Result& r2);
+    std::shared_ptr<Result> getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 };
-
-

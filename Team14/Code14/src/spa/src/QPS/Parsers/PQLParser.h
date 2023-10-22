@@ -3,11 +3,11 @@
 #include <string>
 #include <utility>
 
-#include "QPS/Query.h"
-#include "Tokenizer.h"
-#include "QPS/QueryEntity.h"
 #include "ExprSpecParser.h"
 #include "QPS/QPSTypes.h"
+#include "QPS/Query.h"
+#include "QPS/QueryEntity.h"
+#include "Tokenizer.h"
 
 /**
  * @brief PQLParser class
@@ -25,87 +25,80 @@ private:
     std::shared_ptr<ExprSpecParser> exprSpecParser;
 
     /**
-     * @brief Parses declarations syntactically and extracts the declared entities
-     * @return vector of declared entities
+     * @brief parses declarations and adds the declared entities to the query object
      */
-    std::vector<std::shared_ptr<QueryEntity>> processDeclarations();
+    std::vector<Synonym> parseDeclarations(Query &query);
 
     /**
-     * @brief Parses select clause syntactically ad extracts the selected synonym
-     * @return the selected synonym
+     * @brief parses result clause and adds the selected synonyms to the query object
      */
-    Synonym processSelectClause();
+    void parseResultClause(Query &query);
 
     /**
-     * @brief parses the query for any such that clause and extracts the related
-     * information into a such that clause object
-     * @return a shared pointer to the pattern clause
+     * @brief parses a tuple result clause and adds the tuple elements to the query
      */
-    std::shared_ptr<SuchThatClause> processSuchThatClause();
+    void processTuple(Query &query);
 
     /**
-     * @brief parses the query for any pattern clause and extracts the related
-     * information into a pattern clause object
-     * @return a shared pointer to the pattern clause
+     * @brief parses a single element of result clause and adds the element to the query
      */
-    std::shared_ptr<PatternClause> processPatternClause();
+    void processElem(Query &query);
 
     /**
-     * @brief Validates SuchThatClause syntactically, otherwise throws a SyntaxException
+     * @brief parses the chain of constraint clause and adds the clauses to the query object
+     */
+    void parseClauses(Query &query);
+
+    /**
+     * @brief parses a chain of such that clause and adds the clauses to the query
+     */
+    void processSuchThatClause(Query &query);
+
+    /**
+     * @brief parses a chain of pattern clause and adds the clauses to the query
+     */
+    void processPatternClause(Query &query);
+
+    /**
+     * @brief parses a chain of with clause and adds the clauses to the query
+     */
+    void processWithClause(Query &query);
+
+    /**
+     * @brief Returns a SuchThatClause if syntax is valid, otherwise throws a SyntaxException
+     * @return clause the shared pointer of SuchThat Clause
+     */
+    std::shared_ptr<SuchThatClause> extractSuchThatClause();
+
+    /**
+     * @brief Returns a PatternClause if syntax is valid, otherwise throws a SyntaxException
+     * @param return the shared pointer of Pattern Clause
+     */
+    std::shared_ptr<PatternClause> extractPatternClause();
+
+    /**
+     * @brief Returns a WithClause if syntax is valid, otherwise throws a SyntaxException
+     * @param return the shared pointer of Pattern Clause
+     */
+    std::shared_ptr<WithClause> extractWithClause();
+
+    /**
+     * @brief Validates SuchThatRefType LHS & RHS according to ClauseType
      * @param clause the shared pointer of SuchThatClause to validate
      */
-    void validateSuchThatSyntax(std::shared_ptr<SuchThatClause> clause);
-
-    /**
-    * @brief Validates SuchThatRefType LHS & RHS according to ClauseType
-    * @param clause the shared pointer of SuchThatClause to validate
-    */
     void validateSuchThatRefType(const std::shared_ptr<SuchThatClause> clause);
 
     /**
-     * @brief Validates PatternClause syntactically, otherwise throws a SyntaxException
-     * @param clause the shared pointer of SuchThatClause to validate
+     * @brief Validates WithClauseRefType LHS & RHS according to ClauseType
+     * @param clause the shared pointer of WithClause to validate
      */
-    void validatePatternSyntax(std::shared_ptr<PatternClause> clause);
+    void validateWithRefType(Ref &leftRef, Ref &rightRef);
 
     /**
-     * @brief Validates the declarations and stores them in the query object,
-     * otherwise throws a Semantic exception in case of an entity redeclaration
-     * @param query the query object
-     * @param entities the vector of shared pointer to query entities declared
+     * @brief Validates Pattern Clause structure according to the existence of thirdParam
+     * @param clause The shared pointer of PatternClause to validate
      */
-    void validateDeclarations(Query& query, const std::vector<std::shared_ptr<QueryEntity>>& entities);
-
-    /**
-     * @brief Validates the selected entity and stores them in the query object,
-     * otherwise throws a Semantic exception if not valid
-     * @param query the query object
-     * @param syn the synonym selected in the query
-     */
-    void validateSelectSemantics(Query& query, const Synonym& syn);
-
-    /**
-     * @brief Validates SuchThatClause semantically, and stores it in the query object
-     * otherwise throws a SemanticException
-     * @param query the Query object
-     * @param clause the shared pointer of SuchThatClause to validate
-     */
-    void validateSuchThatSemantics(Query& query, const std::shared_ptr<SuchThatClause> clause);
-
-    /**
-     * @brief Validates PatternClause semantically, and stores it in the query object
-     * otherwise throws a SemanticException
-     * @param query the Query object
-     * @param clause the shared pointer of PatternClause to validate
-     */
-    void validatePatternSemantics(Query& query, const std::shared_ptr<PatternClause> clause);
-
-    /**
-     * @brief Returns a Token shared pointer if isToken is true, otherwise throws an Exception with errorMsg
-     * @param isToken the token boolean check
-     * @param errorMsg the error message of the thrown exception
-     */
-    std::shared_ptr<Token> expect(bool isToken, const std::string& errorMsg);
+    void validatePatternStructure(const std::shared_ptr<PatternClause> clause);
 
     /**
      * @brief Returns the next token as Ref if it is Integer, Identity, Wildcard or Synonym,
@@ -115,19 +108,26 @@ private:
     Ref extractRef();
 
     /**
-    * @brief Returns the next token as QueryEntity of the specified type if it is a valid ident
-    * otherwise throws a SyntaxException
-    * @param entityType a shared ptr to a Token which represents the query entity type
-    * @return a shared ptr to a QueryEntity
-    */
+     * @brief Returns the next token as QueryEntity of the specified type if it is a valid ident
+     * otherwise throws a SyntaxException
+     * @param entityType a shared ptr to a Token which represents the query entity type
+     * @return a shared ptr to a QueryEntity
+     */
     std::shared_ptr<QueryEntity> extractQueryEntity(std::shared_ptr<Token> entityType);
+
+    /**
+     * @brief Returns a Token shared pointer if isToken is true, otherwise throws an Exception with errorMsg
+     * @param isToken the token boolean check
+     * @param errorMsg the error message of the thrown exception
+     */
+    std::shared_ptr<Token> expect(bool isToken, const std::string &errorMsg);
 
 public:
     /**
      * @brief The constructor of PQLParser
      * @param PQLQuery the query in string
      */
-    explicit PQLParser(const std::string& PQLQuery);
+    explicit PQLParser(const std::string &PQLQuery);
 
     /**
      * @brief Parses query in string and returns a Query object

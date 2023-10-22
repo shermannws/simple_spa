@@ -4,7 +4,7 @@
 
 #include "ConditionalExpressionNode.h"
 
-class UnaryConditionalExpressionNode; // forward declaration
+class UnaryConditionalExpressionNode;// forward declaration
 
 /**
  * Visitor interface linked to UnaryConditionalExpressionNode,
@@ -16,8 +16,11 @@ public:
      * Visits the UnaryConditionalExpressionNode for design extraction.
      * @param node UnaryConditionalExpressionNode to be visited
      * @param parents Parents of the UnaryConditionalExpressionNode
+     * @param proc Procedure containing the UnaryConditionalExpressionNode
      */
-    virtual void visitUnaryConditionalExpressionNode(UnaryConditionalExpressionNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
+    virtual void visitUnaryConditionalExpressionNode(UnaryConditionalExpressionNode *node,
+                                                     std::vector<std::shared_ptr<Statement>> parents,
+                                                     std::shared_ptr<Procedure> proc) const = 0;
 };
 
 /**
@@ -46,7 +49,8 @@ public:
      */
     std::shared_ptr<ConditionalExpressionNode> getConditionalExpression();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
+                std::shared_ptr<Procedure> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

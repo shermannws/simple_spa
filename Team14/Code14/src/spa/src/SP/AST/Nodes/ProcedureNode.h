@@ -2,11 +2,11 @@
 
 #include <string>
 
-#include "Commons/AppConstants.h"
 #include "ASTNode.h"
+#include "Commons/AppConstants.h"
 #include "StatementListNode.h"
 
-class ProcedureNode; // forward declaration
+class ProcedureNode;// forward declaration
 
 /**
  * Visitor interface linked to ProcedureNode, used to implement the Acyclic Visitor pattern.
@@ -17,8 +17,10 @@ public:
      * Visits the ProcedureNode for design extraction.
      * @param node ProcedureNode to be visited
      * @param parents Parents of the ProcedureNode
+     * @param proc The procedure that the ProcedureNode (aka itself)
      */
-    virtual void visitProcedureNode(ProcedureNode* node, std::vector<std::shared_ptr<ASTNode>> parents) const = 0;
+    virtual void visitProcedureNode(ProcedureNode *node, std::vector<std::shared_ptr<Statement>> parents,
+                                    std::shared_ptr<Procedure> proc) const = 0;
 };
 
 /**
@@ -56,7 +58,8 @@ public:
      */
     std::shared_ptr<StatementListNode> getStatementList();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
+                std::shared_ptr<Procedure> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

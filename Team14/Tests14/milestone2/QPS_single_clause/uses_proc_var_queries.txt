@@ -1,0 +1,55 @@
+1 - test syn-proc, wildcard
+procedure p;
+Select p such that Uses(p,_)
+main, caller, secondary, uses, final
+5000
+2 - test syn-proc, var-name, no procedure
+procedure p;
+Select p such that Uses(p,"l")
+none
+5000
+3 - test syn-proc, var-name, one procedure
+procedure p;
+Select p such that Uses(p,"g")
+main
+5000
+4 - test syn-proc, var-name, two procedures
+procedure p;
+Select p such that Uses(p,"b")
+caller, uses
+5000
+5 - test syn-proc, var-name, three procedures via nested calls
+procedure p;
+Select p such that Uses(p,"k")
+caller, secondary, final
+5000
+6 - test syn-proc, var-syn
+procedure p; variable v;
+Select v such that Uses(p,v)
+b, c, e, x, y, a, g, j, h, k
+5000
+7 - test syn-proc , var-syn , line no does not exist
+procedure p;
+Select p such that Uses(99999,"g")
+none
+5000
+8 - test syn-proc, var-name, var does not exist
+procedure p;
+Select p such that Modifies(p,"nonexistent")
+none
+5000
+9 - invalid query, wrong procedure terminal
+Procedure p;
+Select p such that Uses(_,"i")
+SyntaxError
+5000
+10 - invalid query, _ in LHS
+procedure p;
+Select p such that Uses(_,"j")
+SemanticError
+5000
+11 - invalid query, integer in RHS
+procedure p;
+Select p such that Uses(a, 1)
+SyntaxError
+5000
