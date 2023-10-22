@@ -84,6 +84,8 @@ void ProcToProcRelationshipManager<S>::calculateTransitiveRelationshipHelper(std
     if (latterChildren == nullptr) { return; }
     for (auto it = latterChildren->getBeginIterator(); it != latterChildren->getEndIterator(); ++it) {
         auto newLatter = *it;
+        auto rightOfFormer = starRelationshipStore->getRightEntitiesOf(former);
+        if (rightOfFormer != nullptr && rightOfFormer->get(newLatter) != nullptr) { continue; }
         starRelationshipStore->storeRelationship(former, newLatter);
         calculateTransitiveRelationshipHelper(former, newLatter);
     }

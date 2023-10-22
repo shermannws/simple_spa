@@ -46,7 +46,7 @@ bool NextRelationshipManager::isRelationship(Statement &statement1, Statement &s
     return StmtToStmtRelationshipManager::isRelationship(statement1, statement2, requireDirect);
 }
 
-void NextRelationshipManager::clearNextStarStore() {// TODO: Someone need to invoke this function after each query
+void NextRelationshipManager::clearNextStarStore() {
     this->starRelationshipStore->clear();
     this->isNextStarCalculated = false;
 }
