@@ -1,0 +1,19 @@
+procedure call {
+	call print;
+	read read;
+	if (!(!(!(x != y)))) then {
+		print a;	} else {
+		print b;
+	}
+}
+
+procedure print {
+	print call;
+	call = 1 + 2 + 3 + 4 + 7 + 100 * a;
+	while (8 == x) {
+		read k;
+	}
+	read print;
+	print print;
+	print extra;
+}
