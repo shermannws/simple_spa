@@ -1,22 +1,38 @@
 #pragma once
 
+#include "PatternStrategy.h"
 #include "QPS/Clauses/PatternClause.h"
-#include "Strategy.h"
 
 /**
  * The Strategy class of While Pattern clause
  */
-class WhilePatternStrategy : public Strategy {
-private:
-    std::shared_ptr<PkbReader> pkbReader;
-
+class WhilePatternStrategy : public PatternStrategy {
 public:
-    explicit WhilePatternStrategy(std::shared_ptr<PkbReader> pkbReader) : pkbReader(pkbReader){};
     /**
-     * @brief Evaluates the clause using pkbReader methods relating to While Pattern
-     * @param clause The shared pointer of the Clause to be evaluated
-     * @param pkbReader The pkbReader of which the methods are to be called
-     * @return The result of the clause evaluation
+     * @brief Explicit constructor of WhilePatternStrategy
+     * @param pkbReader The shared pointer to the PKB reader
      */
-    std::shared_ptr<Result> evaluateClause(std::shared_ptr<Clause> clause) const override;
+    explicit WhilePatternStrategy(std::shared_ptr<PkbReader> pkbReader);
+
+    /**
+     * @brief Evaluates PatternClause that follows the syntax pattern w(_,_)
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateWildcard(ExpressionSpec &secondArg) const override;
+
+    /**
+     * @brief Evaluates PatternClause that follows the syntax pattern w(v,_)
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateSyn(ExpressionSpec &secondArg) const override;
+
+    /**
+     * @brief Evaluates PatternClause that follows the syntax pattern w("var",_)
+     * @param firstArg The first argument of PatternClause to evaluate
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateVarIdent(Ref &firstArg, ExpressionSpec &secondArg) const override;
 };

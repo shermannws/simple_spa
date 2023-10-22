@@ -1,24 +1,38 @@
 #pragma once
 
+#include "PatternStrategy.h"
 #include "QPS/Clauses/PatternClause.h"
-#include "Strategy.h"
 
 /**
  * The Strategy class of Assign Pattern clause
  */
-class AssignPatternStrategy : public Strategy {
-    // TODO: create an abstract class of PatternStrategy similar to SuchThat
-private:
-    std::shared_ptr<PkbReader> pkbReader;
-
+class AssignPatternStrategy : public PatternStrategy {
 public:
-    explicit AssignPatternStrategy(std::shared_ptr<PkbReader> pkbReader) : pkbReader(pkbReader){};
+    /**
+     * @brief Explicit constructor of AssignPatternStrategy
+     * @param pkbReader The shared pointer to the PKB reader
+     */
+    explicit AssignPatternStrategy(std::shared_ptr<PkbReader> pkbReader);
 
     /**
-     * @brief Evaluates the clause using pkbReader methods relating to AssignPattern
-     * @param clause The shared pointer of the Clause to be evaluated
-     * @param pkbReader The pkbReader of which the methods are to be called
-     * @return The result of the clause evaluation
+     * @brief Evaluates PatternClause that follows the syntax pattern a(_,_)
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
      */
-    std::shared_ptr<Result> evaluateClause(std::shared_ptr<Clause> clause) const override;
+    std::shared_ptr<Result> evaluateWildcard(ExpressionSpec &secondArg) const override;
+
+    /**
+     * @brief Evaluates PatternClause that follows the syntax pattern a(v,_)
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateSyn(ExpressionSpec &secondArg) const override;
+
+    /**
+     * @brief Evaluates PatternClause that follows the syntax pattern a("var",expression-spec)
+     * @param firstArg The first argument of PatternClause to evaluate
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
+     */
+    std::shared_ptr<Result> evaluateVarIdent(Ref &firstArg, ExpressionSpec &secondArg) const override;
 };
