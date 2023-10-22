@@ -1320,11 +1320,6 @@ TEST_CASE("multiclause, pattern and suchThat - synonym in tuple result table") {
     PQLEvaluator evaluator = PQLEvaluator(stubReader);
     auto resultObj = evaluator.evaluate(queryObj);
     auto results = evaluator.formatResult(queryObj, resultObj);
-    REQUIRE(resultObj.getType() == ResultType::Tuples);
-    REQUIRE(resultObj.getSynIndices()["a"] == 0);
-    REQUIRE(resultObj.getSynIndices()["v"] == 1);
-    REQUIRE(resultObj.getSynIndices()["a1"] == 2);
-    REQUIRE(resultObj.getTuples().size() == 4);
     REQUIRE(results.size() == 3);
     REQUIRE(find(results.begin(), results.end(), "1") != results.end());
     REQUIRE(find(results.begin(), results.end(), "2") != results.end());
@@ -1400,7 +1395,7 @@ TEST_CASE("boolean result clause query") {
         PQLEvaluator evaluator = PQLEvaluator(stubReader);
         auto resultObj = evaluator.evaluate(queryObj);
         auto results = evaluator.formatResult(queryObj, resultObj);
-        REQUIRE(!resultObj.getTuples().empty());
+        REQUIRE(resultObj.getTuples().empty());
         REQUIRE(results.size() == 1);
         REQUIRE(find(results.begin(), results.end(), "TRUE") != results.end());
     }

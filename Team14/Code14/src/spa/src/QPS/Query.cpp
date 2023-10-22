@@ -46,3 +46,11 @@ std::vector<std::shared_ptr<SuchThatClause>> Query::getSuchThat() const { return
 std::vector<std::shared_ptr<PatternClause>> Query::getPattern() const { return patternClauses; }
 
 std::vector<std::shared_ptr<WithClause>> Query::getWith() const { return withClauses; }
+
+std::vector<std::shared_ptr<Clause>> Query::getAllClause() const {
+    std::vector<std::shared_ptr<Clause>> clauses;
+    for (const auto &clause: suchThatClauses) { clauses.push_back(clause); }
+    for (const auto &clause: patternClauses) { clauses.push_back(clause); }
+    for (const auto &clause: withClauses) { clauses.push_back(clause); }
+    return clauses;
+}
