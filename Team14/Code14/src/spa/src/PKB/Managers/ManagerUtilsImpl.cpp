@@ -9,6 +9,8 @@
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/PatternStore/AssignPatternStore.h"
+#include "PKB/RelationshipStores/CallsRelationshipStore.h"
+#include "PKB/RelationshipStores/NextRelationshipStore.h"
 
 template std::vector<Entity>
 ManagerUtils::getEntitiesFromStore<AssignPatternStore, Assignment>(std::shared_ptr<AssignPatternStore> store,
@@ -136,3 +138,11 @@ ManagerUtils::addStmtVarFromProcVar(std::shared_ptr<UsesRelationshipManager> stm
 
 template std::vector<Entity> ManagerUtils::getLeftKeysMatchRight(RelationshipStore<Statement, Statement> &store,
                                                                  std::function<bool(Statement &)> leftMatcher);
+
+template void ManagerUtils::calculateTransitivity<NextRelationshipStore, Statement>(
+        std::shared_ptr<NextRelationshipStore> relationshipStore,
+        std::shared_ptr<NextRelationshipStore> starRelationshipStore);
+
+template void ManagerUtils::calculateTransitivity<CallsRelationshipStore, Procedure>(
+        std::shared_ptr<CallsRelationshipStore> relationshipStore,
+        std::shared_ptr<CallsRelationshipStore> starRelationshipStore);

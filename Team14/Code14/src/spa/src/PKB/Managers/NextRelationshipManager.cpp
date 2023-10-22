@@ -46,35 +46,13 @@ bool NextRelationshipManager::isRelationship(Statement &statement1, Statement &s
     return StmtToStmtRelationshipManager::isRelationship(statement1, statement2, requireDirect);
 }
 
-void NextRelationshipManager::clearNextStarStore() {// TODO: Someone need to invoke this function after each query
+void NextRelationshipManager::clearNextStarStore() {
     this->starRelationshipStore->clear();
     this->isNextStarCalculated = false;
 }
 
 void NextRelationshipManager::calculateNextStar() const {
-    for (auto it = relationshipStore->getLeftToRightBeginIterator();
-         it != relationshipStore->getLeftToRightEndIterator(); ++it) {
-        auto former = it->first;
-        auto latterSet = it->second;
-        for (auto it2 = latterSet->getBeginIterator(); it2 != latterSet->getEndIterator(); ++it2) {
-            auto latter = *it2;
-            starRelationshipStore->storeRelationship(former, latter);
-            calculateNextStarHelper(former, latter);
-        }
-    }
-
+    ManagerUtils::calculateTransitivity<NextRelationshipStore, Statement>(this->relationshipStore,
+                                                                          this->starRelationshipStore);
     this->isNextStarCalculated = true;
-}
-
-void NextRelationshipManager::calculateNextStarHelper(std::shared_ptr<Statement> former,
-                                                      std::shared_ptr<Statement> latter) const {
-    auto latterChildren = relationshipStore->getRightEntitiesOf(latter);
-    if (latterChildren == nullptr) { return; }
-    for (auto it = latterChildren->getBeginIterator(); it != latterChildren->getEndIterator(); ++it) {
-        auto newLatter = *it;
-        auto rightOfFormer = starRelationshipStore->getRightEntitiesOf(former);
-        if (rightOfFormer != nullptr && rightOfFormer->get(newLatter) != nullptr) { continue; }
-        starRelationshipStore->storeRelationship(former, newLatter);
-        calculateNextStarHelper(former, newLatter);
-    }
 }
