@@ -7,11 +7,20 @@
 #include "SP/AST/Nodes/ASTNode.h"
 #include "SP/AST/Nodes/ProgramNode.h"
 
+/**
+ * An SP subcomponent to validate the semantics of the tokenized source program.
+ */
 class SemanticValidator {
 private:
+    /**
+     * Reference stack to traverse the AST.
+     */
     std::stack<std::shared_ptr<ASTNode>> frontier;
 
 public:
+    /**
+     * Creates and initialises a SemanticValidator.
+     */
     SemanticValidator();
 
     /**

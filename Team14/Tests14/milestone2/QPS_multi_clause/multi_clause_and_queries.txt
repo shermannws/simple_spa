@@ -50,17 +50,17 @@ helper, callee
 5000
 11 - different clause type, pattern, such that - and
 variable v; if ifs;
-Select v pattern ifs(v, _) such that Uses ("callee", v) and Follows (20,21)
+Select v pattern ifs(v, _, _) such that Uses ("callee", v) and Follows (20,21)
 a, b
 5000
 12 - different clause type, such that - and, pattern
 variable v; if ifs;
-Select v such that Uses ("callee", v) and Follows (20,21) pattern ifs(v, _)
+Select v such that Uses ("callee", v) and Follows (20,21) pattern ifs(v, _, _)
 a, b
 5000
 13 - different clause type, such that, such that, pattern
 variable v; if ifs;
-Select v such that Uses ("callee", v) such that Follows (20,21) pattern ifs(v, _)
+Select v such that Uses ("callee", v) such that Follows (20,21) pattern ifs(v, _, _)
 a, b
 5000
 14 - different clause type, with, pattern - and
