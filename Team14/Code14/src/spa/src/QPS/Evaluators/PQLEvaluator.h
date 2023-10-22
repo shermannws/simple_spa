@@ -100,60 +100,60 @@ private:
     std::string concat(std::vector<std::string> strings);
 
     /**
-     *
-     * @param results
-     * @return
+     * evaluates whether any of the results in the vector is a False Result or is an empty result tuple
+     * @param results vector of results to evaluate
+     * @return true if all the results in the vector are non-false and non-empty, false otherwise
      */
     bool evaluateBoolResults(std::vector<std::shared_ptr<Result>> results);
 
     /**
-     *
-     * @param results
-     * @return
+     * evaluate the overall result of the given results
+     * @param results vector of results to combine
+     * @return shared pointer to the result object
      */
     std::shared_ptr<Result> evaluateMainResults(std::vector<std::shared_ptr<Result>> results);
 
     /**
-     *
-     * @param clauseGroup
-     * @return
+     * evaluates the vector of clauses
+     * @param clauseGroup the vector of clauses to evaluate
+     * @return shared pointer to the result object
      */
     std::shared_ptr<Result> evaluateClauses(std::vector<std::shared_ptr<Clause>> clauseGroup);
 
     /**
-     *
-     * @param adjacency_list
-     * @param clauses
-     * @return
+     * groups the clauses in the query based on synonyms
+     * @param adjacency_list An unordered map representing the adjacency list of synonym graph
+     * @param clauses vector of clauses to group
+     * @return vector of grouped clauses
      */
     std::vector<std::unordered_set<std::shared_ptr<Clause>>>
     groupClauses(std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list,
                  std::vector<std::shared_ptr<Clause>> clauses);
 
     /**
-     *
-     * @param query
-     * @param clauses
-     * @return
+     * builds a graph with synonyms as nodes and edges representing synonyms that are connected by clause(s)
+     * @param query the query object
+     * @param clauses vector of clauses that defines the edges in the graph
+     * @return an unordered map representing a adjacency list
      */
     std::unordered_map<Synonym, std::unordered_set<Synonym>>
     buildSynGraph(Query &query, std::vector<std::shared_ptr<Clause>> clauses);
 
     /**
-     *
-     * @param adjacency_list
-     * @param current
-     * @param visited
-     * @param connected
+     * performs depth first search on a adjacency graph of synonyms from current as the starting node
+     * @param adjacency_list An unordered map representing the adjacency list of synonym graph
+     * @param current The current synonym being explored in the graph
+     * @param visited A set of visited synonyms
+     * @param connected A set of synonyms that are reachable from current
      */
     void DFS(const std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list, const std::string &current,
              std::unordered_set<std::string> &visited, std::unordered_set<std::string> &connected);
 
     /**
-     *
-     * @param selects
-     * @param res
-     * @return
+     * checks if the selected synonyms intersect with the synonyms in the result table
+     * @param selects vector of synonyms to check
+     * @param res result table to check
+     * @return true if the synonyms in the result table intersects wiht the sunonyms in the vector
      */
     bool intersect(std::vector<Synonym> selects, std::shared_ptr<Result> res);
 
