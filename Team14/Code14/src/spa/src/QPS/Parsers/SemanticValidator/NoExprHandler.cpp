@@ -9,7 +9,7 @@ void NoExprHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
     }
 
     if (clauseType == ClauseType::While && pattern->hasThirdParam()) {
-        throw SemanticException("Invalid while structure");
+        throw SemanticException("Invalid while pattern structure");
     }
     if (clauseType == ClauseType::If && !pattern->hasThirdParam()) {
         throw SemanticException("Invalid if pattern structure");
