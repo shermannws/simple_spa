@@ -220,6 +220,20 @@ std::vector<Entity> ManagerUtils::getLeftKeysMatchRight(RelationshipStore<K, K> 
 }
 
 template<typename S, typename T>
+void calculateTransitivityHelper(std::shared_ptr<S> relationshipStore, std::shared_ptr<S> starRelationshipStore,
+                                 std::shared_ptr<T> former, std::shared_ptr<T> latter) {
+    auto latterChildren = relationshipStore->getRightEntitiesOf(latter);
+    if (latterChildren == nullptr) { return; }
+    for (auto it = latterChildren->getBeginIterator(); it != latterChildren->getEndIterator(); ++it) {
+        auto newLatter = *it;
+        auto rightOfFormer = starRelationshipStore->getRightEntitiesOf(former);
+        if (rightOfFormer != nullptr && rightOfFormer->get(newLatter) != nullptr) { continue; }
+        starRelationshipStore->storeRelationship(former, newLatter);
+        calculateTransitivityHelper<S, T>(relationshipStore, starRelationshipStore, former, newLatter);
+    }
+}
+
+template<typename S, typename T>
 void ManagerUtils::calculateTransitivity(std::shared_ptr<S> relationshipStore,
                                          std::shared_ptr<S> starRelationshipStore) {
     for (auto it = relationshipStore->getLeftToRightBeginIterator();
@@ -231,19 +245,5 @@ void ManagerUtils::calculateTransitivity(std::shared_ptr<S> relationshipStore,
             starRelationshipStore->storeRelationship(former, latter);
             calculateTransitivityHelper<S, T>(relationshipStore, starRelationshipStore, former, latter);
         }
-    }
-}
-
-template<typename S, typename T>
-void calculateTransitivityHelper(std::shared_ptr<S> relationshipStore, std::shared_ptr<S> starRelationshipStore,
-                                 std::shared_ptr<T> former, std::shared_ptr<T> latter) {
-    auto latterChildren = relationshipStore->getRightEntitiesOf(latter);
-    if (latterChildren == nullptr) { return; }
-    for (auto it = latterChildren->getBeginIterator(); it != latterChildren->getEndIterator(); ++it) {
-        auto newLatter = *it;
-        auto rightOfFormer = starRelationshipStore->getRightEntitiesOf(former);
-        if (rightOfFormer != nullptr && rightOfFormer->get(newLatter) != nullptr) { continue; }
-        starRelationshipStore->storeRelationship(former, newLatter);
-        calculateTransitivityHelper<S, T>(relationshipStore, starRelationshipStore, former, newLatter);
     }
 }
