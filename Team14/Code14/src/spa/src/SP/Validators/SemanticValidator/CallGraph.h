@@ -14,12 +14,12 @@ private:
     /**
      * An unordered map of procedure nodes in the call graph.
      */
-    std::unordered_map<std::string, std::shared_ptr<ProcedureNode>> nodes;
+    std::unordered_map<ProcedureName, std::shared_ptr<ProcedureNode>> nodes;
 
     /**
      * An unordered map of edges mapping caller to callee.
      */
-    std::unordered_map<std::string, std::vector<std::string>> edges;
+    std::unordered_map<ProcedureName, std::vector<ProcedureName>> edges;
 
     /**
      * Recursive depth-first search to detect cycles in the call graph.
@@ -28,8 +28,8 @@ private:
      * @param currentPath Current path the DFS is taking
      * @return
      */
-    bool hasCycleDFS(const std::string &currentProcedure, std::unordered_set<std::string> &visited,
-                     std::unordered_set<std::string> &currentPath);
+    bool hasCycleDFS(const ProcedureName &currentProcedure, std::unordered_set<ProcedureName> &visited,
+                     std::unordered_set<ProcedureName> &currentPath);
 
 public:
     /**
@@ -48,7 +48,7 @@ public:
      * @param caller Procedure node that is calls the callee
      * @param callee Procedure node that is being called
      */
-    void addEdge(const std::string &caller, const std::string &callee);
+    void addEdge(const ProcedureName &caller, const ProcedureName &callee);
 
     /**
      * Entry point to semantically check if the call graph has got a cyclical call.
