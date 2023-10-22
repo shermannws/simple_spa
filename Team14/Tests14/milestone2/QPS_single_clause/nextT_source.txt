@@ -1,0 +1,47 @@
+procedure NextT {
+    print line1;
+    if (line1 <= 2) then {
+        if (line1 > 3) then {
+            print a4;
+            a5 = a4 + 5 % 2;
+        }
+        else {
+            a6 = 6;
+        }
+        print a7;
+    }
+    else {
+        call NextT2;
+        print a9;
+    }
+    if (a10 > 2) then {
+        print a11;
+    }
+    else {
+        read a12;
+    }
+    call NextT2;
+}
+
+procedure NextT2 {
+    while (a14 > 0) {
+        a15 = a10 + 100 % 15;
+        read a16;
+        line17 = a15 + 1;
+        while (a18 != 0) {
+            while ( a19 % 2 == 0) {
+                a20 = a17 + 1;
+            }
+        }
+        print a21;
+        if (22 == a13) then {
+            read a23;
+        } else {
+            a24 = a20 + 21;
+        }
+    }
+    a25 = a22 % 2;
+    while ((26 - 23 + 1) >= a22){
+        a22 = a25 + 24 / 27;
+    }
+}

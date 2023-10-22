@@ -1,0 +1,11 @@
+procedure Next {
+    line1 = 2;
+}
+
+procedure Next2 {
+    read a2;
+}
+
+procedure Next3 {
+    call Next2;
+}
