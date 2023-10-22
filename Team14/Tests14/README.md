@@ -25,7 +25,7 @@ The following are the subdirectories for `/milestone2`.
 - QPS_multi_clause
   - Tests the combination of multiple clauses together.
 - QPS_select_clause
-  - Tests the differnt types of select clauses newly introduced in milestone2.
+  - Tests the different types of select clauses newly introduced in milestone2.
 - QPS_single_clause
   - Tests each such that clause individually.
   - Tests each pattern clause individually (assign/if/while pattern).
