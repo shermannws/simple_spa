@@ -23,13 +23,6 @@ private:
     std::shared_ptr<S> relationshipStore;
     std::shared_ptr<S> starRelationshipStore;
 
-    /**
-     * @brief Helper function that is to be recursively called to populate the starRelationshipStore
-     * @param former The former procedure
-     * @param latter The latter procedure
-     */
-    void calculateTransitiveRelationshipHelper(std::shared_ptr<Procedure> former, std::shared_ptr<Procedure> latter);
-
 public:
     /**
      * @brief Constructs a ProcToProcRelationshipManager object

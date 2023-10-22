@@ -318,4 +318,14 @@ public:
     template<typename K>
     static std::vector<Entity> getLeftKeysMatchRight(RelationshipStore<K, K> &store,
                                                      std::function<bool(K &)> leftMatcher);
+
+    /**
+     * @brief A function that helps calculate the transitive closure of a relationship
+     * @tparam S The type of the store to be retrieved from
+     * @tparam T The type of the object stored in the store
+     * @param relationshipStore The store that stores the direct relationships
+     * @param starRelationshipStore The store that stores the transitive closure of the indirect relationships
+     */
+    template<typename S, typename T>
+    static void calculateTransitivity(std::shared_ptr<S> relationshipStore, std::shared_ptr<S> starRelationshipStore);
 };
