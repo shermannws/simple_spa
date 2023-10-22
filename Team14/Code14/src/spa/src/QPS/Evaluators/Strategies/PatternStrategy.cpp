@@ -10,10 +10,7 @@ std::shared_ptr<Result> PatternStrategy::evaluateClause(std::shared_ptr<Clause> 
     Ref firstArg = pattern->getFirstParam();
     ExpressionSpec secondArg = pattern->getSecondParam();
 
-    if (firstArg.isRootType(RootType::Wildcard)) {
-        return evaluateWildcard(secondArg);
-    } else if (firstArg.isRootType(RootType::Synonym)) {
-        return evaluateSyn(secondArg);
-    }
+    if (firstArg.isRootType(RootType::Wildcard)) { return evaluateWildcard(secondArg); }
+    if (firstArg.isRootType(RootType::Synonym)) { return evaluateSyn(secondArg); }
     return evaluateVarIdent(firstArg, secondArg);
 }

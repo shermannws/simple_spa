@@ -21,25 +21,23 @@ public:
 
     /**
      * @brief Evaluates PatternClause that has synonyms in both parameters
-     * @param leftRef The first parameter of the PatternClause to evaluate
-     * @param rightRef The second parameter of the PatternClause to evaluate
-     * @return The result of the SuchThatClause evaluation as a Result object
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
      */
     virtual std::shared_ptr<Result> evaluateWildcard(ExpressionSpec &secondArg) const = 0;
 
     /**
      * @brief Evaluates PatternClause that has a synonym in the first parameter
-     * @param leftRef The first parameter of the PatternClause to evaluate
-     * @param rightRef The second parameter of the PatternClause to evaluate
-     * @return The result of the SuchThatClause evaluation as a Result object
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
      */
     virtual std::shared_ptr<Result> evaluateSyn(ExpressionSpec &secondArg) const = 0;
 
     /**
      * @brief Evaluates PatternClause that has a synonym in the second parameters
-     * @param leftRef The first parameter of the PatternClause to evaluate
-     * @param rightRef The second parameter of the PatternClause to evaluate
-     * @return The result of the SuchThatClause evaluation as a Result object
+     * @param firstArg The first argument of PatternClause to evaluate
+     * @param secondArg The second argument of PatternClause to evaluate
+     * @return The result of the PatternClause evaluation as a Result object
      */
     virtual std::shared_ptr<Result> evaluateVarIdent(Ref &firstArg, ExpressionSpec &secondArg) const = 0;
 
