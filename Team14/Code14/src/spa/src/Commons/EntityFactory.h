@@ -14,13 +14,35 @@
 #include "Commons/Entities/WhileStatement.h"
 #include "SP/AST/Nodes/StatementNode.h"
 
-class StatementFactory {
+class EntityFactory {
 private:
+    /**
+     * An unordered map to cache Statement subclasses created.
+     */
+    static std::unordered_map<StatementNumber, std::shared_ptr<Statement>> statementCache;
+
+    /**
+     * An unordered map to cache Statement subclasses created.
+     */
+    static std::unordered_map<VariableName, std::shared_ptr<Variable>> variableCache;
+
+    /**
+     * An unordered map to cache Statement subclasses created.
+     */
+    static std::unordered_map<ProcedureName, std::shared_ptr<Procedure>> procedureCache;
+
     /**
      * An unordered map of Statement type to the corresponding factory method that takes in a StatementNode.
      */
     static std::unordered_map<StatementType, std::function<std::shared_ptr<Statement>(std::shared_ptr<StatementNode>)>>
             nodeFactoryMethodMap;
+
+    /**
+     * An unordered map of Statement type to the corresponding factory method.
+     */
+    static std::unordered_map<StatementType,
+                              std::function<std::shared_ptr<Statement>(StatementNumber, const AttrValue &)>>
+            factoryMethodMap;
 
     /**
      * Creates an AssignStatement from a StatementNode and returns a shared pointer to it.
@@ -63,13 +85,6 @@ private:
      * @return A WhileStatement for the given StatementNode
      */
     static std::shared_ptr<WhileStatement> createWhileStatementFromNode(const std::shared_ptr<StatementNode> &node);
-
-    /**
-     * An unordered map of Statement type to the corresponding factory method.
-     */
-    static std::unordered_map<StatementType,
-                              std::function<std::shared_ptr<Statement>(StatementNumber, const AttrValue &)>>
-            factoryMethodMap;
 
     /**
      * Creates an AssignStatement. Some parameters are redundant to conform to the function shape of the
@@ -127,7 +142,8 @@ private:
 
 public:
     /**
-     * Creates a Statement subclass from a StatementNode and returns a shared pointer to it.
+     * Checks the Statement cache for a Statement subclass object corresponding to varName.
+     * If it has not been created, creates a Statement subclass from a StatementNode and returns a shared pointer to it.
      * Calls the correct factory method corresponding to the StatementType.
      * @param node The StatementNode to create a Statement for
      * @return A Statement subclass for the given StatementNode
@@ -135,7 +151,8 @@ public:
     static std::shared_ptr<Statement> createStatementFromStatementNode(const std::shared_ptr<StatementNode> &node);
 
     /**
-     * Creates a Statement subclass and returns a shared pointer to it.
+     * Checks the Statement cache for a Statement subclass object corresponding to varName.
+     * If it has not been created, creates a Statement subclass and returns a shared pointer to it.
      * Calls the correct factory method corresponding to the StatementType.
      * @param statementNumber The statement number of the Statement
      * @param statementType The type of the Statement
@@ -144,4 +161,20 @@ public:
      */
     static std::shared_ptr<Statement> createStatement(StatementNumber statementNumber, StatementType statementType,
                                                       AttrValue attrValue);
+
+    /**
+     * Checks the Variable cache for a Variable object corresponding to varName.
+     * If it has not been created, creates a Variable object and returns a shared pointer to it.
+     * @param varName The variable name of the Variable object
+     * @return The Variable object with the given variable name
+     */
+    static std::shared_ptr<Variable> createVariable(VariableName varName);
+
+    /**
+     * Checks the Procedure cache for a Procedure object corresponding to varName.
+     * If it has not been created, creates a Procedure object and returns a shared pointer to it.
+     * @param procName The procedure name of the Procedure object
+     * @return The Procedure object with the given procedure name
+     */
+    static std::shared_ptr<Procedure> createProcedure(ProcedureName procName);
 };

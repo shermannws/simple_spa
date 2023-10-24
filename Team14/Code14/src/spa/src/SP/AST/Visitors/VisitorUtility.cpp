@@ -1,6 +1,6 @@
 #include <stack>
 
-#include "Commons/StatementFactory.h"
+#include "Commons/EntityFactory.h"
 #include "SP/AST/Nodes/StatementNode.h"
 #include "SP/AST/Nodes/VariableNode.h"
 #include "VisitorUtility.h"
