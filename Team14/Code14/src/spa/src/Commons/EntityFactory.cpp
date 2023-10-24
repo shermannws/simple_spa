@@ -9,6 +9,12 @@
 #include "SP/AST/Nodes/ReadNode.h"
 #include "StatementTypeFactory.h"
 
+std::unordered_map<StatementNumber, std::shared_ptr<Statement>> EntityFactory::statementCache;
+
+std::unordered_map<VariableName, std::shared_ptr<Variable>> EntityFactory::variableCache;
+
+std::unordered_map<ProcedureName, std::shared_ptr<Procedure>> EntityFactory::procedureCache;
+
 std::unordered_map<StatementType, std::function<std::shared_ptr<Statement>(std::shared_ptr<StatementNode>)>>
         EntityFactory::nodeFactoryMethodMap = {{StatementType::Assign, createAssignStatementFromNode},
                                                {StatementType::Call, createCallStatementFromNode},
