@@ -104,4 +104,6 @@ public:
      * @brief Clears the Next* relationship store
      */
     void clearNextStarStore();
+
+    EntityStore<Statement>& getAllNextOfStmt(std::shared_ptr<Statement> stmt) const;
 };

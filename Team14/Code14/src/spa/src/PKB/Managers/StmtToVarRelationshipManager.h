@@ -17,7 +17,7 @@
  */
 template<typename S>
 class StmtToVarRelationshipManager {
-private:
+protected:
     /**
      * @brief The relationship store
      */
