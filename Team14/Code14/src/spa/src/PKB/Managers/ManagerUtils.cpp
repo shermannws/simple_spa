@@ -247,5 +247,3 @@ void ManagerUtils::calculateTransitivity(std::shared_ptr<S> relationshipStore,
         }
     }
 }
-
-#include "ManagerUtilsImpl.cpp"
