@@ -115,3 +115,21 @@ template<>
 struct std::equal_to<std::shared_ptr<Entity>> {
     bool operator()(std::shared_ptr<Entity> const &lhs, std::shared_ptr<Entity> const &rhs) const;
 };
+
+/**
+ * @brief A hash function for vector of Entity objects
+ * @details A hash function for vector of Entity objects
+ */
+template<>
+struct std::hash<std::vector<Entity>> {
+    std::size_t operator()(const std::vector<Entity> &entities) const;
+};
+
+/**
+ * @brief An equal function for a vector of Entity objects
+ * @details An equal function for a vector of Entity objects
+ */
+template<>
+struct std::equal_to<std::vector<Entity>> {
+    bool operator()(std::vector<Entity> const &lhs, std::vector<Entity> const &rhs) const;
+};
