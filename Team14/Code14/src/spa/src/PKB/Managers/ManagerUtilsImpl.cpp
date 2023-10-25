@@ -3,7 +3,6 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "PKB/Commons/Assignment.h"
-#include "PKB/Managers/ManagerUtils.cpp"
 #include "PKB/Managers/ModifiesProcRelationshipManager.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
 #include "PKB/Managers/UsesProcRelationshipManager.h"
