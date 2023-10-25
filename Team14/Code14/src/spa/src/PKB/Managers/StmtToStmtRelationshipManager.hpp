@@ -10,9 +10,9 @@ void StmtToStmtRelationshipManager<S>::storeRelationship(std::shared_ptr<Stateme
 }
 
 template<typename S>
-std::vector<std::vector<Entity>> StmtToStmtRelationshipManager<S>::getRelationshipPair(StatementType formerType,
-                                                                                       StatementType latterType,
-                                                                                       bool requireDirect) const {
+std::unordered_set<std::vector<Entity>>
+StmtToStmtRelationshipManager<S>::getRelationshipPair(StatementType formerType, StatementType latterType,
+                                                      bool requireDirect) const {
     auto leftMatcher = [formerType](Statement &stmt) { return stmt.isStatementType(formerType); };
 
     auto rightMatcher = [latterType](Statement &stmt) { return stmt.isStatementType(latterType); };
@@ -22,39 +22,41 @@ std::vector<std::vector<Entity>> StmtToStmtRelationshipManager<S>::getRelationsh
 }
 
 template<typename S>
-std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeStmt(StatementType type, Statement &statement,
-                                                                              bool requireDirect) const {
+std::unordered_set<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeStmt(StatementType type,
+                                                                                     Statement &statement,
+                                                                                     bool requireDirect) const {
     return ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch<Statement>(
             requireDirect ? *relationshipStore : *starRelationshipStore, statement, type);
 }
 
 template<typename S>
-std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type) const {
+std::unordered_set<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type) const {
     return ManagerUtils::getLeftKeysStmtMatch<Statement>(*relationshipStore, type);
 }
 
 template<typename S>
-std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type,
-                                                                                  bool requireDirect) const {
+std::unordered_set<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type,
+                                                                                         bool requireDirect) const {
     return ManagerUtils::getLeftKeysStmtMatch<Statement>(requireDirect ? *relationshipStore : *starRelationshipStore,
                                                          type);
 }
 
 template<typename S>
-std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipStmtType(Statement &statement, StatementType type,
-                                                                              bool requireDirect) const {
+std::unordered_set<Entity> StmtToStmtRelationshipManager<S>::getRelationshipStmtType(Statement &statement,
+                                                                                     StatementType type,
+                                                                                     bool requireDirect) const {
     return ManagerUtils::getRightEntitiesFromLeftKeyStmtMatch<Statement>(
             requireDirect ? *relationshipStore : *starRelationshipStore, statement, type);
 }
 
 template<typename S>
-std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipWildcardType(StatementType type) const {
+std::unordered_set<Entity> StmtToStmtRelationshipManager<S>::getRelationshipWildcardType(StatementType type) const {
     return ManagerUtils::getRightKeysStmtMatch<Statement>(*relationshipStore, type);
 }
 
 template<typename S>
-std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipWildcardType(StatementType type,
-                                                                                  bool requireDirect) const {
+std::unordered_set<Entity> StmtToStmtRelationshipManager<S>::getRelationshipWildcardType(StatementType type,
+                                                                                         bool requireDirect) const {
     return ManagerUtils::getRightKeysStmtMatch<Statement>(requireDirect ? *relationshipStore : *starRelationshipStore,
                                                           type);
 }

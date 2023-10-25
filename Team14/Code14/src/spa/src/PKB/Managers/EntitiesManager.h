@@ -37,20 +37,20 @@ protected:
      * @brief Returns all the entities of type E in the EntityStore of type E
      * @tparam E The type of the Entity
      * @param entityStore The EntityStore to retrieve the entities from
-     * @return A vector of entities of type E
+     * @return An unordered_set of entities of type E
      */
     template<typename E>
-    std::vector<Entity> getAllEntities(std::shared_ptr<EntityStore<E>>) const;
+    std::unordered_set<Entity> getAllEntities(std::shared_ptr<EntityStore<E>>) const;
 
     /**
      * @brief Returns all the entities of type E in the EntityStore of type E that matches the matcher function
      * @tparam E The type of the Entity
      * @param entityStore The EntityStore to retrieve the entities from
      * @param matcher The matcher function to match the entities against
-     * @return A vector of entities of type E
+     * @return An unordered_set of entities of type E
      */
     template<typename E>
-    std::vector<Entity> getEntities(std::shared_ptr<EntityStore<E>>, std::function<bool(E &)> matcher) const;
+    std::unordered_set<Entity> getEntities(std::shared_ptr<EntityStore<E>>, std::function<bool(E &)> matcher) const;
 
 public:
     /**
@@ -89,57 +89,57 @@ public:
 
     /**
      * @brief Returns all the variables in the SIMPLE source program
-     * @return A vector of variables
+     * @return An unordered_set of variables
      */
-    std::vector<Entity> getAllVariables() const;
+    std::unordered_set<Entity> getAllVariables() const;
 
     /**
      * @brief Returns all the constants in the SIMPLE source program
-     * @return A vector of constants
+     * @return An unordered_set of constants
      */
-    std::vector<Entity> getAllConstants() const;
+    std::unordered_set<Entity> getAllConstants() const;
 
     /**
      * @brief Returns all the procedures in the SIMPLE source program
-     * @return A vector of procedures
+     * @return An unordered_set of procedures
      */
-    std::vector<Entity> getAllProcedures() const;
+    std::unordered_set<Entity> getAllProcedures() const;
 
     /**
      * @brief Returns all the statements in the SIMPLE source program
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    std::vector<Entity> getAllStatements() const;
+    std::unordered_set<Entity> getAllStatements() const;
 
     /**
      * @brief Returns all the read statements in the SIMPLE source program
-     * @return A vector of read statements
+     * @return An unordered_set of read statements
      */
-    std::vector<Entity> getAllRead() const;
+    std::unordered_set<Entity> getAllRead() const;
 
     /**
      * @brief Returns all the print statements in the SIMPLE source program
-     * @return A vector of print statements
+     * @return An unordered_set of print statements
      */
-    std::vector<Entity> getAllPrint() const;
+    std::unordered_set<Entity> getAllPrint() const;
 
     /**
      * @brief Returns all the call statements in the SIMPLE source program
-     * @return A vector of call statements
+     * @return An unordered_set of call statements
      */
-    std::vector<Entity> getAllWhile() const;
+    std::unordered_set<Entity> getAllWhile() const;
 
     /**
      * @brief Returns all the if statements in the SIMPLE source program
-     * @return A vector of if statements
+     * @return An unordered_set of if statements
      */
-    std::vector<Entity> getAllIf() const;
+    std::unordered_set<Entity> getAllIf() const;
 
     /**
      * @brief Returns all the call statements in the SIMPLE source program
-     * @return A vector of call statements
+     * @return An unordered_set of call statements
      */
-    std::vector<Entity> getAllCall() const;
+    std::unordered_set<Entity> getAllCall() const;
 
     /**
      * @brief Returns the Statement object from the StatementStore that is equal to the Statement object passed in

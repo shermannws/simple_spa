@@ -8,7 +8,8 @@ void StmtToVarRelationshipManager<S>::storeRelationship(std::shared_ptr<Statemen
 }
 
 template<typename S>
-std::vector<std::vector<Entity>> StmtToVarRelationshipManager<S>::getRelationshipStmtPair(StatementType type) const {
+std::unordered_set<std::vector<Entity>>
+StmtToVarRelationshipManager<S>::getRelationshipStmtPair(StatementType type) const {
     auto leftMatcher = [type](Statement &stmt) { return stmt.isStatementType(type); };
 
     auto rightMatcher = [](Variable &var) { return true; };
@@ -18,17 +19,18 @@ std::vector<std::vector<Entity>> StmtToVarRelationshipManager<S>::getRelationshi
 }
 
 template<typename S>
-std::vector<Entity> StmtToVarRelationshipManager<S>::getRelationshipTypeIdent(StatementType type, Variable &var) const {
+std::unordered_set<Entity> StmtToVarRelationshipManager<S>::getRelationshipTypeIdent(StatementType type,
+                                                                                     Variable &var) const {
     return ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch<Variable>(*relationshipStore, var, type);
 }
 
 template<typename S>
-std::vector<Entity> StmtToVarRelationshipManager<S>::getRelationshipStmt(StatementType type) const {
+std::unordered_set<Entity> StmtToVarRelationshipManager<S>::getRelationshipStmt(StatementType type) const {
     return ManagerUtils::getLeftKeysStmtMatch<Variable>(*relationshipStore, type);
 }
 
 template<typename S>
-std::vector<Entity> StmtToVarRelationshipManager<S>::getRelationshipVar(Statement &stmt) const {
+std::unordered_set<Entity> StmtToVarRelationshipManager<S>::getRelationshipVar(Statement &stmt) const {
     return ManagerUtils::getRightEntitiesFromLeftKeyNoMatch<Statement, Variable>(*relationshipStore, stmt);
 }
 
