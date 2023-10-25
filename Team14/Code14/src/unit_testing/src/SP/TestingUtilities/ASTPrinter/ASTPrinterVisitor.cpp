@@ -5,7 +5,6 @@
 
 ASTPrinterVisitor::ASTPrinterVisitor(std::shared_ptr<PkbWriter> pkbWriter) { this->pkbWriter = pkbWriter; }
 
-
 void ASTPrinterVisitor::visitProgramNode(const std::shared_ptr<ProgramNode> &node,
                                          std::vector<std::shared_ptr<Statement>> parents,
                                          std::shared_ptr<Procedure> proc) const {
