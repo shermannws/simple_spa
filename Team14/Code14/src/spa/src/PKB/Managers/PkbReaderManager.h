@@ -14,6 +14,7 @@
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/WhilePatternManager.h"
+#include "PKB/Managers/AffectsRelationshipManager.h"
 #include "PKB/PkbTypes.h"
 
 /**
@@ -81,6 +82,11 @@ private:
      */
     std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
 
+    /**
+     * @brief The affects relationship manager.
+     */
+    std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager;
+
 public:
     /**
      * @brief Constructs a PkbReaderManager object.
@@ -96,6 +102,7 @@ public:
      * @param ifPatternManager The if pattern manager.
      * @param whilePatternManager The while pattern manager.
      * @param nextRelationshipManager The next relationship manager.
+     * @param affectsRelationshipManager The affects relationship manager.
      * @return The PkbReaderManager object.
      */
     PkbReaderManager(std::shared_ptr<AssignPatternManager> assignmentManager,
@@ -109,7 +116,8 @@ public:
                      std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
                      std::shared_ptr<IfPatternManager> ifPatternManager,
                      std::shared_ptr<WhilePatternManager> whilePatternManager,
-                     std::shared_ptr<NextRelationshipManager> nextRelationshipManager);
+                     std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
+                     std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager);
 
     /**
      * @brief Returns all the variables in the SIMPLE program.
@@ -988,4 +996,9 @@ public:
      * @return A vector of vectors containing While Statement and Variable pairs
      */
     std::vector<std::vector<Entity>> getAllWhileStmtVarPair() const;
+
+    /**
+     * Triggers the calculation of the affects relationship
+     */
+    void calculateAffects();
 };

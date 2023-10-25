@@ -17,6 +17,7 @@
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/WhilePatternManager.h"
+#include "PKB/Managers/AffectsRelationshipManager.h"
 #include "PKB/PkbReader.h"
 #include "PKB/PkbWriter.h"
 
@@ -100,6 +101,11 @@ private:
      * @brief The CFGManager of the PKB
      */
     std::shared_ptr<CFGManager> cfgManager;
+
+    /**
+     * @brief The AffectsManager of the PKB
+     */
+    std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager;
 
 public:
     /**

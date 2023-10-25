@@ -11,14 +11,15 @@ PkbReaderManager::PkbReaderManager(std::shared_ptr<AssignPatternManager> assignm
                                    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
                                    std::shared_ptr<IfPatternManager> ifPatternManager,
                                    std::shared_ptr<WhilePatternManager> whilePatternManager,
-                                   std::shared_ptr<NextRelationshipManager> nextRelationshipManager)
+                                   std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
+                                   std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager)
     : assignmentManager(assignmentManager), entityManager(entityManager),
       followsRelationshipManager(followsRelationshipManager), usesRelationshipManager(usesRelationshipManager),
       modifiesRelationshipManager(modifiesRelationshipManager), parentRelationshipManager(parentRelationshipManager),
       callsRelationshipManager(callsRelationshipManager),
       modifiesProcRelationshipManager(modifiesProcRelationshipManager),
       usesProcRelationshipManager(usesProcRelationshipManager), ifPatternManager(ifPatternManager),
-      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager){};
+      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager), affectsRelationshipManager(affectsRelationshipManager){};
 
 std::vector<Entity> PkbReaderManager::getAllVariables() const { return this->entityManager->getAllVariables(); }
 
@@ -456,4 +457,14 @@ std::vector<Entity> PkbReaderManager::getWhileStmtsByVar(Variable &var) const {
 
 std::vector<std::vector<Entity>> PkbReaderManager::getAllWhileStmtVarPair() const {
     return this->whilePatternManager->getAllStmtVarPair();
+}
+
+void PkbReaderManager::calculateAffects() {
+    this->affectsRelationshipManager->calculateAffects(
+            assignmentManager->getAllAssignStmtsAsStmts(),
+            [this] (std::shared_ptr<Statement> stmt) { return modifiesRelationshipManager->getModifiedVar(stmt); },
+            [this] (Statement& stmt, Variable& var) { return usesRelationshipManager->isRelationship(stmt, var); },
+            [this] (Statement& stmt, Variable& var) { return modifiesRelationshipManager->isRelationship(stmt, var); },
+            [this] (std::shared_ptr<Statement> stmt) { return nextRelationshipManager->getAllNextOfStmt(stmt); }
+            );
 }
