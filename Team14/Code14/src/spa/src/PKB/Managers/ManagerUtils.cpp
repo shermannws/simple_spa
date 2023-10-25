@@ -1,5 +1,4 @@
 #include "ManagerUtils.h"
-#include "ManagerUtilsImpl.cpp"
 
 template<typename E, typename S, typename R>
 std::vector<E> ManagerUtils::getFromSetStore(std::shared_ptr<S> store, std::function<bool(R &)> matcher,
@@ -248,3 +247,5 @@ void ManagerUtils::calculateTransitivity(std::shared_ptr<S> relationshipStore,
         }
     }
 }
+
+#include "ManagerUtilsImpl.cpp"
