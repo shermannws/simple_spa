@@ -903,4 +903,74 @@ public:
      * @return A vector of vectors containing While Statement and Variable pairs
      */
     std::vector<std::vector<Entity>> getAllWhileStmtVarPair() const override;
+
+    /**
+     * Returns a vector of Statement, Statement pair where the first statement affects the second statement DIRECTLY.
+     * Retrieves the relationship where the first and second statement are both of the given type
+     * @param formerType The type of the former statement
+     * @param latterType The type of the latter statement
+     * @return A vector of Statement, Statement pair stored in a vector
+     */
+    std::vector<std::vector<Entity>> getAffectsPair(StatementType formerType,
+                                                            StatementType latterType) const override;
+
+    /**
+     * Returns a vector of statements of the given statement type which affects the given statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @param statement The statement that succeeds the statements to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getAffectsTypeStmt(StatementType type, Statement &statement) const override;
+
+    /**
+     * Returns a vector of statements of the given statement type which is affects any statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getAffectsTypeWildcard(StatementType type) const override;
+
+    /**
+     * Returns a vector of statements of the given statement type which is affected by the given statement DIRECTLY
+     * @param statement The statement that precedes the statements to be retrieved
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getAffectsStmtType(Statement &statement, StatementType type) const override;
+
+    /**
+     * Returns a vector of statements of the given statement type which is affected by any statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getAffectsWildcardType(StatementType type) const override;
+
+    /**
+     * Returns true if statement1 DIRECTLY affects statement2, false otherwise
+     * @param statement1 The preceding statement
+     * @param statement2 The succeeding statement
+     * @return True if statement1 directly affects statement2, false otherwise
+     */
+    bool isAffects(Statement &statement1, Statement &statement2) const override;
+
+    /**
+     * Returns true if there exists a affects relationship in the PKB, false otherwise
+     * @return True if there exists a affects relationship in the PKB, false otherwise
+     */
+    bool hasAffects() const override;
+
+    /**
+     * Returns true if there exists a statement that is affected by the given statement, false otherwise i.e. there is a
+     * statement in behind of the given statement that is affected by the given statement
+     * @param statement The statement to be checked
+     * @return True if there exists a statement that is affected by the given statement, false otherwise
+     */
+    bool hasAffectedStmt(Statement &statement) const override;
+
+    /**
+     * Returns true if there exists a statement that affects the given statement, false otherwise i.e. there is a
+     * statement in front of the given statement that affects the given statement
+     * @param statement The statement to be checked
+     * @return True if there exists a statement that affects the given statement, false otherwise
+     */
+    bool hasAffectsStmt(Statement &statement) const override;
 };

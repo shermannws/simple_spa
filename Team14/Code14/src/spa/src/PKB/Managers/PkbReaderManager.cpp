@@ -459,7 +459,10 @@ std::vector<std::vector<Entity>> PkbReaderManager::getAllWhileStmtVarPair() cons
     return this->whilePatternManager->getAllStmtVarPair();
 }
 
-void PkbReaderManager::calculateAffects() {
+void PkbReaderManager::triggerAffectsCalculation() const {
+    if (this->affectsRelationshipManager->hasAffectsBeenCalculated()) {
+        return;
+    }
     this->affectsRelationshipManager->calculateAffects(
             assignmentManager->getAllAssignStmtsAsStmts(),
             [this] (std::shared_ptr<Statement> stmt) { return modifiesRelationshipManager->getModifiedVar(stmt); },
@@ -467,4 +470,50 @@ void PkbReaderManager::calculateAffects() {
             [this] (Statement& stmt, Variable& var) { return modifiesRelationshipManager->isRelationship(stmt, var); },
             [this] (std::shared_ptr<Statement> stmt) { return nextRelationshipManager->getAllNextOfStmt(stmt); }
             );
+}
+
+std::vector<std::vector<Entity>> PkbReaderManager::getAffectsPair(StatementType formerType,
+                                                                   StatementType latterType) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipPair(formerType, latterType, true);
+}
+
+std::vector<Entity> PkbReaderManager::getAffectsTypeStmt(StatementType type, Statement &statement) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipTypeStmt(type, statement, true);
+}
+
+std::vector<Entity> PkbReaderManager::getAffectsTypeWildcard(StatementType type) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipTypeWildcard(type);
+}
+
+std::vector<Entity> PkbReaderManager::getAffectsStmtType(Statement &statement, StatementType type) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipStmtType(statement, type, true);
+}
+
+std::vector<Entity> PkbReaderManager::getAffectsWildcardType(StatementType type) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipWildcardType(type);
+}
+
+bool PkbReaderManager::isAffects(Statement &statement1, Statement &statement2) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->isRelationship(statement1, statement2, true);
+}
+
+bool PkbReaderManager::hasAffects() const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->hasRelationship();
+}
+
+bool PkbReaderManager::hasAffectedStmt(Statement &statement) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->isFormer(statement);
+}
+
+bool PkbReaderManager::hasAffectsStmt(Statement &statement) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->isLatter(statement);
 }

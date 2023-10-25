@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "AffectsRelationshipManager.h"
 #include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/Managers/CFGManager.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
@@ -89,6 +90,11 @@ private:
     std::shared_ptr<CFGManager> cfgManager;
 
     /**
+     * @brief The affects relationship manager.
+     */
+    std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager;
+
+    /**
      * @brief The map of procedure to statements where statements modifies/uses whatever modifies/uses by the procedure.
      * @note This will be cleared after the transitive calculation is done.
      */
@@ -127,6 +133,7 @@ public:
      * @param whilePatternManager The while pattern manager.
      * @param nextRelationshipManager The next relationship manager.
      * @param cfgManager The CFG manager.
+     * @param affectsRelationshipManager The affects relationship manager.
      */
     PkbWriterManager(std::shared_ptr<AssignPatternManager> assignmentManager,
                      std::shared_ptr<EntitiesManager> entitiesManager,
@@ -140,7 +147,8 @@ public:
                      std::shared_ptr<IfPatternManager> ifPatternManager,
                      std::shared_ptr<WhilePatternManager> whilePatternManager,
                      std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
-                     std::shared_ptr<CFGManager> cfgManager);
+                     std::shared_ptr<CFGManager> cfgManager,
+                     std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager);
 
     /**
      * @brief Adds a constant to the PKB.

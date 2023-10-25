@@ -27,7 +27,7 @@ Pkb::Pkb() {
             this->assignmentManager, this->entitiesManager, this->followsRelationshipManager,
             this->usesRelationshipManager, this->modifiesRelationshipManager, this->parentRelationshipManager,
             this->callsRelationshipManager, this->modifiesProcRelationshipManager, this->usesProcRelationshipManager,
-            this->ifPatternManager, this->whilePatternManager, this->nextRelationshipManager, this->cfgManager));
+            this->ifPatternManager, this->whilePatternManager, this->nextRelationshipManager, this->cfgManager, this->affectsRelationshipManager));
 };
 
 std::shared_ptr<PkbReader> Pkb::createPkbReader() {

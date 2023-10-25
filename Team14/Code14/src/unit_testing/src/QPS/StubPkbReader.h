@@ -252,4 +252,23 @@ public:
     std::vector<Entity> getWhileStmtsByVar(Variable &var) const override;
 
     std::vector<std::vector<Entity>> getAllWhileStmtVarPair() const override;
+
+    std::vector<std::vector<Entity>> getAffectsPair(StatementType formerType,
+                                                    StatementType latterType) const override;
+
+    std::vector<Entity> getAffectsTypeStmt(StatementType type, Statement &statement) const override;
+
+    std::vector<Entity> getAffectsTypeWildcard(StatementType type) const override;
+
+    std::vector<Entity> getAffectsStmtType(Statement &statement, StatementType type) const override;
+
+    std::vector<Entity> getAffectsWildcardType(StatementType type) const override;
+
+    bool isAffects(Statement &statement1, Statement &statement2) const override;
+
+    bool hasAffects() const override;
+
+    bool hasAffectedStmt(Statement &statement) const override;
+
+    bool hasAffectsStmt(Statement &statement) const override;
 };

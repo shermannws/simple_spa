@@ -571,3 +571,40 @@ std::vector<std::vector<Entity>> StubPkbReader::getAllWhileStmtVarPair() const {
             {WhileStatement(861), Variable("var861")},
     };
 }
+
+std::vector<std::vector<Entity>> StubPkbReader::getAffectsPair(StatementType formerType,
+                                                StatementType latterType) const {
+    return std::vector<std::vector<Entity>>();
+}
+
+std::vector<Entity> StubPkbReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getAffectsTypeWildcard(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getAffectsStmtType(Statement &statement, StatementType type) const {
+    return std::vector<Entity>();
+}
+
+std::vector<Entity> StubPkbReader::getAffectsWildcardType(StatementType type) const {
+    return std::vector<Entity>();
+}
+
+bool StubPkbReader::isAffects(Statement &statement1, Statement &statement2) const {
+    return false;
+}
+
+bool StubPkbReader::hasAffects() const {
+    return false;
+}
+
+bool StubPkbReader::hasAffectedStmt(Statement &statement) const {
+    return false;
+}
+
+bool StubPkbReader::hasAffectsStmt(Statement &statement) const {
+    return false;
+}

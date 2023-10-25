@@ -26,6 +26,8 @@ public:
      */
     AffectsRelationshipManager();
 
+    bool hasAffectsBeenCalculated() const;
+
     /**
      * @brief Calculates the Affects relationship
      */
@@ -34,4 +36,9 @@ public:
                           const std::function<bool(Statement &, Variable &)> &hasUses,
                           const std::function<bool(Statement &, Variable &)> &hasModifies,
                           const std::function<EntityStore<Statement>(std::shared_ptr<Statement>)> &getNext);
+
+    /**
+     * @brief Clears the Affects relationship store
+     */
+    void clearStore();
 };
