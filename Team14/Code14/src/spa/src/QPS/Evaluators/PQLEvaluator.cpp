@@ -1,10 +1,12 @@
 #include <numeric>
+#include <queue>
 #include <stdexcept>
 
 #include "PQLEvaluator.h"
 #include "QPS/QPSTypes.h"
 #include "QPS/QPSUtil.h"
 #include "QPS/QueryEntity.h"
+#include "QPSOptimizer.h"
 
 using transformFunc = std::function<std::string(Entity &)>;
 
@@ -69,130 +71,44 @@ std::string PQLEvaluator::concat(std::vector<std::string> strings) {
     return result;
 }
 
-std::unordered_map<Synonym, std::unordered_set<Synonym>>
-PQLEvaluator::buildSynGraph(Query &query, std::vector<std::shared_ptr<Clause>> clauses) {
-    auto declarationMap = query.getDeclarations();
-    std::unordered_map<Synonym, std::unordered_set<Synonym>> graph;// add all syns into graph as nodes
-    for (const auto &node: declarationMap) { graph[node.first] = {}; }
-
-    for (const auto &clause: clauses) {
-        auto group = clause->getSynonyms();
-        for (size_t i = 0; i < group.size(); ++i) {
-            for (size_t j = 0; j < group.size(); ++j) {
-                if (i != j) { graph[group[i]].insert(group[j]); }
-            }
-        }
-    }
-    return graph;
-}
-
-
-std::vector<std::unordered_set<std::shared_ptr<Clause>>>
-PQLEvaluator::groupClauses(std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list,
-                           std::vector<std::shared_ptr<Clause>> clauses) {
-    std::unordered_set<Synonym> visited;
-    std::vector<std::unordered_set<std::shared_ptr<Clause>>> clauseGroups;
-    std::vector<std::unordered_set<Synonym>> synGroups;
-    std::unordered_map<Synonym, std::unordered_set<std::shared_ptr<Clause>>> synToClauseMaps;
-    for (const auto &clause: clauses) {
-        auto syns = clause->getSynonyms();
-        if (syns.empty()) {// for clauses with no syn, add to own group
-            clauseGroups.push_back({clause});
-            continue;
-        }
-        for (const auto &syn: syns) {
-            if (!synToClauseMaps.count(syn)) { synToClauseMaps[syn] = {}; }
-            synToClauseMaps[syn].insert(clause);
-        }
-    }
-
-    for (const auto &node: adjacency_list) {// get synonym groups
-        Synonym syn = node.first;
-        if (visited.find(syn) == visited.end()) {// unvisited Synonym
-            std::unordered_set<Synonym> currGroup;
-            DFS(adjacency_list, syn, visited, currGroup);
-            synGroups.push_back(currGroup);
-        }
-    }
-
-    for (const auto &synGroup: synGroups) {// get corresponding clauses for each group
-        std::unordered_set<std::shared_ptr<Clause>> clauses;
-        for (const auto &syn: synGroup) { clauses.insert(synToClauseMaps[syn].begin(), synToClauseMaps[syn].end()); }
-        clauseGroups.push_back(clauses);
-    }
-    return clauseGroups;
-}
-
-void PQLEvaluator::DFS(const std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list,
-                       const std::string &current, std::unordered_set<std::string> &visited,
-                       std::unordered_set<Synonym> &connected) {
-    visited.insert(current);
-    connected.insert(current);
-    for (const std::string &neighbor: adjacency_list.at(current)) {
-        if (visited.find(neighbor) == visited.end()) { DFS(adjacency_list, neighbor, visited, connected); }
-    }
-}
-
-
-bool PQLEvaluator::intersect(std::vector<Synonym> selects, std::shared_ptr<Result> res) {
-    auto map = res->getSynIndices();
-    for (const auto &elem: selects) {
-        auto syn = QPSUtil::getSyn(elem);
-        if (map.count(syn)) { return true; }
-    }
-    return false;
-}
-
-Result PQLEvaluator::evaluate(Query &query) {
-    auto clauses = query.getAllClause();
-    auto synGraph = buildSynGraph(query, clauses);
-    auto clauseGroups = groupClauses(synGraph, clauses);
-    auto selects = query.getSelect();
-
-    std::vector<std::shared_ptr<Result>> boolResults;
-    std::vector<std::shared_ptr<Result>> selectResults;
-
-    for (const auto &group: clauseGroups) {
-        std::vector<std::shared_ptr<Clause>> clauses(group.begin(), group.end());
-        auto res = evaluateClauses(clauses);
-        if (intersect(selects, res)) {// if intersect with select, add to selectRes
-            selectResults.push_back(res);
-        } else {
-            boolResults.push_back(res);
-        }
-    }
-
-    // evaluate non-SELECT clauses first
-    bool boolResult = evaluateBoolResults(boolResults);
-    if (!boolResult) { return Result(false); }
-    if (query.getSelect().empty()) { return Result(boolResult); }// end of evaluation for BOOLEAN queries
-
-    // TRUE OR NON-EMPTY bool clause results, continue evaluating SELECT clauses
-    std::shared_ptr<Result> result = evaluateMainResults(selectResults);
-
-    //  CASE RESULT-CLAUSE IN RESULT TABLE, check if ALL synonym in select is in result table
-    std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(query.getSelect(), result);
-    if (unevaluatedSyn.empty()) { return *result; }
-
-    // CASE SOME RESULT-CLAUSE NOT IN clauses
-    auto synResult = evaluateResultClause(query, unevaluatedSyn);
-    auto finalResult = resultHandler->getCombined(result, synResult);
-    return *finalResult;
-}
-
-bool PQLEvaluator::evaluateBoolResults(std::vector<std::shared_ptr<Result>> results) {
-    for (auto const r: results) {
-        if (r->isFalse() || r->isEmpty()) { return false; }
+bool PQLEvaluator::evaluateGroupAsBoolean(const std::vector<std::shared_ptr<Clause>> &clauses) {
+    for (auto &clause: clauses) {
+        auto res = evaluateClause(clause);
+        if (res->isFalse() || res->isEmpty()) { return false; }
     }
     return true;
 }
 
-std::shared_ptr<Result> PQLEvaluator::evaluateMainResults(std::vector<std::shared_ptr<Result>> results) {
-    auto result = std::make_shared<Result>(true);// Initialize with TRUE
-    for (auto const &res: results) {             // Combine until end of list
-        result = resultHandler->getCombined(result, res);
+Result PQLEvaluator::evaluate(Query &query) {
+    auto clauses = query.getAllClause();
+    auto selects = query.getSelect();
+    auto pairs = QPSOptimizer::getGroupScorePairs(query, clauses, selects);
+    std::priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::sortByScore);
+
+    auto res = std::make_shared<Result>(true);
+    while (!pq.empty()) {
+        auto pair = pq.top();
+        pq.pop();
+        std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
+        if (!std::get<0>(pair.second) &&
+            !evaluateGroupAsBoolean(group)) {// no select synonyms && boolean group is false
+            return {false};
+        } else {// those with selectSyns (and if select has synonym(s))
+            for (auto &clause: group) {
+                res = resultHandler->getCombined(res, evaluateClause(clause));
+                if (res->isFalse() || res->isEmpty()) { return {false}; }
+            }
+        }
     }
-    return result;
+
+    //  CASE RESULT-CLAUSE IN RESULT TABLE, check if ALL synonym in select is in result table
+    std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(selects, res);
+    if (unevaluatedSyn.empty()) { return *res; }
+
+    // CASE SOME RESULT-CLAUSE NOT IN clauses
+    auto synResult = evaluateResultClause(query, unevaluatedSyn);
+    auto finalResult = resultHandler->getCombined(res, synResult);
+    return *finalResult;
 }
 
 std::vector<Synonym> PQLEvaluator::getUnevaluatedSyn(const std::vector<Synonym> resultClause,
@@ -210,16 +126,6 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
     std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()](pkbReader);
     clauseHandler->setStrategy(strategy);
     std::shared_ptr<Result> result = clauseHandler->executeClause(clause);
-    return result;
-}
-
-std::shared_ptr<Result> PQLEvaluator::evaluateClauses(std::vector<std::shared_ptr<Clause>> clauseGroup) {
-    auto result = std::make_shared<Result>(true);// Initialize with TRUE
-
-    for (auto const clause: clauseGroup) {
-        auto clauseResult = evaluateClause(clause);
-        result = resultHandler->getCombined(result, clauseResult);
-    }
     return result;
 }
 
