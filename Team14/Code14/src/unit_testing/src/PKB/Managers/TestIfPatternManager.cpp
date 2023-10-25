@@ -50,7 +50,7 @@ TEST_CASE("Test If Pattern Retrieval") {
     Variable testY = Variable("y");
     Variable testZ = Variable("z");
 
-    vector<Entity> getStmtByVar = ifPatternManager.getAllStmts();
+    unordered_set<Entity> getStmtByVar = ifPatternManager.getAllStmts();
     REQUIRE(getStmtByVar.size() == 3);
     REQUIRE(find(getStmtByVar.begin(), getStmtByVar.end(), testStmt1) != getStmtByVar.end());
     REQUIRE(find(getStmtByVar.begin(), getStmtByVar.end(), testStmt2) != getStmtByVar.end());
@@ -58,17 +58,17 @@ TEST_CASE("Test If Pattern Retrieval") {
 
     REQUIRE(ifPatternManager.getAllStmtVarPair().size() == 6);
 
-    vector<Entity> getStmtsByVarX = ifPatternManager.getStmtsByVar(testX);
+    unordered_set<Entity> getStmtsByVarX = ifPatternManager.getStmtsByVar(testX);
     REQUIRE(getStmtsByVarX.size() == 2);
     REQUIRE(find(getStmtsByVarX.begin(), getStmtsByVarX.end(), testStmt1) != getStmtsByVarX.end());
     REQUIRE(find(getStmtsByVarX.begin(), getStmtsByVarX.end(), testStmt2) != getStmtsByVarX.end());
 
-    vector<Entity> getStmtsByVarY = ifPatternManager.getStmtsByVar(testY);
+    unordered_set<Entity> getStmtsByVarY = ifPatternManager.getStmtsByVar(testY);
     REQUIRE(getStmtsByVarY.size() == 2);
     REQUIRE(find(getStmtsByVarY.begin(), getStmtsByVarY.end(), testStmt1) != getStmtsByVarY.end());
     REQUIRE(find(getStmtsByVarY.begin(), getStmtsByVarY.end(), testStmt2) != getStmtsByVarY.end());
 
-    vector<Entity> getStmtsByVarZ = ifPatternManager.getStmtsByVar(testZ);
+    unordered_set<Entity> getStmtsByVarZ = ifPatternManager.getStmtsByVar(testZ);
     REQUIRE(getStmtsByVarZ.size() == 2);
     REQUIRE(find(getStmtsByVarZ.begin(), getStmtsByVarZ.end(), testStmt1) != getStmtsByVarZ.end());
     REQUIRE(find(getStmtsByVarZ.begin(), getStmtsByVarZ.end(), testStmt3) != getStmtsByVarZ.end());

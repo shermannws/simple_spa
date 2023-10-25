@@ -23,16 +23,29 @@ TEST_CASE("Test Entities Retrieval") {
     manager.storeConstant(std::make_shared<Constant>(constant1));
     manager.storeProcedure(std::make_shared<Procedure>(procedure1));
 
-    REQUIRE(manager.getAllStatements().size() == 2);
-    REQUIRE(manager.getAllVariables().size() == 1);
-    REQUIRE(manager.getAllVariables().at(0) == Entity(variable1));
-    REQUIRE(manager.getAllConstants().size() == 1);
-    REQUIRE(manager.getAllConstants().at(0) == Entity(constant1));
-    REQUIRE(manager.getAllProcedures().size() == 1);
-    REQUIRE(manager.getAllProcedures().at(0) == Entity(procedure1));
+    auto set1 = manager.getAllStatements();
+    REQUIRE(set1.size() == 2);
+    REQUIRE(set1.find(Entity(statement1)) != set1.end());
+    REQUIRE(set1.find(Entity(statement2)) != set1.end());
+
+    auto set2 = manager.getAllVariables();
+    REQUIRE(set2.size() == 1);
+    REQUIRE(set2.find(Entity(variable1)) != set2.end());
+
+    auto set3 = manager.getAllConstants();
+    REQUIRE(set3.size() == 1);
+    REQUIRE(set3.find(Entity(constant1)) != set3.end());
+
+    auto set4 = manager.getAllProcedures();
+    REQUIRE(set4.size() == 1);
+    REQUIRE(set4.find(Entity(procedure1)) != set4.end());
+
+    auto set5 = manager.getAllWhile();
+    REQUIRE(set5.size() == 1);
+    REQUIRE(set5.find(Entity(statement2)) != set5.end());
+
     REQUIRE(manager.getAllRead().empty());
     REQUIRE(manager.getAllPrint().empty());
     REQUIRE(manager.getAllWhile().size() == 1);
-    REQUIRE(manager.getAllWhile().at(0) == Entity(statement2));
     REQUIRE(manager.getAllIf().empty());
 }
