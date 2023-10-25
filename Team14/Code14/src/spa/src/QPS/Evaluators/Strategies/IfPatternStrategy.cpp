@@ -1,21 +1,25 @@
 #include "IfPatternStrategy.h"
 
-std::shared_ptr<Result> IfPatternStrategy::evaluateClause(std::shared_ptr<Clause> clause) const {
-    std::shared_ptr<PatternClause> patternClause = std::dynamic_pointer_cast<PatternClause>(clause);
-    Ref firstArg = patternClause->getFirstParam();
+IfPatternStrategy::IfPatternStrategy(std::shared_ptr<PkbReader> pkbReader) : PatternStrategy(std::move(pkbReader)) {}
+
+std::shared_ptr<Result> IfPatternStrategy::evaluateWildcard(ExpressionSpec &secondArg) const {
     std::shared_ptr<Result> result = std::make_shared<Result>();
+    auto tuples = pkbReader->getAllIfPatternStmts();
+    result->setTuples(tuples);
+    return result;
+}
 
-    if (firstArg.isRootType(RootType::Wildcard)) {
-        auto tuples = pkbReader->getAllIfPatternStmts();
-        result->setTuples(tuples);
-    } else if (firstArg.isRootType(RootType::Synonym)) {
-        auto tuples = pkbReader->getAllIfStmtVarPair();
-        result->setTuples(tuples);
-    } else {// ident
-        Variable v = Variable(firstArg.getRep());
-        auto tuples = pkbReader->getIfStmtsByVar(v);
-        result->setTuples(tuples);
-    }
+std::shared_ptr<Result> IfPatternStrategy::evaluateSyn(ExpressionSpec &secondArg) const {
+    std::shared_ptr<Result> result = std::make_shared<Result>();
+    auto tuples = pkbReader->getAllIfStmtVarPair();
+    result->setTuples(tuples);
+    return result;
+}
 
+std::shared_ptr<Result> IfPatternStrategy::evaluateVarIdent(Ref &firstArg, ExpressionSpec &secondArg) const {
+    std::shared_ptr<Result> result = std::make_shared<Result>();
+    Variable v = Variable(firstArg.getRep());
+    auto tuples = pkbReader->getIfStmtsByVar(v);
+    result->setTuples(tuples);
     return result;
 }

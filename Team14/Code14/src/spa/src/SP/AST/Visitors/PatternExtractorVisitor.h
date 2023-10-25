@@ -17,34 +17,34 @@ public:
      * Constructor for PatternExtractorVisitor.
      * @param pkbWriter A shared ptr to a concrete implementation of PkbWriter class
      */
-    PatternExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
+    explicit PatternExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
     /**
      * Visits the AssignNode for design extraction.
      * @param node AssignNode to be visited
-     * @param parents Parents of the AssignNode
-     * @param proc Procedure containing the AssignNode
+     * @param parents A vector of parent statements for this node
+     * @param proc The procedure which the node is in
      */
-    void visitAssignNode(const std::shared_ptr<AssignNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
-                         std::shared_ptr<ASTNode> proc) const override;
+    void visitAssignNode(const std::shared_ptr<AssignNode> &node, std::vector<std::shared_ptr<Statement>> parents,
+                         std::shared_ptr<Procedure> proc) const override;
 
     /**
      * Visits the IfNode and adds the pattern into the PKB.
      * @param node The node to be visited.
-     * @param parents A vector of parent nodes for this node
-     * @param proc The procedure node which the node is in
+     * @param parents A vector of parent statements for this node
+     * @param proc The procedure which the node is in
      */
-    void visitIfNode(const std::shared_ptr<IfNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
-                     std::shared_ptr<ASTNode> proc) const override;
+    void visitIfNode(const std::shared_ptr<IfNode> &node, std::vector<std::shared_ptr<Statement>> parents,
+                     std::shared_ptr<Procedure> proc) const override;
 
     /**
      * Visits a WhileNode and adds the pattern into the PKB
      * @param node The node to be visited
-     * @param parents A vector of parent nodes for this node
-     * @param proc The procedure node which the node is in
+     * @param parents A vector of parent statements for this node
+     * @param proc The procedure which the node is in
      */
-    void visitWhileNode(const std::shared_ptr<WhileNode> &node, std::vector<std::shared_ptr<ASTNode>> parents,
-                        std::shared_ptr<ASTNode> proc) const override;
+    void visitWhileNode(const std::shared_ptr<WhileNode> &node, std::vector<std::shared_ptr<Statement>> parents,
+                        std::shared_ptr<Procedure> proc) const override;
 
 private:
     /**

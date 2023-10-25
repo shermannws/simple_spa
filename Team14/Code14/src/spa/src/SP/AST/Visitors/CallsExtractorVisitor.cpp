@@ -6,16 +6,13 @@
 CallsExtractorVisitor::CallsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter) { this->pkbWriter = pkbWriter; }
 
 void CallsExtractorVisitor::visitCallNode(const std::shared_ptr<CallNode> &node,
-                                          std::vector<std::shared_ptr<ASTNode>> parents,
-                                          std::shared_ptr<ASTNode> proc) const {
+                                          std::vector<std::shared_ptr<Statement>> parents,
+                                          std::shared_ptr<Procedure> proc) const {
 
-    std::shared_ptr<ProcedureNode> callerNode = std::static_pointer_cast<ProcedureNode>(proc);
-    Procedure caller = Procedure(callerNode->getProcedureName());
     Procedure callee = Procedure(node->getProcedureName());
-    std::shared_ptr<Procedure> callerPtr = std::make_shared<Procedure>(caller);
     std::shared_ptr<Procedure> calleePtr = std::make_shared<Procedure>(callee);
 
-    this->pkbWriter->addCallsRelationship(callerPtr, calleePtr);
+    this->pkbWriter->addCallsRelationship(proc, calleePtr);
 
     // Add procedure to statement mapping
     std::vector<std::shared_ptr<Statement>> statementsToAdd;
@@ -23,12 +20,7 @@ void CallsExtractorVisitor::visitCallNode(const std::shared_ptr<CallNode> &node,
     statementsToAdd.push_back(currStatement);
 
     // Add procedure to parent statements mapping for UsesP and ModifiesP
-    for (auto parent = parents.rbegin(); parent != parents.rend(); parent++) {
-        auto parentPtr = std::static_pointer_cast<StatementNode>(*parent);
-        assert(parentPtr != nullptr);
-        std::shared_ptr<Statement> statement = StatementFactory::createStatementFromStatementNode(parentPtr);
-        statementsToAdd.push_back(statement);
-    }
+    for (auto parent = parents.rbegin(); parent != parents.rend(); parent++) { statementsToAdd.push_back(*parent); }
 
     this->pkbWriter->addProcedureToStatementsMap(calleePtr, statementsToAdd);
 }

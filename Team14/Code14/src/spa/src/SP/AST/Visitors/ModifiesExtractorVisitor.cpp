@@ -18,16 +18,16 @@ ModifiesExtractorVisitor::ModifiesExtractorVisitor(std::shared_ptr<PkbWriter> wr
 }
 
 void ModifiesExtractorVisitor::visitAssignNode(const std::shared_ptr<AssignNode> &node,
-                                               std::vector<std::shared_ptr<ASTNode>> parents,
-                                               std::shared_ptr<ASTNode> proc) const {
+                                               std::vector<std::shared_ptr<Statement>> parents,
+                                               std::shared_ptr<Procedure> proc) const {
     return VisitorUtility::addAllVariableRelationshipFrom(node->getVar(),
                                                           std::make_shared<AssignStatement>(node->getStatementNumber()),
                                                           parents, this->funcStmt, proc, this->funcProc);
 }
 
 void ModifiesExtractorVisitor::visitReadNode(const std::shared_ptr<ReadNode> &node,
-                                             std::vector<std::shared_ptr<ASTNode>> parents,
-                                             std::shared_ptr<ASTNode> proc) const {
+                                             std::vector<std::shared_ptr<Statement>> parents,
+                                             std::shared_ptr<Procedure> proc) const {
     return VisitorUtility::addAllVariableRelationshipFrom(
             node->getVar(), std::make_shared<ReadStatement>(node->getStatementNumber(), node->getVar()->getVarName()),
             parents, this->funcStmt, proc, this->funcProc);

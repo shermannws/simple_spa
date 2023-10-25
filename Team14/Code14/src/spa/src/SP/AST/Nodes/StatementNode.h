@@ -36,4 +36,10 @@ public:
      * @return The StatementNodeType of this statement
      */
     virtual StatementNodeType getStatementType() = 0;
+
+    /**
+     * Returns whether this statement is a parent node.
+     * @return True if this statement is a parent node, false otherwise
+     */
+    bool isParentNode();
 };

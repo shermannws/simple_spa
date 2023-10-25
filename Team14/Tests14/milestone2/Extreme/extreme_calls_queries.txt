@@ -1,0 +1,15 @@
+1 - Check e2e Calls* is satisfied
+procedure p, q;
+Select BOOLEAN such that Calls*(p,q) with p.procName = "p1" and q.procName = "ppa10"
+TRUE
+5000
+2 - Check Next* is satisfied through Calls*
+read r; procedure p; call c; variable v;
+Select <p, c, r.varName> such that Modifies(c, v) with c.procName = "p2" such that Calls(p, "p2") with v.varName = r.varName
+p1 1 HELLOWORLD
+5000
+3 - Check all Call* from p1
+procedure p;
+Select p such that Calls*("p1",p)
+p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, pp1, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11, pp12, pp13, pp14, pp15, pp16, pp17, pp18, pp19, pp20, ppa1, ppa2, ppa3, ppa4, ppa5, ppa6, ppa7, ppa8, ppa9, ppa10
+5000

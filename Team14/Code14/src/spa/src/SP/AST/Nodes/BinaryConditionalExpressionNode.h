@@ -22,8 +22,8 @@ public:
      * @param proc Procedure containing the BinaryConditionalExpressionNode
      */
     virtual void visitBinaryConditionalExpressionNode(const std::shared_ptr<BinaryConditionalExpressionNode> &node,
-                                                      std::vector<std::shared_ptr<ASTNode>> parents,
-                                                      std::shared_ptr<ASTNode> proc) const = 0;
+                                                      std::vector<std::shared_ptr<Statement>> parents,
+                                                      std::shared_ptr<Procedure> proc) const = 0;
 };
 
 /**
@@ -93,8 +93,8 @@ public:
     static BinaryConditionalExpressionType
     translateBinaryConditionalExpressionTypeString(const std::string &typeString);
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
-                std::shared_ptr<ASTNode> proc) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
+                std::shared_ptr<Procedure> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

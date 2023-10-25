@@ -9,8 +9,8 @@ std::vector<std::shared_ptr<ASTNode>> CallNode::getAllChildNodes() { return {}; 
 
 StatementNodeType CallNode::getStatementType() { return StatementNodeType::Call; }
 
-void CallNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
-                      std::shared_ptr<ASTNode> proc) {
+void CallNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
+                      std::shared_ptr<Procedure> proc) {
     if (auto callVisitor = std::dynamic_pointer_cast<CallNodeVisitor>(visitor)) {
         callVisitor->visitCallNode(std::enable_shared_from_this<CallNode>::shared_from_this(), parents, proc);
     }

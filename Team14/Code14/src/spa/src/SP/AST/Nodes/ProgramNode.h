@@ -19,8 +19,8 @@ public:
      * @param proc nullptr as ProgramNNode is not contained within a procedure
      */
     virtual void visitProgramNode(const std::shared_ptr<ProgramNode> &node,
-                                  std::vector<std::shared_ptr<ASTNode>> parents,
-                                  std::shared_ptr<ASTNode> proc) const = 0;
+                                  std::vector<std::shared_ptr<Statement>> parents,
+                                  std::shared_ptr<Procedure> proc) const = 0;
 };
 
 /**
@@ -47,8 +47,8 @@ public:
      */
     std::vector<std::shared_ptr<ProcedureNode>> getProcedures();
 
-    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<ASTNode>> parents,
-                std::shared_ptr<ASTNode> proc) override;
+    void accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
+                std::shared_ptr<Procedure> proc) override;
 
     std::vector<std::shared_ptr<ASTNode>> getAllChildNodes() override;
 };

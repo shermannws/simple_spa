@@ -6,16 +6,16 @@
 PatternExtractorVisitor::PatternExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter) { this->pkbWriter = pkbWriter; }
 
 void PatternExtractorVisitor::visitAssignNode(const std::shared_ptr<AssignNode> &node,
-                                              std::vector<std::shared_ptr<ASTNode>> parents,
-                                              std::shared_ptr<ASTNode> proc) const {
+                                              std::vector<std::shared_ptr<Statement>> parents,
+                                              std::shared_ptr<Procedure> proc) const {
     auto currentStmt = std::make_shared<Statement>(node->getStatementNumber(), StatementType::Assign);
     this->pkbWriter->addAssignPattern(currentStmt, std::make_shared<Variable>(node->getVar()->getVarName()),
                                       std::make_shared<FormattedExpression>(node->getExpression()->toString()));
 }
 
 void PatternExtractorVisitor::visitIfNode(const std::shared_ptr<IfNode> &node,
-                                          std::vector<std::shared_ptr<ASTNode>> parents,
-                                          std::shared_ptr<ASTNode> proc) const {
+                                          std::vector<std::shared_ptr<Statement>> parents,
+                                          std::shared_ptr<Procedure> proc) const {
     auto currentStmt = std::make_shared<Statement>(
             node->getStatementNumber(), StatementTypeFactory::getStatementTypeFrom(node->getStatementType()));
     auto variablesUsedByIf = getVariablesFromCondExpr(node->getConditionalExpression());
@@ -25,8 +25,8 @@ void PatternExtractorVisitor::visitIfNode(const std::shared_ptr<IfNode> &node,
 }
 
 void PatternExtractorVisitor::visitWhileNode(const std::shared_ptr<WhileNode> &node,
-                                             std::vector<std::shared_ptr<ASTNode>> parents,
-                                             std::shared_ptr<ASTNode> proc) const {
+                                             std::vector<std::shared_ptr<Statement>> parents,
+                                             std::shared_ptr<Procedure> proc) const {
     auto currentStmt = std::make_shared<Statement>(
             node->getStatementNumber(), StatementTypeFactory::getStatementTypeFrom(node->getStatementType()));
     auto variablesUsedByWhile = getVariablesFromCondExpr(node->getConditionalExpression());
