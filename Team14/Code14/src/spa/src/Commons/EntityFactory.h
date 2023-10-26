@@ -14,6 +14,9 @@
 #include "Commons/Entities/WhileStatement.h"
 #include "SP/AST/Nodes/StatementNode.h"
 
+/**
+ * A singleton factory class to create entities. Caches pointers to previously created entities.
+ */
 class EntityFactory {
 private:
     /**
@@ -139,6 +142,14 @@ private:
      */
     static std::shared_ptr<WhileStatement> createWhileStatement(StatementNumber statementNumber,
                                                                 const AttrValue &attrValue);
+
+protected:
+    /**
+     * Clears the Statement, Variable and Procedure caches. Only used in testing to ensure caches are cleared in
+     * between test cases. Only exposed to subclasses of EntityFactory to prevent clearing of caches from EntityFactory
+     * directly, while allowing testing utilities to subclass EntityFactory and expose this method for testing use.
+     */
+    static void clearCaches();
 
 public:
     /**

@@ -1,3 +1,4 @@
+#include "TestingUtilities/TestFixture/IntegrationTestFixture.h"
 #include "PKB/Pkb.h"
 #include "QPS/Evaluators/PQLEvaluator.h"
 #include "QPS/Parsers/PQLParser.h"
@@ -5,7 +6,7 @@
 
 using namespace std;
 
-TEST_CASE("Test integration of PKB with QPS - Variables") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Variables") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -29,7 +30,7 @@ TEST_CASE("Test integration of PKB with QPS - Variables") {
     REQUIRE(find(results.begin(), results.end(), "z") != results.end());
 }
 
-TEST_CASE("Test integration of PKB with QPS - Get all Constants") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Get all Constants") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -53,7 +54,7 @@ TEST_CASE("Test integration of PKB with QPS - Get all Constants") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("Test integration of PKB with QPS - Get all Procedure") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Get all Procedure") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -77,7 +78,7 @@ TEST_CASE("Test integration of PKB with QPS - Get all Procedure") {
     REQUIRE(find(results.begin(), results.end(), "ProcedureC") != results.end());
 }
 
-TEST_CASE("Test integration of PKB with QPS - Get all Stmt") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Get all Stmt") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -102,7 +103,7 @@ TEST_CASE("Test integration of PKB with QPS - Get all Stmt") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("Test integration of PKB with QPS - Get all Assign") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Get all Assign") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -129,7 +130,7 @@ TEST_CASE("Test integration of PKB with QPS - Get all Assign") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("Test integration of PKB with QPS - Get all Assign - No Assign") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Get all Assign - No Assign") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -142,7 +143,7 @@ TEST_CASE("Test integration of PKB with QPS - Get all Assign - No Assign") {
     REQUIRE(results.size() == 0);
 }
 
-TEST_CASE("Test integration of PKB with QPS - Assign With Pattern") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Assign With Pattern") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -169,7 +170,7 @@ TEST_CASE("Test integration of PKB with QPS - Assign With Pattern") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no result") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Assign With Pattern, returns no result") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -191,7 +192,7 @@ TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no re
 }
 
 
-TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no result, no stmts in pkb") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Assign With Pattern, returns no result, no stmts in pkb") {
     Pkb pkb = Pkb();
 
     PQLParser parser("assign a; Select a pattern a(_, _)");
@@ -203,7 +204,7 @@ TEST_CASE("Test integration of PKB with QPS - Assign With Pattern, returns no re
     REQUIRE(results.size() == 0);
 }
 
-TEST_CASE("Test integration of PKB with QPS - Follows (1, s)") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Follows (1, s)") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -241,7 +242,7 @@ TEST_CASE("Test integration of PKB with QPS - Follows (1, s)") {
     REQUIRE(results3.begin() == results3.end());
 }
 
-TEST_CASE("Test integration of PKB with QPS - Follows (s, 1)") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Follows (s, 1)") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -279,7 +280,7 @@ TEST_CASE("Test integration of PKB with QPS - Follows (s, 1)") {
     REQUIRE(*(results3.begin()) == "2");
 }
 
-TEST_CASE("Test integration of PKB with QPS - Follows (1, 2)") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Follows (1, 2)") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -313,7 +314,7 @@ TEST_CASE("Test integration of PKB with QPS - Follows (1, 2)") {
     REQUIRE(results2.empty());
 }
 
-TEST_CASE("Test integration of PKB with QPS - Uses (a, 'x')") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Uses (a, 'x')") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -361,7 +362,7 @@ TEST_CASE("Test integration of PKB with QPS - Uses (a, 'x')") {
     REQUIRE(find(results3.begin(), results3.end(), "2") != results3.end());
 }
 
-TEST_CASE("Test integration of PKB with QPS - Uses (a, x)") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Uses (a, x)") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 
@@ -413,7 +414,7 @@ TEST_CASE("Test integration of PKB with QPS - Uses (a, x)") {
     REQUIRE(find(results3.begin(), results3.end(), "2") != results3.end());
 }
 
-TEST_CASE("Test multiclause") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test multiclause") {
     Pkb pkb = Pkb();
     shared_ptr<PkbWriter> pkbWriter = pkb.createPkbWriter();
 

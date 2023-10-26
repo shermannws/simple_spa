@@ -1,5 +1,4 @@
-#include <iostream>
-
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "Commons/Entities//EntityType.h"
 #include "Commons/Entities/Constant.h"
 #include "Commons/Entities/Entity.h"
@@ -9,7 +8,7 @@
 
 #include "catch.hpp"
 
-TEST_CASE("Test Entity - Constant") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Entity - Constant") {
     ConstantValue mockValue = "1";
     Constant c = Constant(mockValue);
 
@@ -17,7 +16,7 @@ TEST_CASE("Test Entity - Constant") {
     REQUIRE(c.getEntityType() == EntityType::Constant);
 }
 
-TEST_CASE("Test Entity - Procedure") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Entity - Procedure") {
     ProcedureName mockName = "mockName";
     Procedure p = Procedure(mockName);
 
@@ -25,7 +24,7 @@ TEST_CASE("Test Entity - Procedure") {
     REQUIRE(p.getEntityType() == EntityType::Procedure);
 }
 
-TEST_CASE("Test Entity - Statement") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Entity - Statement") {
     StatementNumber mockLineNo = 1;
     Statement s = Statement(mockLineNo, StatementType::Assign);
 
@@ -33,7 +32,7 @@ TEST_CASE("Test Entity - Statement") {
     REQUIRE(s.getEntityType() == EntityType::Statement);
 }
 
-TEST_CASE("Test Entity - Variable") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Entity - Variable") {
     VariableName mockName = "mockName";
     Variable v = Variable(mockName);
 
@@ -41,7 +40,7 @@ TEST_CASE("Test Entity - Variable") {
     REQUIRE(v.getEntityType() == EntityType::Variable);
 }
 
-TEST_CASE("Test Equality of Entities") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Equality of Entities") {
     ConstantValue mockValue = "1";
     VariableName mockName = "1";
     StatementNumber mockLineNo = 1;
@@ -63,7 +62,7 @@ TEST_CASE("Test Equality of Entities") {
     REQUIRE(v1 == v2);
 }
 
-TEST_CASE("Test Hash Function of Entities") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Hash Function of Entities") {
     ConstantValue mockValue = "1";
 
     Constant c1 = Constant(mockValue);

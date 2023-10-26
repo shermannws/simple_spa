@@ -29,19 +29,6 @@ std::unordered_map<StatementType, std::function<std::shared_ptr<Statement>(State
                 {StatementType::Print, createPrintStatement},   {StatementType::Read, createReadStatement},
                 {StatementType::If, createIfStatement},         {StatementType::While, createWhileStatement}};
 
-std::shared_ptr<Statement> EntityFactory::createStatementFromStatementNode(const std::shared_ptr<StatementNode> &node) {
-    StatementNodeType statementNodeType = node->getStatementType();
-    StatementType statementType = StatementTypeFactory::getStatementTypeFrom(statementNodeType);
-    StatementNumber statementNumber = node->getStatementNumber();
-    if (statementCache.find(statementNumber) != statementCache.end()) {
-        auto cachedStatement = statementCache[statementNumber];
-        assert(cachedStatement->getStatementType() == statementType);
-        return cachedStatement;
-    }
-
-    return statementCache[statementNumber] = nodeFactoryMethodMap.at(statementType)(node);
-}
-
 std::shared_ptr<AssignStatement>
 EntityFactory::createAssignStatementFromNode(const std::shared_ptr<StatementNode> &node) {
     return std::make_shared<AssignStatement>(node->getStatementNumber());
@@ -77,17 +64,6 @@ EntityFactory::createWhileStatementFromNode(const std::shared_ptr<StatementNode>
     return std::make_shared<WhileStatement>(node->getStatementNumber());
 }
 
-std::shared_ptr<Statement> EntityFactory::createStatement(StatementNumber statementNumber, StatementType statementType, AttrValue attrValue) {
-    if (statementCache.find(statementNumber) != statementCache.end()) {
-        auto cachedStatement = statementCache[statementNumber];
-        assert(cachedStatement->getStatementType() == statementType);
-        assert(cachedStatement->getAttrValue() == attrValue);
-        return cachedStatement;
-    }
-
-    return statementCache[statementNumber] = factoryMethodMap.at(statementType)(statementNumber, attrValue);
-}
-
 std::shared_ptr<AssignStatement> EntityFactory::createAssignStatement(StatementNumber statementNumber,
                                                                       const AttrValue &attrValue) {
     return std::make_shared<AssignStatement>(statementNumber);
@@ -116,6 +92,37 @@ std::shared_ptr<WhileStatement> EntityFactory::createWhileStatement(StatementNum
 std::shared_ptr<CallStatement> EntityFactory::createCallStatement(StatementNumber statementNumber,
                                                                   const AttrValue &procName) {
     return std::make_shared<CallStatement>(statementNumber, procName);
+}
+
+void EntityFactory::clearCaches() {
+    statementCache.clear();
+    variableCache.clear();
+    procedureCache.clear();
+}
+
+std::shared_ptr<Statement> EntityFactory::createStatementFromStatementNode(const std::shared_ptr<StatementNode> &node) {
+    StatementNodeType statementNodeType = node->getStatementType();
+    StatementType statementType = StatementTypeFactory::getStatementTypeFrom(statementNodeType);
+    StatementNumber statementNumber = node->getStatementNumber();
+    if (statementCache.find(statementNumber) != statementCache.end()) {
+        auto cachedStatement = statementCache[statementNumber];
+        assert(cachedStatement->getStatementType() == statementType);
+        return cachedStatement;
+    }
+
+    return statementCache[statementNumber] = nodeFactoryMethodMap.at(statementType)(node);
+}
+
+std::shared_ptr<Statement> EntityFactory::createStatement(StatementNumber statementNumber, StatementType statementType,
+                                                          AttrValue attrValue) {
+    if (statementCache.find(statementNumber) != statementCache.end()) {
+        auto cachedStatement = statementCache[statementNumber];
+        assert(cachedStatement->getStatementType() == statementType);
+        assert(cachedStatement->getAttrValue() == attrValue);
+        return cachedStatement;
+    }
+
+    return statementCache[statementNumber] = factoryMethodMap.at(statementType)(statementNumber, attrValue);
 }
 
 std::shared_ptr<Variable> EntityFactory::createVariable(VariableName varName) {
