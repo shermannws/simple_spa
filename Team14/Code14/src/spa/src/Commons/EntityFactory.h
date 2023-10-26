@@ -25,12 +25,17 @@ private:
     static std::unordered_map<StatementNumber, std::shared_ptr<Statement>> statementCache;
 
     /**
-     * An unordered map to cache Statement subclasses created.
+     * An unordered map to cache Variables created.
      */
     static std::unordered_map<VariableName, std::shared_ptr<Variable>> variableCache;
 
     /**
-     * An unordered map to cache Statement subclasses created.
+     * An unordered map to cache Constants created.
+     */
+    static std::unordered_map<ConstantValue, std::shared_ptr<Constant>> constantCache;
+
+    /**
+     * An unordered map to cache Procedures created.
      */
     static std::unordered_map<ProcedureName, std::shared_ptr<Procedure>> procedureCache;
 
@@ -180,6 +185,14 @@ public:
      * @return The Variable object with the given variable name
      */
     static std::shared_ptr<Variable> createVariable(VariableName varName);
+
+    /**
+     * Checks the Constant cache for a Constant object corresponding to constVal.
+     * If it has not been created, creates a Constant object and returns a shared pointer to it.
+     * @param constVal The constant value of the Constant object
+     * @return The Constant object with the given constant value
+     */
+    static std::shared_ptr<Constant> createConstant(ConstantValue constVal);
 
     /**
      * Checks the Procedure cache for a Procedure object corresponding to varName.

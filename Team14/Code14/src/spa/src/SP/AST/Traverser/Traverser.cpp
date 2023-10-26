@@ -24,7 +24,7 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
         frontier.pop();
 
         if (auto currentCasted = std::dynamic_pointer_cast<ProcedureNode>(current)) {
-            currentProcedure = std::make_shared<Procedure>(currentCasted->getProcedureName());
+            currentProcedure = EntityFactory::createProcedure(currentCasted->getProcedureName());
         }
 
         // current node to accept all the visitors and do its respective work

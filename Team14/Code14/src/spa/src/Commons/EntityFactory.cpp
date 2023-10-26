@@ -13,6 +13,8 @@ std::unordered_map<StatementNumber, std::shared_ptr<Statement>> EntityFactory::s
 
 std::unordered_map<VariableName, std::shared_ptr<Variable>> EntityFactory::variableCache;
 
+std::unordered_map<ConstantValue, std::shared_ptr<Constant>> EntityFactory::constantCache;
+
 std::unordered_map<ProcedureName, std::shared_ptr<Procedure>> EntityFactory::procedureCache;
 
 std::unordered_map<StatementType, std::function<std::shared_ptr<Statement>(std::shared_ptr<StatementNode>)>>
@@ -129,6 +131,12 @@ std::shared_ptr<Variable> EntityFactory::createVariable(VariableName varName) {
     if (variableCache.find(varName) != variableCache.end()) { return variableCache[varName]; }
 
     return variableCache[varName] = std::make_shared<Variable>(varName);
+}
+
+std::shared_ptr<Constant> EntityFactory::createConstant(ConstantValue constVal) {
+    if (constantCache.find(constVal) != constantCache.end()) { return constantCache[constVal]; }
+
+    return constantCache[constVal] = std::make_shared<Constant>(constVal);
 }
 
 std::shared_ptr<Procedure> EntityFactory::createProcedure(ProcedureName procName) {

@@ -53,5 +53,5 @@ private:
      * @return A vector of variables
      */
     static std::shared_ptr<std::vector<std::shared_ptr<Variable>>>
-    getVariablesFromCondExpr(std::shared_ptr<ConditionalExpressionNode> condExpr);
+    getVariablesFromCondExpr(const std::shared_ptr<ConditionalExpressionNode> &condExpr);
 };
