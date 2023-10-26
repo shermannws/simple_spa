@@ -20,10 +20,10 @@ std::unordered_map<ProcedureName, std::shared_ptr<Procedure>> EntityFactory::pro
 std::unordered_map<StatementType, std::function<std::shared_ptr<Statement>(std::shared_ptr<StatementNode>)>>
         EntityFactory::nodeFactoryMethodMap = {{StatementType::Assign, createAssignStatementFromNode},
                                                {StatementType::Call, createCallStatementFromNode},
-                                                  {StatementType::Print, createPrintStatementFromNode},
-                                                  {StatementType::Read, createReadStatementFromNode},
-                                                  {StatementType::If, createIfStatementFromNode},
-                                                  {StatementType::While, createWhileStatementFromNode}};
+                                               {StatementType::Print, createPrintStatementFromNode},
+                                               {StatementType::Read, createReadStatementFromNode},
+                                               {StatementType::If, createIfStatementFromNode},
+                                               {StatementType::While, createWhileStatementFromNode}};
 
 std::unordered_map<StatementType, std::function<std::shared_ptr<Statement>(StatementNumber, const AttrValue &)>>
         EntityFactory::factoryMethodMap = {

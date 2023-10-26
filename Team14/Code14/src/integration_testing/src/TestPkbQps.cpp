@@ -1,7 +1,7 @@
-#include "TestingUtilities/TestFixture/IntegrationTestFixture.h"
 #include "PKB/Pkb.h"
 #include "QPS/Evaluators/PQLEvaluator.h"
 #include "QPS/Parsers/PQLParser.h"
+#include "TestingUtilities/TestFixture/IntegrationTestFixture.h"
 #include "catch.hpp"
 
 using namespace std;
@@ -192,7 +192,8 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Ass
 }
 
 
-TEST_CASE_METHOD(IntegrationTestFixture, "Test integration of PKB with QPS - Assign With Pattern, returns no result, no stmts in pkb") {
+TEST_CASE_METHOD(IntegrationTestFixture,
+                 "Test integration of PKB with QPS - Assign With Pattern, returns no result, no stmts in pkb") {
     Pkb pkb = Pkb();
 
     PQLParser parser("assign a; Select a pattern a(_, _)");

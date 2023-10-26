@@ -6,7 +6,9 @@
 
 using namespace std;
 
-TEST_CASE_METHOD(UnitTestFixture, "Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation through triggerTransitiveCalc") {
+TEST_CASE_METHOD(
+        UnitTestFixture,
+        "Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation through triggerTransitiveCalc") {
 
     SECTION("Test Modifes(s,v) and Uses - v1") {
         auto assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());

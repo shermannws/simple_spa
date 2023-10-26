@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 
-#include "TestingUtilities/TestFixture/IntegrationTestFixture.h"
 #include "Commons/Entities/AssignStatement.h"
 #include "Commons/Entities/CallStatement.h"
 #include "Commons/Entities/IfStatement.h"
@@ -24,6 +23,7 @@
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
 #include "TestingUtilities/ASTGenerator/ASTGenerator.h"
+#include "TestingUtilities/TestFixture/IntegrationTestFixture.h"
 #include "catch.hpp"
 
 /*

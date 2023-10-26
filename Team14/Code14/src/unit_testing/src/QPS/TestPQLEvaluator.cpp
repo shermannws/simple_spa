@@ -4,12 +4,12 @@
 #include "QPSTestUtil.h"
 
 
-#include <unordered_map>
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
 #include "StubPkbReader.h"
 #include "catch.hpp"
+#include <unordered_map>
 
 
 using namespace std;
@@ -831,7 +831,8 @@ TEST_CASE_METHOD(UnitTestFixture, "Test QPS Flow - Assign With Pattern") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(wildcard , expr-spec)") {// getAssignStmtsByRhs, hasRhsWildCard == false
+TEST_CASE_METHOD(UnitTestFixture,
+                 "assign pattern a(wildcard , expr-spec)") {// getAssignStmtsByRhs, hasRhsWildCard == false
     PQLParser parser("assign a; Select a pattern a(_, \"x   + y\")");
     Query queryObj = parser.parse();
 
@@ -844,7 +845,8 @@ TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(wildcard , expr-spec)") {// 
     REQUIRE(find(results.begin(), results.end(), "5") != results.end());
 }
 
-TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(wildcard , _expr-spec_)") {// getAssignStmtsByRhs, hasRhsWildCard == true
+TEST_CASE_METHOD(UnitTestFixture,
+                 "assign pattern a(wildcard , _expr-spec_)") {// getAssignStmtsByRhs, hasRhsWildCard == true
     PQLParser parser("assign a; Select a pattern a(_, _\"a/(b+c)\"_)");
     Query queryObj = parser.parse();
 
@@ -870,7 +872,8 @@ TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(var_synonym, wildcard)") {//
     REQUIRE(find(results.begin(), results.end(), "2") != results.end());
 }
 
-TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(var_synonym, _expr-spec_)") {// getAssignStmtsVarPairByRhs, hasWildCard == true
+TEST_CASE_METHOD(UnitTestFixture,
+                 "assign pattern a(var_synonym, _expr-spec_)") {// getAssignStmtsVarPairByRhs, hasWildCard == true
     PQLParser parser("assign a; variable v; Select a pattern a(v, _\"(a-b)+c\"_)");
     Query queryObj = parser.parse();
 
@@ -883,7 +886,8 @@ TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(var_synonym, _expr-spec_)") 
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(var_synonym, expr-spec)") {// getAssignStmtsVarPairByRhs, hasWildcard == false
+TEST_CASE_METHOD(UnitTestFixture,
+                 "assign pattern a(var_synonym, expr-spec)") {// getAssignStmtsVarPairByRhs, hasWildcard == false
     PQLParser parser("assign a; variable v; Select v pattern a(v, \"a-b*c\")");
     Query queryObj = parser.parse();
 
@@ -909,7 +913,8 @@ TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(char_string , wildcard)") {/
     REQUIRE(find(results.begin(), results.end(), "6") != results.end());
 }
 
-TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(char_string , expr-spec)") {// getAssignStmtsByLhsRhs, hasRhsWildcard = true
+TEST_CASE_METHOD(UnitTestFixture,
+                 "assign pattern a(char_string , expr-spec)") {// getAssignStmtsByLhsRhs, hasRhsWildcard = true
     PQLParser parser("assign a; Select a pattern a(\"x\", _\"(a-b)\"_)");
     Query queryObj = parser.parse();
 
@@ -922,7 +927,8 @@ TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(char_string , expr-spec)") {
     REQUIRE(find(results.begin(), results.end(), "100000") != results.end());
 }
 
-TEST_CASE_METHOD(UnitTestFixture, "assign pattern, select synonym not in clause ") {// getAssignStmtsByLhsRhs, hasRhsWildcard = false
+TEST_CASE_METHOD(UnitTestFixture,
+                 "assign pattern, select synonym not in clause ") {// getAssignStmtsByLhsRhs, hasRhsWildcard = false
     PQLParser parser("assign a; variable v; Select v pattern a(\"noneCase\", \"(a-b)\")");
     Query queryObj = parser.parse();
 

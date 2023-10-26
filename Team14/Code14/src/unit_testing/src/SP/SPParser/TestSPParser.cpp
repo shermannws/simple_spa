@@ -276,7 +276,8 @@ TEST_CASE_METHOD(UnitTestFixture, "Test parse with one procedure, all statement 
     std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
 }
 
-TEST_CASE_METHOD(UnitTestFixture, "Tests parse with one procedure, one if statement with one assign statement for each statementlist") {
+TEST_CASE_METHOD(UnitTestFixture,
+                 "Tests parse with one procedure, one if statement with one assign statement for each statementlist") {
     SPParser parser;
 
     /*
