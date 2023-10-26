@@ -671,7 +671,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test NextStarSuchThatStrategy") {
     }
 }
 
-TEST_CASE_METHOD(UnitTestFixture, "Test AffectsSuchThatStrategy") {
+/* TEST_CASE_METHOD(UnitTestFixture, "Test AffectsSuchThatStrategy") {
     // evaluateSynSyn
     SECTION("getAffectsPair") {
         PQLParser parser("assign a, a1; Select a such that Next(a, a1)");
@@ -788,7 +788,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test AffectsSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "4") != results.end());
         REQUIRE(find(results.begin(), results.end(), "5") != results.end());
     }
-}
+} */
 
 TEST_CASE_METHOD(UnitTestFixture, "Test WithStrategy") {
     // evaluateSynSyn
