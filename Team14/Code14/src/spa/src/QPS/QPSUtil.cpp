@@ -13,6 +13,7 @@
 #include "QPS/Evaluators/Strategies/UsesSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/WhilePatternStrategy.h"
 #include "QPS/Evaluators/Strategies/WithStrategy.h"
+#include "QPS/Evaluators/Strategies/AffectsSuchThatStrategy.h"
 
 std::unordered_map<StringRep, QueryEntityType> QPSUtil::designEntities = {
         {AppConstants::STRING_PROCEDURE, QueryEntityType::Procedure},
@@ -62,6 +63,7 @@ std::unordered_map<StringRep, ClauseType> QPSUtil::repClauseTypeMap = {
         {AppConstants::STRING_CALLSSTAR, ClauseType::CallsStar},
         {AppConstants::STRING_NEXT, ClauseType::Next},
         {AppConstants::STRING_NEXTSTAR, ClauseType::NextStar},
+        {AppConstants::STRING_AFFECTS, ClauseType::Affects}
 };
 
 std::unordered_map<QueryEntityType, ClauseType> QPSUtil::entityToClauseMap = {
@@ -76,6 +78,7 @@ std::unordered_map<ClauseType, ClauseArgType> QPSUtil::typeToArgTypeMap = {
         {ClauseType::Parent, StmtrefStmtref},  {ClauseType::ParentStar, StmtrefStmtref},
         {ClauseType::Next, StmtrefStmtref},    {ClauseType::NextStar, StmtrefStmtref},
         {ClauseType::Calls, ProcProc},         {ClauseType::CallsStar, ProcProc},
+        {ClauseType::Affects, StmtrefStmtref}
 };
 
 std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
@@ -146,6 +149,10 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
                 {ClauseType::With,
                  [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
                      return std::make_shared<WithStrategy>(pkbReader);
+                 }},
+                {ClauseType::Affects,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<AffectsSuchThatStrategy>(pkbReader);
                  }},
 };
 

@@ -574,24 +574,31 @@ std::vector<std::vector<Entity>> StubPkbReader::getAllWhileStmtVarPair() const {
 
 std::vector<std::vector<Entity>> StubPkbReader::getAffectsPair(StatementType formerType,
                                                                StatementType latterType) const {
-    return std::vector<std::vector<Entity>>();
+    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Statement(2, StatementType::Assign)};
+    std::vector<Entity> pair2 = {Statement(3, StatementType::Assign), Statement(4, StatementType::Assign)};
+    std::vector<Entity> pair3 = {Statement(5, StatementType::Assign), Statement(6, StatementType::Assign)};
+    return std::vector<std::vector<Entity>>({pair1, pair2, pair3});
 }
 
 std::vector<Entity> StubPkbReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
-    return std::vector<Entity>();
+    return std::vector<Entity>({Statement(7, StatementType::Assign)});
 }
 
-std::vector<Entity> StubPkbReader::getAffectsTypeWildcard(StatementType type) const { return std::vector<Entity>(); }
+std::vector<Entity> StubPkbReader::getAffectsTypeWildcard(StatementType type) const {
+    return std::vector<Entity>({Statement(8, StatementType::Assign)});
+}
 
 std::vector<Entity> StubPkbReader::getAffectsStmtType(Statement &statement, StatementType type) const {
-    return std::vector<Entity>();
+    return std::vector<Entity>({Statement(9, StatementType::Assign)});
 }
 
-std::vector<Entity> StubPkbReader::getAffectsWildcardType(StatementType type) const { return std::vector<Entity>(); }
+std::vector<Entity> StubPkbReader::getAffectsWildcardType(StatementType type) const {
+    return std::vector<Entity>({Statement(10, StatementType::Assign)});
+}
 
-bool StubPkbReader::isAffects(Statement &statement1, Statement &statement2) const { return false; }
+bool StubPkbReader::isAffects(Statement &statement1, Statement &statement2) const { return true; }
 
-bool StubPkbReader::hasAffects() const { return false; }
+bool StubPkbReader::hasAffects() const { return true; }
 
 bool StubPkbReader::hasAffectedStmt(Statement &statement) const { return false; }
 

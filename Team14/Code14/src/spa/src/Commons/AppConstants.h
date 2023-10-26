@@ -39,6 +39,7 @@ public:
     inline static const std::string STRING_CALLSSTAR = "Calls*";
     inline static const std::string STRING_NEXT = "Next";
     inline static const std::string STRING_NEXTSTAR = "Next*";
+    inline static const std::string STRING_AFFECTS = "Affects";
 
     // AttrNames
     inline static const std::string STRING_PROCNAME = "procName";
