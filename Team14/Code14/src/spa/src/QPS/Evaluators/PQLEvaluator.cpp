@@ -80,9 +80,7 @@ bool PQLEvaluator::evaluateGroupAsBoolean(const std::vector<std::shared_ptr<Clau
 }
 
 Result PQLEvaluator::evaluate(Query &query) {
-    auto clauses = query.getAllClause();
-    auto selects = query.getSelect();
-    auto pairs = QPSOptimizer::getGroupScorePairs(query, clauses, selects);
+    auto pairs = QPSOptimizer::getGroupScorePairs(query);
     std::priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::sortByScore);
 
     auto res = std::make_shared<Result>(true);
@@ -102,6 +100,7 @@ Result PQLEvaluator::evaluate(Query &query) {
     }
 
     //  CASE RESULT-CLAUSE IN RESULT TABLE, check if ALL synonym in select is in result table
+    auto selects = query.getSelect();
     std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(selects, res);
     if (unevaluatedSyn.empty()) { return *res; }
 

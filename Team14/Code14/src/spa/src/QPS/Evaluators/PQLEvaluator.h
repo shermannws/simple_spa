@@ -31,12 +31,11 @@ private:
      * Shared pointer to the clause handler which evaluates each clause in the PQL query
      */
     std::shared_ptr<ClauseHandler> clauseHandler;
+
     /**
      * Shared pointer to the result handler which is responsible for combining results
      */
     std::shared_ptr<ResultHandler> resultHandler;
-
-    bool evaluateGroupAsBoolean(const std::vector<std::shared_ptr<Clause>> &clauses);
 
     /**
      * @brief Retrieves all instances of a query entity from the PKB, the method
@@ -51,14 +50,14 @@ private:
      * @param clause A shared pointer to the Clause to evaluate.
      * @return shared pointer to result object
      */
-    std::shared_ptr<Result> evaluateClause(const std::shared_ptr<Clause> clause);
+    std::shared_ptr<Result> evaluateClause(std::shared_ptr<Clause> clause);
 
     /**
      * @brief Evaluates a select clause with the given entity as the result clause without any constraint clauses
      * @param entity the selected entity to be evaluated
      * @return shared pointer to result object
      */
-    std::shared_ptr<Result> evaluateSelect(const std::shared_ptr<QueryEntity> entity);
+    std::shared_ptr<Result> evaluateSelect(std::shared_ptr<QueryEntity> entity);
 
     /**
      * @brief Evaluates a subset of the result clause of a query
@@ -74,7 +73,7 @@ private:
      * @param result result object
      * @return vector of unevaluated synonyms
      */
-    std::vector<Synonym> getUnevaluatedSyn(const std::vector<Synonym> resultClause, std::shared_ptr<Result> result);
+    std::vector<Synonym> getUnevaluatedSyn(std::vector<Synonym> resultClause, std::shared_ptr<Result> result);
 
     /**
      * applies the transformFunc to the entity at index equal to the int and stores the result in the returned vector
@@ -101,6 +100,13 @@ private:
      * @return resultant string
      */
     std::string concat(std::vector<std::string> strings);
+
+    /**
+     * Evaluates all clauses in the group as boolean clauses
+     * @param clauses
+     * @return true if all of the clauses are true or non-empty, otherwise false
+     */
+    bool evaluateGroupAsBoolean(const std::vector<std::shared_ptr<Clause>> &clauses);
 
 public:
     /**

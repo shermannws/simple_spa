@@ -1,10 +1,11 @@
 #include "QPSOptimizer.h"
 
 std::unordered_map<Synonym, std::unordered_set<Synonym>>
-QPSOptimizer::buildSynGraph(Query &query, const std::vector<std::shared_ptr<Clause>> &clauses) {
-    auto declarationMap = query.getDeclarations();
+QPSOptimizer::buildSynGraph(std::unordered_map<std::string, std::shared_ptr<QueryEntity>> &declarations,
+                            const std::vector<std::shared_ptr<Clause>> &clauses) {
+    //    auto declarationMap = query.getDeclarations();
     std::unordered_map<Synonym, std::unordered_set<Synonym>> graph;// add all syns into graph as nodes
-    for (const auto &node: declarationMap) { graph[node.first] = {}; }
+    for (const auto &node: declarations) { graph[node.first] = {}; }
 
     for (const auto &clause: clauses) {
         auto group = clause->getSynonyms();
@@ -30,7 +31,7 @@ GroupScore getGroupScore(int numClauses, std::unordered_set<Synonym> synonyms, c
 
 bool QPSOptimizer::sortByScore(const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p1,
                                const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p2) {
-    return p1.second < p2.second;
+    return p1.second > p2.second;
 }
 
 std::vector<std::unordered_set<Synonym>>
@@ -49,22 +50,21 @@ QPSOptimizer::getSynGroups(std::unordered_map<Synonym, std::unordered_set<Synony
 }
 
 std::vector<std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore>>
-QPSOptimizer::getGroupScorePairs(Query &query, const std::vector<std::shared_ptr<Clause>> &clauses,
-                                 const std::vector<Synonym> &selects) {
+QPSOptimizer::getGroupScorePairs(Query &query) {
     std::vector<std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore>> groupScorePairs;
     std::unordered_map<Synonym, std::unordered_set<std::shared_ptr<Clause>>> synToClauseMap;
     std::unordered_set<std::shared_ptr<Clause>> noSynClauses;
 
-    auto adjacencyList = buildSynGraph(query, clauses);
+    auto declarations = query.getDeclarations();
+    auto clauses = query.getAllClause();
+
+    auto adjacencyList = buildSynGraph(declarations, clauses);
     auto synGroups = getSynGroups(adjacencyList);
 
     // add clause to noSynClauses if boolean, else add clause to synToClauseMap
     for (const auto &clause: clauses) {
         auto synonyms = clause->getSynonyms();
-        if (synonyms.empty()) {
-            noSynClauses.insert(clause);
-            continue;
-        }
+        if (synonyms.empty()) { noSynClauses.insert(clause); }
         for (const auto &syn: synonyms) {
             if (!synToClauseMap.count(syn)) { synToClauseMap[syn] = {}; }
             synToClauseMap[syn].insert(clause);
@@ -74,11 +74,12 @@ QPSOptimizer::getGroupScorePairs(Query &query, const std::vector<std::shared_ptr
     // add noSynClauses to groupScorePairs
     if (!noSynClauses.empty()) { groupScorePairs.emplace_back(noSynClauses, std::tuple{0, 0, noSynClauses.size()}); }
 
+    auto selects = query.getSelect();
     // get corresponding clauses for each group and add to groupScorePairs
     for (const auto &synGroup: synGroups) {
         std::unordered_set<std::shared_ptr<Clause>> group;
         for (const auto &syn: synGroup) { group.insert(synToClauseMap[syn].begin(), synToClauseMap[syn].end()); }
-        groupScorePairs.emplace_back(group, getGroupScore(group.size(), synGroup, selects));
+        if (!group.empty()) { groupScorePairs.emplace_back(group, getGroupScore(group.size(), synGroup, selects)); }
     }
 
     return groupScorePairs;
