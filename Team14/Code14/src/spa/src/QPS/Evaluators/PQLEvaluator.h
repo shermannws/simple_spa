@@ -103,10 +103,17 @@ private:
 
     /**
      * Evaluates all clauses in the group as boolean clauses
-     * @param clauses
+     * @param clauses The group of clauses to evaluate
      * @return true if all of the clauses are true or non-empty, otherwise false
      */
-    bool evaluateGroupAsBoolean(const std::vector<std::shared_ptr<Clause>> &clauses);
+    bool evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause>> &clauses);
+
+    /**
+     * Evaluates a group of clauses with no synonyms in the select clause
+     * @param clauses The group of clauses to evaluate
+     * @return true if all of the clauses are true or non-empty, otherwise false
+     */
+    bool evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Clause>> &clauses);
 
 public:
     /**

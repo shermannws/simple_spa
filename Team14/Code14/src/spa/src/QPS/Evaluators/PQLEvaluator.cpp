@@ -71,10 +71,19 @@ std::string PQLEvaluator::concat(std::vector<std::string> strings) {
     return result;
 }
 
-bool PQLEvaluator::evaluateGroupAsBoolean(const std::vector<std::shared_ptr<Clause>> &clauses) {
+bool PQLEvaluator::evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause>> &clauses) {
     for (auto &clause: clauses) {
         auto res = evaluateClause(clause);
         if (res->isFalse() || res->isEmpty()) { return false; }
+    }
+    return true;
+}
+
+bool PQLEvaluator::evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Clause>> &clauses) {
+    auto tmp = std::make_shared<Result>(true);
+    for (auto &clause: clauses) {
+        tmp = resultHandler->getCombined(tmp, evaluateClause(clause));
+        if (tmp->isFalse() || tmp->isEmpty()) { return false; }
     }
     return true;
 }
@@ -88,10 +97,10 @@ Result PQLEvaluator::evaluate(Query &query) {
         auto pair = pq.top();
         pq.pop();
         std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
-        if (!std::get<0>(pair.second)) {         // no select synonyms
-            if (!evaluateGroupAsBoolean(group)) {// boolean group is false
-                return {false};
-            }
+        if (!std::get<1>(pair.second)) {// no select synonyms
+            if (!evaluateBooleanGroup(group)) { return {false}; }
+        } else if (!std::get<0>(pair.second)) {// group with irrelevant synonyms
+            if (!evaluateIrrelevantGroup(group)) { return {false}; }
         } else {// those with selectSyns (and if select has synonym(s))
             for (auto &clause: group) {
                 res = resultHandler->getCombined(res, evaluateClause(clause));
