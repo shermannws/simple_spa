@@ -1,23 +1,24 @@
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Pkb.h"
 #include "PKB/PkbWriter.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test initialising PKB Writer") {
+TEST_CASE_METHOD(UnitTestFixture, "Test initialising PKB Writer") {
     Pkb pkb = Pkb();
 
     REQUIRE_NOTHROW(pkb.createPkbWriter());
 }
 
-TEST_CASE("Test PKBConcreteWriter Methods - Assert no throw") {
+TEST_CASE_METHOD(UnitTestFixture, "Test PKBConcreteWriter Methods - Assert no throw") {
     Pkb pkb = Pkb();
     auto writer = pkb.createPkbWriter();
 
     REQUIRE(1 == 1);
 }
 
-TEST_CASE("Test set new map as CFGStore through Writer") {
+TEST_CASE_METHOD(UnitTestFixture, "Test set new map as CFGStore through Writer") {
     Pkb pkb = Pkb();
     auto writer = pkb.createPkbWriter();
 

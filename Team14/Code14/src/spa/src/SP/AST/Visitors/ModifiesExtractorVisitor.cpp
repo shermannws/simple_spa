@@ -4,6 +4,7 @@
 #include "Commons/Entities/ReadStatement.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
+#include "Commons/EntityFactory.h"
 #include "ModifiesExtractorVisitor.h"
 #include "VisitorUtility.h"
 
@@ -21,14 +22,14 @@ void ModifiesExtractorVisitor::visitAssignNode(const std::shared_ptr<AssignNode>
                                                std::vector<std::shared_ptr<Statement>> parents,
                                                std::shared_ptr<Procedure> proc) const {
     return VisitorUtility::addAllVariableRelationshipFrom(node->getVar(),
-                                                          std::make_shared<AssignStatement>(node->getStatementNumber()),
+                                                          EntityFactory::createStatementFromStatementNode(node),
                                                           parents, this->funcStmt, proc, this->funcProc);
 }
 
 void ModifiesExtractorVisitor::visitReadNode(const std::shared_ptr<ReadNode> &node,
                                              std::vector<std::shared_ptr<Statement>> parents,
                                              std::shared_ptr<Procedure> proc) const {
-    return VisitorUtility::addAllVariableRelationshipFrom(
-            node->getVar(), std::make_shared<ReadStatement>(node->getStatementNumber(), node->getVar()->getVarName()),
-            parents, this->funcStmt, proc, this->funcProc);
+    return VisitorUtility::addAllVariableRelationshipFrom(node->getVar(),
+                                                          EntityFactory::createStatementFromStatementNode(node),
+                                                          parents, this->funcStmt, proc, this->funcProc);
 }

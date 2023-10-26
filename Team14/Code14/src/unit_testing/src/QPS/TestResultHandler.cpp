@@ -1,3 +1,4 @@
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "QPS/Evaluators/PQLEvaluator.h"
 
 #include <unordered_map>
@@ -7,7 +8,7 @@
 #include "Commons/Entities/Variable.h"
 #include "catch.hpp"
 
-TEST_CASE("Test Result combiner") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
 
     SECTION("Test both tuples, should return tuple result") {
         std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};

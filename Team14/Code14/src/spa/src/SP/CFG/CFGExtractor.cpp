@@ -3,7 +3,7 @@
 #include <utility>
 
 #include "CFGExtractor.h"
-#include "Commons/StatementFactory.h"
+#include "Commons/EntityFactory.h"
 
 CFGExtractor::CFGExtractor(std::shared_ptr<PkbWriter> pkbWriter) : pkbWriter(std::move(pkbWriter)) {}
 
@@ -39,7 +39,7 @@ void CFGExtractor::extractNextRelationship(const std::shared_ptr<CFGNode> &head,
         StatementNumber stmtNum = cfgNode->getStatementNumber();
         StatementType stmtType = cfgNode->getStatementType();
         AttrValue attrValue = cfgNode->getAttrValue();
-        statements[stmtNum] = StatementFactory::createStatement(stmtNum, stmtType, attrValue);
+        statements[stmtNum] = EntityFactory::createStatement(stmtNum, stmtType, attrValue);
     }
 
     // DFS for better space efficiency

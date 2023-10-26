@@ -1,12 +1,13 @@
 #include <vector>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "SP/AST/Nodes/ProgramNode.h"
 #include "SP/SPParser.h"
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
 #include "catch.hpp"
 
-TEST_CASE("Valid program with single statements") {
+TEST_CASE_METHOD(UnitTestFixture, "Valid program with single statements") {
     SPParser parser;
 
     SECTION("Single read") {
@@ -93,7 +94,7 @@ TEST_CASE("Valid program with single statements") {
     }
 }
 
-TEST_CASE("Valid program with multiple statements") {
+TEST_CASE_METHOD(UnitTestFixture, "Valid program with multiple statements") {
     SPParser parser;
 
     std::vector<SPToken> tokens = {
@@ -131,7 +132,7 @@ TEST_CASE("Valid program with multiple statements") {
     REQUIRE_NOTHROW(parser.parse(tokens));
 }
 
-TEST_CASE("Valid program to test conditional expressions") {
+TEST_CASE_METHOD(UnitTestFixture, "Valid program to test conditional expressions") {
     SPParser parser;
 
     SECTION("Simple rel_expr") {

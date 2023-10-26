@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "Commons/Entities/Constant.h"
 #include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Statement.h"
@@ -10,7 +11,7 @@
 
 using namespace std;
 
-TEST_CASE("Test Entity Storage and Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Entity Storage and Retrieval") {
     auto mockStatement = std::make_shared<Statement>(Statement(1, StatementType::Assign));
     auto mockVariable = std::make_shared<Variable>(Variable("x"));
     auto mockConstant = std::make_shared<Constant>(Constant("2"));

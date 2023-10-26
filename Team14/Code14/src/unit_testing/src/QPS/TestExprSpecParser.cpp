@@ -1,8 +1,9 @@
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "QPS/Parsers/ExprSpecParser.h"
 
 #include "catch.hpp"
 
-TEST_CASE("extractExpressionSpec") {
+TEST_CASE_METHOD(UnitTestFixture, "extractExpressionSpec") {
     SECTION("wildcard") {
         std::string input = "_";
         auto tokenizer = std::make_shared<Tokenizer>(input);

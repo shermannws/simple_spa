@@ -1,6 +1,6 @@
 #include <stack>
 
-#include "Commons/StatementFactory.h"
+#include "Commons/EntityFactory.h"
 #include "SP/AST/Nodes/StatementNode.h"
 #include "SP/AST/Nodes/VariableNode.h"
 #include "VisitorUtility.h"
@@ -22,7 +22,7 @@ void VisitorUtility::addAllVariableRelationshipFrom(
         if (ptr) {
             // Add stmt-var relationships
             // Add direct relationship
-            auto variable = std::make_shared<Variable>(ptr->getVarName());
+            auto variable = EntityFactory::createVariable(ptr->getVarName());
             funcStmt(s, variable);
             // Add indirect relationships between parent and variable
             for (const auto &parent: parents) { funcStmt(parent, variable); }

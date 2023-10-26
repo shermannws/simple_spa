@@ -1,11 +1,12 @@
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/CFGStore/CFGStore.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test initialising CFGStore") { REQUIRE_NOTHROW(CFGStore()); }
+TEST_CASE_METHOD(UnitTestFixture, "Test initialising CFGStore") { REQUIRE_NOTHROW(CFGStore()); }
 
-TEST_CASE("Test CFGStore Methods") {
+TEST_CASE_METHOD(UnitTestFixture, "Test CFGStore Methods") {
     SECTION("Constructor initializes an empty store") {
         CFGStore cfgStore = CFGStore();
         REQUIRE(cfgStore.getBeginIterator() == cfgStore.getEndIterator());
