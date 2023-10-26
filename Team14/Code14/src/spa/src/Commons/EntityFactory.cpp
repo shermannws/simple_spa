@@ -99,6 +99,7 @@ std::shared_ptr<CallStatement> EntityFactory::createCallStatement(StatementNumbe
 void EntityFactory::clearCaches() {
     statementCache.clear();
     variableCache.clear();
+    constantCache.clear();
     procedureCache.clear();
 }
 
