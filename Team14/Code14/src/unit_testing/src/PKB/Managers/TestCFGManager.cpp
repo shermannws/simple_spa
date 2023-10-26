@@ -1,11 +1,12 @@
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Managers/CFGManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test initialising CFGManager") { REQUIRE_NOTHROW(CFGManager()); }
+TEST_CASE_METHOD(UnitTestFixture, "Test initialising CFGManager") { REQUIRE_NOTHROW(CFGManager()); }
 
-TEST_CASE("Test CFGManager Methods") {
+TEST_CASE_METHOD(UnitTestFixture, "Test CFGManager Methods") {
     SECTION("Storing new map as the store") {
         CFGManager cfgManager = CFGManager();
         std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> temp =

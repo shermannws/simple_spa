@@ -1,9 +1,10 @@
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Managers/WhilePatternManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test While Pattern Storage Initialisation") {
+TEST_CASE_METHOD(UnitTestFixture, "Test While Pattern Storage Initialisation") {
     WhilePatternManager whilePatternManager = WhilePatternManager();
     Variable var = Variable("x");
 
@@ -12,7 +13,7 @@ TEST_CASE("Test While Pattern Storage Initialisation") {
     REQUIRE(whilePatternManager.getAllStmtVarPair().empty());
 }
 
-TEST_CASE("Test While Pattern Storage") {
+TEST_CASE_METHOD(UnitTestFixture, "Test While Pattern Storage") {
     WhilePatternManager whilePatternManager = WhilePatternManager();
     Statement whileStmt = Statement(1, StatementType::While);
     Variable var = Variable("x");
@@ -22,7 +23,7 @@ TEST_CASE("Test While Pattern Storage") {
             make_shared<vector<shared_ptr<Variable>>>(vector<shared_ptr<Variable>>{make_shared<Variable>(var)})));
 }
 
-TEST_CASE("Test While Pattern Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test While Pattern Retrieval") {
     WhilePatternManager whilePatternManager = WhilePatternManager();
     shared_ptr<Statement> whileStmt1 = make_shared<Statement>(Statement(1, StatementType::While));
     shared_ptr<Statement> whileStmt2 = make_shared<Statement>(Statement(2, StatementType::While));

@@ -1,11 +1,12 @@
 #include <memory>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Managers/AssignPatternManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test Assignment Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Assignment Retrieval") {
     AssignPatternManager assignmentManager = AssignPatternManager();
 
     // Test a = w + (x + y) + z

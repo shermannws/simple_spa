@@ -1,11 +1,12 @@
 #include <memory>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Managers/EntitiesManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test Entities Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Entities Retrieval") {
     EntitiesManager manager = EntitiesManager();
 
     Statement statement1 = Statement(1, StatementType::Assign);
