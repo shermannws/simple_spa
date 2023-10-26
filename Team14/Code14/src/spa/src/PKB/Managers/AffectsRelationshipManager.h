@@ -5,6 +5,7 @@
 #include "PKB/Commons/Assignment.h"
 #include "PKB/Managers/StmtToStmtRelationshipManager.h"
 #include "PKB/RelationshipStores/AffectsRelationshipStore.h"
+#include "PKB/Commons/ClauseGroup.h"
 
 /**
  * @class AffectsRelationshipManager is responsible for storing and retrieving the Affects relationship
