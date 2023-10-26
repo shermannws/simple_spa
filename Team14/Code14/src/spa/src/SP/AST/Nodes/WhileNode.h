@@ -20,7 +20,7 @@ public:
      * @param parents Parents of the WhileNode
      * @param proc Procedure containing the WhileNode
      */
-    virtual void visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    virtual void visitWhileNode(const std::shared_ptr<WhileNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                                 std::shared_ptr<Procedure> proc) const = 0;
 };
 
@@ -28,7 +28,7 @@ public:
  * ASTNode to represent a while statement.
  * Inherits from the StatementNode abstract class.
  */
-class WhileNode : public StatementNode {
+class WhileNode : public StatementNode, public std::enable_shared_from_this<WhileNode> {
 private:
     /**
      * The conditional expression of the while statement.
