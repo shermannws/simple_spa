@@ -1,9 +1,10 @@
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "QPS/Evaluators/PQLEvaluator.h"
 #include "QPS/Parsers/PQLParser.h"
 #include "QPSTestUtil.h"
 
-#include <unordered_map>
 
+#include <unordered_map>
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
 #include "Commons/Entities/Variable.h"
@@ -15,7 +16,7 @@ using namespace std;
 
 std::shared_ptr<StubPkbReader> stubPkbReader = std::make_shared<StubPkbReader>();
 
-TEST_CASE("Test formatResult") {
+TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
     // TODO  test BOOLEAN, attrRef, tuplle with attrRef elem
     SECTION("Uses query multiple synonym tuple") {
         PQLParser parser("assign a; variable x; Select <x, a> such that Uses(a, x)");
@@ -87,7 +88,7 @@ TEST_CASE("Test formatResult") {
     }
 }
 
-TEST_CASE("Test UsesSuchThatStrategy") {
+TEST_CASE_METHOD(UnitTestFixture, "Test UsesSuchThatStrategy") {
     // USES(STMTREF, ENTREF)
     SECTION("getUsesStmtPair") {
         PQLParser parser("assign a; variable v; Select a such that Uses(a, v)");
@@ -243,7 +244,7 @@ TEST_CASE("Test UsesSuchThatStrategy") {
     }
 }
 
-TEST_CASE("Test ModifiesSuchThatStrategy") {
+TEST_CASE_METHOD(UnitTestFixture, "Test ModifiesSuchThatStrategy") {
     // MODIFIES(STMTREF, ENTREF)
     SECTION("getModifiesStmtPair") {
         PQLParser parser("stmt s; variable v; Select s such that Modifies(s, v)");
@@ -401,7 +402,7 @@ TEST_CASE("Test ModifiesSuchThatStrategy") {
     }
 }
 
-TEST_CASE("Test NextSuchThatStrategy") {
+TEST_CASE_METHOD(UnitTestFixture, "Test NextSuchThatStrategy") {
     // evaluateSynSyn
     SECTION("leftRef == rightRef") {// false
         PQLParser parser("stmt s; Select s such that Next(s,s)");
@@ -533,7 +534,7 @@ TEST_CASE("Test NextSuchThatStrategy") {
     }
 }
 
-TEST_CASE("Test NextStarSuchThatStrategy") {
+TEST_CASE_METHOD(UnitTestFixture, "Test NextStarSuchThatStrategy") {
     // evaluateSynSyn
     SECTION("leftRef == rightRef, getNextStarSameStmt") {
         PQLParser parser("assign a; Select a such that Next*(a,a)");
@@ -670,7 +671,7 @@ TEST_CASE("Test NextStarSuchThatStrategy") {
     }
 }
 
-TEST_CASE("Test WithStrategy") {
+TEST_CASE_METHOD(UnitTestFixture, "Test WithStrategy") {
     // evaluateSynSyn
     SECTION("leftRef == rightRef") {
         PQLParser parser("read r; Select r with r.varName = r.varName");
@@ -797,7 +798,7 @@ TEST_CASE("Test WithStrategy") {
     }
 }
 
-TEST_CASE("Test QPS Flow - Assign With Pattern") {
+TEST_CASE_METHOD(UnitTestFixture, "Test QPS Flow - Assign With Pattern") {
     PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
 
     // build a query for the query "assign a; Select a pattern a(_, _)"
@@ -830,7 +831,7 @@ TEST_CASE("Test QPS Flow - Assign With Pattern") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("assign pattern a(wildcard , expr-spec)") {// getAssignStmtsByRhs, hasRhsWildCard == false
+TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(wildcard , expr-spec)") {// getAssignStmtsByRhs, hasRhsWildCard == false
     PQLParser parser("assign a; Select a pattern a(_, \"x   + y\")");
     Query queryObj = parser.parse();
 
@@ -843,7 +844,7 @@ TEST_CASE("assign pattern a(wildcard , expr-spec)") {// getAssignStmtsByRhs, has
     REQUIRE(find(results.begin(), results.end(), "5") != results.end());
 }
 
-TEST_CASE("assign pattern a(wildcard , _expr-spec_)") {// getAssignStmtsByRhs, hasRhsWildCard == true
+TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(wildcard , _expr-spec_)") {// getAssignStmtsByRhs, hasRhsWildCard == true
     PQLParser parser("assign a; Select a pattern a(_, _\"a/(b+c)\"_)");
     Query queryObj = parser.parse();
 
@@ -856,7 +857,7 @@ TEST_CASE("assign pattern a(wildcard , _expr-spec_)") {// getAssignStmtsByRhs, h
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("assign pattern a(var_synonym, wildcard)") {// getAllAssignStmtVarPair()
+TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(var_synonym, wildcard)") {// getAllAssignStmtVarPair()
     PQLParser parser("assign a; variable v; Select a pattern a(v, _)");
     Query queryObj = parser.parse();
 
@@ -869,7 +870,7 @@ TEST_CASE("assign pattern a(var_synonym, wildcard)") {// getAllAssignStmtVarPair
     REQUIRE(find(results.begin(), results.end(), "2") != results.end());
 }
 
-TEST_CASE("assign pattern a(var_synonym, _expr-spec_)") {// getAssignStmtsVarPairByRhs, hasWildCard == true
+TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(var_synonym, _expr-spec_)") {// getAssignStmtsVarPairByRhs, hasWildCard == true
     PQLParser parser("assign a; variable v; Select a pattern a(v, _\"(a-b)+c\"_)");
     Query queryObj = parser.parse();
 
@@ -882,7 +883,7 @@ TEST_CASE("assign pattern a(var_synonym, _expr-spec_)") {// getAssignStmtsVarPai
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("assign pattern a(var_synonym, expr-spec)") {// getAssignStmtsVarPairByRhs, hasWildcard == false
+TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(var_synonym, expr-spec)") {// getAssignStmtsVarPairByRhs, hasWildcard == false
     PQLParser parser("assign a; variable v; Select v pattern a(v, \"a-b*c\")");
     Query queryObj = parser.parse();
 
@@ -896,7 +897,7 @@ TEST_CASE("assign pattern a(var_synonym, expr-spec)") {// getAssignStmtsVarPairB
     REQUIRE(find(results.begin(), results.end(), "var3") != results.end());
 }
 
-TEST_CASE("assign pattern a(char_string , wildcard)") {// getAssignStmtsByLhs
+TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(char_string , wildcard)") {// getAssignStmtsByLhs
     PQLParser parser("assign a; Select a pattern a(\"x\", _)");
     Query queryObj = parser.parse();
 
@@ -908,7 +909,7 @@ TEST_CASE("assign pattern a(char_string , wildcard)") {// getAssignStmtsByLhs
     REQUIRE(find(results.begin(), results.end(), "6") != results.end());
 }
 
-TEST_CASE("assign pattern a(char_string , expr-spec)") {// getAssignStmtsByLhsRhs, hasRhsWildcard = true
+TEST_CASE_METHOD(UnitTestFixture, "assign pattern a(char_string , expr-spec)") {// getAssignStmtsByLhsRhs, hasRhsWildcard = true
     PQLParser parser("assign a; Select a pattern a(\"x\", _\"(a-b)\"_)");
     Query queryObj = parser.parse();
 
@@ -921,7 +922,7 @@ TEST_CASE("assign pattern a(char_string , expr-spec)") {// getAssignStmtsByLhsRh
     REQUIRE(find(results.begin(), results.end(), "100000") != results.end());
 }
 
-TEST_CASE("assign pattern, select synonym not in clause ") {// getAssignStmtsByLhsRhs, hasRhsWildcard = false
+TEST_CASE_METHOD(UnitTestFixture, "assign pattern, select synonym not in clause ") {// getAssignStmtsByLhsRhs, hasRhsWildcard = false
     PQLParser parser("assign a; variable v; Select v pattern a(\"noneCase\", \"(a-b)\")");
     Query queryObj = parser.parse();
 
@@ -932,7 +933,7 @@ TEST_CASE("assign pattern, select synonym not in clause ") {// getAssignStmtsByL
     REQUIRE(results.size() == 0);
 }
 
-TEST_CASE("if pattern") {
+TEST_CASE_METHOD(UnitTestFixture, "if pattern") {
     SECTION("getAllIf for pattern if(_,_,_)") {
         PQLParser parser("if if; Select if pattern if(_,_,_)");
         Query queryObj = parser.parse();
@@ -995,7 +996,7 @@ TEST_CASE("if pattern") {
     }
 }
 
-TEST_CASE("while pattern") {
+TEST_CASE_METHOD(UnitTestFixture, "while pattern") {
     SECTION("getAllWhile for pattern while (_,_)") {
         PQLParser parser("while w; Select w pattern w(_,_)");
         Query queryObj = parser.parse();
@@ -1049,7 +1050,7 @@ TEST_CASE("while pattern") {
     }
 }
 
-TEST_CASE("Calls and Calls* clauses") {
+TEST_CASE_METHOD(UnitTestFixture, "Calls and Calls* clauses") {
     SECTION("boolean results, Calls (_,_)") {
         // Calls(_,_) - hasCalls()
         PQLParser parser("assign a; Select a such that Calls(_,_)");
@@ -1199,7 +1200,7 @@ TEST_CASE("Calls and Calls* clauses") {
     }
 }
 
-TEST_CASE("multiclause, pattern only - synonym in empty result table") {
+TEST_CASE_METHOD(UnitTestFixture, "multiclause, pattern only - synonym in empty result table") {
     // assign a, a1; variable v; Select a pattern a (v,_"multiclauseTest+patternOnly"_) and a(v1,_)
 
     auto pc1 = QPSTestUtil::createPatternClause(ClauseType::Assign, "a", RootType::Synonym, "v",
@@ -1227,7 +1228,7 @@ TEST_CASE("multiclause, pattern only - synonym in empty result table") {
     REQUIRE(results.size() == 0);
 }
 
-TEST_CASE("multiclause, suchThat only - False Result table ") {// syn not involved in clauses
+TEST_CASE_METHOD(UnitTestFixture, "multiclause, suchThat only - False Result table ") {// syn not involved in clauses
     // assign a, a1; variable v; Select a1 such that Follows*(a,20) and  Parent(1,10) and Uses(1, "x")
 
     auto sc1 = QPSTestUtil::createSuchThatClause(ClauseType::FollowsStar, RefType::StmtRef, RootType::Synonym,
@@ -1261,7 +1262,7 @@ TEST_CASE("multiclause, suchThat only - False Result table ") {// syn not involv
     REQUIRE(results.size() == 0);
 }
 
-TEST_CASE("multiclause, pattern and suchThat - True Result table ") {
+TEST_CASE_METHOD(UnitTestFixture, "multiclause, pattern and suchThat - True Result table ") {
     // assign a1; Select a1 such that Parent(1,10) and Uses(1, "multiclauseTrue")
 
     auto sc2 = QPSTestUtil::createSuchThatClause(ClauseType::Parent, RefType::StmtRef, RootType::Integer,
@@ -1292,7 +1293,7 @@ TEST_CASE("multiclause, pattern and suchThat - True Result table ") {
     REQUIRE(find(results.begin(), results.end(), "3") != results.end());
 }
 
-TEST_CASE("multiclause, pattern and suchThat - synonym in tuple result table") {
+TEST_CASE_METHOD(UnitTestFixture, "multiclause, pattern and suchThat - synonym in tuple result table") {
     // assign a, a1; variable v; Select a such that Follows*(a,20) pattern a (v,_"1+multiclauseTest"_) and a1(v,_) such
     // that Parent(1,10)
 
@@ -1326,7 +1327,7 @@ TEST_CASE("multiclause, pattern and suchThat - synonym in tuple result table") {
     REQUIRE(find(results.begin(), results.end(), "4") != results.end());
 }
 
-TEST_CASE("multiclause, pattern and suchThat - synonym not in tuple result table") {
+TEST_CASE_METHOD(UnitTestFixture, "multiclause, pattern and suchThat - synonym not in tuple result table") {
     // assign a, a1; variable v; constant c; Select c such that pattern a (v,_"1+multiclauseTest"_) and
     // a(v,_) such that Parent(1,10)
 
@@ -1360,7 +1361,7 @@ TEST_CASE("multiclause, pattern and suchThat - synonym not in tuple result table
     REQUIRE(results.size() == 4);
 }
 
-TEST_CASE("boolean result clause query") {
+TEST_CASE_METHOD(UnitTestFixture, "boolean result clause query") {
     SECTION("no constraint clauses") {
         PQLParser parser("Select BOOLEAN");
         Query queryObj = parser.parse();
@@ -1401,7 +1402,7 @@ TEST_CASE("boolean result clause query") {
     }
 }
 
-TEST_CASE("tuple result-clause query") {
+TEST_CASE_METHOD(UnitTestFixture, "tuple result-clause query") {
     SECTION("no constraint clauses") {
         PQLParser parser("read re; if i; Select <i, re>");
         Query queryObj = parser.parse();
@@ -1449,7 +1450,7 @@ TEST_CASE("tuple result-clause query") {
 }
 
 
-TEST_CASE("attrRef result-clause query") {
+TEST_CASE_METHOD(UnitTestFixture, "attrRef result-clause query") {
     SECTION("single attrRef,no constraint clauses") {
         PQLParser parser("read re; Select re.varName");
         Query queryObj = parser.parse();
