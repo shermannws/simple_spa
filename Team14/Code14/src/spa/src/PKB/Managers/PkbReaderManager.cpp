@@ -19,7 +19,8 @@ PkbReaderManager::PkbReaderManager(std::shared_ptr<AssignPatternManager> assignm
       callsRelationshipManager(callsRelationshipManager),
       modifiesProcRelationshipManager(modifiesProcRelationshipManager),
       usesProcRelationshipManager(usesProcRelationshipManager), ifPatternManager(ifPatternManager),
-      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager), affectsRelationshipManager(affectsRelationshipManager){};
+      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager),
+      affectsRelationshipManager(affectsRelationshipManager){};
 
 std::vector<Entity> PkbReaderManager::getAllVariables() const { return this->entityManager->getAllVariables(); }
 
@@ -460,20 +461,17 @@ std::vector<std::vector<Entity>> PkbReaderManager::getAllWhileStmtVarPair() cons
 }
 
 void PkbReaderManager::triggerAffectsCalculation() const {
-    if (this->affectsRelationshipManager->hasAffectsBeenCalculated()) {
-        return;
-    }
+    if (this->affectsRelationshipManager->hasAffectsBeenCalculated()) { return; }
     this->affectsRelationshipManager->calculateAffects(
             assignmentManager->getAllAssignStmtsAsStmts(),
-            [this] (std::shared_ptr<Statement> stmt) { return modifiesRelationshipManager->getModifiedVar(stmt); },
-            [this] (Statement& stmt, Variable& var) { return usesRelationshipManager->isRelationship(stmt, var); },
-            [this] (Statement& stmt, Variable& var) { return modifiesRelationshipManager->isRelationship(stmt, var); },
-            [this] (std::shared_ptr<Statement> stmt) { return nextRelationshipManager->getAllNextOfStmt(stmt); }
-            );
+            [this](std::shared_ptr<Statement> stmt) { return modifiesRelationshipManager->getModifiedVar(stmt); },
+            [this](Statement &stmt, Variable &var) { return usesRelationshipManager->isRelationship(stmt, var); },
+            [this](Statement &stmt, Variable &var) { return modifiesRelationshipManager->isRelationship(stmt, var); },
+            [this](std::shared_ptr<Statement> stmt) { return nextRelationshipManager->getAllNextOfStmt(stmt); });
 }
 
 std::vector<std::vector<Entity>> PkbReaderManager::getAffectsPair(StatementType formerType,
-                                                                   StatementType latterType) const {
+                                                                  StatementType latterType) const {
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }

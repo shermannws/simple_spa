@@ -31,11 +31,12 @@ public:
     /**
      * @brief Calculates the Affects relationship
      */
-    void calculateAffects(const std::unordered_set<std::shared_ptr<Statement>> &assignStmts,
-                          const std::function<std::shared_ptr<Variable>(std::shared_ptr<Statement>)> &getVariable,
-                          const std::function<bool(Statement &, Variable &)> &hasUses,
-                          const std::function<bool(Statement &, Variable &)> &hasModifies,
-                          const std::function<std::shared_ptr<EntityStore<Statement>>(std::shared_ptr<Statement>)> &getNext);
+    void
+    calculateAffects(const std::unordered_set<std::shared_ptr<Statement>> &assignStmts,
+                     const std::function<std::shared_ptr<Variable>(std::shared_ptr<Statement>)> &getVariable,
+                     const std::function<bool(Statement &, Variable &)> &hasUses,
+                     const std::function<bool(Statement &, Variable &)> &hasModifies,
+                     const std::function<std::shared_ptr<EntityStore<Statement>>(std::shared_ptr<Statement>)> &getNext);
 
     /**
      * @brief Clears the Affects relationship store

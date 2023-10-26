@@ -911,8 +911,7 @@ public:
      * @param latterType The type of the latter statement
      * @return A vector of Statement, Statement pair stored in a vector
      */
-    std::vector<std::vector<Entity>> getAffectsPair(StatementType formerType,
-                                                            StatementType latterType) const override;
+    std::vector<std::vector<Entity>> getAffectsPair(StatementType formerType, StatementType latterType) const override;
 
     /**
      * Returns a vector of statements of the given statement type which affects the given statement DIRECTLY

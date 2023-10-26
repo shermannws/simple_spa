@@ -253,8 +253,7 @@ public:
 
     std::vector<std::vector<Entity>> getAllWhileStmtVarPair() const override;
 
-    std::vector<std::vector<Entity>> getAffectsPair(StatementType formerType,
-                                                    StatementType latterType) const override;
+    std::vector<std::vector<Entity>> getAffectsPair(StatementType formerType, StatementType latterType) const override;
 
     std::vector<Entity> getAffectsTypeStmt(StatementType type, Statement &statement) const override;
 

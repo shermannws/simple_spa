@@ -1,6 +1,6 @@
 #include "../TestingUtilities/TestFixture/UnitTestFixture.h"
-#include "PKB/Pkb.h"
 #include "Commons/Entities/AssignStatement.h"
+#include "PKB/Pkb.h"
 #include "catch.hpp"
 
 using namespace std;
@@ -697,7 +697,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Affects Relationship") {
     writer->addAssignPattern(stmt3, varZ, make_shared<Expression>("z + x"));
     writer->addNextRelationship(stmt2, stmt3);
 
-    REQUIRE(reader->getAffectsPair(StatementType::Assign, StatementType::Assign).size() ==3);
+    REQUIRE(reader->getAffectsPair(StatementType::Assign, StatementType::Assign).size() == 3);
 
     REQUIRE(reader->getAffectsTypeStmt(StatementType::Assign, *stmt1).empty());
     REQUIRE(reader->getAffectsTypeStmt(StatementType::Assign, *stmt2).size() == 1);

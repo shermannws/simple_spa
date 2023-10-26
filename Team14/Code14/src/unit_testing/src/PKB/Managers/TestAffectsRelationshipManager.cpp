@@ -1,5 +1,12 @@
 #include <memory>
 
+#include "Commons/Entities/AssignStatement.h"
+#include "Commons/Entities/CallStatement.h"
+#include "Commons/Entities/IfStatement.h"
+#include "Commons/Entities/Statement.h"
+#include "Commons/Entities/StatementType.h"
+#include "Commons/Entities/Variable.h"
+#include "Commons/Entities/WhileStatement.h"
 #include "PKB/Managers/AffectsRelationshipManager.h"
 #include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
@@ -14,13 +21,6 @@
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/WhilePatternManager.h"
-#include "Commons/Entities/AssignStatement.h"
-#include "Commons/Entities/WhileStatement.h"
-#include "Commons/Entities/IfStatement.h"
-#include "Commons/Entities/CallStatement.h"
-#include "Commons/Entities/Statement.h"
-#include "Commons/Entities/Variable.h"
-#include "Commons/Entities/StatementType.h"
 #include "catch.hpp"
 
 using namespace std;
@@ -42,10 +42,10 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         auto affectsRelationshipManager = std::make_shared<AffectsRelationshipManager>();
 
         auto pkbReaderManager = std::make_shared<PkbReaderManager>(PkbReaderManager(
-                assignmentManager, entitiesManager, followsRelationshipManager,
-                usesRelationshipManager, modifiesRelationshipManager, parentRelationshipManager,
-                callsRelationshipManager, modifiesProcRelationshipManager, usesProcRelationshipManager,
-                ifPatternManager, whilePatternManager, nextRelationshipManager, affectsRelationshipManager));
+                assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
+                modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
+                modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
+                nextRelationshipManager, affectsRelationshipManager));
 
         /* Construct sample SIMPLE program
         procedure Second {
@@ -67,12 +67,14 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         auto stmt1 = make_shared<AssignStatement>(AssignStatement(1));
         auto varX = make_shared<Variable>("x");
         modifiesRelationshipManager->storeRelationship(stmt1, varX);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt1, varX, make_shared<Expression>("0"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt1, varX, make_shared<Expression>("0"))));
 
         auto stmt2 = make_shared<AssignStatement>(AssignStatement(2));
         auto varI = make_shared<Variable>("i");
         modifiesRelationshipManager->storeRelationship(stmt2, varI);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt2, varI, make_shared<Expression>("5"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt2, varI, make_shared<Expression>("5"))));
         nextRelationshipManager->storeRelationship(stmt1, stmt2, true);
 
         auto stmt3 = make_shared<WhileStatement>(WhileStatement(3));
@@ -83,7 +85,8 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         modifiesRelationshipManager->storeRelationship(stmt4, varX);
         usesRelationshipManager->storeRelationship(stmt4, varX);
         usesRelationshipManager->storeRelationship(stmt4, varY);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt4, varX, make_shared<Expression>("x + 2*y"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt4, varX, make_shared<Expression>("x + 2*y"))));
         nextRelationshipManager->storeRelationship(stmt3, stmt4, true);
 
         auto stmt5 = make_shared<CallStatement>(CallStatement(5, "Third"));
@@ -96,7 +99,8 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         auto stmt6 = make_shared<AssignStatement>(AssignStatement(6));
         modifiesRelationshipManager->storeRelationship(stmt6, varI);
         usesRelationshipManager->storeRelationship(stmt6, varI);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt6, varI, make_shared<Expression>("i - 1"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt6, varI, make_shared<Expression>("i - 1"))));
         nextRelationshipManager->storeRelationship(stmt5, stmt6, true);
         nextRelationshipManager->storeRelationship(stmt6, stmt3, true);
 
@@ -106,12 +110,14 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         auto stmt8 = make_shared<AssignStatement>(AssignStatement(8));
         modifiesRelationshipManager->storeRelationship(stmt8, varX);
         usesRelationshipManager->storeRelationship(stmt8, varX);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt8, varX, make_shared<Expression>("x+1"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt8, varX, make_shared<Expression>("x+1"))));
         nextRelationshipManager->storeRelationship(stmt7, stmt8, true);
 
         auto stmt9 = make_shared<AssignStatement>(AssignStatement(9));
         modifiesRelationshipManager->storeRelationship(stmt9, varZ);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt9, varZ, make_shared<Expression>("1"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt9, varZ, make_shared<Expression>("1"))));
         nextRelationshipManager->storeRelationship(stmt7, stmt9, true);
 
         auto stmt10 = make_shared<AssignStatement>(AssignStatement(10));
@@ -119,14 +125,16 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         usesRelationshipManager->storeRelationship(stmt10, varZ);
         usesRelationshipManager->storeRelationship(stmt10, varX);
         usesRelationshipManager->storeRelationship(stmt10, varI);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt10, varZ, make_shared<Expression>("z + x + i"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt10, varZ, make_shared<Expression>("z + x + i"))));
         nextRelationshipManager->storeRelationship(stmt8, stmt10, true);
         nextRelationshipManager->storeRelationship(stmt9, stmt10, true);
 
         auto stmt11 = make_shared<AssignStatement>(AssignStatement(11));
         modifiesRelationshipManager->storeRelationship(stmt11, varY);
         usesRelationshipManager->storeRelationship(stmt11, varZ);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt11, varY, make_shared<Expression>("z + 2"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt11, varY, make_shared<Expression>("z + 2"))));
         nextRelationshipManager->storeRelationship(stmt10, stmt11, true);
 
         auto stmt12 = make_shared<AssignStatement>(AssignStatement(12));
@@ -134,7 +142,8 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         usesRelationshipManager->storeRelationship(stmt12, varX);
         usesRelationshipManager->storeRelationship(stmt12, varY);
         usesRelationshipManager->storeRelationship(stmt12, varZ);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt12, varX, make_shared<Expression>("x * y + z"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt12, varX, make_shared<Expression>("x * y + z"))));
         nextRelationshipManager->storeRelationship(stmt11, stmt12, true);
 
         REQUIRE(pkbReaderManager->isAffects(*stmt11, *stmt12));
@@ -171,10 +180,10 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         auto affectsRelationshipManager = std::make_shared<AffectsRelationshipManager>();
 
         auto pkbReaderManager = std::make_shared<PkbReaderManager>(PkbReaderManager(
-                assignmentManager, entitiesManager, followsRelationshipManager,
-                usesRelationshipManager, modifiesRelationshipManager, parentRelationshipManager,
-                callsRelationshipManager, modifiesProcRelationshipManager, usesProcRelationshipManager,
-                ifPatternManager, whilePatternManager, nextRelationshipManager, affectsRelationshipManager));
+                assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
+                modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
+                modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
+                nextRelationshipManager, affectsRelationshipManager));
 
         /* Construct sample SIMPLE program
         procedure Second {
@@ -188,27 +197,31 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         auto stmt1 = make_shared<AssignStatement>(AssignStatement(1));
         auto varX = make_shared<Variable>("x");
         modifiesRelationshipManager->storeRelationship(stmt1, varX);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt1, varX, make_shared<Expression>("0"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt1, varX, make_shared<Expression>("0"))));
 
         auto stmt2 = make_shared<AssignStatement>(AssignStatement(2));
         auto varY = make_shared<Variable>("y");
         modifiesRelationshipManager->storeRelationship(stmt2, varX);
         usesRelationshipManager->storeRelationship(stmt2, varX);
         usesRelationshipManager->storeRelationship(stmt2, varY);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt2, varX, make_shared<Expression>("x + 2*y"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt2, varX, make_shared<Expression>("x + 2*y"))));
         nextRelationshipManager->storeRelationship(stmt1, stmt2, true);
 
         auto stmt3 = make_shared<AssignStatement>(AssignStatement(3));
         auto varZ = make_shared<Variable>("z");
         modifiesRelationshipManager->storeRelationship(stmt3, varZ);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt3, varZ, make_shared<Expression>("1"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt3, varZ, make_shared<Expression>("1"))));
         nextRelationshipManager->storeRelationship(stmt2, stmt3, true);
 
         auto stmt4 = make_shared<AssignStatement>(AssignStatement(4));
         modifiesRelationshipManager->storeRelationship(stmt4, varZ);
         usesRelationshipManager->storeRelationship(stmt4, varZ);
         usesRelationshipManager->storeRelationship(stmt4, varX);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt4, varZ, make_shared<Expression>("z + x"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt4, varZ, make_shared<Expression>("z + x"))));
         nextRelationshipManager->storeRelationship(stmt3, stmt4, true);
 
         auto stmt5 = make_shared<AssignStatement>(AssignStatement(5));
@@ -216,7 +229,8 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         usesRelationshipManager->storeRelationship(stmt5, varX);
         usesRelationshipManager->storeRelationship(stmt5, varY);
         usesRelationshipManager->storeRelationship(stmt5, varZ);
-        assignmentManager->storeAssignPattern(make_shared<Assignment>(Assignment(stmt5, varX, make_shared<Expression>("x * y + z"))));
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt5, varX, make_shared<Expression>("x * y + z"))));
         nextRelationshipManager->storeRelationship(stmt4, stmt5, true);
 
         REQUIRE(pkbReaderManager->getAffectsPair(StatementType::Assign, StatementType::Assign).size() == 5);

@@ -25,11 +25,11 @@ TEST_CASE_METHOD(
         auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
         auto affectsRelationshipManager = std::make_shared<AffectsRelationshipManager>();
 
-        PkbWriterManager pkbWriterManager =
-                PkbWriterManager(assignmentManager, entitiesManager, followsRelationshipManager,
-                                 usesRelationshipManager, modifiesRelationshipManager, parentRelationshipManager,
-                                 callsRelationshipManager, modifiesProcRelationshipManager, usesProcRelationshipManager,
-                                 ifPatternManager, whilePatternManager, nextRelationshipManager, affectsRelationshipManager);
+        PkbWriterManager pkbWriterManager = PkbWriterManager(
+                assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
+                modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
+                modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
+                nextRelationshipManager, affectsRelationshipManager);
 
         // A -> modifies a, b, c
         // B -> uses x, y, z

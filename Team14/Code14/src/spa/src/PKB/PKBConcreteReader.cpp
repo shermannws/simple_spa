@@ -425,7 +425,7 @@ std::vector<std::vector<Entity>> PkbConcreteReader::getAllWhileStmtVarPair() con
 }
 
 std::vector<std::vector<Entity>> PkbConcreteReader::getAffectsPair(StatementType formerType,
-                                                               StatementType latterType) const {
+                                                                   StatementType latterType) const {
     return this->readerManager->getAffectsPair(formerType, latterType);
 }
 
@@ -449,9 +449,7 @@ bool PkbConcreteReader::isAffects(Statement &statement1, Statement &statement2) 
     return this->readerManager->isAffects(statement1, statement2);
 }
 
-bool PkbConcreteReader::hasAffects() const {
-    return this->readerManager->hasAffects();
-}
+bool PkbConcreteReader::hasAffects() const { return this->readerManager->hasAffects(); }
 
 bool PkbConcreteReader::hasAffectedStmt(Statement &statement) const {
     return this->readerManager->hasAffectedStmt(statement);

@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "PKB/Managers/AffectsRelationshipManager.h"
 #include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/EntitiesManager.h"
@@ -14,7 +15,6 @@
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/WhilePatternManager.h"
-#include "PKB/Managers/AffectsRelationshipManager.h"
 #include "PKB/PkbTypes.h"
 
 /**
@@ -1009,8 +1009,7 @@ public:
      * @param latterType The type of the latter statement
      * @return A vector of Statement, Statement pair stored in a vector
      */
-    std::vector<std::vector<Entity>> getAffectsPair(StatementType formerType,
-                                                    StatementType latterType) const;
+    std::vector<std::vector<Entity>> getAffectsPair(StatementType formerType, StatementType latterType) const;
 
     /**
      * Returns a vector of statements of the given statement type which affects the given statement DIRECTLY

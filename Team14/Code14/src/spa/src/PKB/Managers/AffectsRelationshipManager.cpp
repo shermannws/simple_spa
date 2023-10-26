@@ -4,9 +4,7 @@ AffectsRelationshipManager::AffectsRelationshipManager() : StmtToStmtRelationshi
     this->isAffectsCalculated = false;
 }
 
-bool AffectsRelationshipManager::hasAffectsBeenCalculated() const {
-    return this->isAffectsCalculated;
-}
+bool AffectsRelationshipManager::hasAffectsBeenCalculated() const { return this->isAffectsCalculated; }
 
 void AffectsRelationshipManager::calculateAffects(
         const std::unordered_set<std::shared_ptr<Statement>> &assignStmts,
@@ -17,7 +15,7 @@ void AffectsRelationshipManager::calculateAffects(
 
     if (this->isAffectsCalculated) { return; }
 
-    for (const auto& currentAssignStmt: assignStmts) {
+    for (const auto &currentAssignStmt: assignStmts) {
         std::stack<std::shared_ptr<Statement>> stack;
         std::unordered_set<std::shared_ptr<Statement>> visited;
         std::shared_ptr<Variable> modifiedVar = getVariable(currentAssignStmt);

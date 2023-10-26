@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "PKB/Managers/AffectsRelationshipManager.h"
 #include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/EntitiesManager.h"
@@ -16,7 +17,6 @@
 #include "PKB/Managers/UsesProcRelationshipManager.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "PKB/Managers/WhilePatternManager.h"
-#include "PKB/Managers/AffectsRelationshipManager.h"
 #include "PKB/PkbReader.h"
 #include "PKB/PkbWriter.h"
 
