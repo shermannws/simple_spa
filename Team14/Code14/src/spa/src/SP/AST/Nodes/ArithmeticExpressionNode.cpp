@@ -28,7 +28,8 @@ void ArithmeticExpressionNode::accept(std::shared_ptr<DesignExtractorVisitor> vi
                                       std::vector<std::shared_ptr<Statement>> parents,
                                       std::shared_ptr<Procedure> proc) {
     if (auto aenVisitor = std::dynamic_pointer_cast<ArithmeticExpressionNodeVisitor>(visitor)) {
-        aenVisitor->visitArithmeticExpressionNode(this, parents, proc);
+        aenVisitor->visitArithmeticExpressionNode(
+                std::enable_shared_from_this<ArithmeticExpressionNode>::shared_from_this(), parents, proc);
     }
 }
 

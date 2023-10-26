@@ -19,14 +19,15 @@ public:
      * @param parents Parents of the ProcedureNode
      * @param proc The procedure that the ProcedureNode (aka itself)
      */
-    virtual void visitProcedureNode(ProcedureNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    virtual void visitProcedureNode(const std::shared_ptr<ProcedureNode> &node,
+                                    std::vector<std::shared_ptr<Statement>> parents,
                                     std::shared_ptr<Procedure> proc) const = 0;
 };
 
 /**
  * ASTNode to represent a procedure.
  */
-class ProcedureNode : public ASTNode {
+class ProcedureNode : public ASTNode, public std::enable_shared_from_this<ProcedureNode> {
 private:
     /**
      * The name of the procedure.

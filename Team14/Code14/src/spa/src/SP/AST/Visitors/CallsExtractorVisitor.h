@@ -10,7 +10,7 @@ public:
      * Constructor for CallsExtractorVisitor.
      * @param pkbWriter A shared ptr to a concrete implementation of PkbWriter class
      */
-    CallsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
+    explicit CallsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
     /**
      * Visits a call node and adds the direct call relationship into PKB.
@@ -18,6 +18,6 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitCallNode(CallNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitCallNode(const std::shared_ptr<CallNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                        std::shared_ptr<Procedure> proc) const override;
 };

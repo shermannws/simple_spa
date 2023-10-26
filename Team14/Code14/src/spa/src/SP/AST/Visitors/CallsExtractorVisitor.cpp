@@ -5,7 +5,8 @@
 
 CallsExtractorVisitor::CallsExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter) { this->pkbWriter = pkbWriter; }
 
-void CallsExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void CallsExtractorVisitor::visitCallNode(const std::shared_ptr<CallNode> &node,
+                                          std::vector<std::shared_ptr<Statement>> parents,
                                           std::shared_ptr<Procedure> proc) const {
 
     std::shared_ptr<Procedure> calleePtr = EntityFactory::createProcedure(node->getProcedureName());
