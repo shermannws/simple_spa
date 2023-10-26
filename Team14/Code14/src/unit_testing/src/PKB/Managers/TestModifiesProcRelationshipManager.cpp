@@ -1,12 +1,13 @@
 #include <memory>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/ModifiesProcRelationshipManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test Modifies Procedure-Variable Relationship Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Modifies Procedure-Variable Relationship Retrieval") {
     ModifiesProcRelationshipManager modifiesProcRelationshipManager = ModifiesProcRelationshipManager();
 
     Variable variableX = Variable("x");
@@ -78,7 +79,7 @@ TEST_CASE("Test Modifies Procedure-Variable Relationship Retrieval") {
 }
 
 
-TEST_CASE("Test Modifies Procedure-Variable Transitive Relationship Calculations") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Modifies Procedure-Variable Transitive Relationship Calculations") {
 
     SECTION("Test permutation 1") {
         ModifiesProcRelationshipManager modifiesProcRelationshipManager = ModifiesProcRelationshipManager();

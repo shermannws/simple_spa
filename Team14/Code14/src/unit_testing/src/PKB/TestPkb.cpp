@@ -1,15 +1,16 @@
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Pkb.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test initialising PKB") {
+TEST_CASE_METHOD(UnitTestFixture, "Test initialising PKB") {
     Pkb pkb = Pkb();
 
     REQUIRE(1 == 1);
 }
 
-TEST_CASE("Test PKB end-to-end using Facades") {
+TEST_CASE_METHOD(UnitTestFixture, "Test PKB end-to-end using Facades") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();

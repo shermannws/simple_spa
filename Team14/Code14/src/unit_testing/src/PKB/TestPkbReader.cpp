@@ -1,16 +1,17 @@
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Pkb.h"
 #include "Commons/Entities/AssignStatement.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test initialising PKB Reader") {
+TEST_CASE_METHOD(UnitTestFixture, "Test initialising PKB Reader") {
     Pkb pkb = Pkb();
 
     REQUIRE_NOTHROW(pkb.createPkbReader());
 }
 
-TEST_CASE("Test Entities") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Entities") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -59,7 +60,7 @@ TEST_CASE("Test Entities") {
     REQUIRE(reader->getAllWhile().size() == 1);
 }
 
-TEST_CASE("Uses (Stmt) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Uses (Stmt) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -102,7 +103,7 @@ TEST_CASE("Uses (Stmt) Relationship") {
     REQUIRE(!reader->hasUses(sNew));
 }
 
-TEST_CASE("Uses (Proc) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Uses (Proc) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -143,7 +144,7 @@ TEST_CASE("Uses (Proc) Relationship") {
 }
 
 
-TEST_CASE("Modifies (Stmt) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Modifies (Stmt) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -186,7 +187,7 @@ TEST_CASE("Modifies (Stmt) Relationship") {
     REQUIRE(!reader->hasModifies(sNew));
 }
 
-TEST_CASE("Modifies (Proc) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Modifies (Proc) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -227,7 +228,7 @@ TEST_CASE("Modifies (Proc) Relationship") {
 }
 
 
-TEST_CASE("Follows(*) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Follows(*) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -300,7 +301,7 @@ TEST_CASE("Follows(*) Relationship") {
     REQUIRE(reader->hasFormerStarStmt(s2));
 }
 
-TEST_CASE("Parent(*) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Parent(*) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -374,7 +375,7 @@ TEST_CASE("Parent(*) Relationship") {
 }
 
 
-TEST_CASE("Calls(*) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Calls(*) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -453,7 +454,7 @@ TEST_CASE("Calls(*) Relationship") {
     REQUIRE(reader->getCalleesStar(pNew).empty());
 }
 
-TEST_CASE("Assign Pattern") {
+TEST_CASE_METHOD(UnitTestFixture, "Assign Pattern") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -514,7 +515,7 @@ TEST_CASE("Assign Pattern") {
     REQUIRE(reader->getAssignStmtsVarPairByRhs(eNew, false).empty());
 }
 
-TEST_CASE("Next(*) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Next(*) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -612,7 +613,7 @@ TEST_CASE("Next(*) Relationship") {
     writer->clearCache();
 }
 
-TEST_CASE("If Pattern") {
+TEST_CASE_METHOD(UnitTestFixture, "If Pattern") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -636,7 +637,7 @@ TEST_CASE("If Pattern") {
     REQUIRE(reader->getAllIfStmtVarPair()[0][1] == v);
 }
 
-TEST_CASE("While Pattern") {
+TEST_CASE_METHOD(UnitTestFixture, "While Pattern") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -660,7 +661,7 @@ TEST_CASE("While Pattern") {
     REQUIRE(reader->getAllWhileStmtVarPair()[0][1] == v);
 }
 
-TEST_CASE("Affects Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Affects Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -695,9 +696,9 @@ TEST_CASE("Affects Relationship") {
     writer->addUsesRelationship(stmt3, varX);
     writer->addAssignPattern(stmt3, varZ, make_shared<Expression>("z + x"));
     writer->addNextRelationship(stmt2, stmt3);
-    
+
     REQUIRE(reader->getAffectsPair(StatementType::Assign, StatementType::Assign).size() ==3);
-    
+
     REQUIRE(reader->getAffectsTypeStmt(StatementType::Assign, *stmt1).empty());
     REQUIRE(reader->getAffectsTypeStmt(StatementType::Assign, *stmt2).size() == 1);
     REQUIRE(reader->getAffectsTypeStmt(StatementType::Assign, *stmt3).size() == 2);

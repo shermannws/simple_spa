@@ -1,3 +1,4 @@
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Pkb.h"
 #include "QPS/Parsers/PQLParser.h"
 #include "QPS/QPS.h"
@@ -8,7 +9,7 @@ using namespace std;
 Pkb pkb = Pkb();
 QPS qps = QPS(pkb.createPkbReader());
 
-TEST_CASE("Syntax Errors") {
+TEST_CASE_METHOD(UnitTestFixture, "Syntax Errors") {
     SECTION("in declarations") {
         vector<string> queries = {
                 "assignment a; Select a",
@@ -43,7 +44,7 @@ TEST_CASE("Syntax Errors") {
     }
 }
 
-TEST_CASE("Semantic Errors") {
+TEST_CASE_METHOD(UnitTestFixture, "Semantic Errors") {
     SECTION("in Such That Clause") {
         vector<string> queries = {
                 "assign a; Select a such that Uses(_,_)",      "variable v; Select v such that Uses(v,v)",

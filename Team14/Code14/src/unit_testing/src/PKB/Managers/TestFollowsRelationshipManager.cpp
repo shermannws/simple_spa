@@ -1,11 +1,12 @@
 #include <memory>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test Follows Relationship Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Follows Relationship Retrieval") {
     FollowsRelationshipManager followsRelationshipManager = FollowsRelationshipManager();
 
     REQUIRE(followsRelationshipManager.hasRelationship() == false);

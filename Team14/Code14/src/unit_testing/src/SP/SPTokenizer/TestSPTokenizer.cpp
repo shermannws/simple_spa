@@ -1,10 +1,11 @@
 #include <string>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "Commons/AppConstants.h"
 #include "SP/SPTokenizer.h"
 #include "catch.hpp"
 
-TEST_CASE("SPTokenizer - Valid Tokens") {
+TEST_CASE_METHOD(UnitTestFixture, "SPTokenizer - Valid Tokens") {
 
     SECTION("Name token") {
         std::string input = "var1 var2 var3 var4";
@@ -164,7 +165,7 @@ TEST_CASE("SPTokenizer - Valid Tokens") {
     }
 }
 
-TEST_CASE("Relational operator test") {
+TEST_CASE_METHOD(UnitTestFixture, "Relational operator test") {
 
     SECTION("Greater than test 1") {
         std::string input = "(var2 > var1)";

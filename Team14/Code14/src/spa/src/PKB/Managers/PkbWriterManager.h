@@ -4,7 +4,6 @@
 
 #include "AffectsRelationshipManager.h"
 #include "PKB/Managers/AssignPatternManager.h"
-#include "PKB/Managers/CFGManager.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/EntitiesManager.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
@@ -85,11 +84,6 @@ private:
     std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
 
     /**
-     *
-     */
-    std::shared_ptr<CFGManager> cfgManager;
-
-    /**
      * @brief The affects relationship manager.
      */
     std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager;
@@ -132,7 +126,6 @@ public:
      * @param ifPatternManager The if pattern manager.
      * @param whilePatternManager The while pattern manager.
      * @param nextRelationshipManager The next relationship manager.
-     * @param cfgManager The CFG manager.
      * @param affectsRelationshipManager The affects relationship manager.
      */
     PkbWriterManager(std::shared_ptr<AssignPatternManager> assignmentManager,
@@ -147,7 +140,6 @@ public:
                      std::shared_ptr<IfPatternManager> ifPatternManager,
                      std::shared_ptr<WhilePatternManager> whilePatternManager,
                      std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
-                     std::shared_ptr<CFGManager> cfgManager,
                      std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager);
 
     /**
@@ -263,12 +255,6 @@ public:
      * @param s2 The shared pointer to the second statement.
      */
     void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2);
-
-    /**
-     * @brief Sets the `cfgMap` received as argument as the CFGs for each procedures
-     * @param cfgMap The map of procedure name to CFGNode
-     */
-    void setCFGMap(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap);
 
     /**
      * @brief Clears the PKB of any cache information that should not persist across queries

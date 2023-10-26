@@ -22,7 +22,7 @@ public:
      * @param parents Parents of the RelativeExpressionNode
      * @param proc Procedure containing the RelativeExpressionNode
      */
-    virtual void visitRelativeExpressionNode(RelativeExpressionNode *node,
+    virtual void visitRelativeExpressionNode(const std::shared_ptr<RelativeExpressionNode> &node,
                                              std::vector<std::shared_ptr<Statement>> parents,
                                              std::shared_ptr<Procedure> proc) const = 0;
 };
@@ -31,7 +31,8 @@ public:
  * ASTNode to represent a relative expression.
  * Implements the ConditionalExpressionNode interface.
  */
-class RelativeExpressionNode : public ConditionalExpressionNode {
+class RelativeExpressionNode : public ConditionalExpressionNode,
+                               public std::enable_shared_from_this<RelativeExpressionNode> {
 private:
     /**
      * The type of comparison operators for the relative expression.
