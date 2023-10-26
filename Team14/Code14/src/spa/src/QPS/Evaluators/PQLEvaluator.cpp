@@ -88,9 +88,10 @@ Result PQLEvaluator::evaluate(Query &query) {
         auto pair = pq.top();
         pq.pop();
         std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
-        if (!std::get<0>(pair.second) &&
-            !evaluateGroupAsBoolean(group)) {// no select synonyms && boolean group is false
-            return {false};
+        if (!std::get<0>(pair.second)) {         // no select synonyms
+            if (!evaluateGroupAsBoolean(group)) {// boolean group is false
+                return {false};
+            }
         } else {// those with selectSyns (and if select has synonym(s))
             for (auto &clause: group) {
                 res = resultHandler->getCombined(res, evaluateClause(clause));

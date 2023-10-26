@@ -1395,6 +1395,7 @@ TEST_CASE("boolean result clause query") {
         PQLEvaluator evaluator = PQLEvaluator(stubReader);
         auto resultObj = evaluator.evaluate(queryObj);
         auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getTuples().empty());
         REQUIRE(results.size() == 1);
         REQUIRE(find(results.begin(), results.end(), "TRUE") != results.end());
     }

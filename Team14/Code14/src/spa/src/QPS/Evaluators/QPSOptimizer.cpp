@@ -18,12 +18,13 @@ QPSOptimizer::buildSynGraph(std::unordered_map<std::string, std::shared_ptr<Quer
     return graph;
 }
 
-GroupScore getGroupScore(int numClauses, std::unordered_set<Synonym> synonyms, const std::vector<Synonym> &selects) {
+GroupScore getGroupScore(int numClauses, std::unordered_set<Synonym> groupSyns, const std::vector<Synonym> &selects) {
     int numSelectSyns = 0;
-    int numSyns = synonyms.size();
+    int numSyns = groupSyns.size();
 
-    for (auto &selectSyn: selects) {
-        if (synonyms.find(selectSyn) != synonyms.end()) { numSelectSyns += 1; }
+    for (auto &select: selects) {
+        auto selectSyn = QPSUtil::getSyn(select);
+        if (groupSyns.find(selectSyn) != groupSyns.end()) { numSelectSyns += 1; }
     }
 
     return std::tuple{numSelectSyns, numSyns, numClauses};
