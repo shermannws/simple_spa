@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "PKB/Managers/AssignPatternManager.h"
-#include "PKB/Managers/CFGManager.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/EntitiesManager.h"
 #include "PKB/Managers/FollowsRelationshipManager.h"
@@ -95,11 +94,6 @@ private:
      * @brief The NextRelationshipManager of the PKB
      */
     std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
-
-    /**
-     * @brief The CFGManager of the PKB
-     */
-    std::shared_ptr<CFGManager> cfgManager;
 
 public:
     /**

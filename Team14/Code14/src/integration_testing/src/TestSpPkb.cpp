@@ -69,13 +69,12 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - e2e for Follows a
     auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
     auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
-    auto cfgManager = std::make_shared<CFGManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
             modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
             modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
-            nextRelationshipManager, cfgManager);
+            nextRelationshipManager);
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
     std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
@@ -182,13 +181,12 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - e2e with nested s
     auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
     auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
-    auto cfgManager = std::make_shared<CFGManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
             modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
             modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
-            nextRelationshipManager, cfgManager);
+            nextRelationshipManager);
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
     std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
@@ -342,13 +340,12 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - test modifies and
     auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
     auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
-    auto cfgManager = std::make_shared<CFGManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
             modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
             modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
-            nextRelationshipManager, cfgManager);
+            nextRelationshipManager);
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
     std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
@@ -473,13 +470,12 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test CFG Extractor - test Next extract
     auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
     auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
-    auto cfgManager = std::make_shared<CFGManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
             modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
             modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
-            nextRelationshipManager, cfgManager);
+            nextRelationshipManager);
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
     auto cfgs = CFGBuilder::buildAllCFG(rootNode);

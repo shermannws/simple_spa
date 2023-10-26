@@ -10,23 +10,10 @@ CFGExtractor::CFGExtractor(std::shared_ptr<PkbWriter> pkbWriter) : pkbWriter(std
 void CFGExtractor::extractRelationships(
         const std::unordered_map<ProcedureName,
                                  std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>> &cfgMap) {
-    saveCFGToPKB(cfgMap);
-
     for (const auto &[procName, cfgHeadAndNodes]: cfgMap) {
         auto &[cfgHead, cfgNodes] = cfgHeadAndNodes;
         extractNextRelationship(cfgHead, cfgNodes);
     }
-}
-
-void CFGExtractor::saveCFGToPKB(
-        const std::unordered_map<ProcedureName,
-                                 std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>> &cfgMap) {
-    std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> procedureToCFGHeadMap;
-    for (const auto &[procName, cfgHeadAndNodes]: cfgMap) {
-        auto &[cfgHead, cfgNodes] = cfgHeadAndNodes;
-        procedureToCFGHeadMap[procName] = cfgHead;
-    }
-    pkbWriter->setCFGMap(procedureToCFGHeadMap);
 }
 
 void CFGExtractor::extractNextRelationship(const std::shared_ptr<CFGNode> &head,

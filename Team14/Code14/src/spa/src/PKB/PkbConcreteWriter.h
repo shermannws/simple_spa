@@ -135,11 +135,6 @@ public:
     void addNextRelationship(std::shared_ptr<Statement> s1, std::shared_ptr<Statement> s2) override;
 
     /*!
-     * Sets the `cfgMap` received as argument as the CFGs for each procedures
-     */
-    void setCFGMap(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap) override;
-
-    /*!
      * Clears any Cache in the PKB that is used for Query Processing
      */
     void clearCache() override;

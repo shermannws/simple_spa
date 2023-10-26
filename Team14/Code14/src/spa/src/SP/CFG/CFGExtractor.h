@@ -18,14 +18,6 @@ private:
     std::shared_ptr<PkbWriter> pkbWriter;
 
     /**
-     * Saves the CFG to the PKB using the PkbWriter.
-     * @param cfgMap An unordered map mapping each procedure to its head and all its CFGNodes
-     */
-    void
-    saveCFGToPKB(const std::unordered_map<
-                 ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>> &cfgMap);
-
-    /**
      * Extracts the direct Next relationships from a CFG and saves them to the PKB using the PkbWriter.
      * @param head The head node of the CFG
      * @param cfgNodes A vector of CFGNodes of the CFG

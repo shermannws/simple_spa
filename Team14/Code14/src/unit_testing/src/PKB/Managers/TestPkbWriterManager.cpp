@@ -23,13 +23,12 @@ TEST_CASE_METHOD(
         auto ifPatternManager = std::make_shared<IfPatternManager>();
         auto whilePatternManager = std::make_shared<WhilePatternManager>();
         auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
-        auto cfgManager = std::make_shared<CFGManager>();
 
         PkbWriterManager pkbWriterManager =
                 PkbWriterManager(assignmentManager, entitiesManager, followsRelationshipManager,
                                  usesRelationshipManager, modifiesRelationshipManager, parentRelationshipManager,
                                  callsRelationshipManager, modifiesProcRelationshipManager, usesProcRelationshipManager,
-                                 ifPatternManager, whilePatternManager, nextRelationshipManager, cfgManager);
+                                 ifPatternManager, whilePatternManager, nextRelationshipManager);
 
         // A -> modifies a, b, c
         // B -> uses x, y, z
@@ -188,32 +187,4 @@ TEST_CASE_METHOD(
         REQUIRE(usesRelationshipManager->isRelationship(statement4, variableY) == true);
         REQUIRE(usesRelationshipManager->isRelationship(statement4, variableZ) == true);
     }
-}
-
-TEST_CASE_METHOD(UnitTestFixture, "Test setting new map in the CFGStore") {
-    auto assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());
-    auto entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
-    auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
-    auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
-    auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
-    auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
-    auto callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
-    auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
-    auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
-    auto ifPatternManager = std::make_shared<IfPatternManager>();
-    auto whilePatternManager = std::make_shared<WhilePatternManager>();
-    auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
-    auto cfgManager = std::make_shared<CFGManager>();
-
-    PkbWriterManager pkbWriterManager =
-            PkbWriterManager(assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
-                             modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
-                             modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager,
-                             whilePatternManager, nextRelationshipManager, cfgManager);
-
-    std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> temp =
-            std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>>();
-    temp.insert({"main", std::make_shared<CFGNode>(1)});
-
-    REQUIRE_NOTHROW(pkbWriterManager.setCFGMap(temp));
 }
