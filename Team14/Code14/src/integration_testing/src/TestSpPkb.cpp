@@ -3,12 +3,8 @@
 
 #include "ASTGenerator.h"
 #include "Commons/Entities/AssignStatement.h"
-#include "Commons/Entities/CallStatement.h"
-#include "Commons/Entities/IfStatement.h"
 #include "Commons/Entities/PrintStatement.h"
 #include "Commons/Entities/ReadStatement.h"
-#include "Commons/Entities/WhileStatement.h"
-#include "PKB/Pkb.h"
 #include "PKB/PkbConcreteWriter.h"
 #include "SP/AST/Nodes/ProgramNode.h"
 #include "SP/AST/Traverser/Traverser.h"

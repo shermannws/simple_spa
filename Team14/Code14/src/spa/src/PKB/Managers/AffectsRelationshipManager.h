@@ -35,7 +35,7 @@ public:
                           const std::function<std::shared_ptr<Variable>(std::shared_ptr<Statement>)> &getVariable,
                           const std::function<bool(Statement &, Variable &)> &hasUses,
                           const std::function<bool(Statement &, Variable &)> &hasModifies,
-                          const std::function<EntityStore<Statement>(std::shared_ptr<Statement>)> &getNext);
+                          const std::function<std::shared_ptr<EntityStore<Statement>>(std::shared_ptr<Statement>)> &getNext);
 
     /**
      * @brief Clears the Affects relationship store

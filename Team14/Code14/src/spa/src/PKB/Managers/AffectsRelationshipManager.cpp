@@ -13,7 +13,7 @@ void AffectsRelationshipManager::calculateAffects(
         const std::function<std::shared_ptr<Variable>(std::shared_ptr<Statement>)> &getVariable,
         const std::function<bool(Statement &, Variable &)> &hasUses,
         const std::function<bool(Statement &, Variable &)> &hasModifies,
-        const std::function<EntityStore<Statement>(std::shared_ptr<Statement>)> &getNext) {
+        const std::function<std::shared_ptr<EntityStore<Statement>>(std::shared_ptr<Statement>)> &getNext) {
 
     if (this->isAffectsCalculated) { return; }
 
@@ -49,8 +49,9 @@ void AffectsRelationshipManager::calculateAffects(
             }
 
             // add all next
-            EntityStore<Statement> nextSet = getNext(stmt);
-            for (auto it = nextSet.getBeginIterator(); it != nextSet.getEndIterator(); it++) { stack.push(*it); }
+            std::shared_ptr<EntityStore<Statement>> nextSet = getNext(stmt);
+            if (nextSet == nullptr) { continue; }
+            for (auto it = nextSet->getBeginIterator(); it != nextSet->getEndIterator(); it++) { stack.push(*it); }
 
             // 1. The initial assign stmt
             // Add next nodes Y

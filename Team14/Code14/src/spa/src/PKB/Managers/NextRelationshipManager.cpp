@@ -59,6 +59,6 @@ void NextRelationshipManager::calculateNextStar() const {
     this->isNextStarCalculated = true;
 }
 
-EntityStore<Statement>& NextRelationshipManager::getAllNextOfStmt(std::shared_ptr<Statement> stmt) const {
-    return *this->relationshipStore->getRightEntitiesOf(std::move(stmt));
+std::shared_ptr<EntityStore<Statement>> NextRelationshipManager::getAllNextOfStmt(std::shared_ptr<Statement> stmt) const {
+    return this->relationshipStore->getRightEntitiesOf(std::move(stmt));
 }
