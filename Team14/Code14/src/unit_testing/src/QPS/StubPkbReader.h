@@ -255,6 +255,8 @@ public:
 
     std::vector<std::vector<Entity>> getAffectsPair(StatementType formerType, StatementType latterType) const override;
 
+    std::vector<Entity> getAffectsSameStmt(StatementType stmtType) const override;
+
     std::vector<Entity> getAffectsTypeStmt(StatementType type, Statement &statement) const override;
 
     std::vector<Entity> getAffectsTypeWildcard(StatementType type) const override;

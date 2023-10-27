@@ -8,11 +8,11 @@ AffectsSuchThatStrategy::AffectsSuchThatStrategy(std::shared_ptr<PkbReader> pkbR
 
 std::shared_ptr<Result> AffectsSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
+    auto leftEntityType = leftRef.getEntityType();
     if (leftRef == rightRef) {
-        res->setTuples(std::vector<Entity>{});
+        res->setTuples(pkbReader->getAffectsSameStmt(QPSUtil::entityToStmtMap.at(leftEntityType)));
         return res;
     }
-    auto leftEntityType = leftRef.getEntityType();
     auto rightEntityType = rightRef.getEntityType();
     auto leftSyn = leftRef.getRep();
     auto rightSyn = rightRef.getRep();

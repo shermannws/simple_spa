@@ -580,6 +580,10 @@ std::vector<std::vector<Entity>> StubPkbReader::getAffectsPair(StatementType for
     return std::vector<std::vector<Entity>>({pair1, pair2, pair3});
 }
 
+std::vector<Entity> StubPkbReader::getAffectsSameStmt(StatementType stmtType) const {
+    return std::vector<Entity>({Statement(61, StatementType::Assign)});
+}
+
 std::vector<Entity> StubPkbReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
     return std::vector<Entity>({Statement(7, StatementType::Assign)});
 }

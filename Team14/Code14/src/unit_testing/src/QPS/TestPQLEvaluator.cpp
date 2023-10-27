@@ -673,6 +673,18 @@ TEST_CASE_METHOD(UnitTestFixture, "Test NextStarSuchThatStrategy") {
 
 /* TEST_CASE_METHOD(UnitTestFixture, "Test AffectsSuchThatStrategy") {
     // evaluateSynSyn
+    SECTION("leftRef == rightRef, getAffectsStarSameStmt") {
+        PQLParser parser("assign a; Select a such that Affects(a,a)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 1);
+        REQUIRE(find(results.begin(), results.end(), "61") != results.end());
+        }
+
     SECTION("getAffectsPair") {
         PQLParser parser("assign a, a1; Select a such that Next(a, a1)");
         Query queryObj = parser.parse();
