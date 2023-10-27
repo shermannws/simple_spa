@@ -32,7 +32,7 @@ protected:
             rightToLeftStore;
 
     /**
-     * @brief A set of all entity pairs in this RelationshipStore
+     * @brief A set of all entity pairs in this DoubleMapStore
      */
     std::unordered_set<std::vector<Entity>> pairs;
 
@@ -102,8 +102,8 @@ public:
     void clear();
 
     /**
-     * @brief Gets all the entity pairs in this RelationshipStore
-     * @return A set of all entity pairs in this RelationshipStore
+     * @brief Gets all the entity pairs in this DoubleMapStore
+     * @return A set of all entity pairs in this DoubleMapStore
      */
     std::unordered_set<std::vector<Entity>> getPairs() const;
 };
