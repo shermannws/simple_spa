@@ -3,8 +3,16 @@
 #include "QPS/QPSUtil.h"
 #include "QPS/Query.h"
 
+/** Type alias for the score of a clause group, defined as follows:
+ * (number of select synonyms, num of synonyms, num of clauses)
+ */
 typedef std::tuple<int, int, int> GroupScore;
 
+/**
+ * @brief QPS Optimizer class.
+ *
+ * QPS Optimizer class is responsible for optimizing the evaluation of PQL clauses using grouping and ordering.
+ */
 class QPSOptimizer {
 private:
     /**
@@ -35,6 +43,17 @@ private:
      */
     static std::vector<std::unordered_set<Synonym>>
     getSynGroups(std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list);
+
+    /**
+     * Calculates the score of the clause group based on the number of select synonyms, the number of synonyms
+     * and the number of clauses
+     * @param numClauses The number of clauses in the group
+     * @param groupSyns The set of synonyms that the group involves
+     * @param selects The vector of synonyms in the select clause
+     * @return The GroupScore defined as follows: (number of select synonyms, num of synonyms, num of clauses)
+     */
+    static GroupScore getGroupScore(int numClauses, std::unordered_set<Synonym> groupSyns,
+                                    const std::vector<Synonym> &selects);
 
 public:
     /**

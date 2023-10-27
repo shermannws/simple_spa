@@ -3,7 +3,6 @@
 std::unordered_map<Synonym, std::unordered_set<Synonym>>
 QPSOptimizer::buildSynGraph(std::unordered_map<std::string, std::shared_ptr<QueryEntity>> &declarations,
                             const std::vector<std::shared_ptr<Clause>> &clauses) {
-    //    auto declarationMap = query.getDeclarations();
     std::unordered_map<Synonym, std::unordered_set<Synonym>> graph;// add all syns into graph as nodes
     for (const auto &node: declarations) { graph[node.first] = {}; }
 
@@ -18,21 +17,14 @@ QPSOptimizer::buildSynGraph(std::unordered_map<std::string, std::shared_ptr<Quer
     return graph;
 }
 
-GroupScore getGroupScore(int numClauses, std::unordered_set<Synonym> groupSyns, const std::vector<Synonym> &selects) {
-    int numSelectSyns = 0;
-    int numSyns = groupSyns.size();
-
-    for (auto &select: selects) {
-        auto selectSyn = QPSUtil::getSyn(select);
-        if (groupSyns.find(selectSyn) != groupSyns.end()) { numSelectSyns += 1; }
+void QPSOptimizer::DFS(const std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list,
+                       const std::string &current, std::unordered_set<std::string> &visited,
+                       std::unordered_set<Synonym> &connected) {
+    visited.insert(current);
+    connected.insert(current);
+    for (const std::string &neighbor: adjacency_list.at(current)) {
+        if (visited.find(neighbor) == visited.end()) { DFS(adjacency_list, neighbor, visited, connected); }
     }
-
-    return std::tuple{numSelectSyns, numSyns, numClauses};
-}
-
-bool QPSOptimizer::sortByScore(const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p1,
-                               const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p2) {
-    return p1.second > p2.second;
 }
 
 std::vector<std::unordered_set<Synonym>>
@@ -48,6 +40,19 @@ QPSOptimizer::getSynGroups(std::unordered_map<Synonym, std::unordered_set<Synony
         }
     }
     return synGroups;
+}
+
+GroupScore QPSOptimizer::getGroupScore(int numClauses, std::unordered_set<Synonym> groupSyns,
+                                       const std::vector<Synonym> &selects) {
+    int numSelectSyns = 0;
+    int numSyns = groupSyns.size();
+
+    for (auto &select: selects) {
+        auto selectSyn = QPSUtil::getSyn(select);
+        if (groupSyns.find(selectSyn) != groupSyns.end()) { numSelectSyns += 1; }
+    }
+
+    return std::tuple{numSelectSyns, numSyns, numClauses};
 }
 
 std::vector<std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore>>
@@ -86,13 +91,7 @@ QPSOptimizer::getGroupScorePairs(Query &query) {
     return groupScorePairs;
 }
 
-
-void QPSOptimizer::DFS(const std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list,
-                       const std::string &current, std::unordered_set<std::string> &visited,
-                       std::unordered_set<Synonym> &connected) {
-    visited.insert(current);
-    connected.insert(current);
-    for (const std::string &neighbor: adjacency_list.at(current)) {
-        if (visited.find(neighbor) == visited.end()) { DFS(adjacency_list, neighbor, visited, connected); }
-    }
+bool QPSOptimizer::sortByScore(const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p1,
+                               const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p2) {
+    return p1.second > p2.second;
 }
