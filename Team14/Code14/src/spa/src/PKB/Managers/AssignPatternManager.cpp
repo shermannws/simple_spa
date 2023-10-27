@@ -87,3 +87,11 @@ std::unordered_set<Entity> AssignPatternManager::getAssignStmtsByLhsRhs(Variable
     return ManagerUtils::getEntitiesFromStore<AssignPatternStore, Assignment>(assignmentStore, matcher,
                                                                               Assignment::getStmtFromAssign);
 }
+
+std::unordered_set<std::shared_ptr<Statement>> AssignPatternManager::getAllAssignStmtsAsStmts() const {
+    std::unordered_set<std::shared_ptr<Statement>> statements = std::unordered_set<std::shared_ptr<Statement>>();
+    for (auto it = assignmentStore->getBeginIterator(); it != assignmentStore->getEndIterator(); it++) {
+        statements.insert((*it)->getStatement());
+    }
+    return statements;
+}

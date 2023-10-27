@@ -6,7 +6,7 @@
 /**
  * @class CallsRelationshipManager is responsible for storing and retrieving the Calls relationship
  * @brief Manages the Calls relationship
- * @note: A Calls relationship is a relationship between two procedures where the first procedure cakks the second
+ * @note: A Calls relationship is a relationship between two procedures where the first procedure calls the second
  * procedure
  */
 class CallsRelationshipManager : public ProcToProcRelationshipManager<CallsRelationshipStore> {

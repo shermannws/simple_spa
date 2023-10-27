@@ -1,5 +1,5 @@
 #include "Traverser.h"
-#include "Commons/StatementFactory.h"
+#include "Commons/EntityFactory.h"
 #include "SP/AST/Nodes/IfNode.h"
 #include "SP/AST/Nodes/ProcedureNode.h"
 #include "SP/AST/Nodes/WhileNode.h"
@@ -24,7 +24,7 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
         frontier.pop();
 
         if (auto currentCasted = std::dynamic_pointer_cast<ProcedureNode>(current)) {
-            currentProcedure = std::make_shared<Procedure>(currentCasted->getProcedureName());
+            currentProcedure = EntityFactory::createProcedure(currentCasted->getProcedureName());
         }
 
         // current node to accept all the visitors and do its respective work
@@ -34,7 +34,7 @@ void Traverser::traverse(std::shared_ptr<ProgramNode> root) {
         std::vector<std::shared_ptr<Statement>> newParents = parents;
         auto currentCasted = std::dynamic_pointer_cast<StatementNode>(current);
         if (currentCasted && currentCasted->isParentNode()) {
-            newParents.emplace_back(StatementFactory::createStatementFromStatementNode(currentCasted));
+            newParents.emplace_back(EntityFactory::createStatementFromStatementNode(currentCasted));
         }
 
         // add child of current node into the frontier

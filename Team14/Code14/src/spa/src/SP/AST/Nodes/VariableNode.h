@@ -18,7 +18,8 @@ public:
      * @param parents Parents of the VariableNode
      * @param proc The procedure that the VariableNode is in
      */
-    virtual void visitVariableNode(VariableNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    virtual void visitVariableNode(const std::shared_ptr<VariableNode> &node,
+                                   std::vector<std::shared_ptr<Statement>> parents,
                                    std::shared_ptr<Procedure> proc) const = 0;
 };
 
@@ -26,7 +27,7 @@ public:
  * ASTNode to represent a variable.
  * Implements the ExpressionNode interface.
  */
-class VariableNode : public ExpressionNode {
+class VariableNode : public ExpressionNode, public std::enable_shared_from_this<VariableNode> {
 private:
     /**
      * The name of the variable.

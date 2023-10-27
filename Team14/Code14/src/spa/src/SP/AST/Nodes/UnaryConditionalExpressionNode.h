@@ -18,7 +18,7 @@ public:
      * @param parents Parents of the UnaryConditionalExpressionNode
      * @param proc Procedure containing the UnaryConditionalExpressionNode
      */
-    virtual void visitUnaryConditionalExpressionNode(UnaryConditionalExpressionNode *node,
+    virtual void visitUnaryConditionalExpressionNode(const std::shared_ptr<UnaryConditionalExpressionNode> &node,
                                                      std::vector<std::shared_ptr<Statement>> parents,
                                                      std::shared_ptr<Procedure> proc) const = 0;
 };
@@ -29,7 +29,8 @@ public:
  * unary conditional expression.
  * Implements the ConditionalExpressionNode interface.
  */
-class UnaryConditionalExpressionNode : public ConditionalExpressionNode {
+class UnaryConditionalExpressionNode : public ConditionalExpressionNode,
+                                       public std::enable_shared_from_this<UnaryConditionalExpressionNode> {
 private:
     /**
      * The nested conditional expression of the unary conditional expression.

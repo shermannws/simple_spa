@@ -11,14 +11,16 @@ PkbReaderManager::PkbReaderManager(std::shared_ptr<AssignPatternManager> assignm
                                    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
                                    std::shared_ptr<IfPatternManager> ifPatternManager,
                                    std::shared_ptr<WhilePatternManager> whilePatternManager,
-                                   std::shared_ptr<NextRelationshipManager> nextRelationshipManager)
+                                   std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
+                                   std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager)
     : assignmentManager(assignmentManager), entityManager(entityManager),
       followsRelationshipManager(followsRelationshipManager), usesRelationshipManager(usesRelationshipManager),
       modifiesRelationshipManager(modifiesRelationshipManager), parentRelationshipManager(parentRelationshipManager),
       callsRelationshipManager(callsRelationshipManager),
       modifiesProcRelationshipManager(modifiesProcRelationshipManager),
       usesProcRelationshipManager(usesProcRelationshipManager), ifPatternManager(ifPatternManager),
-      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager){};
+      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager),
+      affectsRelationshipManager(affectsRelationshipManager){};
 
 std::unordered_set<Entity> PkbReaderManager::getAllVariables() const { return this->entityManager->getAllVariables(); }
 
@@ -465,4 +467,69 @@ std::unordered_set<Entity> PkbReaderManager::getWhileStmtsByVar(Variable &var) c
 
 std::unordered_set<std::vector<Entity>> PkbReaderManager::getAllWhileStmtVarPair() const {
     return this->whilePatternManager->getAllStmtVarPair();
+}
+
+void PkbReaderManager::triggerAffectsCalculation() const {
+    if (this->affectsRelationshipManager->hasAffectsBeenCalculated()) { return; }
+    this->affectsRelationshipManager->calculateAffects(
+            assignmentManager->getAllAssignStmtsAsStmts(),
+            [this](std::shared_ptr<Statement> stmt) { return modifiesRelationshipManager->getModifiedVar(stmt); },
+            [this](Statement &stmt, Variable &var) { return usesRelationshipManager->isRelationship(stmt, var); },
+            [this](Statement &stmt, Variable &var) { return modifiesRelationshipManager->isRelationship(stmt, var); },
+            [this](std::shared_ptr<Statement> stmt) { return nextRelationshipManager->getAllNextOfStmt(stmt); });
+}
+
+std::unordered_set<std::vector<Entity>> PkbReaderManager::getAffectsPair(StatementType formerType,
+                                                                         StatementType latterType) const {
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, latterType)) {
+        return std::unordered_set<std::vector<Entity>>();
+    }
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipPair(formerType, latterType, true);
+}
+
+std::unordered_set<Entity> PkbReaderManager::getAffectsTypeStmt(StatementType type, Statement &statement) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipTypeStmt(type, statement, true);
+}
+
+std::unordered_set<Entity> PkbReaderManager::getAffectsTypeWildcard(StatementType type) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipTypeWildcard(type);
+}
+
+std::unordered_set<Entity> PkbReaderManager::getAffectsStmtType(Statement &statement, StatementType type) const {
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) {
+        return std::unordered_set<Entity>();
+    }
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipStmtType(statement, type, true);
+}
+
+std::unordered_set<Entity> PkbReaderManager::getAffectsWildcardType(StatementType type) const {
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) {
+        return std::unordered_set<Entity>();
+    }
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipWildcardType(type);
+}
+
+bool PkbReaderManager::isAffects(Statement &statement1, Statement &statement2) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->isRelationship(statement1, statement2, true);
+}
+
+bool PkbReaderManager::hasAffects() const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->hasRelationship();
+}
+
+bool PkbReaderManager::hasAffectedStmt(Statement &statement) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->isFormer(statement);
+}
+
+bool PkbReaderManager::hasAffectsStmt(Statement &statement) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->isLatter(statement);
 }

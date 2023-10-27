@@ -594,3 +594,32 @@ std::unordered_set<std::vector<Entity>> StubPkbReader::getAllWhileStmtVarPair() 
             {WhileStatement(861), Variable("var861")},
     };
 }
+
+std::unordered_set<std::vector<Entity>> StubPkbReader::getAffectsPair(StatementType formerType,
+                                                                      StatementType latterType) const {
+    return std::unordered_set<std::vector<Entity>>();
+}
+
+std::unordered_set<Entity> StubPkbReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
+    return std::unordered_set<Entity>();
+}
+
+std::unordered_set<Entity> StubPkbReader::getAffectsTypeWildcard(StatementType type) const {
+    return std::unordered_set<Entity>();
+}
+
+std::unordered_set<Entity> StubPkbReader::getAffectsStmtType(Statement &statement, StatementType type) const {
+    return std::unordered_set<Entity>();
+}
+
+std::unordered_set<Entity> StubPkbReader::getAffectsWildcardType(StatementType type) const {
+    return std::unordered_set<Entity>();
+}
+
+bool StubPkbReader::isAffects(Statement &statement1, Statement &statement2) const { return false; }
+
+bool StubPkbReader::hasAffects() const { return false; }
+
+bool StubPkbReader::hasAffectedStmt(Statement &statement) const { return false; }
+
+bool StubPkbReader::hasAffectsStmt(Statement &statement) const { return false; }

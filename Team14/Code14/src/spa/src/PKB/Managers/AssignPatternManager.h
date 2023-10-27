@@ -115,4 +115,10 @@ public:
      * @note Used for `pattern a ("x", "x")`
      */
     std::unordered_set<Entity> getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const;
+
+    /**
+     * Returns an unordered_set of Statement objects from all the Assignment objects in the store
+     * @return An unordered_set of Statement objects
+     */
+    std::unordered_set<std::shared_ptr<Statement>> getAllAssignStmtsAsStmts() const;
 };

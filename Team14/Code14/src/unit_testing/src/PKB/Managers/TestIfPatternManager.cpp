@@ -1,9 +1,10 @@
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Managers/IfPatternManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test If Pattern Storage Initialisation") {
+TEST_CASE_METHOD(UnitTestFixture, "Test If Pattern Storage Initialisation") {
     IfPatternManager ifPatternManager = IfPatternManager();
     Variable var = Variable("x");
 
@@ -12,7 +13,7 @@ TEST_CASE("Test If Pattern Storage Initialisation") {
     REQUIRE(ifPatternManager.getAllStmtVarPair().empty());
 }
 
-TEST_CASE("Test If Pattern Storage") {
+TEST_CASE_METHOD(UnitTestFixture, "Test If Pattern Storage") {
     IfPatternManager ifPatternManager = IfPatternManager();
     Statement ifStmt = Statement(1, StatementType::If);
     Variable var = Variable("x");
@@ -22,7 +23,7 @@ TEST_CASE("Test If Pattern Storage") {
             make_shared<vector<shared_ptr<Variable>>>(vector<shared_ptr<Variable>>{make_shared<Variable>(var)})));
 }
 
-TEST_CASE("Test If Pattern Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test If Pattern Retrieval") {
     IfPatternManager ifPatternManager = IfPatternManager();
     shared_ptr<Statement> ifStmt1 = make_shared<Statement>(Statement(1, StatementType::If));
     shared_ptr<Statement> ifStmt2 = make_shared<Statement>(Statement(2, StatementType::If));

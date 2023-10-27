@@ -258,4 +258,23 @@ public:
     std::unordered_set<Entity> getWhileStmtsByVar(Variable &var) const override;
 
     std::unordered_set<std::vector<Entity>> getAllWhileStmtVarPair() const override;
+
+    std::unordered_set<std::vector<Entity>> getAffectsPair(StatementType formerType,
+                                                           StatementType latterType) const override;
+
+    std::unordered_set<Entity> getAffectsTypeStmt(StatementType type, Statement &statement) const override;
+
+    std::unordered_set<Entity> getAffectsTypeWildcard(StatementType type) const override;
+
+    std::unordered_set<Entity> getAffectsStmtType(Statement &statement, StatementType type) const override;
+
+    std::unordered_set<Entity> getAffectsWildcardType(StatementType type) const override;
+
+    bool isAffects(Statement &statement1, Statement &statement2) const override;
+
+    bool hasAffects() const override;
+
+    bool hasAffectedStmt(Statement &statement) const override;
+
+    bool hasAffectsStmt(Statement &statement) const override;
 };

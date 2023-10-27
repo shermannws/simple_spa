@@ -27,3 +27,8 @@ std::shared_ptr<T> SetStore<T, H>::get(std::shared_ptr<T> object) const {
     if (it == this->storage.end()) { return nullptr; }
     return *it;
 }
+
+template<typename T, typename H>
+std::shared_ptr<T> SetStore<T, H>::first() const {
+    return *this->storage.begin();
+}

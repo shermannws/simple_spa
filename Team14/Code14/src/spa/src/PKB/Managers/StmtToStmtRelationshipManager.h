@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 
+#include "PKB/Commons/ClauseGroup.h"
 #include "PKB/Managers/ManagerUtils.h"
 
 /**
@@ -21,6 +22,11 @@ protected:
     std::shared_ptr<S> starRelationshipStore;
 
 public:
+    /**
+     * @brief The clause group of the relationship
+     */
+    ClauseGroup clauseGroup;
+
     /**
      * @brief Constructs a StmtToStmtRelationshipManager object
      * @return A StmtToStmtRelationshipManager object

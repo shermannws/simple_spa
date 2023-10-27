@@ -905,4 +905,75 @@ public:
      * @return An unordered_set of vectors containing While Statement and Variable pairs
      */
     virtual std::unordered_set<std::vector<Entity>> getAllWhileStmtVarPair() const = 0;
+
+    /**
+     * Returns an unordered_set of Statement, Statement pair where the first statement affects the second statement
+     * DIRECTLY. Retrieves the relationship where the first and second statement are both of the given type
+     * @param formerType The type of the former statement
+     * @param latterType The type of the latter statement
+     * @return An unordered_set of Statement, Statement pair stored in a vector
+     */
+    virtual std::unordered_set<std::vector<Entity>> getAffectsPair(StatementType formerType,
+                                                                   StatementType latterType) const = 0;
+
+    /**
+     * Returns an unordered_set of statements of the given statement type which affects the given statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @param statement The statement that succeeds the statements to be retrieved
+     * @return An unordered_set of statements
+     */
+    virtual std::unordered_set<Entity> getAffectsTypeStmt(StatementType type, Statement &statement) const = 0;
+
+    /**
+     * Returns an unordered_set of statements of the given statement type which is affects any statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @return An unordered_set of statements
+     */
+    virtual std::unordered_set<Entity> getAffectsTypeWildcard(StatementType type) const = 0;
+
+    /**
+     * Returns an unordered_set of statements of the given statement type which is affected by the given statement
+     * DIRECTLY
+     * @param statement The statement that precedes the statements to be retrieved
+     * @param type The type of the statement to be retrieved
+     * @return An unordered_set of statements
+     */
+    virtual std::unordered_set<Entity> getAffectsStmtType(Statement &statement, StatementType type) const = 0;
+
+    /**
+     * Returns an unordered_set of statements of the given statement type which is affected by any statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @return An unordered_set of statements
+     */
+    virtual std::unordered_set<Entity> getAffectsWildcardType(StatementType type) const = 0;
+
+    /**
+     * Returns true if statement1 DIRECTLY affects statement2, false otherwise
+     * @param statement1 The preceding statement
+     * @param statement2 The succeeding statement
+     * @return True if statement1 directly affects statement2, false otherwise
+     */
+    virtual bool isAffects(Statement &statement1, Statement &statement2) const = 0;
+
+    /**
+     * Returns true if there exists a affects relationship in the PKB, false otherwise
+     * @return True if there exists a affects relationship in the PKB, false otherwise
+     */
+    virtual bool hasAffects() const = 0;
+
+    /**
+     * Returns true if there exists a statement that is affected by the given statement, false otherwise i.e. there is a
+     * statement in behind of the given statement that is affected by the given statement
+     * @param statement The statement to be checked
+     * @return True if there exists a statement that is affected by the given statement, false otherwise
+     */
+    virtual bool hasAffectedStmt(Statement &statement) const = 0;
+
+    /**
+     * Returns true if there exists a statement that affects the given statement, false otherwise i.e. there is a
+     * statement in front of the given statement that affects the given statement
+     * @param statement The statement to be checked
+     * @return True if there exists a statement that affects the given statement, false otherwise
+     */
+    virtual bool hasAffectsStmt(Statement &statement) const = 0;
 };
