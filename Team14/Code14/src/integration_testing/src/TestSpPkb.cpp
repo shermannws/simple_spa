@@ -18,6 +18,7 @@
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/CFG/CFGBuilder.h"
 #include "SP/CFG/CFGExtractor.h"
+#include "SP/SP.h"
 #include "SP/SPParser.h"
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
@@ -574,36 +575,12 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and
 			read f; \
 		}";
 
-    std::shared_ptr<ProgramNode> rootNode = ASTGenerator::generate(sourceCode);
-
     auto pkb = Pkb();
     auto pkbWriter = pkb.createPkbWriter();
     auto pkbReader = pkb.createPkbReader();
 
-    std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
-    std::shared_ptr<FollowsExtractorVisitor> followsExtractor = std::make_shared<FollowsExtractorVisitor>(pkbWriter);
-    std::shared_ptr<UsesExtractorVisitor> usesExtractor = std::make_shared<UsesExtractorVisitor>(pkbWriter);
-    std::shared_ptr<ModifiesExtractorVisitor> modifiesExtractor = std::make_shared<ModifiesExtractorVisitor>(pkbWriter);
-    std::shared_ptr<ParentExtractorVisitor> parentExtractor = std::make_shared<ParentExtractorVisitor>(pkbWriter);
-    std::shared_ptr<CallsExtractorVisitor> callsExtractor = std::make_shared<CallsExtractorVisitor>(pkbWriter);
-    std::shared_ptr<PatternExtractorVisitor> patternExtractor = std::make_shared<PatternExtractorVisitor>(pkbWriter);
-    std::vector<std::shared_ptr<DesignExtractorVisitor>> visitors = {
-            entityExtractor, followsExtractor, usesExtractor,   modifiesExtractor,
-            parentExtractor, callsExtractor,   patternExtractor};
-
-    // Traverse the AST from root node
-    Traverser traverser = Traverser(visitors);
-    traverser.traverse(rootNode);
-
-    // Trigger PKB to do transitivity calculations
-    pkbWriter->triggerTransitiveCalc();
-
-    // Build CFGs
-    auto cfgMap = CFGBuilder::buildAllCFG(rootNode);
-
-    // Handle CFG-related relationships and save CFG to PKB
-    CFGExtractor cfgExtractor(pkbWriter);
-    cfgExtractor.extractRelationships(cfgMap);
+    auto sp = SP(pkbWriter);
+    sp.startSPProcessing(sourceCode);
 
     // Declare Entities for testing
     auto proc1 = Procedure("p1");
@@ -638,12 +615,12 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and
 
     CHECK(pkbReader->getUsesStmtPair(StatementType::Stmt).size() == 4);
     CHECK(pkbReader->getUsesProcPair().size() == 3);
-    CHECK(pkbReader->getUsesTypeIdent(StatementType::Read, varE).size() == 0);
+    CHECK(pkbReader->getUsesTypeIdent(StatementType::Read, varE).empty());
     CHECK(pkbReader->getUsesTypeIdent(StatementType::If, varB).size() == 1);
     CHECK(pkbReader->getUsesProcIdent(varE).size() == 1);
-    CHECK(pkbReader->getUsesStmt(StatementType::While).size() == 0);
+    CHECK(pkbReader->getUsesStmt(StatementType::While).empty());
     CHECK(pkbReader->getUsesVar(stmt3).size() == 3);
-    CHECK(pkbReader->getUsesVar(proc2).size() == 0);
+    CHECK(pkbReader->getUsesVar(proc2).empty());
     CHECK(pkbReader->getUsesProc().size() == 1);
     CHECK(pkbReader->isStmtUsesVar(stmt3, varC));
     CHECK(pkbReader->isProcUsesVar(proc1, varC));
@@ -654,11 +631,11 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and
     CHECK(pkbReader->getFollowsStarPair(StatementType::Assign, StatementType::If).size() == 1);
     CHECK(pkbReader->getFollowsTypeStmt(StatementType::Call, stmt3).size() == 1);
     CHECK(pkbReader->getFollowsStarTypeStmt(StatementType::Call, stmt3).size() == 1);
-    CHECK(pkbReader->getFollowsTypeWildcard(StatementType::If).size() == 0);
-    CHECK(pkbReader->getFollowsStarTypeWildcard(StatementType::If).size() == 0);
+    CHECK(pkbReader->getFollowsTypeWildcard(StatementType::If).empty());
+    CHECK(pkbReader->getFollowsStarTypeWildcard(StatementType::If).empty());
     CHECK(pkbReader->getFollowsStmtType(stmt2, StatementType::Stmt).size() == 1);
     CHECK(pkbReader->getFollowsStarStmtType(stmt1, StatementType::Stmt).size() == 2);
-    CHECK(pkbReader->getFollowsWildcardType(StatementType::While).size() == 0);
+    CHECK(pkbReader->getFollowsWildcardType(StatementType::While).empty());
     CHECK(pkbReader->getFollowsStarWildcardType(StatementType::Call).size() == 1);
     CHECK(pkbReader->isFollows(stmt1, stmt2));
     CHECK(pkbReader->isFollowsStar(stmt1, stmt3));
@@ -688,13 +665,13 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and
     CHECK(pkbReader->getAssignStmtsByRhs(expr, false).size() == 1);
     CHECK(pkbReader->getAssignStmtsByRhs(expr, true).size() == 1);
     CHECK(pkbReader->getAllAssignStmtVarPair().size() == 1);
-    CHECK(pkbReader->getAssignStmtsVarPairByRhs(wrongExpr, true).size() == 0);
+    CHECK(pkbReader->getAssignStmtsVarPairByRhs(wrongExpr, true).empty());
     CHECK(pkbReader->getAssignStmtsByLhs(varA).size() == 1);
     CHECK(pkbReader->getAssignStmtsByLhsRhs(varA, expr, false).size() == 1);
-    CHECK(pkbReader->getAssignStmtsByLhsRhs(varA, wrongExpr, true).size() == 0);
+    CHECK(pkbReader->getAssignStmtsByLhsRhs(varA, wrongExpr, true).empty());
 
     CHECK(pkbReader->getParentPair(StatementType::Stmt, StatementType::Stmt).size() == 3);
-    CHECK(pkbReader->getParentPair(StatementType::Read, StatementType::Stmt).size() == 0);
+    CHECK(pkbReader->getParentPair(StatementType::Read, StatementType::Stmt).empty());
     CHECK(pkbReader->getParentStarPair(StatementType::Stmt, StatementType::Stmt).size() == 4);
     CHECK(pkbReader->getParentTypeStmt(StatementType::Stmt, stmt4).size() == 1);
     CHECK(pkbReader->getParentStarTypeStmt(StatementType::Stmt, stmt5).size() == 2);
@@ -756,15 +733,15 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and
     CHECK(pkbReader->getIfStmtsByVar(varB).size() == 1);
     CHECK(pkbReader->getAllIfStmtVarPair().size() == 2);
 
-    CHECK(pkbReader->getAllWhilePatternStmts().size() == 0);
-    CHECK(pkbReader->getWhileStmtsByVar(varB).size() == 0);
-    CHECK(pkbReader->getAllWhileStmtVarPair().size() == 0);
+    CHECK(pkbReader->getAllWhilePatternStmts().empty());
+    CHECK(pkbReader->getWhileStmtsByVar(varB).empty());
+    CHECK(pkbReader->getAllWhileStmtVarPair().empty());
 
-    CHECK(pkbReader->getAffectsPair(StatementType::Assign, StatementType::Assign).size() == 0);
-    CHECK(pkbReader->getAffectsTypeStmt(StatementType::Assign, stmt2).size() == 0);
-    CHECK(pkbReader->getAffectsTypeWildcard(StatementType::Stmt).size() == 0);
-    CHECK(pkbReader->getAffectsStmtType(stmt1, StatementType::Assign).size() == 0);
-    CHECK(pkbReader->getAffectsWildcardType(StatementType::Assign).size() == 0);
+    CHECK(pkbReader->getAffectsPair(StatementType::Assign, StatementType::Assign).empty());
+    CHECK(pkbReader->getAffectsTypeStmt(StatementType::Assign, stmt2).empty());
+    CHECK(pkbReader->getAffectsTypeWildcard(StatementType::Stmt).empty());
+    CHECK(pkbReader->getAffectsStmtType(stmt1, StatementType::Assign).empty());
+    CHECK(pkbReader->getAffectsWildcardType(StatementType::Assign).empty());
     CHECK(!pkbReader->isAffects(stmt1, stmt2));
     CHECK(!pkbReader->hasAffects());
     CHECK(!pkbReader->hasAffectedStmt(stmt1));
