@@ -945,6 +945,263 @@ TEST_CASE("processSuchThatClause Calls*") {
     }
 }
 
+TEST_CASE("processSuchThatClause Affects") {
+    SECTION("Valid Affects(s1,s2)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1 such that Affects (s1,s2)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Stmt);
+        REQUIRE(leftRef.getRep() == "s1");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Stmt);
+        REQUIRE(rightRef.getRep() == "s2");
+    }
+
+    SECTION("Valid Affects(_,_)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Affects (_,_)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+
+    SECTION("Valid Affects(integer,integer)") {
+        PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Affects(4,5)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "4");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "5");
+    }
+
+    SECTION("Valid Affects(s, integer)") {
+        PQLParser parser("stmt s;\nSelect s such that Affects (s, 100)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Stmt);
+        REQUIRE(leftRef.getRep() == "s");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "100");
+    }
+
+    SECTION("Valid Affects(integer, s)") {
+        PQLParser parser("stmt s;\nSelect s such that Affects (99, s)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "99");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Stmt);
+        REQUIRE(rightRef.getRep() == "s");
+    }
+
+    SECTION("Valid Affects(_, integer)") {
+        PQLParser parser("stmt s;\nSelect s such that Affects (_, 100)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Integer);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "100");
+    }
+
+    SECTION("Valid Affects(integer, _)") {
+        PQLParser parser("stmt s;\nSelect s such that Affects (99, _)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Integer);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "99");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+
+    SECTION("Valid Affects(s, _)") {
+        PQLParser parser("stmt s;\nSelect s such that Affects (s, _)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Stmt);
+        REQUIRE(leftRef.getRep() == "s");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Wildcard);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(rightRef.getRep() == "_");
+    }
+
+    SECTION("Valid Affects(_, s)") {
+        PQLParser parser("stmt s;\nSelect s such that Affects (_, s)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Wildcard);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Invalid);
+        REQUIRE(leftRef.getRep() == "_");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Stmt);
+        REQUIRE(rightRef.getRep() == "s");
+    }
+
+    SECTION("Valid Affects(read,print)") {
+        PQLParser parser("read r; print p;\nSelect r such that Affects (r,p)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Read);
+        REQUIRE(leftRef.getRep() == "r");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Print);
+        REQUIRE(rightRef.getRep() == "p");
+    }
+
+    SECTION("Valid Affects(print,call)") {
+        PQLParser parser("print p; call c;\nSelect p such that Affects (p, c)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Print);
+        REQUIRE(leftRef.getRep() == "p");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Call);
+        REQUIRE(rightRef.getRep() == "c");
+    }
+
+    SECTION("Valid Affects(call,while)") {
+        PQLParser parser("call c; while w;\nSelect c such that Affects (c,w)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Call);
+        REQUIRE(leftRef.getRep() == "c");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::While);
+        REQUIRE(rightRef.getRep() == "w");
+    }
+
+    SECTION("Valid Affects(while, if)") {
+        PQLParser parser("while w; if ifs;\nSelect w such that Affects (w, ifs)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::While);
+        REQUIRE(leftRef.getRep() == "w");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::If);
+        REQUIRE(rightRef.getRep() == "ifs");
+    }
+
+    SECTION("Valid Affects(if, assign)") {
+        PQLParser parser("if ifs; assign a;\nSelect ifs such that Affects (ifs, a)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::If);
+        REQUIRE(leftRef.getRep() == "ifs");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(rightRef.getRep() == "a");
+    }
+
+    SECTION("Valid Affects(assign, read)") {
+        PQLParser parser("assign a; read r;\nSelect a such that Affects (a, r)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(leftRef.getRep() == "a");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Read);
+        REQUIRE(rightRef.getRep() == "r");
+    }
+}
+
 TEST_CASE("Invalid processSuchThat cases") {
     SECTION("Invalid Syntax - general queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
