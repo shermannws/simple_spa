@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "PKB/Managers/AffectsRelationshipManager.h"
 #include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/EntitiesManager.h"
@@ -81,6 +82,11 @@ private:
      */
     std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
 
+    /**
+     * @brief The affects relationship manager.
+     */
+    std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager;
+
 public:
     /**
      * @brief Constructs a PkbReaderManager object.
@@ -96,6 +102,7 @@ public:
      * @param ifPatternManager The if pattern manager.
      * @param whilePatternManager The while pattern manager.
      * @param nextRelationshipManager The next relationship manager.
+     * @param affectsRelationshipManager The affects relationship manager.
      * @return The PkbReaderManager object.
      */
     PkbReaderManager(std::shared_ptr<AssignPatternManager> assignmentManager,
@@ -109,7 +116,8 @@ public:
                      std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
                      std::shared_ptr<IfPatternManager> ifPatternManager,
                      std::shared_ptr<WhilePatternManager> whilePatternManager,
-                     std::shared_ptr<NextRelationshipManager> nextRelationshipManager);
+                     std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
+                     std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager);
 
     /**
      * @brief Returns all the variables in the SIMPLE program.
@@ -988,4 +996,78 @@ public:
      * @return A vector of vectors containing While Statement and Variable pairs
      */
     std::vector<std::vector<Entity>> getAllWhileStmtVarPair() const;
+
+    /**
+     * Triggers the calculation of the affects relationship
+     */
+    void triggerAffectsCalculation() const;
+
+    /**
+     * Returns a vector of Statement, Statement pair where the first statement affects the second statement DIRECTLY.
+     * Retrieves the relationship where the first and second statement are both of the given type
+     * @param formerType The type of the former statement
+     * @param latterType The type of the latter statement
+     * @return A vector of Statement, Statement pair stored in a vector
+     */
+    std::vector<std::vector<Entity>> getAffectsPair(StatementType formerType, StatementType latterType) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which affects the given statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @param statement The statement that succeeds the statements to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getAffectsTypeStmt(StatementType type, Statement &statement) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which is affects any statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getAffectsTypeWildcard(StatementType type) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which is affected by the given statement DIRECTLY
+     * @param statement The statement that precedes the statements to be retrieved
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getAffectsStmtType(Statement &statement, StatementType type) const;
+
+    /**
+     * Returns a vector of statements of the given statement type which is affected by any statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getAffectsWildcardType(StatementType type) const;
+
+    /**
+     * Returns true if statement1 DIRECTLY affects statement2, false otherwise
+     * @param statement1 The preceding statement
+     * @param statement2 The succeeding statement
+     * @return True if statement1 directly affects statement2, false otherwise
+     */
+    bool isAffects(Statement &statement1, Statement &statement2) const;
+
+    /**
+     * Returns true if there exists a affects relationship in the PKB, false otherwise
+     * @return True if there exists a affects relationship in the PKB, false otherwise
+     */
+    bool hasAffects() const;
+
+    /**
+     * Returns true if there exists a statement that is affected by the given statement, false otherwise i.e. there is a
+     * statement in behind of the given statement that is affected by the given statement
+     * @param statement The statement to be checked
+     * @return True if there exists a statement that is affected by the given statement, false otherwise
+     */
+    bool hasAffectedStmt(Statement &statement) const;
+
+    /**
+     * Returns true if there exists a statement that affects the given statement, false otherwise i.e. there is a
+     * statement in front of the given statement that affects the given statement
+     * @param statement The statement to be checked
+     * @return True if there exists a statement that affects the given statement, false otherwise
+     */
+    bool hasAffectsStmt(Statement &statement) const;
 };

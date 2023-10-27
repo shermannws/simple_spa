@@ -14,14 +14,16 @@ PkbWriterManager::PkbWriterManager(std::shared_ptr<AssignPatternManager> assignm
                                    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
                                    std::shared_ptr<IfPatternManager> ifPatternManager,
                                    std::shared_ptr<WhilePatternManager> whilePatternManager,
-                                   std::shared_ptr<NextRelationshipManager> nextRelationshipManager)
+                                   std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
+                                   std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager)
     : assignmentManager(assignmentManager), entitiesManager(entitiesManager),
       followsRelationshipManager(followsRelationshipManager), usesRelationshipManager(usesRelationshipManager),
       modifiesRelationshipManager(modifiesRelationshipManager), parentRelationshipManager(parentRelationshipManager),
       callsRelationshipManager(callsRelationshipManager),
       modifiesProcRelationshipManager(modifiesProcRelationshipManager),
       usesProcRelationshipManager(usesProcRelationshipManager), ifPatternManager(ifPatternManager),
-      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager) {}
+      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager),
+      affectsRelationshipManager(affectsRelationshipManager) {}
 
 void PkbWriterManager::addConstant(std::shared_ptr<Constant> c) { this->entitiesManager->storeConstant(c); }
 
@@ -114,4 +116,7 @@ void PkbWriterManager::addNextRelationship(std::shared_ptr<Statement> s1, std::s
     this->nextRelationshipManager->storeRelationship(s1, s2, true);
 }
 
-void PkbWriterManager::clearCache() { this->nextRelationshipManager->clearNextStarStore(); }
+void PkbWriterManager::clearCache() {
+    this->nextRelationshipManager->clearNextStarStore();
+    this->affectsRelationshipManager->clearStore();
+}
