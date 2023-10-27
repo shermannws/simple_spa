@@ -1,5 +1,21 @@
 #include "ManagerUtils.h"
 
+std::unordered_map<ClauseGroup, std::unordered_set<StatementType>> ManagerUtils::allowedStmtTypesMap = {
+        {ClauseGroup::Parent, {StatementType::Stmt, StatementType::While, StatementType::If}},
+        {ClauseGroup::Uses,
+         {StatementType::Stmt, StatementType::Assign, StatementType::While, StatementType::If, StatementType::Call,
+          StatementType::Print}},
+        {ClauseGroup::Modifies,
+         {StatementType::Stmt, StatementType::Assign, StatementType::While, StatementType::If, StatementType::Call,
+          StatementType::Read}},
+        {ClauseGroup::Affects, {StatementType::Stmt, StatementType::Assign}},
+};
+
+bool ManagerUtils::isStmtTypeAllowed(ClauseGroup clauseGroup, StatementType statementType) {
+    return (allowedStmtTypesMap.find(clauseGroup) == allowedStmtTypesMap.end()) ||
+           (allowedStmtTypesMap[clauseGroup].find(statementType) != allowedStmtTypesMap[clauseGroup].end());
+}
+
 template<typename E, typename S, typename R>
 std::vector<E> ManagerUtils::getFromSetStore(std::shared_ptr<S> store, std::function<bool(R &)> matcher,
                                              std::function<E(R &)> getter) {

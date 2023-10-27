@@ -1,6 +1,7 @@
 #include "AffectsRelationshipManager.h"
 
 AffectsRelationshipManager::AffectsRelationshipManager() : StmtToStmtRelationshipManager() {
+    this->clauseGroup = ClauseGroup::Affects;
     this->isAffectsCalculated = false;
 }
 
