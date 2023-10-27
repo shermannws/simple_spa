@@ -14,7 +14,7 @@ std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1, s
 
 std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
     std::shared_ptr<Result> final = std::make_shared<Result>();
-    ResultTuples finalTuples;
+    std::unordered_set<std::vector<Entity>> finalTuples;
 
     std::unordered_map<int, int> common = getCommonColumns(r1, r2);
     SynonymMap synIndices = buildSynIndices(r1, r2);
@@ -39,7 +39,7 @@ std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1, std::sha
                     int index = map2[colName];
                     newRow.push_back(row2[index]);
                 }
-                finalTuples.push_back(newRow);
+                finalTuples.insert(newRow);
             }
         }
     }

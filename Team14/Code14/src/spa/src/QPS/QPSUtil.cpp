@@ -89,88 +89,86 @@ std::unordered_set<QueryEntityType> QPSUtil::stmtRefEntities = {
         QueryEntityType::Stmt,  QueryEntityType::Assign, QueryEntityType::Print, QueryEntityType::If,
         QueryEntityType::While, QueryEntityType::Read,   QueryEntityType::Call};
 
-std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>>
-        QPSUtil::strategyCreatorMap = {
-                {ClauseType::Uses,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<UsesSuchThatStrategy>(pkbReader);
-                 }},
-                {ClauseType::Modifies,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<ModifiesSuchThatStrategy>(pkbReader);
-                 }},
-                {ClauseType::Follows,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<FollowsSuchThatStrategy>(pkbReader);
-                 }},
-                {ClauseType::FollowsStar,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<FollowsStarSuchThatStrategy>(pkbReader);
-                 }},
-                {ClauseType::Parent,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<ParentSuchThatStrategy>(pkbReader);
-                 }},
-                {ClauseType::ParentStar,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<ParentStarSuchThatStrategy>(pkbReader);
-                 }},
-                {ClauseType::Next,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<NextSuchThatStrategy>(pkbReader);
-                 }},
-                {ClauseType::NextStar,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<NextStarSuchThatStrategy>(pkbReader);
-                 }},
-                {ClauseType::Calls,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<CallsSuchThatStrategy>(pkbReader);
-                 }},
-                {ClauseType::CallsStar,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<CallsStarSuchThatStrategy>(pkbReader);
-                 }},
-                {ClauseType::Assign,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<AssignPatternStrategy>(pkbReader);
-                 }},
-                {ClauseType::If,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<IfPatternStrategy>(pkbReader);
-                 }},
-                {ClauseType::While,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<WhilePatternStrategy>(pkbReader);
-                 }},
-                {ClauseType::With,
-                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-                     return std::make_shared<WithStrategy>(pkbReader);
-                 }},
+std::unordered_map<ClauseType, strategyCreatorFunc> QPSUtil::strategyCreatorMap = {
+        {ClauseType::Uses,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<UsesSuchThatStrategy>(pkbReader);
+         }},
+        {ClauseType::Modifies,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<ModifiesSuchThatStrategy>(pkbReader);
+         }},
+        {ClauseType::Follows,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<FollowsSuchThatStrategy>(pkbReader);
+         }},
+        {ClauseType::FollowsStar,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<FollowsStarSuchThatStrategy>(pkbReader);
+         }},
+        {ClauseType::Parent,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<ParentSuchThatStrategy>(pkbReader);
+         }},
+        {ClauseType::ParentStar,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<ParentStarSuchThatStrategy>(pkbReader);
+         }},
+        {ClauseType::Next,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<NextSuchThatStrategy>(pkbReader);
+         }},
+        {ClauseType::NextStar,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<NextStarSuchThatStrategy>(pkbReader);
+         }},
+        {ClauseType::Calls,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<CallsSuchThatStrategy>(pkbReader);
+         }},
+        {ClauseType::CallsStar,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<CallsStarSuchThatStrategy>(pkbReader);
+         }},
+        {ClauseType::Assign,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<AssignPatternStrategy>(pkbReader);
+         }},
+        {ClauseType::If,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<IfPatternStrategy>(pkbReader);
+         }},
+        {ClauseType::While,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<WhilePatternStrategy>(pkbReader);
+         }},
+        {ClauseType::With,
+         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+             return std::make_shared<WithStrategy>(pkbReader);
+         }},
 };
 
-std::unordered_map<QueryEntityType, std::function<std::vector<Entity>(std::shared_ptr<PkbReader>)>>
-        QPSUtil::entityGetterMap = {
-                {QueryEntityType::Procedure,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllProcedures(); }},
-                {QueryEntityType::Stmt,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllStatements(); }},
-                {QueryEntityType::Assign,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllAssign(); }},
-                {QueryEntityType::Variable,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllVariables(); }},
-                {QueryEntityType::Constant,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllConstants(); }},
-                {QueryEntityType::While,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllWhile(); }},
-                {QueryEntityType::If,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllIf(); }},
-                {QueryEntityType::Read,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllRead(); }},
-                {QueryEntityType::Print,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllPrint(); }},
-                {QueryEntityType::Call,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllCall(); }}};
+std::unordered_map<QueryEntityType, entityGetterFunc> QPSUtil::entityGetterMap = {
+        {QueryEntityType::Procedure,
+         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<Entity> { return pkb->getAllProcedures(); }},
+        {QueryEntityType::Stmt,
+         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<Entity> { return pkb->getAllStatements(); }},
+        {QueryEntityType::Assign,
+         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<Entity> { return pkb->getAllAssign(); }},
+        {QueryEntityType::Variable,
+         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<Entity> { return pkb->getAllVariables(); }},
+        {QueryEntityType::Constant,
+         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<Entity> { return pkb->getAllConstants(); }},
+        {QueryEntityType::While,
+         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<Entity> { return pkb->getAllWhile(); }},
+        {QueryEntityType::If,
+         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<Entity> { return pkb->getAllIf(); }},
+        {QueryEntityType::Read,
+         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<Entity> { return pkb->getAllRead(); }},
+        {QueryEntityType::Print,
+         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<Entity> { return pkb->getAllPrint(); }},
+        {QueryEntityType::Call,
+         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<Entity> { return pkb->getAllCall(); }}};
 
 std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
         {QueryEntityType::Assign, StatementType::Assign}, {QueryEntityType::Print, StatementType::Print},

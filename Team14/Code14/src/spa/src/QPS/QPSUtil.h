@@ -5,6 +5,9 @@
 #include "QueryEntity.h"
 #include "Ref.h"
 
+using entityGetterFunc = std::function<std::unordered_set<Entity>(std::shared_ptr<PkbReader>)>;
+using strategyCreatorFunc = std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>;
+
 /**
  * @brief QPSUtil class
  */
@@ -53,14 +56,12 @@ public:
     /**
      * @brief An unordered map of ClauseType and its corresponding strategy creator function
      */
-    static std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>>
-            strategyCreatorMap;
+    static std::unordered_map<ClauseType, strategyCreatorFunc> strategyCreatorMap;
 
     /**
      * @brief An unordered map of query entity type to the corresponding pkb getAll func
      */
-    static std::unordered_map<QueryEntityType, std::function<std::vector<Entity>(std::shared_ptr<PkbReader>)>>
-            entityGetterMap;
+    static std::unordered_map<QueryEntityType, entityGetterFunc> entityGetterMap;
 
     /**
      * @brief An unordered map that maps QueryEntityType to the corresponding StatementType

@@ -83,14 +83,14 @@ std::unordered_set<std::vector<Entity>> StubPkbReader::getUsesStmtPair(Statement
         return std::unordered_set<std::vector<Entity>>(
                 {{CallStatement(1, "proc1"), Variable("var1")}, {CallStatement(2, "proc2"), Variable("var2")}});
     }
-    std::unordered_set<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var")};
-    std::unordered_set<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var")};
+    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var")};
+    std::vector<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var")};
     return std::unordered_set<std::vector<Entity>>({pair1, pair2});
 }
 
 std::unordered_set<std::vector<Entity>> StubPkbReader::getUsesProcPair() const {
-    std::unordered_set<Entity> pair1 = {Procedure("ProcedureName"), Variable("hello123")};
-    std::unordered_set<Entity> pair2 = {Procedure("ProcedureName2"), Variable("hello321")};
+    std::vector<Entity> pair1 = {Procedure("ProcedureName"), Variable("hello123")};
+    std::vector<Entity> pair2 = {Procedure("ProcedureName2"), Variable("hello321")};
     return std::unordered_set<std::vector<Entity>>({pair1, pair2});
 }
 
@@ -288,8 +288,8 @@ std::unordered_set<std::vector<Entity>> StubPkbReader::getAssignStmtsVarPairByRh
     }
 
     if (hasWildCard) {
-        std::unordered_set<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var2")};
-        std::unordered_set<Entity> pair3 = {Statement(3, StatementType::Assign), Variable("var3")};
+        std::vector<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var2")};
+        std::vector<Entity> pair3 = {Statement(3, StatementType::Assign), Variable("var3")};
         return std::unordered_set<std::vector<Entity>>({pair2, pair3});
     }
     return std::unordered_set<std::vector<Entity>>({pair1, pair2, pair3});

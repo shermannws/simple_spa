@@ -24,9 +24,11 @@ void Result::setBoolResult(bool result) { boolResult = result; }
 
 bool Result::getBoolResult() { return boolResult; }
 
-void Result::setTuples(const std::vector<std::vector<Entity>> &resultTuples) { tuples = resultTuples; }
+void Result::setTuples(const std::unordered_set<std::vector<Entity>> &resultTuples) {
+    for (const auto &tuple: resultTuples) { tuples.push_back(tuple); }
+}
 
-void Result::setTuples(const std::vector<Entity> &resultEntities) {
+void Result::setTuples(const std::unordered_set<Entity> &resultEntities) {
     for (const Entity &entity: resultEntities) { tuples.push_back(std::vector<Entity>{entity}); }
 }
 

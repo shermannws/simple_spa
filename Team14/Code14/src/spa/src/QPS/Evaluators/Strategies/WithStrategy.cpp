@@ -50,23 +50,23 @@ std::shared_ptr<Result> WithStrategy::evaluateBoolean(Ref &leftRef, Ref &rightRe
     return res;
 }
 
-std::vector<std::vector<Entity>> WithStrategy::join(std::vector<Entity> v1, AttrName a1, std::vector<Entity> v2,
-                                                    AttrName a2) const {
-    std::vector<std::vector<Entity>> res;
+std::unordered_set<std::vector<Entity>> WithStrategy::join(std::unordered_set<Entity> v1, AttrName a1,
+                                                           std::unordered_set<Entity> v2, AttrName a2) const {
+    std::unordered_set<std::vector<Entity>> res;
 
     for (const auto &e1: v1) {
         for (const auto &e2: v2) {
-            if (QPSUtil::getValueFunc[a1](e1) == QPSUtil::getValueFunc[a2](e2)) { res.push_back({e1, e2}); }
+            if (QPSUtil::getValueFunc[a1](e1) == QPSUtil::getValueFunc[a2](e2)) { res.insert({e1, e2}); }
         }
     }
 
     return res;
 }
 
-std::vector<Entity> WithStrategy::filter(std::vector<Entity> v, AttrName a, StringRep rep) const {
-    std::vector<Entity> res;
+std::unordered_set<Entity> WithStrategy::filter(std::unordered_set<Entity> v, AttrName a, StringRep rep) const {
+    std::unordered_set<Entity> res;
     for (const auto &e: v) {
-        if (QPSUtil::getValueFunc[a](e) == rep) { res.push_back(e); }
+        if (QPSUtil::getValueFunc[a](e) == rep) { res.insert(e); }
     }
 
     return res;

@@ -39,9 +39,9 @@ private:
      * @brief Retrieves all instances of a query entity from the PKB, the method
      * is responsible for choosing which PKB API to call
      * @param queryEntity A pointer to the query entity to retrieve instances for.
-     * @return A vector of entities representing all instances of the query entity.
+     * @return A set of entities representing all instances of the query entity.
      */
-    std::vector<Entity> getAll(const EntityPtr &queryEntity);
+    std::unordered_set<Entity> getAll(const EntityPtr &queryEntity);
 
     /**
      * @brief Evaluates a clause and updates the result accordingly.

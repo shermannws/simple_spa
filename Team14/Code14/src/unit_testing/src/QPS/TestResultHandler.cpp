@@ -17,12 +17,12 @@ TEST_CASE("Test Result combiner") {
 
         std::shared_ptr<Result> r = std::make_shared<Result>();
         r->setType(std::vector<Synonym>{"a", "x"});
-        std::vector<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
         r->setTuples(tuples);
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
         r1->setType(std::vector<Synonym>{"a", "x"});
-        std::vector<std::vector<Entity>> tuples1{v1, v2, v3};
+        std::unordered_set<std::vector<Entity>> tuples1{v1, v2, v3};
         r1->setTuples(tuples1);
 
         ResultHandler evaluator = ResultHandler();
@@ -42,7 +42,7 @@ TEST_CASE("Test Result combiner") {
 
         std::shared_ptr<Result> r = std::make_shared<Result>();
         r->setType(std::vector<Synonym>{"a", "x"});
-        std::vector<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
         r->setTuples(tuples);
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
@@ -67,7 +67,7 @@ TEST_CASE("Test Result combiner") {
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
         r1->setType(std::vector<Synonym>{"b"});
-        std::vector<std::vector<Entity>> tuples1{{a1}, {a2}, {a3}};
+        std::unordered_set<std::vector<Entity>> tuples1{{a1}, {a2}, {a3}};
         r1->setTuples(tuples1);
 
         ResultHandler evaluator = ResultHandler();
@@ -92,7 +92,7 @@ TEST_CASE("Test Result combiner") {
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
         r1->setType(std::vector<Synonym>{"b"});
-        std::vector<std::vector<Entity>> tuples1{{a1}};
+        std::unordered_set<std::vector<Entity>> tuples1{{a1}};
         r1->setTuples(tuples1);
 
         ResultHandler evaluator = ResultHandler();
@@ -159,7 +159,7 @@ TEST_CASE("Test Result combiner") {
 
         std::shared_ptr<Result> rTuple = std::make_shared<Result>();
         rTuple->setType(std::vector<Synonym>{"a", "x"});
-        std::vector<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
         rTuple->setTuples(tuples);
 
         std::shared_ptr<Result> rInvalid = std::make_shared<Result>();
