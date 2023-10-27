@@ -51,7 +51,6 @@ bool std::equal_to<std::vector<Entity>>::operator()(std::vector<Entity> const &l
     if (lhs.size() != rhs.size()) { return false; }
     for (size_t i = 0; i < lhs.size(); ++i) {
         if (lhs[i].getEntityValue() != rhs[i].getEntityValue()) { return false; }
-        return true;
     }
     return true;
 };

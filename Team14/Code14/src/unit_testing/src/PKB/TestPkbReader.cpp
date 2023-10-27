@@ -522,7 +522,7 @@ TEST_CASE("Assign Pattern") {
 
     auto set2 = reader->getAssignStmtsByRhs(subExpr, true);
     REQUIRE(set2.size() == 1);
-    REQUIRE(set2.find(s) == set2.end());
+    REQUIRE(set2.find(s) != set2.end());
 
     auto set3 = reader->getAssignStmtsByRhs(e, false);
     REQUIRE(set3.size() == 1);
