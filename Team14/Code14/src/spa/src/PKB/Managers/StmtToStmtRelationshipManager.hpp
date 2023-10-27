@@ -13,6 +13,7 @@ template<typename S>
 std::vector<std::vector<Entity>> StmtToStmtRelationshipManager<S>::getRelationshipPair(StatementType formerType,
                                                                                        StatementType latterType,
                                                                                        bool requireDirect) const {
+    if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, formerType)) { return std::vector<std::vector<Entity>>(); }
     auto leftMatcher = [formerType](Statement &stmt) { return stmt.isStatementType(formerType); };
 
     auto rightMatcher = [latterType](Statement &stmt) { return stmt.isStatementType(latterType); };
@@ -24,18 +25,21 @@ std::vector<std::vector<Entity>> StmtToStmtRelationshipManager<S>::getRelationsh
 template<typename S>
 std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeStmt(StatementType type, Statement &statement,
                                                                               bool requireDirect) const {
+    if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return std::vector<Entity>(); }
     return ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch<Statement>(
             requireDirect ? *relationshipStore : *starRelationshipStore, statement, type);
 }
 
 template<typename S>
 std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type) const {
+    if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return std::vector<Entity>(); }
     return ManagerUtils::getLeftKeysStmtMatch<Statement>(*relationshipStore, type);
 }
 
 template<typename S>
 std::vector<Entity> StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type,
                                                                                   bool requireDirect) const {
+    if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return std::vector<Entity>(); }
     return ManagerUtils::getLeftKeysStmtMatch<Statement>(requireDirect ? *relationshipStore : *starRelationshipStore,
                                                          type);
 }

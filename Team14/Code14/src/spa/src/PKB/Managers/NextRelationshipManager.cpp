@@ -3,6 +3,7 @@
 #include <utility>
 
 NextRelationshipManager::NextRelationshipManager() : StmtToStmtRelationshipManager() {
+    this->clauseGroup = ClauseGroup::Next;
     this->isNextStarCalculated = false;
 };
 

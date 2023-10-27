@@ -3,6 +3,7 @@
 #include <stack>
 
 #include "PKB/Commons/Assignment.h"
+#include "PKB/Commons/ClauseGroup.h"
 #include "PKB/Managers/StmtToStmtRelationshipManager.h"
 #include "PKB/RelationshipStores/AffectsRelationshipStore.h"
 
