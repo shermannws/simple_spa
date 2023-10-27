@@ -63,7 +63,5 @@ void AffectsRelationshipManager::clearStore() {
 }
 
 std::vector<Entity> AffectsRelationshipManager::getAffectsSameStmt(StatementType stmtType) const {
-    auto leftMatcher = [stmtType](Statement &stmt) { return stmt.isStatementType(stmtType); };
-
-    return ManagerUtils::getLeftKeysMatchRight<Statement>(*relationshipStore, leftMatcher);
+    return getSameStmt(stmtType, true);
 }

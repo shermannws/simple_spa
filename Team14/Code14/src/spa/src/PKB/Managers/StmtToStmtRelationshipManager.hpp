@@ -80,3 +80,11 @@ template<typename S>
 bool StmtToStmtRelationshipManager<S>::isLatter(Statement &statement) const {
     return relationshipStore->getLeftEntitiesOf(std::make_shared<Statement>(statement)) != nullptr;
 }
+
+template<typename S>
+std::vector<Entity> StmtToStmtRelationshipManager<S>::getSameStmt(StatementType stmtType, bool requireDirect) const {
+    auto leftMatcher = [stmtType](Statement &stmt) { return stmt.isStatementType(stmtType); };
+
+    return ManagerUtils::getLeftKeysMatchRight<Statement>(requireDirect ? *relationshipStore : *starRelationshipStore,
+                                                          leftMatcher);
+}

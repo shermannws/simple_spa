@@ -326,6 +326,5 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
 
         REQUIRE_FALSE(pkbReaderManager->hasAffectedStmt(*stmt1));
         REQUIRE(pkbReaderManager->hasAffectedStmt(*stmt2));
-
     }
 }

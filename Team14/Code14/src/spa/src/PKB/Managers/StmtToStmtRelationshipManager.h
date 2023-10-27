@@ -130,6 +130,13 @@ public:
      * @return True if there exists a relationship where the given statement is the latter statement, false otherwise
      */
     bool isLatter(Statement &statement) const;
+
+    /**
+     * @brief Get all the statements of the given stmtType that is related to itself
+     * @param stmtType The type of statement to retrieve
+     * @return A vector of statements that is related to itself
+     */
+    std::vector<Entity> getSameStmt(StatementType stmtType, bool requireDirect) const;
 };
 
 #include "StmtToStmtRelationshipManager.hpp"
