@@ -13,7 +13,7 @@ std::unordered_map<ClauseGroup, std::unordered_set<StatementType>> ManagerUtils:
 
 bool ManagerUtils::isStmtTypeAllowed(ClauseGroup clauseGroup, StatementType statementType) {
     return (allowedStmtTypesMap.find(clauseGroup) == allowedStmtTypesMap.end()) ||
-           (allowedStmtTypesMap[clauseGroup].find(statementType) != allowedStmtTypesMap[clauseGroup].end())
+           (allowedStmtTypesMap[clauseGroup].find(statementType) != allowedStmtTypesMap[clauseGroup].end());
 }
 
 template<typename E, typename S, typename R>
