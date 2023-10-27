@@ -1,3 +1,4 @@
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "QPS/Exceptions/SemanticException.h"
 #include "QPS/Exceptions/SyntaxException.h"
 #include "QPS/Parsers/PQLParser.h"
@@ -6,7 +7,7 @@
 #include "catch.hpp"
 
 
-TEST_CASE("single declaration, single Select") {
+TEST_CASE_METHOD(UnitTestFixture, "single declaration, single Select") {
     std::string input = "stmt s; Select s";
     PQLParser parser(input);
     Query query = parser.parse();
@@ -20,7 +21,7 @@ TEST_CASE("single declaration, single Select") {
     REQUIRE(declarationEntity == query.getEntity(selectEntity));
 }
 
-TEST_CASE("processDeclarations serial declaration") {
+TEST_CASE_METHOD(UnitTestFixture, "processDeclarations serial declaration") {
     std::string input = "variable v,v1,v2; Select v";
     PQLParser parser(input);
     Query query = parser.parse();
@@ -36,7 +37,7 @@ TEST_CASE("processDeclarations serial declaration") {
     REQUIRE(declarationEntity == query.getEntity(selectEntity));
 }
 
-TEST_CASE("processDeclarations multiple declaration") {
+TEST_CASE_METHOD(UnitTestFixture, "processDeclarations multiple declaration") {
     std::string input =
             "procedure p; stmt s; read re; print pr; assign a; \n while w; if i; variable v; constant k; \n Select p";
     PQLParser parser(input);
@@ -59,7 +60,7 @@ TEST_CASE("processDeclarations multiple declaration") {
     REQUIRE(declarationEntity == query.getEntity(selectEntity));
 }
 
-TEST_CASE("processDeclarations Errors") {
+TEST_CASE_METHOD(UnitTestFixture, "processDeclarations Errors") {
     SECTION("SyntaxExceptions") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assignment a; Select a", "Expected a declaration but found none");
@@ -90,7 +91,7 @@ TEST_CASE("processDeclarations Errors") {
     }
 }
 
-TEST_CASE("processSelect Errors") {
+TEST_CASE_METHOD(UnitTestFixture, "processSelect Errors") {
     SECTION("SyntaxException") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("stmt s; where s", "Expected Select clause but found 'where'");
@@ -115,7 +116,7 @@ TEST_CASE("processSelect Errors") {
     }
 }
 
-TEST_CASE("processSuchThatClause Uses") {
+TEST_CASE_METHOD(UnitTestFixture, "processSuchThatClause Uses") {
     SECTION("Valid Uses query") {
         PQLParser parser("assign a; variable v;\nSelect a such that Uses(a, v)");
         Query query = parser.parse();
@@ -151,7 +152,7 @@ TEST_CASE("processSuchThatClause Uses") {
     }
 }
 
-TEST_CASE("processSuchThatClause Modifies") {
+TEST_CASE_METHOD(UnitTestFixture, "processSuchThatClause Modifies") {
     SECTION("Valid Modifies(s,v) query") {
         PQLParser parser("stmt s; variable v; \nSelect v such that Modifies(s,v)");
         Query query = parser.parse();
@@ -255,7 +256,7 @@ TEST_CASE("processSuchThatClause Modifies") {
     }
 }
 
-TEST_CASE("processSuchThatClause Follows") {
+TEST_CASE_METHOD(UnitTestFixture, "processSuchThatClause Follows") {
     SECTION("Valid Follows(s1,s2)") {
         PQLParser parser("stmt s1, s2;\nSelect s1 such that Follows (s1,s2)");
         Query query = parser.parse();
@@ -376,7 +377,7 @@ TEST_CASE("processSuchThatClause Follows") {
     }
 }
 
-TEST_CASE("processSuchThatClause Parent") {
+TEST_CASE_METHOD(UnitTestFixture, "processSuchThatClause Parent") {
     SECTION("Valid Parent(s1,s2)") {
         PQLParser parser("print s1, s2;\nSelect s1 such that Parent (s1,s2)");
         Query query = parser.parse();
@@ -497,7 +498,7 @@ TEST_CASE("processSuchThatClause Parent") {
     }
 }
 
-TEST_CASE("processSuchThatClause Parent*") {
+TEST_CASE_METHOD(UnitTestFixture, "processSuchThatClause Parent*") {
     SECTION("Valid Parent*(s1,s2)") {
         PQLParser parser("read s1, s2;\nSelect s1 such that Parent* (s1,s2)");
         Query query = parser.parse();
@@ -618,7 +619,7 @@ TEST_CASE("processSuchThatClause Parent*") {
     }
 }
 
-TEST_CASE("processSuchThatClause Next") {
+TEST_CASE_METHOD(UnitTestFixture, "processSuchThatClause Next") {
     SECTION("Valid Next(s1,s2)") {
         PQLParser parser("print s1, s2;\nSelect s1 such that Next (s1,s2)");
         Query query = parser.parse();
@@ -739,7 +740,7 @@ TEST_CASE("processSuchThatClause Next") {
     }
 }
 
-TEST_CASE("processSuchThatClause Next*") {
+TEST_CASE_METHOD(UnitTestFixture, "processSuchThatClause Next*") {
     SECTION("Valid Next*(s1,s2)") {
         PQLParser parser("read s1, s2;\nSelect s1 such that Next* (s1,s2)");
         Query query = parser.parse();
@@ -860,7 +861,7 @@ TEST_CASE("processSuchThatClause Next*") {
     }
 }
 
-TEST_CASE("processSuchThatClause Calls") {
+TEST_CASE_METHOD(UnitTestFixture, "processSuchThatClause Calls") {
     SECTION("Valid Calls(_, _)") {
         PQLParser parser("print s1; Select s1 such that Calls (_,_)");
         Query query = parser.parse();
@@ -898,7 +899,7 @@ TEST_CASE("processSuchThatClause Calls") {
     }
 }
 
-TEST_CASE("processSuchThatClause Calls*") {
+TEST_CASE_METHOD(UnitTestFixture, "processSuchThatClause Calls*") {
     SECTION("Valid Calls*(_, p)") {
         PQLParser parser("print s1; procedure q; Select s1 such that Calls* (_,q)");
         Query query = parser.parse();
@@ -945,7 +946,7 @@ TEST_CASE("processSuchThatClause Calls*") {
     }
 }
 
-TEST_CASE("processSuchThatClause Affects") {
+TEST_CASE_METHOD(UnitTestFixture, "processSuchThatClause Affects") {
     SECTION("Valid Affects(s1,s2)") {
         PQLParser parser("stmt s1, s2;\nSelect s1 such that Affects (s1,s2)");
         Query query = parser.parse();
@@ -1202,7 +1203,7 @@ TEST_CASE("processSuchThatClause Affects") {
     }
 }
 
-TEST_CASE("Invalid processSuchThat cases") {
+TEST_CASE_METHOD(UnitTestFixture, "Invalid processSuchThat cases") {
     SECTION("Invalid Syntax - general queries") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assign a; print d;\nSelect a such", "Invalid query syntax");
@@ -1361,7 +1362,7 @@ TEST_CASE("Invalid processSuchThat cases") {
     }
 }
 
-TEST_CASE("processPatternClause") {
+TEST_CASE_METHOD(UnitTestFixture, "processPatternClause") {
     SECTION("Valid wildcard assign pattern") {
         PQLParser parser("assign a; variable v;\nSelect a pattern a(_,_)");
         Query query = parser.parse();
@@ -1607,7 +1608,7 @@ TEST_CASE("processPatternClause") {
     }
 }
 
-TEST_CASE("processWithClause") {
+TEST_CASE_METHOD(UnitTestFixture, "processWithClause") {
     // Syntax Check
     SECTION("Valid Ident = Ident") {
         PQLParser parser("assign a; variable v;\nSelect a with \"hello\" = \"world\"");
@@ -1700,7 +1701,7 @@ TEST_CASE("processWithClause") {
     }
 }
 
-TEST_CASE("Invalid processWithClause SyntaxError") {
+TEST_CASE_METHOD(UnitTestFixture, "Invalid processWithClause SyntaxError") {
     SECTION("Invalid general structure") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assign a; print d;\nSelect a with ", "Invalid Ref");
@@ -1743,7 +1744,7 @@ TEST_CASE("Invalid processWithClause SyntaxError") {
     }
 }
 
-TEST_CASE("Invalid processWithClause SemanticError") {
+TEST_CASE_METHOD(UnitTestFixture, "Invalid processWithClause SemanticError") {
     SECTION("Different types in attrCompare") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("assign a; print d; procedure p; constant c;\nSelect a with p.procName = c.value",
@@ -1779,7 +1780,7 @@ TEST_CASE("Invalid processWithClause SemanticError") {
     }
 }
 
-TEST_CASE("both clause present") {
+TEST_CASE_METHOD(UnitTestFixture, "both clause present") {
     PQLParser parser("assign a; variable v;\nSelect a such that Uses(a, v) pattern a(\"y\",_\"x\"_)");
     Query query = parser.parse();
 
@@ -1807,7 +1808,7 @@ TEST_CASE("both clause present") {
     REQUIRE(rightRef1.getRep() == "v");
 }
 
-TEST_CASE("invalid multi-clause queries") {
+TEST_CASE_METHOD(UnitTestFixture, "invalid multi-clause queries") {
     SECTION("Syntax Errors") {
         // Use and between different clause types
         PQLParser parser("assign a; variable v; Select v such that Modifies(a,v) and pattern a(_,_) ");
@@ -1827,7 +1828,7 @@ TEST_CASE("invalid multi-clause queries") {
     }
 }
 
-TEST_CASE("valid multi-clause queries") {
+TEST_CASE_METHOD(UnitTestFixture, "valid multi-clause queries") {
 
     SECTION("use AND in such that") {
         PQLParser parser("assign a; variable v; Select v such that Modifies(a,v) and Follows*(1,2) and Uses(a,v)");
@@ -1908,7 +1909,7 @@ TEST_CASE("valid multi-clause queries") {
     }
 }
 
-TEST_CASE("tuple and boolean result clause") {
+TEST_CASE_METHOD(UnitTestFixture, "tuple and boolean result clause") {
 
     PQLParser parser("assign a, b, c, d; Select<a  , b  , c> ");
     Query query = parser.parse();
@@ -1953,7 +1954,7 @@ TEST_CASE("tuple and boolean result clause") {
     REQUIRE(query9.getSelect().size() == 2);
 }
 
-TEST_CASE("invalid result clause") {
+TEST_CASE_METHOD(UnitTestFixture, "invalid result clause") {
     PQLParser parser("Select <>");
     REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
 

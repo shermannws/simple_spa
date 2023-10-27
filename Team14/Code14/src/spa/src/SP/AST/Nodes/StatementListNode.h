@@ -18,14 +18,15 @@ public:
      * @param parents Parents of the StatementListNode
      * @param proc Procedure containing the StatementListNode
      */
-    virtual void visitStatementListNode(StatementListNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    virtual void visitStatementListNode(const std::shared_ptr<StatementListNode> &node,
+                                        std::vector<std::shared_ptr<Statement>> parents,
                                         std::shared_ptr<Procedure> proc) const = 0;
 };
 
 /**
  * ASTNode to represent a statement list.
  */
-class StatementListNode : public ASTNode {
+class StatementListNode : public ASTNode, public std::enable_shared_from_this<StatementListNode> {
 private:
     /**
      * The vector of statements in the statement list.

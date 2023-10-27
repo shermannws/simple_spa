@@ -17,6 +17,7 @@ void UnaryConditionalExpressionNode::accept(std::shared_ptr<DesignExtractorVisit
                                             std::vector<std::shared_ptr<Statement>> parents,
                                             std::shared_ptr<Procedure> proc) {
     if (auto uceVisitor = std::dynamic_pointer_cast<UnaryConditionalExpressionNodeVisitor>(visitor)) {
-        uceVisitor->visitUnaryConditionalExpressionNode(this, parents, proc);
+        uceVisitor->visitUnaryConditionalExpressionNode(
+                std::enable_shared_from_this<UnaryConditionalExpressionNode>::shared_from_this(), parents, proc);
     }
 }

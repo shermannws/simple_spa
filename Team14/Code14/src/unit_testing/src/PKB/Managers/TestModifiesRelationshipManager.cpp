@@ -1,12 +1,13 @@
 #include <memory>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Commons/Assignment.h"
 #include "PKB/Managers/ModifiesRelationshipManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test Modifies Relationship Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Modifies Relationship Retrieval") {
     ModifiesRelationshipManager modifiesRelationshipManager = ModifiesRelationshipManager();
 
     shared_ptr<Variable> variableX = make_shared<Variable>(Variable("x"));

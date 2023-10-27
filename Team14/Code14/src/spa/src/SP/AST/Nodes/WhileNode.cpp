@@ -19,6 +19,6 @@ StatementNodeType WhileNode::getStatementType() { return StatementNodeType::Whil
 void WhileNode::accept(std::shared_ptr<DesignExtractorVisitor> visitor, std::vector<std::shared_ptr<Statement>> parents,
                        std::shared_ptr<Procedure> proc) {
     if (auto whileVisitor = std::dynamic_pointer_cast<WhileNodeVisitor>(visitor)) {
-        whileVisitor->visitWhileNode(this, parents, proc);
+        whileVisitor->visitWhileNode(std::enable_shared_from_this<WhileNode>::shared_from_this(), parents, proc);
     }
 }

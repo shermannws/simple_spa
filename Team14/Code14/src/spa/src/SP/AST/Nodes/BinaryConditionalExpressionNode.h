@@ -21,7 +21,7 @@ public:
      * @param parents Parents of the BinaryConditionalExpressionNode
      * @param proc Procedure containing the BinaryConditionalExpressionNode
      */
-    virtual void visitBinaryConditionalExpressionNode(BinaryConditionalExpressionNode *node,
+    virtual void visitBinaryConditionalExpressionNode(const std::shared_ptr<BinaryConditionalExpressionNode> &node,
                                                       std::vector<std::shared_ptr<Statement>> parents,
                                                       std::shared_ptr<Procedure> proc) const = 0;
 };
@@ -30,7 +30,8 @@ public:
  * ASTNode to represent a binary conditional expression.
  * Implements the ConditionalExpressionNode interface.
  */
-class BinaryConditionalExpressionNode : public ConditionalExpressionNode {
+class BinaryConditionalExpressionNode : public ConditionalExpressionNode,
+                                        public std::enable_shared_from_this<BinaryConditionalExpressionNode> {
 private:
     /**
      * The type of conditional operator for the binary conditional expression.

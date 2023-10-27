@@ -17,4 +17,6 @@ public:
      * @return A ModifiesRelationshipManager object
      */
     ModifiesRelationshipManager();
+
+    std::shared_ptr<Variable> getModifiedVar(std::shared_ptr<Statement> stmt);
 };

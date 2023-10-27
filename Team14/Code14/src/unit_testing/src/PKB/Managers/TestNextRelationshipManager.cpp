@@ -1,11 +1,12 @@
 #include <memory>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Managers/NextRelationshipManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test Next/Next* Relationship Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Next/Next* Relationship Retrieval") {
     SECTION("Simple Test 1") {
         NextRelationshipManager nextRelationshipManager = NextRelationshipManager();
 

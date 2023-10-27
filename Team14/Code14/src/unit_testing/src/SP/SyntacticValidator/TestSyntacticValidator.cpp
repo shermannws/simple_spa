@@ -1,10 +1,11 @@
 #include <string>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "SP/SPTokenizer.h"
 #include "SP/Validators/SyntacticValidator/SyntacticValidator.h"
 #include "catch.hpp"
 
-TEST_CASE("SyntacticValidator - Valid syntax") {
+TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Valid syntax") {
 
     SECTION("Single Read statement") {
         std::string input = "procedure testProcedure {read num1;}";
@@ -79,7 +80,7 @@ TEST_CASE("SyntacticValidator - Valid syntax") {
     }
 }
 
-TEST_CASE("SyntacticValidator - Invalid syntax") {
+TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid syntax") {
 
     SECTION("Empty Procedure") {
         std::string input = "procedure testProcedure {}";
@@ -130,7 +131,7 @@ TEST_CASE("SyntacticValidator - Invalid syntax") {
     }
 }
 
-TEST_CASE("SyntacticValidator - Valid IF syntax") {
+TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Valid IF syntax") {
     SECTION("basic if syntax") {
         std::string input = "procedure testWhile {if (0 == 1) then { count = count + 1; } else { call readx ;}}";
         SPTokenizer tokenizer(input);
@@ -149,7 +150,7 @@ TEST_CASE("SyntacticValidator - Valid IF syntax") {
     }
 }
 
-TEST_CASE("SyntacticValidator - Valid WHILE syntax RELATIONAL expr") {
+TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Valid WHILE syntax RELATIONAL expr") {
     SECTION("single relational expr") {
         std::string input = "procedure testWhile {while (k > r) { a = r; }}";
         SPTokenizer tokenizer(input);
@@ -207,7 +208,7 @@ TEST_CASE("SyntacticValidator - Valid WHILE syntax RELATIONAL expr") {
     }
 }
 
-TEST_CASE("SyntacticValidator - Invalid WHILE syntax RELATIONAL expr") {
+TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid WHILE syntax RELATIONAL expr") {
     SECTION("No brackets") {
         std::string input = "procedure testWhile {while !(a > b) { a = r; }}";
         SPTokenizer tokenizer(input);
@@ -242,7 +243,7 @@ TEST_CASE("SyntacticValidator - Invalid WHILE syntax RELATIONAL expr") {
     }
 }
 
-TEST_CASE("SyntacticValidator - Valid WHILE syntax CONDITIONAL expr") {
+TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Valid WHILE syntax CONDITIONAL expr") {
     SECTION("NOT conditional expr") {
         std::string input = "procedure testWhile {while ( !(a>b)  ) { a = r; }}";
         SPTokenizer tokenizer(input);
@@ -301,7 +302,7 @@ TEST_CASE("SyntacticValidator - Valid WHILE syntax CONDITIONAL expr") {
     }
 }
 
-TEST_CASE("SyntacticValidator - Invalid WHILE syntax CONDITIONAL expr") {
+TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid WHILE syntax CONDITIONAL expr") {
     SECTION("invalid not expression") {
         std::string input = "procedure testWhile {while (!a) { a = r; }}";
         SPTokenizer tokenizer(input);

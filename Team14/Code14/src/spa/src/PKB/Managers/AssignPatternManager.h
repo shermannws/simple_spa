@@ -113,4 +113,6 @@ public:
      * @note Used for `pattern a ("x", "x")`
      */
     std::vector<Entity> getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const;
+
+    std::unordered_set<std::shared_ptr<Statement>> getAllAssignStmtsAsStmts() const;
 };

@@ -1,11 +1,12 @@
 #include <memory>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test Calls Relationship Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Calls Relationship Retrieval") {
     CallsRelationshipManager callsRelationshipManager = CallsRelationshipManager();
 
     REQUIRE(callsRelationshipManager.hasRelationship() == false);
@@ -55,7 +56,7 @@ TEST_CASE("Test Calls Relationship Retrieval") {
 }
 
 
-TEST_CASE("Test Calls Transitivity Calculation") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Calls Transitivity Calculation") {
     SECTION("Calls* Test 1") {
         /**
         1 --> 2

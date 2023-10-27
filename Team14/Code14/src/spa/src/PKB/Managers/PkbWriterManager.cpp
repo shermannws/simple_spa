@@ -15,7 +15,7 @@ PkbWriterManager::PkbWriterManager(std::shared_ptr<AssignPatternManager> assignm
                                    std::shared_ptr<IfPatternManager> ifPatternManager,
                                    std::shared_ptr<WhilePatternManager> whilePatternManager,
                                    std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
-                                   std::shared_ptr<CFGManager> cfgManager)
+                                   std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager)
     : assignmentManager(assignmentManager), entitiesManager(entitiesManager),
       followsRelationshipManager(followsRelationshipManager), usesRelationshipManager(usesRelationshipManager),
       modifiesRelationshipManager(modifiesRelationshipManager), parentRelationshipManager(parentRelationshipManager),
@@ -23,7 +23,7 @@ PkbWriterManager::PkbWriterManager(std::shared_ptr<AssignPatternManager> assignm
       modifiesProcRelationshipManager(modifiesProcRelationshipManager),
       usesProcRelationshipManager(usesProcRelationshipManager), ifPatternManager(ifPatternManager),
       whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager),
-      cfgManager(cfgManager) {}
+      affectsRelationshipManager(affectsRelationshipManager) {}
 
 void PkbWriterManager::addConstant(std::shared_ptr<Constant> c) { this->entitiesManager->storeConstant(c); }
 
@@ -116,8 +116,7 @@ void PkbWriterManager::addNextRelationship(std::shared_ptr<Statement> s1, std::s
     this->nextRelationshipManager->storeRelationship(s1, s2, true);
 }
 
-void PkbWriterManager::setCFGMap(std::unordered_map<ProcedureName, std::shared_ptr<CFGNode>> cfgMap) {
-    this->cfgManager->setCFG(cfgMap);
+void PkbWriterManager::clearCache() {
+    this->nextRelationshipManager->clearNextStarStore();
+    this->affectsRelationshipManager->clearStore();
 }
-
-void PkbWriterManager::clearCache() { this->nextRelationshipManager->clearNextStarStore(); }

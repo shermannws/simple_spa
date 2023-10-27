@@ -37,7 +37,7 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitProcedureNode(ProcedureNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitProcedureNode(const std::shared_ptr<ProcedureNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                             std::shared_ptr<Procedure> proc) const override;
 
     /*!
@@ -47,7 +47,7 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitAssignNode(const std::shared_ptr<AssignNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                          std::shared_ptr<Procedure> proc) const override;
 
     /*!
@@ -56,7 +56,7 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitReadNode(ReadNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitReadNode(const std::shared_ptr<ReadNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                        std::shared_ptr<Procedure> proc) const override;
 
     /*!
@@ -65,7 +65,7 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitPrintNode(PrintNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitPrintNode(const std::shared_ptr<PrintNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                         std::shared_ptr<Procedure> proc) const override;
 
     /*!
@@ -74,7 +74,7 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitVariableNode(VariableNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitVariableNode(const std::shared_ptr<VariableNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                            std::shared_ptr<Procedure> proc) const override;
 
     /*!
@@ -83,7 +83,7 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitConstantNode(ConstantNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitConstantNode(const std::shared_ptr<ConstantNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                            std::shared_ptr<Procedure> proc) const override;
 
     /*!
@@ -92,7 +92,7 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitCallNode(CallNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitCallNode(const std::shared_ptr<CallNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                        std::shared_ptr<Procedure> proc) const override;
 
     /*!
@@ -101,7 +101,7 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitIfNode(IfNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitIfNode(const std::shared_ptr<IfNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                      std::shared_ptr<Procedure> proc) const override;
 
     /*!
@@ -110,6 +110,6 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitWhileNode(const std::shared_ptr<WhileNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                         std::shared_ptr<Procedure> proc) const override;
 };

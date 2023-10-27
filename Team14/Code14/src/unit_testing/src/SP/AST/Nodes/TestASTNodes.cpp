@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 
+#include "../../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "SP/AST/Nodes/ASTNode.h"
 #include "SP/AST/Nodes/ArithmeticExpressionNode.h"
 #include "SP/AST/Nodes/ArithmeticOperatorType.h"
@@ -25,7 +26,7 @@
 #include "SP/AST/Nodes/WhileNode.h"
 #include "catch.hpp"
 
-TEST_CASE("Test ExpressionNode family") {
+TEST_CASE_METHOD(UnitTestFixture, "Test ExpressionNode family") {
     VariableName varName1 = "Variable1";
     VariableName varName2 = "Variable2";
     ConstantValue constVal1 = "100";
@@ -159,7 +160,7 @@ TEST_CASE("Test ExpressionNode family") {
     }
 }
 
-TEST_CASE("Test ConditionalExpressionNode family") {
+TEST_CASE_METHOD(UnitTestFixture, "Test ConditionalExpressionNode family") {
     VariableName varName1 = "Variable1";
     VariableName varName2 = "Variable2";
     ConstantValue constVal1 = "100";
@@ -237,7 +238,7 @@ TEST_CASE("Test ConditionalExpressionNode family") {
     }
 }
 
-TEST_CASE("Test statement family") {
+TEST_CASE_METHOD(UnitTestFixture, "Test statement family") {
     StatementNumber statementNumber = 1;
     ConstantValue constVal1 = "100";
     ConstantValue constVal2 = "200";
@@ -353,7 +354,7 @@ TEST_CASE("Test statement family") {
     }
 }
 
-TEST_CASE("Test AST node getters") {
+TEST_CASE_METHOD(UnitTestFixture, "Test AST node getters") {
     StatementNumber statementNumber = 1;
 
     VariableName varName = "variable";
@@ -400,7 +401,7 @@ TEST_CASE("Test AST node getters") {
     REQUIRE(programNode->getProcedures() == procedures);
 }
 
-TEST_CASE("Test ExpressionNode toString() method") {
+TEST_CASE_METHOD(UnitTestFixture, "Test ExpressionNode toString() method") {
     // test case of 3
     auto constantNode3 = ConstantNode("3");
     std::shared_ptr<ExpressionNode> expression = std::make_shared<ConstantNode>(constantNode3);
