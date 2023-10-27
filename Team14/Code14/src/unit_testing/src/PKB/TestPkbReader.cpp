@@ -594,6 +594,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Next(*) Relationship") {
     REQUIRE(!reader->hasAfterStarStmt(s));
 
     writer->addNextRelationship(make_shared<Statement>(s), make_shared<Statement>(s1));
+    writer->clearCache();
 
     auto set1 = reader->getNextPair(StatementType::Stmt, StatementType::Stmt);
     REQUIRE(set1.size() == 1);
