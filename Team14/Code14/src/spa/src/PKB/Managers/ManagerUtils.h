@@ -8,11 +8,11 @@
 #include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
+#include "PKB/Commons/ClauseGroup.h"
 #include "PKB/EntityStores/EntityStore.h"
 #include "PKB/PatternStore/IfPatternStore.h"
 #include "PKB/PatternStore/WhilePatternStore.h"
 #include "PKB/RelationshipStores/RelationshipStore.h"
-#include "PKB/Commons/ClauseGroup.h"
 
 /**
  * @brief A class that contains utility functions for the Managers

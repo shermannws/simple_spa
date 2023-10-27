@@ -2,8 +2,12 @@
 
 std::unordered_map<ClauseGroup, std::unordered_set<StatementType>> ManagerUtils::allowedStmtTypesMap = {
         {ClauseGroup::Parent, {StatementType::Stmt, StatementType::While, StatementType::If}},
-        {ClauseGroup::Uses, {StatementType::Stmt, StatementType::Assign, StatementType::While, StatementType::If, StatementType::Call, StatementType::Print}},
-        {ClauseGroup::Modifies, {StatementType::Stmt, StatementType::Assign, StatementType::While, StatementType::If, StatementType::Call, StatementType::Read}},
+        {ClauseGroup::Uses,
+         {StatementType::Stmt, StatementType::Assign, StatementType::While, StatementType::If, StatementType::Call,
+          StatementType::Print}},
+        {ClauseGroup::Modifies,
+         {StatementType::Stmt, StatementType::Assign, StatementType::While, StatementType::If, StatementType::Call,
+          StatementType::Read}},
         {ClauseGroup::Affects, {StatementType::Stmt, StatementType::Assign}},
 };
 

@@ -1,6 +1,6 @@
 #include "ModifiesRelationshipManager.h"
 
-ModifiesRelationshipManager::ModifiesRelationshipManager() : StmtToVarRelationshipManager(){
+ModifiesRelationshipManager::ModifiesRelationshipManager() : StmtToVarRelationshipManager() {
     this->clauseGroup = ClauseGroup::Modifies;
 };
 

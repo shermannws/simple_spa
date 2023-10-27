@@ -1,5 +1,5 @@
 #include "FollowsRelationshipManager.h"
 
-FollowsRelationshipManager::FollowsRelationshipManager() : StmtToStmtRelationshipManager(){
-                                                                   this->clauseGroup = ClauseGroup::Follows;
-                                                           };
+FollowsRelationshipManager::FollowsRelationshipManager() : StmtToStmtRelationshipManager() {
+    this->clauseGroup = ClauseGroup::Follows;
+};
