@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "PKB/Managers/AffectsRelationshipManager.h"
 #include "PKB/Managers/AssignPatternManager.h"
 #include "PKB/Managers/CallsRelationshipManager.h"
 #include "PKB/Managers/EntitiesManager.h"
@@ -94,6 +95,11 @@ private:
      * @brief The NextRelationshipManager of the PKB
      */
     std::shared_ptr<NextRelationshipManager> nextRelationshipManager;
+
+    /**
+     * @brief The AffectsManager of the PKB
+     */
+    std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager;
 
 public:
     /**

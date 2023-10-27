@@ -15,17 +15,20 @@ Pkb::Pkb() {
     this->ifPatternManager = std::make_shared<IfPatternManager>();
     this->whilePatternManager = std::make_shared<WhilePatternManager>();
     this->nextRelationshipManager = std::make_shared<NextRelationshipManager>();
+    this->affectsRelationshipManager = std::make_shared<AffectsRelationshipManager>();
 
     this->pkbReaderManager = std::make_shared<PkbReaderManager>(PkbReaderManager(
             this->assignmentManager, this->entitiesManager, this->followsRelationshipManager,
             this->usesRelationshipManager, this->modifiesRelationshipManager, this->parentRelationshipManager,
             this->callsRelationshipManager, this->modifiesProcRelationshipManager, this->usesProcRelationshipManager,
-            this->ifPatternManager, this->whilePatternManager, this->nextRelationshipManager));
+            this->ifPatternManager, this->whilePatternManager, this->nextRelationshipManager,
+            this->affectsRelationshipManager));
     this->pkbWriterManager = std::make_shared<PkbWriterManager>(PkbWriterManager(
             this->assignmentManager, this->entitiesManager, this->followsRelationshipManager,
             this->usesRelationshipManager, this->modifiesRelationshipManager, this->parentRelationshipManager,
             this->callsRelationshipManager, this->modifiesProcRelationshipManager, this->usesProcRelationshipManager,
-            this->ifPatternManager, this->whilePatternManager, this->nextRelationshipManager));
+            this->ifPatternManager, this->whilePatternManager, this->nextRelationshipManager,
+            this->affectsRelationshipManager));
 };
 
 std::shared_ptr<PkbReader> Pkb::createPkbReader() {

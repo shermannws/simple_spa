@@ -1,5 +1,7 @@
 #include "NextRelationshipManager.h"
 
+#include <utility>
+
 NextRelationshipManager::NextRelationshipManager() : StmtToStmtRelationshipManager() {
     this->isNextStarCalculated = false;
 };
@@ -55,4 +57,9 @@ void NextRelationshipManager::calculateNextStar() const {
     ManagerUtils::calculateTransitivity<NextRelationshipStore, Statement>(this->relationshipStore,
                                                                           this->starRelationshipStore);
     this->isNextStarCalculated = true;
+}
+
+std::shared_ptr<EntityStore<Statement>>
+NextRelationshipManager::getAllNextOfStmt(std::shared_ptr<Statement> stmt) const {
+    return this->relationshipStore->getRightEntitiesOf(std::move(stmt));
 }

@@ -423,3 +423,38 @@ std::vector<Entity> PkbConcreteReader::getWhileStmtsByVar(Variable &var) const {
 std::vector<std::vector<Entity>> PkbConcreteReader::getAllWhileStmtVarPair() const {
     return this->readerManager->getAllWhileStmtVarPair();
 }
+
+std::vector<std::vector<Entity>> PkbConcreteReader::getAffectsPair(StatementType formerType,
+                                                                   StatementType latterType) const {
+    return this->readerManager->getAffectsPair(formerType, latterType);
+}
+
+std::vector<Entity> PkbConcreteReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
+    return this->readerManager->getAffectsTypeStmt(type, statement);
+}
+
+std::vector<Entity> PkbConcreteReader::getAffectsTypeWildcard(StatementType type) const {
+    return this->readerManager->getAffectsTypeWildcard(type);
+}
+
+std::vector<Entity> PkbConcreteReader::getAffectsStmtType(Statement &statement, StatementType type) const {
+    return this->readerManager->getAffectsStmtType(statement, type);
+}
+
+std::vector<Entity> PkbConcreteReader::getAffectsWildcardType(StatementType type) const {
+    return this->readerManager->getAffectsWildcardType(type);
+}
+
+bool PkbConcreteReader::isAffects(Statement &statement1, Statement &statement2) const {
+    return this->readerManager->isAffects(statement1, statement2);
+}
+
+bool PkbConcreteReader::hasAffects() const { return this->readerManager->hasAffects(); }
+
+bool PkbConcreteReader::hasAffectedStmt(Statement &statement) const {
+    return this->readerManager->hasAffectedStmt(statement);
+}
+
+bool PkbConcreteReader::hasAffectsStmt(Statement &statement) const {
+    return this->readerManager->hasAffectsStmt(statement);
+}

@@ -16,7 +16,7 @@
  */
 template<typename K1, typename K2, typename V1, typename V2, typename H1, typename H2>
 class DoubleMapStore {
-private:
+protected:
     /**
      * @brief The unordered_map that stores K1 to K2 pairs using V1 as the underlying data structure
      */
