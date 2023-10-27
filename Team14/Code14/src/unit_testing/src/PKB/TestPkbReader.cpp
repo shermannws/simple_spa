@@ -534,7 +534,7 @@ TEST_CASE("Assign Pattern") {
 
     auto set5 = reader->getAssignStmtsByLhsRhs(v, subExpr, true);
     REQUIRE(set5.size() == 1);
-    REQUIRE(set5.find(s) != set4.end());
+    REQUIRE(set5.find(s) != set5.end());
 
     auto set6 = reader->getAssignStmtsByLhsRhs(v, e, false);
     REQUIRE(set6.size() == 1);
