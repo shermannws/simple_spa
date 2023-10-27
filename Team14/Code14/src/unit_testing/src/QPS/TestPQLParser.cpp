@@ -964,6 +964,23 @@ TEST_CASE_METHOD(UnitTestFixture, "processSuchThatClause Affects") {
         REQUIRE(rightRef.getRep() == "s2");
     }
 
+    SECTION("Valid Affects(a,a)") {
+        PQLParser parser("assign a1, a2;\nSelect a1 such that Affects (a1,a1)");
+        Query query = parser.parse();
+        std::shared_ptr<SuchThatClause> clause = query.getSuchThat()[0];
+        Ref leftRef = clause->getFirstParam();
+        Ref rightRef = clause->getSecondParam();
+        REQUIRE(clause->getType() == ClauseType::Affects);
+        REQUIRE(leftRef.getType() == RefType::StmtRef);
+        REQUIRE(leftRef.getRootType() == RootType::Synonym);
+        REQUIRE(leftRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(leftRef.getRep() == "a1");
+        REQUIRE(rightRef.getType() == RefType::StmtRef);
+        REQUIRE(rightRef.getRootType() == RootType::Synonym);
+        REQUIRE(rightRef.getEntityType() == QueryEntityType::Assign);
+        REQUIRE(rightRef.getRep() == "a1");
+    }
+
     SECTION("Valid Affects(_,_)") {
         PQLParser parser("stmt s1, s2;\nSelect s1  such  that  Affects (_,_)");
         Query query = parser.parse();
@@ -1359,6 +1376,39 @@ TEST_CASE_METHOD(UnitTestFixture, "Invalid processSuchThat cases") {
 
         parser = PQLParser("assign a; variable v; procedure p;Select a such that Calls*(p, a)");
         REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+    }
+
+    SECTION("Invalid Affects queries") {
+        std::vector<std::pair<std::string, std::string>> testcases;
+        testcases.emplace_back("stmt s; print p;\nSelect a such that Affects(\"invalid\", p)",
+                               "Invalid LHS, stmtRef expected");
+        testcases.emplace_back("print p; assign a;\nSelect a such that Affects(p, \"invalid\")",
+                               "Invalid RHS, stmtRef expected");
+
+        for (const auto &testcase: testcases) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_AS(parser.parse(), SyntaxException);
+        }
+
+        std::vector<std::pair<std::string, std::string>> testcases2;
+        testcases2.emplace_back("stmt a; variable v;\nSelect v such that Affects(v, a)",
+                                "Invalid LHS synonym, non-statement found");
+        testcases2.emplace_back("stmt a; variable v;\nSelect v such that Affects(a, v)",
+                                "Invalid RHS synonym, non-statement found");
+        testcases2.emplace_back("procedure a; stmt v;\nSelect v such that Affects(a, v)",
+                                "Invalid LHS synonym, non-statement found");
+        testcases2.emplace_back("procedure a; stmt v;\nSelect v such that Affects(v, a)",
+                                "Invalid RHS synonym, non-statement found");
+        testcases2.emplace_back("constant a; stmt v;\nSelect v such that Affects(a, v)",
+                                "Invalid LHS synonym, non-statement found");
+        testcases2.emplace_back("constant a; stmt v;\nSelect v such that Affects(v, a)",
+                                "Invalid RHS synonym, non-statement found");
+        testcases2.emplace_back("procedure a; stmt v;\nSelect v such that Affects(hello, a)",
+                                "Invalid LHS, undeclared synonym found");
+        for (const auto &testcase: testcases2) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+        }
     }
 }
 
