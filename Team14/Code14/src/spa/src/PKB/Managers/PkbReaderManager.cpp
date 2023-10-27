@@ -472,10 +472,10 @@ void PkbReaderManager::triggerAffectsCalculation() const {
 
 std::vector<std::vector<Entity>> PkbReaderManager::getAffectsPair(StatementType formerType,
                                                                   StatementType latterType) const {
-    this->triggerAffectsCalculation();
     if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, latterType)) {
         return std::vector<std::vector<Entity>>();
     }
+    this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
@@ -490,18 +490,18 @@ std::vector<Entity> PkbReaderManager::getAffectsTypeWildcard(StatementType type)
 }
 
 std::vector<Entity> PkbReaderManager::getAffectsStmtType(Statement &statement, StatementType type) const {
-    this->triggerAffectsCalculation();
     if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) {
         return std::vector<Entity>();
     }
+    this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
 std::vector<Entity> PkbReaderManager::getAffectsWildcardType(StatementType type) const {
-    this->triggerAffectsCalculation();
     if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) {
         return std::vector<Entity>();
     }
+    this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipWildcardType(type);
 }
 
