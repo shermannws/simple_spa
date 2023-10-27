@@ -682,14 +682,16 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and
     CHECK(pkbReader->hasModifies(proc1));
     CHECK(pkbReader->hasModifies(stmt3));
 
+    auto expr = Expression("(1)");
+    auto wrongExpr = Expression("(2)");
     CHECK(pkbReader->getAllAssign().size() == 1);
-    CHECK(pkbReader->getAssignStmtsByRhs(Expression("(1)"), false).size() == 1);
-    CHECK(pkbReader->getAssignStmtsByRhs(Expression("(1)"), true).size() == 1);
+    CHECK(pkbReader->getAssignStmtsByRhs(expr, false).size() == 1);
+    CHECK(pkbReader->getAssignStmtsByRhs(expr, true).size() == 1);
     CHECK(pkbReader->getAllAssignStmtVarPair().size() == 1);
-    CHECK(pkbReader->getAssignStmtsVarPairByRhs(Expression("(2)"), true).size() == 0);
+    CHECK(pkbReader->getAssignStmtsVarPairByRhs(wrongExpr, true).size() == 0);
     CHECK(pkbReader->getAssignStmtsByLhs(varA).size() == 1);
-    CHECK(pkbReader->getAssignStmtsByLhsRhs(varA, Expression("(1)"), false).size() == 1);
-    CHECK(pkbReader->getAssignStmtsByLhsRhs(varA, Expression("2"), true).size() == 0);
+    CHECK(pkbReader->getAssignStmtsByLhsRhs(varA, expr, false).size() == 1);
+    CHECK(pkbReader->getAssignStmtsByLhsRhs(varA, wrongExpr, true).size() == 0);
 
     CHECK(pkbReader->getParentPair(StatementType::Stmt, StatementType::Stmt).size() == 3);
     CHECK(pkbReader->getParentPair(StatementType::Read, StatementType::Stmt).size() == 0);
