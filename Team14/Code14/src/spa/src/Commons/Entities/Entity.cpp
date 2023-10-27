@@ -39,7 +39,6 @@ bool std::equal_to<std::shared_ptr<Entity>>::operator()(std::shared_ptr<Entity> 
     return *lhs == *rhs;
 }
 
-
 std::size_t std::hash<std::vector<Entity>>::operator()(const std::vector<Entity> &entities) const {
     std::size_t hash = 0;
     for (const Entity &obj: entities) { hash ^= std::hash<Entity>{}(obj); }

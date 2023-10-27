@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "../AppConstants.h"
 #include "../HashableKey.h"
