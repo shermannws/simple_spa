@@ -477,7 +477,7 @@ std::vector<std::vector<Entity>> PkbReaderManager::getAffectsPair(StatementType 
 }
 
 std::vector<Entity> PkbReaderManager::getAffectsSameStmt(StatementType stmtType) const {
-    //TODO: Type validation
+    // TODO: Type validation
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getAffectsSameStmt(stmtType);
 }
