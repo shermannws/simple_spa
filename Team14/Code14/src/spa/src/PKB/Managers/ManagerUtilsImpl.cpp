@@ -122,6 +122,11 @@ ManagerUtils::getPairsNoMatch<Procedure, Procedure>(RelationshipStore<Procedure,
 template std::unordered_set<std::vector<Entity>>
 ManagerUtils::getPairsNoMatch<Procedure, Variable>(RelationshipStore<Procedure, Variable> &store);
 
+template std::unordered_set<std::vector<Entity>>
+ManagerUtils::getPairsNoMatch<Statement, Statement>(RelationshipStore<Statement, Statement> &store);
+
+template std::unordered_set<std::vector<Entity>>
+ManagerUtils::getPairsNoMatch<Statement, Variable>(RelationshipStore<Statement, Variable> &store);
 
 template void ManagerUtils::unique<Entity>(std::vector<Entity> &vec);
 

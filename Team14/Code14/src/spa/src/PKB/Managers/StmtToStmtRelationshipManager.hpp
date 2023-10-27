@@ -14,8 +14,12 @@ std::unordered_set<std::vector<Entity>>
 StmtToStmtRelationshipManager<S>::getRelationshipPair(StatementType formerType, StatementType latterType,
                                                       bool requireDirect) const {
     if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, formerType)) { return std::unordered_set<std::vector<Entity>>(); }
-    auto leftMatcher = [formerType](Statement &stmt) { return stmt.isStatementType(formerType); };
+    if (formerType == StatementType::Stmt && latterType == StatementType::Stmt) {
+        return ManagerUtils::getPairsNoMatch<Statement, Statement>(requireDirect ? *relationshipStore
+                                                                                 : *starRelationshipStore);
+    }
 
+    auto leftMatcher = [formerType](Statement &stmt) { return stmt.isStatementType(formerType); };
     auto rightMatcher = [latterType](Statement &stmt) { return stmt.isStatementType(latterType); };
 
     return ManagerUtils::getPairs<Entity, RelationshipStore<Statement, Statement>, Statement, Statement>(
