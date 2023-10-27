@@ -132,10 +132,10 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
                  [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
                      return std::make_shared<CallsStarSuchThatStrategy>(pkbReader);
                  }},
-//                {ClauseType::Affects,
-//                 [](std::shared_ptr<PkbReader> pkbreader) -> std::shared_ptr<Strategy> {
-//                     // TODO: return std::make_shared<AffectsSuchThatStrategy>(pkbReader);
-//                 }},
+                //                {ClauseType::Affects,
+                //                 [](std::shared_ptr<PkbReader> pkbreader) -> std::shared_ptr<Strategy> {
+                //                     // TODO: return std::make_shared<AffectsSuchThatStrategy>(pkbReader);
+                //                 }},
                 {ClauseType::Assign,
                  [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
                      return std::make_shared<AssignPatternStrategy>(pkbReader);
