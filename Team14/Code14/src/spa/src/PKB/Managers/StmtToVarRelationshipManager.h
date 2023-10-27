@@ -6,6 +6,7 @@
 
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
+#include "PKB/Commons/ClauseGroup.h"
 #include "PKB/Managers/ManagerUtils.h"
 
 /**
@@ -22,6 +23,11 @@ protected:
      * @brief The relationship store
      */
     std::shared_ptr<S> relationshipStore;
+
+    /**
+     * @brief The clause group of the relationship
+     */
+    ClauseGroup clauseGroup;
 
 public:
     /**
