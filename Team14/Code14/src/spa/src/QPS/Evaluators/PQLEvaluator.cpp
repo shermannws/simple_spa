@@ -83,7 +83,7 @@ bool PQLEvaluator::evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Cla
     auto tmp = std::make_shared<Result>(true);
     for (auto &clause: clauses) {
         tmp = resultHandler->getCombined(tmp, evaluateClause(clause));
-        if (tmp->isFalse() || tmp->isEmpty()) { return false; }
+        if (tmp->isFalse()) { return false; }
     }
     return true;
 }
@@ -98,13 +98,13 @@ Result PQLEvaluator::evaluate(Query &query) {
         pq.pop();
         std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
         if (!std::get<1>(pair.second)) {// no select synonyms
-            if (!evaluateBooleanGroup(group)) { return {false}; }
+            if (!evaluateBooleanGroup(group)) { return Result(false); }
         } else if (!std::get<0>(pair.second)) {// group with irrelevant synonyms
-            if (!evaluateIrrelevantGroup(group)) { return {false}; }
+            if (!evaluateIrrelevantGroup(group)) { return Result(false); }
         } else {// those with selectSyns (and if select has synonym(s))
             for (auto &clause: group) {
                 res = resultHandler->getCombined(res, evaluateClause(clause));
-                if (res->isFalse() || res->isEmpty()) { return {false}; }
+                if (res->isFalse()) { return Result(false); }
             }
         }
     }
