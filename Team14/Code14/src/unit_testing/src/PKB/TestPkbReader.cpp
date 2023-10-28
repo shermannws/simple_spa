@@ -1,15 +1,17 @@
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
+#include "Commons/Entities/AssignStatement.h"
 #include "PKB/Pkb.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test initialising PKB Reader") {
+TEST_CASE_METHOD(UnitTestFixture, "Test initialising PKB Reader") {
     Pkb pkb = Pkb();
 
     REQUIRE_NOTHROW(pkb.createPkbReader());
 }
 
-TEST_CASE("Test Entities") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Entities") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -24,16 +26,16 @@ TEST_CASE("Test Entities") {
     Statement s5 = Statement(5, StatementType::If);
     Statement s6 = Statement(6, StatementType::While);
 
-    REQUIRE(reader->getAllVariables().size() == 0);
-    REQUIRE(reader->getAllConstants().size() == 0);
-    REQUIRE(reader->getAllProcedures().size() == 0);
-    REQUIRE(reader->getAllStatements().size() == 0);
-    REQUIRE(reader->getAllRead().size() == 0);
-    REQUIRE(reader->getAllPrint().size() == 0);
-    REQUIRE(reader->getAllAssign().size() == 0);
-    REQUIRE(reader->getAllCall().size() == 0);
-    REQUIRE(reader->getAllIf().size() == 0);
-    REQUIRE(reader->getAllWhile().size() == 0);
+    REQUIRE(reader->getAllVariables().empty());
+    REQUIRE(reader->getAllConstants().empty());
+    REQUIRE(reader->getAllProcedures().empty());
+    REQUIRE(reader->getAllStatements().empty());
+    REQUIRE(reader->getAllRead().empty());
+    REQUIRE(reader->getAllPrint().empty());
+    REQUIRE(reader->getAllAssign().empty());
+    REQUIRE(reader->getAllCall().empty());
+    REQUIRE(reader->getAllIf().empty());
+    REQUIRE(reader->getAllWhile().empty());
 
     writer->addVariable(make_shared<Variable>(v));
     writer->addConstant(make_shared<Constant>(c));
@@ -58,7 +60,7 @@ TEST_CASE("Test Entities") {
     REQUIRE(reader->getAllWhile().size() == 1);
 }
 
-TEST_CASE("Uses (Stmt) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Uses (Stmt) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -66,10 +68,10 @@ TEST_CASE("Uses (Stmt) Relationship") {
     Variable v = Variable("x");
     Statement s = Statement(1, StatementType::Print);
 
-    REQUIRE(reader->getUsesStmtPair(StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getUsesStmt(StatementType::Print).size() == 0);
-    REQUIRE(reader->getUsesVar(s).size() == 0);
-    REQUIRE(reader->getUsesTypeIdent(StatementType::Stmt, v).size() == 0);
+    REQUIRE(reader->getUsesStmtPair(StatementType::Stmt).empty());
+    REQUIRE(reader->getUsesStmt(StatementType::Print).empty());
+    REQUIRE(reader->getUsesVar(s).empty());
+    REQUIRE(reader->getUsesTypeIdent(StatementType::Stmt, v).empty());
     REQUIRE(!reader->isStmtUsesVar(s, v));
     REQUIRE(!reader->hasUses(s));
 
@@ -93,15 +95,15 @@ TEST_CASE("Uses (Stmt) Relationship") {
 
     // Negative tests
     Statement sNew = Statement(2, StatementType::Read);
-    REQUIRE(reader->getUsesStmtPair(StatementType::Read).size() == 0);
-    REQUIRE(reader->getUsesStmt(StatementType::Read).size() == 0);
-    REQUIRE(reader->getUsesVar(sNew).size() == 0);
-    REQUIRE(reader->getUsesTypeIdent(StatementType::Read, v).size() == 0);
+    REQUIRE(reader->getUsesStmtPair(StatementType::Read).empty());
+    REQUIRE(reader->getUsesStmt(StatementType::Read).empty());
+    REQUIRE(reader->getUsesVar(sNew).empty());
+    REQUIRE(reader->getUsesTypeIdent(StatementType::Read, v).empty());
     REQUIRE(!reader->isStmtUsesVar(sNew, v));
     REQUIRE(!reader->hasUses(sNew));
 }
 
-TEST_CASE("Uses (Proc) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Uses (Proc) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -109,10 +111,10 @@ TEST_CASE("Uses (Proc) Relationship") {
     Variable v = Variable("x");
     Procedure p = Procedure("main");
 
-    REQUIRE(reader->getUsesProcPair().size() == 0);
-    REQUIRE(reader->getUsesProc().size() == 0);
-    REQUIRE(reader->getUsesVar(p).size() == 0);
-    REQUIRE(reader->getUsesProcIdent(v).size() == 0);
+    REQUIRE(reader->getUsesProcPair().empty());
+    REQUIRE(reader->getUsesProc().empty());
+    REQUIRE(reader->getUsesVar(p).empty());
+    REQUIRE(reader->getUsesProcIdent(v).empty());
     REQUIRE(!reader->isProcUsesVar(p, v));
     REQUIRE(!reader->hasUses(p));
 
@@ -136,13 +138,13 @@ TEST_CASE("Uses (Proc) Relationship") {
 
     // Negative tests
     Procedure pNew = Procedure("anotherProcedure");
-    REQUIRE(reader->getUsesVar(pNew).size() == 0);
+    REQUIRE(reader->getUsesVar(pNew).empty());
     REQUIRE(!reader->isProcUsesVar(pNew, v));
     REQUIRE(!reader->hasUses(pNew));
 }
 
 
-TEST_CASE("Modifies (Stmt) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Modifies (Stmt) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -150,10 +152,10 @@ TEST_CASE("Modifies (Stmt) Relationship") {
     Variable v = Variable("x");
     Statement s = Statement(1, StatementType::Read);
 
-    REQUIRE(reader->getModifiesStmtPair(StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getModifiesStmt(StatementType::Read).size() == 0);
-    REQUIRE(reader->getModifiesVar(s).size() == 0);
-    REQUIRE(reader->getModifiesTypeIdent(StatementType::Stmt, v).size() == 0);
+    REQUIRE(reader->getModifiesStmtPair(StatementType::Stmt).empty());
+    REQUIRE(reader->getModifiesStmt(StatementType::Read).empty());
+    REQUIRE(reader->getModifiesVar(s).empty());
+    REQUIRE(reader->getModifiesTypeIdent(StatementType::Stmt, v).empty());
     REQUIRE(!reader->isStmtModifiesVar(s, v));
     REQUIRE(!reader->hasModifies(s));
 
@@ -177,15 +179,15 @@ TEST_CASE("Modifies (Stmt) Relationship") {
 
     // Negative tests
     Statement sNew = Statement(2, StatementType::Print);
-    REQUIRE(reader->getModifiesStmtPair(StatementType::Print).size() == 0);
-    REQUIRE(reader->getModifiesStmt(StatementType::Print).size() == 0);
-    REQUIRE(reader->getModifiesVar(sNew).size() == 0);
-    REQUIRE(reader->getModifiesTypeIdent(StatementType::Print, v).size() == 0);
+    REQUIRE(reader->getModifiesStmtPair(StatementType::Print).empty());
+    REQUIRE(reader->getModifiesStmt(StatementType::Print).empty());
+    REQUIRE(reader->getModifiesVar(sNew).empty());
+    REQUIRE(reader->getModifiesTypeIdent(StatementType::Print, v).empty());
     REQUIRE(!reader->isStmtModifiesVar(sNew, v));
     REQUIRE(!reader->hasModifies(sNew));
 }
 
-TEST_CASE("Modifies (Proc) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Modifies (Proc) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -193,10 +195,10 @@ TEST_CASE("Modifies (Proc) Relationship") {
     Variable v = Variable("x");
     Procedure p = Procedure("main");
 
-    REQUIRE(reader->getModifiesProcPair().size() == 0);
-    REQUIRE(reader->getModifiesProc().size() == 0);
-    REQUIRE(reader->getModifiesVar(p).size() == 0);
-    REQUIRE(reader->getModifiesProcIdent(v).size() == 0);
+    REQUIRE(reader->getModifiesProcPair().empty());
+    REQUIRE(reader->getModifiesProc().empty());
+    REQUIRE(reader->getModifiesVar(p).empty());
+    REQUIRE(reader->getModifiesProcIdent(v).empty());
     REQUIRE(!reader->isProcModifiesVar(p, v));
     REQUIRE(!reader->hasModifies(p));
 
@@ -220,13 +222,13 @@ TEST_CASE("Modifies (Proc) Relationship") {
 
     // Negative tests
     Procedure pNew = Procedure("anotherProcedure");
-    REQUIRE(reader->getModifiesVar(pNew).size() == 0);
+    REQUIRE(reader->getModifiesVar(pNew).empty());
     REQUIRE(!reader->isProcModifiesVar(pNew, v));
     REQUIRE(!reader->hasModifies(pNew));
 }
 
 
-TEST_CASE("Follows(*) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Follows(*) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -234,16 +236,16 @@ TEST_CASE("Follows(*) Relationship") {
     Statement s = Statement(1, StatementType::Print);
     Statement s2 = Statement(2, StatementType::Read);
 
-    REQUIRE(reader->getFollowsPair(StatementType::Stmt, StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getFollowsStarPair(StatementType::Print, StatementType::Read).size() == 0);
-    REQUIRE(reader->getFollowsTypeStmt(StatementType::Print, s2).size() == 0);
-    REQUIRE(reader->getFollowsStarTypeStmt(StatementType::Stmt, s2).size() == 0);
-    REQUIRE(reader->getFollowsStmtType(s, StatementType::Read).size() == 0);
-    REQUIRE(reader->getFollowsStarStmtType(s, StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getFollowsTypeWildcard(StatementType::Print).size() == 0);
-    REQUIRE(reader->getFollowsStarTypeWildcard(StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getFollowsWildcardType(StatementType::Read).size() == 0);
-    REQUIRE(reader->getFollowsStarWildcardType(StatementType::Stmt).size() == 0);
+    REQUIRE(reader->getFollowsPair(StatementType::Stmt, StatementType::Stmt).empty());
+    REQUIRE(reader->getFollowsStarPair(StatementType::Print, StatementType::Read).empty());
+    REQUIRE(reader->getFollowsTypeStmt(StatementType::Print, s2).empty());
+    REQUIRE(reader->getFollowsStarTypeStmt(StatementType::Stmt, s2).empty());
+    REQUIRE(reader->getFollowsStmtType(s, StatementType::Read).empty());
+    REQUIRE(reader->getFollowsStarStmtType(s, StatementType::Stmt).empty());
+    REQUIRE(reader->getFollowsTypeWildcard(StatementType::Print).empty());
+    REQUIRE(reader->getFollowsStarTypeWildcard(StatementType::Stmt).empty());
+    REQUIRE(reader->getFollowsWildcardType(StatementType::Read).empty());
+    REQUIRE(reader->getFollowsStarWildcardType(StatementType::Stmt).empty());
     REQUIRE(!reader->isFollows(s, s2));
     REQUIRE(!reader->isFollowsStar(s, s2));
     REQUIRE(!reader->hasFollows());
@@ -299,7 +301,7 @@ TEST_CASE("Follows(*) Relationship") {
     REQUIRE(reader->hasFormerStarStmt(s2));
 }
 
-TEST_CASE("Parent(*) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Parent(*) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -354,16 +356,16 @@ TEST_CASE("Parent(*) Relationship") {
 
     // Negative tests
     Statement sNew = Statement(3, StatementType::Print);
-    REQUIRE(reader->getParentPair(StatementType::Print, StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getParentStarPair(StatementType::Print, StatementType::Read).size() == 0);
-    REQUIRE(reader->getParentTypeStmt(StatementType::Print, s2).size() == 0);
-    REQUIRE(reader->getParentStarTypeStmt(StatementType::Print, s2).size() == 0);
-    REQUIRE(reader->getParentStmtType(sNew, StatementType::Read).size() == 0);
-    REQUIRE(reader->getParentStarStmtType(sNew, StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getParentTypeWildcard(StatementType::Print).size() == 0);
-    REQUIRE(reader->getParentStarTypeWildcard(StatementType::Print).size() == 0);
-    REQUIRE(reader->getParentWildcardType(StatementType::Print).size() == 0);
-    REQUIRE(reader->getParentStarWildcardType(StatementType::Print).size() == 0);
+    REQUIRE(reader->getParentPair(StatementType::Print, StatementType::Stmt).empty());
+    REQUIRE(reader->getParentStarPair(StatementType::Print, StatementType::Read).empty());
+    REQUIRE(reader->getParentTypeStmt(StatementType::Print, s2).empty());
+    REQUIRE(reader->getParentStarTypeStmt(StatementType::Print, s2).empty());
+    REQUIRE(reader->getParentStmtType(sNew, StatementType::Read).empty());
+    REQUIRE(reader->getParentStarStmtType(sNew, StatementType::Stmt).empty());
+    REQUIRE(reader->getParentTypeWildcard(StatementType::Print).empty());
+    REQUIRE(reader->getParentStarTypeWildcard(StatementType::Print).empty());
+    REQUIRE(reader->getParentWildcardType(StatementType::Print).empty());
+    REQUIRE(reader->getParentStarWildcardType(StatementType::Print).empty());
     REQUIRE(!reader->isParent(sNew, s2));
     REQUIRE(!reader->isParentStar(sNew, s2));
     REQUIRE(!reader->hasChildStmt(sNew));
@@ -373,7 +375,7 @@ TEST_CASE("Parent(*) Relationship") {
 }
 
 
-TEST_CASE("Calls(*) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Calls(*) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -387,16 +389,16 @@ TEST_CASE("Calls(*) Relationship") {
     REQUIRE(!reader->isCalleeStar(p2));
     REQUIRE(!reader->isCaller(p));
     REQUIRE(!reader->isCallerStar(p));
-    REQUIRE(reader->getCallees().size() == 0);
-    REQUIRE(reader->getCalleesStar().size() == 0);
-    REQUIRE(reader->getCallers().size() == 0);
-    REQUIRE(reader->getCallersStar().size() == 0);
-    REQUIRE(reader->getCallsPair().size() == 0);
-    REQUIRE(reader->getCallsStarPair().size() == 0);
-    REQUIRE(reader->getCallers(p2).size() == 0);
-    REQUIRE(reader->getCallersStar(p2).size() == 0);
-    REQUIRE(reader->getCallees(p).size() == 0);
-    REQUIRE(reader->getCalleesStar(p).size() == 0);
+    REQUIRE(reader->getCallees().empty());
+    REQUIRE(reader->getCalleesStar().empty());
+    REQUIRE(reader->getCallers().empty());
+    REQUIRE(reader->getCallersStar().empty());
+    REQUIRE(reader->getCallsPair().empty());
+    REQUIRE(reader->getCallsStarPair().empty());
+    REQUIRE(reader->getCallers(p2).empty());
+    REQUIRE(reader->getCallersStar(p2).empty());
+    REQUIRE(reader->getCallees(p).empty());
+    REQUIRE(reader->getCalleesStar(p).empty());
 
     writer->addCallsRelationship(make_shared<Procedure>(p), make_shared<Procedure>(p2));
     writer->triggerTransitiveCalc();
@@ -446,13 +448,13 @@ TEST_CASE("Calls(*) Relationship") {
     REQUIRE(!reader->isCalleeStar(pNew));
     REQUIRE(!reader->isCaller(pNew));
     REQUIRE(!reader->isCallerStar(pNew));
-    REQUIRE(reader->getCallers(pNew).size() == 0);
-    REQUIRE(reader->getCallersStar(pNew).size() == 0);
-    REQUIRE(reader->getCallees(pNew).size() == 0);
-    REQUIRE(reader->getCalleesStar(pNew).size() == 0);
+    REQUIRE(reader->getCallers(pNew).empty());
+    REQUIRE(reader->getCallersStar(pNew).empty());
+    REQUIRE(reader->getCallees(pNew).empty());
+    REQUIRE(reader->getCalleesStar(pNew).empty());
 }
 
-TEST_CASE("Assign Pattern") {
+TEST_CASE_METHOD(UnitTestFixture, "Assign Pattern") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -462,15 +464,15 @@ TEST_CASE("Assign Pattern") {
     Expression e = Expression("((x)+(y))*1");//(x+y) * 1
     Expression subExpr = Expression("((x)+(y))");
 
-    REQUIRE(reader->getAllAssign().size() == 0);
-    REQUIRE(reader->getAssignStmtsByRhs(subExpr, true).size() == 0);
-    REQUIRE(reader->getAssignStmtsByRhs(e, false).size() == 0);
-    REQUIRE(reader->getAssignStmtsByLhs(v).size() == 0);
-    REQUIRE(reader->getAssignStmtsByLhsRhs(v, subExpr, true).size() == 0);
-    REQUIRE(reader->getAssignStmtsByLhsRhs(v, e, false).size() == 0);
-    REQUIRE(reader->getAllAssignStmtVarPair().size() == 0);
-    REQUIRE(reader->getAssignStmtsVarPairByRhs(subExpr, true).size() == 0);
-    REQUIRE(reader->getAssignStmtsVarPairByRhs(e, false).size() == 0);
+    REQUIRE(reader->getAllAssign().empty());
+    REQUIRE(reader->getAssignStmtsByRhs(subExpr, true).empty());
+    REQUIRE(reader->getAssignStmtsByRhs(e, false).empty());
+    REQUIRE(reader->getAssignStmtsByLhs(v).empty());
+    REQUIRE(reader->getAssignStmtsByLhsRhs(v, subExpr, true).empty());
+    REQUIRE(reader->getAssignStmtsByLhsRhs(v, e, false).empty());
+    REQUIRE(reader->getAllAssignStmtVarPair().empty());
+    REQUIRE(reader->getAssignStmtsVarPairByRhs(subExpr, true).empty());
+    REQUIRE(reader->getAssignStmtsVarPairByRhs(e, false).empty());
 
     writer->addAssignStatement(make_shared<Statement>(s));
     writer->addAssignPattern(make_shared<Statement>(s), make_shared<Variable>(v), make_shared<Expression>(e));
@@ -505,15 +507,15 @@ TEST_CASE("Assign Pattern") {
     // Negative tests
     Expression eNew = Expression("((x)+(z))*2");
     Expression subExprNew = Expression("((x)+(z))");
-    REQUIRE(reader->getAssignStmtsByRhs(subExprNew, true).size() == 0);
-    REQUIRE(reader->getAssignStmtsByRhs(eNew, false).size() == 0);
-    REQUIRE(reader->getAssignStmtsByLhsRhs(v, subExprNew, true).size() == 0);
-    REQUIRE(reader->getAssignStmtsByLhsRhs(v, eNew, false).size() == 0);
-    REQUIRE(reader->getAssignStmtsVarPairByRhs(subExprNew, true).size() == 0);
-    REQUIRE(reader->getAssignStmtsVarPairByRhs(eNew, false).size() == 0);
+    REQUIRE(reader->getAssignStmtsByRhs(subExprNew, true).empty());
+    REQUIRE(reader->getAssignStmtsByRhs(eNew, false).empty());
+    REQUIRE(reader->getAssignStmtsByLhsRhs(v, subExprNew, true).empty());
+    REQUIRE(reader->getAssignStmtsByLhsRhs(v, eNew, false).empty());
+    REQUIRE(reader->getAssignStmtsVarPairByRhs(subExprNew, true).empty());
+    REQUIRE(reader->getAssignStmtsVarPairByRhs(eNew, false).empty());
 }
 
-TEST_CASE("Next(*) Relationship") {
+TEST_CASE_METHOD(UnitTestFixture, "Next(*) Relationship") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -521,17 +523,17 @@ TEST_CASE("Next(*) Relationship") {
     Statement s = Statement(1, StatementType::Print);
     Statement s1 = Statement(2, StatementType::Read);
 
-    REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read).size() == 0);
-    REQUIRE(reader->getNextStarSameStmt(StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getNextTypeStmt(StatementType::Print, s1).size() == 0);
-    REQUIRE(reader->getNextStarTypeStmt(StatementType::Stmt, s1).size() == 0);
-    REQUIRE(reader->getNextTypeWildcard(StatementType::Print).size() == 0);
-    REQUIRE(reader->getNextStarTypeWildcard(StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getNextStmtType(s, StatementType::Read).size() == 0);
-    REQUIRE(reader->getNextStarStmtType(s, StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getNextWildcardType(StatementType::Read).size() == 0);
-    REQUIRE(reader->getNextStarWildcardType(StatementType::Stmt).size() == 0);
+    REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt).empty());
+    REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read).empty());
+    REQUIRE(reader->getNextStarSameStmt(StatementType::Stmt).empty());
+    REQUIRE(reader->getNextTypeStmt(StatementType::Print, s1).empty());
+    REQUIRE(reader->getNextStarTypeStmt(StatementType::Stmt, s1).empty());
+    REQUIRE(reader->getNextTypeWildcard(StatementType::Print).empty());
+    REQUIRE(reader->getNextStarTypeWildcard(StatementType::Stmt).empty());
+    REQUIRE(reader->getNextStmtType(s, StatementType::Read).empty());
+    REQUIRE(reader->getNextStarStmtType(s, StatementType::Stmt).empty());
+    REQUIRE(reader->getNextWildcardType(StatementType::Read).empty());
+    REQUIRE(reader->getNextStarWildcardType(StatementType::Stmt).empty());
     REQUIRE(!reader->isNext(s, s1));
     REQUIRE(!reader->isNextStar(s, s1));
     REQUIRE(!reader->hasNext());
@@ -542,6 +544,7 @@ TEST_CASE("Next(*) Relationship") {
     REQUIRE(!reader->hasAfterStarStmt(s));
 
     writer->addNextRelationship(make_shared<Statement>(s), make_shared<Statement>(s1));
+    writer->clearCache();
 
     REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt).size() == 1);
     REQUIRE(reader->getNextPair(StatementType::Stmt, StatementType::Stmt)[0][0] == s);
@@ -551,7 +554,7 @@ TEST_CASE("Next(*) Relationship") {
     REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read)[0][0] == s);
     REQUIRE(reader->getNextStarPair(StatementType::Print, StatementType::Read)[0][1] == s1);
 
-    REQUIRE(reader->getNextStarSameStmt(StatementType::Stmt).size() == 0);
+    REQUIRE(reader->getNextStarSameStmt(StatementType::Stmt).empty());
 
     REQUIRE(reader->getNextTypeStmt(StatementType::Print, s1).size() == 1);
     REQUIRE(reader->getNextTypeStmt(StatementType::Print, s1)[0] == s);
@@ -591,16 +594,16 @@ TEST_CASE("Next(*) Relationship") {
 
     // Negative tests
     Statement sNew = Statement(3, StatementType::Assign);
-    REQUIRE(reader->getNextPair(StatementType::Assign, StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getNextStarPair(StatementType::Assign, StatementType::Read).size() == 0);
-    REQUIRE(reader->getNextTypeStmt(StatementType::Assign, s1).size() == 0);
-    REQUIRE(reader->getNextStarTypeStmt(StatementType::Assign, s1).size() == 0);
-    REQUIRE(reader->getNextStmtType(sNew, StatementType::Read).size() == 0);
-    REQUIRE(reader->getNextStarStmtType(sNew, StatementType::Stmt).size() == 0);
-    REQUIRE(reader->getNextTypeWildcard(StatementType::Assign).size() == 0);
-    REQUIRE(reader->getNextStarTypeWildcard(StatementType::Assign).size() == 0);
-    REQUIRE(reader->getNextWildcardType(StatementType::Assign).size() == 0);
-    REQUIRE(reader->getNextStarWildcardType(StatementType::Assign).size() == 0);
+    REQUIRE(reader->getNextPair(StatementType::Assign, StatementType::Stmt).empty());
+    REQUIRE(reader->getNextStarPair(StatementType::Assign, StatementType::Read).empty());
+    REQUIRE(reader->getNextTypeStmt(StatementType::Assign, s1).empty());
+    REQUIRE(reader->getNextStarTypeStmt(StatementType::Assign, s1).empty());
+    REQUIRE(reader->getNextStmtType(sNew, StatementType::Read).empty());
+    REQUIRE(reader->getNextStarStmtType(sNew, StatementType::Stmt).empty());
+    REQUIRE(reader->getNextTypeWildcard(StatementType::Assign).empty());
+    REQUIRE(reader->getNextStarTypeWildcard(StatementType::Assign).empty());
+    REQUIRE(reader->getNextWildcardType(StatementType::Assign).empty());
+    REQUIRE(reader->getNextStarWildcardType(StatementType::Assign).empty());
     REQUIRE(!reader->isNext(sNew, s1));
     REQUIRE(!reader->isNextStar(sNew, s1));
     REQUIRE(!reader->hasBeforeStmt(sNew));
@@ -611,7 +614,7 @@ TEST_CASE("Next(*) Relationship") {
     writer->clearCache();
 }
 
-TEST_CASE("If Pattern") {
+TEST_CASE_METHOD(UnitTestFixture, "If Pattern") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -635,7 +638,7 @@ TEST_CASE("If Pattern") {
     REQUIRE(reader->getAllIfStmtVarPair()[0][1] == v);
 }
 
-TEST_CASE("While Pattern") {
+TEST_CASE_METHOD(UnitTestFixture, "While Pattern") {
     Pkb pkb = Pkb();
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
@@ -659,6 +662,67 @@ TEST_CASE("While Pattern") {
     REQUIRE(reader->getAllWhileStmtVarPair()[0][1] == v);
 }
 
-TEST_CASE("Affects Relationship") {
-    // TODO
+TEST_CASE_METHOD(UnitTestFixture, "Affects Relationship") {
+    Pkb pkb = Pkb();
+    auto reader = pkb.createPkbReader();
+    auto writer = pkb.createPkbWriter();
+
+    REQUIRE_FALSE(reader->hasAffects());
+    writer->clearCache();
+
+    /* Construct sample SIMPLE program
+    procedure Second {
+        01        x = 0;
+        02        z = x + 2*y;
+        03        z = z + x;
+    */
+
+    auto stmt1 = make_shared<AssignStatement>(AssignStatement(1));
+    auto varX = make_shared<Variable>("x");
+    writer->addModifiesRelationship(stmt1, varX);
+    writer->addAssignPattern(stmt1, varX, make_shared<Expression>("0"));
+
+    auto stmt2 = make_shared<AssignStatement>(AssignStatement(2));
+    auto varY = make_shared<Variable>("y");
+    auto varZ = make_shared<Variable>("z");
+    writer->addModifiesRelationship(stmt2, varZ);
+    writer->addUsesRelationship(stmt2, varX);
+    writer->addUsesRelationship(stmt2, varY);
+    writer->addAssignPattern(stmt2, varZ, make_shared<Expression>("x + 2*y"));
+    writer->addNextRelationship(stmt1, stmt2);
+
+    auto stmt3 = make_shared<AssignStatement>(AssignStatement(3));
+    writer->addModifiesRelationship(stmt3, varZ);
+    writer->addUsesRelationship(stmt3, varZ);
+    writer->addUsesRelationship(stmt3, varX);
+    writer->addAssignPattern(stmt3, varZ, make_shared<Expression>("z + x"));
+    writer->addNextRelationship(stmt2, stmt3);
+
+    REQUIRE(reader->getAffectsPair(StatementType::Assign, StatementType::Assign).size() == 3);
+
+    REQUIRE(reader->getAffectsTypeStmt(StatementType::Assign, *stmt1).empty());
+    REQUIRE(reader->getAffectsTypeStmt(StatementType::Assign, *stmt2).size() == 1);
+    REQUIRE(reader->getAffectsTypeStmt(StatementType::Assign, *stmt3).size() == 2);
+
+    REQUIRE(reader->getAffectsTypeWildcard(StatementType::Assign).size() == 2);
+
+    REQUIRE(reader->getAffectsStmtType(*stmt1, StatementType::Assign).size() == 2);
+    REQUIRE(reader->getAffectsStmtType(*stmt2, StatementType::Assign).size() == 1);
+    REQUIRE(reader->getAffectsStmtType(*stmt3, StatementType::Assign).empty());
+
+    REQUIRE(reader->getAffectsWildcardType(StatementType::Assign).size() == 2);
+
+    REQUIRE(reader->hasAffects());
+
+    REQUIRE(reader->isAffects(*stmt1, *stmt2));
+    REQUIRE(reader->isAffects(*stmt2, *stmt3));
+    REQUIRE(reader->isAffects(*stmt1, *stmt3));
+
+    REQUIRE_FALSE(reader->hasAffectsStmt(*stmt1));
+    REQUIRE(reader->hasAffectsStmt(*stmt2));
+    REQUIRE(reader->hasAffectsStmt(*stmt3));
+
+    REQUIRE(reader->hasAffectedStmt(*stmt1));
+    REQUIRE(reader->hasAffectedStmt(*stmt2));
+    REQUIRE_FALSE(reader->hasAffectedStmt(*stmt3));
 }

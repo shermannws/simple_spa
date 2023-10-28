@@ -8,6 +8,7 @@
 #include "Commons/Entities/Procedure.h"
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/StatementType.h"
+#include "PKB/Commons/ClauseGroup.h"
 #include "PKB/EntityStores/EntityStore.h"
 #include "PKB/PatternStore/IfPatternStore.h"
 #include "PKB/PatternStore/WhilePatternStore.h"
@@ -95,6 +96,19 @@ private:
             StatementType type);
 
 public:
+    /**
+     * @brief A map that stores the allowed statement types for each clause group
+     */
+    static std::unordered_map<ClauseGroup, std::unordered_set<StatementType>> allowedStmtTypesMap;
+
+    /**
+     * @brief A function that checks if the statement type is allowed for the clause group
+     * @param clauseGroup The clause group to be checked
+     * @param stmtType The statement type to be checked
+     * @return True if the statement type is allowed for the clause group, false otherwise
+     */
+    static bool isStmtTypeAllowed(ClauseGroup clauseGroup, StatementType stmtType);
+
     /**
      * @brief A function that retrieves entities from a set-based store based on a matcher and getter function
      * @tparam S The type of the store to be retrieved from

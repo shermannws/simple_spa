@@ -1,8 +1,9 @@
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "QPS/Query.h"
 
 #include "catch.hpp"
 
-TEST_CASE("Query class tests") {
+TEST_CASE_METHOD(UnitTestFixture, "Query class tests") {
     std::shared_ptr<QueryEntity> entity1 = std::make_shared<QueryEntity>(QueryEntityType::Variable, "v");
     std::shared_ptr<QueryEntity> entity2 = std::make_shared<QueryEntity>(QueryEntityType::Assign, "a");
     Query query;

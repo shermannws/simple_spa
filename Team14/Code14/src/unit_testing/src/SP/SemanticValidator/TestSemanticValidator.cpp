@@ -1,11 +1,12 @@
 #include <string>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "SP/SPParser.h"
 #include "SP/Validators/SemanticValidator/SemanticValidator.h"
 #include "SP/Validators/SyntacticValidator/SyntacticValidator.h"
 #include "catch.hpp"
 
-TEST_CASE("SemanticValidator - Valid semantics") {
+TEST_CASE_METHOD(UnitTestFixture, "SemanticValidator - Valid semantics") {
     SECTION("Valid call chain") {
         SPParser parser;
         SemanticValidator semanticValidator;
@@ -28,7 +29,7 @@ TEST_CASE("SemanticValidator - Valid semantics") {
     }
 }
 
-TEST_CASE("SemanticValidator - Invalid semantics") {
+TEST_CASE_METHOD(UnitTestFixture, "SemanticValidator - Invalid semantics") {
     SECTION("Non-existing procedure") {
         SPParser parser;
         SemanticValidator semanticValidator;

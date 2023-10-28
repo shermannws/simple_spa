@@ -1,11 +1,12 @@
 #include <memory>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Managers/ParentRelationshipManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test Parent Relationship Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Parent Relationship Retrieval") {
     ParentRelationshipManager parentRelationshipManager = ParentRelationshipManager();
 
     REQUIRE(parentRelationshipManager.hasRelationship() == false);

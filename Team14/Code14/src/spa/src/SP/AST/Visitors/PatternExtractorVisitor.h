@@ -17,7 +17,7 @@ public:
      * Constructor for PatternExtractorVisitor.
      * @param pkbWriter A shared ptr to a concrete implementation of PkbWriter class
      */
-    PatternExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
+    explicit PatternExtractorVisitor(std::shared_ptr<PkbWriter> pkbWriter);
 
     /**
      * Visits the AssignNode for design extraction.
@@ -25,7 +25,7 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitAssignNode(const std::shared_ptr<AssignNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                          std::shared_ptr<Procedure> proc) const override;
 
     /**
@@ -34,7 +34,7 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitIfNode(IfNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitIfNode(const std::shared_ptr<IfNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                      std::shared_ptr<Procedure> proc) const override;
 
     /**
@@ -43,7 +43,7 @@ public:
      * @param parents A vector of parent statements for this node
      * @param proc The procedure which the node is in
      */
-    void visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<Statement>> parents,
+    void visitWhileNode(const std::shared_ptr<WhileNode> &node, std::vector<std::shared_ptr<Statement>> parents,
                         std::shared_ptr<Procedure> proc) const override;
 
 private:
@@ -53,5 +53,5 @@ private:
      * @return A vector of variables
      */
     static std::shared_ptr<std::vector<std::shared_ptr<Variable>>>
-    getVariablesFromCondExpr(std::shared_ptr<ConditionalExpressionNode> condExpr);
+    getVariablesFromCondExpr(const std::shared_ptr<ConditionalExpressionNode> &condExpr);
 };

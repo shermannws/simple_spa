@@ -1,12 +1,13 @@
 #include <memory>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Commons/Assignment.h"
 #include "PKB/Managers/UsesRelationshipManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test Uses Relationship Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Uses Relationship Retrieval") {
     UsesRelationshipManager usesRelationshipManager = UsesRelationshipManager();
 
     // Test x = y + z

@@ -2,6 +2,7 @@
 #include <memory>
 #include <unordered_map>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "Commons/Entities/StatementType.h"
 #include "SP/CFG/CFGBuilder.h"
 #include "SP/SPParser.h"
@@ -36,7 +37,7 @@ void sortCFGNodes(std::vector<std::shared_ptr<CFGNode>> &cfgNodes) {
     std::sort(cfgNodes.begin(), cfgNodes.end(), lambda);
 }
 
-TEST_CASE("Test single procedure") {
+TEST_CASE_METHOD(UnitTestFixture, "Test single procedure") {
     std::string sourceProgram = "procedure Proc1 {"
                                 "x = 1 + 2 * y - (1 / var) % 5;"// stmt 1
                                 "read x;"                       // stmt 2
@@ -143,7 +144,7 @@ TEST_CASE("Test single procedure") {
     REQUIRE(node8->getParentNodes().front() == node8->getChildrenNodes().front());
 }
 
-TEST_CASE("Test multiple procedures") {
+TEST_CASE_METHOD(UnitTestFixture, "Test multiple procedures") {
     std::string sourceProgram = "procedure Proc1 { x = 1; }"
                                 "procedure Proc2 { read x; }"
                                 "procedure Proc3 { print y; }"
@@ -274,7 +275,7 @@ TEST_CASE("Test multiple procedures") {
     }
 }
 
-TEST_CASE("Test nested ifs - with one leaf/tail node") {
+TEST_CASE_METHOD(UnitTestFixture, "Test nested ifs - with one leaf/tail node") {
     // 12 stmts
     std::string sourceProgram = "procedure Proc1 { "
                                 "   if (z > 1) then { "    // 1
@@ -429,7 +430,7 @@ TEST_CASE("Test nested ifs - with one leaf/tail node") {
     REQUIRE(node12->getChildrenNodes().empty());
 }
 
-TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
+TEST_CASE_METHOD(UnitTestFixture, "Test nested ifs - with multiple leaf/tail nodes") {
     // Repeat of previous test case but without the last assign statement,
     // so there is no common last statement in the CFG.
     // The last statement depends on which branches are taken.
@@ -525,7 +526,7 @@ TEST_CASE("Test nested ifs - with multiple leaf/tail nodes") {
     REQUIRE(node11->getChildrenNodes().empty());
 }
 
-TEST_CASE("Test nested whiles") {
+TEST_CASE_METHOD(UnitTestFixture, "Test nested whiles") {
     std::string sourceProgram = "procedure Proc1 { "
                                 "   while (z > 1) { "            // 1
                                 "       while (z > 1) { "        // 2
@@ -671,7 +672,7 @@ TEST_CASE("Test nested whiles") {
     REQUIRE(isSameStatements(node12->getChildrenNodes(), {10}));
 }
 
-TEST_CASE("Test nested whiles and ifs") {
+TEST_CASE_METHOD(UnitTestFixture, "Test nested whiles and ifs") {
     // Covers if-while and while-if nestings
     std::string sourceProgram = "procedure Proc1 { "
                                 "   if (z > 1) then { "          // 1
