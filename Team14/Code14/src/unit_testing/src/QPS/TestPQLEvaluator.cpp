@@ -671,7 +671,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test NextStarSuchThatStrategy") {
     }
 }
 
-/* TEST_CASE_METHOD(UnitTestFixture, "Test AffectsSuchThatStrategy") {
+TEST_CASE_METHOD(UnitTestFixture, "Test AffectsSuchThatStrategy") {
     // evaluateSynSyn
     SECTION("leftRef == rightRef, getAffectsStarSameStmt") {
         PQLParser parser("assign a; Select a such that Affects(a,a)");
@@ -683,10 +683,10 @@ TEST_CASE_METHOD(UnitTestFixture, "Test NextStarSuchThatStrategy") {
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(results.size() == 1);
         REQUIRE(find(results.begin(), results.end(), "61") != results.end());
-        }
+    }
 
     SECTION("getAffectsPair") {
-        PQLParser parser("assign a, a1; Select a such that Next(a, a1)");
+        PQLParser parser("assign a, a1; Select a such that Affects(a, a1)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -713,7 +713,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test NextStarSuchThatStrategy") {
     }
 
     SECTION("getAffectsTypeWildcard") {
-        PQLParser parser("assign a; Select if such that Affects(a,_)");
+        PQLParser parser("assign a; Select a such that Affects(a,_)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -726,7 +726,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test NextStarSuchThatStrategy") {
 
     // evaluateAnySyn
     SECTION("getAffectsStmtType") {
-        PQLParser parser("assign a; Select call such that Affects(23, a)");
+        PQLParser parser("assign a; Select a such that Affects(23, a)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -800,7 +800,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test NextStarSuchThatStrategy") {
         REQUIRE(find(results.begin(), results.end(), "4") != results.end());
         REQUIRE(find(results.begin(), results.end(), "5") != results.end());
     }
-} */
+}
 
 TEST_CASE_METHOD(UnitTestFixture, "Test WithStrategy") {
     // evaluateSynSyn

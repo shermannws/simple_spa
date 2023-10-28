@@ -16,7 +16,6 @@ enum class ClauseType {
     ParentStar,
     Next,
     NextStar,
-    Affects,
     Calls,
     CallsStar,
     Affects,
