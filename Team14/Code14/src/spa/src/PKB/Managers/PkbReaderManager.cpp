@@ -479,6 +479,14 @@ std::vector<std::vector<Entity>> PkbReaderManager::getAffectsPair(StatementType 
     return this->affectsRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
+std::vector<Entity> PkbReaderManager::getAffectsSameStmt(StatementType stmtType) const {
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, stmtType)) {
+        return std::vector<Entity>();
+    }
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getAffectsSameStmt(stmtType);
+}
+
 std::vector<Entity> PkbReaderManager::getAffectsTypeStmt(StatementType type, Statement &statement) const {
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipTypeStmt(type, statement, true);

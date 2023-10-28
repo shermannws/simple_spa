@@ -265,4 +265,66 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         REQUIRE(pkbReaderManager->hasAffectedStmt(*stmt4));
         REQUIRE_FALSE(pkbReaderManager->hasAffectedStmt(*stmt5));
     }
+
+    SECTION("Test Affects Retrieval Loop") {
+        auto assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());
+        auto entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
+        auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
+        auto usesRelationshipManager = std::make_shared<UsesRelationshipManager>();
+        auto modifiesRelationshipManager = std::make_shared<ModifiesRelationshipManager>();
+        auto parentRelationshipManager = std::make_shared<ParentRelationshipManager>();
+        auto callsRelationshipManager = std::make_shared<CallsRelationshipManager>();
+        auto modifiesProcRelationshipManager = std::make_shared<ModifiesProcRelationshipManager>();
+        auto usesProcRelationshipManager = std::make_shared<UsesProcRelationshipManager>();
+        auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
+        auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
+        auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
+        auto affectsRelationshipManager = std::make_shared<AffectsRelationshipManager>();
+
+        auto pkbReaderManager = std::make_shared<PkbReaderManager>(PkbReaderManager(
+                assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
+                modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
+                modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
+                nextRelationshipManager, affectsRelationshipManager));
+
+        /* Construct sample SIMPLE program
+        procedure Second {
+            01        while (x) {
+            02          x = x +1; }
+        */
+
+        auto stmt1 = make_shared<WhileStatement>(WhileStatement(1));
+        auto varX = make_shared<Variable>("x");
+
+        auto stmt2 = make_shared<AssignStatement>(AssignStatement(2));
+        modifiesRelationshipManager->storeRelationship(stmt2, varX);
+        usesRelationshipManager->storeRelationship(stmt2, varX);
+        assignmentManager->storeAssignPattern(
+                make_shared<Assignment>(Assignment(stmt2, varX, make_shared<Expression>("x + 1"))));
+        nextRelationshipManager->storeRelationship(stmt1, stmt2, true);
+        nextRelationshipManager->storeRelationship(stmt2, stmt1, true);
+
+        REQUIRE(pkbReaderManager->getAffectsPair(StatementType::Assign, StatementType::Assign).size() == 1);
+
+        REQUIRE(pkbReaderManager->getAffectsSameStmt(StatementType::Assign).size() == 1);
+        REQUIRE(pkbReaderManager->getAffectsSameStmt(StatementType::Assign)[0] == *stmt2);
+
+        REQUIRE(pkbReaderManager->getAffectsTypeStmt(StatementType::Assign, *stmt1).empty());
+        REQUIRE(pkbReaderManager->getAffectsTypeStmt(StatementType::Assign, *stmt2).size() == 1);
+
+        REQUIRE(pkbReaderManager->getAffectsTypeWildcard(StatementType::Assign).size() == 1);
+
+        REQUIRE(pkbReaderManager->getAffectsStmtType(*stmt1, StatementType::Assign).empty());
+        REQUIRE(pkbReaderManager->getAffectsStmtType(*stmt2, StatementType::Assign).size() == 1);
+
+        REQUIRE(pkbReaderManager->getAffectsWildcardType(StatementType::Assign).size() == 1);
+
+        REQUIRE(pkbReaderManager->hasAffects());
+
+        REQUIRE_FALSE(pkbReaderManager->hasAffectsStmt(*stmt1));
+        REQUIRE(pkbReaderManager->hasAffectsStmt(*stmt2));
+
+        REQUIRE_FALSE(pkbReaderManager->hasAffectedStmt(*stmt1));
+        REQUIRE(pkbReaderManager->hasAffectedStmt(*stmt2));
+    }
 }

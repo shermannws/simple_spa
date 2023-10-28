@@ -62,3 +62,7 @@ void AffectsRelationshipManager::clearStore() {
     this->relationshipStore->clear();
     this->isAffectsCalculated = false;
 }
+
+std::vector<Entity> AffectsRelationshipManager::getAffectsSameStmt(StatementType stmtType) const {
+    return getSameStmt(stmtType, true);
+}

@@ -43,4 +43,11 @@ public:
      * @brief Clears the Affects relationship store
      */
     void clearStore();
+
+    /**
+     * Returns a vector of statements of the given statement type which affects itself
+     * @param stmtType The type of statement to be retrieved
+     * @return A vector of statements
+     */
+    std::vector<Entity> getAffectsSameStmt(StatementType stmtType) const;
 };

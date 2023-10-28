@@ -429,6 +429,10 @@ std::vector<std::vector<Entity>> PkbConcreteReader::getAffectsPair(StatementType
     return this->readerManager->getAffectsPair(formerType, latterType);
 }
 
+std::vector<Entity> PkbConcreteReader::getAffectsSameStmt(StatementType stmtType) const {
+    return this->readerManager->getAffectsSameStmt(stmtType);
+}
+
 std::vector<Entity> PkbConcreteReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
     return this->readerManager->getAffectsTypeStmt(type, statement);
 }
