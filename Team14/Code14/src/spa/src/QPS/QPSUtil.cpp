@@ -1,4 +1,5 @@
 #include "QPSUtil.h"
+#include "QPS/Evaluators/Strategies/AffectsSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
 #include "QPS/Evaluators/Strategies/CallsStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/CallsSuchThatStrategy.h"
@@ -75,9 +76,8 @@ std::unordered_map<ClauseType, ClauseArgType> QPSUtil::typeToArgTypeMap = {
         {ClauseType::Follows, StmtrefStmtref}, {ClauseType::FollowsStar, StmtrefStmtref},
         {ClauseType::Parent, StmtrefStmtref},  {ClauseType::ParentStar, StmtrefStmtref},
         {ClauseType::Next, StmtrefStmtref},    {ClauseType::NextStar, StmtrefStmtref},
-        {ClauseType::Affects, StmtrefStmtref}, {ClauseType::Calls, ProcProc},
-        {ClauseType::CallsStar, ProcProc},
-};
+        {ClauseType::Calls, ProcProc},         {ClauseType::CallsStar, ProcProc},
+        {ClauseType::Affects, StmtrefStmtref}};
 
 std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
         {QueryEntityType::Stmt, RefType::StmtRef},  {QueryEntityType::Assign, RefType::StmtRef},
@@ -132,10 +132,6 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
                  [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
                      return std::make_shared<CallsStarSuchThatStrategy>(pkbReader);
                  }},
-                //                {ClauseType::Affects,
-                //                 [](std::shared_ptr<PkbReader> pkbreader) -> std::shared_ptr<Strategy> {
-                //                     // TODO: return std::make_shared<AffectsSuchThatStrategy>(pkbReader);
-                //                 }},
                 {ClauseType::Assign,
                  [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
                      return std::make_shared<AssignPatternStrategy>(pkbReader);
@@ -151,6 +147,10 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
                 {ClauseType::With,
                  [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
                      return std::make_shared<WithStrategy>(pkbReader);
+                 }},
+                {ClauseType::Affects,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<AffectsSuchThatStrategy>(pkbReader);
                  }},
 };
 
