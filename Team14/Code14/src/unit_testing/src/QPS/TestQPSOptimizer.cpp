@@ -1,3 +1,4 @@
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "QPS/Evaluators/PQLEvaluator.h"
 #include "QPS/Parsers/PQLParser.h"
 
@@ -9,7 +10,7 @@
 
 using namespace std;
 
-TEST_CASE("Test getGroupScorePairs") {
+TEST_CASE_METHOD(UnitTestFixture, "Test getGroupScorePairs") {
     SECTION("All boolean clauses -- one group") {
         PQLParser parser(R"(Select BOOLEAN such that Follows(1, 2) and Modifies("proc", "var") with 1 = 3)");
         Query queryObj = parser.parse();
@@ -65,7 +66,7 @@ TEST_CASE("Test getGroupScorePairs") {
     }
 }
 
-TEST_CASE("Test sortByScore") {
+TEST_CASE_METHOD(UnitTestFixture, "Test sortByScore") {
     PQLParser parser(
             "assign a1, a2, a3; stmt s1, s2, s3; variable v1, v2, v3; Select <s1, s2, v2> such that "
             "Uses(s3,v1) and Modifies(s3, \"x\") and Follows(s1,s2) and Parent(s3,s1) and Uses(s2,v1) such that "
