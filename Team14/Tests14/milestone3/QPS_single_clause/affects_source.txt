@@ -35,11 +35,11 @@ procedure Third {
     read c;
 }
 
-procedure DoesNotModifiy {
+procedure DoesNotModify {
     print doNothing;
 }
 
-procedure secondLast {
+procedure SecondLast {
     b = 1;
 }
 

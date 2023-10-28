@@ -1,7 +1,7 @@
 1 - test Affects(assign, assign)
 assign a;
 Select a such that Affects(a, a)
-14
+10, 14
 5000
 2 - test Affects(a1, a2)
 assign a1, a2;
@@ -20,28 +20,33 @@ Select a such that Affects(a, 20)
 5000
 5 - test Affects(assign, int) - no result
 assign a;
-Select a such that Affects(a, 19)
+Select a such that Affects(a, 7)
 none
 5000
 6 - test Affects(int, int) - true
+
 Select BOOLEAN such that Affects(14, 14)
-True
+TRUE
 5000
 7 - test Affects(int, int) - false
+
 Select BOOLEAN such that Affects(17, 17)
-False
+FALSE
 5000
 8 - test Affects(int1, int2) - true
+
 Select BOOLEAN such that Affects(10, 18)
-True
+TRUE
 5000
 9 - test Affects(int1, int2) - false: statements in between path that modify
+
 Select BOOLEAN such that Affects(17, 20)
-False
+FALSE
 5000
 10 - test Affects(int1, int2) - false: different procedure
+
 Select BOOLEAN such that Affects(26, 27)
-False
+FALSE
 5000
 11 - test Affects(int, assign)
 assign a;
@@ -49,38 +54,44 @@ Select a such that Affects(5, a)
 10, 16, 18, 20
 5000
 12 - test Affects(int, wildcard) - true
+
 Select BOOLEAN such that Affects(4, _)
-True
+TRUE
 5000
 13 - test Affects(int, wildcard) - false: statements in between path that modify
+
 Select BOOLEAN such that Affects(7, _)
-False
+FALSE
 5000
 14 - test Affects(int, wildcard) - false: no other line
+
 Select BOOLEAN such that Affects(26, _)
-False
+FALSE
 5000
 15 - test Affects(wildcard, wildcard)
+
 Select BOOLEAN such that Affects(_, _)
-True
+TRUE
 5000
 16 - test Affects(wildcard, assign)
 assign a;
 Select a such that Affects(_, a)
-10, 14, 16, 17, 18, 20, 22
+10, 14, 16, 18, 19, 20, 22
 5000
 17 - test Affects(wildcard, int) - true
+
 Select BOOLEAN such that Affects(_, 20)
-True
+TRUE
 5000
 18 - test Affects(wildcard, int) - false
+
 Select BOOLEAN such that Affects(_, 12)
-False
+FALSE
 5000
 19 - test valid query with no return value - Affects(assign, stmt)
 assign a; stmt s;
 Select a such that Affects(a, s)
-none
+10, 14, 16, 17, 18, 19, 21, 4, 5, 6
 5000
 20 - test valid query with no return value - Affects(assign, read)
 assign a; read r;
@@ -107,10 +118,10 @@ assign a; if ifs;
 Select a such that Affects(a, ifs)
 none
 5000
-25 - test valid query with no return value - Affects(stmt, assign)
+25 - test valid query with return value - Affects(stmt, assign)
 assign a; stmt s;
 Select a such that Affects(s, a)
-none
+10, 14, 16, 18, 19, 20, 22
 5000
 26 - test valid query with no return value - Affects(read, assign)
 assign a; read r;
@@ -137,15 +148,15 @@ assign a; if ifs;
 Select a such that Affects(ifs, a)
 none
 5000
-31 - test valid query with no return value - Affects(s1, s2)
+31 - test valid query with return value - Affects(s1, s2)
 stmt s1, s2;
 Select s1 such that Affects(s1, s2)
-none
+10, 14, 16, 17, 18, 19, 21, 4, 5, 6
 5000
 32 - test valid query with no return value - Affects(s, s)
 stmt s;
 Select s such that Affects(s, s)
-none
+10, 14
 5000
 33 - test valid query with no return value - Affects(r, p)
 read r; print p;
@@ -183,32 +194,32 @@ Select a such that Affects(a, "x")
 SyntaxError
 5000
 40 - test semantically invalid query - Affects(var, a)
-assign a; var v;
+assign a; variable v;
 Select v such that Affects(v, a)
 SemanticError
 5000
 41 - test semantically invalid query - Affects(a, var)
-assign a; var v;
+assign a; variable v;
 Select v such that Affects(a, v)
 SemanticError
 5000
 42 - test semantically invalid query - Affects(proc, a)
-assign a; proc p;
+assign a; procedure p;
 Select p such that Affects(p, a)
 SemanticError
 5000
 43 - test semantically invalid query - Affects(a, proc)
-assign a; proc p;
+assign a; procedure p;
 Select p such that Affects(a, p)
 SemanticError
 5000
 44 - test semantically invalid query - Affects(const, a)
-assign a; const c;
+assign a; constant c;
 Select c such that Affects(c, a)
 SemanticError
 5000
 45 - test semantically invalid query - Affects(a, const)
-assign a; const c;
+assign a; constant c;
 Select c such that Affects(a, c)
 SemanticError
 5000
