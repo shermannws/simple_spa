@@ -10,9 +10,7 @@ NextRelationshipManager::NextRelationshipManager() : StmtToStmtRelationshipManag
 std::unordered_set<Entity> NextRelationshipManager::getNextStarSameStmt(StatementType stmtType) const {
     if (!this->isNextStarCalculated) { this->calculateNextStar(); }
 
-    auto leftMatcher = [stmtType](Statement &stmt) { return stmt.isStatementType(stmtType); };
-
-    return ManagerUtils::getLeftKeysMatchRight<Statement>(*starRelationshipStore, leftMatcher);
+    return getSameStmt(stmtType, false);
 }
 
 std::unordered_set<std::vector<Entity>> NextRelationshipManager::getRelationshipPair(StatementType formerType,

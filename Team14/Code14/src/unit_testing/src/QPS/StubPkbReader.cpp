@@ -597,28 +597,54 @@ std::unordered_set<std::vector<Entity>> StubPkbReader::getAllWhileStmtVarPair() 
 
 std::unordered_set<std::vector<Entity>> StubPkbReader::getAffectsPair(StatementType formerType,
                                                                       StatementType latterType) const {
+    if (formerType == StatementType::Assign && latterType == StatementType::Assign) {
+        std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Statement(2, StatementType::Assign)};
+        std::vector<Entity> pair2 = {Statement(3, StatementType::Assign), Statement(4, StatementType::Assign)};
+        std::vector<Entity> pair3 = {Statement(5, StatementType::Assign), Statement(6, StatementType::Assign)};
+        return std::unordered_set<std::vector<Entity>>({pair1, pair2, pair3});
+    }
     return std::unordered_set<std::vector<Entity>>();
 }
 
+std::unordered_set<Entity> StubPkbReader::getAffectsSameStmt(StatementType stmtType) const {
+    if (stmtType == StatementType::Assign) {
+        return std::unordered_set<Entity>({Statement(61, StatementType::Assign)});
+    }
+    return std::unordered_set<Entity>();
+}
+
 std::unordered_set<Entity> StubPkbReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
+    if (type == StatementType::Stmt && statement == Statement(71, StatementType::Stmt)) {
+        return std::unordered_set<Entity>({Statement(7, StatementType::Assign)});
+    }
     return std::unordered_set<Entity>();
 }
 
 std::unordered_set<Entity> StubPkbReader::getAffectsTypeWildcard(StatementType type) const {
+    if (type == StatementType::Assign) { return std::unordered_set<Entity>({Statement(8, StatementType::Assign)}); }
     return std::unordered_set<Entity>();
 }
 
 std::unordered_set<Entity> StubPkbReader::getAffectsStmtType(Statement &statement, StatementType type) const {
+    if (type == StatementType::Assign && statement == Statement(91, StatementType::Stmt)) {
+        return std::unordered_set<Entity>({Statement(9, StatementType::Assign)});
+    }
     return std::unordered_set<Entity>();
 }
 
 std::unordered_set<Entity> StubPkbReader::getAffectsWildcardType(StatementType type) const {
+    if (type == StatementType::Assign) { return std::unordered_set<Entity>({Statement(10, StatementType::Assign)}); }
     return std::unordered_set<Entity>();
 }
 
-bool StubPkbReader::isAffects(Statement &statement1, Statement &statement2) const { return false; }
+bool StubPkbReader::isAffects(Statement &statement1, Statement &statement2) const {
+    if (statement1 == Statement(11, StatementType::Stmt) && statement2 == Statement(12, StatementType::Stmt)) {
+        return true;
+    }
+    return false;
+}
 
-bool StubPkbReader::hasAffects() const { return false; }
+bool StubPkbReader::hasAffects() const { return true; }
 
 bool StubPkbReader::hasAffectedStmt(Statement &statement) const { return false; }
 

@@ -264,6 +264,8 @@ public:
 
     std::unordered_set<Entity> getAffectsTypeStmt(StatementType type, Statement &statement) const override;
 
+    std::unordered_set<Entity> getAffectsSameStmt(StatementType stmtType) const override;
+
     std::unordered_set<Entity> getAffectsTypeWildcard(StatementType type) const override;
 
     std::unordered_set<Entity> getAffectsStmtType(Statement &statement, StatementType type) const override;

@@ -488,6 +488,14 @@ std::unordered_set<std::vector<Entity>> PkbReaderManager::getAffectsPair(Stateme
     return this->affectsRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
+std::unordered_set<Entity> PkbReaderManager::getAffectsSameStmt(StatementType stmtType) const {
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, stmtType)) {
+        return std::unordered_set<Entity>();
+    }
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getAffectsSameStmt(stmtType);
+}
+
 std::unordered_set<Entity> PkbReaderManager::getAffectsTypeStmt(StatementType type, Statement &statement) const {
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipTypeStmt(type, statement, true);

@@ -917,6 +917,13 @@ public:
                                                                    StatementType latterType) const = 0;
 
     /**
+     * Returns an unordered_set of statements of the given statement type which affects itself
+     * @param stmtType The type of statement to be retrieved
+     * @return An unordered_set of statements
+     */
+    virtual std::unordered_set<Entity> getAffectsSameStmt(StatementType stmtType) const = 0;
+
+    /**
      * Returns an unordered_set of statements of the given statement type which affects the given statement DIRECTLY
      * @param type The type of the statement to be retrieved
      * @param statement The statement that succeeds the statements to be retrieved

@@ -18,6 +18,7 @@ enum class ClauseType {
     NextStar,
     Calls,
     CallsStar,
+    Affects,
     Assign,
     While,
     If,

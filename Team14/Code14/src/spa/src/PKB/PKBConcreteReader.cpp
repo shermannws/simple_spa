@@ -435,6 +435,10 @@ std::unordered_set<std::vector<Entity>> PkbConcreteReader::getAffectsPair(Statem
     return this->readerManager->getAffectsPair(formerType, latterType);
 }
 
+std::unordered_set<Entity> PkbConcreteReader::getAffectsSameStmt(StatementType stmtType) const {
+    return this->readerManager->getAffectsSameStmt(stmtType);
+}
+
 std::unordered_set<Entity> PkbConcreteReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
     return this->readerManager->getAffectsTypeStmt(type, statement);
 }

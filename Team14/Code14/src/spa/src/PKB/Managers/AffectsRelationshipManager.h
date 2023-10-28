@@ -43,4 +43,11 @@ public:
      * @brief Clears the Affects relationship store
      */
     void clearStore();
+
+    /**
+     * Returns an unordered_set of statements of the given statement type which affects itself
+     * @param stmtType The type of statement to be retrieved
+     * @return An unordered_set of statements
+     */
+    std::unordered_set<Entity> getAffectsSameStmt(StatementType stmtType) const;
 };

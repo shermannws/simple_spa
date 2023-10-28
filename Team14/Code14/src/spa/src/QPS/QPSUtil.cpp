@@ -1,4 +1,5 @@
 #include "QPSUtil.h"
+#include "QPS/Evaluators/Strategies/AffectsSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
 #include "QPS/Evaluators/Strategies/CallsStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/CallsSuchThatStrategy.h"
@@ -62,7 +63,7 @@ std::unordered_map<StringRep, ClauseType> QPSUtil::repClauseTypeMap = {
         {AppConstants::STRING_CALLSSTAR, ClauseType::CallsStar},
         {AppConstants::STRING_NEXT, ClauseType::Next},
         {AppConstants::STRING_NEXTSTAR, ClauseType::NextStar},
-};
+        {AppConstants::STRING_AFFECTS, ClauseType::Affects}};
 
 std::unordered_map<QueryEntityType, ClauseType> QPSUtil::entityToClauseMap = {
         {QueryEntityType::Assign, ClauseType::Assign},
@@ -76,7 +77,7 @@ std::unordered_map<ClauseType, ClauseArgType> QPSUtil::typeToArgTypeMap = {
         {ClauseType::Parent, StmtrefStmtref},  {ClauseType::ParentStar, StmtrefStmtref},
         {ClauseType::Next, StmtrefStmtref},    {ClauseType::NextStar, StmtrefStmtref},
         {ClauseType::Calls, ProcProc},         {ClauseType::CallsStar, ProcProc},
-};
+        {ClauseType::Affects, StmtrefStmtref}};
 
 std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
         {QueryEntityType::Stmt, RefType::StmtRef},  {QueryEntityType::Assign, RefType::StmtRef},
@@ -89,63 +90,68 @@ std::unordered_set<QueryEntityType> QPSUtil::stmtRefEntities = {
         QueryEntityType::Stmt,  QueryEntityType::Assign, QueryEntityType::Print, QueryEntityType::If,
         QueryEntityType::While, QueryEntityType::Read,   QueryEntityType::Call};
 
-std::unordered_map<ClauseType, strategyCreatorFunc> QPSUtil::strategyCreatorMap = {
-        {ClauseType::Uses,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<UsesSuchThatStrategy>(pkbReader);
-         }},
-        {ClauseType::Modifies,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<ModifiesSuchThatStrategy>(pkbReader);
-         }},
-        {ClauseType::Follows,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<FollowsSuchThatStrategy>(pkbReader);
-         }},
-        {ClauseType::FollowsStar,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<FollowsStarSuchThatStrategy>(pkbReader);
-         }},
-        {ClauseType::Parent,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<ParentSuchThatStrategy>(pkbReader);
-         }},
-        {ClauseType::ParentStar,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<ParentStarSuchThatStrategy>(pkbReader);
-         }},
-        {ClauseType::Next,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<NextSuchThatStrategy>(pkbReader);
-         }},
-        {ClauseType::NextStar,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<NextStarSuchThatStrategy>(pkbReader);
-         }},
-        {ClauseType::Calls,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<CallsSuchThatStrategy>(pkbReader);
-         }},
-        {ClauseType::CallsStar,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<CallsStarSuchThatStrategy>(pkbReader);
-         }},
-        {ClauseType::Assign,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<AssignPatternStrategy>(pkbReader);
-         }},
-        {ClauseType::If,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<IfPatternStrategy>(pkbReader);
-         }},
-        {ClauseType::While,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<WhilePatternStrategy>(pkbReader);
-         }},
-        {ClauseType::With,
-         [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
-             return std::make_shared<WithStrategy>(pkbReader);
-         }},
+std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>>
+        QPSUtil::strategyCreatorMap = {
+                {ClauseType::Uses,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<UsesSuchThatStrategy>(pkbReader);
+                 }},
+                {ClauseType::Modifies,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<ModifiesSuchThatStrategy>(pkbReader);
+                 }},
+                {ClauseType::Follows,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<FollowsSuchThatStrategy>(pkbReader);
+                 }},
+                {ClauseType::FollowsStar,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<FollowsStarSuchThatStrategy>(pkbReader);
+                 }},
+                {ClauseType::Parent,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<ParentSuchThatStrategy>(pkbReader);
+                 }},
+                {ClauseType::ParentStar,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<ParentStarSuchThatStrategy>(pkbReader);
+                 }},
+                {ClauseType::Next,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<NextSuchThatStrategy>(pkbReader);
+                 }},
+                {ClauseType::NextStar,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<NextStarSuchThatStrategy>(pkbReader);
+                 }},
+                {ClauseType::Calls,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<CallsSuchThatStrategy>(pkbReader);
+                 }},
+                {ClauseType::CallsStar,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<CallsStarSuchThatStrategy>(pkbReader);
+                 }},
+                {ClauseType::Assign,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<AssignPatternStrategy>(pkbReader);
+                 }},
+                {ClauseType::If,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<IfPatternStrategy>(pkbReader);
+                 }},
+                {ClauseType::While,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<WhilePatternStrategy>(pkbReader);
+                 }},
+                {ClauseType::With,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<WithStrategy>(pkbReader);
+                 }},
+                {ClauseType::Affects,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<AffectsSuchThatStrategy>(pkbReader);
+                 }},
 };
 
 std::unordered_map<QueryEntityType, entityGetterFunc> QPSUtil::entityGetterMap = {
