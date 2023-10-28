@@ -701,7 +701,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test AffectsSuchThatStrategy") {
 
     // evaluateSynAny
     SECTION("getAffectsTypeStmt") {
-        PQLParser parser("stmt s; Select s such that Affects(s,14)");
+        PQLParser parser("stmt s; Select s such that Affects(s,71)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -726,7 +726,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test AffectsSuchThatStrategy") {
 
     // evaluateAnySyn
     SECTION("getAffectsStmtType") {
-        PQLParser parser("assign a; Select a such that Affects(23, a)");
+        PQLParser parser("assign a; Select a such that Affects(91, a)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -764,7 +764,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test AffectsSuchThatStrategy") {
     }
 
     SECTION("hasAfterStmt") {
-        PQLParser parser("stmt s; Select s such that Affects(1,_)");
+        PQLParser parser("stmt s; Select s such that Affects(13,_)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
@@ -775,7 +775,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test AffectsSuchThatStrategy") {
     }
 
     SECTION("hasAffectedStmt") {
-        PQLParser parser("stmt s; Select s such that Affects(_,1)");
+        PQLParser parser("stmt s; Select s such that Affects(_,14)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
