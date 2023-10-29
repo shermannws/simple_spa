@@ -11,6 +11,7 @@ template<typename S>
 std::unordered_set<std::vector<Entity>>
 StmtToVarRelationshipManager<S>::getRelationshipStmtPair(StatementType type) const {
     if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return std::unordered_set<std::vector<Entity>>(); }
+    if (type == StatementType::Stmt) { return relationshipStore->getPairs(); }
 
     auto leftMatcher = [type](Statement &stmt) { return stmt.isStatementType(type); };
     auto rightMatcher = [](Variable &var) { return true; };

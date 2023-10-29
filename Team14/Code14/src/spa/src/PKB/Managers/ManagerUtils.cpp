@@ -212,19 +212,6 @@ std::unordered_set<std::vector<R>> ManagerUtils::getPairs(S &store, std::functio
     return result;
 }
 
-template<typename K, typename V>
-std::unordered_set<std::vector<Entity>> ManagerUtils::getPairsNoMatch(RelationshipStore<K, V> &store) {
-    auto leftMatcher = [](K &entity) { return true; };
-    auto rightMatcher = [](V &entity) { return true; };
-    return getPairs<Entity, RelationshipStore<K, V>, K, V>(store, leftMatcher, rightMatcher);
-}
-
-std::unordered_set<std::vector<Entity>> ManagerUtils::getPairsNoMatch(ConditionPatternStore &store) {
-    auto leftMatcher = [](Statement &entity) { return true; };
-    auto rightMatcher = [](Variable &entity) { return true; };
-    return getPairs<Entity, ConditionPatternStore, Statement, Variable>(store, leftMatcher, rightMatcher);
-}
-
 template<typename K>
 std::unordered_set<Entity> ManagerUtils::getLeftKeysMatchRight(RelationshipStore<K, K> &store,
                                                                std::function<bool(K &)> leftMatcher) {

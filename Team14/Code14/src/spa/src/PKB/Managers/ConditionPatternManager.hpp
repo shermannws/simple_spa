@@ -19,5 +19,5 @@ std::unordered_set<Entity> ConditionPatternManager<S>::getStmtsByVar(Variable &v
 
 template<typename S>
 std::unordered_set<std::vector<Entity>> ConditionPatternManager<S>::getAllStmtVarPair() const {
-    return ManagerUtils::getPairsNoMatch(*patternStore);
+    return patternStore->getPairs();
 }
