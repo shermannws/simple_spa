@@ -26,17 +26,21 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Assignment Retrieval") {
 
     string empty;
     string query = "(x+y)";
-    vector<Entity> assignLhsRhsWc =
+    unordered_set<Entity> assignLhsRhsWc =
             assignmentManager.getAssignStmtsByLhsRhs(*variableA, query, true);// pattern ("a", "_(x+y)_")
     REQUIRE(assignLhsRhsWc.size() == 1);
-    REQUIRE(assignLhsRhsWc.at(0) == *statement1);
-    vector<Entity> assignLhsRhsNoWc =
+    REQUIRE(assignLhsRhsWc.find(*statement1) != assignLhsRhsWc.end());
+
+    unordered_set<Entity> assignLhsRhsNoWc =
             assignmentManager.getAssignStmtsByLhsRhs(*variableA, query, false);// pattern ("a", "(x+y)")
     REQUIRE(assignLhsRhsNoWc.empty());
-    REQUIRE(assignmentManager.getAssignStmtsByLhs(*variableA).size() == 2);         // pattern ("a", "_")
-    vector<Entity> assignRhsWc = assignmentManager.getAssignStmtsByRhs(query, true);// pattern ("_", "_(x+y)_")
+
+    REQUIRE(assignmentManager.getAssignStmtsByLhs(*variableA).size() == 2);// pattern ("a", "_")
+
+    unordered_set<Entity> assignRhsWc = assignmentManager.getAssignStmtsByRhs(query, true);// pattern ("_", "_(x+y)_")
     REQUIRE(assignRhsWc.size() == 1);
-    REQUIRE(assignRhsWc.at(0) == *statement1);
+    REQUIRE(assignRhsWc.find(*statement1) != assignRhsWc.end());
+
     REQUIRE(assignmentManager.getAssignStmtsByRhs(query, false).empty());// pattern ("_", "(x+y)")
     REQUIRE(assignmentManager.getAllAssignStmts().size() == 2);          // pattern ("_", "_")
 }

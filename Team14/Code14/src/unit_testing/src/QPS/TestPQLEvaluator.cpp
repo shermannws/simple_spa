@@ -28,7 +28,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
         std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
         std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
 
-        std::vector<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
@@ -52,7 +52,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
         std::vector<Entity> v2{Statement(2, StatementType::Stmt)};
 
 
-        std::vector<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
@@ -74,7 +74,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
         std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
         std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
 
-        std::vector<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);

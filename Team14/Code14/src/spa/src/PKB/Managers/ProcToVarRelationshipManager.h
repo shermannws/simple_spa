@@ -41,30 +41,30 @@ public:
     void storeRelationship(std::shared_ptr<Procedure> procedure, std::shared_ptr<Variable> variable);
 
     /**
-     * Returns a vector of Procedure, Variable pair where the procedure is related to the variable.
-     * @return A vector of Procedure, Variable pair stored in a vector
+     * Returns an unordered_set of Procedure, Variable pair where the procedure is related to the variable.
+     * @return An unordered_set of Procedure, Variable pair stored in a vector
      */
-    std::vector<std::vector<Entity>> getRelationshipProcPair() const;
+    std::unordered_set<std::vector<Entity>> getRelationshipProcPair() const;
 
     /**
-     * Returns a vector of procedure which is related to the given variable
+     * Returns an unordered_set of procedure which is related to the given variable
      * @param var The variable that is related to the statements
-     * @return A vector of procedure
+     * @return An unordered_set of procedure
      */
-    std::vector<Entity> getRelationshipIdent(Variable &var) const;
+    std::unordered_set<Entity> getRelationshipIdent(Variable &var) const;
 
     /**
-     * Returns a vector of procedures which is related to any variable
-     * @return A vector of procedures
+     * Returns an unordered_set of procedures which is related to any variable
+     * @return An unordered_set of procedures
      */
-    std::vector<Entity> getRelationshipProc() const;
+    std::unordered_set<Entity> getRelationshipProc() const;
 
     /**
-     * Returns a vector of variables which is related to the given procedure
+     * Returns an unordered_set of variables which is related to the given procedure
      * @param procedure The procedure that is related to the variables
-     * @return A vector of variables
+     * @return An unordered_set of variables
      */
-    std::vector<Entity> getRelationshipVar(Procedure &procedure) const;
+    std::unordered_set<Entity> getRelationshipVar(Procedure &procedure) const;
 
     /**
      * Returns a boolean value indicating if the given procedure is related to the given variable

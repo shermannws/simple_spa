@@ -51,7 +51,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test While Pattern Retrieval") {
     Variable testY = Variable("y");
     Variable testZ = Variable("z");
 
-    vector<Entity> getStmtByVar = whilePatternManager.getAllStmts();
+    unordered_set<Entity> getStmtByVar = whilePatternManager.getAllStmts();
     REQUIRE(getStmtByVar.size() == 3);
     REQUIRE(find(getStmtByVar.begin(), getStmtByVar.end(), testStmt1) != getStmtByVar.end());
     REQUIRE(find(getStmtByVar.begin(), getStmtByVar.end(), testStmt2) != getStmtByVar.end());
@@ -59,17 +59,17 @@ TEST_CASE_METHOD(UnitTestFixture, "Test While Pattern Retrieval") {
 
     REQUIRE(whilePatternManager.getAllStmtVarPair().size() == 6);
 
-    vector<Entity> getStmtsByVarX = whilePatternManager.getStmtsByVar(testX);
+    unordered_set<Entity> getStmtsByVarX = whilePatternManager.getStmtsByVar(testX);
     REQUIRE(getStmtsByVarX.size() == 2);
     REQUIRE(find(getStmtsByVarX.begin(), getStmtsByVarX.end(), testStmt1) != getStmtsByVarX.end());
     REQUIRE(find(getStmtsByVarX.begin(), getStmtsByVarX.end(), testStmt2) != getStmtsByVarX.end());
 
-    vector<Entity> getStmtsByVarY = whilePatternManager.getStmtsByVar(testY);
+    unordered_set<Entity> getStmtsByVarY = whilePatternManager.getStmtsByVar(testY);
     REQUIRE(getStmtsByVarY.size() == 2);
     REQUIRE(find(getStmtsByVarY.begin(), getStmtsByVarY.end(), testStmt1) != getStmtsByVarY.end());
     REQUIRE(find(getStmtsByVarY.begin(), getStmtsByVarY.end(), testStmt2) != getStmtsByVarY.end());
 
-    vector<Entity> getStmtsByVarZ = whilePatternManager.getStmtsByVar(testZ);
+    unordered_set<Entity> getStmtsByVarZ = whilePatternManager.getStmtsByVar(testZ);
     REQUIRE(getStmtsByVarZ.size() == 2);
     REQUIRE(find(getStmtsByVarZ.begin(), getStmtsByVarZ.end(), testStmt1) != getStmtsByVarZ.end());
     REQUIRE(find(getStmtsByVarZ.begin(), getStmtsByVarZ.end(), testStmt3) != getStmtsByVarZ.end());

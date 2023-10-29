@@ -4,51 +4,55 @@ PkbConcreteReader::PkbConcreteReader(std::shared_ptr<PkbReaderManager> readerMan
     this->readerManager = readerManager;
 }
 
-std::vector<Entity> PkbConcreteReader::getAllVariables() const { return this->readerManager->getAllVariables(); }
+std::unordered_set<Entity> PkbConcreteReader::getAllVariables() const { return this->readerManager->getAllVariables(); }
 
-std::vector<Entity> PkbConcreteReader::getAllConstants() const { return this->readerManager->getAllConstants(); }
+std::unordered_set<Entity> PkbConcreteReader::getAllConstants() const { return this->readerManager->getAllConstants(); }
 
-std::vector<Entity> PkbConcreteReader::getAllProcedures() const { return this->readerManager->getAllProcedures(); }
+std::unordered_set<Entity> PkbConcreteReader::getAllProcedures() const {
+    return this->readerManager->getAllProcedures();
+}
 
-std::vector<Entity> PkbConcreteReader::getAllStatements() const { return this->readerManager->getAllStatements(); }
+std::unordered_set<Entity> PkbConcreteReader::getAllStatements() const {
+    return this->readerManager->getAllStatements();
+}
 
-std::vector<Entity> PkbConcreteReader::getAllRead() const { return this->readerManager->getAllRead(); }
+std::unordered_set<Entity> PkbConcreteReader::getAllRead() const { return this->readerManager->getAllRead(); }
 
-std::vector<Entity> PkbConcreteReader::getAllPrint() const { return this->readerManager->getAllPrint(); }
+std::unordered_set<Entity> PkbConcreteReader::getAllPrint() const { return this->readerManager->getAllPrint(); }
 
-std::vector<Entity> PkbConcreteReader::getAllWhile() const { return this->readerManager->getAllWhile(); }
+std::unordered_set<Entity> PkbConcreteReader::getAllWhile() const { return this->readerManager->getAllWhile(); }
 
-std::vector<Entity> PkbConcreteReader::getAllIf() const { return this->readerManager->getAllIf(); }
+std::unordered_set<Entity> PkbConcreteReader::getAllIf() const { return this->readerManager->getAllIf(); }
 
-std::vector<Entity> PkbConcreteReader::getAllCall() const { return this->readerManager->getAllCall(); }
+std::unordered_set<Entity> PkbConcreteReader::getAllCall() const { return this->readerManager->getAllCall(); }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getUsesStmtPair(StatementType type) const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getUsesStmtPair(StatementType type) const {
     return this->readerManager->getUsesStmtPair(type);
 }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getUsesProcPair() const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getUsesProcPair() const {
     return this->readerManager->getUsesProcPair();
 }
 
-std::vector<Entity> PkbConcreteReader::getUsesTypeIdent(StatementType type, Variable &var) const {
+std::unordered_set<Entity> PkbConcreteReader::getUsesTypeIdent(StatementType type, Variable &var) const {
     return this->readerManager->getUsesTypeIdent(type, var);
 }
 
-std::vector<Entity> PkbConcreteReader::getUsesProcIdent(Variable &var) const {
+std::unordered_set<Entity> PkbConcreteReader::getUsesProcIdent(Variable &var) const {
     return this->readerManager->getUsesProcIdent(var);
 };
 
-std::vector<Entity> PkbConcreteReader::getUsesStmt(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getUsesStmt(StatementType type) const {
     return this->readerManager->getUsesStmt(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getUsesProc() const { return this->readerManager->getUsesProc(); }
+std::unordered_set<Entity> PkbConcreteReader::getUsesProc() const { return this->readerManager->getUsesProc(); }
 
-std::vector<Entity> PkbConcreteReader::getUsesVar(Statement &stmt) const {
+std::unordered_set<Entity> PkbConcreteReader::getUsesVar(Statement &stmt) const {
     return this->readerManager->getUsesVar(stmt);
 }
 
-std::vector<Entity> PkbConcreteReader::getUsesVar(Procedure &proc) const {
+std::unordered_set<Entity> PkbConcreteReader::getUsesVar(Procedure &proc) const {
     return this->readerManager->getUsesVar(proc);
 }
 
@@ -64,45 +68,45 @@ bool PkbConcreteReader::hasUses(Statement &stmt) const { return this->readerMana
 
 bool PkbConcreteReader::hasUses(Procedure &proc) const { return this->readerManager->hasUses(proc); }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getFollowsPair(StatementType formerType,
-                                                                   StatementType latterType) const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getFollowsPair(StatementType formerType,
+                                                                          StatementType latterType) const {
     return this->readerManager->getFollowsPair(formerType, latterType);
 }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getFollowsStarPair(StatementType formerType,
-                                                                       StatementType latterType) const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getFollowsStarPair(StatementType formerType,
+                                                                              StatementType latterType) const {
     return this->readerManager->getFollowsStarPair(formerType, latterType);
 }
 
-std::vector<Entity> PkbConcreteReader::getFollowsTypeStmt(StatementType type, Statement &statement) const {
+std::unordered_set<Entity> PkbConcreteReader::getFollowsTypeStmt(StatementType type, Statement &statement) const {
     return this->readerManager->getFollowsTypeStmt(type, statement);
 }
 
-std::vector<Entity> PkbConcreteReader::getFollowsStarTypeStmt(StatementType type, Statement &statement) const {
+std::unordered_set<Entity> PkbConcreteReader::getFollowsStarTypeStmt(StatementType type, Statement &statement) const {
     return this->readerManager->getFollowsStarTypeStmt(type, statement);
 }
 
-std::vector<Entity> PkbConcreteReader::getFollowsTypeWildcard(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getFollowsTypeWildcard(StatementType type) const {
     return this->readerManager->getFollowsTypeWildcard(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getFollowsStarTypeWildcard(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getFollowsStarTypeWildcard(StatementType type) const {
     return this->readerManager->getFollowsStarTypeWildcard(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getFollowsStmtType(Statement &statement, StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getFollowsStmtType(Statement &statement, StatementType type) const {
     return this->readerManager->getFollowsStmtType(statement, type);
 }
 
-std::vector<Entity> PkbConcreteReader::getFollowsStarStmtType(Statement &statement, StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getFollowsStarStmtType(Statement &statement, StatementType type) const {
     return this->readerManager->getFollowsStarStmtType(statement, type);
 }
 
-std::vector<Entity> PkbConcreteReader::getFollowsWildcardType(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getFollowsWildcardType(StatementType type) const {
     return this->readerManager->getFollowsWildcardType(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getFollowsStarWildcardType(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getFollowsStarWildcardType(StatementType type) const {
     return this->readerManager->getFollowsStarWildcardType(type);
 }
 
@@ -134,33 +138,33 @@ bool PkbConcreteReader::hasFormerStarStmt(Statement &statement) const {
     return this->readerManager->hasFormerStarStmt(statement);
 }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getModifiesStmtPair(StatementType type) const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getModifiesStmtPair(StatementType type) const {
     return this->readerManager->getModifiesStmtPair(type);
 }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getModifiesProcPair() const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getModifiesProcPair() const {
     return this->readerManager->getModifiesProcPair();
 }
 
-std::vector<Entity> PkbConcreteReader::getModifiesTypeIdent(StatementType type, Variable &var) const {
+std::unordered_set<Entity> PkbConcreteReader::getModifiesTypeIdent(StatementType type, Variable &var) const {
     return this->readerManager->getModifiesTypeIdent(type, var);
 }
 
-std::vector<Entity> PkbConcreteReader::getModifiesProcIdent(Variable &var) const {
+std::unordered_set<Entity> PkbConcreteReader::getModifiesProcIdent(Variable &var) const {
     return this->readerManager->getModifiesProcIdent(var);
 }
 
-std::vector<Entity> PkbConcreteReader::getModifiesStmt(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getModifiesStmt(StatementType type) const {
     return this->readerManager->getModifiesStmt(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getModifiesProc() const { return this->readerManager->getModifiesProc(); }
+std::unordered_set<Entity> PkbConcreteReader::getModifiesProc() const { return this->readerManager->getModifiesProc(); }
 
-std::vector<Entity> PkbConcreteReader::getModifiesVar(Statement &stmt) const {
+std::unordered_set<Entity> PkbConcreteReader::getModifiesVar(Statement &stmt) const {
     return this->readerManager->getModifiesVar(stmt);
 }
 
-std::vector<Entity> PkbConcreteReader::getModifiesVar(Procedure &proc) const {
+std::unordered_set<Entity> PkbConcreteReader::getModifiesVar(Procedure &proc) const {
     return this->readerManager->getModifiesVar(proc);
 }
 
@@ -177,74 +181,74 @@ bool PkbConcreteReader::hasModifies(Statement &stmt) const { return this->reader
 bool PkbConcreteReader::hasModifies(Procedure &proc) const { return this->readerManager->hasModifies(proc); }
 
 // pattern a (_,_)
-std::vector<Entity> PkbConcreteReader::getAllAssign() const { return this->readerManager->getAllAssign(); }
+std::unordered_set<Entity> PkbConcreteReader::getAllAssign() const { return this->readerManager->getAllAssign(); }
 
 // pattern a (_, "x")
-std::vector<Entity> PkbConcreteReader::getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const {
+std::unordered_set<Entity> PkbConcreteReader::getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const {
     return this->readerManager->getAssignStmtsByRhs(rhs, hasRhsWildCard);
 }
 
 // pattern a (v, _)
-std::vector<std::vector<Entity>> PkbConcreteReader::getAllAssignStmtVarPair() const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getAllAssignStmtVarPair() const {
     return this->readerManager->getAllAssignStmtVarPair();
 }
 
 // pattern a (v, "x")
-std::vector<std::vector<Entity>> PkbConcreteReader::getAssignStmtsVarPairByRhs(Expression &rhs,
-                                                                               bool hasWildCard) const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getAssignStmtsVarPairByRhs(Expression &rhs,
+                                                                                      bool hasWildCard) const {
     return this->readerManager->getAssignStmtsVarPairByRhs(rhs, hasWildCard);
 }
 
 // pattern a ("x", _)
-std::vector<Entity> PkbConcreteReader::getAssignStmtsByLhs(Variable &lhs) const {
+std::unordered_set<Entity> PkbConcreteReader::getAssignStmtsByLhs(Variable &lhs) const {
     return this->readerManager->getAssignStmtsByLhs(lhs);
 }
 
 // pattern a ("x", "x")
-std::vector<Entity> PkbConcreteReader::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
-                                                              bool hasRhsWildCard) const {
+std::unordered_set<Entity> PkbConcreteReader::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
+                                                                     bool hasRhsWildCard) const {
     return this->readerManager->getAssignStmtsByLhsRhs(lhs, rhs, hasRhsWildCard);
 }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getParentPair(StatementType formerType,
-                                                                  StatementType latterType) const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getParentPair(StatementType formerType,
+                                                                         StatementType latterType) const {
     return this->readerManager->getParentPair(formerType, latterType);
 }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getParentStarPair(StatementType formerType,
-                                                                      StatementType latterType) const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getParentStarPair(StatementType formerType,
+                                                                             StatementType latterType) const {
     return this->readerManager->getParentStarPair(formerType, latterType);
 }
 
-std::vector<Entity> PkbConcreteReader::getParentTypeStmt(StatementType type, Statement &statement) const {
+std::unordered_set<Entity> PkbConcreteReader::getParentTypeStmt(StatementType type, Statement &statement) const {
     return this->readerManager->getParentTypeStmt(type, statement);
 }
 
-std::vector<Entity> PkbConcreteReader::getParentStarTypeStmt(StatementType type, Statement &statement) const {
+std::unordered_set<Entity> PkbConcreteReader::getParentStarTypeStmt(StatementType type, Statement &statement) const {
     return this->readerManager->getParentStarTypeStmt(type, statement);
 }
 
-std::vector<Entity> PkbConcreteReader::getParentTypeWildcard(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getParentTypeWildcard(StatementType type) const {
     return this->readerManager->getParentTypeWildcard(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getParentStarTypeWildcard(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getParentStarTypeWildcard(StatementType type) const {
     return this->readerManager->getParentStarTypeWildcard(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getParentStmtType(Statement &statement, StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getParentStmtType(Statement &statement, StatementType type) const {
     return this->readerManager->getParentStmtType(statement, type);
 }
 
-std::vector<Entity> PkbConcreteReader::getParentStarStmtType(Statement &statement, StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getParentStarStmtType(Statement &statement, StatementType type) const {
     return this->readerManager->getParentStarStmtType(statement, type);
 }
 
-std::vector<Entity> PkbConcreteReader::getParentWildcardType(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getParentWildcardType(StatementType type) const {
     return this->readerManager->getParentWildcardType(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getParentStarWildcardType(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getParentStarWildcardType(StatementType type) const {
     return this->readerManager->getParentStarWildcardType(type);
 }
 
@@ -296,79 +300,81 @@ bool PkbConcreteReader::isCallsStar(Procedure &caller, Procedure &callee) const 
     return this->readerManager->isCallsStar(caller, callee);
 }
 
-std::vector<Entity> PkbConcreteReader::getCallees() const { return this->readerManager->getCallees(); }
+std::unordered_set<Entity> PkbConcreteReader::getCallees() const { return this->readerManager->getCallees(); }
 
-std::vector<Entity> PkbConcreteReader::getCalleesStar() const { return this->readerManager->getCalleesStar(); }
+std::unordered_set<Entity> PkbConcreteReader::getCalleesStar() const { return this->readerManager->getCalleesStar(); }
 
-std::vector<Entity> PkbConcreteReader::getCallers() const { return this->readerManager->getCallers(); }
+std::unordered_set<Entity> PkbConcreteReader::getCallers() const { return this->readerManager->getCallers(); }
 
-std::vector<Entity> PkbConcreteReader::getCallersStar() const { return this->readerManager->getCallersStar(); }
+std::unordered_set<Entity> PkbConcreteReader::getCallersStar() const { return this->readerManager->getCallersStar(); }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getCallsPair() const { return this->readerManager->getCallsPair(); }
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getCallsPair() const {
+    return this->readerManager->getCallsPair();
+}
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getCallsStarPair() const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getCallsStarPair() const {
     return this->readerManager->getCallsStarPair();
 }
 
-std::vector<Entity> PkbConcreteReader::getCallers(Procedure &callee) const {
+std::unordered_set<Entity> PkbConcreteReader::getCallers(Procedure &callee) const {
     return this->readerManager->getCallers(callee);
 }
 
-std::vector<Entity> PkbConcreteReader::getCallersStar(Procedure &callee) const {
+std::unordered_set<Entity> PkbConcreteReader::getCallersStar(Procedure &callee) const {
     return this->readerManager->getCallersStar(callee);
 }
 
-std::vector<Entity> PkbConcreteReader::getCallees(Procedure &caller) const {
+std::unordered_set<Entity> PkbConcreteReader::getCallees(Procedure &caller) const {
     return this->readerManager->getCallees(caller);
 }
 
-std::vector<Entity> PkbConcreteReader::getCalleesStar(Procedure &caller) const {
+std::unordered_set<Entity> PkbConcreteReader::getCalleesStar(Procedure &caller) const {
     return this->readerManager->getCalleesStar(caller);
 }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getNextPair(StatementType formerType,
-                                                                StatementType latterType) const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getNextPair(StatementType formerType,
+                                                                       StatementType latterType) const {
     return this->readerManager->getNextPair(formerType, latterType);
 }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getNextStarPair(StatementType formerType,
-                                                                    StatementType latterType) const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getNextStarPair(StatementType formerType,
+                                                                           StatementType latterType) const {
     return this->readerManager->getNextStarPair(formerType, latterType);
 }
 
-std::vector<Entity> PkbConcreteReader::getNextStarSameStmt(StatementType stmtType) const {
+std::unordered_set<Entity> PkbConcreteReader::getNextStarSameStmt(StatementType stmtType) const {
     return this->readerManager->getNextStarSameStmt(stmtType);
 }
 
-std::vector<Entity> PkbConcreteReader::getNextTypeStmt(StatementType type, Statement &statement) const {
+std::unordered_set<Entity> PkbConcreteReader::getNextTypeStmt(StatementType type, Statement &statement) const {
     return this->readerManager->getNextTypeStmt(type, statement);
 }
 
-std::vector<Entity> PkbConcreteReader::getNextStarTypeStmt(StatementType type, Statement &statement) const {
+std::unordered_set<Entity> PkbConcreteReader::getNextStarTypeStmt(StatementType type, Statement &statement) const {
     return this->readerManager->getNextStarTypeStmt(type, statement);
 }
 
-std::vector<Entity> PkbConcreteReader::getNextTypeWildcard(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getNextTypeWildcard(StatementType type) const {
     return this->readerManager->getNextTypeWildcard(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getNextStarTypeWildcard(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getNextStarTypeWildcard(StatementType type) const {
     return this->readerManager->getNextStarTypeWildcard(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getNextStmtType(Statement &statement, StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getNextStmtType(Statement &statement, StatementType type) const {
     return this->readerManager->getNextStmtType(statement, type);
 }
 
-std::vector<Entity> PkbConcreteReader::getNextStarStmtType(Statement &statement, StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getNextStarStmtType(Statement &statement, StatementType type) const {
     return this->readerManager->getNextStarStmtType(statement, type);
 }
 
-std::vector<Entity> PkbConcreteReader::getNextWildcardType(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getNextWildcardType(StatementType type) const {
     return this->readerManager->getNextWildcardType(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getNextStarWildcardType(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getNextStarWildcardType(StatementType type) const {
     return this->readerManager->getNextStarWildcardType(type);
 }
 
@@ -400,52 +406,52 @@ bool PkbConcreteReader::hasAfterStarStmt(Statement &statement) const {
     return this->readerManager->hasAfterStarStmt(statement);
 }
 
-std::vector<Entity> PkbConcreteReader::getAllIfPatternStmts() const {
+std::unordered_set<Entity> PkbConcreteReader::getAllIfPatternStmts() const {
     return this->readerManager->getAllIfPatternStmts();
 }
 
-std::vector<Entity> PkbConcreteReader::getIfStmtsByVar(Variable &var) const {
+std::unordered_set<Entity> PkbConcreteReader::getIfStmtsByVar(Variable &var) const {
     return this->readerManager->getIfStmtsByVar(var);
 };
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getAllIfStmtVarPair() const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getAllIfStmtVarPair() const {
     return this->readerManager->getAllIfStmtVarPair();
 }
 
-std::vector<Entity> PkbConcreteReader::getAllWhilePatternStmts() const {
+std::unordered_set<Entity> PkbConcreteReader::getAllWhilePatternStmts() const {
     return this->readerManager->getAllWhilePatternStmts();
 }
 
-std::vector<Entity> PkbConcreteReader::getWhileStmtsByVar(Variable &var) const {
+std::unordered_set<Entity> PkbConcreteReader::getWhileStmtsByVar(Variable &var) const {
     return this->readerManager->getWhileStmtsByVar(var);
 }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getAllWhileStmtVarPair() const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getAllWhileStmtVarPair() const {
     return this->readerManager->getAllWhileStmtVarPair();
 }
 
-std::vector<std::vector<Entity>> PkbConcreteReader::getAffectsPair(StatementType formerType,
-                                                                   StatementType latterType) const {
+std::unordered_set<std::vector<Entity>> PkbConcreteReader::getAffectsPair(StatementType formerType,
+                                                                          StatementType latterType) const {
     return this->readerManager->getAffectsPair(formerType, latterType);
 }
 
-std::vector<Entity> PkbConcreteReader::getAffectsSameStmt(StatementType stmtType) const {
+std::unordered_set<Entity> PkbConcreteReader::getAffectsSameStmt(StatementType stmtType) const {
     return this->readerManager->getAffectsSameStmt(stmtType);
 }
 
-std::vector<Entity> PkbConcreteReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
+std::unordered_set<Entity> PkbConcreteReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
     return this->readerManager->getAffectsTypeStmt(type, statement);
 }
 
-std::vector<Entity> PkbConcreteReader::getAffectsTypeWildcard(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getAffectsTypeWildcard(StatementType type) const {
     return this->readerManager->getAffectsTypeWildcard(type);
 }
 
-std::vector<Entity> PkbConcreteReader::getAffectsStmtType(Statement &statement, StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getAffectsStmtType(Statement &statement, StatementType type) const {
     return this->readerManager->getAffectsStmtType(statement, type);
 }
 
-std::vector<Entity> PkbConcreteReader::getAffectsWildcardType(StatementType type) const {
+std::unordered_set<Entity> PkbConcreteReader::getAffectsWildcardType(StatementType type) const {
     return this->readerManager->getAffectsWildcardType(type);
 }
 

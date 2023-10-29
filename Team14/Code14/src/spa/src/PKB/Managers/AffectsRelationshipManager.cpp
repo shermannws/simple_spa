@@ -63,6 +63,6 @@ void AffectsRelationshipManager::clearStore() {
     this->isAffectsCalculated = false;
 }
 
-std::vector<Entity> AffectsRelationshipManager::getAffectsSameStmt(StatementType stmtType) const {
+std::unordered_set<Entity> AffectsRelationshipManager::getAffectsSameStmt(StatementType stmtType) const {
     return getSameStmt(stmtType, true);
 }

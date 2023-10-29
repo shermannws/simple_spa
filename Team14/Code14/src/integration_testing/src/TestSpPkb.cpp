@@ -119,32 +119,34 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - e2e for Follows a
     auto VarV = Variable("v");
     auto usesV = usesRelationshipManager->getRelationshipTypeIdent(StatementType::Assign, VarV);
     REQUIRE(usesV.size() == 1);
-    REQUIRE(usesV.at(0) == AssignStatement(1));
-    REQUIRE(usesV.at(0) == Statement(1, StatementType::Assign));
+    REQUIRE(usesV.find(AssignStatement(1)) != usesV.end());
+    REQUIRE(usesV.find(Statement(1, StatementType::Assign)) != usesV.end());
 
     auto VarY = Variable("y");
     auto usesY = usesRelationshipManager->getRelationshipTypeIdent(StatementType::Assign, VarY);
     REQUIRE(usesY.size() == 1);
-    REQUIRE(usesY.at(0) == AssignStatement(1));
-    REQUIRE(usesY.at(0) == Statement(1, StatementType::Assign));
+    REQUIRE(usesY.find(AssignStatement(1)) != usesY.end());
+    REQUIRE(usesY.find(Statement(1, StatementType::Assign)) != usesY.end());
 
     auto Stmt1Stmt = Statement(1, StatementType::Assign);
     auto followsRSStmt = followsRelationshipManager->getRelationshipStmtType(Stmt1Stmt, StatementType::Stmt, true);
     REQUIRE(followsRSStmt.size() == 1);
-    REQUIRE(followsRSStmt.at(0) == ReadStatement(2, varName));
+    REQUIRE(followsRSStmt.find(ReadStatement(2, varName)) != followsRSStmt.end());
+
     auto Stmt1Assign = AssignStatement(1);
     auto followsRSAssign = followsRelationshipManager->getRelationshipStmtType(Stmt1Assign, StatementType::Stmt, true);
     REQUIRE(followsRSAssign.size() == 1);
-    REQUIRE(followsRSAssign.at(0) == Statement(2, StatementType::Read, varName));
+    REQUIRE(followsRSAssign.find(ReadStatement(2, varName)) != followsRSAssign.end());
 
     auto Stmt2Stmt = Statement(2, StatementType::Read, varName);
     auto followsRS2Stmt = followsRelationshipManager->getRelationshipStmtType(Stmt2Stmt, StatementType::Stmt, true);
     REQUIRE(followsRS2Stmt.size() == 1);
-    REQUIRE(followsRS2Stmt.at(0) == PrintStatement(3, varName));
+    REQUIRE(followsRS2Stmt.find(PrintStatement(3, varName)) != followsRS2Stmt.end());
+
     auto Stmt2Read = ReadStatement(2, varName);
     auto followsRS2Read = followsRelationshipManager->getRelationshipStmtType(Stmt2Read, StatementType::Stmt, true);
     REQUIRE(followsRS2Read.size() == 1);
-    REQUIRE(followsRS2Read.at(0) == Statement(3, StatementType::Print, varName));
+    REQUIRE(followsRS2Read.find(Statement(3, StatementType::Print, varName)) != followsRS2Read.end());
 }
 
 
@@ -237,11 +239,10 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - e2e with nested s
     // Check Follows
     auto follows1 = followsRelationshipManager->getRelationshipStmtType(stmt1, StatementType::Stmt, true);
     CHECK(follows1.size() == 1);
-    CHECK(follows1.at(0) == stmt9);
+    CHECK(follows1.find(stmt9) != follows1.end());
     auto follows3 = followsRelationshipManager->getRelationshipStmtType(stmt3, StatementType::Stmt, true);
     CHECK(follows3.size() == 1);
-    CHECK(follows3.at(0) == Statement(4, StatementType::Assign));
-
+    CHECK(follows3.find(stmt4) != follows3.end());
 
     // Check Follows*
     auto follows1star = followsRelationshipManager->getRelationshipStmtType(stmt1, StatementType::Stmt, false);
@@ -546,15 +547,18 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test CFG Extractor - test Next extract
     // Check correct Statement subclass saved
     auto statements1 = nextRelationshipManager->getRelationshipStmtType(statement15, StatementType::Call, true);
     CHECK(statements1.size() == 1);
-    CHECK(statements1.at(0).getAttrValue() == "Proc1");
+    CHECK(statements1.find(statement17) != statements1.end());
+    CHECK(statements1.find(statement17)->getAttrValue() == "Proc1");
 
     auto statements2 = nextRelationshipManager->getRelationshipStmtType(statement12, StatementType::Print, true);
     CHECK(statements2.size() == 1);
-    CHECK(statements2.at(0).getAttrValue() == "p");
+    CHECK(statements2.find(statement13) != statements2.end());
+    CHECK(statements2.find(statement13)->getAttrValue() == "p");
 
     auto statements3 = nextRelationshipManager->getRelationshipStmtType(statement1, StatementType::Read, true);
     CHECK(statements3.size() == 1);
-    CHECK(statements3.at(0).getAttrValue() == "x");
+    CHECK(statements3.find(statement2) != statements3.end());
+    CHECK(statements3.find(statement2)->getAttrValue() == "x");
 }
 
 

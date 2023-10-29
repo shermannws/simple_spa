@@ -9,7 +9,7 @@ NextSuchThatStrategy::NextSuchThatStrategy(std::shared_ptr<PkbReader> pkbReader)
 std::shared_ptr<Result> NextSuchThatStrategy::evaluateSynSyn(Ref &leftRef, Ref &rightRef) const {
     std::shared_ptr<Result> res = std::make_shared<Result>();
     if (leftRef == rightRef) {
-        res->setTuples(std::vector<Entity>());
+        res->setTuples(std::unordered_set<Entity>());
         return res;
     }
     auto leftEntityType = leftRef.getEntityType();

@@ -82,9 +82,9 @@ public:
      */
     SynonymMap &getSynIndices();
 
-    void setTuples(const std::vector<Entity> &resultEntities);
+    void setTuples(const std::unordered_set<Entity> &resultEntities);
 
-    void setTuples(const std::vector<std::vector<Entity>> &resultTuples);
+    void setTuples(const std::unordered_set<std::vector<Entity>> &resultTuples);
 
     /**
      * @brief Gets the tuples in the result of the clause evaluation
