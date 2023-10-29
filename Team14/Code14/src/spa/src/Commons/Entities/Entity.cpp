@@ -40,9 +40,11 @@ bool std::equal_to<std::shared_ptr<Entity>>::operator()(std::shared_ptr<Entity> 
 }
 
 std::size_t std::hash<std::vector<Entity>>::operator()(const std::vector<Entity> &entities) const {
-    std::size_t hash = 0;
-    for (const Entity &obj: entities) { hash ^= std::hash<Entity>{}(obj); }
-    return hash;
+    std::hash<Entity> hasher;
+
+    std::size_t seed = entities.size();
+    for (auto &i: entities) { seed ^= hasher(i) + 0x9e3779b9 + (seed << 6) + (seed >> 2); }
+    return seed;
 };
 
 bool std::equal_to<std::vector<Entity>>::operator()(std::vector<Entity> const &lhs,
