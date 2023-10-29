@@ -9,7 +9,7 @@ void ProcToVarRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedur
 
 template<typename S>
 std::unordered_set<std::vector<Entity>> ProcToVarRelationshipManager<S>::getRelationshipProcPair() const {
-    return ManagerUtils::getPairsNoMatch<Procedure, Variable>(*relationshipStore);
+    return relationshipStore->getPairs();
 }
 
 template<typename S>

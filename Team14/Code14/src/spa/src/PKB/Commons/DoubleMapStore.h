@@ -31,6 +31,11 @@ protected:
                        std::equal_to<std::shared_ptr<H2>>>
             rightToLeftStore;
 
+    /**
+     * @brief A set of all entity pairs in this DoubleMapStore
+     */
+    std::unordered_set<std::vector<Entity>> pairs;
+
 public:
     /**
      * @brief Construct a new DoubleMapStore object
@@ -95,6 +100,12 @@ public:
      * @return None
      */
     void clear();
+
+    /**
+     * @brief Gets all the entity pairs in this DoubleMapStore
+     * @return A set of all entity pairs in this DoubleMapStore
+     */
+    std::unordered_set<std::vector<Entity>> getPairs() const;
 };
 
 #include "DoubleMapStore.hpp"

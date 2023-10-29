@@ -116,13 +116,6 @@ ManagerUtils::getPairs<Entity, RelationshipStore<Statement, Variable>, Statement
         RelationshipStore<Statement, Variable> &store, std::function<bool(Statement &)> leftMatcher,
         std::function<bool(Variable &)> rightMatcher);
 
-template std::unordered_set<std::vector<Entity>>
-ManagerUtils::getPairsNoMatch<Procedure, Procedure>(RelationshipStore<Procedure, Procedure> &store);
-
-template std::unordered_set<std::vector<Entity>>
-ManagerUtils::getPairsNoMatch<Procedure, Variable>(RelationshipStore<Procedure, Variable> &store);
-
-
 template void ManagerUtils::unique<Entity>(std::vector<Entity> &vec);
 
 template void
