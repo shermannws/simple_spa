@@ -120,11 +120,13 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - e2e for Follows a
     auto usesV = usesRelationshipManager->getRelationshipTypeIdent(StatementType::Assign, VarV);
     REQUIRE(usesV.size() == 1);
     REQUIRE(usesV.find(AssignStatement(1)) != usesV.end());
+    REQUIRE(usesV.find(Statement(1, StatementType::Assign)) != usesV.end());
 
     auto VarY = Variable("y");
     auto usesY = usesRelationshipManager->getRelationshipTypeIdent(StatementType::Assign, VarY);
     REQUIRE(usesY.size() == 1);
     REQUIRE(usesY.find(AssignStatement(1)) != usesY.end());
+    REQUIRE(usesY.find(Statement(1, StatementType::Assign)) != usesY.end());
 
     auto Stmt1Stmt = Statement(1, StatementType::Assign);
     auto followsRSStmt = followsRelationshipManager->getRelationshipStmtType(Stmt1Stmt, StatementType::Stmt, true);
