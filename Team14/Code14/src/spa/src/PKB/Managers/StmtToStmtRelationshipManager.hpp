@@ -15,8 +15,7 @@ StmtToStmtRelationshipManager<S>::getRelationshipPair(StatementType formerType, 
                                                       bool requireDirect) const {
     if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, formerType)) { return std::unordered_set<std::vector<Entity>>(); }
     if (formerType == StatementType::Stmt && latterType == StatementType::Stmt) {
-        return ManagerUtils::getPairsNoMatch<Statement, Statement>(requireDirect ? *relationshipStore
-                                                                                 : *starRelationshipStore);
+        return requireDirect ? relationshipStore->getPairs() : starRelationshipStore->getPairs();
     }
 
     auto leftMatcher = [formerType](Statement &stmt) { return stmt.isStatementType(formerType); };

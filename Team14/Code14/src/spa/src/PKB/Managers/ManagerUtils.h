@@ -285,23 +285,6 @@ public:
                                                        std::function<bool(V &)> rightMatcher);
 
     /**
-     * @brief A function that retrieves key-value pairs from a map-based store when no matcher function is required
-     * @tparam K The type of the left object stored in the store
-     * @tparam V The type of the right object stored in the store
-     * @param store The store to be retrieved from
-     * @return An unordered_set of key-value pairs from the map
-     */
-    template<typename K, typename V>
-    static std::unordered_set<std::vector<Entity>> getPairsNoMatch(RelationshipStore<K, V> &store);
-
-    /**
-     * @brief A function that retrieves key-value pairs from a map-based store when no matcher function is required
-     * @param store The store to be retrieved from
-     * @return An unordered_set of key-value pairs from the map
-     */
-    static std::unordered_set<std::vector<Entity>> getPairsNoMatch(ConditionPatternStore &store);
-
-    /**
      * @brief A function that removes duplicates in a vector of object of type E
      * @tparam E The type stored in the vector to make unique
      * @param v The vector to be modified

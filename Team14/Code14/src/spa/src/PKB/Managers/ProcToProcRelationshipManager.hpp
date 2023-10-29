@@ -12,8 +12,7 @@ void ProcToProcRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedu
 template<typename S>
 std::unordered_set<std::vector<Entity>>
 ProcToProcRelationshipManager<S>::getRelationshipPair(bool requireDirect) const {
-    return ManagerUtils::getPairsNoMatch<Procedure, Procedure>(requireDirect ? *relationshipStore
-                                                                             : *starRelationshipStore);
+    return requireDirect ? relationshipStore->getPairs() : starRelationshipStore->getPairs();
 }
 
 template<typename S>
@@ -25,7 +24,7 @@ std::unordered_set<Entity> ProcToProcRelationshipManager<S>::getRelationshipForm
 
 template<typename S>
 std::unordered_set<Entity> ProcToProcRelationshipManager<S>::getRelationshipFormer()
-        const {// Same for Calls and Calls* since Calls* is a superset of Follows
+        const {// Same for Calls and Calls* since Calls* is a superset of Calls
     return ManagerUtils::getLeftKeysNoMatch<Procedure, Procedure>(*relationshipStore);
 }
 
@@ -38,7 +37,7 @@ std::unordered_set<Entity> ProcToProcRelationshipManager<S>::getRelationshipLatt
 
 template<typename S>
 std::unordered_set<Entity> ProcToProcRelationshipManager<S>::getRelationshipLatter()
-        const {// Same for Calls and Calls* since Calls* is a superset of Follows
+        const {// Same for Calls and Calls* since Calls* is a superset of Calls
     return ManagerUtils::getRightKeysNoMatch<Procedure, Procedure>(*relationshipStore);
 }
 
