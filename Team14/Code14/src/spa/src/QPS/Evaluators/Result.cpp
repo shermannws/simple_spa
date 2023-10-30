@@ -4,6 +4,8 @@ Result::Result() : type(ResultType::Invalid), boolResult(false) {}
 
 Result::Result(bool value) : type(ResultType::Boolean), boolResult(value) {}
 
+Result::Result(std::vector<Synonym> synonyms) : boolResult(false) { this->setType(synonyms); }
+
 ResultType Result::getType() { return type; }
 
 void Result::setType(std::vector<Synonym> synonyms) {
@@ -24,9 +26,7 @@ void Result::setBoolResult(bool result) { boolResult = result; }
 
 bool Result::getBoolResult() { return boolResult; }
 
-void Result::setTuples(const std::unordered_set<std::vector<Entity>> &resultTuples) {
-    tuples = resultTuples;
-}
+void Result::setTuples(const std::unordered_set<std::vector<Entity>> &resultTuples) { tuples = resultTuples; }
 
 
 void Result::setTuples(const std::unordered_set<Entity> &resultEntities) {
