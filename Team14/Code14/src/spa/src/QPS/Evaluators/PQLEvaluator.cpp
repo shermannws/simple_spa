@@ -90,18 +90,19 @@ bool PQLEvaluator::evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Cla
 
 Result PQLEvaluator::evaluate(Query &query) {
     auto pairs = QPSOptimizer::getGroupScorePairs(query);
-    std::priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::sortByScore);
+    std::priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::compareGroupByScore);
 
     auto res = std::make_shared<Result>(true);
     while (!pq.empty()) {
         auto pair = pq.top();
         pq.pop();
         std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
-        if (!std::get<1>(pair.second)) {// no select synonyms
+        group = QPSOptimizer::sortClauses(group, std::get<1>(pair.second));
+        if (!std::get<1>(pair.second)) {// no synonyms
             if (!evaluateBooleanGroup(group)) { return Result(false); }
         } else if (!std::get<0>(pair.second)) {// group with irrelevant synonyms
             if (!evaluateIrrelevantGroup(group)) { return Result(false); }
-        } else {// those with selectSyns (and if select has synonym(s))
+        } else {// those with selectSyns (and if select has synonym(s)
             for (auto &clause: group) {
                 res = resultHandler->getCombined(res, evaluateClause(clause));
                 if (res->isFalse()) { return Result(false); }

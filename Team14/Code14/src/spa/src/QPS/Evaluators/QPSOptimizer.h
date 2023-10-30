@@ -2,11 +2,19 @@
 #include "QPS/QPSTypes.h"
 #include "QPS/QPSUtil.h"
 #include "QPS/Query.h"
+#include <queue>
+
+// TODO: replace int with size_t to avoid warning
+/* Type alias for a positive integer value representing a score */
+typedef int Score;
 
 /** Type alias for the score of a clause group, defined as follows:
  * (number of select synonyms, num of synonyms, num of clauses)
  */
-typedef std::tuple<int, int, int> GroupScore;
+typedef std::tuple<Score, Score, Score> GroupScore;
+
+// no of synonyms, type of clause, type of such that / pattern / with
+typedef std::tuple<Score, Score> ClauseScore;
 
 /**
  * @brief QPS Optimizer class.
@@ -15,6 +23,11 @@ typedef std::tuple<int, int, int> GroupScore;
  */
 class QPSOptimizer {
 private:
+    /**
+     * An unordered map that maps ClauseType to a Score
+     */
+    static std::unordered_map<ClauseType, Score> clauseTypeScore;
+
     /**
      * builds a graph with synonyms as nodes and edges representing synonyms that are connected by clause(s)
      * @declarations the map of declared synonyms in the query
@@ -55,6 +68,22 @@ private:
     static GroupScore getGroupScore(int numClauses, std::unordered_set<Synonym> groupSyns,
                                     const std::vector<Synonym> &selects);
 
+
+    /**
+     * Calculates the score of the Clause based on the number of synonyms and the ClauseType
+     * @param clause the Clause which score to calculate
+     * @return The ClauseScore defined as follows: (number of synonyms, the ClauseType score)
+     */
+    static ClauseScore getClauseScore(const std::shared_ptr<Clause> &clause);
+
+    /**
+     * Determines if a set of synonyms of a clause group intersects with a vector of synonyms of a Clause
+     * @param currSynGroup the set of synonyms to compare with
+     * @param synonyms the vector of synonyms to compare with
+     * @return true if the set and the vector have common synonym(s), otherwise false
+     */
+    static bool intersects(const std::unordered_set<Synonym> &currSynGroup, const std::vector<Synonym> &synonyms);
+
 public:
     /**
      * Groups connected clauses based on their collective synonyms and calculates their scores
@@ -64,12 +93,16 @@ public:
     static std::vector<std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore>>
     getGroupScorePairs(Query &query);
 
+    static std::vector<std::shared_ptr<Clause>> sortClauses(std::vector<std::shared_ptr<Clause>> &clauses,
+                                                            int numSynonyms);
     /**
-     * Sorts two pairs by the GroupScore of the clause group for a min-heap priority queue
+     * Compares two pairs by the GroupScore of the clause group for a min-heap priority queue
      * @param p1 The first pair of (clause group, score) to compare
      * @param p2 The second pair of (clause group, score) to compare
      * @return true if the first pair has a higher score, otherwise false
      */
-    static bool sortByScore(const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p1,
-                            const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p2);
+    static bool compareGroupByScore(const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p1,
+                                    const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p2);
+
+    static bool compareClauseByScore(const std::shared_ptr<Clause> &c1, const std::shared_ptr<Clause> &c2);
 };

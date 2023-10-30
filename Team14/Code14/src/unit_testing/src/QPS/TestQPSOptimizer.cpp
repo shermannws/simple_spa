@@ -14,7 +14,6 @@ TEST_CASE_METHOD(UnitTestFixture, "Test getGroupScorePairs") {
     SECTION("All boolean clauses -- one group") {
         PQLParser parser(R"(Select BOOLEAN such that Follows(1, 2) and Modifies("proc", "var") with 1 = 3)");
         Query queryObj = parser.parse();
-        auto stubReader = make_shared<StubPkbReader>();
         auto pairs = QPSOptimizer::getGroupScorePairs(queryObj);
         pair<unordered_set<shared_ptr<Clause>>, GroupScore> expectedPair(
                 {queryObj.getSuchThat()[0], queryObj.getSuchThat()[1], queryObj.getWith()[0]}, tuple(0, 0, 3));
@@ -73,9 +72,8 @@ TEST_CASE_METHOD(UnitTestFixture, "Test sortByScore") {
             "Uses(5, \"y\") and Follows(3,4) pattern a1(v2, _\"x+y\"_) such that Parent(a1, a2) with a2.stmt# = "
             "20 such that Modifies (a3,v3) pattern a3(\"z\",_)");
     Query queryObj = parser.parse();
-    auto stubReader = make_shared<StubPkbReader>();
     auto pairs = QPSOptimizer::getGroupScorePairs(queryObj);
-    priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::sortByScore);
+    priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::compareGroupByScore);
     vector<GroupScore> expected{
             std::tuple(0, 0, 2),
             std::tuple(0, 2, 2),
@@ -88,5 +86,95 @@ TEST_CASE_METHOD(UnitTestFixture, "Test sortByScore") {
         pq.pop();
         REQUIRE(pair.second == expected[i]);
         i++;
+    }
+}
+
+TEST_CASE_METHOD(UnitTestFixture, "Test compareClauseByScore") {
+    SECTION("Pure function, without clause grouping") {
+        PQLParser parser(
+                "assign a1, a2, a3; stmt s1, s2, s3; variable v1, v2, v3; Select <s1, s2, v2> such that "
+                "Uses(s3,v1) and Modifies(s3, \"x\") and Follows(s1,s2) and Parent(s3,s1) and Uses(s2,v1) such that "
+                "Uses(5, \"y\") and Follows(3,4) pattern a1(v2, _\"x+y\"_) such that Parent(a1, a2) with a2.stmt# = "
+                "20 such that Modifies (a3,v3) pattern a3(\"z\",_)");
+        Query queryObj = parser.parse();
+        auto clauses = queryObj.getAllClause();
+        sort(clauses.begin(), clauses.end(), QPSOptimizer::compareClauseByScore);
+        vector<shared_ptr<Clause>> expectedClauses{
+                queryObj.getSuchThat()[6], queryObj.getSuchThat()[5], queryObj.getWith()[0],
+                queryObj.getPattern()[1],  queryObj.getSuchThat()[1], queryObj.getPattern()[0],
+                queryObj.getSuchThat()[7], queryObj.getSuchThat()[3], queryObj.getSuchThat()[2],
+                queryObj.getSuchThat()[8], queryObj.getSuchThat()[4], queryObj.getSuchThat()[0]};
+        reverse(expectedClauses.begin(),
+                expectedClauses.end());// opposite orders, since compareClauseByScore is used for min heap
+        REQUIRE(clauses == expectedClauses);
+    }
+
+    SECTION("With clause grouping") {
+        PQLParser parser(
+                "assign a1, a2, a3; stmt s1, s2, s3; variable v1, v2, v3; Select <s1, s2, v2> such that "
+                "Uses(s3,v1) and Modifies(s3, \"x\") and Follows(s1,s2) and Parent(s3,s1) and Uses(s2,v1) such that "
+                "Uses(5, \"y\") and Follows(3,4) pattern a1(v2, _\"x+y\"_) such that Parent(a1, a2) with a2.stmt# = "
+                "20 such that Modifies (a3,v3) pattern a3(\"z\",_)");
+        Query queryObj = parser.parse();
+        auto pairs = QPSOptimizer::getGroupScorePairs(queryObj);
+        vector<vector<shared_ptr<Clause>>> expectedGroups{
+                {queryObj.getSuchThat()[6], queryObj.getSuchThat()[5]},// Follows(3,4), Uses(5, "y")
+                {queryObj.getPattern()[1], queryObj.getSuchThat()[8]}, // pattern a3("z",_), Modifies(a3,v3),
+                {queryObj.getWith()[0], queryObj.getPattern()[0],
+                 queryObj.getSuchThat()[7]},// with a2.stmt# = 20, pattern a1(v2, _"x+y"_), Parent(a1,a2)
+                {queryObj.getSuchThat()[1], queryObj.getSuchThat()[3], queryObj.getSuchThat()[2],
+                 queryObj.getSuchThat()[0], queryObj.getSuchThat()[4]},//  Modifies(s3, "x"), Parent(s3,s1),
+                                                                       //  Follows(s1,s2), Uses(s3,v1), Uses(s2,v1)
+        };
+
+        REQUIRE(pairs.size() == expectedGroups.size());
+
+        // transform pairs to a vector of vectors
+        vector<vector<shared_ptr<Clause>>> actualGroups;
+        for (auto &pair: pairs) {
+            std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
+            std::sort(group.begin(), group.end(), QPSOptimizer::compareClauseByScore);
+            actualGroups.push_back(group);
+        }
+
+        for (auto &group: expectedGroups) {
+            reverse(group.begin(), group.end());// opposite orders, since compareClauseByScore is used for min heap
+            REQUIRE(find(actualGroups.begin(), actualGroups.end(), group) != actualGroups.end());
+        }
+    }
+}
+
+TEST_CASE_METHOD(UnitTestFixture, "Test sortClauses") {
+    SECTION("With clause grouping") {
+        PQLParser parser(
+                "assign a1, a2, a3; stmt s1, s2, s3; variable v1, v2, v3; Select <s1, s2, v2> such that "
+                "Uses(s3,v1) and Modifies(s3, \"x\") and Follows(s1,s2) and Parent(s3,s1) and Uses(s2,v1) such that "
+                "Uses(5, \"y\") and Follows(3,4) pattern a1(v2, _\"x+y\"_) such that Parent(a1, a2) with a2.stmt# = "
+                "20 such that Modifies (a3,v3) pattern a3(\"z\",_)");
+        Query queryObj = parser.parse();
+        auto pairs = QPSOptimizer::getGroupScorePairs(queryObj);
+        vector<vector<shared_ptr<Clause>>> expectedGroups{
+                {queryObj.getSuchThat()[6], queryObj.getSuchThat()[5]},// Follows(3,4), Uses(5, "y")
+                {queryObj.getPattern()[1], queryObj.getSuchThat()[8]}, // pattern a3("z",_), Modifies(a3,v3),
+                {queryObj.getWith()[0], queryObj.getSuchThat()[7],
+                 queryObj.getPattern()[0]},// with a2.stmt# = 20, Parent(a1,a2), pattern a1(v2, _"x+y"_)
+                {queryObj.getSuchThat()[1], queryObj.getSuchThat()[3], queryObj.getSuchThat()[2],
+                 queryObj.getSuchThat()[4], queryObj.getSuchThat()[0]},//  Modifies(s3, "x"), Parent(s3,s1),
+                                                                       //  Follows(s1,s2), Uses(s2,v1), Uses(s3,v1)
+        };
+
+        vector<vector<shared_ptr<Clause>>> actualGroups;
+
+        for (auto &pair: pairs) {
+            std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
+            group = QPSOptimizer::sortClauses(group, std::get<1>(pair.second));
+            actualGroups.push_back(group);
+        }
+        REQUIRE(pairs.size() == expectedGroups.size());
+
+
+        for (auto &group: expectedGroups) {
+            REQUIRE(find(actualGroups.begin(), actualGroups.end(), group) != actualGroups.end());
+        }
     }
 }
