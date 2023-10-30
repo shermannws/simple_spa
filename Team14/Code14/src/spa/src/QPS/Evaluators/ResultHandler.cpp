@@ -30,11 +30,10 @@ std::shared_ptr<Result> ResultHandler::hashJoin(std::shared_ptr<Result> r1, std:
     auto hashtable = partition(commonSyns, r1);
 
     std::unordered_map<int, int> commonMap = getMatchMap(r1, r2, commonSyns);
-    auto map1 = r1->getSynIndices();
-    auto map2 = r2->getSynIndices();
+    RowTemplate rowTemplate = getRowTemplate(r1, r2, header);
+
     auto keyIndices = getKeyIndices(commonSyns, r2);
     auto tuples2 = r2->getTuples();
-
     // probe
     for (auto &row2: tuples2) {
         std::vector<Entity> key;
@@ -44,21 +43,11 @@ std::shared_ptr<Result> ResultHandler::hashJoin(std::shared_ptr<Result> r1, std:
 
         auto tuples1 = hashtable[key];
         for (const auto &row1: tuples1) {
-            if (isMatch(row1, row2, commonMap)) {
-                std::vector<Entity> newRow;
-                for (const auto &colName: header) {
-                    if (map1.count(colName)) {
-                        newRow.push_back(row1[map1[colName]]);
-                        continue;
-                    }
-                    newRow.push_back(row2[map2[colName]]);
-                }
-                finalTuples.insert(newRow);
-            }
+            if (isMatch(row1, row2, commonMap)) { finalTuples.insert(buildRow(rowTemplate, row1, row2)); }
         }
     }
-
     finalResult->setTuples(finalTuples);
+
     return finalResult;
 }
 
@@ -68,25 +57,14 @@ std::shared_ptr<Result> ResultHandler::nestedLoopJoin(std::shared_ptr<Result> r1
     std::unordered_set<std::vector<Entity>> finalTuples;
 
     auto tuples1 = r1->getTuples();
-    auto map1 = r1->getSynIndices();
-
     auto tuples2 = r2->getTuples();
-    auto map2 = r2->getSynIndices();
+    RowTemplate rowTemplate = getRowTemplate(r1, r2, header);
 
     for (const auto &row1: tuples1) {
-        for (const auto &row2: tuples2) {
-            std::vector<Entity> newRow;
-            for (const auto &colName: header) {
-                if (map1.count(colName)) {
-                    newRow.push_back(row1[map1[colName]]);
-                    continue;
-                }
-                newRow.push_back(row2[map2[colName]]);
-            }
-            finalTuples.insert(newRow);
-        }
+        for (const auto &row2: tuples2) { finalTuples.insert(buildRow(rowTemplate, row1, row2)); }
     }
     finalResult->setTuples(finalTuples);
+
     return finalResult;
 }
 
@@ -108,6 +86,29 @@ std::pair<std::vector<Synonym>, std::vector<Synonym>> ResultHandler::getSynonyms
     }
     return {commonSyns, finalSyns};
 }
+
+RowTemplate ResultHandler::getRowTemplate(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
+                                          std::vector<Synonym> header) {
+    auto map1 = r1->getSynIndices();
+    auto map2 = r2->getSynIndices();
+    RowTemplate rowTemplate;
+    for (const auto &column: header) {
+        if (map1.count(column)) {
+            rowTemplate.emplace_back(std::make_pair(0, map1[column]));
+            continue;
+        }
+        rowTemplate.emplace_back(std::make_pair(1, map2[column]));
+    }
+    return rowTemplate;
+}
+
+std::vector<Entity> ResultHandler::buildRow(RowTemplate temp, std::vector<Entity> row1, std::vector<Entity> row2) {
+    std::vector<std::vector<Entity>> src = {row1, row2};
+    std::vector<Entity> newRow;
+    for (const auto &idx: temp) { newRow.push_back(src[idx.first][idx.second]); }
+    return newRow;
+}
+
 
 std::unordered_map<int, int> ResultHandler::getMatchMap(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
                                                         std::vector<Synonym> &commonSyns) {
