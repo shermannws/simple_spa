@@ -10,6 +10,9 @@
 /* Type alias for a string representing a synonym of an entity*/
 typedef std::string Synonym;
 
+/* Type alias for an int representing an index */
+typedef int idx;
+
 // Query typedefs
 class QueryEntity;
 

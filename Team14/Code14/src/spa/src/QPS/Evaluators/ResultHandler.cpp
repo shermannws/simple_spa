@@ -111,11 +111,11 @@ std::vector<Entity> ResultHandler::buildRow(const RowTemplate &temp, const std::
 }
 
 
-std::unordered_map<int, int> ResultHandler::getMatchMap(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
+std::unordered_map<idx, idx> ResultHandler::getMatchMap(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
                                                         std::vector<Synonym> &commonSyns) {
     auto map1 = r1->getSynIndices();
     auto map2 = r2->getSynIndices();
-    std::unordered_map<int, int> commonIndices;
+    std::unordered_map<idx, idx> commonIndices;
 
     for (const auto &syn: commonSyns) { commonIndices[map1[syn]] = map2[syn]; }
     return commonIndices;
@@ -131,9 +131,9 @@ bool ResultHandler::isMatch(const std::vector<Entity> &row1, const std::vector<E
     return true;
 }
 
-std::vector<int> ResultHandler::getKeyIndices(std::vector<Synonym> &synonyms, std::shared_ptr<Result> result) {
+std::vector<idx> ResultHandler::getKeyIndices(std::vector<Synonym> &synonyms, std::shared_ptr<Result> result) {
     auto synMap = result->getSynIndices();
-    std::vector<int> keyIndices(synonyms.size());
+    std::vector<idx> keyIndices(synonyms.size());
     for (int i = 0; i < synonyms.size(); i++) { keyIndices[i] = synMap[synonyms[i]]; }
     return keyIndices;
 }

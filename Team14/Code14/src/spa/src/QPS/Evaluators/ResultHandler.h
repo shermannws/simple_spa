@@ -4,6 +4,7 @@
 #include <string>
 
 #include "QPS/Query.h"
+#include "QPS/QPSTypes.h"
 #include "Result.h"
 
 /* hash function for a vector of Entities used for hash join partitioning */
@@ -19,7 +20,7 @@ struct syn_vector_hash {
 using hashTable = std::unordered_map<std::vector<Entity>, std::unordered_set<std::vector<Entity>>, syn_vector_hash>;
 
 /* template for the corresponding synonyms in the form of a pair representing <idx of input row, idx in input row> */
-using RowTemplate = std::vector<std::pair<int, int>>;
+using RowTemplate = std::vector<std::pair<idx, idx>>;
 
 /**
  * @class ResultHandler class generates a result table from the combining two tables
@@ -93,7 +94,7 @@ private:
      * @param commonSyns the vector of common synonyms
      * @return map of index of common synonyms in table 1 to index in table 2
      */
-    std::unordered_map<int, int> getMatchMap(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
+    std::unordered_map<idx, idx> getMatchMap(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
                                              std::vector<Synonym> &commonSyns);
 
     /**
@@ -111,7 +112,7 @@ private:
      * @param result result object containing the synonyms
      * @return vector of the corresponding index of the synonym in the result object
      */
-    std::vector<int> getKeyIndices(std::vector<Synonym> &synonyms, std::shared_ptr<Result> result);
+    std::vector<idx> getKeyIndices(std::vector<Synonym> &synonyms, std::shared_ptr<Result> result);
 
     /**
      * partitions the result table into a hashtable with the vector of synonyms specified as the hash key
