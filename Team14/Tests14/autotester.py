@@ -24,7 +24,7 @@ ERROR_PREFIX = "error_"
 TEST_SETTINGS = {
     "milestone1": True,
     "milestone2": True,
-    "milestone3": False,
+    "milestone3": True,
 }
 
 TEST_DIR = Path(os.getenv("TEST_DIR"))
