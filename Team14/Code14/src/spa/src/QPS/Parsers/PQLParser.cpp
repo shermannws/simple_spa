@@ -131,6 +131,7 @@ void PQLParser::processWithClause(Query &query) {
 
 std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
     std::shared_ptr<Token> absToken = tokenizer->popToken();
+    //TODO handle not
     std::shared_ptr<SuchThatClause> clause = std::make_shared<SuchThatClause>(absToken);
 
     std::shared_ptr<Token> next = tokenizer->popToken();
@@ -154,6 +155,7 @@ std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
 
 std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
     std::shared_ptr<PatternClause> clause = std::make_shared<PatternClause>();
+    //TODO handler not
     std::shared_ptr<Token> patternSyn = tokenizer->popToken();
     if (!patternSyn->isIdent()) { throw SyntaxException("Invalid synonym syntax"); }
     clause->setSyn(patternSyn->getRep());
@@ -191,6 +193,7 @@ std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
 
 std::shared_ptr<WithClause> PQLParser::extractWithClause() {
     std::shared_ptr<WithClause> clause = std::make_shared<WithClause>();
+    // TODO handle not
     Ref leftRef = extractRef();
     clause->setFirstParam(leftRef);
     std::shared_ptr<Token> next = tokenizer->popToken();

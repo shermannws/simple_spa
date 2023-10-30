@@ -37,6 +37,11 @@ protected:
     ClauseType type;
 
     /**
+     * @brief true if clause is negated
+     */
+     bool negation;
+
+    /**
      * @brief The first parameter of the Clause in Ref
      */
     Ref firstParam;
@@ -63,6 +68,18 @@ public:
      * @return The ClauseType of the Clause
      */
     ClauseType getType();
+
+    /**
+     * @brief The setter of the clause negation
+     * @param isNegated value of the negation of the clause
+     */
+    void setNegation(bool isNegated);
+
+    /**
+     * @brief returns true if clause contains 'not' otherwise false
+     * @return true if clause is a negation clause
+     */
+    bool isNegation();
 
     /**
      * @brief The setter of the first parameter of the Clause
