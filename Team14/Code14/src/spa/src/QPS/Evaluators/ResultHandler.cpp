@@ -26,36 +26,38 @@ std::shared_ptr<Result> ResultHandler::hashJoin(std::shared_ptr<Result> r1, std:
     std::shared_ptr<Result> finalResult = std::make_shared<Result>(header);
     std::unordered_set<std::vector<Entity>> finalTuples;
 
-    auto hashtable1 = partition(commonSyns, r1);
-    auto map1 = r1->getSynIndices();
-
-    auto hashtable2 = partition(commonSyns, r2);
-    auto map2 = r2->getSynIndices();
+    // build hashtable
+    auto hashtable = partition(commonSyns, r1);
 
     std::unordered_map<int, int> commonMap = getMatchMap(r1, r2, commonSyns);
+    auto map1 = r1->getSynIndices();
+    auto map2 = r2->getSynIndices();
+    auto keyIndices = getKeyIndices(commonSyns, r2);
+    auto tuples2 = r2->getTuples();
 
-    for (auto &bucket: hashtable1) {
-        auto tuples1 = bucket.second;
-        auto key = bucket.first;
-        if (!hashtable2.count(key)) { continue; }// no elements in other hashtable
+    // probe
+    for (auto &row2: tuples2) {
+        std::vector<Entity> key;
+        for (const auto &idx: keyIndices) { key.push_back(row2[idx]); }// build hash key
 
-        auto tuples2 = hashtable2[key];
+        if (!hashtable.count(key)) { continue; }// skip if no matching bucket
+
+        auto tuples1 = hashtable[key];
         for (const auto &row1: tuples1) {
-            for (const auto &row2: tuples2) {
-                if (isMatch(row1, row2, commonMap)) {
-                    std::vector<Entity> newRow;
-                    for (const auto &colName: header) {
-                        if (map1.count(colName)) {
-                            newRow.push_back(row1[map1[colName]]);
-                            continue;
-                        }
-                        newRow.push_back(row2[map2[colName]]);
+            if (isMatch(row1, row2, commonMap)) {
+                std::vector<Entity> newRow;
+                for (const auto &colName: header) {
+                    if (map1.count(colName)) {
+                        newRow.push_back(row1[map1[colName]]);
+                        continue;
                     }
-                    finalTuples.insert(newRow);
+                    newRow.push_back(row2[map2[colName]]);
                 }
+                finalTuples.insert(newRow);
             }
         }
     }
+
     finalResult->setTuples(finalTuples);
     return finalResult;
 }
