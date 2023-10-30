@@ -73,7 +73,8 @@ private:
      * @return template for the corresponding synonyms in the form of a pair representing
      * <idx of source row, idx in source row>
      */
-    RowTemplate getRowTemplate(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2, std::vector<Synonym> header);
+    RowTemplate getRowTemplate(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
+                               const std::vector<Synonym> &header);
 
     /**
      * creates a new row according to the rowTemplate using row1 and row2 as the input/source rows
@@ -82,7 +83,8 @@ private:
      * @param row2 second input row
      * @return a vector of Entities representing the resultant row
      */
-    std::vector<Entity> buildRow(RowTemplate temp, std::vector<Entity> row1, std::vector<Entity> row2);
+    std::vector<Entity> buildRow(const RowTemplate &temp, const std::vector<Entity> &row1,
+                                 const std::vector<Entity> &row2);
 
     /**
      * Gets a map of indices of the common synonyms between two tables

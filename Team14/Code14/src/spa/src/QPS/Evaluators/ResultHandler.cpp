@@ -88,7 +88,7 @@ std::pair<std::vector<Synonym>, std::vector<Synonym>> ResultHandler::getSynonyms
 }
 
 RowTemplate ResultHandler::getRowTemplate(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
-                                          std::vector<Synonym> header) {
+                                          const std::vector<Synonym> &header) {
     auto map1 = r1->getSynIndices();
     auto map2 = r2->getSynIndices();
     RowTemplate rowTemplate;
@@ -102,7 +102,8 @@ RowTemplate ResultHandler::getRowTemplate(std::shared_ptr<Result> r1, std::share
     return rowTemplate;
 }
 
-std::vector<Entity> ResultHandler::buildRow(RowTemplate temp, std::vector<Entity> row1, std::vector<Entity> row2) {
+std::vector<Entity> ResultHandler::buildRow(const RowTemplate &temp, const std::vector<Entity> &row1,
+                                            const std::vector<Entity> &row2) {
     std::vector<std::vector<Entity>> src = {row1, row2};
     std::vector<Entity> newRow;
     for (const auto &idx: temp) { newRow.push_back(src[idx.first][idx.second]); }
