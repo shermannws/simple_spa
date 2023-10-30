@@ -1,6 +1,6 @@
 #include "QPSOptimizer.h"
 
-std::unordered_map<ClauseType, Score> QPSOptimizer::clauseTypeScore = {
+std::unordered_map<ClauseType, IntScore> QPSOptimizer::clauseTypeScore = {
         {ClauseType::With, 0},     {ClauseType::If, 1},           {ClauseType::While, 1},
         {ClauseType::Assign, 2},   {ClauseType::Calls, 3},        {ClauseType::Parent, 4},
         {ClauseType::Follows, 5},  {ClauseType::Next, 6},         {ClauseType::Modifies, 7},
@@ -50,10 +50,10 @@ QPSOptimizer::getSynGroups(std::unordered_map<Synonym, std::unordered_set<Synony
     return synGroups;
 }
 
-GroupScore QPSOptimizer::getGroupScore(int numClauses, std::unordered_set<Synonym> groupSyns,
+GroupScore QPSOptimizer::getGroupScore(SizeTScore numClauses, std::unordered_set<Synonym> groupSyns,
                                        const std::vector<Synonym> &selects) {
     int numSelectSyns = 0;
-    int numSyns = groupSyns.size();
+    auto numSyns = groupSyns.size();
 
     for (const auto &select: selects) {
         auto selectSyn = QPSUtil::getSyn(select);
@@ -64,7 +64,7 @@ GroupScore QPSOptimizer::getGroupScore(int numClauses, std::unordered_set<Synony
 }
 
 ClauseScore QPSOptimizer::getClauseScore(const std::shared_ptr<Clause> &clause) {
-    int numSyns = clause->getSynonyms().size();
+    auto numSyns = clause->getSynonyms().size();
     int typeScore = QPSOptimizer::clauseTypeScore[clause->getType()];
 
     return std::tuple{numSyns, typeScore};
@@ -114,7 +114,7 @@ QPSOptimizer::getGroupScorePairs(Query &query) {
 }
 
 std::vector<std::shared_ptr<Clause>> QPSOptimizer::sortClauses(std::vector<std::shared_ptr<Clause>> &clauses,
-                                                               int numSynonyms) {
+                                                               SizeTScore numSynonyms) {
     std::vector<std::shared_ptr<Clause>> finalClauses;
     finalClauses.reserve(clauses.size());// preallocate memory to reduce reallocation
 

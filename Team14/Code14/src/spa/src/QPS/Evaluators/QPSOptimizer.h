@@ -4,17 +4,18 @@
 #include "QPS/Query.h"
 #include <queue>
 
-// TODO: replace int with size_t to avoid warning
-/* Type alias for a positive integer value representing a score */
-typedef int Score;
+/* Type alias for a non-negative integer value representing a score */
+typedef int IntScore;
 
+/* Type alias for a non-negative size_t value representing a score */
+typedef size_t SizeTScore;
 /** Type alias for the score of a clause group, defined as follows:
  * (number of select synonyms, num of synonyms, num of clauses)
  */
-typedef std::tuple<Score, Score, Score> GroupScore;
+typedef std::tuple<IntScore, SizeTScore, IntScore> GroupScore;
 
 // no of synonyms, type of clause, type of such that / pattern / with
-typedef std::tuple<Score, Score> ClauseScore;
+typedef std::tuple<SizeTScore, IntScore> ClauseScore;
 
 /**
  * @brief QPS Optimizer class.
@@ -26,7 +27,7 @@ private:
     /**
      * An unordered map that maps ClauseType to a Score
      */
-    static std::unordered_map<ClauseType, Score> clauseTypeScore;
+    static std::unordered_map<ClauseType, IntScore> clauseTypeScore;
 
     /**
      * builds a graph with synonyms as nodes and edges representing synonyms that are connected by clause(s)
@@ -65,7 +66,7 @@ private:
      * @param selects The vector of synonyms in the select clause
      * @return The GroupScore defined as follows: (number of select synonyms, num of synonyms, num of clauses)
      */
-    static GroupScore getGroupScore(int numClauses, std::unordered_set<Synonym> groupSyns,
+    static GroupScore getGroupScore(SizeTScore numClauses, std::unordered_set<Synonym> groupSyns,
                                     const std::vector<Synonym> &selects);
 
 
@@ -94,7 +95,7 @@ public:
     getGroupScorePairs(Query &query);
 
     static std::vector<std::shared_ptr<Clause>> sortClauses(std::vector<std::shared_ptr<Clause>> &clauses,
-                                                            int numSynonyms);
+                                                            SizeTScore numSynonyms);
     /**
      * Compares two pairs by the GroupScore of the clause group for a min-heap priority queue
      * @param p1 The first pair of (clause group, score) to compare
