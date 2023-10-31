@@ -24,10 +24,17 @@ std::vector<Synonym> PatternClause::getSynonyms() const {
     return synonyms;
 }
 
+std::vector<QueryEntityType> PatternClause::getSynonymEntityTypes() const {
+    std::vector<QueryEntityType> types = {QPSUtil::patternClauseToEntityMap[type]};
+    if (firstParam.getRootType() == RootType::Synonym) { types.push_back(QueryEntityType::Variable); }
+    return types;
+}
+
 bool PatternClause::operator==(const Clause &other) const {
     try {
         const auto &otherPattern = dynamic_cast<const PatternClause &>(other);
-        return (type == otherPattern.type) && (firstParam == otherPattern.firstParam) &&
-               (secondParam == otherPattern.secondParam) && (syn == otherPattern.syn);
+        return (type == otherPattern.type) && (negation == otherPattern.negation) &&
+               (firstParam == otherPattern.firstParam) && (secondParam == otherPattern.secondParam) &&
+               (syn == otherPattern.syn);
     } catch (std::bad_cast &e) { return false; }
 }
