@@ -65,7 +65,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test getGroupScorePairs") {
     }
 }
 
-TEST_CASE_METHOD(UnitTestFixture, "Test sortByScore") {
+TEST_CASE_METHOD(UnitTestFixture, "Test compareGroupByScore") {
     PQLParser parser(
             "assign a1, a2, a3; stmt s1, s2, s3; variable v1, v2, v3; Select <s1, s2, v2> such that "
             "Uses(s3,v1) and Modifies(s3, \"x\") and Follows(s1,s2) and Parent(s3,s1) and Uses(s2,v1) such that "
@@ -98,7 +98,10 @@ TEST_CASE_METHOD(UnitTestFixture, "Test compareClauseByScore") {
                 "20 such that Modifies (a3,v3) pattern a3(\"z\",_)");
         Query queryObj = parser.parse();
         auto clauses = queryObj.getAllClause();
-        sort(clauses.begin(), clauses.end(), QPSOptimizer::compareClauseByScore);
+        auto pairs = QPSOptimizer::getClauseScorePairs(clauses);
+        sort(pairs.begin(), pairs.end(), QPSOptimizer::compareClauseByScore);
+        clauses.clear();
+        for (const auto &clausePair: pairs) { clauses.push_back(clausePair.first); }
         vector<shared_ptr<Clause>> expectedClauses{
                 queryObj.getSuchThat()[6], queryObj.getSuchThat()[5], queryObj.getWith()[0],
                 queryObj.getPattern()[1],  queryObj.getSuchThat()[1], queryObj.getPattern()[0],
@@ -138,11 +141,14 @@ TEST_CASE_METHOD(UnitTestFixture, "Test compareClauseByScore") {
 
         // transform pairs to a vector of vectors
         vector<vector<shared_ptr<Clause>>> actualGroups;
-        for (auto &pair: pairs) {
-            std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
-            std::sort(group.begin(), group.end(), QPSOptimizer::compareClauseByScore);
-            reverse(group.begin(), group.end());// reverse since compareClauseByScore is meant for min-heap
-            actualGroups.push_back(group);
+        for (auto &groupPair: pairs) {
+            std::vector<std::shared_ptr<Clause>> group(groupPair.first.begin(), groupPair.first.end());
+            auto clausePairs = QPSOptimizer::getClauseScorePairs(group);
+            sort(clausePairs.begin(), clausePairs.end(), QPSOptimizer::compareClauseByScore);
+            reverse(clausePairs.begin(), clausePairs.end());// reverse since compareClauseByScore is meant for min-heap
+            vector<shared_ptr<Clause>> newGroup;
+            for (const auto &clausePair: clausePairs) { newGroup.push_back(clausePair.first); }
+            actualGroups.push_back(newGroup);
         }
 
         REQUIRE(find(actualGroups.begin(), actualGroups.end(), group1) != actualGroups.end());
@@ -154,7 +160,6 @@ TEST_CASE_METHOD(UnitTestFixture, "Test compareClauseByScore") {
         REQUIRE(group4Check);
     }
 }
-
 
 TEST_CASE_METHOD(UnitTestFixture, "Test sortClauses") {
     SECTION("With clause grouping") {

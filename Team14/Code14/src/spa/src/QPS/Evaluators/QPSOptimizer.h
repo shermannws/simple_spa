@@ -14,7 +14,9 @@ typedef size_t SizeTScore;
  */
 typedef std::tuple<IntScore, SizeTScore, IntScore> GroupScore;
 
-// no of synonyms, type of clause, type of such that / pattern / with
+/** Type alias for the score of a Clause, defined as follows:
+ * (no of synonyms, type of clause, type of such that / pattern / with)
+ */
 typedef std::tuple<SizeTScore, IntScore> ClauseScore;
 
 /**
@@ -69,7 +71,6 @@ private:
     static GroupScore getGroupScore(SizeTScore numClauses, std::unordered_set<Synonym> groupSyns,
                                     const std::vector<Synonym> &selects);
 
-
     /**
      * Calculates the score of the Clause based on the number of synonyms and the ClauseType
      * @param clause the Clause which score to calculate
@@ -83,9 +84,17 @@ private:
      * @param synonyms the vector of synonyms to compare with
      * @return true if the set and the vector have common synonym(s), otherwise false
      */
-    static bool intersects(const std::unordered_set<Synonym> &currSynGroup, const std::vector<Synonym> &synonyms);
+    static bool intersect(const std::unordered_set<Synonym> &currSynGroup, const std::vector<Synonym> &synonyms);
 
 public:
+    /**
+     * Calculates the score of each clause in clauses and returns them as pairs
+     * @param clauses The clauses which scores to calculate
+     * @return A vector of pairs (clause, score)
+     */
+    static std::vector<std::pair<std::shared_ptr<Clause>, ClauseScore>>
+    getClauseScorePairs(std::vector<std::shared_ptr<Clause>> &clauses);
+
     /**
      * Groups connected clauses based on their collective synonyms and calculates their scores
      * @param query The query containing all the clauses
@@ -105,5 +114,6 @@ public:
     static bool compareGroupByScore(const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p1,
                                     const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p2);
 
-    static bool compareClauseByScore(const std::shared_ptr<Clause> &c1, const std::shared_ptr<Clause> &c2);
+    static bool compareClauseByScore(const std::pair<std::shared_ptr<Clause>, ClauseScore> &p1,
+                                     const std::pair<std::shared_ptr<Clause>, ClauseScore> &p2);
 };
