@@ -131,6 +131,7 @@ void PQLParser::processWithClause(Query &query) {
 
 std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
     std::shared_ptr<Token> absToken = tokenizer->popToken();
+
     bool negation = absToken->isToken(AppConstants::STRING_NEGATE);
     if (negation) { absToken = tokenizer->popToken(); }
     std::shared_ptr<SuchThatClause> clause = std::make_shared<SuchThatClause>(absToken);
@@ -158,13 +159,14 @@ std::shared_ptr<SuchThatClause> PQLParser::extractSuchThatClause() {
 std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
     std::shared_ptr<PatternClause> clause = std::make_shared<PatternClause>();
     std::shared_ptr<Token> patternSyn = tokenizer->popToken();
+
     bool negation = patternSyn->isToken(AppConstants::STRING_NEGATE) &&
                     !tokenizer->peekToken()->isToken(TokenType::Lparenthesis);
     if (negation) { patternSyn = tokenizer->popToken(); }
+    clause->setNegation(negation);
 
     if (!patternSyn->isIdent()) { throw SyntaxException("Invalid synonym syntax"); }
     clause->setSyn(patternSyn->getRep());
-    clause->setNegation(negation);
 
     std::shared_ptr<Token> next = tokenizer->popToken();
     if (!next->isToken(TokenType::Lparenthesis)) { throw SyntaxException("Expected Lparenthesis"); }
@@ -200,12 +202,11 @@ std::shared_ptr<PatternClause> PQLParser::extractPatternClause() {
 std::shared_ptr<WithClause> PQLParser::extractWithClause() {
     std::shared_ptr<WithClause> clause = std::make_shared<WithClause>();
     auto followingTokens = tokenizer->peekFollowingToken(2);
+
     bool negation = followingTokens[0]->isToken(AppConstants::STRING_NEGATE) &&
                     !followingTokens[1]->isToken(TokenType::Dot) && !followingTokens[1]->isToken(TokenType::Equal);
-    if (negation) {
-        tokenizer->popToken();
-        clause->setNegation(negation);
-    }
+    if (negation) { tokenizer->popToken(); }
+    clause->setNegation(negation);
 
     Ref leftRef = extractRef();
     clause->setFirstParam(leftRef);
