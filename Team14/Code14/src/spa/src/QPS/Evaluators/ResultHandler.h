@@ -3,8 +3,8 @@
 #include <list>
 #include <string>
 
-#include "QPS/Query.h"
 #include "QPS/QPSTypes.h"
+#include "QPS/Query.h"
 #include "Result.h"
 
 /* hash function for a vector of Entities used for hash join partitioning */
