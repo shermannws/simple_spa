@@ -2,7 +2,7 @@
 
 #include <unordered_set>
 
-ResultHandler::ResultHandler(){};
+ResultHandler::ResultHandler() = default;
 
 std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
     if (r1->isInvalid()) { return cast(r2); }
@@ -13,81 +13,144 @@ std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1, s
 }
 
 std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
-    std::shared_ptr<Result> final = std::make_shared<Result>();
+    auto synLists = getSynonyms(r1, r2);
+    auto commonSyns = synLists.first;
+    auto header = synLists.second;
+
+    if (commonSyns.empty()) { return nestedLoopJoin(r1, r2, header); }
+    return hashJoin(r1, r2, header, commonSyns);
+}
+
+std::shared_ptr<Result> ResultHandler::hashJoin(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
+                                                std::vector<Synonym> &header, std::vector<Synonym> &commonSyns) {
+    std::shared_ptr<Result> finalResult = std::make_shared<Result>(header);
     std::unordered_set<std::vector<Entity>> finalTuples;
 
-    std::unordered_map<int, int> common = getCommonColumns(r1, r2);
-    SynonymMap synIndices = buildSynIndices(r1, r2);
-    std::vector<Synonym> header = getHeader(synIndices);
-    final->setType(header);
+    // build hashtable
+    auto hashtable = partition(commonSyns, r1);
+
+    std::unordered_map<int, int> commonMap = getMatchMap(r1, r2, commonSyns);
+    RowTemplate rowTemplate = getRowTemplate(r1, r2, header);
+
+    auto keyIndices = getKeyIndices(commonSyns, r2);
+    auto tuples2 = r2->getTuples();
+    // probe
+    for (auto &row2: tuples2) {
+        std::vector<Entity> key;
+        for (const auto &idx: keyIndices) { key.push_back(row2[idx]); }// build hash key
+
+        if (!hashtable.count(key)) { continue; }// skip if no matching bucket
+
+        auto tuples1 = hashtable[key];
+        for (const auto &row1: tuples1) {
+            if (isMatch(row1, row2, commonMap)) { finalTuples.insert(buildRow(rowTemplate, row1, row2)); }
+        }
+    }
+    finalResult->setTuples(finalTuples);
+
+    return finalResult;
+}
+
+std::shared_ptr<Result> ResultHandler::nestedLoopJoin(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
+                                                      std::vector<Synonym> &header) {
+    std::shared_ptr<Result> finalResult = std::make_shared<Result>(header);
+    std::unordered_set<std::vector<Entity>> finalTuples;
 
     auto tuples1 = r1->getTuples();
     auto tuples2 = r2->getTuples();
+    RowTemplate rowTemplate = getRowTemplate(r1, r2, header);
 
     for (const auto &row1: tuples1) {
-        for (const auto &row2: tuples2) {
-            if (isMatch(row1, row2, common)) {
-                std::vector<Entity> newRow;
-                auto map1 = r1->getSynIndices();
-                auto map2 = r2->getSynIndices();
-                for (const auto &colName: header) {
-                    if (map1.count(colName)) {
-                        int index = map1[colName];
-                        newRow.push_back(row1[index]);
-                        continue;
-                    }
-                    int index = map2[colName];
-                    newRow.push_back(row2[index]);
-                }
-                finalTuples.insert(newRow);
-            }
-        }
+        for (const auto &row2: tuples2) { finalTuples.insert(buildRow(rowTemplate, row1, row2)); }
     }
-    final->setTuples(finalTuples);
-    return final;
+    finalResult->setTuples(finalTuples);
+
+    return finalResult;
 }
 
-std::unordered_map<int, int> ResultHandler::getCommonColumns(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
-    std::unordered_map<int, int> commonIndices;
+std::pair<std::vector<Synonym>, std::vector<Synonym>> ResultHandler::getSynonyms(std::shared_ptr<Result> r1,
+                                                                                 std::shared_ptr<Result> r2) {
     auto map1 = r1->getSynIndices();
     auto map2 = r2->getSynIndices();
+    std::vector<Synonym> commonSyns;
+    std::vector<Synonym> finalSyns;
 
     for (auto &it: map1) {
         Synonym key = it.first;
-        if (map2.count(key)) { commonIndices[map1[key]] = map2[key]; }
+        finalSyns.push_back(key);
+        if (map2.count(key)) { commonSyns.push_back(key); }
     }
-    return commonIndices;
-}
-
-SynonymMap ResultHandler::buildSynIndices(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
-    SynonymMap combined = r1->getSynIndices();
-    SynonymMap other = r2->getSynIndices();
-    int mapSize = combined.size();
-
-    for (auto &it: other) {
+    for (auto &it: map2) {
         Synonym key = it.first;
-        if (combined.count(key) == 0) {
-            combined[it.first] = mapSize;
-            mapSize += 1;
-        }
+        if (!map1.count(key)) { finalSyns.push_back(key); }
     }
-    return combined;
+    return {commonSyns, finalSyns};
 }
 
-std::vector<Synonym> ResultHandler::getHeader(SynonymMap map) {
-    std::vector<Synonym> header(map.size());
-    for (auto &it: map) { header[it.second] = it.first; }
-    return header;
+RowTemplate ResultHandler::getRowTemplate(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
+                                          const std::vector<Synonym> &header) {
+    auto map1 = r1->getSynIndices();
+    auto map2 = r2->getSynIndices();
+    RowTemplate rowTemplate;
+    for (const auto &column: header) {
+        if (map1.count(column)) {
+            rowTemplate.emplace_back(std::make_pair(0, map1[column]));
+            continue;
+        }
+        rowTemplate.emplace_back(std::make_pair(1, map2[column]));
+    }
+    return rowTemplate;
+}
+
+std::vector<Entity> ResultHandler::buildRow(const RowTemplate &temp, const std::vector<Entity> &row1,
+                                            const std::vector<Entity> &row2) {
+    std::vector<std::vector<Entity>> src = {row1, row2};
+    std::vector<Entity> newRow;
+    for (const auto &idx: temp) { newRow.push_back(src[idx.first][idx.second]); }
+    return newRow;
+}
+
+
+std::unordered_map<idx, idx> ResultHandler::getMatchMap(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
+                                                        std::vector<Synonym> &commonSyns) {
+    auto map1 = r1->getSynIndices();
+    auto map2 = r2->getSynIndices();
+    std::unordered_map<idx, idx> commonIndices;
+
+    for (const auto &syn: commonSyns) { commonIndices[map1[syn]] = map2[syn]; }
+    return commonIndices;
 }
 
 
 bool ResultHandler::isMatch(const std::vector<Entity> &row1, const std::vector<Entity> &row2,
-                            const std::unordered_map<int, int> &commons) {
-    for (auto &it: commons) {
+                            const std::unordered_map<int, int> &matchMap) {
+    for (auto &it: matchMap) {
         if (row1[it.first] == row2[it.second]) { continue; }
         return false;
     }
     return true;
+}
+
+std::vector<idx> ResultHandler::getKeyIndices(std::vector<Synonym> &synonyms, std::shared_ptr<Result> result) {
+    auto synMap = result->getSynIndices();
+    std::vector<idx> keyIndices(synonyms.size());
+    for (int i = 0; i < synonyms.size(); i++) { keyIndices[i] = synMap[synonyms[i]]; }
+    return keyIndices;
+}
+
+
+hashTable ResultHandler::partition(std::vector<Synonym> &synonyms, std::shared_ptr<Result> result) {
+    auto keyIndices = getKeyIndices(synonyms, result);
+    auto rows = result->getTuples();
+    hashTable buckets;
+    for (const auto &row: rows) {
+        std::vector<Entity> key;
+        for (const auto &idx: keyIndices) {// build key of join attributes
+            key.push_back(row[idx]);
+        }
+        buckets[key].insert(row);
+    }
+    return buckets;
 }
 
 std::shared_ptr<Result> ResultHandler::cast(std::shared_ptr<Result> result) {

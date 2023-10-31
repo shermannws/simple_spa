@@ -10,6 +10,9 @@
 /* Type alias for a string representing a synonym of an entity*/
 typedef std::string Synonym;
 
+/* Type alias for an int representing an index */
+typedef int idx;
+
 // Query typedefs
 class QueryEntity;
 
@@ -45,4 +48,4 @@ typedef std::unordered_set<std::string> ResultSet;
 /* Type alias for a string representing a formatted result */
 typedef std::string FormattedResult;
 /* Type alias for a vector of vectors of Entities, representing rows of tuples in a result table */
-typedef std::vector<std::vector<Entity>> ResultTuples;
+typedef std::unordered_set<std::vector<Entity>> ResultTuples;
