@@ -5,30 +5,47 @@
 #include "SP/AST/Nodes/VariableNode.h"
 #include "VisitorUtility.h"
 
-void VisitorUtility::addAllVariableRelationshipFrom(
-        const std::shared_ptr<ASTNode> &root, const std::shared_ptr<Statement> &s,
-        const std::vector<std::shared_ptr<Statement>> &parents,
-        const std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> &funcStmt,
-        const std::shared_ptr<Procedure> &proc,
-        const std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> &funcProc) {
+VisitorUtilsParams::VisitorUtilsParams(std::shared_ptr<ASTNode> subtree) { this->subtree = subtree; }
+
+void VisitorUtilsParams::setStatement(std::shared_ptr<Statement> statement) { this->statement = statement; }
+
+void VisitorUtilsParams::setParents(std::vector<std::shared_ptr<Statement>> parents) { this->parents = parents; }
+
+void VisitorUtilsParams::setProcedure(std::shared_ptr<Procedure> procedure) { this->procedure = procedure; }
+
+std::shared_ptr<ASTNode> VisitorUtilsParams::getSubtree() const { return subtree; }
+
+std::shared_ptr<Statement> VisitorUtilsParams::getStatement() const { return statement; }
+
+std::vector<std::shared_ptr<Statement>> VisitorUtilsParams::getParents() const { return parents; }
+
+std::shared_ptr<Procedure> VisitorUtilsParams::getProcedure() const { return procedure; }
+
+VisitorUtility::VisitorUtility(StmtVarFunc &funcStmt, ProcVarFunc &funcProc) {
+    this->funcStmt = funcStmt;
+    this->funcProc = funcProc;
+}
+
+void VisitorUtility::addAllVariableRelationshipFrom(VisitorUtilsParams &params) {
     std::stack<std::shared_ptr<ASTNode>> frontier;
-    frontier.push(root);
+    frontier.push(params.getSubtree());
+
 
     while (!frontier.empty()) {
         std::shared_ptr<ASTNode> current = frontier.top();
         frontier.pop();
 
-        auto ptr = std::dynamic_pointer_cast<VariableNode>(current);
-        if (ptr) {
-            // Add stmt-var relationships
-            // Add direct relationship
-            auto variable = EntityFactory::createVariable(ptr->getVarName());
-            funcStmt(s, variable);
+        auto variableNodePtr = std::dynamic_pointer_cast<VariableNode>(current);
+        if (variableNodePtr) {
+            // Add stmt-var relationships direct relationships
+            auto variable = EntityFactory::createVariable(variableNodePtr->getVarName());
+            funcStmt(params.getStatement(), variable);
+
             // Add indirect relationships between parent and variable
-            for (const auto &parent: parents) { funcStmt(parent, variable); }
+            for (const auto &parent: params.getParents()) { funcStmt(parent, variable); }
 
             // Add proc-var relationships
-            funcProc(proc, variable);
+            funcProc(params.getProcedure(), variable);
         }
 
         std::vector<std::shared_ptr<ASTNode>> childrenOfCurrent = current->getAllChildNodes();

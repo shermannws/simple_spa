@@ -5,18 +5,14 @@
 #include "../../AST/Nodes/AssignNode.h"
 #include "../../AST/Nodes/ReadNode.h"
 #include "DesignExtractorVisitor.h"
+#include "VisitorUtility.h"
 
 class ModifiesExtractorVisitor : public DesignExtractorVisitor, public AssignNodeVisitor, public ReadNodeVisitor {
 private:
     /*!
-     * funcStmt is a lambda function used to abstract the call to PKB to add Modifies (stmt-var) relationship.
+     * Utility class to help populate PKB with Uses relationships.
      */
-    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> funcStmt;
-
-    /*!
-     * funcProc is a lambda function used to abstract the call to PKB to add Modifies (proc-var) relationship.
-     */
-    std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> funcProc;
+    VisitorUtility mutable visitorUtils;
 
 public:
     /*!

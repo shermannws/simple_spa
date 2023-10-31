@@ -7,6 +7,7 @@
 #include "../../AST/Nodes/PrintNode.h"
 #include "../../AST/Nodes/WhileNode.h"
 #include "DesignExtractorVisitor.h"
+#include "VisitorUtility.h"
 
 class UsesExtractorVisitor : public DesignExtractorVisitor,
                              public AssignNodeVisitor,
@@ -15,14 +16,9 @@ class UsesExtractorVisitor : public DesignExtractorVisitor,
                              public WhileNodeVisitor {
 private:
     /*!
-     * funcStmt is a lambda function used to abstract the call to PKB to add Uses relationship.
+     * Utility class to help populate PKB with Uses relationships.
      */
-    std::function<void(std::shared_ptr<Statement>, std::shared_ptr<Variable>)> funcStmt;
-
-    /*!
-     * funcProc is a lambda function used to abstract the call to PKB to add Uses (proc-var) relationship.
-     */
-    std::function<void(std::shared_ptr<Procedure>, std::shared_ptr<Variable>)> funcProc;
+    VisitorUtility mutable visitorUtils;
 
 public:
     /*!
