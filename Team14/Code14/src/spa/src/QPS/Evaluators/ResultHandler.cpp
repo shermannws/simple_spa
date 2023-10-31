@@ -12,6 +12,23 @@ std::shared_ptr<Result> ResultHandler::getCombined(std::shared_ptr<Result> r1, s
     return cast(join(r1, r2));// case 2 non-empty Tuple Result
 }
 
+std::shared_ptr<Result> ResultHandler::getDiff(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
+    auto commonSyns = r2->getHeader();
+    auto keyIndices = getKeyIndices(commonSyns, r1);
+
+    auto mainSet = r1->getTuples();
+    auto minusSet = r2->getTuples();
+
+    for (auto &tuple: mainSet) {
+        std::vector<Entity> key;
+        for (const auto &idx: keyIndices) { key.push_back(tuple[idx]); }   // build hash key
+        if (minusSet.find(key) != minusSet.end()) { mainSet.erase(tuple); }// remove if found in minusSet
+    }
+
+    r1->setTuples(mainSet);
+    return r1;
+}
+
 std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
     auto synLists = getSynonyms(r1, r2);
     auto commonSyns = synLists.first;

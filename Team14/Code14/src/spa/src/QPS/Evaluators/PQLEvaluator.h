@@ -59,6 +59,8 @@ private:
      */
     std::shared_ptr<Result> evaluateClause(std::shared_ptr<Clause> clause);
 
+    std::shared_ptr<Result> evaluateNext(std::shared_ptr<Result> curr, std::shared_ptr<Clause> clause);
+
     /**
      * @brief Evaluates a select clause with the given entity as the result clause without any constraint clauses
      * @param entity the selected entity to be evaluated

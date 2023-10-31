@@ -144,4 +144,6 @@ public:
      * @return the resultant table
      */
     std::shared_ptr<Result> getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
+
+    std::shared_ptr<Result> getDiff(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 };

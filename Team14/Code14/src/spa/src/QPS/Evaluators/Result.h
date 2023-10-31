@@ -89,6 +89,8 @@ public:
      */
     SynonymMap &getSynIndices();
 
+    std::vector<Synonym> getHeader();
+
     void setTuples(const std::unordered_set<Entity> &resultEntities);
 
     void setTuples(const std::unordered_set<std::vector<Entity>> &resultTuples);

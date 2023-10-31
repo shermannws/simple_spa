@@ -74,7 +74,8 @@ std::string PQLEvaluator::concat(std::vector<std::string> strings) {
 bool PQLEvaluator::evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause>> &clauses) {
     for (auto &clause: clauses) {
         auto res = evaluateClause(clause);
-        if (res->isFalse() || res->isEmpty()) { return false; }
+        if (clause->isNegation()) { res->setBoolResult(!res->getBoolResult()); }
+        if (res->isFalse()) { return false; }
     }
     return true;
 }
@@ -82,8 +83,8 @@ bool PQLEvaluator::evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause
 bool PQLEvaluator::evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Clause>> &clauses) {
     auto tmp = std::make_shared<Result>(true);
     for (auto &clause: clauses) {
-        tmp = resultHandler->getCombined(tmp, evaluateClause(clause));
-        if (tmp->isFalse()) { return false; }
+        tmp = evaluateNext(tmp, clause); //TODO rename to evaluateNegation and add if(negation) check here
+        if (tmp->isFalse() || tmp->isEmpty()) { return false; }
     }
     return true;
 }
@@ -103,7 +104,7 @@ Result PQLEvaluator::evaluate(Query &query) {
             if (!evaluateIrrelevantGroup(group)) { return Result(false); }
         } else {// those with selectSyns (and if select has synonym(s))
             for (auto &clause: group) {
-                res = resultHandler->getCombined(res, evaluateClause(clause));
+                res = evaluateNext(res, clause);
                 if (res->isFalse()) { return Result(false); }
             }
         }
@@ -135,7 +136,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
     std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()](pkbReader);
     clauseHandler->setStrategy(strategy);
     std::shared_ptr<Result> result = clauseHandler->executeClause(clause);
-
+    /*
     if (clause->isNegation()) {
         if (result->getType() == ResultType::Boolean) {
             auto boolValue = result->getBoolResult();
@@ -149,8 +150,31 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
         for (const auto &tuple: rhs) { lhs.erase(tuple); }
         result->setTuples(lhs);
     }
-
+    */
     return result;
+}
+
+std::shared_ptr<Result> PQLEvaluator::evaluateNext(std::shared_ptr<Result> curr, std::shared_ptr<Clause> clause) {
+    if (clause->isNegation()) {
+        auto rhsRes = evaluateClause(clause);
+        auto rhsHeader = rhsRes->getHeader();
+
+        std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(rhsHeader, curr);
+
+        if (unevaluatedSyn.empty()) {// all syns present
+            return resultHandler->getDiff(curr, rhsRes);
+        }
+
+        // not all syns in current result, execute naive approach
+        auto queryEntities = clause->getSynonymEntityTypes();
+        auto lhs = getAllByTypes(queryEntities);
+        auto rhs = rhsRes->getTuples();
+        for (const auto &tuple: rhs) { lhs.erase(tuple); }
+        rhsRes->setTuples(lhs);
+        return rhsRes;
+    }
+
+    return resultHandler->getCombined(curr, evaluateClause(clause));
 }
 
 std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const std::shared_ptr<QueryEntity> entity) {
