@@ -27,7 +27,7 @@ void ModifiesExtractorVisitor::visitAssignNode(const std::shared_ptr<AssignNode>
     params.setStatement(EntityFactory::createStatementFromStatementNode(node));
     params.setParents(parents);
     params.setProcedure(proc);
-    return this->visitorUtils.addAllVariableRelationshipFrom(params);
+    return this->visitorUtils.addAllVariableRelationship(params);
 }
 
 void ModifiesExtractorVisitor::visitReadNode(const std::shared_ptr<ReadNode> &node,
@@ -37,5 +37,5 @@ void ModifiesExtractorVisitor::visitReadNode(const std::shared_ptr<ReadNode> &no
     params.setStatement(EntityFactory::createStatementFromStatementNode(node));
     params.setParents(parents);
     params.setProcedure(proc);
-    return this->visitorUtils.addAllVariableRelationshipFrom(params);
+    return this->visitorUtils.addAllVariableRelationship(params);
 }

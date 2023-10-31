@@ -117,5 +117,5 @@ public:
      * @param params A VisitorUtilsParams struct containing all the necessary parameters to add direct and indirect
      * relationships with variables
      */
-    void addAllVariableRelationshipFrom(VisitorUtilsParams &params);
+    void addAllVariableRelationship(VisitorUtilsParams &params) const;
 };

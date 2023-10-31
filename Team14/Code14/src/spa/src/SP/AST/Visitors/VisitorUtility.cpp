@@ -26,7 +26,7 @@ VisitorUtility::VisitorUtility(StmtVarFunc &funcStmt, ProcVarFunc &funcProc) {
     this->funcProc = funcProc;
 }
 
-void VisitorUtility::addAllVariableRelationshipFrom(VisitorUtilsParams &params) {
+void VisitorUtility::addAllVariableRelationship(VisitorUtilsParams &params) const {
     std::stack<std::shared_ptr<ASTNode>> frontier;
     frontier.push(params.getSubtree());
 

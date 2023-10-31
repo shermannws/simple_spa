@@ -27,7 +27,7 @@ void UsesExtractorVisitor::visitAssignNode(const std::shared_ptr<AssignNode> &no
     params.setStatement(EntityFactory::createStatementFromStatementNode(node));
     params.setParents(parents);
     params.setProcedure(proc);
-    return this->visitorUtils.addAllVariableRelationshipFrom(params);
+    return this->visitorUtils.addAllVariableRelationship(params);
 }
 
 void UsesExtractorVisitor::visitPrintNode(const std::shared_ptr<PrintNode> &node,
@@ -37,7 +37,7 @@ void UsesExtractorVisitor::visitPrintNode(const std::shared_ptr<PrintNode> &node
     params.setStatement(EntityFactory::createStatementFromStatementNode(node));
     params.setParents(parents);
     params.setProcedure(proc);
-    return this->visitorUtils.addAllVariableRelationshipFrom(params);
+    return this->visitorUtils.addAllVariableRelationship(params);
 }
 
 void UsesExtractorVisitor::visitIfNode(const std::shared_ptr<IfNode> &node,
@@ -47,7 +47,7 @@ void UsesExtractorVisitor::visitIfNode(const std::shared_ptr<IfNode> &node,
     params.setStatement(EntityFactory::createStatementFromStatementNode(node));
     params.setParents(parents);
     params.setProcedure(proc);
-    return this->visitorUtils.addAllVariableRelationshipFrom(params);
+    return this->visitorUtils.addAllVariableRelationship(params);
 }
 
 void UsesExtractorVisitor::visitWhileNode(const std::shared_ptr<WhileNode> &node,
@@ -57,5 +57,5 @@ void UsesExtractorVisitor::visitWhileNode(const std::shared_ptr<WhileNode> &node
     params.setStatement(EntityFactory::createStatementFromStatementNode(node));
     params.setParents(parents);
     params.setProcedure(proc);
-    return this->visitorUtils.addAllVariableRelationshipFrom(params);
+    return this->visitorUtils.addAllVariableRelationship(params);
 }

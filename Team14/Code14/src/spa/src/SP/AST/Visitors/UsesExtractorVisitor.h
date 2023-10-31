@@ -18,7 +18,7 @@ private:
     /*!
      * Utility class to help populate PKB with Uses relationships.
      */
-    VisitorUtility mutable visitorUtils;
+    VisitorUtility visitorUtils;
 
 public:
     /*!
