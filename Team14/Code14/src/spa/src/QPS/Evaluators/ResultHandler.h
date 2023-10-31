@@ -3,9 +3,11 @@
 #include <list>
 #include <string>
 
+#include "QPS/QPSTypes.h"
 #include "QPS/Query.h"
 #include "Result.h"
 
+/* hash function for a vector of Entities used for hash join partitioning */
 struct syn_vector_hash {
     std::size_t operator()(const std::vector<Entity> &entities) const {
         std::size_t seed = 0;
@@ -14,7 +16,11 @@ struct syn_vector_hash {
     }
 };
 
+/* hashtable built in hash join algorithm */
 using hashTable = std::unordered_map<std::vector<Entity>, std::unordered_set<std::vector<Entity>>, syn_vector_hash>;
+
+/* template for the corresponding synonyms in the form of a pair representing <idx of input row, idx in input row> */
+using RowTemplate = std::vector<std::pair<idx, idx>>;
 
 /**
  * @class ResultHandler class generates a result table from the combining two tables
@@ -61,13 +67,34 @@ private:
                                                                       std::shared_ptr<Result> r2);
 
     /**
+     * creates a row template to join the 2 result objects into the row according to the specified header
+     * @param r1 first result table to join
+     * @param r2 first result table to join
+     * @param header header of the resultant table
+     * @return template for the corresponding synonyms in the form of a pair representing
+     * <idx of source row, idx in source row>
+     */
+    RowTemplate getRowTemplate(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
+                               const std::vector<Synonym> &header);
+
+    /**
+     * creates a new row according to the rowTemplate using row1 and row2 as the input/source rows
+     * @param temp row template for resultant row
+     * @param row1 first input row
+     * @param row2 second input row
+     * @return a vector of Entities representing the resultant row
+     */
+    std::vector<Entity> buildRow(const RowTemplate &temp, const std::vector<Entity> &row1,
+                                 const std::vector<Entity> &row2);
+
+    /**
      * Gets a map of indices of the common synonyms between two tables
      * @param r1 first result table
      * @param r2 second result table
      * @param commonSyns the vector of common synonyms
      * @return map of index of common synonyms in table 1 to index in table 2
      */
-    std::unordered_map<int, int> getMatchMap(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
+    std::unordered_map<idx, idx> getMatchMap(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
                                              std::vector<Synonym> &commonSyns);
 
     /**
@@ -85,7 +112,7 @@ private:
      * @param result result object containing the synonyms
      * @return vector of the corresponding index of the synonym in the result object
      */
-    std::vector<int> getKeyIndices(std::vector<Synonym> &synonyms, std::shared_ptr<Result> result);
+    std::vector<idx> getKeyIndices(std::vector<Synonym> &synonyms, std::shared_ptr<Result> result);
 
     /**
      * partitions the result table into a hashtable with the vector of synonyms specified as the hash key
