@@ -29,6 +29,11 @@ public:
     static std::unordered_map<QueryEntityType, ClauseType> entityToClauseMap;
 
     /**
+     * @brief An unordered map that maps a pattern clause's ClauseType to the corresponding QueryEntityType
+     */
+    static std::unordered_map<ClauseType, QueryEntityType> patternClauseToEntityMap;
+
+    /**
      * @brief An unordered map that maps a string to TokenType
      */
     static std::unordered_map<std::string, TokenType> strToTokenTypeMap;

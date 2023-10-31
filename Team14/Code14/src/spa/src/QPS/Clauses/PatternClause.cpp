@@ -24,6 +24,12 @@ std::vector<Synonym> PatternClause::getSynonyms() const {
     return synonyms;
 }
 
+std::vector<QueryEntityType> PatternClause::getSynonymEntityTypes() const {
+    std::vector<QueryEntityType> types = {QPSUtil::patternClauseToEntityMap[type]};
+    if (firstParam.getRootType() == RootType::Synonym) { types.push_back(QueryEntityType::Variable); }
+    return types;
+}
+
 bool PatternClause::operator==(const Clause &other) const {
     try {
         const auto &otherPattern = dynamic_cast<const PatternClause &>(other);

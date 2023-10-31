@@ -46,6 +46,13 @@ private:
     std::unordered_set<Entity> getAll(const EntityPtr &queryEntity);
 
     /**
+     * @brief retrieves all combinations of the query entities from the PKB
+     * @param queryEntities vector of QueryEntityTypes representing the combination of Entities to retrieve
+     * @return A set of entities representing all instances of the query entity combination
+     */
+    std::unordered_set<std::vector<Entity>> getAllByTypes(const std::vector<QueryEntityType> &queryEntities);
+
+    /**
      * @brief Evaluates a clause and updates the result accordingly.
      * @param clause A shared pointer to the Clause to evaluate.
      * @return shared pointer to result object

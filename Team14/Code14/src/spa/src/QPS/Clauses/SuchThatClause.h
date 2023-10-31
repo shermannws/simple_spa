@@ -48,6 +48,12 @@ public:
     std::vector<Synonym> getSynonyms() const override;
 
     /**
+     * @brief returns the list of QueryEntityTypes of the synonyms present in the clause
+     * @return vector of QueryEntityTypes
+     */
+    std::vector<QueryEntityType> getSynonymEntityTypes() const override;
+
+    /**
      * @brief Returns true if the Clause object is equal to the other Clause object, false otherwise
      * @param other The other Clause object to compare against
      * @return True if the Clause object is equal to the other Clause object

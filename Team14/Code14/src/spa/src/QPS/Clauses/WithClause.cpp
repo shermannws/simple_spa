@@ -16,6 +16,15 @@ std::vector<Synonym> WithClause::getSynonyms() const {
     return synonyms;
 }
 
+std::vector<QueryEntityType> WithClause::getSynonymEntityTypes() const {
+    std::vector<QueryEntityType> types;
+    if (firstParam.getRootType() == RootType::AttrRef) { types.push_back(firstParam.getEntityType()); }
+    if (secondParam.getRootType() == RootType::AttrRef && !(firstParam == secondParam)) {
+        types.push_back(secondParam.getEntityType());
+    }
+    return types;
+}
+
 bool WithClause::operator==(const Clause &other) const {
     try {
         const auto &otherWith = dynamic_cast<const WithClause &>(other);

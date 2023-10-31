@@ -26,6 +26,15 @@ std::vector<Synonym> SuchThatClause::getSynonyms() const {
     return synonyms;
 }
 
+std::vector<QueryEntityType> SuchThatClause::getSynonymEntityTypes() const {
+    std::vector<QueryEntityType> types;
+    if (firstParam.getRootType() == RootType::Synonym) { types.push_back(firstParam.getEntityType()); }
+    if (secondParam.getRootType() == RootType::Synonym && !(firstParam == secondParam)) {
+        types.push_back(secondParam.getEntityType());
+    }
+    return types;
+}
+
 bool SuchThatClause::operator==(const Clause &other) const {
     try {
         const auto &otherST = dynamic_cast<const SuchThatClause &>(other);

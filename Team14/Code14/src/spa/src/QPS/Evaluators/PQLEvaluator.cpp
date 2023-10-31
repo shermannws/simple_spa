@@ -135,6 +135,23 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
     std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()](pkbReader);
     clauseHandler->setStrategy(strategy);
     std::shared_ptr<Result> result = clauseHandler->executeClause(clause);
+
+    if (clause->isNegation()) {
+        if (result->getType() == ResultType::Boolean) {
+            auto boolValue = result->getBoolResult();
+            result->setBoolResult(!boolValue);
+            return result;
+        }
+
+        auto queryEntities = clause->getSynonymEntityTypes();
+        auto lhs = getAllByTypes(queryEntities);
+        auto rhs = result->getTuples();
+        if (!rhs.empty()) {
+            lhs.erase(rhs.begin(), rhs.end());// eliminate rows
+        }
+        result->setTuples(lhs);
+    }
+
     return result;
 }
 
@@ -161,4 +178,19 @@ std::unordered_set<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntit
         throw std::runtime_error("Not supported entity type in query select clause");
     }
     return QPSUtil::entityGetterMap[entityType](pkbReader);
+}
+
+std::unordered_set<std::vector<Entity>> PQLEvaluator::getAllByTypes(const std::vector<QueryEntityType> &queryEntities) {
+    std::unordered_set<std::vector<Entity>> tuples;
+    if (queryEntities.size() == 1) {
+        auto set = QPSUtil::entityGetterMap[queryEntities[0]](pkbReader);
+        for (const Entity &entity: set) { tuples.insert(std::vector<Entity>{entity}); }
+    } else {
+        auto sets = std::make_pair(QPSUtil::entityGetterMap[queryEntities[0]](pkbReader),
+                                   QPSUtil::entityGetterMap[queryEntities[1]](pkbReader));
+        for (auto &first: sets.first) {
+            for (auto &second: sets.second) { tuples.insert({first, second}); }
+        }
+    }
+    return tuples;
 }
