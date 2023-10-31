@@ -1,3 +1,5 @@
 #include "UsesRelationshipManager.h"
 
-UsesRelationshipManager::UsesRelationshipManager() : StmtToVarRelationshipManager(){};
+UsesRelationshipManager::UsesRelationshipManager() : StmtToVarRelationshipManager() {
+    this->clauseGroup = ClauseGroup::Uses;
+};
