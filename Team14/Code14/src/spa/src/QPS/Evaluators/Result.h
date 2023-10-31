@@ -53,6 +53,13 @@ public:
     Result(bool value);
 
     /**
+     * @brief Constructor for a Result instance, returns a Result object with Type Tuple and synonyms as Result columns
+     * if synonyms is non empty, else returns a Boolean Result object
+     * @param synonyms vector of synonyms representing the table header
+     */
+    Result(std::vector<Synonym> synonyms);
+
+    /**
      * @brief Gets the type of the result.
      * @return The type of the result (ResultType).
      */
