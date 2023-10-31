@@ -1,6 +1,6 @@
 #include "Clause.h"
 
-Clause::Clause() : negation(false){}
+Clause::Clause() : negation(false) {}
 
 void Clause::setType(ClauseType clauseType) { type = clauseType; }
 

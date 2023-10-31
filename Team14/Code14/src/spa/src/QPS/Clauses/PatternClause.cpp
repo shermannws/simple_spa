@@ -27,7 +27,8 @@ std::vector<Synonym> PatternClause::getSynonyms() const {
 bool PatternClause::operator==(const Clause &other) const {
     try {
         const auto &otherPattern = dynamic_cast<const PatternClause &>(other);
-        return (type == otherPattern.type) && (firstParam == otherPattern.firstParam) &&
-               (secondParam == otherPattern.secondParam) && (syn == otherPattern.syn);
+        return (type == otherPattern.type) && (negation == otherPattern.negation) &&
+               (firstParam == otherPattern.firstParam) && (secondParam == otherPattern.secondParam) &&
+               (syn == otherPattern.syn);
     } catch (std::bad_cast &e) { return false; }
 }

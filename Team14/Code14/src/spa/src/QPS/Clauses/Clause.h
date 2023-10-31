@@ -39,7 +39,7 @@ protected:
     /**
      * @brief true if clause is negated
      */
-     bool negation;
+    bool negation;
 
     /**
      * @brief The first parameter of the Clause in Ref

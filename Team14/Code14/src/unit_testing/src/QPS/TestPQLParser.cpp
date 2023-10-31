@@ -2014,3 +2014,34 @@ TEST_CASE_METHOD(UnitTestFixture, "invalid result clause") {
     parser = PQLParser("Select <BOOLEAN>");
     REQUIRE_THROWS_AS(parser.parse(), SemanticException);
 }
+
+TEST_CASE_METHOD(UnitTestFixture, "not clauses") {
+    PQLParser parser("constant k; read re; Select BOOLEAN with not 1 = 5 with not re.stmt# = k.value and not \"var\"= "
+                     "re.varName");
+    auto query1 = parser.parse();
+    auto clauses = query1.getWith();
+    REQUIRE(clauses[0]->isNegation());
+    REQUIRE(clauses[1]->isNegation());
+    REQUIRE(clauses[2]->isNegation());
+
+    parser = PQLParser("assign a, a1; variable v; Select a such that not Uses(a, v) and not Uses(a1, v)");
+    auto query2 = parser.parse();
+    auto clauses2 = query2.getSuchThat();
+    auto expectedStClause = QPSTestUtil::createSuchThatClause(ClauseType::Uses, RefType::StmtRef, RootType::Synonym,
+                                                              QueryEntityType::Assign, "a", RefType::EntRef,
+                                                              RootType::Synonym, QueryEntityType::Variable, "v");
+    expectedStClause->setNegation(true);
+    REQUIRE(clauses2[0]->isNegation());
+    REQUIRE(*clauses2[0] == *expectedStClause);
+    REQUIRE(clauses2[1]->isNegation());
+
+    parser = PQLParser("assign a; variable v; if ifs; Select a pattern not ifs(v, _, _) and not a(v, _)");
+    auto query3 = parser.parse();
+    auto clauses3 = query3.getPattern();
+    auto expectedPatternClause = QPSTestUtil::createPatternClause(ClauseType::Assign, "a", RootType::Synonym, "v",
+                                                                  ExpressionSpecType::Wildcard, "");
+    expectedPatternClause->setNegation(true);
+    REQUIRE(clauses3[0]->isNegation());
+    REQUIRE(clauses3[1]->isNegation());
+    REQUIRE(*clauses3[1] == *expectedPatternClause);
+}

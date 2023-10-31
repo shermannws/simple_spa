@@ -127,6 +127,17 @@ TEST_CASE_METHOD(UnitTestFixture, "Tokenizer Test") {
         REQUIRE(tokenizer.popToken()->getRep() == "\"");
         REQUIRE(tokenizer.popToken()->getType() == TokenType::Empty);
     }
+
+    SECTION("test peekFollowingToken") {
+        Tokenizer tokenizer("first second third    ");
+        auto next2 = tokenizer.peekFollowingToken(2);
+        auto next3 = tokenizer.peekFollowingToken(3);
+        REQUIRE(next2.size() == 2);
+        REQUIRE(next3.size() == 3);
+
+        auto next4 = tokenizer.peekFollowingToken(4);
+        REQUIRE(next3.size() == 3);
+    }
 }
 
 TEST_CASE_METHOD(UnitTestFixture, "attrName") {

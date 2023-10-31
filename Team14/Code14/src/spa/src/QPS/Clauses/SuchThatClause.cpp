@@ -28,8 +28,8 @@ std::vector<Synonym> SuchThatClause::getSynonyms() const {
 
 bool SuchThatClause::operator==(const Clause &other) const {
     try {
-        const auto &otherPattern = dynamic_cast<const SuchThatClause &>(other);
-        return (type == otherPattern.type) && (firstParam == otherPattern.firstParam) &&
-               (secondParam == otherPattern.secondParam);
+        const auto &otherST = dynamic_cast<const SuchThatClause &>(other);
+        return (type == otherST.type) && (negation == otherST.negation) && (firstParam == otherST.firstParam) &&
+               (secondParam == otherST.secondParam);
     } catch (std::bad_cast &e) { return false; }
 }
