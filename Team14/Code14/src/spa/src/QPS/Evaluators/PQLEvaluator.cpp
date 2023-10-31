@@ -146,9 +146,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
         auto queryEntities = clause->getSynonymEntityTypes();
         auto lhs = getAllByTypes(queryEntities);
         auto rhs = result->getTuples();
-        if (!rhs.empty()) {
-            lhs.erase(rhs.begin(), rhs.end());// eliminate rows
-        }
+        for (const auto &tuple: rhs) { lhs.erase(tuple); }
         result->setTuples(lhs);
     }
 
