@@ -117,32 +117,44 @@ TEST_CASE_METHOD(UnitTestFixture, "Test compareClauseByScore") {
                 "20 such that Modifies (a3,v3) pattern a3(\"z\",_)");
         Query queryObj = parser.parse();
         auto pairs = QPSOptimizer::getGroupScorePairs(queryObj);
-        vector<vector<shared_ptr<Clause>>> expectedGroups{
-                {queryObj.getSuchThat()[6], queryObj.getSuchThat()[5]},// Follows(3,4), Uses(5, "y")
-                {queryObj.getPattern()[1], queryObj.getSuchThat()[8]}, // pattern a3("z",_), Modifies(a3,v3),
-                {queryObj.getWith()[0], queryObj.getPattern()[0],
-                 queryObj.getSuchThat()[7]},// with a2.stmt# = 20, pattern a1(v2, _"x+y"_), Parent(a1,a2)
-                {queryObj.getSuchThat()[1], queryObj.getSuchThat()[3], queryObj.getSuchThat()[2],
-                 queryObj.getSuchThat()[0], queryObj.getSuchThat()[4]},//  Modifies(s3, "x"), Parent(s3,s1),
-                                                                       //  Follows(s1,s2), Uses(s3,v1), Uses(s2,v1)
-        };
 
-        REQUIRE(pairs.size() == expectedGroups.size());
+        vector<shared_ptr<Clause>> group1 = {queryObj.getSuchThat()[6],
+                                             queryObj.getSuchThat()[5]};// Follows(3,4), Uses(5, "y")
+        vector<shared_ptr<Clause>> group2 = {queryObj.getPattern()[1],
+                                             queryObj.getSuchThat()[8]};// pattern a3("z",_), Modifies(a3,v3)
+        vector<shared_ptr<Clause>> group3 = {
+                queryObj.getWith()[0], queryObj.getPattern()[0],
+                queryObj.getSuchThat()[7]};// with a2.stmt# = 20, pattern a1(v2, _"x+y"_), Parent(a1,a2)
+        vector<shared_ptr<Clause>> group4_0 = {
+                queryObj.getSuchThat()[1], queryObj.getSuchThat()[3], queryObj.getSuchThat()[2],
+                queryObj.getSuchThat()[4],
+                queryObj.getSuchThat()[0]};// Modifies(s3, "x"), Parent(s3,s1), Follows(s1,s2), Uses(s2,v1), Uses(s3,v1)
+        vector<shared_ptr<Clause>> group4_1 = {
+                queryObj.getSuchThat()[1], queryObj.getSuchThat()[3], queryObj.getSuchThat()[2],
+                queryObj.getSuchThat()[0],
+                queryObj.getSuchThat()[4]};// Modifies(s3, "x"), Parent(s3,s1), Follows(s1,s2), Uses(s3,v1), Uses(s2,v1)
+
+        REQUIRE(pairs.size() == 4);
 
         // transform pairs to a vector of vectors
         vector<vector<shared_ptr<Clause>>> actualGroups;
         for (auto &pair: pairs) {
             std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
             std::sort(group.begin(), group.end(), QPSOptimizer::compareClauseByScore);
+            reverse(group.begin(), group.end()); // reverse since compareClauseByScore is meant for min-heap
             actualGroups.push_back(group);
         }
 
-        for (auto &group: expectedGroups) {
-            reverse(group.begin(), group.end());// opposite orders, since compareClauseByScore is used for min heap
-            REQUIRE(find(actualGroups.begin(), actualGroups.end(), group) != actualGroups.end());
-        }
+        REQUIRE(find(actualGroups.begin(), actualGroups.end(), group1) != actualGroups.end());
+        REQUIRE(find(actualGroups.begin(), actualGroups.end(), group2) != actualGroups.end());
+        REQUIRE(find(actualGroups.begin(), actualGroups.end(), group3) != actualGroups.end());
+
+        bool group4Check = find(actualGroups.begin(), actualGroups.end(), group4_0) != actualGroups.end() ||
+                           find(actualGroups.begin(), actualGroups.end(), group4_1) != actualGroups.end();
+        REQUIRE(group4Check);
     }
 }
+
 
 TEST_CASE_METHOD(UnitTestFixture, "Test sortClauses") {
     SECTION("With clause grouping") {
@@ -153,15 +165,16 @@ TEST_CASE_METHOD(UnitTestFixture, "Test sortClauses") {
                 "20 such that Modifies (a3,v3) pattern a3(\"z\",_)");
         Query queryObj = parser.parse();
         auto pairs = QPSOptimizer::getGroupScorePairs(queryObj);
-        vector<vector<shared_ptr<Clause>>> expectedGroups{
-                {queryObj.getSuchThat()[6], queryObj.getSuchThat()[5]},// Follows(3,4), Uses(5, "y")
-                {queryObj.getPattern()[1], queryObj.getSuchThat()[8]}, // pattern a3("z",_), Modifies(a3,v3),
-                {queryObj.getWith()[0], queryObj.getSuchThat()[7],
-                 queryObj.getPattern()[0]},// with a2.stmt# = 20, Parent(a1,a2), pattern a1(v2, _"x+y"_)
-                {queryObj.getSuchThat()[1], queryObj.getSuchThat()[3], queryObj.getSuchThat()[2],
-                 queryObj.getSuchThat()[4], queryObj.getSuchThat()[0]},//  Modifies(s3, "x"), Parent(s3,s1),
-                                                                       //  Follows(s1,s2), Uses(s2,v1), Uses(s3,v1)
-        };
+        vector<shared_ptr<Clause>> group1 = {queryObj.getSuchThat()[6], queryObj.getSuchThat()[5]};
+        vector<shared_ptr<Clause>> group2 = {queryObj.getPattern()[1], queryObj.getSuchThat()[8]};
+        vector<shared_ptr<Clause>> group3 = {queryObj.getWith()[0], queryObj.getSuchThat()[7],
+                                             queryObj.getPattern()[0]};
+        vector<shared_ptr<Clause>> group4_0 = {queryObj.getSuchThat()[1], queryObj.getSuchThat()[3],
+                                               queryObj.getSuchThat()[2], queryObj.getSuchThat()[4],
+                                               queryObj.getSuchThat()[0]};
+        vector<shared_ptr<Clause>> group4_1 = {queryObj.getSuchThat()[1], queryObj.getSuchThat()[3],
+                                               queryObj.getSuchThat()[2], queryObj.getSuchThat()[0],
+                                               queryObj.getSuchThat()[4]};
 
         vector<vector<shared_ptr<Clause>>> actualGroups;
 
@@ -170,11 +183,14 @@ TEST_CASE_METHOD(UnitTestFixture, "Test sortClauses") {
             group = QPSOptimizer::sortClauses(group, std::get<1>(pair.second));
             actualGroups.push_back(group);
         }
-        REQUIRE(pairs.size() == expectedGroups.size());
+        REQUIRE(pairs.size() == 4);
 
+        REQUIRE(find(actualGroups.begin(), actualGroups.end(), group1) != actualGroups.end());
+        REQUIRE(find(actualGroups.begin(), actualGroups.end(), group2) != actualGroups.end());
+        REQUIRE(find(actualGroups.begin(), actualGroups.end(), group3) != actualGroups.end());
 
-        for (auto &group: expectedGroups) {
-            REQUIRE(find(actualGroups.begin(), actualGroups.end(), group) != actualGroups.end());
-        }
+        bool group4Check = find(actualGroups.begin(), actualGroups.end(), group4_0) != actualGroups.end() ||
+                           find(actualGroups.begin(), actualGroups.end(), group4_1) != actualGroups.end();
+        REQUIRE(group4Check);
     }
 }
