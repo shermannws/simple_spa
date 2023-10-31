@@ -141,7 +141,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test compareClauseByScore") {
         for (auto &pair: pairs) {
             std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
             std::sort(group.begin(), group.end(), QPSOptimizer::compareClauseByScore);
-            reverse(group.begin(), group.end()); // reverse since compareClauseByScore is meant for min-heap
+            reverse(group.begin(), group.end());// reverse since compareClauseByScore is meant for min-heap
             actualGroups.push_back(group);
         }
 
