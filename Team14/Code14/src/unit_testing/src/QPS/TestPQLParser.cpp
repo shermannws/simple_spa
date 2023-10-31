@@ -1742,6 +1742,7 @@ TEST_CASE_METHOD(UnitTestFixture, "processWithClause") {
         Ref leftRef = clause->getFirstParam();
         Ref rightRef = clause->getSecondParam();
         REQUIRE(clause->getType() == ClauseType::With);
+        REQUIRE(!clause->isNegation());
         REQUIRE(leftRef.getRootType() == RootType::AttrRef);
         REQUIRE(leftRef.getRep() == "c1");
         REQUIRE(leftRef.getAttrName() == AttrName::Value);
@@ -1953,9 +1954,14 @@ TEST_CASE_METHOD(UnitTestFixture, "valid multi-clause queries") {
         REQUIRE(*pClauses[0] == *pc1);
         REQUIRE(*pClauses[1] == *pc2);
         REQUIRE(*pClauses[2] == *pc3);
+        REQUIRE(!pClauses[0]->isNegation());
+        REQUIRE(!pClauses[1]->isNegation());
+        REQUIRE(!pClauses[2]->isNegation());
 
         REQUIRE(*stClauses[0] == *sc1);
         REQUIRE(*stClauses[1] == *sc2);
+        REQUIRE(!stClauses[0]->isNegation());
+        REQUIRE(!stClauses[1]->isNegation());
     }
 }
 
