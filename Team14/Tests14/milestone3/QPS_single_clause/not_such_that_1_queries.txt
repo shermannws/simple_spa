@@ -1,540 +1,540 @@
-1a - Not Follows - first stmt - select first DONE
+1a - Not Follows - first stmt - select first
 stmt s; print p;
 Select s such that not Follows(s,p)
 1, 2, 3, 4, 6, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-1b - Not Follows - first stmt - select second DONE
+1b - Not Follows - first stmt - select second
 stmt s; print p;
 Select p such that not Follows(s,p)
 17, 23, 24, 26, 31
 5000
-1c - Not Follows - second stmt - select first DONE
+1c - Not Follows - second stmt - select first
 stmt s; assign a;
 Select a such that not Follows(a,s)
 19, 30
 5000
-1d - Not Follows - second stmt - select second DONE
+1d - Not Follows - second stmt - select second
 stmt s; assign a;
 Select s such that not Follows(a,s)
 1, 5, 6, 7, 8, 9, 10, 12, 13, 14, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-1ei - Not Follows - Follows false case - same stmtlist DONE
-procedure p;
-Select p such that not Follows(1,3)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-1eii - Not Follows - Follows false case - same proc diff stmtlist same nested level DONE
-procedure p;
-Select p such that not Follows(5,7)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-1eiii - Not Follows - Follows false case - same proc diff stmtlist diff nested level DONE
-procedure p;
-Select p such that not Follows(4,5)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-1eiv - Not Follows - Follows false case - diff proc DONE
-procedure p;
-Select p such that not Follows(12,16)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-1f - Not Follows - Follows true case DONE
-stmt s;
-Select s such that not Follows(5,6)
+1ei - Not Follows - Follows false case - same stmtlist
 
+Select BOOLEAN such that not Follows(1,3)
+TRUE
 5000
-1g - Not Follows - wildcard first DONE
+1eii - Not Follows - Follows false case - same proc diff stmtlist same nested level
+
+Select BOOLEAN such that not Follows(5,7)
+TRUE
+5000
+1eiii - Not Follows - Follows false case - same proc diff stmtlist diff nested level
+
+Select BOOLEAN such that not Follows(4,5)
+TRUE
+5000
+1eiv - Not Follows - Follows false case - diff proc
+
+Select BOOLEAN such that not Follows(12,16)
+TRUE
+5000
+1f - Not Follows - Follows true case
+
+Select BOOLEAN such that not Follows(5,6)
+FALSE
+5000
+1g - Not Follows - wildcard first
 stmt s;
 Select s such that not Follows(_,s)
 1, 5, 7, 10, 14, 17, 21, 23, 24, 26, 29, 30, 31, 32
 5000
-1h - Not Follows - wildcard second DONE
+1h - Not Follows - wildcard second
 stmt s;
 Select s such that not Follows(s,_)
 6, 8, 11, 13, 19, 20, 23, 24, 26, 28, 29, 30, 31, 32
 5000
-1i - Not Follows - int first DONE
+1i - Not Follows - int first
 stmt s;
 Select s such that not Follows(1,s)
 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-1j - Not Follows - int second DONE
+1j - Not Follows - int second
 stmt s;
 Select s such that not Follows(s,9)
 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-2a - Not Follows* - first stmt - select first DONE
+2a - Not Follows* - first stmt - select first
 stmt s; read r;
 Select s such that not Follows*(s,r)
 5, 6, 7, 8, 10, 11, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-2b - Not Follows* - first stmt - select second DONE
+2b - Not Follows* - first stmt - select second
 stmt s; read r;
 Select r such that not Follows*(s,r)
 5, 7, 32
 5000
-2c - Not Follows* - second stmt - select first DONE
+2c - Not Follows* - second stmt - select first
 stmt s; if i;
 Select s such that not Follows*(i,s)
 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 29, 30, 31, 32
 5000
-2d - Not Follows* - second stmt - select second DONE
+2d - Not Follows* - second stmt - select second
 stmt s; if i;
 Select i such that not Follows*(i,s)
 
 5000
-2ei - Not Follows* - Follows* false case - same proc diff stmtlist same nested level DONE
-procedure p;
-Select p such that not Follows*(6,7)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-2eii - Not Follows* - Follows* false case - same proc diff stmtlist diff nested level DONE
-procedure p;
-Select p such that not Follows*(2,5)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-2eiii - Not Follows* - Follows* false case - different procs DONE
-procedure p;
-Select p such that not Follows*(2,16)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-2f - Not Follows* - Follows* true case DONE
-stmt s;
-Select s such that not Follows*(7,8)
+2ei - Not Follows* - Follows* false case - same proc diff stmtlist same nested level
 
+Select BOOLEAN such that not Follows*(6,7)
+TRUE
 5000
-2g - Not Follows* - wildcard first DONE
+2eii - Not Follows* - Follows* false case - same proc diff stmtlist diff nested level
+
+Select BOOLEAN such that not Follows*(2,5)
+TRUE
+5000
+2eiii - Not Follows* - Follows* false case - different procs
+
+Select BOOLEAN such that not Follows*(2,16)
+TRUE
+5000
+2f - Not Follows* - Follows* true case
+
+Select BOOLEAN such that not Follows*(7,8)
+FALSE
+5000
+2g - Not Follows* - wildcard first
 stmt s;
 Select s such that not Follows*(_,s)
 1, 5, 7, 10, 14, 17, 21, 23, 24, 26, 29, 30, 31, 32
 5000
-2h - Not Follows* - wildcard second DONE
+2h - Not Follows* - wildcard second
 stmt s;
 Select s such that not Follows*(s,_)
 6, 8, 11, 13, 19, 20, 23, 24, 26, 29, 30, 31, 32
 5000
-2i - Not Follows* - int first DONE
+2i - Not Follows* - int first
 stmt s;
 Select s such that not Follows*(3,s)
 1, 2, 3, 5, 6, 7, 8, 10, 11, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-2j - Not Follows* - int second DONE
+2j - Not Follows* - int second
 stmt s;
 Select s such that not Follows*(s,10)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-3a - Not ModifiesS - ident second DONE
+3a - Not ModifiesS - ident second
 read r;
 Select r such that not Modifies(r,"one")
 7, 13, 18, 32
 5000
-3bi - Not ModifiesS - wildcard second DONE
+3bi - Not ModifiesS - wildcard second
 stmt s;
 Select s such that not Modifies(s,_)
 6, 8, 12, 17, 22, 23, 24, 25, 26, 27, 31
 5000
-3bii - Not ModifiesS - wildcard second DONE
+3bii - Not ModifiesS - wildcard second
 if i;
 Select i such that not Modifies(i,_)
 22
 5000
-3biii - Not ModifiesS - wildcard second DONE
+3biii - Not ModifiesS - wildcard second
 while w;
 Select w such that not Modifies(w,_)
 25
 5000
-3biv - Not ModifiesS - wildcard second DONE
+3biv - Not ModifiesS - wildcard second
 call c;
 Select c such that not Modifies(c,_)
 27
 5000
-3ci - Not ModifiesS - synonym second DONE
+3ci - Not ModifiesS - synonym second
 stmt s; variable v;
 Select s such that not Modifies(s,v)
 6, 8, 12, 17, 22, 23, 24, 25, 26, 27, 31
 5000
-3cii - Not ModifiesS - synonym second DONE
+3cii - Not ModifiesS - synonym second
 if i; variable v;
 Select i such that not Modifies(i,v)
 22
 5000
-3ciii - Not ModifiesS - synonym second DONE
+3ciii - Not ModifiesS - synonym second
 while w; variable v;
 Select w such that not Modifies(w,v)
 25
 5000
-3civ - Not ModifiesS - synonym second DONE
+3civ - Not ModifiesS - synonym second
 call c; variable v;
 Select c such that not Modifies(c,v)
 27
 5000
-3d - Not ModifiesS - int first DONE
+3d - Not ModifiesS - int first
 variable v;
 Select v such that not Modifies(2,v)
 x, z, one, two, three, four, five, ten, eleven, i, plus, mod, p, c, v, ww, print, read
 5000
-3e - Not ModifiesS - wildcard first DONE
+3e - Not ModifiesS - wildcard first
 variable v;
 Select v such that not Modifies(_,v)
 three, four, five, ten, plus, p, c, v, print
 5000
-3fi - Not ModifiesS - ModifiesS true case - nested DONE
-variable v;
-Select v such that not Modifies(4,"one")
+3fi - Not ModifiesS - ModifiesS true case - nested
 
+Select BOOLEAN such that not Modifies(4,"one")
+FALSE
 5000
-3fii - Not ModifiesS - ModifiesS true case - direct call DONE
-procedure p;
-Select p such that not Modifies(11,"i")
+3fii - Not ModifiesS - ModifiesS true case - direct call
 
+Select BOOLEAN such that not Modifies(11,"i")
+FALSE
 5000
-3fiii - Not ModifiesS - ModifiesS true case - transitive call DONE
-procedure p;
-Select p such that not Modifies(9,"ww")
+3fiii - Not ModifiesS - ModifiesS true case - transitive call
 
+Select BOOLEAN such that not Modifies(9,"ww")
+FALSE
 5000
-3gi - Not ModifiesS - ModifiesS false case - dont exist DONE
-variable v;
-Select v such that not Modifies(9,"six")
-x, y, z, one, two, three, four, five, ten, eleven, i, plus, mod, p, c, v, ww, print, read
+3gi - Not ModifiesS - ModifiesS false case - dont exist
+
+Select BOOLEAN such that not Modifies(9,"six")
+TRUE
 5000
-3gii - Not ModifiesS - ModifiesS false case - diff statement DONE
-procedure p;
-Select p such that not Modifies(9,"two")
-Proc1, Proc2, Proc3, Proc4, Proc5
+3gii - Not ModifiesS - ModifiesS false case - diff statement
+
+Select BOOLEAN such that not Modifies(9,"two")
+TRUE
 5000
-4a - Not ModifiesP - synonym second DONE
+4a - Not ModifiesP - synonym second
 variable v; procedure p;
 Select p such that not Modifies(p,v)
 Proc4
 5000
-4b - Not ModifiesP - ident second DONE
+4b - Not ModifiesP - ident second
 procedure p;
 Select p such that not Modifies(p,"i")
 Proc1, Proc3, Proc4, Proc5
 5000
-4c - Not ModifiesP - wildcard second DONE
+4c - Not ModifiesP - wildcard second
 procedure p;
 Select p such that not Modifies(p, _)
 Proc4
 5000
-4d - Not ModifiesP - ident first DONE
+4d - Not ModifiesP - ident first
 variable v;
 Select v such that not Modifies("Proc1",v)
 three, four, five, ten, i, plus, mod, p, c, v, ww, print, read
 5000
-4e - Not ModifiesP - wildcard first DONE
+4e - Not ModifiesP - wildcard first
 variable v;
 Select v such that not Modifies(_,v)
 three, four, five, ten, plus, p, c, v, print
 5000
-4fi - Not ModifiesP - ModifiesP true case - same proc DONE
-variable v;
-Select v such that not Modifies("Proc1","one")
+4fi - Not ModifiesP - ModifiesP true case - same proc
 
+Select BOOLEAN such that not Modifies("Proc1","one")
+FALSE
 5000
-4fii - Not ModifiesP - ModifiesP true case - diff proc direct DONE
-procedure p
-Select p such that not Modifies("Proc1","i")
+4fii - Not ModifiesP - ModifiesP true case - diff proc direct
 
+Select BOOLEAN such that not Modifies("Proc1","i")
+FALSE
 5000
-4fiii - Not ModifiesP - ModifiesP true case - diff proc transitive DONE
-procedure p
-Select p such that not Modifies("Proc1","ww")
+4fiii - Not ModifiesP - ModifiesP true case - diff proc transitive
 
+Select BOOLEAN such that not Modifies("Proc1","ww")
+FALSE
 5000
-4gi - Not ModifiesP - ModifiesP false case - diff proc DONE
-procedure p
-Select p such that not Modifies("Proc2","two")
-Proc1, Proc2, Proc3, Proc4, Proc5
+4gi - Not ModifiesP - ModifiesP false case - diff proc
+
+Select BOOLEAN such that not Modifies("Proc2","two")
+TRUE
 5000
-4gii - Not ModifiesP - ModifiesP false case - unrelated DONE
-procedure p
-Select p such that not Modifies("Proc1","read")
-Proc1, Proc2, Proc3, Proc4, Proc5
+4gii - Not ModifiesP - ModifiesP false case - unrelated
+
+Select BOOLEAN such that not Modifies("Proc1","read")
+TRUE
 5000
-5a - Not Parent - first stmt - select first DONE
+5a - Not Parent - first stmt - select first
 stmt s; read r;
 Select s such that not Parent(s,r)
 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-5b - Not Parent - first stmt - select second DONE
+5b - Not Parent - first stmt - select second
 stmt s; read r;
 Select r such that not Parent(s,r)
 13, 32
 5000
-5c - Not Parent - second stmt - select first DONE
+5c - Not Parent - second stmt - select first
 stmt s; assign a;
 Select s such that not Parent(a,s)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-5d - Not Parent - second stmt - select second DONE
+5d - Not Parent - second stmt - select second
 stmt s; assign a;
 Select a such that not Parent(a,s)
 1, 2, 3, 10, 14, 15, 19, 21, 30
 5000
-5ei - Not Parent - Parent false case - same stmtlist DONE
-procedure p;
-Select p such that not Parent(2,3)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-5eii - Not Parent - Parent false case - same proc diff stmtlist same nested level DONE
-procedure p;
-Select p such that not Parent(5,7)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-5eiii - Not Parent - Parent false case - same proc diff stmtlist diff nested level DONE
-procedure p;
-Select p such that not Parent(3,5)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-5eiv - Not Parent - Parent false case - same proc non-direct nested level DONE
-procedure p;
-Select p such that not Parent(28,30)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-5ev - Not Parent - Parent false case - diff proc DONE
-procedure p;
-Select p such that not Parent(12,16)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-5evi - Not Parent - Parent false case - diff proc, call stmt to stmt in called proc DONE
-procedure p;
-Select p such that not Parent(11,14)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-5f - Not Parent - Parent true case DONE
-stmt s;
-Select s such that not Parent(9,10)
+5ei - Not Parent - Parent false case - same stmtlist
 
+Select BOOLEAN such that not Parent(2,3)
+TRUE
 5000
-5g - Not Parent - wildcard first DONE
+5eii - Not Parent - Parent false case - same proc diff stmtlist same nested level
+
+Select BOOLEAN such that not Parent(5,7)
+TRUE
+5000
+5eiii - Not Parent - Parent false case - same proc diff stmtlist diff nested level
+
+Select BOOLEAN such that not Parent(3,5)
+TRUE
+5000
+5eiv - Not Parent - Parent false case - same proc non-direct nested level
+
+Select BOOLEAN such that not Parent(28,30)
+TRUE
+5000
+5ev - Not Parent - Parent false case - diff proc
+
+Select BOOLEAN such that not Parent(12,16)
+TRUE
+5000
+5evi - Not Parent - Parent false case - diff proc, call stmt to stmt in called proc
+
+Select BOOLEAN such that not Parent(11,14)
+TRUE
+5000
+5f - Not Parent - Parent true case
+
+Select BOOLEAN such that not Parent(9,10)
+FALSE
+5000
+5g - Not Parent - wildcard first
 stmt s;
 Select s such that not Parent(_,s)
 1, 2, 3, 4, 9, 12, 13, 14, 15, 16, 20, 21, 22, 25, 27, 28, 31, 32
 5000
-5h - Not Parent - wildcard second DONE
+5h - Not Parent - wildcard second
 stmt s;
 Select s such that not Parent(s,_)
 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 26, 27, 29, 30, 31, 32
 5000
-5i - Not Parent - int first DONE
+5i - Not Parent - int first
 stmt s;
 Select s such that not Parent(4,s)
 1, 2, 3, 4, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-5j - Not Parent - int second DONE
+5j - Not Parent - int second
 stmt s;
 Select s such that not Parent(s,10)
 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-6a - Not Parent* - first stmt - select first DONE
+6a - Not Parent* - first stmt - select first
 stmt s; print p;
 Select s such that not Parent*(s,p)
 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 26, 27, 28, 29, 30, 31, 32
 5000
-6b - Not Parent* - first stmt - select second DONE
+6b - Not Parent* - first stmt - select second
 stmt s; print p;
 Select p such that not Parent*(s,p)
 12, 31
 5000
-6c - Not Parent* - second stmt - select first DONE
+6c - Not Parent* - second stmt - select first
 stmt s; while w;
 Select s such that not Parent*(w,s)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 20, 21, 22, 23, 24, 25, 27, 28, 31, 32
 5000
-6d - Not Parent* - second stmt - select second DONE
+6d - Not Parent* - second stmt - select second
 stmt s; while w;
 Select w such that not Parent*(w,s)
 
 5000
-6ei - Not Parent* - Parent* false case - same stmtlist DONE
-procedure p;
-Select p such that not Parent*(5,6)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-6eii - Not Parent* - Parent* false case - same proc diff stmtlist same nested level DONE
-procedure p;
-Select p such that not Parent*(5,7)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-6eiii - Not Parent* - Parent* false case - same proc diff stmtlist diff nested level DONE
-procedure p;
-Select p such that not Parent*(11,13)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-6eiv - Not Parent* - Parent* false case - diff proc DONE
-procedure p;
-Select p such that not Parent*(12,16)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-6ev - Not Parent* - Parent* false case - diff proc, call stmt to stmt in called proc DONE
-procedure p;
-Select p such that not Parent*(11,15)
-Proc1, Proc2, Proc3, Proc4, Proc5
-5000
-6fi - Not Parent* - Parent* true case - direct nested DONE
-stmt s;
-Select s such that not Parent*(9,11)
+6ei - Not Parent* - Parent* false case - same stmtlist
 
+Select BOOLEAN such that not Parent*(5,6)
+TRUE
 5000
-6fii - Not Parent* - Parent* true case - non-direct nested DONE
-procedure p;
-Select p such that not Parent*(28,30)
+6eii - Not Parent* - Parent* false case - same proc diff stmtlist same nested level
 
+Select BOOLEAN such that not Parent*(5,7)
+TRUE
 5000
-6g - Not Parent* - wildcard first DONE
+6eiii - Not Parent* - Parent* false case - same proc diff stmtlist diff nested level
+
+Select BOOLEAN such that not Parent*(11,13)
+TRUE
+5000
+6eiv - Not Parent* - Parent* false case - diff proc
+
+Select BOOLEAN such that not Parent*(12,16)
+TRUE
+5000
+6ev - Not Parent* - Parent* false case - diff proc, call stmt to stmt in called proc
+
+Select BOOLEAN such that not Parent*(11,15)
+TRUE
+5000
+6fi - Not Parent* - Parent* true case - direct nested
+
+Select BOOLEAN such that not Parent*(9,11)
+FALSE
+5000
+6fii - Not Parent* - Parent* true case - non-direct nested
+
+Select BOOLEAN such that not Parent*(28,30)
+FALSE
+5000
+6g - Not Parent* - wildcard first
 stmt s;
 Select s such that not Parent*(_,s)
 1, 2, 3, 4, 9, 12, 13, 14, 15, 16, 20, 21, 22, 25, 27, 28, 31, 32
 5000
-6h - Not Parent* - wildcard second DONE
+6h - Not Parent* - wildcard second
 stmt s;
 Select s such that not Parent*(s,_)
 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 26, 27, 29, 30, 31, 32
 5000
-6i - Not Parent* - int first DONE
+6i - Not Parent* - int first
 stmt s;
 Select s such that not Parent*(22,s)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 25, 26, 27, 28, 29, 30, 31, 32
 5000
-6j - Not Parent* - int second DONE
+6j - Not Parent* - int second
 stmt s;
 Select s such that not Parent*(s,30)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 30, 31, 32
 5000
-7a - Not UsesS - ident second DONE
+7a - Not UsesS - ident second
 assign a;
 Select a such that not Uses(a,"two")
 1, 2, 3, 14, 15, 19, 21, 30
 5000
-7bi - Not UsesS - wildcard second DONE
+7bi - Not UsesS - wildcard second
 stmt s;
 Select s such that not Uses(s,_)
 1, 5, 7, 13, 14, 18, 19, 28, 29, 30, 32
 5000
-7bii - Not UsesS - wildcard second DONE
+7bii - Not UsesS - wildcard second
 if i;
 Select i such that not Uses(i,_)
 
 5000
-7biii - Not UsesS - wildcard second DONE
+7biii - Not UsesS - wildcard second
 while w;
 Select w such that not Uses(w,_)
 28, 29
 5000
-7biv - Not UsesS - wildcard second DONE
+7biv - Not UsesS - wildcard second
 call c;
 Select c such that not Uses(c,_)
 
 5000
-7ci - Not UsesS - synonym second DONE
+7ci - Not UsesS - synonym second
 stmt s; variable v;
 Select s such that not Uses(s,v)
 1, 5, 7, 13, 14, 18, 19, 28, 29, 30, 32
 5000
-7cii - Not UsesS - synonym second DONE
+7cii - Not UsesS - synonym second
 if i; variable v;
 Select i such that not Uses(i,v)
 
 5000
-7ciii - Not UsesS - synonym second DONE
+7ciii - Not UsesS - synonym second
 while w; variable v;
 Select w such that not Uses(w,v)
 28, 29
 5000
-7civ - Not UsesS - synonym second DONE
+7civ - Not UsesS - synonym second
 call c; variable v;
 Select c such that not Uses(c,v)
 
 5000
-7di - Not UsesS - int first DONE
+7di - Not UsesS - int first
 variable v;
 Select v such that not Uses(2,v)
 y, z, one, two, three, four, five, ten, eleven, i, plus, mod, p, c, v, ww, print, read
 5000
-7dii - Not UsesS - int first DONE
+7dii - Not UsesS - int first
 variable v;
 Select v such that not Uses(9,v)
 y, z, one, ten, eleven, i, ww, read
 5000
-7e - Not UsesS - wildcard first DONE
+7e - Not UsesS - wildcard first
 variable v;
 Select v such that not Uses(_,v)
 z, eleven, i, ww, read
 5000
-7fi - Not UsesS - UsesS true case - nested DONE
-variable v;
-Select v such that not Uses(4,"one")
+7fi - Not UsesS - UsesS true case - nested
 
+Select BOOLEAN such that not Uses(4,"one")
+FALSE
 5000
-7fii - Not UsesS - UsesS true case - direct call DONE
-procedure p;
-Select p such that not Uses(11,"plus")
+7fii - Not UsesS - UsesS true case - direct call
 
+Select BOOLEAN such that not Uses(11,"plus")
+FALSE
 5000
-7fiii - Not UsesS - UsesS true case - transitive call DONE
-procedure p;
-Select p such that not Uses(9,"print")
+7fiii - Not UsesS - UsesS true case - transitive call
 
+Select BOOLEAN such that not Uses(9,"print")
+FALSE
 5000
-7gi - Not UsesS - UsesS false case - dont exist DONE
-variable v;
-Select v such that not Uses(9,"six")
-x, y, z, one, two, three, four, five, ten, eleven, i, plus, mod, p, c, v, ww, print, read
+7gi - Not UsesS - UsesS false case - dont exist
+
+Select BOOLEAN such that not Uses(9,"six")
+TRUE
 5000
-7gii - Not UsesS - UsesS false case - diff statement DONE
-procedure p;
-Select p such that not Uses(5,"two")
-Proc1, Proc2, Proc3, Proc4, Proc5
+7gii - Not UsesS - UsesS false case - diff statement
+
+Select BOOLEAN such that not Uses(5,"two")
+TRUE
 5000
-8a - Not UsesP - synonym second DONE
+8a - Not UsesP - synonym second
 variable v; procedure p;
 Select p such that not Uses(p,v)
 Proc5
 5000
-8b - Not UsesP - ident second DONE
+8b - Not UsesP - ident second
 procedure p;
 Select p such that not Uses(p,"five")
 Proc2, Proc3, Proc4, Proc5
 5000
-8c - Not UsesP - wildcard second DONE
+8c - Not UsesP - wildcard second
 procedure p;
 Select p such that not Uses(p,_)
 Proc5
 5000
-8d - Not UsesP - ident first DONE
+8d - Not UsesP - ident first
 variable v;
 Select v such that not Uses("Proc2",v)
 y, z, one, two, three, four, five, ten, eleven, i, ww, read
 5000
-8e - Not UsesP - wildcard first DONE
+8e - Not UsesP - wildcard first
 variable v;
 Select v such that not Uses(_,v)
 z, eleven, i, ww, read
 5000
-8fi - Not UsesP - UsesP true case - same proc DONE
-variable v;
-Select v such that not Uses("Proc1","one")
+8fi - Not UsesP - UsesP true case - same proc
 
+Select BOOLEAN such that not Uses("Proc1","one")
+FALSE
 5000
-8fii - Not UsesP - UsesP true case - diff proc direct DONE
-procedure p
-Select p such that not Uses("Proc1","plus")
+8fii - Not UsesP - UsesP true case - diff proc direct
 
+Select BOOLEAN such that not Uses("Proc1","plus")
+FALSE
 5000
-8fiii - Not UsesP - UsesP true case - diff proc transitive DONE
-procedure p
-Select p such that not Uses("Proc1","print")
+8fiii - Not UsesP - UsesP true case - diff proc transitive
 
+Select BOOLEAN such that not Uses("Proc1","print")
+FALSE
 5000
-8gi - Not UsesP - UsesP false case - diff proc DONE
-procedure p
-Select p such that not Uses("Proc2","two")
-Proc1, Proc2, Proc3, Proc4, Proc5
+8gi - Not UsesP - UsesP false case - diff proc
+
+Select BOOLEAN such that not Uses("Proc2","two")
+TRUE
 5000
-8gii - Not UsesP - UsesP false case - unrelated DONE
-procedure p
-Select p such that not Uses("Proc1","read")
-Proc1, Proc2, Proc3, Proc4, Proc5
+8gii - Not UsesP - UsesP false case - unrelated
+
+Select BOOLEAN such that not Uses("Proc1","read")
+TRUE
 5000
