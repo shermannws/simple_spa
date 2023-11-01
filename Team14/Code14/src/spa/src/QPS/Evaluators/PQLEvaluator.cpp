@@ -54,7 +54,7 @@ std::vector<std::pair<int, transformFunc>> PQLEvaluator::getTransformations(Syno
 }
 
 std::vector<std::string> PQLEvaluator::project(ResultTuple row,
-                                               std::vector<std::pair<int, transformFunc>>& transformations) {
+                                               std::vector<std::pair<int, transformFunc>> &transformations) {
     std::vector<std::string> projection;
     for (auto &elem: transformations) {
         auto result = elem.second(row[elem.first]);

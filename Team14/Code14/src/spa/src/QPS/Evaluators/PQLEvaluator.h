@@ -88,8 +88,7 @@ private:
      * @param transformations pair of index of entity to transform and toString function to apply
      * @return the vector of transformation results
      */
-    std::vector<std::string> project(ResultTuple row,
-                                     std::vector<std::pair<int, transformFunc>>& transformations);
+    std::vector<std::string> project(ResultTuple row, std::vector<std::pair<int, transformFunc>> &transformations);
 
     /**
      * creates a vector of transformations to convert a row from a result table into the format specified by

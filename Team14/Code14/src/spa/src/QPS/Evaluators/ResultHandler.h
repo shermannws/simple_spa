@@ -93,8 +93,7 @@ private:
      * @param row2 row from table 2
      * @return boolean
      */
-    bool isMatch(const ResultTuple &row1, const ResultTuple &row2,
-                 const std::unordered_map<int, int> &matchMap);
+    bool isMatch(const ResultTuple &row1, const ResultTuple &row2, const std::unordered_map<int, int> &matchMap);
 
     /**
      * returns the corresponding indices of the synonyms in the specified result table in a vector

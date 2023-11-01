@@ -121,7 +121,8 @@ std::unordered_map<idx, idx> ResultHandler::getMatchMap(std::shared_ptr<Result> 
 }
 
 
-bool ResultHandler::isMatch(const ResultTuple &row1, const ResultTuple &row2, const std::unordered_map<int, int> &matchMap) {
+bool ResultHandler::isMatch(const ResultTuple &row1, const ResultTuple &row2,
+                            const std::unordered_map<int, int> &matchMap) {
     for (auto &it: matchMap) {
         if (row1[it.first] == row2[it.second]) { continue; }
         return false;

@@ -51,7 +51,7 @@ std::shared_ptr<Result> WithStrategy::evaluateBoolean(Ref &leftRef, Ref &rightRe
 }
 
 std::unordered_set<ResultTuple> WithStrategy::join(std::unordered_set<std::shared_ptr<Entity>> v1, AttrName a1,
-                                                           std::unordered_set<std::shared_ptr<Entity>> v2, AttrName a2) const {
+                                                   std::unordered_set<std::shared_ptr<Entity>> v2, AttrName a2) const {
     std::unordered_set<ResultTuple> res;
 
     for (const auto &e1: v1) {
@@ -63,7 +63,8 @@ std::unordered_set<ResultTuple> WithStrategy::join(std::unordered_set<std::share
     return res;
 }
 
-std::unordered_set<std::shared_ptr<Entity>> WithStrategy::filter(std::unordered_set<std::shared_ptr<Entity>> v, AttrName a, StringRep rep) const {
+std::unordered_set<std::shared_ptr<Entity>> WithStrategy::filter(std::unordered_set<std::shared_ptr<Entity>> v,
+                                                                 AttrName a, StringRep rep) const {
     std::unordered_set<std::shared_ptr<Entity>> res;
     for (const auto e: v) {
         if (QPSUtil::getValueFunc[a](e) == rep) { res.insert(e); }

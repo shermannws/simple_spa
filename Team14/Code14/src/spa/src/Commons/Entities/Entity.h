@@ -150,5 +150,6 @@ struct std::hash<std::vector<std::shared_ptr<Entity>>> {
  */
 template<>
 struct std::equal_to<std::vector<std::shared_ptr<Entity>>> {
-    bool operator()(std::vector<std::shared_ptr<Entity>> const &lhs, std::vector<std::shared_ptr<Entity>> const &rhs) const;
+    bool operator()(std::vector<std::shared_ptr<Entity>> const &lhs,
+                    std::vector<std::shared_ptr<Entity>> const &rhs) const;
 };
