@@ -49,8 +49,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of Statement, Statement pair stored in a vector
      */
-    virtual std::unordered_set<std::vector<Entity>>
-    getRelationshipPair(StatementType formerType, StatementType latterType, bool requireDirect) const;
+    virtual EntityPairSet getRelationshipPair(StatementType formerType, StatementType latterType, bool requireDirect) const;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to the given statement. The
@@ -60,7 +59,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    virtual std::unordered_set<Entity> getRelationshipTypeStmt(StatementType type, Statement &statement,
+    virtual EntitySet getRelationshipTypeStmt(StatementType type, Statement &statement,
                                                                bool requireDirect) const;
 
     /**
@@ -69,7 +68,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered_set of statements
      */
-    std::unordered_set<Entity> getRelationshipTypeWildcard(StatementType type) const;
+    EntitySet getRelationshipTypeWildcard(StatementType type) const;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to any statement. The
@@ -78,7 +77,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    virtual std::unordered_set<Entity> getRelationshipTypeWildcard(StatementType type, bool requireDirect) const;
+    virtual EntitySet getRelationshipTypeWildcard(StatementType type, bool requireDirect) const;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to the given statement. The
@@ -88,7 +87,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    virtual std::unordered_set<Entity> getRelationshipStmtType(Statement &statement, StatementType type,
+    virtual EntitySet getRelationshipStmtType(Statement &statement, StatementType type,
                                                                bool requireDirect) const;
 
     /**
@@ -97,7 +96,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered_set of statements
      */
-    std::unordered_set<Entity> getRelationshipWildcardType(StatementType type) const;
+    EntitySet getRelationshipWildcardType(StatementType type) const;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to any statement. The
@@ -106,7 +105,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    virtual std::unordered_set<Entity> getRelationshipWildcardType(StatementType type, bool requireDirect) const;
+    virtual EntitySet getRelationshipWildcardType(StatementType type, bool requireDirect) const;
 
     /**
      * Returns true if statement1 is related to statement2, false otherwise
@@ -142,7 +141,7 @@ public:
      * @param stmtType The type of statement to retrieve
      * @return An unordered_set of statements that is related to itself
      */
-    std::unordered_set<Entity> getSameStmt(StatementType stmtType, bool requireDirect) const;
+    EntitySet getSameStmt(StatementType stmtType, bool requireDirect) const;
 };
 
 #include "StmtToStmtRelationshipManager.hpp"

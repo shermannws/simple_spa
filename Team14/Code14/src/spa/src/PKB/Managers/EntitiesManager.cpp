@@ -8,14 +8,14 @@ EntitiesManager::EntitiesManager() {
 }
 
 template<typename E>
-std::unordered_set<Entity> EntitiesManager::getEntities(std::shared_ptr<EntityStore<E>> store,
-                                                        std::function<bool(E &)> matcher) const {
-    return ManagerUtils::getEntitiesFromEntityStore<E>(store, matcher, [](Entity &entity) { return entity; });
+EntitySet EntitiesManager::getEntities(std::shared_ptr<EntityStore<E>> store,
+                                                        std::function<bool(std::shared_ptr<E>)> matcher) const {
+    return ManagerUtils::getEntitiesFromEntityStore<E>(store, matcher, [](EntityPointer entity) { return entity; });
 }
 
 template<typename E>
-std::unordered_set<Entity> EntitiesManager::getAllEntities(std::shared_ptr<EntityStore<E>> store) const {
-    return this->getEntities<E>(store, [](E &entity) { return true; });
+EntitySet EntitiesManager::getAllEntities(std::shared_ptr<EntityStore<E>> store) const {
+    return this->getEntities<E>(store, [](std::shared_ptr<E> entity) { return true; });
 }
 
 void EntitiesManager::storeConstant(std::shared_ptr<Constant> c) { this->constantStore->storeEntity(c); }
@@ -26,59 +26,59 @@ void EntitiesManager::storeProcedure(std::shared_ptr<Procedure> p) { this->proce
 
 void EntitiesManager::storeStatement(std::shared_ptr<Statement> s) { this->statementStore->storeEntity(s); }
 
-std::unordered_set<Entity> EntitiesManager::getAllVariables() const {
+EntitySet EntitiesManager::getAllVariables() const {
     return this->getAllEntities<Variable>(this->variableStore);
 }
 
-std::unordered_set<Entity> EntitiesManager::getAllConstants() const {
+EntitySet EntitiesManager::getAllConstants() const {
     return this->getAllEntities<Constant>(this->constantStore);
 }
 
-std::unordered_set<Entity> EntitiesManager::getAllProcedures() const {
+EntitySet EntitiesManager::getAllProcedures() const {
     return this->getAllEntities<Procedure>(this->procedureStore);
 }
 
-std::unordered_set<Entity> EntitiesManager::getAllStatements() const {
+EntitySet EntitiesManager::getAllStatements() const {
     return this->getAllEntities<Statement>(this->statementStore);
 }
 
-std::unordered_set<Entity> EntitiesManager::getAllRead() const {
+EntitySet EntitiesManager::getAllRead() const {
     return this->getEntities<Statement>(
-            this->statementStore, [](Statement &statement) { return statement.isStatementType(StatementType::Read); });
+            this->statementStore, [](std::shared_ptr<Statement> statement) { return statement->isStatementType(StatementType::Read); });
 }
 
-std::unordered_set<Entity> EntitiesManager::getAllPrint() const {
+EntitySet EntitiesManager::getAllPrint() const {
     return this->getEntities<Statement>(
-            this->statementStore, [](Statement &statement) { return statement.isStatementType(StatementType::Print); });
+            this->statementStore, [](std::shared_ptr<Statement> statement) { return statement->isStatementType(StatementType::Print); });
 }
 
-std::unordered_set<Entity> EntitiesManager::getAllWhile() const {
+EntitySet EntitiesManager::getAllWhile() const {
     return this->getEntities<Statement>(
-            this->statementStore, [](Statement &statement) { return statement.isStatementType(StatementType::While); });
+            this->statementStore, [](std::shared_ptr<Statement> statement) { return statement->isStatementType(StatementType::While); });
 }
 
-std::unordered_set<Entity> EntitiesManager::getAllIf() const {
+EntitySet EntitiesManager::getAllIf() const {
     return this->getEntities<Statement>(
-            this->statementStore, [](Statement &statement) { return statement.isStatementType(StatementType::If); });
+            this->statementStore, [](std::shared_ptr<Statement> statement) { return statement->isStatementType(StatementType::If); });
 }
 
-std::unordered_set<Entity> EntitiesManager::getAllCall() const {
+EntitySet EntitiesManager::getAllCall() const {
     return this->getEntities<Statement>(
-            this->statementStore, [](Statement &statement) { return statement.isStatementType(StatementType::Call); });
+            this->statementStore, [](std::shared_ptr<Statement> statement) { return statement->isStatementType(StatementType::Call); });
 }
 
-std::shared_ptr<Entity> EntitiesManager::getStatement(std::shared_ptr<Statement> s) const {
+EntityPointer EntitiesManager::getStatement(std::shared_ptr<Statement> s) const {
     return this->statementStore->getEntity(s);
 }
 
-std::shared_ptr<Entity> EntitiesManager::getVariable(std::shared_ptr<Variable> v) const {
+EntityPointer EntitiesManager::getVariable(std::shared_ptr<Variable> v) const {
     return this->variableStore->getEntity(v);
 }
 
-std::shared_ptr<Entity> EntitiesManager::getConstant(std::shared_ptr<Constant> c) const {
+EntityPointer EntitiesManager::getConstant(std::shared_ptr<Constant> c) const {
     return this->constantStore->getEntity(c);
 }
 
-std::shared_ptr<Entity> EntitiesManager::getProcedure(std::shared_ptr<Procedure> p) const {
+EntityPointer EntitiesManager::getProcedure(std::shared_ptr<Procedure> p) const {
     return this->procedureStore->getEntity(p);
 }

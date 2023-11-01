@@ -44,27 +44,27 @@ public:
      * Returns an unordered_set of Procedure, Variable pair where the procedure is related to the variable.
      * @return An unordered_set of Procedure, Variable pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getRelationshipProcPair() const;
+    EntityPairSet getRelationshipProcPair() const;
 
     /**
      * Returns an unordered_set of procedure which is related to the given variable
      * @param var The variable that is related to the statements
      * @return An unordered_set of procedure
      */
-    std::unordered_set<Entity> getRelationshipIdent(Variable &var) const;
+    EntitySet getRelationshipIdent(Variable &var) const;
 
     /**
      * Returns an unordered_set of procedures which is related to any variable
      * @return An unordered_set of procedures
      */
-    std::unordered_set<Entity> getRelationshipProc() const;
+    EntitySet getRelationshipProc() const;
 
     /**
      * Returns an unordered_set of variables which is related to the given procedure
      * @param procedure The procedure that is related to the variables
      * @return An unordered_set of variables
      */
-    std::unordered_set<Entity> getRelationshipVar(Procedure &procedure) const;
+    EntitySet getRelationshipVar(Procedure &procedure) const;
 
     /**
      * Returns a boolean value indicating if the given procedure is related to the given variable

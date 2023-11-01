@@ -22,57 +22,57 @@ PkbReaderManager::PkbReaderManager(std::shared_ptr<AssignPatternManager> assignm
       whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager),
       affectsRelationshipManager(affectsRelationshipManager){};
 
-std::unordered_set<Entity> PkbReaderManager::getAllVariables() const { return this->entityManager->getAllVariables(); }
+EntitySet PkbReaderManager::getAllVariables() const { return this->entityManager->getAllVariables(); }
 
-std::unordered_set<Entity> PkbReaderManager::getAllConstants() const { return this->entityManager->getAllConstants(); }
+EntitySet PkbReaderManager::getAllConstants() const { return this->entityManager->getAllConstants(); }
 
-std::unordered_set<Entity> PkbReaderManager::getAllProcedures() const {
+EntitySet PkbReaderManager::getAllProcedures() const {
     return this->entityManager->getAllProcedures();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getAllStatements() const {
+EntitySet PkbReaderManager::getAllStatements() const {
     return this->entityManager->getAllStatements();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getAllRead() const { return this->entityManager->getAllRead(); }
+EntitySet PkbReaderManager::getAllRead() const { return this->entityManager->getAllRead(); }
 
-std::unordered_set<Entity> PkbReaderManager::getAllPrint() const { return this->entityManager->getAllPrint(); }
+EntitySet PkbReaderManager::getAllPrint() const { return this->entityManager->getAllPrint(); }
 
-std::unordered_set<Entity> PkbReaderManager::getAllWhile() const { return this->entityManager->getAllWhile(); }
+EntitySet PkbReaderManager::getAllWhile() const { return this->entityManager->getAllWhile(); }
 
-std::unordered_set<Entity> PkbReaderManager::getAllIf() const { return this->entityManager->getAllIf(); }
+EntitySet PkbReaderManager::getAllIf() const { return this->entityManager->getAllIf(); }
 
-std::unordered_set<Entity> PkbReaderManager::getAllCall() const { return this->entityManager->getAllCall(); }
+EntitySet PkbReaderManager::getAllCall() const { return this->entityManager->getAllCall(); }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getUsesStmtPair(StatementType type) const {
+EntityPairSet PkbReaderManager::getUsesStmtPair(StatementType type) const {
     return this->usesRelationshipManager->getRelationshipStmtPair(type);
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getUsesProcPair() const {
+EntityPairSet PkbReaderManager::getUsesProcPair() const {
     return this->usesProcRelationshipManager->getRelationshipProcPair();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getUsesTypeIdent(StatementType type, Variable &var) const {
+EntitySet PkbReaderManager::getUsesTypeIdent(StatementType type, Variable &var) const {
     return this->usesRelationshipManager->getRelationshipTypeIdent(type, var);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getUsesProcIdent(Variable &var) const {
+EntitySet PkbReaderManager::getUsesProcIdent(Variable &var) const {
     return this->usesProcRelationshipManager->getRelationshipIdent(var);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getUsesStmt(StatementType type) const {
+EntitySet PkbReaderManager::getUsesStmt(StatementType type) const {
     return this->usesRelationshipManager->getRelationshipStmt(type);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getUsesProc() const {
+EntitySet PkbReaderManager::getUsesProc() const {
     return this->usesProcRelationshipManager->getRelationshipProc();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getUsesVar(Statement &stmt) const {
+EntitySet PkbReaderManager::getUsesVar(Statement &stmt) const {
     return this->usesRelationshipManager->getRelationshipVar(stmt);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getUsesVar(Procedure &proc) const {
+EntitySet PkbReaderManager::getUsesVar(Procedure &proc) const {
     return this->usesProcRelationshipManager->getRelationshipVar(proc);
 }
 
@@ -90,45 +90,45 @@ bool PkbReaderManager::hasUses(Procedure &proc) const {
     return this->usesProcRelationshipManager->hasRelationship(proc);
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getFollowsPair(StatementType formerType,
+EntityPairSet PkbReaderManager::getFollowsPair(StatementType formerType,
                                                                          StatementType latterType) const {
     return this->followsRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getFollowsStarPair(StatementType formerType,
+EntityPairSet PkbReaderManager::getFollowsStarPair(StatementType formerType,
                                                                              StatementType latterType) const {
     return this->followsRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getFollowsTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getFollowsTypeStmt(StatementType type, Statement &statement) const {
     return this->followsRelationshipManager->getRelationshipTypeStmt(type, statement, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getFollowsStarTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getFollowsStarTypeStmt(StatementType type, Statement &statement) const {
     return this->followsRelationshipManager->getRelationshipTypeStmt(type, statement, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getFollowsTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getFollowsTypeWildcard(StatementType type) const {
     return this->followsRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getFollowsStarTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getFollowsStarTypeWildcard(StatementType type) const {
     return this->followsRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getFollowsStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getFollowsStmtType(Statement &statement, StatementType type) const {
     return this->followsRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getFollowsStarStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getFollowsStarStmtType(Statement &statement, StatementType type) const {
     return this->followsRelationshipManager->getRelationshipStmtType(statement, type, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getFollowsWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getFollowsWildcardType(StatementType type) const {
     return this->followsRelationshipManager->getRelationshipWildcardType(type);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getFollowsStarWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getFollowsStarWildcardType(StatementType type) const {
     return this->followsRelationshipManager->getRelationshipWildcardType(type);
 }
 
@@ -160,35 +160,35 @@ bool PkbReaderManager::hasFormerStarStmt(Statement &statement) const {
     return this->followsRelationshipManager->isLatter(statement);
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getModifiesStmtPair(StatementType type) const {
+EntityPairSet PkbReaderManager::getModifiesStmtPair(StatementType type) const {
     return this->modifiesRelationshipManager->getRelationshipStmtPair(type);
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getModifiesProcPair() const {
+EntityPairSet PkbReaderManager::getModifiesProcPair() const {
     return this->modifiesProcRelationshipManager->getRelationshipProcPair();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getModifiesTypeIdent(StatementType type, Variable &var) const {
+EntitySet PkbReaderManager::getModifiesTypeIdent(StatementType type, Variable &var) const {
     return this->modifiesRelationshipManager->getRelationshipTypeIdent(type, var);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getModifiesProcIdent(Variable &var) const {
+EntitySet PkbReaderManager::getModifiesProcIdent(Variable &var) const {
     return this->modifiesProcRelationshipManager->getRelationshipIdent(var);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getModifiesStmt(StatementType type) const {
+EntitySet PkbReaderManager::getModifiesStmt(StatementType type) const {
     return this->modifiesRelationshipManager->getRelationshipStmt(type);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getModifiesProc() const {
+EntitySet PkbReaderManager::getModifiesProc() const {
     return this->modifiesProcRelationshipManager->getRelationshipProc();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getModifiesVar(Statement &stmt) const {
+EntitySet PkbReaderManager::getModifiesVar(Statement &stmt) const {
     return this->modifiesRelationshipManager->getRelationshipVar(stmt);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getModifiesVar(Procedure &proc) const {
+EntitySet PkbReaderManager::getModifiesVar(Procedure &proc) const {
     return this->modifiesProcRelationshipManager->getRelationshipVar(proc);
 }
 
@@ -210,76 +210,76 @@ bool PkbReaderManager::hasModifies(Procedure &proc) const {
 
 // Pattern queries i.e. pattern a (...,...)
 // pattern a (_,_)
-std::unordered_set<Entity> PkbReaderManager::getAllAssign() const {
+EntitySet PkbReaderManager::getAllAssign() const {
     return this->assignmentManager->getAllAssignStmts();
 }
 
 // pattern a (_, "x")
-std::unordered_set<Entity> PkbReaderManager::getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const {
+EntitySet PkbReaderManager::getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const {
     return this->assignmentManager->getAssignStmtsByRhs(rhs, hasRhsWildCard);
 }
 
 // pattern a (v, _)
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getAllAssignStmtVarPair() const {
+EntityPairSet PkbReaderManager::getAllAssignStmtVarPair() const {
     return this->assignmentManager->getAllAssignStmtVarPair();
 }
 
 // pattern a (v, "x")
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getAssignStmtsVarPairByRhs(Expression &rhs,
+EntityPairSet PkbReaderManager::getAssignStmtsVarPairByRhs(Expression &rhs,
                                                                                      bool hasWildCard) const {
     return this->assignmentManager->getAssignStmtsVarPairByRhs(rhs, hasWildCard);
 }
 
 // pattern a ("x", _)
-std::unordered_set<Entity> PkbReaderManager::getAssignStmtsByLhs(Variable &lhs) const {
+EntitySet PkbReaderManager::getAssignStmtsByLhs(Variable &lhs) const {
     return this->assignmentManager->getAssignStmtsByLhs(lhs);
 }
 
 // pattern a ("x", "x")
-std::unordered_set<Entity> PkbReaderManager::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
+EntitySet PkbReaderManager::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
                                                                     bool hasRhsWildCard) const {
     return this->assignmentManager->getAssignStmtsByLhsRhs(lhs, rhs, hasRhsWildCard);
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getParentPair(StatementType formerType,
+EntityPairSet PkbReaderManager::getParentPair(StatementType formerType,
                                                                         StatementType latterType) const {
     return this->parentRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getParentStarPair(StatementType formerType,
+EntityPairSet PkbReaderManager::getParentStarPair(StatementType formerType,
                                                                             StatementType latterType) const {
     return this->parentRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getParentTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getParentTypeStmt(StatementType type, Statement &statement) const {
     return this->parentRelationshipManager->getRelationshipTypeStmt(type, statement, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getParentStarTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getParentStarTypeStmt(StatementType type, Statement &statement) const {
     return this->parentRelationshipManager->getRelationshipTypeStmt(type, statement, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getParentTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getParentTypeWildcard(StatementType type) const {
     return this->parentRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getParentStarTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getParentStarTypeWildcard(StatementType type) const {
     return this->parentRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getParentStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getParentStmtType(Statement &statement, StatementType type) const {
     return this->parentRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getParentStarStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getParentStarStmtType(Statement &statement, StatementType type) const {
     return this->parentRelationshipManager->getRelationshipStmtType(statement, type, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getParentWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getParentWildcardType(StatementType type) const {
     return this->parentRelationshipManager->getRelationshipWildcardType(type);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getParentStarWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getParentStarWildcardType(StatementType type) const {
     return this->parentRelationshipManager->getRelationshipWildcardType(type);
 }
 
@@ -331,89 +331,89 @@ bool PkbReaderManager::isCallsStar(Procedure &caller, Procedure &callee) const {
     return this->callsRelationshipManager->isRelationship(caller, callee, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getCallees() const {
+EntitySet PkbReaderManager::getCallees() const {
     return this->callsRelationshipManager->getRelationshipLatter();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getCalleesStar() const {
+EntitySet PkbReaderManager::getCalleesStar() const {
     return this->callsRelationshipManager->getRelationshipLatter();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getCallers() const {
+EntitySet PkbReaderManager::getCallers() const {
     return this->callsRelationshipManager->getRelationshipFormer();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getCallersStar() const {
+EntitySet PkbReaderManager::getCallersStar() const {
     return this->callsRelationshipManager->getRelationshipFormer();
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getCallsPair() const {
+EntityPairSet PkbReaderManager::getCallsPair() const {
     return this->callsRelationshipManager->getRelationshipPair(true);
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getCallsStarPair() const {
+EntityPairSet PkbReaderManager::getCallsStarPair() const {
     return this->callsRelationshipManager->getRelationshipPair(false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getCallers(Procedure &callee) const {
+EntitySet PkbReaderManager::getCallers(Procedure &callee) const {
     return this->callsRelationshipManager->getRelationshipFormer(callee, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getCallersStar(Procedure &callee) const {
+EntitySet PkbReaderManager::getCallersStar(Procedure &callee) const {
     return this->callsRelationshipManager->getRelationshipFormer(callee, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getCallees(Procedure &caller) const {
+EntitySet PkbReaderManager::getCallees(Procedure &caller) const {
     return this->callsRelationshipManager->getRelationshipLatter(caller, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getCalleesStar(Procedure &caller) const {
+EntitySet PkbReaderManager::getCalleesStar(Procedure &caller) const {
     return this->callsRelationshipManager->getRelationshipLatter(caller, false);
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getNextPair(StatementType formerType,
+EntityPairSet PkbReaderManager::getNextPair(StatementType formerType,
                                                                       StatementType latterType) const {
     return this->nextRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getNextStarPair(StatementType formerType,
+EntityPairSet PkbReaderManager::getNextStarPair(StatementType formerType,
                                                                           StatementType latterType) const {
     return this->nextRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getNextStarSameStmt(StatementType stmtType) const {
+EntitySet PkbReaderManager::getNextStarSameStmt(StatementType stmtType) const {
     return this->nextRelationshipManager->getNextStarSameStmt(stmtType);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getNextTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getNextTypeStmt(StatementType type, Statement &statement) const {
     return this->nextRelationshipManager->getRelationshipTypeStmt(type, statement, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getNextStarTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getNextStarTypeStmt(StatementType type, Statement &statement) const {
     return this->nextRelationshipManager->getRelationshipTypeStmt(type, statement, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getNextTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getNextTypeWildcard(StatementType type) const {
     return this->nextRelationshipManager->getRelationshipTypeWildcard(type, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getNextStarTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getNextStarTypeWildcard(StatementType type) const {
     return this->nextRelationshipManager->getRelationshipTypeWildcard(type, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getNextStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getNextStmtType(Statement &statement, StatementType type) const {
     return this->nextRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getNextStarStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getNextStarStmtType(Statement &statement, StatementType type) const {
     return this->nextRelationshipManager->getRelationshipStmtType(statement, type, false);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getNextWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getNextWildcardType(StatementType type) const {
     return this->nextRelationshipManager->getRelationshipWildcardType(type, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getNextStarWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getNextStarWildcardType(StatementType type) const {
     return this->nextRelationshipManager->getRelationshipWildcardType(type, false);
 }
 
@@ -445,27 +445,27 @@ bool PkbReaderManager::hasAfterStarStmt(Statement &statement) const {
     return this->nextRelationshipManager->isFormer(statement);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getAllIfPatternStmts() const {
+EntitySet PkbReaderManager::getAllIfPatternStmts() const {
     return this->ifPatternManager->getAllStmts();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getIfStmtsByVar(Variable &var) const {
+EntitySet PkbReaderManager::getIfStmtsByVar(Variable &var) const {
     return this->ifPatternManager->getStmtsByVar(var);
 };
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getAllIfStmtVarPair() const {
+EntityPairSet PkbReaderManager::getAllIfStmtVarPair() const {
     return this->ifPatternManager->getAllStmtVarPair();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getAllWhilePatternStmts() const {
+EntitySet PkbReaderManager::getAllWhilePatternStmts() const {
     return this->whilePatternManager->getAllStmts();
 }
 
-std::unordered_set<Entity> PkbReaderManager::getWhileStmtsByVar(Variable &var) const {
+EntitySet PkbReaderManager::getWhileStmtsByVar(Variable &var) const {
     return this->whilePatternManager->getStmtsByVar(var);
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getAllWhileStmtVarPair() const {
+EntityPairSet PkbReaderManager::getAllWhileStmtVarPair() const {
     return this->whilePatternManager->getAllStmtVarPair();
 }
 
@@ -479,44 +479,44 @@ void PkbReaderManager::triggerAffectsCalculation() const {
             [this](std::shared_ptr<Statement> stmt) { return nextRelationshipManager->getAllNextOfStmt(stmt); });
 }
 
-std::unordered_set<std::vector<Entity>> PkbReaderManager::getAffectsPair(StatementType formerType,
+EntityPairSet PkbReaderManager::getAffectsPair(StatementType formerType,
                                                                          StatementType latterType) const {
     if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, latterType)) {
-        return std::unordered_set<std::vector<Entity>>();
+        return EntityPairSet();
     }
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getAffectsSameStmt(StatementType stmtType) const {
+EntitySet PkbReaderManager::getAffectsSameStmt(StatementType stmtType) const {
     if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, stmtType)) {
-        return std::unordered_set<Entity>();
+        return EntitySet();
     }
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getAffectsSameStmt(stmtType);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getAffectsTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getAffectsTypeStmt(StatementType type, Statement &statement) const {
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipTypeStmt(type, statement, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getAffectsTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getAffectsTypeWildcard(StatementType type) const {
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getAffectsStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getAffectsStmtType(Statement &statement, StatementType type) const {
     if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) {
-        return std::unordered_set<Entity>();
+        return EntitySet();
     }
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
-std::unordered_set<Entity> PkbReaderManager::getAffectsWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getAffectsWildcardType(StatementType type) const {
     if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) {
-        return std::unordered_set<Entity>();
+        return EntitySet();
     }
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipWildcardType(type);

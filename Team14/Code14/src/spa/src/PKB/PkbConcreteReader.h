@@ -27,55 +27,55 @@ public:
      * @brief Returns all the variables in the SIMPLE program.
      * @return An unordered set of variables.
      */
-    std::unordered_set<Entity> getAllVariables() const override;
+    EntitySet getAllVariables() const override;
 
     /**
      * @brief Returns all the constants in the SIMPLE program.
      * @return An unordered set of constants.
      */
-    std::unordered_set<Entity> getAllConstants() const override;
+    EntitySet getAllConstants() const override;
 
     /**
      * @brief Returns all the procedures in the SIMPLE program.
      * @return An unordered set of procedures.
      */
-    std::unordered_set<Entity> getAllProcedures() const override;
+    EntitySet getAllProcedures() const override;
 
     /**
      * @brief Returns all the statements in the SIMPLE program.
      * @return An unordered set of statements.
      */
-    std::unordered_set<Entity> getAllStatements() const override;
+    EntitySet getAllStatements() const override;
 
     /**
      * @brief Returns all the read statements in the SIMPLE program.
      * @return An unordered set of read statements.
      */
-    std::unordered_set<Entity> getAllRead() const override;
+    EntitySet getAllRead() const override;
 
     /**
      * @brief Returns all the print statements in the SIMPLE program.
      * @return An unordered set of print statements.
      */
-    std::unordered_set<Entity> getAllPrint() const override;
+    EntitySet getAllPrint() const override;
 
     /**
      * @brief Returns all the while statements in the SIMPLE program.
      * @return An unordered set of while statements.
      */
-    std::unordered_set<Entity> getAllWhile() const override;
+    EntitySet getAllWhile() const override;
 
     /**
      * @brief Returns all the if statements in the SIMPLE program.
      * @return An unordered set of if statements.
      */
-    std::unordered_set<Entity> getAllIf() const override;
+    EntitySet getAllIf() const override;
 
     /**
      * @brief Returns all the call statements in the SIMPLE program.
      * @return An unordered set of call statements.
      */
-    std::unordered_set<Entity> getAllCall() const override;
+    EntitySet getAllCall() const override;
 
     /**
      * Returns an unordered_set of Statement, Variable pair where the statement uses the variable. Retrieves the
@@ -83,13 +83,13 @@ public:
      * @param type The type of the statement
      * @return An unordered set of Statement, Variable pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getUsesStmtPair(StatementType type) const override;
+    EntityPairSet getUsesStmtPair(StatementType type) const override;
 
     /**
      * Returns an unordered_set of Procedure, Variable pair where the procedure uses the variable.
      * @return An unordered set of Procedure, Variable pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getUsesProcPair() const override;
+    EntityPairSet getUsesProcPair() const override;
 
     /**
      * Returns an unordered_set of statements of StatementType type which uses the given variable
@@ -97,41 +97,41 @@ public:
      * @param var The variable that is used by the statements
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getUsesTypeIdent(StatementType type, Variable &var) const override;
+    EntitySet getUsesTypeIdent(StatementType type, Variable &var) const override;
 
     /**
      * Returns an unordered_set of procedures which uses the given variable
      * @param var The variable that is used by the statements
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getUsesProcIdent(Variable &var) const override;
+    EntitySet getUsesProcIdent(Variable &var) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which uses any variable
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getUsesStmt(StatementType type) const override;
+    EntitySet getUsesStmt(StatementType type) const override;
 
     /**
      * Returns an unordered_set of procedures which uses any variable
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getUsesProc() const override;
+    EntitySet getUsesProc() const override;
 
     /**
      * Returns an unordered_set of variables which is used by the given statement
      * @param stmt The statement that uses the variables
      * @return An unordered set of variables
      */
-    std::unordered_set<Entity> getUsesVar(Statement &stmt) const override;
+    EntitySet getUsesVar(Statement &stmt) const override;
 
     /**
      * Returns an unordered_set of variables which is used by the given procedure
      * @param proc The procedure that uses the variables
      * @return An unordered set of variables
      */
-    std::unordered_set<Entity> getUsesVar(Procedure &proc) const override;
+    EntitySet getUsesVar(Procedure &proc) const override;
 
     /**
      * Returns a boolean value indicating if the given statement uses the given variable
@@ -170,7 +170,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getFollowsPair(StatementType formerType,
+    EntityPairSet getFollowsPair(StatementType formerType,
                                                            StatementType latterType) const override;
 
     /**
@@ -181,7 +181,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getFollowsStarPair(StatementType formerType,
+    EntityPairSet getFollowsStarPair(StatementType formerType,
                                                                StatementType latterType) const override;
 
     /**
@@ -191,7 +191,7 @@ public:
      * @param statement The statement that succeeds the statements to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getFollowsTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getFollowsTypeStmt(StatementType type, Statement &statement) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is followed by the given statement
@@ -200,7 +200,7 @@ public:
      * @param statement The statement that succeeds the statements to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getFollowsStarTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getFollowsStarTypeStmt(StatementType type, Statement &statement) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is followed by any statement i.e. there
@@ -208,7 +208,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getFollowsTypeWildcard(StatementType type) const override;
+    EntitySet getFollowsTypeWildcard(StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is followed by any statement i.e. there
@@ -216,7 +216,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getFollowsStarTypeWildcard(StatementType type) const override;
+    EntitySet getFollowsStarTypeWildcard(StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which follows the given statement DIRECTLY
@@ -225,7 +225,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getFollowsStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getFollowsStmtType(Statement &statement, StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which follows the given statement DIRECTLY or
@@ -234,7 +234,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getFollowsStarStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getFollowsStarStmtType(Statement &statement, StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which follows any statement i.e. there exist a
@@ -242,7 +242,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getFollowsWildcardType(StatementType type) const override;
+    EntitySet getFollowsWildcardType(StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which follows any statement i.e. there exist a
@@ -250,7 +250,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getFollowsStarWildcardType(StatementType type) const override;
+    EntitySet getFollowsStarWildcardType(StatementType type) const override;
 
     /**
      * Returns true if statement1 DIRECTLY precedes statement2, false otherwise
@@ -318,13 +318,13 @@ public:
      * @param type The type of the statement
      * @return An unordered set of Statement, Variable pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getModifiesStmtPair(StatementType type) const override;
+    EntityPairSet getModifiesStmtPair(StatementType type) const override;
 
     /**
      * Returns an unordered_set of Procedure, Variable pair where the procedure modifies the variable.
      * @return An unordered set of Procedure, Variable pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getModifiesProcPair() const override;
+    EntityPairSet getModifiesProcPair() const override;
 
     /**
      * Returns an unordered_set of statements of StatementType type which modifies the given variable
@@ -332,14 +332,14 @@ public:
      * @param var The variable that is modified by the statements
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getModifiesTypeIdent(StatementType type, Variable &var) const override;
+    EntitySet getModifiesTypeIdent(StatementType type, Variable &var) const override;
 
     /**
      * Returns an unordered_set of procedures which modifies the given variable
      * @param var The variable that is modified by the procedure
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getModifiesProcIdent(Variable &var) const override;
+    EntitySet getModifiesProcIdent(Variable &var) const override;
 
 
     /**
@@ -347,27 +347,27 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getModifiesStmt(StatementType type) const override;
+    EntitySet getModifiesStmt(StatementType type) const override;
 
     /**
      * Returns an unordered_set of procedures which modifies any variable
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getModifiesProc() const override;
+    EntitySet getModifiesProc() const override;
 
     /**
      * Returns an unordered_set of variables which is modified by the given statement
      * @param stmt The statement that modifies the variables
      * @return An unordered set of variables
      */
-    std::unordered_set<Entity> getModifiesVar(Statement &stmt) const override;
+    EntitySet getModifiesVar(Statement &stmt) const override;
 
     /**
      * Returns an unordered_set of variables which is modified by the given procedure
      * @param proc The procedure that modifies the variables
      * @return An unordered set of variables
      */
-    std::unordered_set<Entity> getModifiesVar(Procedure &proc) const override;
+    EntitySet getModifiesVar(Procedure &proc) const override;
 
     /**
      * Returns a boolean value indicating if the given statement modifies the given variable
@@ -405,7 +405,7 @@ public:
      * @return An unordered set of all the Statement objects
      * @note Used for `pattern a (_,_)`
      */
-    std::unordered_set<Entity> getAllAssign() const override;
+    EntitySet getAllAssign() const override;
 
     /**
      * Returns an unordered_set of Statement objects from Assignment objects in the store with Expressions that match
@@ -416,7 +416,7 @@ public:
      * @return An unordered set of Statement objects
      * @note Used for `pattern a (_, "x")`
      */
-    std::unordered_set<Entity> getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const override;
+    EntitySet getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const override;
 
     /**
      * Returns an unordered_set of vectors containing Statement and Variable pairs from all the Assignment objects in
@@ -424,7 +424,7 @@ public:
      * @return An unordered set of vectors containing Statement and Variable pairs
      * @note Used for `pattern a (v, _)`
      */
-    std::unordered_set<std::vector<Entity>> getAllAssignStmtVarPair() const override;
+    EntityPairSet getAllAssignStmtVarPair() const override;
 
     /**
      * Returns an unordered_set of vectors containing Statement and Variable pairs from the Assignment objects in the
@@ -434,7 +434,7 @@ public:
      * @return An unordered set of vectors containing Statement and Variable pairs
      * @note Used for `pattern a (v, "x")`
      */
-    std::unordered_set<std::vector<Entity>> getAssignStmtsVarPairByRhs(Expression &rhs,
+    EntityPairSet getAssignStmtsVarPairByRhs(Expression &rhs,
                                                                        bool hasWildCard) const override;
 
     /**
@@ -444,7 +444,7 @@ public:
      * @return An unordered set of Statement objects
      * @note Used for `pattern a ("x", _)`
      */
-    std::unordered_set<Entity> getAssignStmtsByLhs(Variable &lhs) const override;
+    EntitySet getAssignStmtsByLhs(Variable &lhs) const override;
 
     /**
      * Returns an unordered_set of Statement objects from Assignment objects in the store where the Variable that is
@@ -455,7 +455,7 @@ public:
      * @return An unordered set of Statement objects
      * @note Used for `pattern a ("x", "x")`
      */
-    std::unordered_set<Entity> getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
+    EntitySet getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
                                                       bool hasRhsWildCard) const override;
 
     /**
@@ -465,7 +465,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getParentPair(StatementType formerType,
+    EntityPairSet getParentPair(StatementType formerType,
                                                           StatementType latterType) const override;
 
     /**
@@ -476,7 +476,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getParentStarPair(StatementType formerType,
+    EntityPairSet getParentStarPair(StatementType formerType,
                                                               StatementType latterType) const override;
 
     /**
@@ -486,7 +486,7 @@ public:
      * @param statement The statement that is the direct child of the statements to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getParentTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getParentTypeStmt(StatementType type, Statement &statement) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is the DIRECT or INDIRECT parent of the
@@ -495,14 +495,14 @@ public:
      * @param statement The statement that is the direct or indirect child of the statements to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getParentStarTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getParentStarTypeStmt(StatementType type, Statement &statement) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is the direct parent of any statement
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getParentTypeWildcard(StatementType type) const override;
+    EntitySet getParentTypeWildcard(StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is the direct or indirect parent of any
@@ -510,7 +510,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getParentStarTypeWildcard(StatementType type) const override;
+    EntitySet getParentStarTypeWildcard(StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is the DIRECT child of the given
@@ -519,7 +519,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getParentStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getParentStmtType(Statement &statement, StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is the DIRECT or INDIRECT child of the
@@ -528,14 +528,14 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getParentStarStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getParentStarStmtType(Statement &statement, StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is the direct child of any statement
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getParentWildcardType(StatementType type) const override;
+    EntitySet getParentWildcardType(StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is the direct or indirect child of any
@@ -543,7 +543,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getParentStarWildcardType(StatementType type) const override;
+    EntitySet getParentStarWildcardType(StatementType type) const override;
 
     /**
      * Returns a boolean value indicating if the first statement is the DIRECT parent of the second statement
@@ -662,67 +662,67 @@ public:
      * Returns an unordered_set of procedures which is called directly by any other procedure
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getCallees() const override;
+    EntitySet getCallees() const override;
 
     /**
      * Returns an unordered_set of procedures which is called directly or indirectly by any other procedure
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getCalleesStar() const override;
+    EntitySet getCalleesStar() const override;
 
     /**
      * Returns an unordered_set of procedures which calls any other procedure directly
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getCallers() const override;
+    EntitySet getCallers() const override;
 
     /**
      * Returns an unordered_set of procedures which calls any other procedure directly or indirectly
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getCallersStar() const override;
+    EntitySet getCallersStar() const override;
 
     /**
      * Returns an unordered_set of Procedure, Procedure pair where the first procedure calls the second procedure
      * DIRECTLY
      * @return An unordered set of Procedure, Procedure pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getCallsPair() const override;
+    EntityPairSet getCallsPair() const override;
 
     /**
      * Returns an unordered_set of Procedure, Procedure pair where the first procedure calls the second procedure
      * DIRECTLY or INDIRECTLY
      * @return An unordered set of Procedure, Procedure pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getCallsStarPair() const override;
+    EntityPairSet getCallsStarPair() const override;
 
     /**
      * Returns an unordered_set of procedures which calls the given procedure DIRECTLY
      * @param callee The procedure that is called by the procedures to be retrieved
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getCallers(Procedure &callee) const override;
+    EntitySet getCallers(Procedure &callee) const override;
 
     /**
      * Returns an unordered_set of procedures which calls the given procedure DIRECTLY or INDIRECTLY
      * @param callee The procedure that is called by the procedures to be retrieved
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getCallersStar(Procedure &callee) const override;
+    EntitySet getCallersStar(Procedure &callee) const override;
 
     /**
      * Returns an unordered_set of procedures which is called DIRECTLY by the given procedure
      * @param caller The procedure that calls the procedures to be retrieved
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getCallees(Procedure &caller) const override;
+    EntitySet getCallees(Procedure &caller) const override;
 
     /**
      * Returns an unordered_set of procedures which is called DIRECTLY or INDIRECTLY by the given procedure
      * @param caller The procedure that calls the procedures to be retrieved
      * @return An unordered set of procedures
      */
-    std::unordered_set<Entity> getCalleesStar(Procedure &caller) const override;
+    EntitySet getCalleesStar(Procedure &caller) const override;
 
     /**
      * Returns an unordered_set of Statement, Statement pair where the first statement is is executed IMMEDIATELY before
@@ -731,7 +731,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getNextPair(StatementType formerType,
+    EntityPairSet getNextPair(StatementType formerType,
                                                         StatementType latterType) const override;
 
     /**
@@ -742,7 +742,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getNextStarPair(StatementType formerType,
+    EntityPairSet getNextStarPair(StatementType formerType,
                                                             StatementType latterType) const override;
 
     /**
@@ -751,7 +751,7 @@ public:
      * @param stmtType The type of statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getNextStarSameStmt(StatementType stmtType) const override;
+    EntitySet getNextStarSameStmt(StatementType stmtType) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is executed IMMEDIATELY before the given
@@ -760,7 +760,7 @@ public:
      * @param statement The statement that executed IMMEDIATELY after the statements to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getNextTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getNextTypeStmt(StatementType type, Statement &statement) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is executed before the given statement,
@@ -769,7 +769,7 @@ public:
      * @param statement The statement that is executed after the statements to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getNextStarTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getNextStarTypeStmt(StatementType type, Statement &statement) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type that is executed IMMEDIATELY before any
@@ -777,7 +777,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getNextTypeWildcard(StatementType type) const override;
+    EntitySet getNextTypeWildcard(StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is executed before any statement, either
@@ -785,7 +785,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getNextStarTypeWildcard(StatementType type) const override;
+    EntitySet getNextStarTypeWildcard(StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is executed IMMEDIATELY after the given
@@ -794,7 +794,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getNextStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getNextStmtType(Statement &statement, StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is executed after the given statement,
@@ -803,7 +803,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getNextStarStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getNextStarStmtType(Statement &statement, StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is executed IMMEDIATELY after any
@@ -811,7 +811,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getNextWildcardType(StatementType type) const override;
+    EntitySet getNextWildcardType(StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is executed after any statement, either
@@ -819,7 +819,7 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getNextStarWildcardType(StatementType type) const override;
+    EntitySet getNextStarWildcardType(StatementType type) const override;
 
     /**
      * Returns a boolean value indicating if the first statement is executed IMMEDIATELY before the second statement
@@ -884,34 +884,34 @@ public:
      * Returns an unordered_set of If Statements that has variables as control variables
      * @return An unordered set of Statements
      */
-    std::unordered_set<Entity> getAllIfPatternStmts() const override;
+    EntitySet getAllIfPatternStmts() const override;
 
     /**
      * Returns an unordered_set of If Statements with the given variable as a control variable
      * @param var The variable to be checked
      * @return An unordered set of If Statements
      */
-    std::unordered_set<Entity> getIfStmtsByVar(Variable &var) const override;
+    EntitySet getIfStmtsByVar(Variable &var) const override;
 
     /**
      * Returns an unordered_set of vectors containing If Statement and Variable pairs where the variable is the control
      * variable of the If Statement
      * @return An unordered set of vectors containing If Statement and Variable pairs
      */
-    std::unordered_set<std::vector<Entity>> getAllIfStmtVarPair() const override;
+    EntityPairSet getAllIfStmtVarPair() const override;
 
     /**
      * Returns an unordered_set of While Statements that has variables as control variables
      * @return An unordered set of Statements
      */
-    std::unordered_set<Entity> getAllWhilePatternStmts() const override;
+    EntitySet getAllWhilePatternStmts() const override;
 
     /**
      * Returns an unordered_set of While Statements with the given variable as a control variable
      * @param var The variable to be checked
      * @return An unordered set of While Statements
      */
-    std::unordered_set<Entity> getWhileStmtsByVar(Variable &var) const override;
+    EntitySet getWhileStmtsByVar(Variable &var) const override;
 
     /**
      * Returns an unordered_set of vectors containing While Statement and Variable pairs where the variable is the
@@ -919,7 +919,7 @@ public:
      * @return An unordered set of vectors containing While Statement and Variable pairs
      */
 
-    std::unordered_set<std::vector<Entity>> getAllWhileStmtVarPair() const override;
+    EntityPairSet getAllWhileStmtVarPair() const override;
 
     /**
      * Returns an unordered_set of Statement, Statement pair where the first statement affects the second statement
@@ -928,7 +928,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getAffectsPair(StatementType formerType,
+    EntityPairSet getAffectsPair(StatementType formerType,
                                                            StatementType latterType) const override;
 
     /**
@@ -936,7 +936,7 @@ public:
      * @param stmtType The type of statement to be retrieved
      * @return An unordered_set of statements
      */
-    std::unordered_set<Entity> getAffectsSameStmt(StatementType stmtType) const override;
+    EntitySet getAffectsSameStmt(StatementType stmtType) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which affects the given statement DIRECTLY
@@ -944,14 +944,14 @@ public:
      * @param statement The statement that succeeds the statements to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getAffectsTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getAffectsTypeStmt(StatementType type, Statement &statement) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is affects any statement DIRECTLY
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getAffectsTypeWildcard(StatementType type) const override;
+    EntitySet getAffectsTypeWildcard(StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is affected by the given statement
@@ -960,14 +960,14 @@ public:
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getAffectsStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getAffectsStmtType(Statement &statement, StatementType type) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is affected by any statement DIRECTLY
      * @param type The type of the statement to be retrieved
      * @return An unordered set of statements
      */
-    std::unordered_set<Entity> getAffectsWildcardType(StatementType type) const override;
+    EntitySet getAffectsWildcardType(StatementType type) const override;
 
     /**
      * Returns true if statement1 DIRECTLY affects statement2, false otherwise

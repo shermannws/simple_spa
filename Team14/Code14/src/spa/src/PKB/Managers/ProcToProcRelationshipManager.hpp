@@ -10,33 +10,32 @@ void ProcToProcRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedu
 }
 
 template<typename S>
-std::unordered_set<std::vector<Entity>>
-ProcToProcRelationshipManager<S>::getRelationshipPair(bool requireDirect) const {
+EntityPairSet ProcToProcRelationshipManager<S>::getRelationshipPair(bool requireDirect) const {
     return requireDirect ? relationshipStore->getPairs() : starRelationshipStore->getPairs();
 }
 
 template<typename S>
-std::unordered_set<Entity> ProcToProcRelationshipManager<S>::getRelationshipFormer(Procedure &latterProcedure,
+EntitySet ProcToProcRelationshipManager<S>::getRelationshipFormer(Procedure &latterProcedure,
                                                                                    bool requireDirect) const {
     return ManagerUtils::getLeftEntitiesFromRightKeyNoMatch<Procedure, Procedure>(
             requireDirect ? *relationshipStore : *starRelationshipStore, latterProcedure);
 }
 
 template<typename S>
-std::unordered_set<Entity> ProcToProcRelationshipManager<S>::getRelationshipFormer()
+EntitySet ProcToProcRelationshipManager<S>::getRelationshipFormer()
         const {// Same for Calls and Calls* since Calls* is a superset of Calls
     return ManagerUtils::getLeftKeysNoMatch<Procedure, Procedure>(*relationshipStore);
 }
 
 template<typename S>
-std::unordered_set<Entity> ProcToProcRelationshipManager<S>::getRelationshipLatter(Procedure &formerProcedure,
+EntitySet ProcToProcRelationshipManager<S>::getRelationshipLatter(Procedure &formerProcedure,
                                                                                    bool requireDirect) const {
     return ManagerUtils::getRightEntitiesFromLeftKeyNoMatch<Procedure, Procedure>(
             requireDirect ? *relationshipStore : *starRelationshipStore, formerProcedure);
 }
 
 template<typename S>
-std::unordered_set<Entity> ProcToProcRelationshipManager<S>::getRelationshipLatter()
+EntitySet ProcToProcRelationshipManager<S>::getRelationshipLatter()
         const {// Same for Calls and Calls* since Calls* is a superset of Calls
     return ManagerUtils::getRightKeysNoMatch<Procedure, Procedure>(*relationshipStore);
 }

@@ -52,7 +52,7 @@ public:
      * @param assignment The Assignment object
      * @return The Statement object that represents the assignment statement
      */
-    static Entity getStmtFromAssign(const Assignment &assignment);
+    static EntityPointer getStmtFromAssign(const std::shared_ptr<Assignment> assignment);
 
     /**
      * @brief Returns the Statement and Variable Pair as a vector from the Assignment object
@@ -60,7 +60,7 @@ public:
      * @return A vector containing the Statement and Variable objects of the Assignment object
      * @note The Statement object is at index 0 and the Variable object is at index 1
      */
-    static std::vector<Entity> getStmtVarPairFromAssign(const Assignment &assignment);
+    static std::vector<EntityPointer> getStmtVarPairFromAssign(const std::shared_ptr<Assignment> assignment);
 
     /**
      * @brief Returns the Statement object from the Assignment object

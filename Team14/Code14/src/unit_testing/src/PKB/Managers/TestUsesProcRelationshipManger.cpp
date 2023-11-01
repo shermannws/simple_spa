@@ -36,25 +36,25 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Uses Procedure-Variable Relationship Ret
 
     REQUIRE(usesProcRelationshipManager.getRelationshipIdent(variableX).size() == 2);
     auto v = usesProcRelationshipManager.getRelationshipIdent(variableX);
-    REQUIRE(find(v.begin(), v.end(), procedure1) != v.end());
-    REQUIRE(find(v.begin(), v.end(), procedure4) != v.end());
+    REQUIRE(find(v.begin(), v.end(), make_shared<Procedure>(procedure1)) != v.end());
+    REQUIRE(find(v.begin(), v.end(), make_shared<Procedure>(procedure4)) != v.end());
 
 
     REQUIRE(usesProcRelationshipManager.getRelationshipProc().size() == 4);
     v = usesProcRelationshipManager.getRelationshipProc();
-    REQUIRE(find(v.begin(), v.end(), procedure1) != v.end());
-    REQUIRE(find(v.begin(), v.end(), procedure2) != v.end());
-    REQUIRE(find(v.begin(), v.end(), procedure3) != v.end());
-    REQUIRE(find(v.begin(), v.end(), procedure4) != v.end());
+    REQUIRE(find(v.begin(), v.end(), make_shared<Procedure>(procedure1)) != v.end());
+    REQUIRE(find(v.begin(), v.end(), make_shared<Procedure>(procedure2)) != v.end());
+    REQUIRE(find(v.begin(), v.end(), make_shared<Procedure>(procedure3)) != v.end());
+    REQUIRE(find(v.begin(), v.end(), make_shared<Procedure>(procedure4)) != v.end());
 
     REQUIRE(usesProcRelationshipManager.getRelationshipVar(procedure1).size() == 1);
     v = usesProcRelationshipManager.getRelationshipVar(procedure1);
-    REQUIRE(find(v.begin(), v.end(), variableX) != v.end());
+    REQUIRE(find(v.begin(), v.end(), make_shared<Variable>(variableX)) != v.end());
     REQUIRE(usesProcRelationshipManager.getRelationshipVar(procedure4).size() == 3);
     v = usesProcRelationshipManager.getRelationshipVar(procedure4);
-    REQUIRE(find(v.begin(), v.end(), variableX) != v.end());
-    REQUIRE(find(v.begin(), v.end(), variableY) != v.end());
-    REQUIRE(find(v.begin(), v.end(), variableZ) != v.end());
+    REQUIRE(find(v.begin(), v.end(), make_shared<Variable>(variableX)) != v.end());
+    REQUIRE(find(v.begin(), v.end(), make_shared<Variable>(variableY)) != v.end());
+    REQUIRE(find(v.begin(), v.end(), make_shared<Variable>(variableZ)) != v.end());
 
 
     REQUIRE(usesProcRelationshipManager.isRelationship(procedure1, variableX) == true);

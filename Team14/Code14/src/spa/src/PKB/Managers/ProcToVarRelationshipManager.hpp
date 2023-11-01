@@ -8,22 +8,22 @@ void ProcToVarRelationshipManager<S>::storeRelationship(std::shared_ptr<Procedur
 }
 
 template<typename S>
-std::unordered_set<std::vector<Entity>> ProcToVarRelationshipManager<S>::getRelationshipProcPair() const {
+EntityPairSet ProcToVarRelationshipManager<S>::getRelationshipProcPair() const {
     return relationshipStore->getPairs();
 }
 
 template<typename S>
-std::unordered_set<Entity> ProcToVarRelationshipManager<S>::getRelationshipIdent(Variable &var) const {
+EntitySet ProcToVarRelationshipManager<S>::getRelationshipIdent(Variable &var) const {
     return ManagerUtils::getLeftEntitiesFromRightKeyNoMatch<Procedure, Variable>(*relationshipStore, var);
 }
 
 template<typename S>
-std::unordered_set<Entity> ProcToVarRelationshipManager<S>::getRelationshipProc() const {
+EntitySet ProcToVarRelationshipManager<S>::getRelationshipProc() const {
     return ManagerUtils::getLeftKeysNoMatch<Procedure, Variable>(*relationshipStore);
 }
 
 template<typename S>
-std::unordered_set<Entity> ProcToVarRelationshipManager<S>::getRelationshipVar(Procedure &procedure) const {
+EntitySet ProcToVarRelationshipManager<S>::getRelationshipVar(Procedure &procedure) const {
     return ManagerUtils::getRightEntitiesFromLeftKeyNoMatch<Procedure, Variable>(*relationshipStore, procedure);
 }
 

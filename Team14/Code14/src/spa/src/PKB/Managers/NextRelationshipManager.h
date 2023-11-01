@@ -7,6 +7,7 @@
 #include "Commons/Entities/Statement.h"
 #include "PKB/Managers/StmtToStmtRelationshipManager.h"
 #include "PKB/RelationshipStores/NextRelationshipStore.h"
+#include "PKB/PkbTypes.h"
 
 /**
  * @class NextRelationshipManager is responsible for storing the Next relationship
@@ -38,7 +39,7 @@ public:
      * @param stmtType The type of statement to retrieve
      * @return An unordered_set of statements that executes after itself in some execution sequence
      */
-    std::unordered_set<Entity> getNextStarSameStmt(StatementType stmtType) const;
+     EntitySet getNextStarSameStmt(StatementType stmtType) const;
 
     /**
      * Returns an unordered_set of Statement, Statement pair where the first statement is related to the second
@@ -48,7 +49,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of Statement, Statement pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getRelationshipPair(StatementType formerType, StatementType latterType,
+     EntityPairSet getRelationshipPair(StatementType formerType, StatementType latterType,
                                                                 bool requireDirect) const override;
 
     /**
@@ -59,7 +60,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    std::unordered_set<Entity> getRelationshipTypeStmt(StatementType type, Statement &statement,
+    EntitySet getRelationshipTypeStmt(StatementType type, Statement &statement,
                                                        bool requireDirect) const override;
 
     /**
@@ -69,7 +70,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    std::unordered_set<Entity> getRelationshipTypeWildcard(StatementType type, bool requireDirect) const override;
+    EntitySet getRelationshipTypeWildcard(StatementType type, bool requireDirect) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to the given statement. The
@@ -79,7 +80,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    std::unordered_set<Entity> getRelationshipStmtType(Statement &statement, StatementType type,
+    EntitySet getRelationshipStmtType(Statement &statement, StatementType type,
                                                        bool requireDirect) const override;
 
     /**
@@ -89,7 +90,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    std::unordered_set<Entity> getRelationshipWildcardType(StatementType type, bool requireDirect) const override;
+    EntitySet getRelationshipWildcardType(StatementType type, bool requireDirect) const override;
 
     /**
      * Returns true if statement1 is related to statement2, false otherwise
