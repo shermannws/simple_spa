@@ -6,22 +6,22 @@ call, print
 2 - procedure.procName = call.procName
 procedure p; call c;
 Select c.procName with not c.procName = p.procName
-none
+print
 5000
 3 - procedure.procName = variable.varName
 procedure p; variable v;
 Select v with not v.varName = p.procName
-read, x, y, a, b, k
+print, read, x, y, a, b, call, k
 5000
 4 - procedure.procName = read.varName
 procedure p; read r;
 Select r with not p.procName = r.varName
-2, 8
+2, 9, 10
 5000
 5 - procedure.procName = print.varName
 procedure p; print pn; variable v;
 Select v with not p.procName = pn.varName
-none
+print, read, x, y, a, b, call, k
 5000
 6 - procedure.procName = IDENT
 procedure p;
@@ -36,7 +36,7 @@ none
 8 - call.procName = variable.varName
 call c; variable v;
 Select v.varName with not v.varName = c.procName
-read, x, y, a, b, k
+read, x, y, a, b, call, k
 5000
 9 - call.procName = read.varName
 call c; read r;
@@ -99,13 +99,13 @@ Select pn with not pn.varName = "call"
 4, 5
 5000
 21 - IDENT = IDENT
-procedure with not;
-Select with not.procName with not "x" = "x"
+procedure with;
+Select with.procName with not "x" = "x"
 none
 5000
 22 - IDENT = IDENT
-procedure with not;
-Select with not with not "x" = "x"
+procedure with;
+Select with with not "x" = "x"
 none
 5000
 23 - constant.value = constant.value
@@ -116,17 +116,17 @@ Select c.value with not c.value = c1.value
 24 - constant.value = stmt.stmt#
 constant c; stmt s;
 Select s.stmt# with not c.value = s.stmt#
-9, 10
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 5000
 25 - constant.value = read.stmt#
 constant c; read r;
 Select r.varName with not c.value = r.stmt#
-k, print
+read, k, print
 5000
 26 - constant.value = read.stmt#
 constant c; read r;
 Select r.stmt# with not c.value = r.stmt#
-9, 10
+2, 9, 10
 5000
 27 - constant.value = print.stmt#
 constant c; print pn;
@@ -306,7 +306,7 @@ Select ifs with not c.stmt# = ifs.stmt#
 62 - call.stmt# = assign.stmt#
 call c; assign a;
 Select c with not c.stmt# = a.stmt#
-7
+1
 5000
 63 - call.stmt# = INTEGER
 call BOOLEAN;
