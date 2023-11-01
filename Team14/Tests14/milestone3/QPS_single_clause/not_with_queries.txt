@@ -1,4 +1,4 @@
-1 procedure.procName = procedure.procName DONE
+1 - procedure.procName = procedure.procName DONE
 procedure p, p1;
 Select p with not p.procName = p1.procName
 call, print
