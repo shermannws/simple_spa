@@ -198,4 +198,25 @@ TEST_CASE_METHOD(UnitTestFixture, "Test sortClauses") {
                            find(actualGroups.begin(), actualGroups.end(), group4_1) != actualGroups.end();
         REQUIRE(group4Check);
     }
+
+    SECTION("With negated clauses") {
+        PQLParser parser("stmt s1, s2; Select s1 such that not Follows(s1, 2) with not s1.stmt# = s2.stmt# such that "
+                         "Next(s1,s2) ");
+        Query queryObj = parser.parse();
+        auto pairs = QPSOptimizer::getGroupScorePairs(queryObj);
+        vector<shared_ptr<Clause>> expected = {
+                queryObj.getSuchThat()[1], queryObj.getSuchThat()[0],
+                queryObj.getWith()[0]};// Next(s1,s2), not Follows(s1,2), not s1.stmt# = s2.stmt#
+
+        vector<vector<shared_ptr<Clause>>> actualGroups;
+
+        for (auto &pair: pairs) {
+            std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
+            group = QPSOptimizer::sortClauses(group);
+            actualGroups.push_back(group);
+        }
+        REQUIRE(pairs.size() == 1);
+
+        REQUIRE(find(actualGroups.begin(), actualGroups.end(), expected) != actualGroups.end());
+    }
 }

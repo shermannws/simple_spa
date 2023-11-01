@@ -64,10 +64,11 @@ GroupScore QPSOptimizer::getGroupScore(SizeTScore numClauses, std::unordered_set
 }
 
 ClauseScore QPSOptimizer::getClauseScore(const std::shared_ptr<Clause> &clause) {
+    int negation = clause->isNegation();
     auto numSyns = clause->getSynonyms().size();
     int typeScore = QPSOptimizer::clauseTypeScore[clause->getType()];
 
-    return std::tuple{numSyns, typeScore};
+    return std::tuple{negation, numSyns, typeScore};
 }
 
 bool QPSOptimizer::intersect(const std::unordered_set<Synonym> &currSynGroup, const std::vector<Synonym> &synonyms) {

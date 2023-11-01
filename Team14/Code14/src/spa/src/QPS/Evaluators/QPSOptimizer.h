@@ -16,9 +16,9 @@ typedef size_t SizeTScore;
 typedef std::tuple<IntScore, SizeTScore, IntScore> GroupScore;
 
 /** Type alias for the score of a Clause, defined as follows:
- * (no of synonyms, score of ClauseType)
+ * (whether it's a negated clause, no of synonyms, score of ClauseType)
  */
-typedef std::tuple<SizeTScore, IntScore> ClauseScore;
+typedef std::tuple<IntScore, SizeTScore, IntScore> ClauseScore;
 
 /**
  * @brief QPS Optimizer class.
@@ -75,7 +75,8 @@ private:
     /**
      * Calculates the score of the Clause based on the number of synonyms and the ClauseType
      * @param clause the Clause which score to calculate
-     * @return The ClauseScore defined as follows: (number of synonyms, the ClauseType score)
+     * @return The ClauseScore defined as follows: (whether it's a negated clause, number of synonyms, the ClauseType
+     * score)
      */
     static ClauseScore getClauseScore(const std::shared_ptr<Clause> &clause);
 
