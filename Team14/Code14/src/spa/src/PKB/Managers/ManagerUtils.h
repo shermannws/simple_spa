@@ -31,8 +31,8 @@ private:
      * @return An unordered_set of entities
      */
     template<typename E, typename S, typename R>
-    static std::unordered_set<std::shared_ptr<E>> getFromSetStore(std::shared_ptr<S> store, std::function<bool(std::shared_ptr<R>)> matcher,
-                                                 std::function<std::shared_ptr<E>(std::shared_ptr<R>)> getter);
+    static std::unordered_set<E> getFromSetStore(std::shared_ptr<S> store, std::function<bool(std::shared_ptr<R>)> matcher,
+                                                 std::function<E(std::shared_ptr<R>)> getter);
 
     /**
      * @brief A function that retrieves objects from a map-based store based on a matcher and getter function

@@ -17,8 +17,8 @@ bool ManagerUtils::isStmtTypeAllowed(ClauseGroup clauseGroup, StatementType stat
 }
 
 template<typename E, typename S, typename R>
-std::unordered_set<std::shared_ptr<E>> ManagerUtils::getFromSetStore(std::shared_ptr<S> store, std::function<bool(std::shared_ptr<R>)> matcher,
-                                                    std::function<std::shared_ptr<E>(std::shared_ptr<R>)> getter) {
+std::unordered_set<E> ManagerUtils::getFromSetStore(std::shared_ptr<S> store, std::function<bool(std::shared_ptr<R>)> matcher,
+                                                    std::function<E(std::shared_ptr<R>)> getter) {
     auto result = std::unordered_set<std::shared_ptr<E>>();
     for (auto it = store->getBeginIterator(); it != store->getEndIterator(); it++) {
         if (matcher(*it)) { result.insert(getter(*it)); }
@@ -30,14 +30,14 @@ template<typename S, typename R>
 EntitySet ManagerUtils::getEntitiesFromStore(std::shared_ptr<S> store,
                                                               std::function<bool(std::shared_ptr<R>)> matcher,
                                                               std::function<EntityPointer(std::shared_ptr<R>)> getter) {
-    return getFromSetStore<Entity, S, R>(store, matcher, getter);
+    return getFromSetStore<EntityPointer, S, R>(store, matcher, getter);
 }
 
 template<typename E>
 EntitySet ManagerUtils::getEntitiesFromEntityStore(std::shared_ptr<EntityStore<E>> store,
                                                                     std::function<bool(std::shared_ptr<E>)> matcher,
                                                                     std::function<EntityPointer(std::shared_ptr<E>)> getter) {
-    return getFromSetStore<Entity, EntityStore<E>, E>(store, matcher, getter);
+    return getFromSetStore<EntityPointer, EntityStore<E>, E>(store, matcher, getter);
 }
 
 template<typename S, typename R>
