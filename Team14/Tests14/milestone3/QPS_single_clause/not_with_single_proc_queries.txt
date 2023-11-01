@@ -1,0 +1,25 @@
+1 - procedure.procName = procedure.procName
+procedure p, p1;
+Select p with not p.procName = p1.procName
+none
+5000
+2 - call.procName = call.procName
+call c1, c2;
+Select c1.procName with not c1.procName = c2.procName
+none
+5000
+3 - variable.varName = variable.varName
+variable v1, v2;
+Select v1 with not v1.varName = v2.varName
+none
+5000
+4 - read.varname = read.varName
+read r1, r2;
+Select r1 with not r1.varName = r2.varName
+none
+5000
+5 - print.varName = print.varName
+print pn1, pn2;
+Select pn1 with not pn1.varName = pn2.varName
+none
+5000
