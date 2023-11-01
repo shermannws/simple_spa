@@ -246,8 +246,8 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - e2e with nested s
     // Check Follows*
     auto follows1star = followsRelationshipManager->getRelationshipStmtType(stmt1, StatementType::Stmt, false);
     CHECK(follows1star.size() == 2);
-    CHECK(std::find(follows1star.begin(), follows1star.end(), make_shared<Statement>(stmt9)) != follows1star.end());
-    CHECK(std::find(follows1star.begin(), follows1star.end(), make_shared<Statement>(stmt10)) != follows1star.end());
+    CHECK(follows1star.find(make_shared<Statement>(stmt9)) != follows1star.end());
+    CHECK(follows1star.find(make_shared<Statement>(stmt10)) != follows1star.end());
 
     // Check Uses exhaustively
     CHECK(usesRelationshipManager->getRelationshipStmtPair(StatementType::Stmt).size() == 17);

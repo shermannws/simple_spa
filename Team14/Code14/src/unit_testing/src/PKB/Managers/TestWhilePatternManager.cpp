@@ -53,24 +53,24 @@ TEST_CASE_METHOD(UnitTestFixture, "Test While Pattern Retrieval") {
 
     EntitySet getStmtByVar = whilePatternManager.getAllStmts();
     REQUIRE(getStmtByVar.size() == 3);
-    REQUIRE(find(getStmtByVar.begin(), getStmtByVar.end(), testStmt1) != getStmtByVar.end());
-    REQUIRE(find(getStmtByVar.begin(), getStmtByVar.end(), testStmt2) != getStmtByVar.end());
-    REQUIRE(find(getStmtByVar.begin(), getStmtByVar.end(), testStmt3) != getStmtByVar.end());
+    REQUIRE(getStmtByVar.find(testStmt1) != getStmtByVar.end());
+    REQUIRE(getStmtByVar.find(testStmt2) != getStmtByVar.end());
+    REQUIRE(getStmtByVar.find(testStmt3) != getStmtByVar.end());
 
     REQUIRE(whilePatternManager.getAllStmtVarPair().size() == 6);
 
     EntitySet getStmtsByVarX = whilePatternManager.getStmtsByVar(testX);
     REQUIRE(getStmtsByVarX.size() == 2);
-    REQUIRE(find(getStmtsByVarX.begin(), getStmtsByVarX.end(), testStmt1) != getStmtsByVarX.end());
-    REQUIRE(find(getStmtsByVarX.begin(), getStmtsByVarX.end(), testStmt2) != getStmtsByVarX.end());
+    REQUIRE(getStmtsByVarX.find(testStmt1) != getStmtsByVarX.end());
+    REQUIRE(getStmtsByVarX.find(testStmt2) != getStmtsByVarX.end());
 
     EntitySet getStmtsByVarY = whilePatternManager.getStmtsByVar(testY);
     REQUIRE(getStmtsByVarY.size() == 2);
-    REQUIRE(find(getStmtsByVarY.begin(), getStmtsByVarY.end(), testStmt1) != getStmtsByVarY.end());
-    REQUIRE(find(getStmtsByVarY.begin(), getStmtsByVarY.end(), testStmt2) != getStmtsByVarY.end());
+    REQUIRE(getStmtsByVarY.find(testStmt1) != getStmtsByVarY.end());
+    REQUIRE(getStmtsByVarY.find(testStmt2) != getStmtsByVarY.end());
 
     EntitySet getStmtsByVarZ = whilePatternManager.getStmtsByVar(testZ);
     REQUIRE(getStmtsByVarZ.size() == 2);
-    REQUIRE(find(getStmtsByVarZ.begin(), getStmtsByVarZ.end(), testStmt1) != getStmtsByVarZ.end());
-    REQUIRE(find(getStmtsByVarZ.begin(), getStmtsByVarZ.end(), testStmt3) != getStmtsByVarZ.end());
+    REQUIRE(getStmtsByVarZ.find(testStmt1) != getStmtsByVarZ.end());
+    REQUIRE(getStmtsByVarZ.find(testStmt3) != getStmtsByVarZ.end());
 }

@@ -19,7 +19,7 @@ bool ManagerUtils::isStmtTypeAllowed(ClauseGroup clauseGroup, StatementType stat
 template<typename E, typename S, typename R>
 std::unordered_set<E> ManagerUtils::getFromSetStore(std::shared_ptr<S> store, std::function<bool(std::shared_ptr<R>)> matcher,
                                                     std::function<E(std::shared_ptr<R>)> getter) {
-    auto result = std::unordered_set<std::shared_ptr<E>>();
+    auto result = std::unordered_set<E>();
     for (auto it = store->getBeginIterator(); it != store->getEndIterator(); it++) {
         if (matcher(*it)) { result.insert(getter(*it)); }
     }
@@ -205,7 +205,7 @@ std::unordered_set<std::vector<std::shared_ptr<R>>> ManagerUtils::getPairs(S &st
         if (leftMatcher(former)) {
             for (auto it2 = latterSet->getBeginIterator(); it2 != latterSet->getEndIterator(); ++it2) {
                 auto latter = *it2;
-                if (rightMatcher(latter)) { result.insert(std::vector<R>{former, latter}); }
+                if (rightMatcher(latter)) { result.insert(std::vector<std::shared_ptr<R>>{former, latter}); }
             }
         }
     }
