@@ -24,7 +24,7 @@ std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1, std::sha
 std::shared_ptr<Result> ResultHandler::hashJoin(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
                                                 std::vector<Synonym> &header, std::vector<Synonym> &commonSyns) {
     std::shared_ptr<Result> finalResult = std::make_shared<Result>(header);
-    std::unordered_set<std::vector<Entity>> finalTuples;
+    std::unordered_set<ResultTuple> finalTuples;
 
     // build hashtable
     auto hashtable = partition(commonSyns, r1);
@@ -36,7 +36,7 @@ std::shared_ptr<Result> ResultHandler::hashJoin(std::shared_ptr<Result> r1, std:
     auto tuples2 = r2->getTuples();
     // probe
     for (auto &row2: tuples2) {
-        std::vector<Entity> key;
+        ResultTuple key;
         for (const auto &idx: keyIndices) { key.push_back(row2[idx]); }// build hash key
 
         if (!hashtable.count(key)) { continue; }// skip if no matching bucket
@@ -54,7 +54,7 @@ std::shared_ptr<Result> ResultHandler::hashJoin(std::shared_ptr<Result> r1, std:
 std::shared_ptr<Result> ResultHandler::nestedLoopJoin(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
                                                       std::vector<Synonym> &header) {
     std::shared_ptr<Result> finalResult = std::make_shared<Result>(header);
-    std::unordered_set<std::vector<Entity>> finalTuples;
+    std::unordered_set<ResultTuple> finalTuples;
 
     auto tuples1 = r1->getTuples();
     auto tuples2 = r2->getTuples();
@@ -102,10 +102,9 @@ RowTemplate ResultHandler::getRowTemplate(std::shared_ptr<Result> r1, std::share
     return rowTemplate;
 }
 
-std::vector<Entity> ResultHandler::buildRow(const RowTemplate &temp, const std::vector<Entity> &row1,
-                                            const std::vector<Entity> &row2) {
-    std::vector<std::vector<Entity>> src = {row1, row2};
-    std::vector<Entity> newRow;
+ResultTuple ResultHandler::buildRow(const RowTemplate &temp, const ResultTuple &row1, const ResultTuple &row2) {
+    std::vector<ResultTuple> src = {row1, row2};
+    ResultTuple newRow;
     for (const auto &idx: temp) { newRow.push_back(src[idx.first][idx.second]); }
     return newRow;
 }
@@ -122,8 +121,7 @@ std::unordered_map<idx, idx> ResultHandler::getMatchMap(std::shared_ptr<Result> 
 }
 
 
-bool ResultHandler::isMatch(const std::vector<Entity> &row1, const std::vector<Entity> &row2,
-                            const std::unordered_map<int, int> &matchMap) {
+bool ResultHandler::isMatch(const ResultTuple &row1, const ResultTuple &row2, const std::unordered_map<int, int> &matchMap) {
     for (auto &it: matchMap) {
         if (row1[it.first] == row2[it.second]) { continue; }
         return false;
@@ -144,7 +142,7 @@ hashTable ResultHandler::partition(std::vector<Synonym> &synonyms, std::shared_p
     auto rows = result->getTuples();
     hashTable buckets;
     for (const auto &row: rows) {
-        std::vector<Entity> key;
+        ResultTuple key;
         for (const auto &idx: keyIndices) {// build key of join attributes
             key.push_back(row[idx]);
         }

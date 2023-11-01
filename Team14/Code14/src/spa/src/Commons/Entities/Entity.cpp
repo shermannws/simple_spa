@@ -55,3 +55,20 @@ bool std::equal_to<std::vector<Entity>>::operator()(std::vector<Entity> const &l
     }
     return true;
 };
+
+std::size_t std::hash<std::vector<std::shared_ptr<Entity>>>::operator()(const std::vector<std::shared_ptr<Entity>> &entities) const {
+    std::hash<std::shared_ptr<Entity>> hasher;
+
+    std::size_t seed = entities.size();
+    for (auto &i: entities) { seed ^= hasher(i) + 0x9e3779b9 + (seed << 6) + (seed >> 2); }
+    return seed;
+};
+
+bool std::equal_to<std::vector<std::shared_ptr<Entity>>>::operator()(std::vector<std::shared_ptr<Entity>> const &lhs,
+                                                    std::vector<std::shared_ptr<Entity>> const &rhs) const {
+    if (lhs.size() != rhs.size()) { return false; }
+    for (size_t i = 0; i < lhs.size(); ++i) {
+        if (lhs[i]->getEntityValue() != rhs[i]->getEntityValue()) { return false; }
+    }
+    return true;
+};

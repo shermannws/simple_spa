@@ -7,17 +7,8 @@
 #include "QPS/Query.h"
 #include "Result.h"
 
-/* hash function for a vector of Entities used for hash join partitioning */
-struct syn_vector_hash {
-    std::size_t operator()(const std::vector<Entity> &entities) const {
-        std::size_t seed = 0;
-        for (const auto &ent: entities) { seed ^= std::hash<Entity>()(ent) + 0x9e3779b9 + (seed << 6) + (seed >> 2); }
-        return seed;
-    }
-};
-
 /* hashtable built in hash join algorithm */
-using hashTable = std::unordered_map<std::vector<Entity>, std::unordered_set<std::vector<Entity>>, syn_vector_hash>;
+using hashTable = std::unordered_map<ResultTuple, std::unordered_set<ResultTuple>>;
 
 /* template for the corresponding synonyms in the form of a pair representing <idx of input row, idx in input row> */
 using RowTemplate = std::vector<std::pair<idx, idx>>;
@@ -84,8 +75,7 @@ private:
      * @param row2 second input row
      * @return a vector of Entities representing the resultant row
      */
-    std::vector<Entity> buildRow(const RowTemplate &temp, const std::vector<Entity> &row1,
-                                 const std::vector<Entity> &row2);
+    ResultTuple buildRow(const RowTemplate &temp, const ResultTuple &row1, const ResultTuple &row2);
 
     /**
      * Gets a map of indices of the common synonyms between two tables
@@ -103,7 +93,7 @@ private:
      * @param row2 row from table 2
      * @return boolean
      */
-    bool isMatch(const std::vector<Entity> &row1, const std::vector<Entity> &row2,
+    bool isMatch(const ResultTuple &row1, const ResultTuple &row2,
                  const std::unordered_map<int, int> &matchMap);
 
     /**
