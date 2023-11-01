@@ -83,7 +83,7 @@ bool PQLEvaluator::evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause
 bool PQLEvaluator::evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Clause>> &clauses) {
     auto tmp = std::make_shared<Result>(true);
     for (auto &clause: clauses) {
-        tmp = evaluateNext(tmp, clause); //TODO rename to evaluateNegation and add if(negation) check here
+        tmp = evaluateNext(tmp, clause);// TODO rename to evaluateNegation and add if(negation) check here
         if (tmp->isFalse() || tmp->isEmpty()) { return false; }
     }
     return true;
