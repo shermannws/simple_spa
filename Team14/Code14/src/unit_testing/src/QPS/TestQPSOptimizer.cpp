@@ -185,7 +185,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test sortClauses") {
 
         for (auto &pair: pairs) {
             std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
-            group = QPSOptimizer::sortClauses(group, std::get<1>(pair.second));
+            group = QPSOptimizer::sortClauses(group);
             actualGroups.push_back(group);
         }
         REQUIRE(pairs.size() == 4);

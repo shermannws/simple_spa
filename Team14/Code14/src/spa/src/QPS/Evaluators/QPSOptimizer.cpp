@@ -122,23 +122,11 @@ QPSOptimizer::getClauseScorePairs(std::vector<std::shared_ptr<Clause>> &clauses)
 }
 
 
-std::vector<std::shared_ptr<Clause>> QPSOptimizer::sortClauses(std::vector<std::shared_ptr<Clause>> &clauses,
-                                                               SizeTScore numSynonyms) {
+std::vector<std::shared_ptr<Clause>> QPSOptimizer::sortClauses(std::vector<std::shared_ptr<Clause>> &clauses) {
     std::vector<std::shared_ptr<Clause>> finalClauses;
     finalClauses.reserve(clauses.size());// preallocate memory to reduce reallocation
     auto pairs = getClauseScorePairs(clauses);
     std::priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::compareClauseByScore);
-
-    if (!numSynonyms) {// if no synonym
-        while (!pq.empty()) {
-            auto pair = pq.top();
-            auto clause = pair.first;
-            finalClauses.push_back(clause);
-            pq.pop();
-        }
-        return finalClauses;
-    }
-
 
     std::vector<std::pair<std::shared_ptr<Clause>, ClauseScore>> tempGroup;
     std::unordered_set<Synonym> currSynGroup;

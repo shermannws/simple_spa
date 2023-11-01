@@ -9,13 +9,14 @@ typedef int IntScore;
 
 /* Type alias for a non-negative size_t value representing a score */
 typedef size_t SizeTScore;
+
 /** Type alias for the score of a clause group, defined as follows:
  * (number of select synonyms, num of synonyms, num of clauses)
  */
 typedef std::tuple<IntScore, SizeTScore, IntScore> GroupScore;
 
 /** Type alias for the score of a Clause, defined as follows:
- * (no of synonyms, type of clause, type of such that / pattern / with)
+ * (no of synonyms, score of ClauseType)
  */
 typedef std::tuple<SizeTScore, IntScore> ClauseScore;
 
@@ -103,8 +104,13 @@ public:
     static std::vector<std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore>>
     getGroupScorePairs(Query &query);
 
-    static std::vector<std::shared_ptr<Clause>> sortClauses(std::vector<std::shared_ptr<Clause>> &clauses,
-                                                            SizeTScore numSynonyms);
+    /**
+     * Sorts a vector of Clauses by their ClauseScore
+     * @param clauses The vector of Clauses to sort
+     * @return The sorted vector of Clauses
+     */
+    static std::vector<std::shared_ptr<Clause>> sortClauses(std::vector<std::shared_ptr<Clause>> &clauses);
+
     /**
      * Compares two pairs by the GroupScore of the clause group for a min-heap priority queue
      * @param p1 The first pair of (clause group, score) to compare
@@ -114,6 +120,12 @@ public:
     static bool compareGroupByScore(const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p1,
                                     const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p2);
 
+    /**
+     * Compares two pairs by the ClauseScore of the clause for a min-heap priority queue
+     * @param p1 The first pair of (clause, score) to compare
+     * @param p2 The second pair of (clause, score) to compare
+     * @return true if the first pair has a higher score, otherwise false
+     */
     static bool compareClauseByScore(const std::pair<std::shared_ptr<Clause>, ClauseScore> &p1,
                                      const std::pair<std::shared_ptr<Clause>, ClauseScore> &p2);
 };

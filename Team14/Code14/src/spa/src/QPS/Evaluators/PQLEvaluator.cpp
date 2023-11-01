@@ -74,7 +74,7 @@ std::string PQLEvaluator::concat(std::vector<std::string> strings) {
 bool PQLEvaluator::evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause>> &clauses) {
     for (auto &clause: clauses) {
         auto res = evaluateClause(clause);
-        if (res->isFalse() || res->isEmpty()) { return false; }
+        if (res->isFalse()) { return false; }
     }
     return true;
 }
@@ -97,12 +97,13 @@ Result PQLEvaluator::evaluate(Query &query) {
         auto pair = pq.top();
         pq.pop();
         std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
-        group = QPSOptimizer::sortClauses(group, std::get<1>(pair.second));
         if (!std::get<1>(pair.second)) {// no synonyms
             if (!evaluateBooleanGroup(group)) { return Result(false); }
         } else if (!std::get<0>(pair.second)) {// group with irrelevant synonyms
+            group = QPSOptimizer::sortClauses(group);
             if (!evaluateIrrelevantGroup(group)) { return Result(false); }
         } else {// those with selectSyns (and if select has synonym(s)
+            group = QPSOptimizer::sortClauses(group);
             for (auto &clause: group) {
                 res = resultHandler->getCombined(res, evaluateClause(clause));
                 if (res->isFalse()) { return Result(false); }
