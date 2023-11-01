@@ -26,7 +26,7 @@ std::shared_ptr<Result> ResultHandler::getDiff(std::shared_ptr<Result> r1, std::
     }
 
     r1->setTuples(mainSet);
-    return r1;
+    return cast(r1);
 }
 
 std::shared_ptr<Result> ResultHandler::join(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2) {
