@@ -1,22 +1,22 @@
 1a - Not Follows - first stmt - select first
 stmt s; print p;
 Select s such that not Follows(s,p)
-1, 2, 3, 4, 6, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
 1b - Not Follows - first stmt - select second
 stmt s; print p;
 Select p such that not Follows(s,p)
-17, 23, 24, 26, 31
+6, 8, 12, 17, 23, 24, 26, 31
 5000
 1c - Not Follows - second stmt - select first
 stmt s; assign a;
 Select a such that not Follows(a,s)
-19, 30
+1, 2, 3, 10, 14, 15, 19, 21, 30
 5000
 1d - Not Follows - second stmt - select second
 stmt s; assign a;
 Select s such that not Follows(a,s)
-1, 5, 6, 7, 8, 9, 10, 12, 13, 14, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
 1ei - Not Follows - Follows false case - same stmtlist
 
@@ -66,22 +66,22 @@ Select s such that not Follows(s,9)
 2a - Not Follows* - first stmt - select first
 stmt s; read r;
 Select s such that not Follows*(s,r)
-5, 6, 7, 8, 10, 11, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
 2b - Not Follows* - first stmt - select second
 stmt s; read r;
 Select r such that not Follows*(s,r)
-5, 7, 32
+5, 7, 13, 18, 32
 5000
 2c - Not Follows* - second stmt - select first
 stmt s; if i;
 Select s such that not Follows*(i,s)
-1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 29, 30, 31, 32
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
 2d - Not Follows* - second stmt - select second
 stmt s; if i;
 Select i such that not Follows*(i,s)
-
+4, 22
 5000
 2ei - Not Follows* - Follows* false case - same proc diff stmtlist same nested level
 
@@ -151,22 +151,22 @@ Select c such that not Modifies(c,_)
 3ci - Not ModifiesS - synonym second
 stmt s; variable v;
 Select s such that not Modifies(s,v)
-6, 8, 12, 17, 22, 23, 24, 25, 26, 27, 31
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
 3cii - Not ModifiesS - synonym second
 if i; variable v;
 Select i such that not Modifies(i,v)
-22
+4, 22
 5000
 3ciii - Not ModifiesS - synonym second
 while w; variable v;
 Select w such that not Modifies(w,v)
-25
+9, 16, 25, 28, 29
 5000
 3civ - Not ModifiesS - synonym second
 call c; variable v;
 Select c such that not Modifies(c,v)
-27
+11, 20, 27
 5000
 3d - Not ModifiesS - int first
 variable v;
@@ -176,7 +176,7 @@ x, z, one, two, three, four, five, ten, eleven, i, plus, mod, p, c, v, ww, print
 3e - Not ModifiesS - wildcard first
 variable v;
 Select v such that not Modifies(_,v)
-three, four, five, ten, plus, p, c, v, print
+SemanticError
 5000
 3fi - Not ModifiesS - ModifiesS true case - nested
 
@@ -206,7 +206,7 @@ TRUE
 4a - Not ModifiesP - synonym second
 variable v; procedure p;
 Select p such that not Modifies(p,v)
-Proc4
+Proc1, Proc2, Proc3, Proc4, Proc5
 5000
 4b - Not ModifiesP - ident second
 procedure p;
@@ -226,7 +226,7 @@ three, four, five, ten, plus, p, c, v, print, read
 4e - Not ModifiesP - wildcard first
 variable v;
 Select v such that not Modifies(_,v)
-three, four, five, ten, plus, p, c, v, print
+SemanticError
 5000
 4fi - Not ModifiesP - ModifiesP true case - same proc
 
@@ -256,12 +256,12 @@ TRUE
 5a - Not Parent - first stmt - select first
 stmt s; read r;
 Select s such that not Parent(s,r)
-1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
 5b - Not Parent - first stmt - select second
 stmt s; read r;
 Select r such that not Parent(s,r)
-13, 32
+5, 7, 13, 18, 32
 5000
 5c - Not Parent - second stmt - select first
 stmt s; assign a;
@@ -316,7 +316,7 @@ Select s such that not Parent(_,s)
 5h - Not Parent - wildcard second
 stmt s;
 Select s such that not Parent(s,_)
-1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 26, 27, 29, 30, 31, 32
+1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 26, 27, 30, 31, 32
 5000
 5i - Not Parent - int first
 stmt s;
@@ -331,22 +331,22 @@ Select s such that not Parent(s,10)
 6a - Not Parent* - first stmt - select first
 stmt s; print p;
 Select s such that not Parent*(s,p)
-1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 26, 27, 28, 29, 30, 31, 32
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
 6b - Not Parent* - first stmt - select second
 stmt s; print p;
 Select p such that not Parent*(s,p)
-12, 31
+6, 8, 12, 17, 23, 24, 26, 31
 5000
 6c - Not Parent* - second stmt - select first
 stmt s; while w;
 Select s such that not Parent*(w,s)
-1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 20, 21, 22, 23, 24, 25, 27, 28, 31, 32
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
 6d - Not Parent* - second stmt - select second
 stmt s; while w;
 Select w such that not Parent*(w,s)
-
+9, 16, 25, 28, 29
 5000
 6ei - Not Parent* - Parent* false case - same stmtlist
 
@@ -391,7 +391,7 @@ Select s such that not Parent*(_,s)
 6h - Not Parent* - wildcard second
 stmt s;
 Select s such that not Parent*(s,_)
-1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 26, 27, 29, 30, 31, 32
+1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 26, 27, 30, 31, 32
 5000
 6i - Not Parent* - int first
 stmt s;
@@ -431,22 +431,22 @@ Select c such that not Uses(c,_)
 7ci - Not UsesS - synonym second
 stmt s; variable v;
 Select s such that not Uses(s,v)
-1, 5, 7, 13, 14, 18, 19, 28, 29, 30, 32
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
 5000
 7cii - Not UsesS - synonym second
 if i; variable v;
 Select i such that not Uses(i,v)
-
+4, 22
 5000
 7ciii - Not UsesS - synonym second
 while w; variable v;
 Select w such that not Uses(w,v)
-28, 29
+9, 16, 25, 28, 29
 5000
 7civ - Not UsesS - synonym second
 call c; variable v;
 Select c such that not Uses(c,v)
-
+11, 20, 27
 5000
 7di - Not UsesS - int first
 variable v;
@@ -461,7 +461,7 @@ y, z, one, ten, eleven, i, ww, read
 7e - Not UsesS - wildcard first
 variable v;
 Select v such that not Uses(_,v)
-z, eleven, i, ww, read
+SemanticError
 5000
 7fi - Not UsesS - UsesS true case - nested
 
@@ -491,7 +491,7 @@ TRUE
 8a - Not UsesP - synonym second
 variable v; procedure p;
 Select p such that not Uses(p,v)
-Proc5
+Proc1, Proc2, Proc3, Proc4, Proc5
 5000
 8b - Not UsesP - ident second
 procedure p;
@@ -511,7 +511,7 @@ y, z, one, two, three, four, five, ten, eleven, i, ww, read
 8e - Not UsesP - wildcard first
 variable v;
 Select v such that not Uses(_,v)
-z, eleven, i, ww, read
+SemanticError
 5000
 8fi - Not UsesP - UsesP true case - same proc
 
