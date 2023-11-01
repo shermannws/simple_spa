@@ -212,22 +212,22 @@ std::string QPSUtil::getAttrName(std::string elem) {
     return "";
 }
 
-std::unordered_map<AttrName, std::function<std::string(Entity)>> QPSUtil::getValueFunc = {
+std::unordered_map<AttrName, std::function<std::string(std::shared_ptr<Entity>)>> QPSUtil::getValueFunc = {
         {AttrName::ProcName,
-         [](const Entity &e) -> std::string {
-             if (e.getEntityType() == EntityType::Procedure) {
-                 return e.getEntityValue();
+         [](const std::shared_ptr<Entity> e) -> std::string {
+             if (e->getEntityType() == EntityType::Procedure) {
+                 return e->getEntityValue();
              } else {// call.procName
-                 return e.getAttrValue();
+                 return e->getAttrValue();
              }
          }},
         {AttrName::VarName,
-         [](const Entity &e) -> std::string {
-             if (e.getEntityType() == EntityType::Variable) {
-                 return e.getEntityValue();
+         [](const std::shared_ptr<Entity> e) -> std::string {
+             if (e->getEntityType() == EntityType::Variable) {
+                 return e->getEntityValue();
              } else {// read.varName & printVarName
-                 return e.getAttrValue();
+                 return e->getAttrValue();
              }
          }},
-        {AttrName::Value, [](const Entity &e) -> std::string { return e.getEntityValue(); }},
-        {AttrName::StmtNo, [](const Entity &e) -> std::string { return e.getEntityValue(); }}};
+        {AttrName::Value, [](const std::shared_ptr<Entity> e) -> std::string { return e->getEntityValue(); }},
+        {AttrName::StmtNo, [](const std::shared_ptr<Entity> e) -> std::string { return e->getEntityValue(); }}};

@@ -8,8 +8,6 @@
 #include "QPS/QueryEntity.h"
 #include "QPSOptimizer.h"
 
-using transformFunc = std::function<std::string(Entity &)>;
-
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader)
     : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
       resultHandler(std::make_shared<ResultHandler>()) {}
@@ -44,7 +42,7 @@ std::vector<std::pair<int, transformFunc>> PQLEvaluator::getTransformations(Syno
         std::pair<int, transformFunc> transformation;
         if (attrName.empty()) {// case synonym
             transformation.first = inputMap[elem];
-            transformation.second = [](Entity &ent) { return ent.getEntityValue(); };
+            transformation.second = [](auto ent) { return ent->getEntityValue(); };
         } else {                             // case attrRef
             auto syn = QPSUtil::getSyn(elem);// get Syn without attrName
             transformation.first = inputMap[syn];
@@ -55,8 +53,8 @@ std::vector<std::pair<int, transformFunc>> PQLEvaluator::getTransformations(Syno
     return transformations;
 }
 
-std::vector<std::string> PQLEvaluator::project(std::vector<Entity> row,
-                                               std::vector<std::pair<int, transformFunc>> transformations) {
+std::vector<std::string> PQLEvaluator::project(ResultTuple row,
+                                               std::vector<std::pair<int, transformFunc>> &transformations) {
     std::vector<std::string> projection;
     for (auto &elem: transformations) {
         auto result = elem.second(row[elem.first]);
@@ -74,7 +72,7 @@ std::string PQLEvaluator::concat(std::vector<std::string> strings) {
 bool PQLEvaluator::evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause>> &clauses) {
     for (auto &clause: clauses) {
         auto res = evaluateClause(clause);
-        if (res->isFalse() || res->isEmpty()) { return false; }
+        if (res->isFalse()) { return false; }
     }
     return true;
 }
@@ -90,18 +88,20 @@ bool PQLEvaluator::evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Cla
 
 Result PQLEvaluator::evaluate(Query &query) {
     auto pairs = QPSOptimizer::getGroupScorePairs(query);
-    std::priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::sortByScore);
+    std::priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::compareGroupByScore);
 
     auto res = std::make_shared<Result>(true);
     while (!pq.empty()) {
         auto pair = pq.top();
         pq.pop();
         std::vector<std::shared_ptr<Clause>> group(pair.first.begin(), pair.first.end());
-        if (!std::get<1>(pair.second)) {// no select synonyms
+        if (!std::get<1>(pair.second)) {// no synonyms
             if (!evaluateBooleanGroup(group)) { return Result(false); }
         } else if (!std::get<0>(pair.second)) {// group with irrelevant synonyms
+            group = QPSOptimizer::sortClauses(group);
             if (!evaluateIrrelevantGroup(group)) { return Result(false); }
-        } else {// those with selectSyns (and if select has synonym(s))
+        } else {// those with selectSyns (and if select has synonym(s)
+            group = QPSOptimizer::sortClauses(group);
             for (auto &clause: group) {
                 res = resultHandler->getCombined(res, evaluateClause(clause));
                 if (res->isFalse()) { return Result(false); }
@@ -170,7 +170,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(const Query &query, s
     return tupleResult;
 }
 
-std::unordered_set<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity> &queryEntity) {
+std::unordered_set<std::shared_ptr<Entity>> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity> &queryEntity) {
     QueryEntityType entityType = queryEntity->getType();
     if (QPSUtil::entityGetterMap.find(entityType) == QPSUtil::entityGetterMap.end()) {
         throw std::runtime_error("Not supported entity type in query select clause");
@@ -178,11 +178,11 @@ std::unordered_set<Entity> PQLEvaluator::getAll(const std::shared_ptr<QueryEntit
     return QPSUtil::entityGetterMap[entityType](pkbReader);
 }
 
-std::unordered_set<std::vector<Entity>> PQLEvaluator::getAllByTypes(const std::vector<QueryEntityType> &queryEntities) {
-    std::unordered_set<std::vector<Entity>> tuples;
+std::unordered_set<ResultTuple> PQLEvaluator::getAllByTypes(const std::vector<QueryEntityType> &queryEntities) {
+    std::unordered_set<ResultTuple> tuples;
     if (queryEntities.size() == 1) {
         auto set = QPSUtil::entityGetterMap[queryEntities[0]](pkbReader);
-        for (const Entity &entity: set) { tuples.insert(std::vector<Entity>{entity}); }
+        for (const auto &entity: set) { tuples.insert(ResultTuple{entity}); }
     } else {
         auto sets = std::make_pair(QPSUtil::entityGetterMap[queryEntities[0]](pkbReader),
                                    QPSUtil::entityGetterMap[queryEntities[1]](pkbReader));

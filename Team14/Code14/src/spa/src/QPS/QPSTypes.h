@@ -47,5 +47,7 @@ typedef std::list<std::string> ResultList;
 typedef std::unordered_set<std::string> ResultSet;
 /* Type alias for a string representing a formatted result */
 typedef std::string FormattedResult;
-/* Type alias for a vector of vectors of Entities, representing rows of tuples in a result table */
-typedef std::unordered_set<std::vector<Entity>> ResultTuples;
+/* Type alias for a set of vectors of shared ptr to Entities, representing rows of tuples in a result table */
+typedef std::unordered_set<std::vector<std::shared_ptr<Entity>>> ResultTuples;
+/* Type alias for a vector of shared ptr to Entities, representing a rows/tuple in a result table */
+typedef std::vector<std::shared_ptr<Entity>> ResultTuple;
