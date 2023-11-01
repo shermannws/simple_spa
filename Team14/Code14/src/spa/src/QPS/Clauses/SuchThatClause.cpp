@@ -26,10 +26,19 @@ std::vector<Synonym> SuchThatClause::getSynonyms() const {
     return synonyms;
 }
 
+std::vector<QueryEntityType> SuchThatClause::getSynonymEntityTypes() const {
+    std::vector<QueryEntityType> types;
+    if (firstParam.getRootType() == RootType::Synonym) { types.push_back(firstParam.getEntityType()); }
+    if (secondParam.getRootType() == RootType::Synonym && !(firstParam == secondParam)) {
+        types.push_back(secondParam.getEntityType());
+    }
+    return types;
+}
+
 bool SuchThatClause::operator==(const Clause &other) const {
     try {
-        const auto &otherPattern = dynamic_cast<const SuchThatClause &>(other);
-        return (type == otherPattern.type) && (firstParam == otherPattern.firstParam) &&
-               (secondParam == otherPattern.secondParam);
+        const auto &otherST = dynamic_cast<const SuchThatClause &>(other);
+        return (type == otherST.type) && (negation == otherST.negation) && (firstParam == otherST.firstParam) &&
+               (secondParam == otherST.secondParam);
     } catch (std::bad_cast &e) { return false; }
 }

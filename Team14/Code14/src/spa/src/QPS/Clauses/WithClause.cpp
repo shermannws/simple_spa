@@ -16,10 +16,19 @@ std::vector<Synonym> WithClause::getSynonyms() const {
     return synonyms;
 }
 
+std::vector<QueryEntityType> WithClause::getSynonymEntityTypes() const {
+    std::vector<QueryEntityType> types;
+    if (firstParam.getRootType() == RootType::AttrRef) { types.push_back(firstParam.getEntityType()); }
+    if (secondParam.getRootType() == RootType::AttrRef && !(firstParam == secondParam)) {
+        types.push_back(secondParam.getEntityType());
+    }
+    return types;
+}
+
 bool WithClause::operator==(const Clause &other) const {
     try {
-        const auto &otherPattern = dynamic_cast<const WithClause &>(other);
-        return (type == otherPattern.type) && (firstParam == otherPattern.firstParam) &&
-               (secondParam == otherPattern.secondParam);
+        const auto &otherWith = dynamic_cast<const WithClause &>(other);
+        return (type == otherWith.type) && (negation == otherWith.negation) && (firstParam == otherWith.firstParam) &&
+               (secondParam == otherWith.secondParam);
     } catch (std::bad_cast &e) { return false; }
 };

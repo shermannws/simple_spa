@@ -71,6 +71,12 @@ std::unordered_map<QueryEntityType, ClauseType> QPSUtil::entityToClauseMap = {
         {QueryEntityType::If, ClauseType::If},
 };
 
+std::unordered_map<ClauseType, QueryEntityType> QPSUtil::patternClauseToEntityMap = {
+        {ClauseType::Assign, QueryEntityType::Assign},
+        {ClauseType::While, QueryEntityType::While},
+        {ClauseType::If, QueryEntityType::If},
+};
+
 std::unordered_map<ClauseType, ClauseArgType> QPSUtil::typeToArgTypeMap = {
         {ClauseType::Uses, StmtrefProcVar},    {ClauseType::Modifies, StmtrefProcVar},
         {ClauseType::Follows, StmtrefStmtref}, {ClauseType::FollowsStar, StmtrefStmtref},
