@@ -6,8 +6,8 @@
 
 #include "Commons/Entities/Statement.h"
 #include "PKB/Managers/StmtToStmtRelationshipManager.h"
-#include "PKB/RelationshipStores/NextRelationshipStore.h"
 #include "PKB/PkbTypes.h"
+#include "PKB/RelationshipStores/NextRelationshipStore.h"
 
 /**
  * @class NextRelationshipManager is responsible for storing the Next relationship
@@ -39,7 +39,7 @@ public:
      * @param stmtType The type of statement to retrieve
      * @return An unordered_set of statements that executes after itself in some execution sequence
      */
-     EntitySet getNextStarSameStmt(StatementType stmtType) const;
+    EntitySet getNextStarSameStmt(StatementType stmtType) const;
 
     /**
      * Returns an unordered_set of Statement, Statement pair where the first statement is related to the second
@@ -49,8 +49,8 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of Statement, Statement pair stored in a vector
      */
-     EntityPairSet getRelationshipPair(StatementType formerType, StatementType latterType,
-                                                                bool requireDirect) const override;
+    EntityPairSet getRelationshipPair(StatementType formerType, StatementType latterType,
+                                      bool requireDirect) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to the given statement. The
@@ -60,8 +60,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    EntitySet getRelationshipTypeStmt(StatementType type, Statement &statement,
-                                                       bool requireDirect) const override;
+    EntitySet getRelationshipTypeStmt(StatementType type, Statement &statement, bool requireDirect) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to any statement. The
@@ -80,8 +79,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    EntitySet getRelationshipStmtType(Statement &statement, StatementType type,
-                                                       bool requireDirect) const override;
+    EntitySet getRelationshipStmtType(Statement &statement, StatementType type, bool requireDirect) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to any statement. The

@@ -8,13 +8,9 @@ EntitySet PkbConcreteReader::getAllVariables() const { return this->readerManage
 
 EntitySet PkbConcreteReader::getAllConstants() const { return this->readerManager->getAllConstants(); }
 
-EntitySet PkbConcreteReader::getAllProcedures() const {
-    return this->readerManager->getAllProcedures();
-}
+EntitySet PkbConcreteReader::getAllProcedures() const { return this->readerManager->getAllProcedures(); }
 
-EntitySet PkbConcreteReader::getAllStatements() const {
-    return this->readerManager->getAllStatements();
-}
+EntitySet PkbConcreteReader::getAllStatements() const { return this->readerManager->getAllStatements(); }
 
 EntitySet PkbConcreteReader::getAllRead() const { return this->readerManager->getAllRead(); }
 
@@ -30,9 +26,7 @@ EntityPairSet PkbConcreteReader::getUsesStmtPair(StatementType type) const {
     return this->readerManager->getUsesStmtPair(type);
 }
 
-EntityPairSet PkbConcreteReader::getUsesProcPair() const {
-    return this->readerManager->getUsesProcPair();
-}
+EntityPairSet PkbConcreteReader::getUsesProcPair() const { return this->readerManager->getUsesProcPair(); }
 
 EntitySet PkbConcreteReader::getUsesTypeIdent(StatementType type, Variable &var) const {
     return this->readerManager->getUsesTypeIdent(type, var);
@@ -42,19 +36,13 @@ EntitySet PkbConcreteReader::getUsesProcIdent(Variable &var) const {
     return this->readerManager->getUsesProcIdent(var);
 };
 
-EntitySet PkbConcreteReader::getUsesStmt(StatementType type) const {
-    return this->readerManager->getUsesStmt(type);
-}
+EntitySet PkbConcreteReader::getUsesStmt(StatementType type) const { return this->readerManager->getUsesStmt(type); }
 
 EntitySet PkbConcreteReader::getUsesProc() const { return this->readerManager->getUsesProc(); }
 
-EntitySet PkbConcreteReader::getUsesVar(Statement &stmt) const {
-    return this->readerManager->getUsesVar(stmt);
-}
+EntitySet PkbConcreteReader::getUsesVar(Statement &stmt) const { return this->readerManager->getUsesVar(stmt); }
 
-EntitySet PkbConcreteReader::getUsesVar(Procedure &proc) const {
-    return this->readerManager->getUsesVar(proc);
-}
+EntitySet PkbConcreteReader::getUsesVar(Procedure &proc) const { return this->readerManager->getUsesVar(proc); }
 
 bool PkbConcreteReader::isStmtUsesVar(Statement &stmt, Variable &var) const {
     return this->readerManager->isStmtUsesVar(stmt, var);
@@ -68,13 +56,11 @@ bool PkbConcreteReader::hasUses(Statement &stmt) const { return this->readerMana
 
 bool PkbConcreteReader::hasUses(Procedure &proc) const { return this->readerManager->hasUses(proc); }
 
-EntityPairSet PkbConcreteReader::getFollowsPair(StatementType formerType,
-                                                                          StatementType latterType) const {
+EntityPairSet PkbConcreteReader::getFollowsPair(StatementType formerType, StatementType latterType) const {
     return this->readerManager->getFollowsPair(formerType, latterType);
 }
 
-EntityPairSet PkbConcreteReader::getFollowsStarPair(StatementType formerType,
-                                                                              StatementType latterType) const {
+EntityPairSet PkbConcreteReader::getFollowsStarPair(StatementType formerType, StatementType latterType) const {
     return this->readerManager->getFollowsStarPair(formerType, latterType);
 }
 
@@ -142,9 +128,7 @@ EntityPairSet PkbConcreteReader::getModifiesStmtPair(StatementType type) const {
     return this->readerManager->getModifiesStmtPair(type);
 }
 
-EntityPairSet PkbConcreteReader::getModifiesProcPair() const {
-    return this->readerManager->getModifiesProcPair();
-}
+EntityPairSet PkbConcreteReader::getModifiesProcPair() const { return this->readerManager->getModifiesProcPair(); }
 
 EntitySet PkbConcreteReader::getModifiesTypeIdent(StatementType type, Variable &var) const {
     return this->readerManager->getModifiesTypeIdent(type, var);
@@ -160,13 +144,9 @@ EntitySet PkbConcreteReader::getModifiesStmt(StatementType type) const {
 
 EntitySet PkbConcreteReader::getModifiesProc() const { return this->readerManager->getModifiesProc(); }
 
-EntitySet PkbConcreteReader::getModifiesVar(Statement &stmt) const {
-    return this->readerManager->getModifiesVar(stmt);
-}
+EntitySet PkbConcreteReader::getModifiesVar(Statement &stmt) const { return this->readerManager->getModifiesVar(stmt); }
 
-EntitySet PkbConcreteReader::getModifiesVar(Procedure &proc) const {
-    return this->readerManager->getModifiesVar(proc);
-}
+EntitySet PkbConcreteReader::getModifiesVar(Procedure &proc) const { return this->readerManager->getModifiesVar(proc); }
 
 bool PkbConcreteReader::isStmtModifiesVar(Statement &stmt, Variable &var) const {
     return this->readerManager->isStmtModifiesVar(stmt, var);
@@ -194,8 +174,7 @@ EntityPairSet PkbConcreteReader::getAllAssignStmtVarPair() const {
 }
 
 // pattern a (v, "x")
-EntityPairSet PkbConcreteReader::getAssignStmtsVarPairByRhs(Expression &rhs,
-                                                                                      bool hasWildCard) const {
+EntityPairSet PkbConcreteReader::getAssignStmtsVarPairByRhs(Expression &rhs, bool hasWildCard) const {
     return this->readerManager->getAssignStmtsVarPairByRhs(rhs, hasWildCard);
 }
 
@@ -205,18 +184,15 @@ EntitySet PkbConcreteReader::getAssignStmtsByLhs(Variable &lhs) const {
 }
 
 // pattern a ("x", "x")
-EntitySet PkbConcreteReader::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
-                                                                     bool hasRhsWildCard) const {
+EntitySet PkbConcreteReader::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const {
     return this->readerManager->getAssignStmtsByLhsRhs(lhs, rhs, hasRhsWildCard);
 }
 
-EntityPairSet PkbConcreteReader::getParentPair(StatementType formerType,
-                                                                         StatementType latterType) const {
+EntityPairSet PkbConcreteReader::getParentPair(StatementType formerType, StatementType latterType) const {
     return this->readerManager->getParentPair(formerType, latterType);
 }
 
-EntityPairSet PkbConcreteReader::getParentStarPair(StatementType formerType,
-                                                                             StatementType latterType) const {
+EntityPairSet PkbConcreteReader::getParentStarPair(StatementType formerType, StatementType latterType) const {
     return this->readerManager->getParentStarPair(formerType, latterType);
 }
 
@@ -308,37 +284,27 @@ EntitySet PkbConcreteReader::getCallers() const { return this->readerManager->ge
 
 EntitySet PkbConcreteReader::getCallersStar() const { return this->readerManager->getCallersStar(); }
 
-EntityPairSet PkbConcreteReader::getCallsPair() const {
-    return this->readerManager->getCallsPair();
-}
+EntityPairSet PkbConcreteReader::getCallsPair() const { return this->readerManager->getCallsPair(); }
 
-EntityPairSet PkbConcreteReader::getCallsStarPair() const {
-    return this->readerManager->getCallsStarPair();
-}
+EntityPairSet PkbConcreteReader::getCallsStarPair() const { return this->readerManager->getCallsStarPair(); }
 
-EntitySet PkbConcreteReader::getCallers(Procedure &callee) const {
-    return this->readerManager->getCallers(callee);
-}
+EntitySet PkbConcreteReader::getCallers(Procedure &callee) const { return this->readerManager->getCallers(callee); }
 
 EntitySet PkbConcreteReader::getCallersStar(Procedure &callee) const {
     return this->readerManager->getCallersStar(callee);
 }
 
-EntitySet PkbConcreteReader::getCallees(Procedure &caller) const {
-    return this->readerManager->getCallees(caller);
-}
+EntitySet PkbConcreteReader::getCallees(Procedure &caller) const { return this->readerManager->getCallees(caller); }
 
 EntitySet PkbConcreteReader::getCalleesStar(Procedure &caller) const {
     return this->readerManager->getCalleesStar(caller);
 }
 
-EntityPairSet PkbConcreteReader::getNextPair(StatementType formerType,
-                                                                       StatementType latterType) const {
+EntityPairSet PkbConcreteReader::getNextPair(StatementType formerType, StatementType latterType) const {
     return this->readerManager->getNextPair(formerType, latterType);
 }
 
-EntityPairSet PkbConcreteReader::getNextStarPair(StatementType formerType,
-                                                                           StatementType latterType) const {
+EntityPairSet PkbConcreteReader::getNextStarPair(StatementType formerType, StatementType latterType) const {
     return this->readerManager->getNextStarPair(formerType, latterType);
 }
 
@@ -406,21 +372,13 @@ bool PkbConcreteReader::hasAfterStarStmt(Statement &statement) const {
     return this->readerManager->hasAfterStarStmt(statement);
 }
 
-EntitySet PkbConcreteReader::getAllIfPatternStmts() const {
-    return this->readerManager->getAllIfPatternStmts();
-}
+EntitySet PkbConcreteReader::getAllIfPatternStmts() const { return this->readerManager->getAllIfPatternStmts(); }
 
-EntitySet PkbConcreteReader::getIfStmtsByVar(Variable &var) const {
-    return this->readerManager->getIfStmtsByVar(var);
-};
+EntitySet PkbConcreteReader::getIfStmtsByVar(Variable &var) const { return this->readerManager->getIfStmtsByVar(var); };
 
-EntityPairSet PkbConcreteReader::getAllIfStmtVarPair() const {
-    return this->readerManager->getAllIfStmtVarPair();
-}
+EntityPairSet PkbConcreteReader::getAllIfStmtVarPair() const { return this->readerManager->getAllIfStmtVarPair(); }
 
-EntitySet PkbConcreteReader::getAllWhilePatternStmts() const {
-    return this->readerManager->getAllWhilePatternStmts();
-}
+EntitySet PkbConcreteReader::getAllWhilePatternStmts() const { return this->readerManager->getAllWhilePatternStmts(); }
 
 EntitySet PkbConcreteReader::getWhileStmtsByVar(Variable &var) const {
     return this->readerManager->getWhileStmtsByVar(var);
@@ -430,8 +388,7 @@ EntityPairSet PkbConcreteReader::getAllWhileStmtVarPair() const {
     return this->readerManager->getAllWhileStmtVarPair();
 }
 
-EntityPairSet PkbConcreteReader::getAffectsPair(StatementType formerType,
-                                                                          StatementType latterType) const {
+EntityPairSet PkbConcreteReader::getAffectsPair(StatementType formerType, StatementType latterType) const {
     return this->readerManager->getAffectsPair(formerType, latterType);
 }
 

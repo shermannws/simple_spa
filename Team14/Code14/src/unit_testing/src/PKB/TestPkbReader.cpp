@@ -711,8 +711,7 @@ TEST_CASE_METHOD(UnitTestFixture, "If Pattern") {
     REQUIRE(reader->getIfStmtsByVar(*v).empty());
     REQUIRE(reader->getAllIfStmtVarPair().empty());
 
-    writer->addIfPattern(s,
-                         make_shared<vector<shared_ptr<Variable>>>(1, v));
+    writer->addIfPattern(s, make_shared<vector<shared_ptr<Variable>>>(1, v));
 
     auto set1 = reader->getAllIfPatternStmts();
     REQUIRE(set1.size() == 1);
@@ -739,8 +738,7 @@ TEST_CASE_METHOD(UnitTestFixture, "While Pattern") {
     REQUIRE(reader->getWhileStmtsByVar(*v).empty());
     REQUIRE(reader->getAllWhileStmtVarPair().empty());
 
-    writer->addWhilePattern(s,
-                            make_shared<vector<shared_ptr<Variable>>>(1, v));
+    writer->addWhilePattern(s, make_shared<vector<shared_ptr<Variable>>>(1, v));
 
     auto set1 = reader->getAllWhilePatternStmts();
     REQUIRE(set1.size() == 1);

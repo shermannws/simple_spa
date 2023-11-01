@@ -11,7 +11,7 @@ void StmtToStmtRelationshipManager<S>::storeRelationship(std::shared_ptr<Stateme
 
 template<typename S>
 EntityPairSet StmtToStmtRelationshipManager<S>::getRelationshipPair(StatementType formerType, StatementType latterType,
-                                                      bool requireDirect) const {
+                                                                    bool requireDirect) const {
     if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, formerType)) { return EntityPairSet(); }
     if (formerType == StatementType::Stmt && latterType == StatementType::Stmt) {
         return requireDirect ? relationshipStore->getPairs() : starRelationshipStore->getPairs();
@@ -25,9 +25,8 @@ EntityPairSet StmtToStmtRelationshipManager<S>::getRelationshipPair(StatementTyp
 }
 
 template<typename S>
-EntitySet StmtToStmtRelationshipManager<S>::getRelationshipTypeStmt(StatementType type,
-                                                                                     Statement &statement,
-                                                                                     bool requireDirect) const {
+EntitySet StmtToStmtRelationshipManager<S>::getRelationshipTypeStmt(StatementType type, Statement &statement,
+                                                                    bool requireDirect) const {
     if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return EntitySet(); }
     return ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch<Statement>(
             requireDirect ? *relationshipStore : *starRelationshipStore, statement, type);
@@ -40,17 +39,15 @@ EntitySet StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(Statemen
 }
 
 template<typename S>
-EntitySet StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type,
-                                                                                         bool requireDirect) const {
+EntitySet StmtToStmtRelationshipManager<S>::getRelationshipTypeWildcard(StatementType type, bool requireDirect) const {
     if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return EntitySet(); }
     return ManagerUtils::getLeftKeysStmtMatch<Statement>(requireDirect ? *relationshipStore : *starRelationshipStore,
                                                          type);
 }
 
 template<typename S>
-EntitySet StmtToStmtRelationshipManager<S>::getRelationshipStmtType(Statement &statement,
-                                                                                     StatementType type,
-                                                                                     bool requireDirect) const {
+EntitySet StmtToStmtRelationshipManager<S>::getRelationshipStmtType(Statement &statement, StatementType type,
+                                                                    bool requireDirect) const {
     return ManagerUtils::getRightEntitiesFromLeftKeyStmtMatch<Statement>(
             requireDirect ? *relationshipStore : *starRelationshipStore, statement, type);
 }
@@ -61,8 +58,7 @@ EntitySet StmtToStmtRelationshipManager<S>::getRelationshipWildcardType(Statemen
 }
 
 template<typename S>
-EntitySet StmtToStmtRelationshipManager<S>::getRelationshipWildcardType(StatementType type,
-                                                                                         bool requireDirect) const {
+EntitySet StmtToStmtRelationshipManager<S>::getRelationshipWildcardType(StatementType type, bool requireDirect) const {
     return ManagerUtils::getRightKeysStmtMatch<Statement>(requireDirect ? *relationshipStore : *starRelationshipStore,
                                                           type);
 }
@@ -90,8 +86,7 @@ bool StmtToStmtRelationshipManager<S>::isLatter(Statement &statement) const {
 }
 
 template<typename S>
-EntitySet StmtToStmtRelationshipManager<S>::getSameStmt(StatementType stmtType,
-                                                                         bool requireDirect) const {
+EntitySet StmtToStmtRelationshipManager<S>::getSameStmt(StatementType stmtType, bool requireDirect) const {
     auto leftMatcher = [stmtType](std::shared_ptr<Statement> stmt) { return stmt->isStatementType(stmtType); };
 
     return ManagerUtils::getLeftKeysMatchRight<Statement>(requireDirect ? *relationshipStore : *starRelationshipStore,

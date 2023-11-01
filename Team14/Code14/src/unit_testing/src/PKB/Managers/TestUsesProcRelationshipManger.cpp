@@ -19,18 +19,12 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Uses Procedure-Variable Relationship Ret
     shared_ptr<Procedure> procedure4 = make_shared<Procedure>("proc4");
     shared_ptr<Procedure> procedure5 = make_shared<Procedure>("proc5");
 
-    usesProcRelationshipManager.storeRelationship(procedure1,
-                                                  variableX);
-    usesProcRelationshipManager.storeRelationship(procedure2,
-                                                  variableY);
-    usesProcRelationshipManager.storeRelationship(procedure3,
-                                                  variableZ);
-    usesProcRelationshipManager.storeRelationship(procedure4,
-                                                  variableX);
-    usesProcRelationshipManager.storeRelationship(procedure4,
-                                                  variableY);
-    usesProcRelationshipManager.storeRelationship(procedure4,
-                                                  variableZ);
+    usesProcRelationshipManager.storeRelationship(procedure1, variableX);
+    usesProcRelationshipManager.storeRelationship(procedure2, variableY);
+    usesProcRelationshipManager.storeRelationship(procedure3, variableZ);
+    usesProcRelationshipManager.storeRelationship(procedure4, variableX);
+    usesProcRelationshipManager.storeRelationship(procedure4, variableY);
+    usesProcRelationshipManager.storeRelationship(procedure4, variableZ);
 
     REQUIRE(usesProcRelationshipManager.getRelationshipProcPair().size() == 6);
 
@@ -90,14 +84,11 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Uses Procedure-Variable Transitive Relat
         shared_ptr<Variable> variableX = make_shared<Variable>("x");
 
         // 1-->2-->3
-        callRelationshipManager.storeRelationship(procedure1,
-                                                  procedure2, true);
-        callRelationshipManager.storeRelationship(procedure2,
-                                                  procedure3, true);
+        callRelationshipManager.storeRelationship(procedure1, procedure2, true);
+        callRelationshipManager.storeRelationship(procedure2, procedure3, true);
         callRelationshipManager.calculateTransitiveRelationship();
 
-        usesProcRelationshipManager.storeRelationship(procedure3,
-                                                      variableX);
+        usesProcRelationshipManager.storeRelationship(procedure3, variableX);
 
         REQUIRE(usesProcRelationshipManager.isRelationship(*procedure1, *variableX) == false);
         REQUIRE(usesProcRelationshipManager.isRelationship(*procedure2, *variableX) == false);
@@ -129,23 +120,15 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Uses Procedure-Variable Transitive Relat
         // 1 --> 2
         // 3 --> 4
         // 5 --> 1
-        callRelationshipManager.storeRelationship(procedure1,
-                                                  procedure2, true);
-        callRelationshipManager.storeRelationship(procedure3,
-                                                  procedure4, true);
-        callRelationshipManager.storeRelationship(procedure5,
-                                                  procedure1, true);
+        callRelationshipManager.storeRelationship(procedure1, procedure2, true);
+        callRelationshipManager.storeRelationship(procedure3, procedure4, true);
+        callRelationshipManager.storeRelationship(procedure5, procedure1, true);
 
-        usesProcRelationshipManager.storeRelationship(procedure1,
-                                                      variableX);
-        usesProcRelationshipManager.storeRelationship(procedure2,
-                                                      variableY);
-        usesProcRelationshipManager.storeRelationship(procedure3,
-                                                      variableZ);
-        usesProcRelationshipManager.storeRelationship(procedure4,
-                                                      variableA);
-        usesProcRelationshipManager.storeRelationship(procedure5,
-                                                      variableB);
+        usesProcRelationshipManager.storeRelationship(procedure1, variableX);
+        usesProcRelationshipManager.storeRelationship(procedure2, variableY);
+        usesProcRelationshipManager.storeRelationship(procedure3, variableZ);
+        usesProcRelationshipManager.storeRelationship(procedure4, variableA);
+        usesProcRelationshipManager.storeRelationship(procedure5, variableB);
 
         callRelationshipManager.calculateTransitiveRelationship();
 

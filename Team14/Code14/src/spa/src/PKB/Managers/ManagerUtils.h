@@ -31,7 +31,8 @@ private:
      * @return An unordered_set of entities
      */
     template<typename E, typename S, typename R>
-    static std::unordered_set<E> getFromSetStore(std::shared_ptr<S> store, std::function<bool(std::shared_ptr<R>)> matcher,
+    static std::unordered_set<E> getFromSetStore(std::shared_ptr<S> store,
+                                                 std::function<bool(std::shared_ptr<R>)> matcher,
                                                  std::function<E(std::shared_ptr<R>)> getter);
 
     /**
@@ -47,8 +48,9 @@ private:
      * @return An unordered_set of entities
      */
     template<typename E, typename S, typename K, typename V, typename R>
-    static std::unordered_set<std::shared_ptr<R>> getFromMapStore(S &store, std::function<std::shared_ptr<E>(S &, K &)> getter, K &key,
-                                                 std::function<bool(std::shared_ptr<V>)> matcher);
+    static std::unordered_set<std::shared_ptr<R>>
+    getFromMapStore(S &store, std::function<std::shared_ptr<E>(S &, K &)> getter, K &key,
+                    std::function<bool(std::shared_ptr<V>)> matcher);
 
 
     /**
@@ -120,7 +122,7 @@ public:
      */
     template<typename S, typename R>
     static EntitySet getEntitiesFromStore(std::shared_ptr<S> store, std::function<bool(std::shared_ptr<R>)> matcher,
-                                                           std::function<EntityPointer(std::shared_ptr<R>)> getter);
+                                          std::function<EntityPointer(std::shared_ptr<R>)> getter);
 
     /**
      * @brief A function that retrieves entities from an set-based entity store based on a matcher and getter function
@@ -132,8 +134,8 @@ public:
      */
     template<typename E>
     static EntitySet getEntitiesFromEntityStore(std::shared_ptr<EntityStore<E>> store,
-                                                                 std::function<bool(std::shared_ptr<E>)> matcher,
-                                                                 std::function<EntityPointer(std::shared_ptr<E>)> getter);
+                                                std::function<bool(std::shared_ptr<E>)> matcher,
+                                                std::function<EntityPointer(std::shared_ptr<E>)> getter);
 
 
     /**
@@ -146,8 +148,9 @@ public:
      * @return An unordered_set of entity pairs
      */
     template<typename S, typename R>
-    static EntityPairSet getEntityPairsFromStore(std::shared_ptr<S> store, std::function<bool(std::shared_ptr<R>)> matcher,
-                            std::function<std::vector<EntityPointer>(std::shared_ptr<R>)> getter);
+    static EntityPairSet getEntityPairsFromStore(std::shared_ptr<S> store,
+                                                 std::function<bool(std::shared_ptr<R>)> matcher,
+                                                 std::function<std::vector<EntityPointer>(std::shared_ptr<R>)> getter);
 
     /**
      * @brief A function that retrieves right entities based on a left key when no matcher function is required
@@ -189,8 +192,8 @@ public:
      * @return An unordered_set of right entities that matches the statement type
      */
     template<typename L>
-    static EntitySet getRightEntitiesFromLeftKeyStmtMatch(RelationshipStore<L, Statement> &store,
-                                                                           L &key, StatementType type);
+    static EntitySet getRightEntitiesFromLeftKeyStmtMatch(RelationshipStore<L, Statement> &store, L &key,
+                                                          StatementType type);
 
     /**
      * @brief A function that retrieves left entities based on a right key when a matcher function for statement type is
@@ -202,8 +205,8 @@ public:
      * @return An unordered_set of left entities that matches the statement type
      */
     template<typename R>
-    static EntitySet getLeftEntitiesFromRightKeyStmtMatch(RelationshipStore<Statement, R> &store,
-                                                                           R &key, StatementType type);
+    static EntitySet getLeftEntitiesFromRightKeyStmtMatch(RelationshipStore<Statement, R> &store, R &key,
+                                                          StatementType type);
 
     /**
      * @brief A function that checks if the map-based store contains the key-value pair
@@ -280,8 +283,9 @@ public:
      * @return An unordered_set of key-value pairs from the map
      */
     template<typename R, typename S, typename K, typename V>
-    static std::unordered_set<std::vector<std::shared_ptr<R>>> getPairs(S &store, std::function<bool(std::shared_ptr<K>)> leftMatcher,
-                                                       std::function<bool(std::shared_ptr<V>)> rightMatcher);
+    static std::unordered_set<std::vector<std::shared_ptr<R>>>
+    getPairs(S &store, std::function<bool(std::shared_ptr<K>)> leftMatcher,
+             std::function<bool(std::shared_ptr<V>)> rightMatcher);
 
     /**
      * @brief A function that removes duplicates in a vector of object of type E
@@ -314,7 +318,7 @@ public:
      */
     template<typename K>
     static EntitySet getLeftKeysMatchRight(RelationshipStore<K, K> &store,
-                                                            std::function<bool(std::shared_ptr<K>)> leftMatcher);
+                                           std::function<bool(std::shared_ptr<K>)> leftMatcher);
 
     /**
      * @brief A function that helps calculate the transitive closure of a relationship

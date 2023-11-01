@@ -13,33 +13,30 @@ EntitySet NextRelationshipManager::getNextStarSameStmt(StatementType stmtType) c
     return getSameStmt(stmtType, false);
 }
 
-EntityPairSet NextRelationshipManager::getRelationshipPair(StatementType formerType,
-                                                                                     StatementType latterType,
-                                                                                     bool requireDirect) const {
+EntityPairSet NextRelationshipManager::getRelationshipPair(StatementType formerType, StatementType latterType,
+                                                           bool requireDirect) const {
     if (!requireDirect && !this->isNextStarCalculated) { this->calculateNextStar(); }
     return StmtToStmtRelationshipManager::getRelationshipPair(formerType, latterType, requireDirect);
 }
 
 EntitySet NextRelationshipManager::getRelationshipTypeStmt(StatementType type, Statement &statement,
-                                                                            bool requireDirect) const {
+                                                           bool requireDirect) const {
     if (!requireDirect && !this->isNextStarCalculated) { this->calculateNextStar(); }
     return StmtToStmtRelationshipManager::getRelationshipTypeStmt(type, statement, requireDirect);
 }
 
-EntitySet NextRelationshipManager::getRelationshipTypeWildcard(StatementType type,
-                                                                                bool requireDirect) const {
+EntitySet NextRelationshipManager::getRelationshipTypeWildcard(StatementType type, bool requireDirect) const {
     if (!requireDirect && !this->isNextStarCalculated) { this->calculateNextStar(); }
     return StmtToStmtRelationshipManager::getRelationshipTypeWildcard(type, requireDirect);
 }
 
 EntitySet NextRelationshipManager::getRelationshipStmtType(Statement &statement, StatementType type,
-                                                                            bool requireDirect) const {
+                                                           bool requireDirect) const {
     if (!requireDirect && !this->isNextStarCalculated) { this->calculateNextStar(); }
     return StmtToStmtRelationshipManager::getRelationshipStmtType(statement, type, requireDirect);
 }
 
-EntitySet NextRelationshipManager::getRelationshipWildcardType(StatementType type,
-                                                                                bool requireDirect) const {
+EntitySet NextRelationshipManager::getRelationshipWildcardType(StatementType type, bool requireDirect) const {
     if (!requireDirect && !this->isNextStarCalculated) { this->calculateNextStar(); }
     return StmtToStmtRelationshipManager::getRelationshipWildcardType(type, requireDirect);
 }

@@ -16,7 +16,7 @@ EntityPairSet ProcToProcRelationshipManager<S>::getRelationshipPair(bool require
 
 template<typename S>
 EntitySet ProcToProcRelationshipManager<S>::getRelationshipFormer(Procedure &latterProcedure,
-                                                                                   bool requireDirect) const {
+                                                                  bool requireDirect) const {
     return ManagerUtils::getLeftEntitiesFromRightKeyNoMatch<Procedure, Procedure>(
             requireDirect ? *relationshipStore : *starRelationshipStore, latterProcedure);
 }
@@ -29,7 +29,7 @@ EntitySet ProcToProcRelationshipManager<S>::getRelationshipFormer()
 
 template<typename S>
 EntitySet ProcToProcRelationshipManager<S>::getRelationshipLatter(Procedure &formerProcedure,
-                                                                                   bool requireDirect) const {
+                                                                  bool requireDirect) const {
     return ManagerUtils::getRightEntitiesFromLeftKeyNoMatch<Procedure, Procedure>(
             requireDirect ? *relationshipStore : *starRelationshipStore, formerProcedure);
 }

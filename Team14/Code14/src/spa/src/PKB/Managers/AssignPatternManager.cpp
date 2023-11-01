@@ -32,10 +32,9 @@ bool AssignPatternManager::matchExpression(Expression &expression, std::regex &p
 // pattern a (_,_)
 EntitySet AssignPatternManager::getAllAssignStmts() const {
     EntitySet statements = EntitySet();
-    std::for_each(assignmentStore->getBeginIterator(), assignmentStore->getEndIterator(),
-                  [&statements](std::shared_ptr<Assignment> assignment) {
-                      statements.insert(assignment->getStatement());
-                  });
+    std::for_each(
+            assignmentStore->getBeginIterator(), assignmentStore->getEndIterator(),
+            [&statements](std::shared_ptr<Assignment> assignment) { statements.insert(assignment->getStatement()); });
     return statements;
 }
 
@@ -59,8 +58,7 @@ EntityPairSet AssignPatternManager::getAllAssignStmtVarPair() const {
 }
 
 // pattern a (v, "x")
-EntityPairSet AssignPatternManager::getAssignStmtsVarPairByRhs(Expression &rhs,
-                                                                                         bool hasRhsWildCard) const {
+EntityPairSet AssignPatternManager::getAssignStmtsVarPairByRhs(Expression &rhs, bool hasRhsWildCard) const {
     std::regex regexPattern = AssignPatternManager::parsePattern(rhs);
     auto matcher = [&regexPattern, &hasRhsWildCard, this](std::shared_ptr<Assignment> assignment) {
         return AssignPatternManager::matchExpression(*(assignment->getExpression()), regexPattern, hasRhsWildCard);
@@ -77,8 +75,7 @@ EntitySet AssignPatternManager::getAssignStmtsByLhs(Variable &lhs) const {
 }
 
 // pattern a ("x", "x")
-EntitySet AssignPatternManager::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
-                                                                        bool hasRhsWildCard) const {
+EntitySet AssignPatternManager::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const {
     std::regex regexPattern = AssignPatternManager::parsePattern(rhs);
     auto matcher = [&regexPattern, &lhs, &hasRhsWildCard, this](std::shared_ptr<Assignment> assignment) {
         return *(assignment->getVariable()) == lhs &&

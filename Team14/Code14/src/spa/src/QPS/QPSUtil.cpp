@@ -160,27 +160,47 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
                  }},
 };
 
-std::unordered_map<QueryEntityType, entityGetterFunc> QPSUtil::entityGetterMap = {
-        {QueryEntityType::Procedure,
-         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> { return pkb->getAllProcedures(); }},
-        {QueryEntityType::Stmt,
-         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> { return pkb->getAllStatements(); }},
-        {QueryEntityType::Assign,
-         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> { return pkb->getAllAssign(); }},
-        {QueryEntityType::Variable,
-         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> { return pkb->getAllVariables(); }},
-        {QueryEntityType::Constant,
-         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> { return pkb->getAllConstants(); }},
-        {QueryEntityType::While,
-         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> { return pkb->getAllWhile(); }},
-        {QueryEntityType::If,
-         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> { return pkb->getAllIf(); }},
-        {QueryEntityType::Read,
-         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> { return pkb->getAllRead(); }},
-        {QueryEntityType::Print,
-         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> { return pkb->getAllPrint(); }},
-        {QueryEntityType::Call,
-         [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> { return pkb->getAllCall(); }}};
+std::unordered_map<QueryEntityType, entityGetterFunc>
+        QPSUtil::entityGetterMap = {{QueryEntityType::Procedure,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllProcedures();
+                                     }},
+                                    {QueryEntityType::Stmt,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllStatements();
+                                     }},
+                                    {QueryEntityType::Assign,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllAssign();
+                                     }},
+                                    {QueryEntityType::Variable,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllVariables();
+                                     }},
+                                    {QueryEntityType::Constant,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllConstants();
+                                     }},
+                                    {QueryEntityType::While,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllWhile();
+                                     }},
+                                    {QueryEntityType::If,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllIf();
+                                     }},
+                                    {QueryEntityType::Read,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllRead();
+                                     }},
+                                    {QueryEntityType::Print,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllPrint();
+                                     }},
+                                    {QueryEntityType::Call,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllCall();
+                                     }}};
 
 std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
         {QueryEntityType::Assign, StatementType::Assign}, {QueryEntityType::Print, StatementType::Print},

@@ -170,8 +170,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    EntityPairSet getFollowsPair(StatementType formerType,
-                                                           StatementType latterType) const override;
+    EntityPairSet getFollowsPair(StatementType formerType, StatementType latterType) const override;
 
     /**
      * Returns an unordered_set of Statement, Statement pair where the first statement follows the second statement
@@ -181,8 +180,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    EntityPairSet getFollowsStarPair(StatementType formerType,
-                                                               StatementType latterType) const override;
+    EntityPairSet getFollowsStarPair(StatementType formerType, StatementType latterType) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is followed by the given statement
@@ -434,8 +432,7 @@ public:
      * @return An unordered set of vectors containing Statement and Variable pairs
      * @note Used for `pattern a (v, "x")`
      */
-    EntityPairSet getAssignStmtsVarPairByRhs(Expression &rhs,
-                                                                       bool hasWildCard) const override;
+    EntityPairSet getAssignStmtsVarPairByRhs(Expression &rhs, bool hasWildCard) const override;
 
     /**
      * Returns an unordered_set of Statement objects from Assignment objects in the store where the Variable that is
@@ -455,8 +452,7 @@ public:
      * @return An unordered set of Statement objects
      * @note Used for `pattern a ("x", "x")`
      */
-    EntitySet getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
-                                                      bool hasRhsWildCard) const override;
+    EntitySet getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const override;
 
     /**
      * Returns an unordered_set of Statement, Statement pair where the first statement is the DIRECT parent of the
@@ -465,8 +461,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    EntityPairSet getParentPair(StatementType formerType,
-                                                          StatementType latterType) const override;
+    EntityPairSet getParentPair(StatementType formerType, StatementType latterType) const override;
 
     /**
      * Returns an unordered_set of Statement, Statement pair where the first statement is the DIRECT or INDIRECT parent
@@ -476,8 +471,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    EntityPairSet getParentStarPair(StatementType formerType,
-                                                              StatementType latterType) const override;
+    EntityPairSet getParentStarPair(StatementType formerType, StatementType latterType) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is the DIRECT parent of the given
@@ -731,8 +725,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    EntityPairSet getNextPair(StatementType formerType,
-                                                        StatementType latterType) const override;
+    EntityPairSet getNextPair(StatementType formerType, StatementType latterType) const override;
 
     /**
      * Returns an unordered_set of Statement, Statement pair where the first statement is executed before of the second
@@ -742,8 +735,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    EntityPairSet getNextStarPair(StatementType formerType,
-                                                            StatementType latterType) const override;
+    EntityPairSet getNextStarPair(StatementType formerType, StatementType latterType) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is executed again after it has been
@@ -928,8 +920,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered set of Statement, Statement pair stored in a vector
      */
-    EntityPairSet getAffectsPair(StatementType formerType,
-                                                           StatementType latterType) const override;
+    EntityPairSet getAffectsPair(StatementType formerType, StatementType latterType) const override;
 
     /**
      * Returns an unordered_set of statements of the given statement type which affects itself

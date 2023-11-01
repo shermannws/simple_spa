@@ -26,13 +26,9 @@ EntitySet PkbReaderManager::getAllVariables() const { return this->entityManager
 
 EntitySet PkbReaderManager::getAllConstants() const { return this->entityManager->getAllConstants(); }
 
-EntitySet PkbReaderManager::getAllProcedures() const {
-    return this->entityManager->getAllProcedures();
-}
+EntitySet PkbReaderManager::getAllProcedures() const { return this->entityManager->getAllProcedures(); }
 
-EntitySet PkbReaderManager::getAllStatements() const {
-    return this->entityManager->getAllStatements();
-}
+EntitySet PkbReaderManager::getAllStatements() const { return this->entityManager->getAllStatements(); }
 
 EntitySet PkbReaderManager::getAllRead() const { return this->entityManager->getAllRead(); }
 
@@ -64,9 +60,7 @@ EntitySet PkbReaderManager::getUsesStmt(StatementType type) const {
     return this->usesRelationshipManager->getRelationshipStmt(type);
 }
 
-EntitySet PkbReaderManager::getUsesProc() const {
-    return this->usesProcRelationshipManager->getRelationshipProc();
-}
+EntitySet PkbReaderManager::getUsesProc() const { return this->usesProcRelationshipManager->getRelationshipProc(); }
 
 EntitySet PkbReaderManager::getUsesVar(Statement &stmt) const {
     return this->usesRelationshipManager->getRelationshipVar(stmt);
@@ -90,13 +84,11 @@ bool PkbReaderManager::hasUses(Procedure &proc) const {
     return this->usesProcRelationshipManager->hasRelationship(proc);
 }
 
-EntityPairSet PkbReaderManager::getFollowsPair(StatementType formerType,
-                                                                         StatementType latterType) const {
+EntityPairSet PkbReaderManager::getFollowsPair(StatementType formerType, StatementType latterType) const {
     return this->followsRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
-EntityPairSet PkbReaderManager::getFollowsStarPair(StatementType formerType,
-                                                                             StatementType latterType) const {
+EntityPairSet PkbReaderManager::getFollowsStarPair(StatementType formerType, StatementType latterType) const {
     return this->followsRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
@@ -210,9 +202,7 @@ bool PkbReaderManager::hasModifies(Procedure &proc) const {
 
 // Pattern queries i.e. pattern a (...,...)
 // pattern a (_,_)
-EntitySet PkbReaderManager::getAllAssign() const {
-    return this->assignmentManager->getAllAssignStmts();
-}
+EntitySet PkbReaderManager::getAllAssign() const { return this->assignmentManager->getAllAssignStmts(); }
 
 // pattern a (_, "x")
 EntitySet PkbReaderManager::getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const {
@@ -225,8 +215,7 @@ EntityPairSet PkbReaderManager::getAllAssignStmtVarPair() const {
 }
 
 // pattern a (v, "x")
-EntityPairSet PkbReaderManager::getAssignStmtsVarPairByRhs(Expression &rhs,
-                                                                                     bool hasWildCard) const {
+EntityPairSet PkbReaderManager::getAssignStmtsVarPairByRhs(Expression &rhs, bool hasWildCard) const {
     return this->assignmentManager->getAssignStmtsVarPairByRhs(rhs, hasWildCard);
 }
 
@@ -236,18 +225,15 @@ EntitySet PkbReaderManager::getAssignStmtsByLhs(Variable &lhs) const {
 }
 
 // pattern a ("x", "x")
-EntitySet PkbReaderManager::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
-                                                                    bool hasRhsWildCard) const {
+EntitySet PkbReaderManager::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const {
     return this->assignmentManager->getAssignStmtsByLhsRhs(lhs, rhs, hasRhsWildCard);
 }
 
-EntityPairSet PkbReaderManager::getParentPair(StatementType formerType,
-                                                                        StatementType latterType) const {
+EntityPairSet PkbReaderManager::getParentPair(StatementType formerType, StatementType latterType) const {
     return this->parentRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
-EntityPairSet PkbReaderManager::getParentStarPair(StatementType formerType,
-                                                                            StatementType latterType) const {
+EntityPairSet PkbReaderManager::getParentStarPair(StatementType formerType, StatementType latterType) const {
     return this->parentRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
@@ -331,21 +317,13 @@ bool PkbReaderManager::isCallsStar(Procedure &caller, Procedure &callee) const {
     return this->callsRelationshipManager->isRelationship(caller, callee, false);
 }
 
-EntitySet PkbReaderManager::getCallees() const {
-    return this->callsRelationshipManager->getRelationshipLatter();
-}
+EntitySet PkbReaderManager::getCallees() const { return this->callsRelationshipManager->getRelationshipLatter(); }
 
-EntitySet PkbReaderManager::getCalleesStar() const {
-    return this->callsRelationshipManager->getRelationshipLatter();
-}
+EntitySet PkbReaderManager::getCalleesStar() const { return this->callsRelationshipManager->getRelationshipLatter(); }
 
-EntitySet PkbReaderManager::getCallers() const {
-    return this->callsRelationshipManager->getRelationshipFormer();
-}
+EntitySet PkbReaderManager::getCallers() const { return this->callsRelationshipManager->getRelationshipFormer(); }
 
-EntitySet PkbReaderManager::getCallersStar() const {
-    return this->callsRelationshipManager->getRelationshipFormer();
-}
+EntitySet PkbReaderManager::getCallersStar() const { return this->callsRelationshipManager->getRelationshipFormer(); }
 
 EntityPairSet PkbReaderManager::getCallsPair() const {
     return this->callsRelationshipManager->getRelationshipPair(true);
@@ -371,13 +349,11 @@ EntitySet PkbReaderManager::getCalleesStar(Procedure &caller) const {
     return this->callsRelationshipManager->getRelationshipLatter(caller, false);
 }
 
-EntityPairSet PkbReaderManager::getNextPair(StatementType formerType,
-                                                                      StatementType latterType) const {
+EntityPairSet PkbReaderManager::getNextPair(StatementType formerType, StatementType latterType) const {
     return this->nextRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
-EntityPairSet PkbReaderManager::getNextStarPair(StatementType formerType,
-                                                                          StatementType latterType) const {
+EntityPairSet PkbReaderManager::getNextStarPair(StatementType formerType, StatementType latterType) const {
     return this->nextRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
@@ -445,21 +421,13 @@ bool PkbReaderManager::hasAfterStarStmt(Statement &statement) const {
     return this->nextRelationshipManager->isFormer(statement);
 }
 
-EntitySet PkbReaderManager::getAllIfPatternStmts() const {
-    return this->ifPatternManager->getAllStmts();
-}
+EntitySet PkbReaderManager::getAllIfPatternStmts() const { return this->ifPatternManager->getAllStmts(); }
 
-EntitySet PkbReaderManager::getIfStmtsByVar(Variable &var) const {
-    return this->ifPatternManager->getStmtsByVar(var);
-};
+EntitySet PkbReaderManager::getIfStmtsByVar(Variable &var) const { return this->ifPatternManager->getStmtsByVar(var); };
 
-EntityPairSet PkbReaderManager::getAllIfStmtVarPair() const {
-    return this->ifPatternManager->getAllStmtVarPair();
-}
+EntityPairSet PkbReaderManager::getAllIfStmtVarPair() const { return this->ifPatternManager->getAllStmtVarPair(); }
 
-EntitySet PkbReaderManager::getAllWhilePatternStmts() const {
-    return this->whilePatternManager->getAllStmts();
-}
+EntitySet PkbReaderManager::getAllWhilePatternStmts() const { return this->whilePatternManager->getAllStmts(); }
 
 EntitySet PkbReaderManager::getWhileStmtsByVar(Variable &var) const {
     return this->whilePatternManager->getStmtsByVar(var);
@@ -479,8 +447,7 @@ void PkbReaderManager::triggerAffectsCalculation() const {
             [this](std::shared_ptr<Statement> stmt) { return nextRelationshipManager->getAllNextOfStmt(stmt); });
 }
 
-EntityPairSet PkbReaderManager::getAffectsPair(StatementType formerType,
-                                                                         StatementType latterType) const {
+EntityPairSet PkbReaderManager::getAffectsPair(StatementType formerType, StatementType latterType) const {
     if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, latterType)) {
         return EntityPairSet();
     }
@@ -489,9 +456,7 @@ EntityPairSet PkbReaderManager::getAffectsPair(StatementType formerType,
 }
 
 EntitySet PkbReaderManager::getAffectsSameStmt(StatementType stmtType) const {
-    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, stmtType)) {
-        return EntitySet();
-    }
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, stmtType)) { return EntitySet(); }
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getAffectsSameStmt(stmtType);
 }
@@ -507,17 +472,13 @@ EntitySet PkbReaderManager::getAffectsTypeWildcard(StatementType type) const {
 }
 
 EntitySet PkbReaderManager::getAffectsStmtType(Statement &statement, StatementType type) const {
-    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) {
-        return EntitySet();
-    }
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) { return EntitySet(); }
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
 EntitySet PkbReaderManager::getAffectsWildcardType(StatementType type) const {
-    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) {
-        return EntitySet();
-    }
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) { return EntitySet(); }
     this->triggerAffectsCalculation();
     return this->affectsRelationshipManager->getRelationshipWildcardType(type);
 }

@@ -276,8 +276,7 @@ public:
      * @param latterType The type of the latter statement
      * @return An unordered_set of Statement, Statement pair stored in a vector
      */
-    EntityPairSet getFollowsStarPair(StatementType formerType,
-                                                               StatementType latterType) const;
+    EntityPairSet getFollowsStarPair(StatementType formerType, StatementType latterType) const;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is followed by the given statement

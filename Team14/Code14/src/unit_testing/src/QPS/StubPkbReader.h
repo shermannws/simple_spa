@@ -51,11 +51,9 @@ public:
 
     bool hasUses(Procedure &proc) const override;
 
-    EntityPairSet getFollowsPair(StatementType formerType,
-                                                           StatementType latterType) const override;
+    EntityPairSet getFollowsPair(StatementType formerType, StatementType latterType) const override;
 
-    EntityPairSet getFollowsStarPair(StatementType formerType,
-                                                               StatementType latterType) const override;
+    EntityPairSet getFollowsStarPair(StatementType formerType, StatementType latterType) const override;
 
     EntitySet getFollowsTypeStmt(StatementType type, Statement &statement) const override;
 
@@ -123,21 +121,17 @@ public:
     EntityPairSet getAllAssignStmtVarPair() const override;
 
     // pattern a (v, "x")
-    EntityPairSet getAssignStmtsVarPairByRhs(std::string &rhs,
-                                                                       bool hasWildCard) const override;
+    EntityPairSet getAssignStmtsVarPairByRhs(std::string &rhs, bool hasWildCard) const override;
 
     // pattern a ("x", _)
     EntitySet getAssignStmtsByLhs(Variable &lhs) const override;
 
     // pattern a ("x", "x")
-    EntitySet getAssignStmtsByLhsRhs(Variable &lhs, std::string &rhs,
-                                                      bool hasRhsWildCard) const override;
+    EntitySet getAssignStmtsByLhsRhs(Variable &lhs, std::string &rhs, bool hasRhsWildCard) const override;
 
-    EntityPairSet getParentPair(StatementType formerType,
-                                                          StatementType latterType) const override;
+    EntityPairSet getParentPair(StatementType formerType, StatementType latterType) const override;
 
-    EntityPairSet getParentStarPair(StatementType formerType,
-                                                              StatementType latterType) const override;
+    EntityPairSet getParentStarPair(StatementType formerType, StatementType latterType) const override;
 
     EntitySet getParentTypeStmt(StatementType type, Statement &statement) const override;
 
@@ -207,11 +201,9 @@ public:
 
     EntitySet getCalleesStar(Procedure &caller) const override;
 
-    EntityPairSet getNextPair(StatementType formerType,
-                                                        StatementType latterType) const override;
+    EntityPairSet getNextPair(StatementType formerType, StatementType latterType) const override;
 
-    EntityPairSet getNextStarPair(StatementType formerType,
-                                                            StatementType latterType) const override;
+    EntityPairSet getNextStarPair(StatementType formerType, StatementType latterType) const override;
 
     EntitySet getNextStarSameStmt(StatementType stmtType) const override;
 
@@ -259,8 +251,7 @@ public:
 
     EntityPairSet getAllWhileStmtVarPair() const override;
 
-    EntityPairSet getAffectsPair(StatementType formerType,
-                                                           StatementType latterType) const override;
+    EntityPairSet getAffectsPair(StatementType formerType, StatementType latterType) const override;
 
     EntitySet getAffectsTypeStmt(StatementType type, Statement &statement) const override;
 

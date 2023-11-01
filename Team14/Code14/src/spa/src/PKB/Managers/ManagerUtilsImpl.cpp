@@ -12,10 +12,9 @@
 #include "PKB/RelationshipStores/CallsRelationshipStore.h"
 #include "PKB/RelationshipStores/NextRelationshipStore.h"
 
-template EntitySet
-ManagerUtils::getEntitiesFromStore<AssignPatternStore, Assignment>(std::shared_ptr<AssignPatternStore> store,
-                                                                   std::function<bool(std::shared_ptr<Assignment>)> matcher,
-                                                                   std::function<EntityPointer(std::shared_ptr<Assignment>)> getter);
+template EntitySet ManagerUtils::getEntitiesFromStore<AssignPatternStore, Assignment>(
+        std::shared_ptr<AssignPatternStore> store, std::function<bool(std::shared_ptr<Assignment>)> matcher,
+        std::function<EntityPointer(std::shared_ptr<Assignment>)> getter);
 
 template EntityPairSet ManagerUtils::getEntityPairsFromStore<AssignPatternStore, Assignment>(
         std::shared_ptr<AssignPatternStore> store, std::function<bool(std::shared_ptr<Assignment>)> matcher,
@@ -74,17 +73,16 @@ ManagerUtils::getLeftEntitiesFromRightKeyNoMatch<Procedure, Variable>(Relationsh
                                                                       Variable &key);
 
 
-template EntitySet
-ManagerUtils::getLeftKeysStmtMatch<Variable>(RelationshipStore<Statement, Variable> &store, StatementType type);
+template EntitySet ManagerUtils::getLeftKeysStmtMatch<Variable>(RelationshipStore<Statement, Variable> &store,
+                                                                StatementType type);
 
-template EntitySet
-ManagerUtils::getLeftKeysStmtMatch<Statement>(RelationshipStore<Statement, Statement> &store, StatementType type);
+template EntitySet ManagerUtils::getLeftKeysStmtMatch<Statement>(RelationshipStore<Statement, Statement> &store,
+                                                                 StatementType type);
 
-template EntitySet
-ManagerUtils::getRightKeysStmtMatch<Statement>(RelationshipStore<Statement, Statement> &store, StatementType type);
+template EntitySet ManagerUtils::getRightKeysStmtMatch<Statement>(RelationshipStore<Statement, Statement> &store,
+                                                                  StatementType type);
 
-template EntitySet
-ManagerUtils::getLeftKeysNoMatch<Procedure, Variable>(RelationshipStore<Procedure, Variable> &store);
+template EntitySet ManagerUtils::getLeftKeysNoMatch<Procedure, Variable>(RelationshipStore<Procedure, Variable> &store);
 
 template EntitySet
 ManagerUtils::getLeftKeysNoMatch<Procedure, Procedure>(RelationshipStore<Procedure, Procedure> &store);
@@ -128,7 +126,7 @@ ManagerUtils::addStmtVarFromProcVar(std::shared_ptr<UsesRelationshipManager> stm
 
 
 template EntitySet ManagerUtils::getLeftKeysMatchRight(RelationshipStore<Statement, Statement> &store,
-                                                                        std::function<bool(std::shared_ptr<Statement>)> leftMatcher);
+                                                       std::function<bool(std::shared_ptr<Statement>)> leftMatcher);
 
 template void ManagerUtils::calculateTransitivity<NextRelationshipStore, Statement>(
         std::shared_ptr<NextRelationshipStore> relationshipStore,

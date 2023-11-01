@@ -49,7 +49,8 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of Statement, Statement pair stored in a vector
      */
-    virtual EntityPairSet getRelationshipPair(StatementType formerType, StatementType latterType, bool requireDirect) const;
+    virtual EntityPairSet getRelationshipPair(StatementType formerType, StatementType latterType,
+                                              bool requireDirect) const;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to the given statement. The
@@ -59,8 +60,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    virtual EntitySet getRelationshipTypeStmt(StatementType type, Statement &statement,
-                                                               bool requireDirect) const;
+    virtual EntitySet getRelationshipTypeStmt(StatementType type, Statement &statement, bool requireDirect) const;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to any statement. The
@@ -87,8 +87,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of statements
      */
-    virtual EntitySet getRelationshipStmtType(Statement &statement, StatementType type,
-                                                               bool requireDirect) const;
+    virtual EntitySet getRelationshipStmtType(Statement &statement, StatementType type, bool requireDirect) const;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to any statement. The

@@ -20,8 +20,7 @@ EntityPairSet StmtToVarRelationshipManager<S>::getRelationshipStmtPair(Statement
 
 template<typename S>
 
-EntitySet StmtToVarRelationshipManager<S>::getRelationshipTypeIdent(StatementType type,
-                                                                                     Variable &var) const {
+EntitySet StmtToVarRelationshipManager<S>::getRelationshipTypeIdent(StatementType type, Variable &var) const {
     if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return EntitySet(); }
     return ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch<Variable>(*relationshipStore, var, type);
 }
