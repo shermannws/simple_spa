@@ -111,7 +111,7 @@ Select s such that not Follows*(_,s)
 2h - Not Follows* - wildcard second
 stmt s;
 Select s such that not Follows*(s,_)
-6, 8, 11, 13, 19, 20, 23, 24, 26, 29, 30, 31, 32
+6, 8, 11, 13, 19, 20, 23, 24, 26, 28, 29, 30, 31, 32
 5000
 2i - Not Follows* - int first
 stmt s;
@@ -211,7 +211,7 @@ Proc4
 4b - Not ModifiesP - ident second
 procedure p;
 Select p such that not Modifies(p,"i")
-Proc1, Proc3, Proc4, Proc5
+Proc3, Proc4, Proc5
 5000
 4c - Not ModifiesP - wildcard second
 procedure p;
@@ -221,7 +221,7 @@ Proc4
 4d - Not ModifiesP - ident first
 variable v;
 Select v such that not Modifies("Proc1",v)
-three, four, five, ten, i, plus, mod, p, c, v, ww, print, read
+three, four, five, ten, plus, p, c, v, print, read
 5000
 4e - Not ModifiesP - wildcard first
 variable v;
