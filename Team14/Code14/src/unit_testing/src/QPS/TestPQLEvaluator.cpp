@@ -1657,3 +1657,64 @@ TEST_CASE_METHOD(UnitTestFixture, "attrRef result-clause query") {
         REQUIRE(find(results.begin(), results.end(), "14 var14 var14") != results.end());
     }
 }
+
+TEST_CASE_METHOD(UnitTestFixture, "not queries") {
+    SECTION("single not pattern - 2 syns in not clause") {
+        PQLParser parser("assign a; variable v; Select <a,v> pattern not a(v,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getTuples().size() == 22);
+        REQUIRE(find(results.begin(), results.end(), "1 var88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var38") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var5") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var38") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var5") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var38") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var5") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var1") != results.end());
+    }
+
+    SECTION("single not such that - negate a boolean FALSE clause, tuple results") {
+        PQLParser parser("procedure p; variable v; Select p such that not Uses(\"proc1\",\"x\")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getTuples().size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "proc1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "proc2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "proc3") != results.end());
+    }
+
+    SECTION("single not with - negate a non-empty tuple clause, negation returns empty, boolean results") {
+        PQLParser parser("procedure p;Select BOOLEAN with not p.procName = p.procName");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getTuples().size() == 0);
+        REQUIRE(find(results.begin(), results.end(), "FALSE") != results.end());
+    }
+}
