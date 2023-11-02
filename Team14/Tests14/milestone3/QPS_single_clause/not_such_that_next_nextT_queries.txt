@@ -1,0 +1,155 @@
+1 - Not Next (wildcard, wildcard) DONE
+constant k;
+Select k such that not Next(_,_)
+none
+5000
+2 - Not Next (wildcard, syn) DONE
+assign a;
+Select a such that not Next(_,a)
+1, 15
+5000
+3 - Not Next (wildcard, int) DONE
+procedure p;
+Select p such that not Next(_,11)
+none
+5000
+4 - Not Next (int, int) - stmt else block cannot be executed after stmt in if block DONE
+constant k;
+Select k such that not Next(25, 26)
+2, 3, 5, 6, 1, 100, 11, 12, 14, 15, 18, 20, 26
+5000
+5 - Not Next (int, int) - stmt in else block can be executed after if cond evaluation DONE
+
+Select BOOLEAN such that not Next(3, 6)
+FALSE
+5000
+6 - Not Next (int,syn) DONE
+call c;
+Select c such that not Next(2, c)
+7
+5000
+7 - Not Next (int, syn) - possible stmts after a while cond evaluation DONE
+stmt s;
+Select s such that not Next(12,s)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30
+5000
+8 - Not Next (int, syn) - only while cond eval is possible after a last line of while block DONE
+stmt s;
+Select s such that not Next(22,s)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30
+5000
+9 - Not Next (int, wildcard) DONE
+if if;
+Select if such that not Next(14,_)
+2, 3, 24
+5000
+10 - Not Next (syn, syn) DONE
+if ifs; print pr;
+Select <ifs,pr> such that not Next(ifs, pr)
+2 4, 2 9, 2 11, 2 14, 2 23, 2 25, 2 26, 2 27, 3 9, 3 11, 3 14, 3 23, 3 25, 3 26, 3 27, 24 4, 24 9, 24 11, 24 14, 24 23, 24 27
+5000
+11 - Not Next (syn, wildcard) DONE
+read re;
+Select re such that not Next(re, _)
+none
+5000
+12 - Not Next (syn, int) DONE
+while w;
+Select w.stmt# such that not Next(w, 20)
+8, 12, 16, 29
+5000
+13 - negative test - Not Next (int, int) where lhs = rhs DONE
+while w;
+Select w such that not Next(12, 12)
+8, 12, 16, 19, 29
+5000
+14 - negative test - Not Next (syn, syn) where lhs = rhs DONE
+while w;
+Select w such that not Next(w, w)
+8, 12, 16, 19, 29
+5000
+15 - negative case - s2 executed after s1 but diff procedure (not returned) DONE
+
+Select BOOLEAN such that not Next(7, 15)
+TRUE
+5000
+16 - Not Next* (wildcard, wildcard) DONE
+
+Select BOOLEAN such that not Next*(_,_)
+FALSE
+5000
+17 - Not Next* (wildcard, syn) DONE
+read re;
+Select re.varName such that not Next*(_,re)
+none
+5000
+18 - Not Next* (wildcard, int) DONE
+procedure p;
+Select p such that not Next*(_,13)
+none
+5000
+19 - Not Next* (int, int) - non-first stmt in else block can be executed after if cond evaluation DONE
+call c;
+Select c such that not Next*(2, 12)
+none
+5000
+20 - Not Next* (int, int) - stmt in diff nesting level DONE
+
+Select BOOLEAN such that not Next*(4, 7)
+FALSE
+5000
+21 - Not Next* (int,syn) DONE
+assign a;
+Select a such that not Next*(1, a)
+1, 15, 18, 22, 30
+5000
+22 - Not Next* (int, syn) - possible stmts after a nested while cond evaluation DONE
+stmt s;
+Select s such that not Next*(19,s)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+5000
+23 - Not Next* (int, wildcard) DONE
+if if;
+Select if such that not Next*(14,_)
+2, 3, 24
+5000
+24 - Not Next* (syn, syn) DONE
+if ifs; print pr;
+Select <ifs,pr> such that not Next*(ifs, pr)
+2 23, 2 25, 2 26, 2 27, 3 11, 3 23, 3 25, 3 26, 3 27, 24 4, 24 9, 24 11, 24 14
+5000
+25 - Not Next* (syn, wildcard) DONE
+assign a;
+Select a such that not Next*(a, _)
+none
+5000
+26 - Not Next* (syn, int) DONE
+if ifs;
+Select ifs.stmt# such that not Next*(ifs, 3)
+3, 24
+5000
+27 - Not Next* (syn, int) DONE
+if ifs;
+Select ifs.stmt# such that not Next*(ifs, 2)
+2, 3, 24
+5000
+28 - Not Next* (int, int) where lhs = rhs false DONE
+while w;
+Select w such that not Next*(2, 2)
+8, 12, 16, 19, 29
+5000
+29 - Not Next* (int, int) where lhs = rhs true DONE
+while w;
+Select w such that not Next*(19, 19)
+none
+5000
+30 - Not Next* (syn, syn) where lhs = rhs DONE
+print p;
+Select p such that not Next*(p, p)
+4, 11, 14, 27
+5000
+31 - negative case - s2 executed after s1 but diff procedure (not returned) DONE
+
+Select BOOLEAN such that not Next*(13, 15)
+TRUE
+5000
