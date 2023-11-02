@@ -78,6 +78,11 @@ read r;
 Select r with not r.varName = r.varName
 none
 5000
+16a - read.varName = read1.varname
+read r, r1;
+Select r with not r.varName = r1.varName
+2, 9 ,10
+5000
 17 - read.varName = print.varName
 read r; print pn;
 Select r with not r.varName = pn.varName
@@ -152,6 +157,11 @@ Select c1.stmt# with not c.value = c1.stmt#
 constant c; while w;
 Select w.stmt# with not c.value = w.stmt#
 8
+5000
+31a -  constant.value = while.stmt#
+constant c; while w;
+Select c.value with not c.value = w.stmt#
+1, 2, 3, 4, 7, 100
 5000
 32 - constant.value = if.stmt#
 constant c; if ifs;
