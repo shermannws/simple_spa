@@ -1,0 +1,130 @@
+1 - Parent - read first syn
+stmt s; read x;
+Select s such that Parent(x,s)
+none
+5000
+2 - Parent - print first syn
+stmt s; print x;
+Select s such that Parent(x,s)
+none
+5000
+3 - Parent - call first syn
+stmt s; call x;
+Select s such that Parent(x,s)
+none
+5000
+4 - Parent - assign first syn
+stmt s; assign x;
+Select s such that Parent(x,s)
+none
+5000
+5 - Parent* - read first syn
+stmt s; read x;
+Select s such that Parent*(x,s)
+none
+5000
+6 - Parent* - print first syn
+stmt s; print x;
+Select s such that Parent*(x,s)
+none
+5000
+7 - Parent* - call first syn
+stmt s; call x;
+Select s such that Parent*(x,s)
+none
+5000
+8 - Parent* - assign first syn
+stmt s; assign x;
+Select s such that Parent*(x,s)
+none
+5000
+9 - Uses - read first syn
+variable v; read x;
+Select v such that Uses(x,v)
+none
+5000
+10 - Modifies - print first syn
+variable v; print x;
+Select v such that Modifies(x,v)
+none
+5000
+11 - Affects - read first syn
+stmt s; read x;
+Select s such that Affects(x,s)
+none
+5000
+12 - Affects - print first syn
+stmt s; print x;
+Select s such that Affects(x,s)
+none
+5000
+13 - Affects - call first syn
+stmt s; call x;
+Select s such that Affects(x,s)
+none
+5000
+14 - Affects - if first syn
+stmt s; if x;
+Select s such that Affects(x,s)
+none
+5000
+15 - Affects - while first syn
+stmt s; while x;
+Select s such that Affects(x,s)
+none
+5000
+16 - Affects - read second syn
+stmt s; read x;
+Select s such that Affects(s,x)
+none
+5000
+17 - Affects - print second syn
+stmt s; print x;
+Select s such that Affects(s,x)
+none
+5000
+18 - Affects - call second syn
+stmt s; call x;
+Select s such that Affects(s,x)
+none
+5000
+19 - Affects - if second syn
+stmt s; if x;
+Select s such that Affects(s,x)
+none
+5000
+20 - Affects - while second syn
+stmt s; while x;
+Select s such that Affects(s,x)
+none
+5000
+21 - Follows - same syn
+stmt s;
+Select s such that Follows(s,s)
+none
+5000
+22 - Follows* - same syn
+stmt s;
+Select s such that Follows*(s,s)
+none
+5000
+23 - Parent - same syn
+stmt s;
+Select s such that Parent(s,s)
+none
+5000
+24 - Parent* - same syn
+stmt s;
+Select s such that Parent*(s,s)
+none
+5000
+25 - Calls - same syn
+procedure p;
+Select p such that Calls(p,p)
+none
+5000
+26 - Calls - same syn
+procedure p;
+Select p such that Calls*(p,p)
+none
+5000
