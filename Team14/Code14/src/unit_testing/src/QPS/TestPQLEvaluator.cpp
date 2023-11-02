@@ -25,10 +25,12 @@ TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
         Result r = Result();
         r.setType(std::vector<Synonym>{"a", "x"});
 
-        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
-        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
+        ResultTuple v1{make_shared<Entity>(Statement(1, StatementType::Assign)),
+                       make_shared<Entity>(Variable("my_variable"))};
+        ResultTuple v2{make_shared<Entity>(Statement(5, StatementType::Stmt)),
+                       make_shared<Entity>(Variable("another_variable"))};
 
-        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<ResultTuple> tuples{v1, v2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
@@ -48,11 +50,11 @@ TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
         Result r = Result();
         r.setType(std::vector<Synonym>{"s"});
 
-        std::vector<Entity> v1{Statement(1, StatementType::Stmt)};
-        std::vector<Entity> v2{Statement(2, StatementType::Stmt)};
+        ResultTuple v1{make_shared<Entity>(Statement(1, StatementType::Stmt))};
+        ResultTuple v2{make_shared<Entity>(Statement(2, StatementType::Stmt))};
 
 
-        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<ResultTuple> tuples{v1, v2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
@@ -71,10 +73,12 @@ TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
         Result r = Result();
         r.setType(std::vector<Synonym>{"a", "x"});
 
-        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
-        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
+        ResultTuple v1{make_shared<Entity>(Statement(1, StatementType::Assign)),
+                       make_shared<Entity>(Variable("my_variable"))};
+        ResultTuple v2{make_shared<Entity>(Statement(5, StatementType::Stmt)),
+                       make_shared<Entity>(Variable("another_variable"))};
 
-        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<ResultTuple> tuples{v1, v2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
@@ -1655,5 +1659,66 @@ TEST_CASE_METHOD(UnitTestFixture, "attrRef result-clause query") {
         REQUIRE(find(results.begin(), results.end(), "24 var24 var24") != results.end());
         REQUIRE(find(results.begin(), results.end(), "36 var36 var36") != results.end());
         REQUIRE(find(results.begin(), results.end(), "14 var14 var14") != results.end());
+    }
+}
+
+TEST_CASE_METHOD(UnitTestFixture, "not queries") {
+    SECTION("single not pattern - 2 syns in not clause") {
+        PQLParser parser("assign a; variable v; Select <a,v> pattern not a(v,_)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getTuples().size() == 22);
+        REQUIRE(find(results.begin(), results.end(), "1 var88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var38") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var5") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var38") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var5") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var38") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var5") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var1") != results.end());
+    }
+
+    SECTION("single not such that - negate a boolean FALSE clause, tuple results") {
+        PQLParser parser("procedure p; variable v; Select p such that not Uses(\"proc1\",\"x\")");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getTuples().size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "proc1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "proc2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "proc3") != results.end());
+    }
+
+    SECTION("single not with - negate a non-empty tuple clause, negation returns empty, boolean results") {
+        PQLParser parser("procedure p;Select BOOLEAN with not p.procName = p.procName");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(resultObj.getTuples().size() == 0);
+        REQUIRE(find(results.begin(), results.end(), "FALSE") != results.end());
     }
 }

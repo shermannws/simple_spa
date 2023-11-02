@@ -5,7 +5,7 @@
 #include "QueryEntity.h"
 #include "Ref.h"
 
-using entityGetterFunc = std::function<std::unordered_set<Entity>(std::shared_ptr<PkbReader>)>;
+using entityGetterFunc = std::function<std::unordered_set<std::shared_ptr<Entity>>(std::shared_ptr<PkbReader>)>;
 using strategyCreatorFunc = std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>;
 
 /**
@@ -27,6 +27,11 @@ public:
      * @brief An unordered map that maps QueryEntityType to the corresponding ClauseType
      */
     static std::unordered_map<QueryEntityType, ClauseType> entityToClauseMap;
+
+    /**
+     * @brief An unordered map that maps a pattern clause's ClauseType to the corresponding QueryEntityType
+     */
+    static std::unordered_map<ClauseType, QueryEntityType> patternClauseToEntityMap;
 
     /**
      * @brief An unordered map that maps a string to TokenType
@@ -76,7 +81,7 @@ public:
     /**
      * @brief An unordered map of attrName strings to the entity's getValue func based on attrName
      */
-    static std::unordered_map<AttrName, std::function<std::string(Entity)>> getValueFunc;
+    static std::unordered_map<AttrName, std::function<std::string(std::shared_ptr<Entity>)>> getValueFunc;
 
     /**
      * @brief returns the synonym of an element

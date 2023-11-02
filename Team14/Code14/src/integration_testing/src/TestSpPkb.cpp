@@ -1,4 +1,3 @@
-#include <iostream>
 #include <vector>
 
 #include "Commons/Entities/AssignStatement.h"
@@ -8,13 +7,11 @@
 #include "PKB/PkbConcreteWriter.h"
 #include "SP/AST/Nodes/ProgramNode.h"
 #include "SP/AST/Traverser/Traverser.h"
-#include "SP/AST/Visitors/CallsExtractorVisitor.h"
 #include "SP/AST/Visitors/DesignExtractorVisitor.h"
 #include "SP/AST/Visitors/EntityExtractorVisitor.h"
 #include "SP/AST/Visitors/FollowsExtractorVisitor.h"
 #include "SP/AST/Visitors/ModifiesExtractorVisitor.h"
 #include "SP/AST/Visitors/ParentExtractorVisitor.h"
-#include "SP/AST/Visitors/PatternExtractorVisitor.h"
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/CFG/CFGBuilder.h"
 #include "SP/CFG/CFGExtractor.h"
@@ -25,6 +22,8 @@
 #include "TestingUtilities/ASTGenerator/ASTGenerator.h"
 #include "TestingUtilities/TestFixture/IntegrationTestFixture.h"
 #include "catch.hpp"
+
+using namespace std;
 
 /*
 Test the e2e addition through from SPTraverser to PKB stores
@@ -119,34 +118,34 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - e2e for Follows a
     auto VarV = Variable("v");
     auto usesV = usesRelationshipManager->getRelationshipTypeIdent(StatementType::Assign, VarV);
     REQUIRE(usesV.size() == 1);
-    REQUIRE(usesV.find(AssignStatement(1)) != usesV.end());
-    REQUIRE(usesV.find(Statement(1, StatementType::Assign)) != usesV.end());
+    REQUIRE(usesV.find(make_shared<AssignStatement>(1)) != usesV.end());
+    REQUIRE(usesV.find(make_shared<Statement>(1, StatementType::Assign)) != usesV.end());
 
     auto VarY = Variable("y");
     auto usesY = usesRelationshipManager->getRelationshipTypeIdent(StatementType::Assign, VarY);
     REQUIRE(usesY.size() == 1);
-    REQUIRE(usesY.find(AssignStatement(1)) != usesY.end());
-    REQUIRE(usesY.find(Statement(1, StatementType::Assign)) != usesY.end());
+    REQUIRE(usesY.find(make_shared<AssignStatement>(1)) != usesY.end());
+    REQUIRE(usesY.find(make_shared<Statement>(1, StatementType::Assign)) != usesY.end());
 
     auto Stmt1Stmt = Statement(1, StatementType::Assign);
     auto followsRSStmt = followsRelationshipManager->getRelationshipStmtType(Stmt1Stmt, StatementType::Stmt, true);
     REQUIRE(followsRSStmt.size() == 1);
-    REQUIRE(followsRSStmt.find(ReadStatement(2, varName)) != followsRSStmt.end());
+    REQUIRE(followsRSStmt.find(make_shared<ReadStatement>(2, varName)) != followsRSStmt.end());
 
     auto Stmt1Assign = AssignStatement(1);
     auto followsRSAssign = followsRelationshipManager->getRelationshipStmtType(Stmt1Assign, StatementType::Stmt, true);
     REQUIRE(followsRSAssign.size() == 1);
-    REQUIRE(followsRSAssign.find(ReadStatement(2, varName)) != followsRSAssign.end());
+    REQUIRE(followsRSAssign.find(make_shared<ReadStatement>(2, varName)) != followsRSAssign.end());
 
     auto Stmt2Stmt = Statement(2, StatementType::Read, varName);
     auto followsRS2Stmt = followsRelationshipManager->getRelationshipStmtType(Stmt2Stmt, StatementType::Stmt, true);
     REQUIRE(followsRS2Stmt.size() == 1);
-    REQUIRE(followsRS2Stmt.find(PrintStatement(3, varName)) != followsRS2Stmt.end());
+    REQUIRE(followsRS2Stmt.find(make_shared<PrintStatement>(3, varName)) != followsRS2Stmt.end());
 
     auto Stmt2Read = ReadStatement(2, varName);
     auto followsRS2Read = followsRelationshipManager->getRelationshipStmtType(Stmt2Read, StatementType::Stmt, true);
     REQUIRE(followsRS2Read.size() == 1);
-    REQUIRE(followsRS2Read.find(Statement(3, StatementType::Print, varName)) != followsRS2Read.end());
+    REQUIRE(followsRS2Read.find(make_shared<Statement>(3, StatementType::Print, varName)) != followsRS2Read.end());
 }
 
 
@@ -239,16 +238,16 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - e2e with nested s
     // Check Follows
     auto follows1 = followsRelationshipManager->getRelationshipStmtType(stmt1, StatementType::Stmt, true);
     CHECK(follows1.size() == 1);
-    CHECK(follows1.find(stmt9) != follows1.end());
+    CHECK(follows1.find(make_shared<Statement>(stmt9)) != follows1.end());
     auto follows3 = followsRelationshipManager->getRelationshipStmtType(stmt3, StatementType::Stmt, true);
     CHECK(follows3.size() == 1);
-    CHECK(follows3.find(stmt4) != follows3.end());
+    CHECK(follows3.find(make_shared<Statement>(stmt4)) != follows3.end());
 
     // Check Follows*
     auto follows1star = followsRelationshipManager->getRelationshipStmtType(stmt1, StatementType::Stmt, false);
     CHECK(follows1star.size() == 2);
-    CHECK(std::find(follows1star.begin(), follows1star.end(), stmt9) != follows1star.end());
-    CHECK(std::find(follows1star.begin(), follows1star.end(), stmt10) != follows1star.end());
+    CHECK(follows1star.find(make_shared<Statement>(stmt9)) != follows1star.end());
+    CHECK(follows1star.find(make_shared<Statement>(stmt10)) != follows1star.end());
 
     // Check Uses exhaustively
     CHECK(usesRelationshipManager->getRelationshipStmtPair(StatementType::Stmt).size() == 17);
@@ -547,18 +546,18 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test CFG Extractor - test Next extract
     // Check correct Statement subclass saved
     auto statements1 = nextRelationshipManager->getRelationshipStmtType(statement15, StatementType::Call, true);
     CHECK(statements1.size() == 1);
-    CHECK(statements1.find(statement17) != statements1.end());
-    CHECK(statements1.find(statement17)->getAttrValue() == "Proc1");
+    CHECK(statements1.find(make_shared<Statement>(statement17)) != statements1.end());
+    CHECK((*statements1.find(make_shared<Statement>(statement17)))->getAttrValue() == "Proc1");
 
     auto statements2 = nextRelationshipManager->getRelationshipStmtType(statement12, StatementType::Print, true);
     CHECK(statements2.size() == 1);
-    CHECK(statements2.find(statement13) != statements2.end());
-    CHECK(statements2.find(statement13)->getAttrValue() == "p");
+    CHECK(statements2.find(make_shared<Statement>(statement13)) != statements2.end());
+    CHECK((*statements2.find(make_shared<Statement>(statement13)))->getAttrValue() == "p");
 
     auto statements3 = nextRelationshipManager->getRelationshipStmtType(statement1, StatementType::Read, true);
     CHECK(statements3.size() == 1);
-    CHECK(statements3.find(statement2) != statements3.end());
-    CHECK(statements3.find(statement2)->getAttrValue() == "x");
+    CHECK(statements3.find(make_shared<Statement>(statement2)) != statements3.end());
+    CHECK((*statements3.find(make_shared<Statement>(statement2)))->getAttrValue() == "x");
 }
 
 

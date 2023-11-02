@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Clause.h"
+#include "QPS/QPSUtil.h"
 
 /**
  * @brief PatternClause class that extends from Clause
@@ -72,6 +73,12 @@ public:
      * @return vector of Synonyms
      */
     std::vector<Synonym> getSynonyms() const override;
+
+    /**
+     * @brief returns the list of QueryEntityTypes of the synonyms present in the clause
+     * @return vector of QueryEntityTypes
+     */
+    std::vector<QueryEntityType> getSynonymEntityTypes() const override;
 
     /**
      * @brief Returns true if the Clause object is equal to the other Clause object, false otherwise

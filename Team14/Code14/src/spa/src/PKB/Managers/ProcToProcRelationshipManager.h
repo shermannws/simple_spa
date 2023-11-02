@@ -44,7 +44,7 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of Procedure, Procedure pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getRelationshipPair(bool requireDirect) const;
+    EntityPairSet getRelationshipPair(bool requireDirect) const;
 
     /**
      * Returns an unordered_set of procedure which is related to the given procedure. The procedure given is the latter
@@ -53,14 +53,14 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of procedures
      */
-    std::unordered_set<Entity> getRelationshipFormer(Procedure &latterProcedure, bool requireDirect) const;
+    EntitySet getRelationshipFormer(Procedure &latterProcedure, bool requireDirect) const;
 
     /**
      * Returns an unordered_set of procedures which is related to any procedures. The procedures retrieved are the
      * former procedures
      * @return An unordered_set of procedures
      */
-    std::unordered_set<Entity> getRelationshipFormer() const;
+    EntitySet getRelationshipFormer() const;
 
     /**
      * Returns an unordered_set of procedures which is related to the given procedure. The procedure given is the former
@@ -69,14 +69,14 @@ public:
      * @param requireDirect A boolean value indicating if a direct relationship is required
      * @return An unordered_set of procedures
      */
-    std::unordered_set<Entity> getRelationshipLatter(Procedure &formerProcedure, bool requireDirect) const;
+    EntitySet getRelationshipLatter(Procedure &formerProcedure, bool requireDirect) const;
 
     /**
      * Returns an unordered_set of procedures which is related to any procedure. The procedures retrieved are the latter
      * procedure
      * @return An unordered_set of procedures
      */
-    std::unordered_set<Entity> getRelationshipLatter() const;
+    EntitySet getRelationshipLatter() const;
 
     /**
      * Returns true if procedure1 is related to procedure2, false otherwise

@@ -233,7 +233,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Next/Next* Relationship Retrieval") {
         nextRelationshipManager.clearNextStarStore();
     }
 
-    SECTION("Intermeidate Test 2 - If at node 3") {
+    SECTION("Intermediate Test 2 - If at node 3") {
         NextRelationshipManager nextRelationshipManager = NextRelationshipManager();
 
         REQUIRE(nextRelationshipManager.hasRelationship() == false);

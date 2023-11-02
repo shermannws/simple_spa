@@ -37,6 +37,11 @@ protected:
     ClauseType type;
 
     /**
+     * @brief true if clause is negated
+     */
+    bool negation;
+
+    /**
      * @brief The first parameter of the Clause in Ref
      */
     Ref firstParam;
@@ -65,6 +70,18 @@ public:
     ClauseType getType();
 
     /**
+     * @brief The setter of the clause negation
+     * @param isNegated value of the negation of the clause
+     */
+    void setNegation(bool isNegated);
+
+    /**
+     * @brief returns true if clause contains 'not' otherwise false
+     * @return true if clause is a negation clause
+     */
+    bool isNegation();
+
+    /**
      * @brief The setter of the first parameter of the Clause
      * @param ref The Ref reference of the first parameter
      */
@@ -82,6 +99,12 @@ public:
      * @return vector of Synonyms
      */
     virtual std::vector<Synonym> getSynonyms() const = 0;
+
+    /**
+     * @brief returns the list of QueryEntityTypes of the synonyms present in the clause
+     * @return vector of QueryEntityTypes
+     */
+    virtual std::vector<QueryEntityType> getSynonymEntityTypes() const = 0;
 
     /**
      * @brief Returns true if the Clause object is equal to the other Clause object, false otherwise

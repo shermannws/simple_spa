@@ -58,8 +58,8 @@ public:
      * @param a2 The AttrName of the second attrRef to join
      * @return The vector of vectors of Entity as a result of the join
      */
-    std::unordered_set<std::vector<Entity>> join(std::unordered_set<Entity> v1, AttrName a1,
-                                                 std::unordered_set<Entity> v2, AttrName a2) const;
+    std::unordered_set<ResultTuple> join(std::unordered_set<std::shared_ptr<Entity>> v1, AttrName a1,
+                                         std::unordered_set<std::shared_ptr<Entity>> v2, AttrName a2) const;
 
     /**
      * Filters a vector of Entities based on a StringRep
@@ -68,5 +68,6 @@ public:
      * @param rep The string representation of the value to filter with
      * @return The vector of Entities as a result of the join
      */
-    std::unordered_set<Entity> filter(std::unordered_set<Entity> v, AttrName a, StringRep rep) const;
+    std::unordered_set<std::shared_ptr<Entity>> filter(std::unordered_set<std::shared_ptr<Entity>> v, AttrName a,
+                                                       StringRep rep) const;
 };
