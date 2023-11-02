@@ -142,6 +142,17 @@ std::unordered_set<std::vector<Entity>> StubPkbReader::getFollowsPair(StatementT
 
 std::unordered_set<std::vector<Entity>> StubPkbReader::getFollowsStarPair(StatementType formerType,
                                                                           StatementType latterType) const {
+    if (formerType == StatementType::Assign && latterType == StatementType::Read) {
+        auto a1 = Statement(1, StatementType::Assign);
+        auto a3 = Statement(3, StatementType::Assign);
+        auto a7 = Statement(7, StatementType::Assign);
+
+        auto r5 = Statement(5, StatementType::Read);
+        auto r6 = Statement(6, StatementType::Read);
+        auto r8 = Statement(8, StatementType::Read);
+        return std::unordered_set<std::vector<Entity>>(
+                {{a1, r5}, {a1, r6}, {a1, r8}, {a3, r5}, {a3, r6}, {a3, r8}, {a7, r8}});
+    }
     return std::unordered_set<std::vector<Entity>>();
 }
 
@@ -200,6 +211,11 @@ std::unordered_set<std::vector<Entity>> StubPkbReader::getModifiesStmtPair(State
     std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var1")};
     std::vector<Entity> pair2 = {Statement(3, StatementType::Call), Variable("var2")};
     std::vector<Entity> pair3 = {Statement(2, StatementType::While), Variable("var3")};
+    if (type == StatementType::Assign) {
+        std::vector<Entity> pair4 = {Statement(4, StatementType::Assign), Variable("var3")};
+        std::vector<Entity> pair5 = {Statement(6, StatementType::Assign), Variable("var4")};
+        return std::unordered_set<std::vector<Entity>>({pair1, pair4, pair5});
+    }
     return std::unordered_set<std::vector<Entity>>({pair1, pair2, pair3});
 }
 

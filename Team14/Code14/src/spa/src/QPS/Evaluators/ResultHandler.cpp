@@ -18,14 +18,15 @@ std::shared_ptr<Result> ResultHandler::getDiff(std::shared_ptr<Result> r1, std::
 
     auto mainSet = r1->getTuples();
     auto minusSet = r2->getTuples();
+    ResultTuples filteredSet;
 
     for (auto &tuple: mainSet) {
         std::vector<Entity> key;
-        for (const auto &idx: keyIndices) { key.push_back(tuple[idx]); }   // build hash key
-        if (minusSet.find(key) != minusSet.end()) { mainSet.erase(tuple); }// remove if found in minusSet
+        for (const auto &idx: keyIndices) { key.push_back(tuple[idx]); }        // build hash key
+        if (minusSet.find(key) == minusSet.end()) { filteredSet.insert(tuple); }// add if not in minusSet
     }
 
-    r1->setTuples(mainSet);
+    r1->setTuples(filteredSet);
     return cast(r1);
 }
 
