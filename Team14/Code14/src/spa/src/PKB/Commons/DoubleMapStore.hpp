@@ -13,7 +13,7 @@ void DoubleMapStore<K1, K2, V1, V2, H1, H2>::store(std::shared_ptr<K1> left, std
     }
     this->rightToLeftStore[right]->store(left);
 
-    this->pairs.insert({*left, *right});
+    this->pairs.insert({left, right});
 }
 
 template<typename K1, typename K2, typename V1, typename V2, typename H1, typename H2>
@@ -64,6 +64,6 @@ void DoubleMapStore<K1, K2, V1, V2, H1, H2>::clear() {
 }
 
 template<typename K1, typename K2, typename V1, typename V2, typename H1, typename H2>
-std::unordered_set<std::vector<Entity>> DoubleMapStore<K1, K2, V1, V2, H1, H2>::getPairs() const {
+EntityPairSet DoubleMapStore<K1, K2, V1, V2, H1, H2>::getPairs() const {
     return this->pairs;
 }

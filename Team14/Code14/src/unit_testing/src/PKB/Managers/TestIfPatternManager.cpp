@@ -44,33 +44,33 @@ TEST_CASE_METHOD(UnitTestFixture, "Test If Pattern Retrieval") {
     ifPatternManager.storeIfPattern(ifStmt2, vars2);
     ifPatternManager.storeIfPattern(ifStmt3, vars3);
 
-    Statement testStmt1 = Statement(1, StatementType::If);
-    Statement testStmt2 = Statement(2, StatementType::If);
-    Statement testStmt3 = Statement(3, StatementType::If);
+    shared_ptr<Statement> testStmt1 = make_shared<Statement>(1, StatementType::If);
+    shared_ptr<Statement> testStmt2 = make_shared<Statement>(2, StatementType::If);
+    shared_ptr<Statement> testStmt3 = make_shared<Statement>(3, StatementType::If);
     Variable testX = Variable("x");
     Variable testY = Variable("y");
     Variable testZ = Variable("z");
 
-    unordered_set<Entity> getStmtByVar = ifPatternManager.getAllStmts();
+    EntitySet getStmtByVar = ifPatternManager.getAllStmts();
     REQUIRE(getStmtByVar.size() == 3);
-    REQUIRE(find(getStmtByVar.begin(), getStmtByVar.end(), testStmt1) != getStmtByVar.end());
-    REQUIRE(find(getStmtByVar.begin(), getStmtByVar.end(), testStmt2) != getStmtByVar.end());
-    REQUIRE(find(getStmtByVar.begin(), getStmtByVar.end(), testStmt3) != getStmtByVar.end());
+    REQUIRE(getStmtByVar.find(testStmt1) != getStmtByVar.end());
+    REQUIRE(getStmtByVar.find(testStmt2) != getStmtByVar.end());
+    REQUIRE(getStmtByVar.find(testStmt3) != getStmtByVar.end());
 
     REQUIRE(ifPatternManager.getAllStmtVarPair().size() == 6);
 
-    unordered_set<Entity> getStmtsByVarX = ifPatternManager.getStmtsByVar(testX);
+    EntitySet getStmtsByVarX = ifPatternManager.getStmtsByVar(testX);
     REQUIRE(getStmtsByVarX.size() == 2);
-    REQUIRE(find(getStmtsByVarX.begin(), getStmtsByVarX.end(), testStmt1) != getStmtsByVarX.end());
-    REQUIRE(find(getStmtsByVarX.begin(), getStmtsByVarX.end(), testStmt2) != getStmtsByVarX.end());
+    REQUIRE(getStmtsByVarX.find(testStmt1) != getStmtsByVarX.end());
+    REQUIRE(getStmtsByVarX.find(testStmt2) != getStmtsByVarX.end());
 
-    unordered_set<Entity> getStmtsByVarY = ifPatternManager.getStmtsByVar(testY);
+    EntitySet getStmtsByVarY = ifPatternManager.getStmtsByVar(testY);
     REQUIRE(getStmtsByVarY.size() == 2);
-    REQUIRE(find(getStmtsByVarY.begin(), getStmtsByVarY.end(), testStmt1) != getStmtsByVarY.end());
-    REQUIRE(find(getStmtsByVarY.begin(), getStmtsByVarY.end(), testStmt2) != getStmtsByVarY.end());
+    REQUIRE(getStmtsByVarY.find(testStmt1) != getStmtsByVarY.end());
+    REQUIRE(getStmtsByVarY.find(testStmt2) != getStmtsByVarY.end());
 
-    unordered_set<Entity> getStmtsByVarZ = ifPatternManager.getStmtsByVar(testZ);
+    EntitySet getStmtsByVarZ = ifPatternManager.getStmtsByVar(testZ);
     REQUIRE(getStmtsByVarZ.size() == 2);
-    REQUIRE(find(getStmtsByVarZ.begin(), getStmtsByVarZ.end(), testStmt1) != getStmtsByVarZ.end());
-    REQUIRE(find(getStmtsByVarZ.begin(), getStmtsByVarZ.end(), testStmt3) != getStmtsByVarZ.end());
+    REQUIRE(getStmtsByVarZ.find(testStmt1) != getStmtsByVarZ.end());
+    REQUIRE(getStmtsByVarZ.find(testStmt3) != getStmtsByVarZ.end());
 }

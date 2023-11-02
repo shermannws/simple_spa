@@ -8,22 +8,27 @@
 #include "Commons/Entities/Variable.h"
 #include "catch.hpp"
 
+using namespace std;
+
 TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
 
     SECTION("Test both tuples, should return tuple result") {
-        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
-        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
-        std::vector<Entity> v3{Statement(7, StatementType::Stmt), Variable("third_variable")};
+        ResultTuple v1{make_shared<Entity>(Statement(1, StatementType::Assign)),
+                       make_shared<Entity>(Variable("my_variable"))};
+        ResultTuple v2{make_shared<Entity>(Statement(5, StatementType::Stmt)),
+                       make_shared<Entity>(Variable("another_variable"))};
+        ResultTuple v3{make_shared<Entity>(Statement(7, StatementType::Stmt)),
+                       make_shared<Entity>(Variable("third_variable"))};
         ResultType type = ResultType::Tuples;
 
         std::shared_ptr<Result> r = std::make_shared<Result>();
         r->setType(std::vector<Synonym>{"a", "x"});
-        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<ResultTuple> tuples{v1, v2};
         r->setTuples(tuples);
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
         r1->setType(std::vector<Synonym>{"a", "x"});
-        std::unordered_set<std::vector<Entity>> tuples1{v1, v2, v3};
+        std::unordered_set<ResultTuple> tuples1{v1, v2, v3};
         r1->setTuples(tuples1);
 
         ResultHandler evaluator = ResultHandler();
@@ -36,14 +41,17 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
     }
 
     SECTION("Test both tuples with 1 empty Tuples Result, should return false Result") {
-        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
-        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
-        std::vector<Entity> v3{Statement(7, StatementType::Stmt), Variable("third_variable")};
+        ResultTuple v1{make_shared<Entity>(Statement(1, StatementType::Assign)),
+                       make_shared<Entity>(Variable("my_variable"))};
+        ResultTuple v2{make_shared<Entity>(Statement(5, StatementType::Assign)),
+                       make_shared<Entity>(Variable("another_variable"))};
+        ResultTuple v3{make_shared<Entity>(Statement(7, StatementType::Assign)),
+                       make_shared<Entity>(Variable("third_variable"))};
         ResultType type = ResultType::Tuples;
 
         std::shared_ptr<Result> r = std::make_shared<Result>();
         r->setType(std::vector<Synonym>{"a", "x"});
-        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<ResultTuple> tuples{v1, v2};
         r->setTuples(tuples);
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
@@ -58,9 +66,9 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
     }
 
     SECTION("FALSE boolean result x tuple result") {
-        Entity a1 = Statement(1, StatementType::Assign);
-        Entity a2 = Statement(2, StatementType::Assign);
-        Entity a3 = Statement(3, StatementType::Assign);
+        shared_ptr<Entity> a1 = make_shared<Entity>(Statement(1, StatementType::Assign));
+        shared_ptr<Entity> a2 = make_shared<Entity>(Statement(2, StatementType::Assign));
+        shared_ptr<Entity> a3 = make_shared<Entity>(Statement(3, StatementType::Assign));
 
         std::shared_ptr<Result> r = std::make_shared<Result>();
         r->setType(std::vector<Synonym>{});
@@ -68,7 +76,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
         r1->setType(std::vector<Synonym>{"b"});
-        std::unordered_set<std::vector<Entity>> tuples1{{a1}, {a2}, {a3}};
+        std::unordered_set<ResultTuple> tuples1{{a1}, {a2}, {a3}};
         r1->setTuples(tuples1);
 
         ResultHandler evaluator = ResultHandler();
@@ -85,7 +93,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
     }
 
     SECTION("TRUE boolean result x tuple result") {
-        Entity a1 = Statement(1, StatementType::Assign);
+        shared_ptr<Entity> a1 = make_shared<Entity>(Statement(1, StatementType::Assign));
 
         std::shared_ptr<Result> r = std::make_shared<Result>();
         r->setType(std::vector<Synonym>{});
@@ -93,7 +101,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
 
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
         r1->setType(std::vector<Synonym>{"b"});
-        std::unordered_set<std::vector<Entity>> tuples1{{a1}};
+        std::unordered_set<ResultTuple> tuples1{{a1}};
         r1->setTuples(tuples1);
 
         ResultHandler evaluator = ResultHandler();
@@ -102,14 +110,14 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
 
         REQUIRE(final->getTuples().size() == 1);
         REQUIRE(final->getType() == ResultType::Tuples);
-        REQUIRE(find(finalTuples.begin(), finalTuples.end(), std::vector<Entity>{a1}) != finalTuples.end());
+        REQUIRE(find(finalTuples.begin(), finalTuples.end(), ResultTuple{a1}) != finalTuples.end());
 
         std::shared_ptr<Result> finalAssociative = evaluator.getCombined(r1, r);
         auto finalAssociativeTuples = final->getTuples();
 
         REQUIRE(finalAssociative->getTuples().size() == 1);
         REQUIRE(finalAssociative->getType() == ResultType::Tuples);
-        REQUIRE(find(finalAssociativeTuples.begin(), finalAssociativeTuples.end(), std::vector<Entity>{a1}) !=
+        REQUIRE(find(finalAssociativeTuples.begin(), finalAssociativeTuples.end(), ResultTuple{a1}) !=
                 finalAssociativeTuples.end());
     }
 
@@ -155,12 +163,14 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
         rFalse->setType(std::vector<Synonym>{});
         rFalse->setBoolResult(false);
 
-        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
-        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
+        ResultTuple v1{make_shared<Entity>(Statement(1, StatementType::Assign)),
+                       make_shared<Entity>(Variable("my_variable"))};
+        ResultTuple v2{make_shared<Entity>(Statement(5, StatementType::Stmt)),
+                       make_shared<Entity>(Variable("another_variable"))};
 
         std::shared_ptr<Result> rTuple = std::make_shared<Result>();
         rTuple->setType(std::vector<Synonym>{"a", "x"});
-        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<ResultTuple> tuples{v1, v2};
         rTuple->setTuples(tuples);
 
         std::shared_ptr<Result> rInvalid = std::make_shared<Result>();

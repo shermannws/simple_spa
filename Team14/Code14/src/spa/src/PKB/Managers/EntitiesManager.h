@@ -40,7 +40,7 @@ protected:
      * @return An unordered_set of entities of type E
      */
     template<typename E>
-    std::unordered_set<Entity> getAllEntities(std::shared_ptr<EntityStore<E>>) const;
+    EntitySet getAllEntities(std::shared_ptr<EntityStore<E>>) const;
 
     /**
      * @brief Returns all the entities of type E in the EntityStore of type E that matches the matcher function
@@ -50,7 +50,7 @@ protected:
      * @return An unordered_set of entities of type E
      */
     template<typename E>
-    std::unordered_set<Entity> getEntities(std::shared_ptr<EntityStore<E>>, std::function<bool(E &)> matcher) const;
+    EntitySet getEntities(std::shared_ptr<EntityStore<E>>, std::function<bool(std::shared_ptr<E>)> matcher) const;
 
 public:
     /**
@@ -91,81 +91,81 @@ public:
      * @brief Returns all the variables in the SIMPLE source program
      * @return An unordered_set of variables
      */
-    std::unordered_set<Entity> getAllVariables() const;
+    EntitySet getAllVariables() const;
 
     /**
      * @brief Returns all the constants in the SIMPLE source program
      * @return An unordered_set of constants
      */
-    std::unordered_set<Entity> getAllConstants() const;
+    EntitySet getAllConstants() const;
 
     /**
      * @brief Returns all the procedures in the SIMPLE source program
      * @return An unordered_set of procedures
      */
-    std::unordered_set<Entity> getAllProcedures() const;
+    EntitySet getAllProcedures() const;
 
     /**
      * @brief Returns all the statements in the SIMPLE source program
      * @return An unordered_set of statements
      */
-    std::unordered_set<Entity> getAllStatements() const;
+    EntitySet getAllStatements() const;
 
     /**
      * @brief Returns all the read statements in the SIMPLE source program
      * @return An unordered_set of read statements
      */
-    std::unordered_set<Entity> getAllRead() const;
+    EntitySet getAllRead() const;
 
     /**
      * @brief Returns all the print statements in the SIMPLE source program
      * @return An unordered_set of print statements
      */
-    std::unordered_set<Entity> getAllPrint() const;
+    EntitySet getAllPrint() const;
 
     /**
      * @brief Returns all the call statements in the SIMPLE source program
      * @return An unordered_set of call statements
      */
-    std::unordered_set<Entity> getAllWhile() const;
+    EntitySet getAllWhile() const;
 
     /**
      * @brief Returns all the if statements in the SIMPLE source program
      * @return An unordered_set of if statements
      */
-    std::unordered_set<Entity> getAllIf() const;
+    EntitySet getAllIf() const;
 
     /**
      * @brief Returns all the call statements in the SIMPLE source program
      * @return An unordered_set of call statements
      */
-    std::unordered_set<Entity> getAllCall() const;
+    EntitySet getAllCall() const;
 
     /**
      * @brief Returns the Statement object from the StatementStore that is equal to the Statement object passed in
      * @param s The Statement object to be compared against
      * @return The Statement object from the StatementStore that is equal to the Statement object passed in
      */
-    std::shared_ptr<Entity> getStatement(std::shared_ptr<Statement> s) const;
+    EntityPointer getStatement(std::shared_ptr<Statement> s) const;
 
     /**
      * @brief Returns the Variable object from the VariableStore that is equal to the Variable object passed in
      * @param v The Variable object to be compared against
      * @return The Variable object from the VariableStore that is equal to the Variable object passed in
      */
-    std::shared_ptr<Entity> getVariable(std::shared_ptr<Variable> v) const;
+    EntityPointer getVariable(std::shared_ptr<Variable> v) const;
 
     /**
      * @brief Returns the Constant object from the ConstantStore that is equal to the Constant object passed in
      * @param c The Constant object to be compared against
      * @return The Constant object from the ConstantStore that is equal to the Constant object passed in
      */
-    std::shared_ptr<Entity> getConstant(std::shared_ptr<Constant> c) const;
+    EntityPointer getConstant(std::shared_ptr<Constant> c) const;
 
     /**
      * @brief Returns the Procedure object from the ProcedureStore that is equal to the Procedure object passed in
      * @param p The Procedure object to be compared against
      * @return The Procedure object from the ProcedureStore that is equal to the Procedure object passed in
      */
-    std::shared_ptr<Entity> getProcedure(std::shared_ptr<Procedure> p) const;
+    EntityPointer getProcedure(std::shared_ptr<Procedure> p) const;
 };
