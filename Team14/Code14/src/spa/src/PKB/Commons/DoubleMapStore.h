@@ -35,7 +35,7 @@ protected:
     /**
      * @brief A set of all entity pairs in this DoubleMapStore
      */
-    std::unordered_set<std::vector<EntityPointer>> pairs;
+    EntityPairSet pairs;
 
 public:
     /**
