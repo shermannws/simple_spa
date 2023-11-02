@@ -78,24 +78,6 @@ private:
     ResultTuple buildRow(const RowTemplate &temp, const ResultTuple &row1, const ResultTuple &row2);
 
     /**
-     * Gets a map of indices of the common synonyms between two tables
-     * @param r1 first result table
-     * @param r2 second result table
-     * @param commonSyns the vector of common synonyms
-     * @return map of index of common synonyms in table 1 to index in table 2
-     */
-    std::unordered_map<idx, idx> getMatchMap(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
-                                             std::vector<Synonym> &commonSyns);
-
-    /**
-     * Returns true if the two rows have the same value for the common synonyms (if any)
-     * @param row1 row from table 1
-     * @param row2 row from table 2
-     * @return boolean
-     */
-    bool isMatch(const ResultTuple &row1, const ResultTuple &row2, const std::unordered_map<int, int> &matchMap);
-
-    /**
      * returns the corresponding indices of the synonyms in the specified result table in a vector
      * @param synonyms vector of synonyms
      * @param result result object containing the synonyms

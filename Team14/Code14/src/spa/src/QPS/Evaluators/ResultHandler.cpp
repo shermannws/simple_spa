@@ -29,7 +29,6 @@ std::shared_ptr<Result> ResultHandler::hashJoin(std::shared_ptr<Result> r1, std:
     // build hashtable
     auto hashtable = partition(commonSyns, r1);
 
-    std::unordered_map<int, int> commonMap = getMatchMap(r1, r2, commonSyns);
     RowTemplate rowTemplate = getRowTemplate(r1, r2, header);
 
     auto keyIndices = getKeyIndices(commonSyns, r2);
@@ -42,9 +41,7 @@ std::shared_ptr<Result> ResultHandler::hashJoin(std::shared_ptr<Result> r1, std:
         if (!hashtable.count(key)) { continue; }// skip if no matching bucket
 
         auto tuples1 = hashtable[key];
-        for (const auto &row1: tuples1) {
-            if (isMatch(row1, row2, commonMap)) { finalTuples.insert(buildRow(rowTemplate, row1, row2)); }
-        }
+        for (const auto &row1: tuples1) { finalTuples.insert(buildRow(rowTemplate, row1, row2)); }
     }
     finalResult->setTuples(finalTuples);
 
@@ -107,27 +104,6 @@ ResultTuple ResultHandler::buildRow(const RowTemplate &temp, const ResultTuple &
     ResultTuple newRow;
     for (const auto &idx: temp) { newRow.push_back(src[idx.first][idx.second]); }
     return newRow;
-}
-
-
-std::unordered_map<idx, idx> ResultHandler::getMatchMap(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
-                                                        std::vector<Synonym> &commonSyns) {
-    auto map1 = r1->getSynIndices();
-    auto map2 = r2->getSynIndices();
-    std::unordered_map<idx, idx> commonIndices;
-
-    for (const auto &syn: commonSyns) { commonIndices[map1[syn]] = map2[syn]; }
-    return commonIndices;
-}
-
-
-bool ResultHandler::isMatch(const ResultTuple &row1, const ResultTuple &row2,
-                            const std::unordered_map<int, int> &matchMap) {
-    for (auto &it: matchMap) {
-        if (row1[it.first] == row2[it.second]) { continue; }
-        return false;
-    }
-    return true;
 }
 
 std::vector<idx> ResultHandler::getKeyIndices(std::vector<Synonym> &synonyms, std::shared_ptr<Result> result) {
