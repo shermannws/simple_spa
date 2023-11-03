@@ -193,7 +193,7 @@ std::unordered_set<std::shared_ptr<Entity>> PQLEvaluator::getAll(const std::shar
     return QPSUtil::entityGetterMap[entityType](pkbReader);
 }
 
-std::unordered_set<std::vector<EntityPointer>> PQLEvaluator::getTuplesBySyn(const std::vector<Synonym> &entitySyns) {
+std::unordered_set<ResultTuple> PQLEvaluator::getTuplesBySyn(const std::vector<Synonym> &entitySyns) {
     auto tupleSize = entitySyns.size();
     std::vector<QueryEntityType> types(tupleSize);
     for (int i = 0; i < tupleSize; i++) { types[i] = declarationMap[entitySyns[i]]->getType(); }
