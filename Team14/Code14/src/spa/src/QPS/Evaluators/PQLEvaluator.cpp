@@ -153,17 +153,54 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
 std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> curr,
                                                        std::shared_ptr<Result> clauseRes) {
     auto clauseSyns = clauseRes->getHeader();
-    auto unevaluatedSyn = getUnevaluatedSyn(clauseSyns, curr);
 
-    if (unevaluatedSyn.empty()) {// all syns present
+    std::pair<std::vector<Synonym>, std::vector<Synonym>> synGroups;//<overlapSyns, unevaluatedSyns>
+    auto currSynMap = curr->getSynIndices();
+    auto clauseSynMap = clauseRes->getSynIndices();
+    for (auto &elem: clauseSynMap) {
+        auto syn = QPSUtil::getSyn(elem.first);
+        if (currSynMap.count(syn)) {
+            synGroups.first.push_back(syn);
+        } else {
+            synGroups.second.push_back(syn);
+        }
+    }
+
+    if (synGroups.second.empty()) {// all syns present
         return resultHandler->getDiff(curr, clauseRes);
     }
 
-    // not all syns in current result, execute naive approach
-    auto lhs = getTuplesBySyn(clauseSyns);
-    auto rhs = clauseRes->getTuples();
-    for (const auto &tuple: rhs) { lhs.erase(tuple); }
-    clauseRes->setTuples(lhs);
+    if (synGroups.first.empty()) {// all syns unevaluated, take naive approach
+        auto lhs = getTuplesBySyn(clauseSyns);
+        auto rhs = clauseRes->getTuples();
+        for (const auto &tuple: rhs) { lhs.erase(tuple); }
+        clauseRes->setTuples(lhs);
+        return resultHandler->getCombined(curr, clauseRes);
+    }
+
+    // syns partially evaluated
+    auto appendSet = getAll(declarationMap[synGroups.second[0]]);// get column to append
+    idx commonInRhs = clauseSynMap[synGroups.first[0]];
+    idx commonInCurr = currSynMap[synGroups.first[0]];
+    auto currTuples = curr->getTuples();
+
+    // get all allowed pairs i.e. after negation
+    auto filter = clauseRes->getTuples();
+    std::unordered_set<EntityPointer> found;// track which entities has been added to filtered
+    ResultTuples filtered;
+    for (const auto &row: currTuples) {
+        auto connector = row[commonInCurr];
+        if (!found.count(connector)) {// new common column value encountered
+            found.insert(connector);
+            for (const auto &value: appendSet) {
+                ResultTuple newRow(2);
+                newRow[commonInRhs] = connector;
+                newRow[!commonInRhs] = value;
+                if (!filter.count(newRow)) { filtered.insert(newRow); }// if row not in rhsRes, add to filteredSet
+            }
+        }
+    }
+    clauseRes->setTuples(filtered);
     return resultHandler->getCombined(curr, clauseRes);
 }
 
