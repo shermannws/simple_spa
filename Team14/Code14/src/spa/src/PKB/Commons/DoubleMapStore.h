@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "PKB/Commons/SetStore.h"
+#include "PKB/PkbTypes.h"
 
 /**
  * @brief A class that stores objects using two Hashmaps as the underlying data structure
@@ -34,7 +35,7 @@ protected:
     /**
      * @brief A set of all entity pairs in this DoubleMapStore
      */
-    std::unordered_set<std::vector<Entity>> pairs;
+    EntityPairSet pairs;
 
 public:
     /**
@@ -105,7 +106,7 @@ public:
      * @brief Gets all the entity pairs in this DoubleMapStore
      * @return A set of all entity pairs in this DoubleMapStore
      */
-    std::unordered_set<std::vector<Entity>> getPairs() const;
+    EntityPairSet getPairs() const;
 };
 
 #include "DoubleMapStore.hpp"

@@ -91,9 +91,9 @@ public:
 
     std::vector<Synonym> getHeader();
 
-    void setTuples(const std::unordered_set<Entity> &resultEntities);
+    void setTuples(const std::unordered_set<std::shared_ptr<Entity>> &resultEntities);
 
-    void setTuples(const std::unordered_set<std::vector<Entity>> &resultTuples);
+    void setTuples(const std::unordered_set<ResultTuple> &resultTuples);
 
     /**
      * @brief Gets the tuples in the result of the clause evaluation

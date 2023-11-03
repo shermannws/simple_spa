@@ -6,121 +6,128 @@
 
 StubPkbReader::StubPkbReader() = default;
 
-std::unordered_set<Entity> StubPkbReader::getAllVariables() const {
-    return std::unordered_set<Entity>({
-            Variable("var1"),
-            Variable("var2"),
-            Variable("var5"),
-            Variable("var14"),
-            Variable("var24"),
-            Variable("var36"),
-            Variable("var38"),
-            Variable("var88"),
+EntitySet StubPkbReader::getAllVariables() const {
+    return EntitySet({
+            std::make_shared<Variable>("var1"),
+            std::make_shared<Variable>("var2"),
+            std::make_shared<Variable>("var5"),
+            std::make_shared<Variable>("var14"),
+            std::make_shared<Variable>("var24"),
+            std::make_shared<Variable>("var36"),
+            std::make_shared<Variable>("var38"),
+            std::make_shared<Variable>("var88"),
     });
 }
 
-std::unordered_set<Entity> StubPkbReader::getAllConstants() const {
-    return std::unordered_set<Entity>({Constant("3"), Constant("7"), Constant("21"), Constant("63")});
+EntitySet StubPkbReader::getAllConstants() const {
+    return EntitySet({std::make_shared<Constant>("3"), std::make_shared<Constant>("7"),
+                      std::make_shared<Constant>("21"), std::make_shared<Constant>("63")});
 }
 
-std::unordered_set<Entity> StubPkbReader::getAllProcedures() const {
-    return std::unordered_set<Entity>({
-            Procedure("proc1"),
-            Procedure("proc2"),
-            Procedure("proc3"),
+EntitySet StubPkbReader::getAllProcedures() const {
+    return EntitySet({
+            std::make_shared<Procedure>("proc1"),
+            std::make_shared<Procedure>("proc2"),
+            std::make_shared<Procedure>("proc3"),
     });
 }
 
-std::unordered_set<Entity> StubPkbReader::getAllStatements() const {
-    return std::unordered_set<Entity>{
-            Statement(1, StatementType::If),     Statement(2, StatementType::While), Statement(3, StatementType::Call),
-            Statement(4, StatementType::Assign), Statement(5, StatementType::Read),
+EntitySet StubPkbReader::getAllStatements() const {
+    return EntitySet{
+            std::make_shared<Statement>(1, StatementType::If),   std::make_shared<Statement>(2, StatementType::While),
+            std::make_shared<Statement>(3, StatementType::Call), std::make_shared<Statement>(4, StatementType::Assign),
+            std::make_shared<Statement>(5, StatementType::Read),
     };
 }
 
-std::unordered_set<Entity> StubPkbReader::getAllRead() const {
-    return std::unordered_set<Entity>({
-            Statement(88, StatementType::Read, "var88"),
-            Statement(24, StatementType::Read, "var24"),
-            Statement(36, StatementType::Read, "var36"),
-            Statement(14, StatementType::Read, "var14"),
+EntitySet StubPkbReader::getAllRead() const {
+    return EntitySet({
+            std::make_shared<Statement>(88, StatementType::Read, "var88"),
+            std::make_shared<Statement>(24, StatementType::Read, "var24"),
+            std::make_shared<Statement>(36, StatementType::Read, "var36"),
+            std::make_shared<Statement>(14, StatementType::Read, "var14"),
     });
 }
 
-std::unordered_set<Entity> StubPkbReader::getAllPrint() const {
-    return std::unordered_set<Entity>({
-            Statement(1, StatementType::Print, "var1"),
-            Statement(3, StatementType::Print, "var3"),
-            Statement(5, StatementType::Print, "var5"),
-            Statement(7, StatementType::Print, "var7"),
-            Statement(9, StatementType::Print, "var9"),
+EntitySet StubPkbReader::getAllPrint() const {
+    return EntitySet({
+            std::make_shared<Statement>(1, StatementType::Print, "var1"),
+            std::make_shared<Statement>(3, StatementType::Print, "var3"),
+            std::make_shared<Statement>(5, StatementType::Print, "var5"),
+            std::make_shared<Statement>(7, StatementType::Print, "var7"),
+            std::make_shared<Statement>(9, StatementType::Print, "var9"),
     });
 }
 
-std::unordered_set<Entity> StubPkbReader::getAllWhile() const {
-    return std::unordered_set<Entity>{
-            Statement(10, StatementType::While),
-            Statement(13, StatementType::While),
-            Statement(15, StatementType::While),
+EntitySet StubPkbReader::getAllWhile() const {
+    return EntitySet{
+            std::make_shared<Statement>(10, StatementType::While),
+            std::make_shared<Statement>(13, StatementType::While),
+            std::make_shared<Statement>(15, StatementType::While),
     };
 }
 
-std::unordered_set<Entity> StubPkbReader::getAllIf() const {
-    return std::unordered_set<Entity>({
-            Statement(101, StatementType::If),
-            Statement(102, StatementType::If),
+EntitySet StubPkbReader::getAllIf() const {
+    return EntitySet({
+            std::make_shared<Statement>(101, StatementType::If),
+            std::make_shared<Statement>(102, StatementType::If),
     });
 }
 
-std::unordered_set<Entity> StubPkbReader::getAllCall() const {
-    return std::unordered_set<Entity>(
-            {Statement(7, StatementType::Call, "Proc1"), Statement(10, StatementType::Call, "Proc2"),
-             Statement(21, StatementType::Call, "Proc3"), Statement(22, StatementType::Call, "Proc3")});
+EntitySet StubPkbReader::getAllCall() const {
+    return EntitySet({std::make_shared<Statement>(7, StatementType::Call, "Proc1"),
+                      std::make_shared<Statement>(10, StatementType::Call, "Proc2"),
+                      std::make_shared<Statement>(21, StatementType::Call, "Proc3"),
+                      std::make_shared<Statement>(22, StatementType::Call, "Proc3")});
 }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getUsesStmtPair(StatementType type) const {
+EntityPairSet StubPkbReader::getUsesStmtPair(StatementType type) const {
     if (type == StatementType::Call) {
-        return std::unordered_set<std::vector<Entity>>(
-                {{CallStatement(1, "proc1"), Variable("var1")}, {CallStatement(2, "proc2"), Variable("var2")}});
+        return EntityPairSet({{std::make_shared<CallStatement>(1, "proc1"), std::make_shared<Variable>("var1")},
+                              {std::make_shared<CallStatement>(2, "proc2"), std::make_shared<Variable>("var2")}});
     }
-    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var")};
-    std::vector<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var")};
-    return std::unordered_set<std::vector<Entity>>({pair1, pair2});
+    std::vector<EntityPointer> pair1 = {std::make_shared<Statement>(1, StatementType::Assign),
+                                        std::make_shared<Variable>("var")};
+    std::vector<EntityPointer> pair2 = {std::make_shared<Statement>(2, StatementType::Assign),
+                                        std::make_shared<Variable>("var")};
+    return EntityPairSet({pair1, pair2});
 }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getUsesProcPair() const {
-    std::vector<Entity> pair1 = {Procedure("ProcedureName"), Variable("hello123")};
-    std::vector<Entity> pair2 = {Procedure("ProcedureName2"), Variable("hello321")};
-    return std::unordered_set<std::vector<Entity>>({pair1, pair2});
+EntityPairSet StubPkbReader::getUsesProcPair() const {
+    std::vector<EntityPointer> pair1 = {std::make_shared<Procedure>("ProcedureName"),
+                                        std::make_shared<Variable>("hello123")};
+    std::vector<EntityPointer> pair2 = {std::make_shared<Procedure>("ProcedureName2"),
+                                        std::make_shared<Variable>("hello321")};
+    return EntityPairSet({pair1, pair2});
 }
 
-std::unordered_set<Entity> StubPkbReader::getUsesTypeIdent(StatementType type, Variable &var) const {
-    return std::unordered_set<Entity>{
-            Statement(2, StatementType::If),
-            Statement(4, StatementType::If),
-            Statement(5, StatementType::If),
+EntitySet StubPkbReader::getUsesTypeIdent(StatementType type, Variable &var) const {
+    return EntitySet{
+            std::make_shared<Statement>(2, StatementType::If),
+            std::make_shared<Statement>(4, StatementType::If),
+            std::make_shared<Statement>(5, StatementType::If),
     };
 }
 
-std::unordered_set<Entity> StubPkbReader::getUsesProcIdent(Variable &var) const {
-    return std::unordered_set<Entity>{Procedure("ProcedureName")};
+EntitySet StubPkbReader::getUsesProcIdent(Variable &var) const {
+    return EntitySet{std::make_shared<Procedure>("ProcedureName")};
 };
 
-std::unordered_set<Entity> StubPkbReader::getUsesStmt(StatementType type) const {
-    return std::unordered_set<Entity>{
-            Statement(1, StatementType::Assign),
-            Statement(3, StatementType::Call),
+EntitySet StubPkbReader::getUsesStmt(StatementType type) const {
+    return EntitySet{
+            std::make_shared<Statement>(1, StatementType::Assign),
+            std::make_shared<Statement>(3, StatementType::Call),
     };
 }
 
-std::unordered_set<Entity> StubPkbReader::getUsesProc() const { return {}; }
+EntitySet StubPkbReader::getUsesProc() const { return {}; }
 
-std::unordered_set<Entity> StubPkbReader::getUsesVar(Statement &stmt) const {
-    return std::unordered_set<Entity>{Variable("name"), Variable("asdfghjkl")};
+EntitySet StubPkbReader::getUsesVar(Statement &stmt) const {
+    return EntitySet{std::make_shared<Variable>("name"), std::make_shared<Variable>("asdfghjkl")};
 }
 
-std::unordered_set<Entity> StubPkbReader::getUsesVar(Procedure &proc) const {
-    return std::unordered_set<Entity>{Variable("proc"), Variable("anotherVar")};
+EntitySet StubPkbReader::getUsesVar(Procedure &proc) const {
+    return EntitySet{std::make_shared<Variable>("proc"), std::make_shared<Variable>("anotherVar")};
 }
 
 bool StubPkbReader::isStmtUsesVar(Statement &stmt, Variable &var) const {
@@ -135,61 +142,44 @@ bool StubPkbReader::hasUses(Statement &stmt) const { return false; }
 
 bool StubPkbReader::hasUses(Procedure &proc) const { return true; }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getFollowsPair(StatementType formerType,
-                                                                      StatementType latterType) const {
-    return std::unordered_set<std::vector<Entity>>();
+EntityPairSet StubPkbReader::getFollowsPair(StatementType formerType, StatementType latterType) const {
+    return EntityPairSet();
 }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getFollowsStarPair(StatementType formerType,
-                                                                          StatementType latterType) const {
+EntityPairSet StubPkbReader::getFollowsStarPair(StatementType formerType, StatementType latterType) const {
     if (formerType == StatementType::Assign && latterType == StatementType::Read) {
-        auto a1 = Statement(1, StatementType::Assign);
-        auto a3 = Statement(3, StatementType::Assign);
-        auto a7 = Statement(7, StatementType::Assign);
+        auto a1 = std::make_shared<Entity>(Statement(1, StatementType::Assign));
+        auto a3 = std::make_shared<Entity>(Statement(3, StatementType::Assign));
+        auto a7 = std::make_shared<Entity>(Statement(7, StatementType::Assign));
 
-        auto r5 = Statement(5, StatementType::Read);
-        auto r6 = Statement(6, StatementType::Read);
-        auto r8 = Statement(8, StatementType::Read);
-        return std::unordered_set<std::vector<Entity>>(
-                {{a1, r5}, {a1, r6}, {a1, r8}, {a3, r5}, {a3, r6}, {a3, r8}, {a7, r8}});
+        auto r5 = std::make_shared<Entity>(Statement(5, StatementType::Read));
+        auto r6 = std::make_shared<Entity>(Statement(6, StatementType::Read));
+        auto r8 = std::make_shared<Entity>(Statement(8, StatementType::Read));
+        return EntityPairSet ({{a1, r5}, {a1, r6}, {a1, r8}, {a3, r5}, {a3, r6}, {a3, r8}, {a7, r8}});
     }
-    return std::unordered_set<std::vector<Entity>>();
+    return EntityPairSet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getFollowsTypeStmt(StatementType type, Statement &statement) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getFollowsTypeStmt(StatementType type, Statement &statement) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getFollowsStarTypeStmt(StatementType type, Statement &statement) const {
+EntitySet StubPkbReader::getFollowsStarTypeStmt(StatementType type, Statement &statement) const {
     if (type == StatementType::Stmt && statement == Statement(700, StatementType::Stmt)) {
-        return std::unordered_set<Entity>({Statement(10, StatementType::Assign)});
+        return EntitySet({std::make_shared<Statement>(10, StatementType::Assign)});
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getFollowsTypeWildcard(StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getFollowsTypeWildcard(StatementType type) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getFollowsStarTypeWildcard(StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getFollowsStarTypeWildcard(StatementType type) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getFollowsStmtType(Statement &statement, StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getFollowsStmtType(Statement &statement, StatementType type) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getFollowsStarStmtType(Statement &statement, StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getFollowsStarStmtType(Statement &statement, StatementType type) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getFollowsWildcardType(StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getFollowsWildcardType(StatementType type) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getFollowsStarWildcardType(StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getFollowsStarWildcardType(StatementType type) const { return EntitySet(); }
 
 bool StubPkbReader::isFollows(Statement &statement1, Statement &statement2) const { return false; }
 
@@ -207,54 +197,59 @@ bool StubPkbReader::hasLatterStarStmt(Statement &statement) const { return false
 
 bool StubPkbReader::hasFormerStarStmt(Statement &statement) const { return false; }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getModifiesStmtPair(StatementType type) const {
-    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var1")};
-    std::vector<Entity> pair2 = {Statement(3, StatementType::Call), Variable("var2")};
-    std::vector<Entity> pair3 = {Statement(2, StatementType::While), Variable("var3")};
+EntityPairSet StubPkbReader::getModifiesStmtPair(StatementType type) const {
+    std::vector<EntityPointer> pair1 = {std::make_shared<Statement>(1, StatementType::Assign),
+                                        std::make_shared<Variable>("var1")};
+    std::vector<EntityPointer> pair2 = {std::make_shared<Statement>(3, StatementType::Call),
+                                        std::make_shared<Variable>("var2")};
+    std::vector<EntityPointer> pair3 = {std::make_shared<Statement>(2, StatementType::While),
+                                        std::make_shared<Variable>("var3")};
     if (type == StatementType::Assign) {
-        std::vector<Entity> pair4 = {Statement(4, StatementType::Assign), Variable("var3")};
-        std::vector<Entity> pair5 = {Statement(6, StatementType::Assign), Variable("var4")};
-        return std::unordered_set<std::vector<Entity>>({pair1, pair4, pair5});
+        std::vector<EntityPointer> pair4 = {std::make_shared<Statement>(4, StatementType::Assign),
+                                            std::make_shared<Variable>("var3")};
+        std::vector<EntityPointer> pair5 = {std::make_shared<Statement>(6, StatementType::Assign),
+                                            std::make_shared<Variable>("var4")};
+        return EntityPairSet ({pair1, pair4, pair5});
     }
-    return std::unordered_set<std::vector<Entity>>({pair1, pair2, pair3});
+    return EntityPairSet({pair1, pair2, pair3});
 }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getModifiesProcPair() const {
-    std::vector<Entity> pair1 = {Procedure("first"), Variable("one")};
-    std::vector<Entity> pair2 = {Procedure("second"), Variable("two")};
-    std::vector<Entity> pair3 = {Procedure("third"), Variable("three")};
-    std::vector<Entity> pair4 = {Procedure("fourth"), Variable("four")};
-    return std::unordered_set<std::vector<Entity>>({pair1, pair2, pair3, pair4});
+EntityPairSet StubPkbReader::getModifiesProcPair() const {
+    std::vector<EntityPointer> pair1 = {std::make_shared<Procedure>("first"), std::make_shared<Variable>("one")};
+    std::vector<EntityPointer> pair2 = {std::make_shared<Procedure>("second"), std::make_shared<Variable>("two")};
+    std::vector<EntityPointer> pair3 = {std::make_shared<Procedure>("third"), std::make_shared<Variable>("three")};
+    std::vector<EntityPointer> pair4 = {std::make_shared<Procedure>("fourth"), std::make_shared<Variable>("four")};
+    return EntityPairSet({pair1, pair2, pair3, pair4});
 }
 
-std::unordered_set<Entity> StubPkbReader::getModifiesTypeIdent(StatementType type, Variable &var) const {
-    return std::unordered_set<Entity>{
-            Statement(14, StatementType::Read),
-            Statement(15, StatementType::Read),
+EntitySet StubPkbReader::getModifiesTypeIdent(StatementType type, Variable &var) const {
+    return EntitySet{
+            std::make_shared<Statement>(14, StatementType::Read),
+            std::make_shared<Statement>(15, StatementType::Read),
     };
 }
 
-std::unordered_set<Entity> StubPkbReader::getModifiesProcIdent(Variable &var) const {
-    return std::unordered_set<Entity>{Procedure("Procedure")};
+EntitySet StubPkbReader::getModifiesProcIdent(Variable &var) const {
+    return EntitySet{std::make_shared<Procedure>("Procedure")};
 }
 
-std::unordered_set<Entity> StubPkbReader::getModifiesStmt(StatementType type) const {
-    return std::unordered_set<Entity>{
-            Statement(34, StatementType::While),
+EntitySet StubPkbReader::getModifiesStmt(StatementType type) const {
+    return EntitySet{
+            std::make_shared<Statement>(34, StatementType::While),
     };
 }
 
-std::unordered_set<Entity> StubPkbReader::getModifiesProc() const {
-    return std::unordered_set<Entity>{
-            Procedure("first"),
+EntitySet StubPkbReader::getModifiesProc() const {
+    return EntitySet{
+            std::make_shared<Procedure>("first"),
     };
 }
 
-std::unordered_set<Entity> StubPkbReader::getModifiesVar(Statement &stmt) const {
-    return std::unordered_set<Entity>{Variable("myVar"), Variable("anotherVar")};
+EntitySet StubPkbReader::getModifiesVar(Statement &stmt) const {
+    return EntitySet{std::make_shared<Variable>("myVar"), std::make_shared<Variable>("anotherVar")};
 }
 
-std::unordered_set<Entity> StubPkbReader::getModifiesVar(Procedure &proc) const { return {}; }
+EntitySet StubPkbReader::getModifiesVar(Procedure &proc) const { return {}; }
 
 bool StubPkbReader::isStmtModifiesVar(Statement &stmt, Variable &var) const { return false; }
 
@@ -266,104 +261,95 @@ bool StubPkbReader::hasModifies(Procedure &proc) const { return false; }
 
 // Pattern queries i.e. pattern a (...,...)
 // pattern a (_,_)
-std::unordered_set<Entity> StubPkbReader::getAllAssign() const {
-    return std::unordered_set<Entity>{Statement(1, StatementType::Assign), Statement(2, StatementType::Assign),
-                                      Statement(3, StatementType::Assign)};
+EntitySet StubPkbReader::getAllAssign() const {
+    return EntitySet{std::make_shared<Statement>(1, StatementType::Assign),
+                     std::make_shared<Statement>(2, StatementType::Assign),
+                     std::make_shared<Statement>(3, StatementType::Assign)};
 }
 
 // pattern a (_, "x")
-std::unordered_set<Entity> StubPkbReader::getAssignStmtsByRhs(std::string &rhs, bool hasRhsWildCard) const {
+EntitySet StubPkbReader::getAssignStmtsByRhs(std::string &rhs, bool hasRhsWildCard) const {
     if (hasRhsWildCard) {
-        return std::unordered_set<Entity>{Statement(2, StatementType::Assign), Statement(3, StatementType::Assign)};
+        return EntitySet{std::make_shared<Statement>(2, StatementType::Assign),
+                         std::make_shared<Statement>(3, StatementType::Assign)};
     }
-    return std::unordered_set<Entity>{Statement(4, StatementType::Assign), Statement(5, StatementType::Assign)};
+    return EntitySet{std::make_shared<Statement>(4, StatementType::Assign),
+                     std::make_shared<Statement>(5, StatementType::Assign)};
 }
 
 // pattern a (v, _)
-std::unordered_set<std::vector<Entity>> StubPkbReader::getAllAssignStmtVarPair() const {
-    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var1")};
-    std::vector<Entity> pair2 = {Statement(1, StatementType::Assign), Variable("var2")};
-    std::vector<Entity> pair3 = {Statement(2, StatementType::Assign), Variable("var3")};
-    return std::unordered_set<std::vector<Entity>>({pair1, pair2, pair3});
+EntityPairSet StubPkbReader::getAllAssignStmtVarPair() const {
+    std::vector<EntityPointer> pair1 = {std::make_shared<Statement>(1, StatementType::Assign),
+                                        std::make_shared<Variable>("var1")};
+    std::vector<EntityPointer> pair2 = {std::make_shared<Statement>(1, StatementType::Assign),
+                                        std::make_shared<Variable>("var2")};
+    std::vector<EntityPointer> pair3 = {std::make_shared<Statement>(2, StatementType::Assign),
+                                        std::make_shared<Variable>("var3")};
+    return EntityPairSet({pair1, pair2, pair3});
 }
 
 // pattern a (v, "x")
-std::unordered_set<std::vector<Entity>> StubPkbReader::getAssignStmtsVarPairByRhs(std::string &rhs,
-                                                                                  bool hasWildCard) const {
-    std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Variable("var1")};
-    std::vector<Entity> pair2 = {Statement(1, StatementType::Assign), Variable("var2")};
-    std::vector<Entity> pair3 = {Statement(2, StatementType::Assign), Variable("var3")};
-    std::vector<Entity> pair4 = {Statement(3, StatementType::Assign), Variable("var4")};
-    std::vector<Entity> pair5 = {Statement(4, StatementType::Assign), Variable("var3")};
-    std::vector<Entity> pair6 = {Statement(6, StatementType::Assign), Variable("var6")};
-    if (rhs == "((1)+(multiclauseTest))" && hasWildCard) {
-        return std::unordered_set<std::vector<Entity>>({pair1, pair2, pair3, pair4, pair5});
-    }
-    if (rhs == "((multiclauseTest)+(patternOnly))" && !hasWildCard) {
-        return std::unordered_set<std::vector<Entity>>({pair6});
-    }
+EntityPairSet StubPkbReader::getAssignStmtsVarPairByRhs(std::string &rhs, bool hasWildCard) const {
+    std::vector<EntityPointer> pair1 = {std::make_shared<Statement>(1, StatementType::Assign),
+                                        std::make_shared<Variable>("var1")};
+    std::vector<EntityPointer> pair2 = {std::make_shared<Statement>(1, StatementType::Assign),
+                                        std::make_shared<Variable>("var2")};
+    std::vector<EntityPointer> pair3 = {std::make_shared<Statement>(2, StatementType::Assign),
+                                        std::make_shared<Variable>("var3")};
+    std::vector<EntityPointer> pair4 = {std::make_shared<Statement>(3, StatementType::Assign),
+                                        std::make_shared<Variable>("var4")};
+    std::vector<EntityPointer> pair5 = {std::make_shared<Statement>(4, StatementType::Assign),
+                                        std::make_shared<Variable>("var3")};
+    std::vector<EntityPointer> pair6 = {std::make_shared<Statement>(6, StatementType::Assign),
+                                        std::make_shared<Variable>("var6")};
+    if (rhs == "((1)+(multiclauseTest))" && hasWildCard) { return EntityPairSet({pair1, pair2, pair3, pair4, pair5}); }
+    if (rhs == "((multiclauseTest)+(patternOnly))" && !hasWildCard) { return EntityPairSet({pair6}); }
 
     if (hasWildCard) {
-        std::vector<Entity> pair2 = {Statement(2, StatementType::Assign), Variable("var2")};
-        std::vector<Entity> pair3 = {Statement(3, StatementType::Assign), Variable("var3")};
-        return std::unordered_set<std::vector<Entity>>({pair2, pair3});
+        std::vector<EntityPointer> pair2 = {std::make_shared<Statement>(2, StatementType::Assign),
+                                            std::make_shared<Variable>("var2")};
+        std::vector<EntityPointer> pair3 = {std::make_shared<Statement>(3, StatementType::Assign),
+                                            std::make_shared<Variable>("var3")};
+        return EntityPairSet({pair2, pair3});
     }
-    return std::unordered_set<std::vector<Entity>>({pair1, pair2, pair3});
+    return EntityPairSet({pair1, pair2, pair3});
 }
 
 // pattern a ("x", _)
-std::unordered_set<Entity> StubPkbReader::getAssignStmtsByLhs(Variable &lhs) const {
-    return std::unordered_set<Entity>{Statement(6, StatementType::Assign)};
+EntitySet StubPkbReader::getAssignStmtsByLhs(Variable &lhs) const {
+    return EntitySet{std::make_shared<Statement>(6, StatementType::Assign)};
 }
 
 // pattern a ("x", "x")
-std::unordered_set<Entity> StubPkbReader::getAssignStmtsByLhsRhs(Variable &lhs, std::string &rhs,
-                                                                 bool hasRhsWildCard) const {
-    if (lhs == Variable("noneCase") && !hasRhsWildCard) { return std::unordered_set<Entity>(); }
-    return std::unordered_set<Entity>{Statement(100, StatementType::Assign), Statement(100000, StatementType::Assign)};
+EntitySet StubPkbReader::getAssignStmtsByLhsRhs(Variable &lhs, std::string &rhs, bool hasRhsWildCard) const {
+    if (lhs == Variable("noneCase") && !hasRhsWildCard) { return EntitySet(); }
+    return EntitySet{std::make_shared<Statement>(100, StatementType::Assign),
+                     std::make_shared<Statement>(100000, StatementType::Assign)};
 }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getParentPair(StatementType formerType,
-                                                                     StatementType latterType) const {
-    return std::unordered_set<std::vector<Entity>>();
+EntityPairSet StubPkbReader::getParentPair(StatementType formerType, StatementType latterType) const {
+    return EntityPairSet();
 }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getParentStarPair(StatementType formerType,
-                                                                         StatementType latterType) const {
-    return std::unordered_set<std::vector<Entity>>();
+EntityPairSet StubPkbReader::getParentStarPair(StatementType formerType, StatementType latterType) const {
+    return EntityPairSet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getParentTypeStmt(StatementType type, Statement &statement) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getParentTypeStmt(StatementType type, Statement &statement) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getParentStarTypeStmt(StatementType type, Statement &statement) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getParentStarTypeStmt(StatementType type, Statement &statement) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getParentTypeWildcard(StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getParentTypeWildcard(StatementType type) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getParentStarTypeWildcard(StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getParentStarTypeWildcard(StatementType type) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getParentStmtType(Statement &statement, StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getParentStmtType(Statement &statement, StatementType type) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getParentStarStmtType(Statement &statement, StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getParentStarStmtType(Statement &statement, StatementType type) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getParentWildcardType(StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getParentWildcardType(StatementType type) const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getParentStarWildcardType(StatementType type) const {
-    return std::unordered_set<Entity>();
-}
+EntitySet StubPkbReader::getParentStarWildcardType(StatementType type) const { return EntitySet(); }
 
 bool StubPkbReader::isParent(Statement &statement1, Statement &statement2) const {
     if (statement1 == Statement(1, StatementType::Stmt) && statement2 == Statement(10, StatementType::Stmt)) {
@@ -411,140 +397,138 @@ bool StubPkbReader::isCallsStar(Procedure &caller, Procedure &callee) const {
     return false;
 }
 
-std::unordered_set<Entity> StubPkbReader::getCallees() const {
-    return std::unordered_set<Entity>({Procedure("procedure1"), Procedure("procedure2")});
+EntitySet StubPkbReader::getCallees() const {
+    return EntitySet({std::make_shared<Procedure>("procedure1"), std::make_shared<Procedure>("procedure2")});
 }
 
-std::unordered_set<Entity> StubPkbReader::getCalleesStar() const { return std::unordered_set<Entity>(); }
+EntitySet StubPkbReader::getCalleesStar() const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getCallers() const { return std::unordered_set<Entity>(); }
+EntitySet StubPkbReader::getCallers() const { return EntitySet(); }
 
-std::unordered_set<Entity> StubPkbReader::getCallersStar() const {
-    return std::unordered_set<Entity>({Procedure("procName")});
+EntitySet StubPkbReader::getCallersStar() const { return EntitySet({std::make_shared<Procedure>("procName")}); }
+
+EntityPairSet StubPkbReader::getCallsPair() const {
+    auto proc1 = std::make_shared<Procedure>("procedureLHS");
+    auto proc2 = std::make_shared<Procedure>("procedureRHS");
+    return EntityPairSet({{proc1, proc2}});
 }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getCallsPair() const {
-    auto proc1 = Procedure("procedureLHS");
-    auto proc2 = Procedure("procedureRHS");
-    return std::unordered_set<std::vector<Entity>>({{proc1, proc2}});
+EntityPairSet StubPkbReader::getCallsStarPair() const { return EntityPairSet(); }
+
+EntitySet StubPkbReader::getCallers(Procedure &callee) const {
+    if (callee == Procedure("procName")) { return EntitySet(); }
+    return EntitySet();
 }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getCallsStarPair() const {
-    return std::unordered_set<std::vector<Entity>>();
+EntitySet StubPkbReader::getCallersStar(Procedure &callee) const { return EntitySet(); }
+
+EntitySet StubPkbReader::getCallees(Procedure &caller) const { return EntitySet(); }
+
+EntitySet StubPkbReader::getCalleesStar(Procedure &caller) const {
+    if (caller == Procedure("procName")) { return EntitySet(); }
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getCallers(Procedure &callee) const {
-    if (callee == Procedure("procName")) { return std::unordered_set<Entity>(); }
-    return std::unordered_set<Entity>();
-}
-
-std::unordered_set<Entity> StubPkbReader::getCallersStar(Procedure &callee) const {
-    return std::unordered_set<Entity>();
-}
-
-std::unordered_set<Entity> StubPkbReader::getCallees(Procedure &caller) const { return std::unordered_set<Entity>(); }
-
-std::unordered_set<Entity> StubPkbReader::getCalleesStar(Procedure &caller) const {
-    if (caller == Procedure("procName")) { return std::unordered_set<Entity>(); }
-    return std::unordered_set<Entity>();
-}
-
-std::unordered_set<std::vector<Entity>> StubPkbReader::getNextPair(StatementType formerType,
-                                                                   StatementType latterType) const {
+EntityPairSet StubPkbReader::getNextPair(StatementType formerType, StatementType latterType) const {
     if (formerType == StatementType::Assign && latterType == StatementType::Read) {
-        std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Statement(2, StatementType::Read)};
-        std::vector<Entity> pair2 = {Statement(3, StatementType::Assign), Statement(4, StatementType::Read)};
-        std::vector<Entity> pair3 = {Statement(5, StatementType::Assign), Statement(6, StatementType::Read)};
-        return std::unordered_set<std::vector<Entity>>({pair1, pair2, pair3});
+        std::vector<EntityPointer> pair1 = {std::make_shared<Statement>(1, StatementType::Assign),
+                                            std::make_shared<Statement>(2, StatementType::Read)};
+        std::vector<EntityPointer> pair2 = {std::make_shared<Statement>(3, StatementType::Assign),
+                                            std::make_shared<Statement>(4, StatementType::Read)};
+        std::vector<EntityPointer> pair3 = {std::make_shared<Statement>(5, StatementType::Assign),
+                                            std::make_shared<Statement>(6, StatementType::Read)};
+        return EntityPairSet({pair1, pair2, pair3});
     }
-    return std::unordered_set<std::vector<Entity>>();
+    return EntityPairSet();
 }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getNextStarPair(StatementType formerType,
-                                                                       StatementType latterType) const {
+EntityPairSet StubPkbReader::getNextStarPair(StatementType formerType, StatementType latterType) const {
     if (formerType == StatementType::Read && latterType == StatementType::If) {
-        return std::unordered_set<std::vector<Entity>>(
-                {{Statement(11, StatementType::Read), Statement(12, StatementType::If)},
-                 {Statement(21, StatementType::Read), Statement(22, StatementType::If)},
-                 {Statement(31, StatementType::Read), Statement(32, StatementType::If)}});
+        return EntityPairSet({{std::make_shared<Statement>(11, StatementType::Read),
+                               std::make_shared<Statement>(12, StatementType::If)},
+                              {std::make_shared<Statement>(21, StatementType::Read),
+                               std::make_shared<Statement>(22, StatementType::If)},
+                              {std::make_shared<Statement>(31, StatementType::Read),
+                               std::make_shared<Statement>(32, StatementType::If)}});
     }
-    return std::unordered_set<std::vector<Entity>>();
+    return EntityPairSet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getNextStarSameStmt(StatementType stmtType) const {
+EntitySet StubPkbReader::getNextStarSameStmt(StatementType stmtType) const {
     if (stmtType == StatementType::Assign) {
-        return std::unordered_set<Entity>({Statement(102, StatementType::Assign)});
+        return EntitySet({std::make_shared<Statement>(102, StatementType::Assign)});
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getNextTypeStmt(StatementType type, Statement &statement) const {
+EntitySet StubPkbReader::getNextTypeStmt(StatementType type, Statement &statement) const {
     if (type == StatementType::Stmt && statement == Statement(14, StatementType::Stmt)) {
-        return std::unordered_set<Entity>({Statement(13, StatementType::Call)});
+        return EntitySet({std::make_shared<Statement>(13, StatementType::Call)});
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getNextStarTypeStmt(StatementType type, Statement &statement) const {
+EntitySet StubPkbReader::getNextStarTypeStmt(StatementType type, Statement &statement) const {
     if (type == StatementType::Stmt && statement == Statement(15, StatementType::Stmt)) {
-        return std::unordered_set<Entity>({Statement(1, StatementType::Call), Statement(2, StatementType::Assign),
-                                           Statement(5, StatementType::Read)});
+        return EntitySet({std::make_shared<Statement>(1, StatementType::Call),
+                          std::make_shared<Statement>(2, StatementType::Assign),
+                          std::make_shared<Statement>(5, StatementType::Read)});
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getNextTypeWildcard(StatementType type) const {
+EntitySet StubPkbReader::getNextTypeWildcard(StatementType type) const {
     if (type == StatementType::If) {
-        return std::unordered_set<Entity>({
-                Statement(11, StatementType::If),
+        return EntitySet({
+                std::make_shared<Statement>(11, StatementType::If),
         });
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getNextStarTypeWildcard(StatementType type) const {
+EntitySet StubPkbReader::getNextStarTypeWildcard(StatementType type) const {
     if (type == StatementType::While) {
-        return std::unordered_set<Entity>({
-                Statement(20, StatementType::While),
+        return EntitySet({
+                std::make_shared<Statement>(20, StatementType::While),
         });
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getNextStmtType(Statement &statement, StatementType type) const {
+EntitySet StubPkbReader::getNextStmtType(Statement &statement, StatementType type) const {
     if (statement == Statement(23, StatementType::Stmt) && type == StatementType::Call) {
-        return std::unordered_set<Entity>({Statement(24, StatementType::Call)});
+        return EntitySet({std::make_shared<Statement>(24, StatementType::Call)});
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getNextStarStmtType(Statement &statement, StatementType type) const {
+EntitySet StubPkbReader::getNextStarStmtType(Statement &statement, StatementType type) const {
     if (statement == Statement(23, StatementType::Stmt) && type == StatementType::If) {
-        return std::unordered_set<Entity>({Statement(26, StatementType::If)});
+        return EntitySet({std::make_shared<Statement>(26, StatementType::If)});
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getNextWildcardType(StatementType type) const {
+EntitySet StubPkbReader::getNextWildcardType(StatementType type) const {
     if (type == StatementType::Assign) {
-        return std::unordered_set<Entity>({
-                Statement(10, StatementType::Assign),
-                Statement(12, StatementType::Assign),
-                Statement(13, StatementType::Assign),
+        return EntitySet({
+                std::make_shared<Statement>(10, StatementType::Assign),
+                std::make_shared<Statement>(12, StatementType::Assign),
+                std::make_shared<Statement>(13, StatementType::Assign),
         });
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getNextStarWildcardType(StatementType type) const {
+EntitySet StubPkbReader::getNextStarWildcardType(StatementType type) const {
     if (type == StatementType::Read) {
-        return std::unordered_set<Entity>({
-                Statement(10, StatementType::Read),
-                Statement(12, StatementType::Read),
-                Statement(15, StatementType::Read),
+        return EntitySet({
+                std::make_shared<Statement>(10, StatementType::Read),
+                std::make_shared<Statement>(12, StatementType::Read),
+                std::make_shared<Statement>(15, StatementType::Read),
         });
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
 bool StubPkbReader::isNext(Statement &statement1, Statement &statement2) const { return true; }
@@ -574,83 +558,84 @@ bool StubPkbReader::hasAfterStarStmt(Statement &statement) const {
     return false;
 }
 
-std::unordered_set<Entity> StubPkbReader::getAllIfPatternStmts() const {
-    return std::unordered_set<Entity>({
-            Statement(101, StatementType::If),
-            Statement(102, StatementType::If),
-            Statement(103, StatementType::If),
+EntitySet StubPkbReader::getAllIfPatternStmts() const {
+    return EntitySet({
+            std::make_shared<Statement>(101, StatementType::If),
+            std::make_shared<Statement>(102, StatementType::If),
+            std::make_shared<Statement>(103, StatementType::If),
     });
 };
 
-std::unordered_set<Entity> StubPkbReader::getIfStmtsByVar(Variable &var) const {
+EntitySet StubPkbReader::getIfStmtsByVar(Variable &var) const {
     if (var.getEntityValue() == "ifPatternVar") {
-        return std::unordered_set<Entity>(
-                {Statement(3, StatementType::If), Statement(59, StatementType::If), Statement(100, StatementType::If)});
+        return EntitySet({std::make_shared<Statement>(3, StatementType::If),
+                          std::make_shared<Statement>(59, StatementType::If),
+                          std::make_shared<Statement>(100, StatementType::If)});
     }
-    return std::unordered_set<Entity>{};
+    return EntitySet{};
 };
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getAllIfStmtVarPair() const {
-    return std::unordered_set<std::vector<Entity>>(
-            {{Statement(1, StatementType::If), Variable("var2")}, {Statement(3, StatementType::If), Variable("var3")}});
+EntityPairSet StubPkbReader::getAllIfStmtVarPair() const {
+    return EntityPairSet({{std::make_shared<Statement>(1, StatementType::If), std::make_shared<Variable>("var2")},
+                          {std::make_shared<Statement>(3, StatementType::If), std::make_shared<Variable>("var3")}});
 }
 
-std::unordered_set<Entity> StubPkbReader::getAllWhilePatternStmts() const {
-    return std::unordered_set<Entity>({WhileStatement(847)});
+EntitySet StubPkbReader::getAllWhilePatternStmts() const { return EntitySet({std::make_shared<WhileStatement>(847)}); }
+
+EntitySet StubPkbReader::getWhileStmtsByVar(Variable &var) const {
+    if (var.getEntityValue() == "x") { return EntitySet{std::make_shared<WhileStatement>(873)}; }
+    return EntitySet{};
 }
 
-std::unordered_set<Entity> StubPkbReader::getWhileStmtsByVar(Variable &var) const {
-    if (var.getEntityValue() == "x") { return std::unordered_set<Entity>{WhileStatement(873)}; }
-    return std::unordered_set<Entity>{};
-}
-
-std::unordered_set<std::vector<Entity>> StubPkbReader::getAllWhileStmtVarPair() const {
-    return std::unordered_set<std::vector<Entity>>{
-            {WhileStatement(860), Variable("var860")},
-            {WhileStatement(861), Variable("var861")},
+EntityPairSet StubPkbReader::getAllWhileStmtVarPair() const {
+    return EntityPairSet{
+            {std::make_shared<WhileStatement>(860), std::make_shared<Variable>("var860")},
+            {std::make_shared<WhileStatement>(861), std::make_shared<Variable>("var861")},
     };
 }
 
-std::unordered_set<std::vector<Entity>> StubPkbReader::getAffectsPair(StatementType formerType,
-                                                                      StatementType latterType) const {
+EntityPairSet StubPkbReader::getAffectsPair(StatementType formerType, StatementType latterType) const {
     if (formerType == StatementType::Assign && latterType == StatementType::Assign) {
-        std::vector<Entity> pair1 = {Statement(1, StatementType::Assign), Statement(2, StatementType::Assign)};
-        std::vector<Entity> pair2 = {Statement(3, StatementType::Assign), Statement(4, StatementType::Assign)};
-        std::vector<Entity> pair3 = {Statement(5, StatementType::Assign), Statement(6, StatementType::Assign)};
-        return std::unordered_set<std::vector<Entity>>({pair1, pair2, pair3});
+        std::vector<EntityPointer> pair1 = {std::make_shared<Statement>(1, StatementType::Assign),
+                                            std::make_shared<Statement>(2, StatementType::Assign)};
+        std::vector<EntityPointer> pair2 = {std::make_shared<Statement>(3, StatementType::Assign),
+                                            std::make_shared<Statement>(4, StatementType::Assign)};
+        std::vector<EntityPointer> pair3 = {std::make_shared<Statement>(5, StatementType::Assign),
+                                            std::make_shared<Statement>(6, StatementType::Assign)};
+        return EntityPairSet({pair1, pair2, pair3});
     }
-    return std::unordered_set<std::vector<Entity>>();
+    return EntityPairSet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getAffectsSameStmt(StatementType stmtType) const {
+EntitySet StubPkbReader::getAffectsSameStmt(StatementType stmtType) const {
     if (stmtType == StatementType::Assign) {
-        return std::unordered_set<Entity>({Statement(61, StatementType::Assign)});
+        return EntitySet({std::make_shared<Statement>(61, StatementType::Assign)});
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
+EntitySet StubPkbReader::getAffectsTypeStmt(StatementType type, Statement &statement) const {
     if (type == StatementType::Stmt && statement == Statement(71, StatementType::Stmt)) {
-        return std::unordered_set<Entity>({Statement(7, StatementType::Assign)});
+        return EntitySet({std::make_shared<Statement>(7, StatementType::Assign)});
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getAffectsTypeWildcard(StatementType type) const {
-    if (type == StatementType::Assign) { return std::unordered_set<Entity>({Statement(8, StatementType::Assign)}); }
-    return std::unordered_set<Entity>();
+EntitySet StubPkbReader::getAffectsTypeWildcard(StatementType type) const {
+    if (type == StatementType::Assign) { return EntitySet({std::make_shared<Statement>(8, StatementType::Assign)}); }
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getAffectsStmtType(Statement &statement, StatementType type) const {
+EntitySet StubPkbReader::getAffectsStmtType(Statement &statement, StatementType type) const {
     if (type == StatementType::Assign && statement == Statement(91, StatementType::Stmt)) {
-        return std::unordered_set<Entity>({Statement(9, StatementType::Assign)});
+        return EntitySet({std::make_shared<Statement>(9, StatementType::Assign)});
     }
-    return std::unordered_set<Entity>();
+    return EntitySet();
 }
 
-std::unordered_set<Entity> StubPkbReader::getAffectsWildcardType(StatementType type) const {
-    if (type == StatementType::Assign) { return std::unordered_set<Entity>({Statement(10, StatementType::Assign)}); }
-    return std::unordered_set<Entity>();
+EntitySet StubPkbReader::getAffectsWildcardType(StatementType type) const {
+    if (type == StatementType::Assign) { return EntitySet({std::make_shared<Statement>(10, StatementType::Assign)}); }
+    return EntitySet();
 }
 
 bool StubPkbReader::isAffects(Statement &statement1, Statement &statement2) const {

@@ -7,6 +7,7 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "PKB/Managers/ManagerUtils.h"
+#include "PKB/PkbTypes.h"
 
 /**
  * @class ConditionPatterManager is responsible for storing and retrieving the statement patterns
@@ -41,20 +42,20 @@ public:
      * Returns an unordered_set of Statements in the store.
      * @return An unordered_set of all the Statement objects
      */
-    std::unordered_set<Entity> getAllStmts() const;
+    EntitySet getAllStmts() const;
 
     /**
      * Returns an unordered_set of Statement objects the store with pattern using the given variable.
      * @param var The variable to be matched against
      * @return An unordered_set of Statement objects
      */
-    std::unordered_set<Entity> getStmtsByVar(Variable &var) const;
+    EntitySet getStmtsByVar(Variable &var) const;
 
     /**
      * Returns an unordered_set of vectors containing all the Statement and Variable pairs in the store
      * @return An unordered_set of vectors containing Statement and Variable pairs
      */
-    std::unordered_set<std::vector<Entity>> getAllStmtVarPair() const;
+    EntityPairSet getAllStmtVarPair() const;
 };
 
 #include "ConditionPatternManager.hpp"

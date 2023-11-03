@@ -75,23 +75,26 @@ TEST_CASE_METHOD(UnitTestFixture, "Uses (Stmt) Relationship") {
     REQUIRE(!reader->isStmtUsesVar(s, v));
     REQUIRE(!reader->hasUses(s));
 
+    auto sp = make_shared<Statement>(s);
+    auto vp = make_shared<Variable>(v);
+
     writer->addUsesRelationship(make_shared<Statement>(s), make_shared<Variable>(v));
 
     auto set1 = reader->getUsesStmtPair(StatementType::Stmt);
     REQUIRE(set1.size() == 1);
-    REQUIRE(set1.find({s, v}) != set1.end());
+    REQUIRE(set1.find({sp, vp}) != set1.end());
 
     auto set2 = reader->getUsesStmt(StatementType::Print);
     REQUIRE(set2.size() == 1);
-    REQUIRE(set2.find(s) != set2.end());
+    REQUIRE(set2.find(sp) != set2.end());
 
     auto set3 = reader->getUsesVar(s);
     REQUIRE(set3.size() == 1);
-    REQUIRE(set3.find(v) != set3.end());
+    REQUIRE(set3.find(vp) != set3.end());
 
     auto set4 = reader->getUsesTypeIdent(StatementType::Stmt, v);
     REQUIRE(set4.size() == 1);
-    REQUIRE(set4.find(s) != set4.end());
+    REQUIRE(set4.find(sp) != set4.end());
 
     REQUIRE(reader->isStmtUsesVar(s, v));
     REQUIRE(reader->hasUses(s));
@@ -121,23 +124,26 @@ TEST_CASE_METHOD(UnitTestFixture, "Uses (Proc) Relationship") {
     REQUIRE(!reader->isProcUsesVar(p, v));
     REQUIRE(!reader->hasUses(p));
 
-    writer->addUsesProcRelationship(make_shared<Procedure>(p), make_shared<Variable>(v));
+    auto pp = make_shared<Procedure>(p);
+    auto vp = make_shared<Variable>(v);
+
+    writer->addUsesProcRelationship(pp, vp);
 
     auto set1 = reader->getUsesProcPair();
     REQUIRE(set1.size() == 1);
-    REQUIRE(set1.find({p, v}) != set1.end());
+    REQUIRE(set1.find({pp, vp}) != set1.end());
 
     auto set2 = reader->getUsesProc();
     REQUIRE(set2.size() == 1);
-    REQUIRE(set2.find(p) != set2.end());
+    REQUIRE(set2.find(pp) != set2.end());
 
     auto set3 = reader->getUsesVar(p);
     REQUIRE(set3.size() == 1);
-    REQUIRE(set3.find(v) != set3.end());
+    REQUIRE(set3.find(vp) != set3.end());
 
     auto set4 = reader->getUsesProcIdent(v);
     REQUIRE(set4.size() == 1);
-    REQUIRE(set4.find(p) != set4.end());
+    REQUIRE(set4.find(pp) != set4.end());
 
     REQUIRE(reader->isProcUsesVar(p, v));
     REQUIRE(reader->hasUses(p));
@@ -165,23 +171,26 @@ TEST_CASE_METHOD(UnitTestFixture, "Modifies (Stmt) Relationship") {
     REQUIRE(!reader->isStmtModifiesVar(s, v));
     REQUIRE(!reader->hasModifies(s));
 
-    writer->addModifiesRelationship(make_shared<Statement>(s), make_shared<Variable>(v));
+    auto sp = make_shared<Statement>(s);
+    auto vp = make_shared<Variable>(v);
+
+    writer->addModifiesRelationship(sp, vp);
 
     auto set1 = reader->getModifiesStmtPair(StatementType::Stmt);
     REQUIRE(set1.size() == 1);
-    REQUIRE(set1.find({s, v}) != set1.end());
+    REQUIRE(set1.find({sp, vp}) != set1.end());
 
     auto set2 = reader->getModifiesStmt(StatementType::Read);
     REQUIRE(set2.size() == 1);
-    REQUIRE(set2.find(s) != set2.end());
+    REQUIRE(set2.find(sp) != set2.end());
 
     auto set3 = reader->getModifiesVar(s);
     REQUIRE(set3.size() == 1);
-    REQUIRE(set3.find(v) != set3.end());
+    REQUIRE(set3.find(vp) != set3.end());
 
     auto set4 = reader->getModifiesTypeIdent(StatementType::Stmt, v);
     REQUIRE(set4.size() == 1);
-    REQUIRE(set4.find(s) != set4.end());
+    REQUIRE(set4.find(sp) != set4.end());
 
     REQUIRE(reader->isStmtModifiesVar(s, v));
     REQUIRE(reader->hasModifies(s));
@@ -211,23 +220,26 @@ TEST_CASE_METHOD(UnitTestFixture, "Modifies (Proc) Relationship") {
     REQUIRE(!reader->isProcModifiesVar(p, v));
     REQUIRE(!reader->hasModifies(p));
 
-    writer->addModifiesProcRelationship(make_shared<Procedure>(p), make_shared<Variable>(v));
+    auto pp = make_shared<Procedure>(p);
+    auto vp = make_shared<Variable>(v);
+
+    writer->addModifiesProcRelationship(pp, vp);
 
     auto set1 = reader->getModifiesProcPair();
     REQUIRE(set1.size() == 1);
-    REQUIRE(set1.find({p, v}) != set1.end());
+    REQUIRE(set1.find({pp, vp}) != set1.end());
 
     auto set2 = reader->getModifiesProc();
     REQUIRE(set2.size() == 1);
-    REQUIRE(set2.find(p) != set2.end());
+    REQUIRE(set2.find(pp) != set2.end());
 
     auto set3 = reader->getModifiesVar(p);
     REQUIRE(set3.size() == 1);
-    REQUIRE(set3.find(v) != set3.end());
+    REQUIRE(set3.find(vp) != set3.end());
 
     auto set4 = reader->getModifiesProcIdent(v);
     REQUIRE(set4.size() == 1);
-    REQUIRE(set4.find(p) != set4.end());
+    REQUIRE(set4.find(pp) != set4.end());
 
     REQUIRE(reader->isProcModifiesVar(p, v));
     REQUIRE(reader->hasModifies(p));
@@ -267,47 +279,50 @@ TEST_CASE_METHOD(UnitTestFixture, "Follows(*) Relationship") {
     REQUIRE(!reader->hasFormerStmt(s2));
     REQUIRE(!reader->hasFormerStarStmt(s2));
 
-    writer->addFollowsRelationship(make_shared<Statement>(s), make_shared<Statement>(s2), true);
+    auto sp = make_shared<Statement>(s);
+    auto sp2 = make_shared<Statement>(s2);
+
+    writer->addFollowsRelationship(sp, sp2, true);
 
     auto set1 = reader->getFollowsPair(StatementType::Stmt, StatementType::Stmt);
     REQUIRE(set1.size() == 1);
-    REQUIRE(set1.find({s, s2}) != set1.end());
+    REQUIRE(set1.find({sp, sp2}) != set1.end());
 
     auto set2 = reader->getFollowsStarPair(StatementType::Print, StatementType::Read);
     REQUIRE(set2.size() == 1);
-    REQUIRE(set2.find({s, s2}) != set2.end());
+    REQUIRE(set2.find({sp, sp2}) != set2.end());
 
     auto set3 = reader->getFollowsTypeStmt(StatementType::Print, s2);
     REQUIRE(set3.size() == 1);
-    REQUIRE(set3.find(s) != set3.end());
+    REQUIRE(set3.find(sp) != set3.end());
 
     auto set4 = reader->getFollowsStarTypeStmt(StatementType::Stmt, s2);
     REQUIRE(set4.size() == 1);
-    REQUIRE(set4.find(s) != set4.end());
+    REQUIRE(set4.find(sp) != set4.end());
 
     auto set5 = reader->getFollowsStmtType(s, StatementType::Read);
     REQUIRE(set5.size() == 1);
-    REQUIRE(set5.find(s2) != set5.end());
+    REQUIRE(set5.find(sp2) != set5.end());
 
     auto set6 = reader->getFollowsStarStmtType(s, StatementType::Stmt);
     REQUIRE(set6.size() == 1);
-    REQUIRE(set6.find(s2) != set6.end());
+    REQUIRE(set6.find(sp2) != set6.end());
 
     auto set7 = reader->getFollowsTypeWildcard(StatementType::Print);
     REQUIRE(set7.size() == 1);
-    REQUIRE(set7.find(s) != set7.end());
+    REQUIRE(set7.find(sp) != set7.end());
 
     auto set8 = reader->getFollowsStarTypeWildcard(StatementType::Stmt);
     REQUIRE(set8.size() == 1);
-    REQUIRE(set8.find(s) != set8.end());
+    REQUIRE(set8.find(sp) != set8.end());
 
     auto set9 = reader->getFollowsWildcardType(StatementType::Read);
     REQUIRE(set9.size() == 1);
-    REQUIRE(set9.find(s2) != set9.end());
+    REQUIRE(set9.find(sp2) != set9.end());
 
     auto set10 = reader->getFollowsStarWildcardType(StatementType::Stmt);
     REQUIRE(set10.size() == 1);
-    REQUIRE(set10.find(s2) != set10.end());
+    REQUIRE(set10.find(sp2) != set10.end());
 
     REQUIRE(reader->isFollows(s, s2));
     REQUIRE(reader->isFollowsStar(s, s2));
@@ -329,47 +344,50 @@ TEST_CASE_METHOD(UnitTestFixture, "Parent(*) Relationship") {
     Statement s = Statement(1, StatementType::While);
     Statement s2 = Statement(2, StatementType::Read);
 
-    writer->addParentRelationship(make_shared<Statement>(s), make_shared<Statement>(s2), true);
+    auto sp = make_shared<Statement>(s);
+    auto sp2 = make_shared<Statement>(s2);
+
+    writer->addParentRelationship(sp, sp2, true);
 
     auto set1 = reader->getParentPair(StatementType::Stmt, StatementType::Stmt);
     REQUIRE(set1.size() == 1);
-    REQUIRE(set1.find({s, s2}) != set1.end());
+    REQUIRE(set1.find({sp, sp2}) != set1.end());
 
     auto set2 = reader->getParentStarPair(StatementType::While, StatementType::Read);
     REQUIRE(set2.size() == 1);
-    REQUIRE(set2.find({s, s2}) != set2.end());
+    REQUIRE(set2.find({sp, sp2}) != set2.end());
 
     auto set3 = reader->getParentTypeStmt(StatementType::While, s2);
     REQUIRE(set3.size() == 1);
-    REQUIRE(set3.find(s) != set3.end());
+    REQUIRE(set3.find(sp) != set3.end());
 
     auto set4 = reader->getParentStarTypeStmt(StatementType::Stmt, s2);
     REQUIRE(set4.size() == 1);
-    REQUIRE(set4.find(s) != set4.end());
+    REQUIRE(set4.find(sp) != set4.end());
 
     auto set5 = reader->getParentStmtType(s, StatementType::Read);
     REQUIRE(set5.size() == 1);
-    REQUIRE(set5.find(s2) != set5.end());
+    REQUIRE(set5.find(sp2) != set5.end());
 
     auto set6 = reader->getParentStarStmtType(s, StatementType::Stmt);
     REQUIRE(set6.size() == 1);
-    REQUIRE(set6.find(s2) != set6.end());
+    REQUIRE(set6.find(sp2) != set6.end());
 
     auto set7 = reader->getParentTypeWildcard(StatementType::While);
     REQUIRE(set7.size() == 1);
-    REQUIRE(set7.find(s) != set7.end());
+    REQUIRE(set7.find(sp) != set7.end());
 
     auto set8 = reader->getParentStarTypeWildcard(StatementType::Stmt);
     REQUIRE(set8.size() == 1);
-    REQUIRE(set8.find(s) != set8.end());
+    REQUIRE(set8.find(sp) != set8.end());
 
     auto set9 = reader->getParentWildcardType(StatementType::Read);
     REQUIRE(set9.size() == 1);
-    REQUIRE(set9.find(s2) != set9.end());
+    REQUIRE(set9.find(sp2) != set9.end());
 
     auto set10 = reader->getParentStarWildcardType(StatementType::Stmt);
     REQUIRE(set10.size() == 1);
-    REQUIRE(set10.find(s2) != set10.end());
+    REQUIRE(set10.find(sp2) != set10.end());
 
     REQUIRE(reader->isParent(s, s2));
     REQUIRE(reader->isParentStar(s, s2));
@@ -428,7 +446,10 @@ TEST_CASE_METHOD(UnitTestFixture, "Calls(*) Relationship") {
     REQUIRE(reader->getCallees(p).empty());
     REQUIRE(reader->getCalleesStar(p).empty());
 
-    writer->addCallsRelationship(make_shared<Procedure>(p), make_shared<Procedure>(p2));
+    auto pp = make_shared<Procedure>(p);
+    auto pp2 = make_shared<Procedure>(p2);
+
+    writer->addCallsRelationship(pp, pp2);
     writer->triggerTransitiveCalc();
 
     REQUIRE(reader->hasCalls());
@@ -445,43 +466,43 @@ TEST_CASE_METHOD(UnitTestFixture, "Calls(*) Relationship") {
 
     auto set1 = reader->getCallees();
     REQUIRE(set1.size() == 1);
-    REQUIRE(set1.find(p2) != set1.end());
+    REQUIRE(set1.find(pp2) != set1.end());
 
     auto set2 = reader->getCalleesStar();
     REQUIRE(set2.size() == 1);
-    REQUIRE(set2.find(p2) != set2.end());
+    REQUIRE(set2.find(pp2) != set2.end());
 
     auto set3 = reader->getCallers();
     REQUIRE(set3.size() == 1);
-    REQUIRE(set3.find(p) != set3.end());
+    REQUIRE(set3.find(pp) != set3.end());
 
     auto set4 = reader->getCallersStar();
     REQUIRE(set4.size() == 1);
-    REQUIRE(set4.find(p) != set4.end());
+    REQUIRE(set4.find(pp) != set4.end());
 
     auto set5 = reader->getCallsPair();
     REQUIRE(set5.size() == 1);
-    REQUIRE(set5.find({p, p2}) != set5.end());
+    REQUIRE(set5.find({pp, pp2}) != set5.end());
 
     auto set6 = reader->getCallsStarPair();
     REQUIRE(set6.size() == 1);
-    REQUIRE(set6.find({p, p2}) != set6.end());
+    REQUIRE(set6.find({pp, pp2}) != set6.end());
 
     auto set7 = reader->getCallers(p2);
     REQUIRE(set7.size() == 1);
-    REQUIRE(set7.find(p) != set7.end());
+    REQUIRE(set7.find(pp) != set7.end());
 
     auto set8 = reader->getCallersStar(p2);
     REQUIRE(set8.size() == 1);
-    REQUIRE(set8.find(p) != set8.end());
+    REQUIRE(set8.find(pp) != set8.end());
 
     auto set9 = reader->getCallees(p);
     REQUIRE(set9.size() == 1);
-    REQUIRE(set9.find(p2) != set9.end());
+    REQUIRE(set9.find(pp2) != set9.end());
 
     auto set10 = reader->getCalleesStar(p);
     REQUIRE(set10.size() == 1);
-    REQUIRE(set10.find(p2) != set10.end());
+    REQUIRE(set10.find(pp2) != set10.end());
 
     // Negative Cases
     Procedure pNew = Procedure("main3");
@@ -515,44 +536,47 @@ TEST_CASE_METHOD(UnitTestFixture, "Assign Pattern") {
     REQUIRE(reader->getAssignStmtsVarPairByRhs(subExpr, true).empty());
     REQUIRE(reader->getAssignStmtsVarPairByRhs(e, false).empty());
 
-    writer->addAssignStatement(make_shared<Statement>(s));
-    writer->addAssignPattern(make_shared<Statement>(s), make_shared<Variable>(v), make_shared<Expression>(e));
+    auto sp = make_shared<Statement>(s);
+    auto vp = make_shared<Variable>(v);
+
+    writer->addAssignStatement(sp);
+    writer->addAssignPattern(sp, vp, make_shared<Expression>(e));
 
     auto set1 = reader->getAllAssign();
     REQUIRE(set1.size() == 1);
-    REQUIRE(set1.find(s) != set1.end());
+    REQUIRE(set1.find(sp) != set1.end());
 
     auto set2 = reader->getAssignStmtsByRhs(subExpr, true);
     REQUIRE(set2.size() == 1);
-    REQUIRE(set2.find(s) != set2.end());
+    REQUIRE(set2.find(sp) != set2.end());
 
     auto set3 = reader->getAssignStmtsByRhs(e, false);
     REQUIRE(set3.size() == 1);
-    REQUIRE(set3.find(s) != set3.end());
+    REQUIRE(set3.find(sp) != set3.end());
 
     auto set4 = reader->getAssignStmtsByLhs(v);
     REQUIRE(set4.size() == 1);
-    REQUIRE(set4.find(s) != set4.end());
+    REQUIRE(set4.find(sp) != set4.end());
 
     auto set5 = reader->getAssignStmtsByLhsRhs(v, subExpr, true);
     REQUIRE(set5.size() == 1);
-    REQUIRE(set5.find(s) != set5.end());
+    REQUIRE(set5.find(sp) != set5.end());
 
     auto set6 = reader->getAssignStmtsByLhsRhs(v, e, false);
     REQUIRE(set6.size() == 1);
-    REQUIRE(set6.find(s) != set6.end());
+    REQUIRE(set6.find(sp) != set6.end());
 
     auto set7 = reader->getAllAssignStmtVarPair();
     REQUIRE(set7.size() == 1);
-    REQUIRE(set7.find({s, v}) != set7.end());
+    REQUIRE(set7.find({sp, vp}) != set7.end());
 
     auto set8 = reader->getAssignStmtsVarPairByRhs(subExpr, true);
     REQUIRE(set8.size() == 1);
-    REQUIRE(set8.find({s, v}) != set8.end());
+    REQUIRE(set8.find({sp, vp}) != set8.end());
 
     auto set9 = reader->getAssignStmtsVarPairByRhs(e, false);
     REQUIRE(set9.size() == 1);
-    REQUIRE(set9.find({s, v}) != set9.end());
+    REQUIRE(set9.find({sp, vp}) != set9.end());
 
     // Negative tests
     Expression eNew = Expression("((x)+(z))*2");
@@ -593,50 +617,53 @@ TEST_CASE_METHOD(UnitTestFixture, "Next(*) Relationship") {
     REQUIRE(!reader->hasAfterStmt(s));
     REQUIRE(!reader->hasAfterStarStmt(s));
 
-    writer->addNextRelationship(make_shared<Statement>(s), make_shared<Statement>(s1));
+    auto sp = make_shared<Statement>(s);
+    auto sp1 = make_shared<Statement>(s1);
+
+    writer->addNextRelationship(sp, sp1);
     writer->clearCache();
 
     auto set1 = reader->getNextPair(StatementType::Stmt, StatementType::Stmt);
     REQUIRE(set1.size() == 1);
-    REQUIRE(set1.find({s, s1}) != set1.end());
+    REQUIRE(set1.find({sp, sp1}) != set1.end());
 
     auto set2 = reader->getNextStarPair(StatementType::Print, StatementType::Read);
     REQUIRE(set2.size() == 1);
-    REQUIRE(set2.find({s, s1}) != set2.end());
+    REQUIRE(set2.find({sp, sp1}) != set2.end());
 
     auto set3 = reader->getNextStarSameStmt(StatementType::Stmt);
     REQUIRE(set3.size() == 0);
 
     auto set4 = reader->getNextTypeStmt(StatementType::Print, s1);
     REQUIRE(set4.size() == 1);
-    REQUIRE(set4.find(s) != set4.end());
+    REQUIRE(set4.find(sp) != set4.end());
 
     auto set5 = reader->getNextStarTypeStmt(StatementType::Stmt, s1);
     REQUIRE(set5.size() == 1);
 
     auto set6 = reader->getNextTypeWildcard(StatementType::Print);
     REQUIRE(set6.size() == 1);
-    REQUIRE(set6.find(s) != set6.end());
+    REQUIRE(set6.find(sp) != set6.end());
 
     auto set7 = reader->getNextStarTypeWildcard(StatementType::Stmt);
     REQUIRE(set7.size() == 1);
-    REQUIRE(set7.find(s) != set7.end());
+    REQUIRE(set7.find(sp) != set7.end());
 
     auto set8 = reader->getNextStmtType(s, StatementType::Read);
     REQUIRE(set8.size() == 1);
-    REQUIRE(set8.find(s1) != set8.end());
+    REQUIRE(set8.find(sp1) != set8.end());
 
     auto set9 = reader->getNextStarStmtType(s, StatementType::Stmt);
     REQUIRE(set9.size() == 1);
-    REQUIRE(set9.find(s1) != set9.end());
+    REQUIRE(set9.find(sp1) != set9.end());
 
     auto set10 = reader->getNextWildcardType(StatementType::Read);
     REQUIRE(set10.size() == 1);
-    REQUIRE(set10.find(s1) != set10.end());
+    REQUIRE(set10.find(sp1) != set10.end());
 
     auto set11 = reader->getNextStarWildcardType(StatementType::Stmt);
     REQUIRE(set11.size() == 1);
-    REQUIRE(set11.find(s1) != set11.end());
+    REQUIRE(set11.find(sp1) != set11.end());
 
     REQUIRE(reader->isNext(s, s1));
     REQUIRE(reader->isNextStar(s, s1));
@@ -677,21 +704,20 @@ TEST_CASE_METHOD(UnitTestFixture, "If Pattern") {
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
 
-    Statement s = Statement(1, StatementType::If);
-    Variable v = Variable("x");
+    shared_ptr<Statement> s = make_shared<Statement>(1, StatementType::If);
+    shared_ptr<Variable> v = make_shared<Variable>("x");
 
     REQUIRE(reader->getAllIfPatternStmts().empty());
-    REQUIRE(reader->getIfStmtsByVar(v).empty());
+    REQUIRE(reader->getIfStmtsByVar(*v).empty());
     REQUIRE(reader->getAllIfStmtVarPair().empty());
 
-    writer->addIfPattern(make_shared<Statement>(s),
-                         make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>(v)));
+    writer->addIfPattern(s, make_shared<vector<shared_ptr<Variable>>>(1, v));
 
     auto set1 = reader->getAllIfPatternStmts();
     REQUIRE(set1.size() == 1);
     REQUIRE(set1.find(s) != set1.end());
 
-    auto set2 = reader->getIfStmtsByVar(v);
+    auto set2 = reader->getIfStmtsByVar(*v);
     REQUIRE(set2.size() == 1);
     REQUIRE(set2.find(s) != set2.end());
 
@@ -705,21 +731,20 @@ TEST_CASE_METHOD(UnitTestFixture, "While Pattern") {
     auto reader = pkb.createPkbReader();
     auto writer = pkb.createPkbWriter();
 
-    Statement s = Statement(1, StatementType::While);
-    Variable v = Variable("x");
+    shared_ptr<Statement> s = make_shared<Statement>(1, StatementType::While);
+    shared_ptr<Variable> v = make_shared<Variable>("x");
 
     REQUIRE(reader->getAllWhilePatternStmts().empty());
-    REQUIRE(reader->getWhileStmtsByVar(v).empty());
+    REQUIRE(reader->getWhileStmtsByVar(*v).empty());
     REQUIRE(reader->getAllWhileStmtVarPair().empty());
 
-    writer->addWhilePattern(make_shared<Statement>(s),
-                            make_shared<vector<shared_ptr<Variable>>>(1, make_shared<Variable>(v)));
+    writer->addWhilePattern(s, make_shared<vector<shared_ptr<Variable>>>(1, v));
 
     auto set1 = reader->getAllWhilePatternStmts();
     REQUIRE(set1.size() == 1);
     REQUIRE(set1.find(s) != set1.end());
 
-    auto set2 = reader->getWhileStmtsByVar(v);
+    auto set2 = reader->getWhileStmtsByVar(*v);
     REQUIRE(set2.size() == 1);
     REQUIRE(set2.find(s) != set2.end());
 

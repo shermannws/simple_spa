@@ -49,5 +49,5 @@ public:
      * @param stmtType The type of statement to be retrieved
      * @return An unordered_set of statements
      */
-    std::unordered_set<Entity> getAffectsSameStmt(StatementType stmtType) const;
+    EntitySet getAffectsSameStmt(StatementType stmtType) const;
 };

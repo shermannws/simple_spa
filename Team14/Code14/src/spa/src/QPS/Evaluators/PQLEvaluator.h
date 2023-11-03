@@ -12,7 +12,7 @@
 #include "Result.h"
 #include "ResultHandler.h"
 
-using transformFunc = std::function<std::string(Entity &)>;
+using transformFunc = std::function<std::string(std::shared_ptr<Entity>)>;
 
 /**
  * @brief PQL (Program Query Language) evaluator class.
@@ -43,14 +43,14 @@ private:
      * @param queryEntity A pointer to the query entity to retrieve instances for.
      * @return A set of entities representing all instances of the query entity.
      */
-    std::unordered_set<Entity> getAll(const EntityPtr &queryEntity);
+    std::unordered_set<std::shared_ptr<Entity>> getAll(const EntityPtr &queryEntity);
 
     /**
      * @brief retrieves all combinations of the query entities from the PKB
      * @param queryEntities vector of QueryEntityTypes representing the combination of Entities to retrieve
      * @return A set of entities representing all instances of the query entity combination
      */
-    std::unordered_set<std::vector<Entity>> getAllByTypes(const std::vector<QueryEntityType> &queryEntities);
+    std::unordered_set<ResultTuple> getAllByTypes(const std::vector<QueryEntityType> &queryEntities);
 
     /**
      * @brief Evaluates a clause and updates the result accordingly.
@@ -90,8 +90,7 @@ private:
      * @param transformations pair of index of entity to transform and toString function to apply
      * @return the vector of transformation results
      */
-    std::vector<std::string> project(std::vector<Entity> row,
-                                     std::vector<std::pair<int, transformFunc>> transformations);
+    std::vector<std::string> project(ResultTuple row, std::vector<std::pair<int, transformFunc>> &transformations);
 
     /**
      * creates a vector of transformations to convert a row from a result table into the format specified by

@@ -10,7 +10,7 @@ TEST_CASE_METHOD(
         UnitTestFixture,
         "Test PkbWriterManager - Triggering Stmt to Var Transitive Calculation through triggerTransitiveCalc") {
 
-    SECTION("Test Modifes(s,v) and Uses - v1") {
+    SECTION("Test Modifies(s,v) and Uses - v1") {
         auto assignmentManager = std::make_shared<AssignPatternManager>(AssignPatternManager());
         auto entitiesManager = std::make_shared<EntitiesManager>(EntitiesManager());
         auto followsRelationshipManager = std::make_shared<FollowsRelationshipManager>();
