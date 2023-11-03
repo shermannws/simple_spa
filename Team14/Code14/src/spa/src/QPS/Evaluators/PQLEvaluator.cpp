@@ -81,13 +81,19 @@ bool PQLEvaluator::evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause
 bool PQLEvaluator::evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Clause>> &clauses) {
     auto tmp = std::make_shared<Result>(true);
     for (auto &clause: clauses) {
-        tmp = evaluateNext(tmp, clause);// TODO rename to evaluateNegation and add if(negation) check here
+        auto clauseRes = evaluateClause(clause);
+        if (clause->isNegation()) {
+            tmp = evaluateNegation(tmp, clauseRes);
+        } else {
+            tmp = resultHandler->getCombined(tmp, clauseRes);
+        }
         if (tmp->isFalse()) { return false; }
     }
     return true;
 }
 
 Result PQLEvaluator::evaluate(Query &query) {
+    setDeclarationMap(query);
     auto pairs = QPSOptimizer::getGroupScorePairs(query);
     std::priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::compareGroupByScore);
 
@@ -104,7 +110,12 @@ Result PQLEvaluator::evaluate(Query &query) {
         } else {// those with selectSyns (and if select has synonym(s)
             group = QPSOptimizer::sortClauses(group);
             for (auto &clause: group) {
-                res = evaluateNext(res, clause);
+                auto clauseRes = evaluateClause(clause);
+                if (clause->isNegation()) {
+                    res = evaluateNegation(res, clauseRes);
+                } else {
+                    res = resultHandler->getCombined(res, clauseRes);
+                }
                 if (res->isFalse()) { return Result(false); }
             }
         }
@@ -136,46 +147,26 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
     std::shared_ptr<Strategy> strategy = QPSUtil::strategyCreatorMap[clause->getType()](pkbReader);
     clauseHandler->setStrategy(strategy);
     std::shared_ptr<Result> result = clauseHandler->executeClause(clause);
-    /*
-    if (clause->isNegation()) {
-        if (result->getType() == ResultType::Boolean) {
-            auto boolValue = result->getBoolResult();
-            result->setBoolResult(!boolValue);
-            return result;
-        }
-
-        auto queryEntities = clause->getSynonymEntityTypes();
-        auto lhs = getAllByTypes(queryEntities);
-        auto rhs = result->getTuples();
-        for (const auto &tuple: rhs) { lhs.erase(tuple); }
-        result->setTuples(lhs);
-    }
-    */
     return result;
 }
 
-std::shared_ptr<Result> PQLEvaluator::evaluateNext(std::shared_ptr<Result> curr, std::shared_ptr<Clause> clause) {
-    if (clause->isNegation()) {
-        auto rhsRes = evaluateClause(clause);
-        auto rhsHeader = rhsRes->getHeader();
+std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> curr,
+                                                       std::shared_ptr<Result> clauseRes) {
+    auto clauseSyns = clauseRes->getHeader();
+    auto unevaluatedSyn = getUnevaluatedSyn(clauseSyns, curr);
 
-        std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(rhsHeader, curr);
-
-        if (unevaluatedSyn.empty()) {// all syns present
-            return resultHandler->getDiff(curr, rhsRes);
-        }
-
-        // not all syns in current result, execute naive approach
-        auto queryEntities = clause->getSynonymEntityTypes();
-        auto lhs = getAllByTypes(queryEntities);
-        auto rhs = rhsRes->getTuples();
-        for (const auto &tuple: rhs) { lhs.erase(tuple); }
-        rhsRes->setTuples(lhs);
-        return resultHandler->getCombined(curr, rhsRes);
+    if (unevaluatedSyn.empty()) {// all syns present
+        return resultHandler->getDiff(curr, clauseRes);
     }
 
-    return resultHandler->getCombined(curr, evaluateClause(clause));
+    // not all syns in current result, execute naive approach
+    auto lhs = getTuplesBySyn(clauseSyns);
+    auto rhs = clauseRes->getTuples();
+    for (const auto &tuple: rhs) { lhs.erase(tuple); }
+    clauseRes->setTuples(lhs);
+    return resultHandler->getCombined(curr, clauseRes);
 }
+
 
 std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const std::shared_ptr<QueryEntity> entity) {
     std::shared_ptr<Result> result = std::make_shared<Result>();
@@ -202,17 +193,25 @@ std::unordered_set<std::shared_ptr<Entity>> PQLEvaluator::getAll(const std::shar
     return QPSUtil::entityGetterMap[entityType](pkbReader);
 }
 
-std::unordered_set<ResultTuple> PQLEvaluator::getAllByTypes(const std::vector<QueryEntityType> &queryEntities) {
+std::unordered_set<std::vector<EntityPointer>> PQLEvaluator::getTuplesBySyn(const std::vector<Synonym> &entitySyns) {
+    auto tupleSize = entitySyns.size();
+    std::vector<QueryEntityType> types(tupleSize);
+    for (int i = 0; i < tupleSize; i++) { types[i] = declarationMap[entitySyns[i]]->getType(); }
+
     std::unordered_set<ResultTuple> tuples;
-    if (queryEntities.size() == 1) {
-        auto set = QPSUtil::entityGetterMap[queryEntities[0]](pkbReader);
-        for (const auto &entity: set) { tuples.insert(ResultTuple{entity}); }
-    } else {
-        auto sets = std::make_pair(QPSUtil::entityGetterMap[queryEntities[0]](pkbReader),
-                                   QPSUtil::entityGetterMap[queryEntities[1]](pkbReader));
-        for (auto &first: sets.first) {
-            for (auto &second: sets.second) { tuples.insert({first, second}); }
-        }
+    if (tupleSize == 1) {// tuples are single entity
+        auto set = QPSUtil::entityGetterMap[types[0]](pkbReader);
+        for (const auto &entity: set) { tuples.insert({entity}); }
+        return tuples;
+    }
+
+    // tuples are pair of entities
+    auto sets = std::make_pair(QPSUtil::entityGetterMap[types[0]](pkbReader),
+                               QPSUtil::entityGetterMap[types[1]](pkbReader));
+    for (auto &first: sets.first) {
+        for (auto &second: sets.second) { tuples.insert({first, second}); }
     }
     return tuples;
 }
+
+void PQLEvaluator::setDeclarationMap(Query &query) { declarationMap = query.getDeclarations(); }

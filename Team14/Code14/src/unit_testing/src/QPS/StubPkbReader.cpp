@@ -155,7 +155,7 @@ EntityPairSet StubPkbReader::getFollowsStarPair(StatementType formerType, Statem
         auto r5 = std::make_shared<Entity>(Statement(5, StatementType::Read));
         auto r6 = std::make_shared<Entity>(Statement(6, StatementType::Read));
         auto r8 = std::make_shared<Entity>(Statement(8, StatementType::Read));
-        return EntityPairSet ({{a1, r5}, {a1, r6}, {a1, r8}, {a3, r5}, {a3, r6}, {a3, r8}, {a7, r8}});
+        return EntityPairSet({{a1, r5}, {a1, r6}, {a1, r8}, {a3, r5}, {a3, r6}, {a3, r8}, {a7, r8}});
     }
     return EntityPairSet();
 }
@@ -209,7 +209,7 @@ EntityPairSet StubPkbReader::getModifiesStmtPair(StatementType type) const {
                                             std::make_shared<Variable>("var3")};
         std::vector<EntityPointer> pair5 = {std::make_shared<Statement>(6, StatementType::Assign),
                                             std::make_shared<Variable>("var4")};
-        return EntityPairSet ({pair1, pair4, pair5});
+        return EntityPairSet({pair1, pair4, pair5});
     }
     return EntityPairSet({pair1, pair2, pair3});
 }
