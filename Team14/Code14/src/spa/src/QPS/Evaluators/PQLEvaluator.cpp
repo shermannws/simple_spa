@@ -84,7 +84,7 @@ bool PQLEvaluator::evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Cla
     auto tmp = std::make_shared<Result>(true);
     for (auto &clause: clauses) {
         tmp = evaluateNext(tmp, clause);// TODO rename to evaluateNegation and add if(negation) check here
-        if (tmp->isFalse() || tmp->isEmpty()) { return false; }
+        if (tmp->isFalse()) { return false; }
     }
     return true;
 }
@@ -173,7 +173,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNext(std::shared_ptr<Result> curr,
         auto rhs = rhsRes->getTuples();
         for (const auto &tuple: rhs) { lhs.erase(tuple); }
         rhsRes->setTuples(lhs);
-        return rhsRes;
+        return resultHandler->getCombined(curr, rhsRes);
     }
 
     return resultHandler->getCombined(curr, evaluateClause(clause));

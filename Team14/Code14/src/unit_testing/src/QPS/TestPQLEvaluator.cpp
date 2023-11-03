@@ -1730,7 +1730,7 @@ TEST_CASE_METHOD(UnitTestFixture, "not queries, optimisation paths executed") {
         PQLEvaluator evaluator = PQLEvaluator(stubReader);
         auto resultObj = evaluator.evaluate(queryObj);
         auto results = evaluator.formatResult(queryObj, resultObj);
-        REQUIRE(results.size() == 22);
+        REQUIRE(results.size() == 14);
         REQUIRE(find(results.begin(), results.end(), "1 var88") != results.end());
         REQUIRE(find(results.begin(), results.end(), "1 var38") != results.end());
         REQUIRE(find(results.begin(), results.end(), "1 var36") != results.end());
@@ -1744,15 +1744,7 @@ TEST_CASE_METHOD(UnitTestFixture, "not queries, optimisation paths executed") {
         REQUIRE(find(results.begin(), results.end(), "3 var14") != results.end());
         REQUIRE(find(results.begin(), results.end(), "3 var5") != results.end());
         REQUIRE(find(results.begin(), results.end(), "3 var2") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "7 var1") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "7 var88") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "7 var38") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "7 var36") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "7 var24") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "7 var14") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "7 var5") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "7 var2") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "7 var1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var1") != results.end());
     }
 
     SECTION("all syns overlap") {// both syn present
