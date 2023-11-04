@@ -1355,10 +1355,12 @@ TEST_CASE_METHOD(UnitTestFixture, "multiclause, pattern only - synonym in empty 
     queryObj.addClause(pc2);// returns a,v1 of 6 var6
     std::vector<std::shared_ptr<QueryEntity>> decl = {std::make_shared<QueryEntity>(QueryEntityType::Assign, "a"),
                                                       std::make_shared<QueryEntity>(QueryEntityType::Assign, "a1"),
-                                                      std::make_shared<QueryEntity>(QueryEntityType::Variable, "v")};
+                                                      std::make_shared<QueryEntity>(QueryEntityType::Variable, "v"),
+                                                      std::make_shared<QueryEntity>(QueryEntityType::Variable, "v1")};
     queryObj.addDeclaration(decl[0]);
     queryObj.addDeclaration(decl[1]);
     queryObj.addDeclaration(decl[2]);
+    queryObj.addDeclaration(decl[3]);
 
     auto stubReader = make_shared<StubPkbReader>();
     PQLEvaluator evaluator = PQLEvaluator(stubReader);
