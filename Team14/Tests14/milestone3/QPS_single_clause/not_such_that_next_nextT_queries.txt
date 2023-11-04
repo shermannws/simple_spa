@@ -139,9 +139,9 @@ Select BOOLEAN such that not Next*(_,_)
 FALSE
 5000
 17 - Not Next* (wildcard, syn)
-read re;
-Select re.varName such that not Next*(_,re)
-none
+assign a;
+Select a such that not Next*(_,a)
+1, 15
 5000
 18 - Not Next* (wildcard, int)
 procedure p;
