@@ -1,7 +1,30 @@
 #pragma once
 
+#include <type_traits>
 #include <unordered_map>
+#include <utility>
 #include <vector>
+
+/**
+ * Type trait to test for presence of valid hash function during compilation.
+ * This is the default template, and has a compile-time IsHashable::value value of false.
+ * This version of the IsHashable struct will be used if the type T fails the std::hash check
+ * for the specialized template, triggering SFINAE and falling back to this default version.
+ * @tparam T Type to check for presence of valid hash function
+ */
+template<typename T, typename = void>
+struct IsHashable : std::false_type {};
+
+/**
+ * Type trait to test for presence of valid hash function during compilation.
+ * This is the specialized template, and has a compile-time IsHashable::value value of true.
+ * This version of the IsHashable struct will be used when the std::hash check in the struct
+ * declaration passes, i.e. no compilation error is thrown.
+ * @tparam T Type to check for presence of valid hash function
+ */
+template<typename T>
+struct IsHashable<T, decltype(std::hash<T>()(std::declval<T>()), void())> : std::true_type {};
+
 
 /**
  * Union-Find Disjoint Set data structure.

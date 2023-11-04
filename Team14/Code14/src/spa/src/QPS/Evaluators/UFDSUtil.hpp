@@ -1,9 +1,12 @@
 template<typename T>
-UFDSUtil<T>::UFDSUtil() = default;
+UFDSUtil<T>::UFDSUtil() {
+    static_assert(IsHashable<T>::value, "Type used in UFDS must have a hash function defined.");
+};
 
 template<typename T>
 UFDSUtil<T>::UFDSUtil(const std::vector<T> &elements) {
     // Optional: add assert to test for presence of hash function for T
+    static_assert(IsHashable<T>::value, "Type used in UFDS must have a hash function defined.");
     for (const T &element: elements) {
         parent.emplace(element, element);
         rank.emplace(element, DEFAULT_RANK);
