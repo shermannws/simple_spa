@@ -152,18 +152,16 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
 
 std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> curr,
                                                        std::shared_ptr<Result> clauseRes) {
-    auto clauseSyns = clauseRes->getHeader();
-    auto unevaluatedSyn = getUnevaluatedSyn(clauseSyns, curr);
+    std::vector<Synonym> clauseSyns = clauseRes->getHeader();
+    std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(clauseSyns, curr);
 
     if (unevaluatedSyn.empty()) {// all syns present
         return resultHandler->getDiff(curr, clauseRes);
     }
 
     // not all syns in current result, execute naive approach
-    auto lhs = getTuplesBySyn(clauseSyns);
-    auto rhs = clauseRes->getTuples();
-    for (const auto &tuple: rhs) { lhs.erase(tuple); }
-    clauseRes->setTuples(lhs);
+    std::shared_ptr<Result> lhs = evaluateAll(clauseSyns);
+    clauseRes = resultHandler->getDiff(lhs, clauseRes);
     return resultHandler->getCombined(curr, clauseRes);
 }
 
@@ -193,25 +191,26 @@ std::unordered_set<std::shared_ptr<Entity>> PQLEvaluator::getAll(const std::shar
     return QPSUtil::entityGetterMap[entityType](pkbReader);
 }
 
-std::unordered_set<ResultTuple> PQLEvaluator::getTuplesBySyn(const std::vector<Synonym> &entitySyns) {
+std::shared_ptr<Result> PQLEvaluator::evaluateAll(const std::vector<Synonym> &entitySyns) {
     auto tupleSize = entitySyns.size();
     std::vector<QueryEntityType> types(tupleSize);
     for (int i = 0; i < tupleSize; i++) { types[i] = declarationMap[entitySyns[i]]->getType(); }
 
+    auto res = std::make_shared<Result>(entitySyns);
     std::unordered_set<ResultTuple> tuples;
     if (tupleSize == 1) {// tuples are single entity
         auto set = QPSUtil::entityGetterMap[types[0]](pkbReader);
         for (const auto &entity: set) { tuples.insert({entity}); }
-        return tuples;
+    } else {// tuples are pair of entities
+        auto sets = std::make_pair(QPSUtil::entityGetterMap[types[0]](pkbReader),
+                                   QPSUtil::entityGetterMap[types[1]](pkbReader));
+        for (auto &first: sets.first) {
+            for (auto &second: sets.second) { tuples.insert({first, second}); }
+        }
     }
 
-    // tuples are pair of entities
-    auto sets = std::make_pair(QPSUtil::entityGetterMap[types[0]](pkbReader),
-                               QPSUtil::entityGetterMap[types[1]](pkbReader));
-    for (auto &first: sets.first) {
-        for (auto &second: sets.second) { tuples.insert({first, second}); }
-    }
-    return tuples;
+    res->setTuples(tuples);
+    return res;
 }
 
 void PQLEvaluator::setDeclarationMap(Query &query) { declarationMap = query.getDeclarations(); }

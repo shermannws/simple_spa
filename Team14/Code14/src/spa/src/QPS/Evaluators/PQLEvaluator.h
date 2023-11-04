@@ -53,9 +53,9 @@ private:
     /**
      * @brief retrieves all combinations of the entities in the order specified by entitySyns from the PKB
      * @param entitySyns vector of Synonyms representing the combination of Entities to retrieve
-     * @return A set of Result Tuples representing all possible combinations of entities
+     * @return shared pointer to Result containing all combinations of entities
      */
-    std::unordered_set<ResultTuple> getTuplesBySyn(const std::vector<Synonym> &entitySyns);
+    std::shared_ptr<Result> evaluateAll(const std::vector<Synonym> &entitySyns);
 
     /**
      * @brief Evaluates a clause and updates the result accordingly.
