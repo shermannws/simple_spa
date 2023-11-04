@@ -25,10 +25,12 @@ TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
         Result r = Result();
         r.setType(std::vector<Synonym>{"a", "x"});
 
-        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
-        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
+        ResultTuple v1{make_shared<Entity>(Statement(1, StatementType::Assign)),
+                       make_shared<Entity>(Variable("my_variable"))};
+        ResultTuple v2{make_shared<Entity>(Statement(5, StatementType::Stmt)),
+                       make_shared<Entity>(Variable("another_variable"))};
 
-        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<ResultTuple> tuples{v1, v2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
@@ -48,11 +50,11 @@ TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
         Result r = Result();
         r.setType(std::vector<Synonym>{"s"});
 
-        std::vector<Entity> v1{Statement(1, StatementType::Stmt)};
-        std::vector<Entity> v2{Statement(2, StatementType::Stmt)};
+        ResultTuple v1{make_shared<Entity>(Statement(1, StatementType::Stmt))};
+        ResultTuple v2{make_shared<Entity>(Statement(2, StatementType::Stmt))};
 
 
-        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<ResultTuple> tuples{v1, v2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);
@@ -71,10 +73,12 @@ TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
         Result r = Result();
         r.setType(std::vector<Synonym>{"a", "x"});
 
-        std::vector<Entity> v1{Statement(1, StatementType::Assign), Variable("my_variable")};
-        std::vector<Entity> v2{Statement(5, StatementType::Stmt), Variable("another_variable")};
+        ResultTuple v1{make_shared<Entity>(Statement(1, StatementType::Assign)),
+                       make_shared<Entity>(Variable("my_variable"))};
+        ResultTuple v2{make_shared<Entity>(Statement(5, StatementType::Stmt)),
+                       make_shared<Entity>(Variable("another_variable"))};
 
-        std::unordered_set<std::vector<Entity>> tuples{v1, v2};
+        std::unordered_set<ResultTuple> tuples{v1, v2};
         r.setTuples(tuples);
 
         PQLEvaluator evaluator = PQLEvaluator(stubPkbReader);

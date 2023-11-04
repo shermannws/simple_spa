@@ -8,33 +8,31 @@ void StmtToVarRelationshipManager<S>::storeRelationship(std::shared_ptr<Statemen
 }
 
 template<typename S>
-std::unordered_set<std::vector<Entity>>
-StmtToVarRelationshipManager<S>::getRelationshipStmtPair(StatementType type) const {
-    if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return std::unordered_set<std::vector<Entity>>(); }
+EntityPairSet StmtToVarRelationshipManager<S>::getRelationshipStmtPair(StatementType type) const {
+    if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return EntityPairSet(); }
     if (type == StatementType::Stmt) { return relationshipStore->getPairs(); }
 
-    auto leftMatcher = [type](Statement &stmt) { return stmt.isStatementType(type); };
-    auto rightMatcher = [](Variable &var) { return true; };
+    auto leftMatcher = [type](std::shared_ptr<Statement> stmt) { return stmt->isStatementType(type); };
+    auto rightMatcher = [](std::shared_ptr<Variable> var) { return true; };
     return ManagerUtils::getPairs<Entity, RelationshipStore<Statement, Variable>, Statement, Variable>(
             *relationshipStore, leftMatcher, rightMatcher);
 }
 
 template<typename S>
 
-std::unordered_set<Entity> StmtToVarRelationshipManager<S>::getRelationshipTypeIdent(StatementType type,
-                                                                                     Variable &var) const {
-    if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return std::unordered_set<Entity>(); }
+EntitySet StmtToVarRelationshipManager<S>::getRelationshipTypeIdent(StatementType type, Variable &var) const {
+    if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return EntitySet(); }
     return ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch<Variable>(*relationshipStore, var, type);
 }
 
 template<typename S>
-std::unordered_set<Entity> StmtToVarRelationshipManager<S>::getRelationshipStmt(StatementType type) const {
-    if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return std::unordered_set<Entity>(); }
+EntitySet StmtToVarRelationshipManager<S>::getRelationshipStmt(StatementType type) const {
+    if (!ManagerUtils::isStmtTypeAllowed(clauseGroup, type)) { return EntitySet(); }
     return ManagerUtils::getLeftKeysStmtMatch<Variable>(*relationshipStore, type);
 }
 
 template<typename S>
-std::unordered_set<Entity> StmtToVarRelationshipManager<S>::getRelationshipVar(Statement &stmt) const {
+EntitySet StmtToVarRelationshipManager<S>::getRelationshipVar(Statement &stmt) const {
     return ManagerUtils::getRightEntitiesFromLeftKeyNoMatch<Statement, Variable>(*relationshipStore, stmt);
 }
 

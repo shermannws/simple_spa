@@ -308,7 +308,7 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
 
         auto set = pkbReaderManager->getAffectsSameStmt(StatementType::Assign);
         REQUIRE(set.size() == 1);
-        REQUIRE(set.find(*stmt2) != set.end());
+        REQUIRE(set.find(stmt2) != set.end());
 
         REQUIRE(pkbReaderManager->getAffectsTypeStmt(StatementType::Assign, *stmt1).empty());
         REQUIRE(pkbReaderManager->getAffectsTypeStmt(StatementType::Assign, *stmt2).size() == 1);

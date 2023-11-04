@@ -26,24 +26,24 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Entities Retrieval") {
 
     auto set1 = manager.getAllStatements();
     REQUIRE(set1.size() == 2);
-    REQUIRE(set1.find(Entity(statement1)) != set1.end());
-    REQUIRE(set1.find(Entity(statement2)) != set1.end());
+    REQUIRE(set1.find(make_shared<Entity>(statement1)) != set1.end());
+    REQUIRE(set1.find(make_shared<Entity>(statement2)) != set1.end());
 
     auto set2 = manager.getAllVariables();
     REQUIRE(set2.size() == 1);
-    REQUIRE(set2.find(Entity(variable1)) != set2.end());
+    REQUIRE(set2.find(make_shared<Entity>(variable1)) != set2.end());
 
     auto set3 = manager.getAllConstants();
     REQUIRE(set3.size() == 1);
-    REQUIRE(set3.find(Entity(constant1)) != set3.end());
+    REQUIRE(set3.find(make_shared<Entity>(constant1)) != set3.end());
 
     auto set4 = manager.getAllProcedures();
     REQUIRE(set4.size() == 1);
-    REQUIRE(set4.find(Entity(procedure1)) != set4.end());
+    REQUIRE(set4.find(make_shared<Entity>(procedure1)) != set4.end());
 
     auto set5 = manager.getAllWhile();
     REQUIRE(set5.size() == 1);
-    REQUIRE(set5.find(Entity(statement2)) != set5.end());
+    REQUIRE(set5.find(make_shared<Entity>(statement2)) != set5.end());
 
     REQUIRE(manager.getAllRead().empty());
     REQUIRE(manager.getAllPrint().empty());

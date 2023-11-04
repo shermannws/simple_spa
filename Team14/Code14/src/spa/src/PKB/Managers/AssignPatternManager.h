@@ -65,7 +65,7 @@ public:
      * @return An unordered_set of all the Statement objects
      * @note Used for `pattern a (_,_)`
      */
-    std::unordered_set<Entity> getAllAssignStmts() const;
+    EntitySet getAllAssignStmts() const;
 
     /**
      * Returns an unordered_set of Statement objects from Assignment objects in the store with Expressions that match
@@ -76,7 +76,7 @@ public:
      * @return An unordered_set of Statement objects
      * @note Used for `pattern a (_, "x")`
      */
-    std::unordered_set<Entity> getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const;
+    EntitySet getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const;
 
     /**
      * Returns an unordered_set of vectors containing Statement and Variable pairs from all the Assignment objects in
@@ -84,7 +84,7 @@ public:
      * @return An unordered_set of vectors containing Statement and Variable pairs
      * @note Used for `pattern a (v, _)`
      */
-    std::unordered_set<std::vector<Entity>> getAllAssignStmtVarPair() const;
+    EntityPairSet getAllAssignStmtVarPair() const;
 
     /**
      * Returns an unordered_set of vectors containing Statement and Variable pairs from the Assignment objects in the
@@ -94,7 +94,7 @@ public:
      * @return An unordered_set of vectors containing Statement and Variable pairs
      * @note Used for `pattern a (v, "x")`
      */
-    std::unordered_set<std::vector<Entity>> getAssignStmtsVarPairByRhs(Expression &rhs, bool hasWildCard) const;
+    EntityPairSet getAssignStmtsVarPairByRhs(Expression &rhs, bool hasWildCard) const;
 
     /**
      * Returns an unordered_set of Statement objects from Assignment objects in the store where the Variable that is
@@ -103,7 +103,7 @@ public:
      * @return An unordered_set of Statement objects
      * @note Used for `pattern a ("x", _)`
      */
-    std::unordered_set<Entity> getAssignStmtsByLhs(Variable &lhs) const;
+    EntitySet getAssignStmtsByLhs(Variable &lhs) const;
 
     /**
      * Returns an unordered_set of Statement objects from Assignment objects in the store where the Variable that is
@@ -114,7 +114,7 @@ public:
      * @return An unordered_set of Statement objects
      * @note Used for `pattern a ("x", "x")`
      */
-    std::unordered_set<Entity> getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const;
+    EntitySet getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const;
 
     /**
      * Returns an unordered_set of Statement objects from all the Assignment objects in the store

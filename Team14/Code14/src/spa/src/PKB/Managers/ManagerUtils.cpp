@@ -17,94 +17,94 @@ bool ManagerUtils::isStmtTypeAllowed(ClauseGroup clauseGroup, StatementType stat
 }
 
 template<typename E, typename S, typename R>
-std::unordered_set<E> ManagerUtils::getFromSetStore(std::shared_ptr<S> store, std::function<bool(R &)> matcher,
-                                                    std::function<E(R &)> getter) {
+std::unordered_set<E> ManagerUtils::getFromSetStore(std::shared_ptr<S> store,
+                                                    std::function<bool(std::shared_ptr<R>)> matcher,
+                                                    std::function<E(std::shared_ptr<R>)> getter) {
     auto result = std::unordered_set<E>();
     for (auto it = store->getBeginIterator(); it != store->getEndIterator(); it++) {
-        if (matcher(**it)) { result.insert(getter(**it)); }
+        if (matcher(*it)) { result.insert(getter(*it)); }
     }
     return result;
 }
 
 template<typename S, typename R>
-std::unordered_set<Entity> ManagerUtils::getEntitiesFromStore(std::shared_ptr<S> store,
-                                                              std::function<bool(R &)> matcher,
-                                                              std::function<Entity(R &)> getter) {
-    return getFromSetStore<Entity, S, R>(store, matcher, getter);
+EntitySet ManagerUtils::getEntitiesFromStore(std::shared_ptr<S> store, std::function<bool(std::shared_ptr<R>)> matcher,
+                                             std::function<EntityPointer(std::shared_ptr<R>)> getter) {
+    return getFromSetStore<EntityPointer, S, R>(store, matcher, getter);
 }
 
 template<typename E>
-std::unordered_set<Entity> ManagerUtils::getEntitiesFromEntityStore(std::shared_ptr<EntityStore<E>> store,
-                                                                    std::function<bool(E &)> matcher,
-                                                                    std::function<Entity(E &)> getter) {
-    return getFromSetStore<Entity, EntityStore<E>, E>(store, matcher, getter);
+EntitySet ManagerUtils::getEntitiesFromEntityStore(std::shared_ptr<EntityStore<E>> store,
+                                                   std::function<bool(std::shared_ptr<E>)> matcher,
+                                                   std::function<EntityPointer(std::shared_ptr<E>)> getter) {
+    return getFromSetStore<EntityPointer, EntityStore<E>, E>(store, matcher, getter);
 }
 
 template<typename S, typename R>
-std::unordered_set<std::vector<Entity>>
-ManagerUtils::getEntityPairsFromStore(std::shared_ptr<S> store, std::function<bool(R &)> matcher,
-                                      std::function<std::vector<Entity>(R &)> getter) {
-    return getFromSetStore<std::vector<Entity>, S, R>(store, matcher, getter);
+EntityPairSet
+ManagerUtils::getEntityPairsFromStore(std::shared_ptr<S> store, std::function<bool(std::shared_ptr<R>)> matcher,
+                                      std::function<std::vector<EntityPointer>(std::shared_ptr<R>)> getter) {
+    return getFromSetStore<std::vector<EntityPointer>, S, R>(store, matcher, getter);
 }
 
 template<typename E, typename S, typename K, typename V, typename R>
-std::unordered_set<R> ManagerUtils::getFromMapStore(S &store, std::function<std::shared_ptr<E>(S &, K &)> getter,
-                                                    K &key, std::function<bool(V &)> matcher) {
-    auto result = std::unordered_set<R>();
+std::unordered_set<std::shared_ptr<R>>
+ManagerUtils::getFromMapStore(S &store, std::function<std::shared_ptr<E>(S &, K &)> getter, K &key,
+                              std::function<bool(std::shared_ptr<V>)> matcher) {
+    auto result = std::unordered_set<std::shared_ptr<R>>();
     auto resultSet = getter(store, key);
     if (resultSet == nullptr) { return result; }
     for (auto it = resultSet->getBeginIterator(); it != resultSet->getEndIterator(); it++) {
-        if (matcher(**it)) { result.insert(**it); }
+        if (matcher(*it)) { result.insert(*it); }
     }
     return result;
 }
 
 template<typename L, typename R>
-std::unordered_set<Entity> ManagerUtils::getRightEntitiesFromLeftKeyNoMatch(RelationshipStore<L, R> &store, L &key) {
+EntitySet ManagerUtils::getRightEntitiesFromLeftKeyNoMatch(RelationshipStore<L, R> &store, L &key) {
     auto getter = [](RelationshipStore<L, R> &store, L &key) {
         return store.getRightEntitiesOf(std::make_shared<L>(key));
     };
-    auto matcher = [](R &entity) { return true; };
+    auto matcher = [](std::shared_ptr<R> entity) { return true; };
     return getFromMapStore<EntityStore<R>, RelationshipStore<L, R>, L, R, Entity>(store, getter, key, matcher);
 }
 
 template<typename L, typename R>
-std::unordered_set<Entity> ManagerUtils::getLeftEntitiesFromRightKeyNoMatch(RelationshipStore<L, R> &store, R &key) {
+EntitySet ManagerUtils::getLeftEntitiesFromRightKeyNoMatch(RelationshipStore<L, R> &store, R &key) {
     auto getter = [](RelationshipStore<L, R> &store, R &key) {
         return store.getLeftEntitiesOf(std::make_shared<R>(key));
     };
-    auto matcher = [](L &entity) { return true; };
+    auto matcher = [](std::shared_ptr<L> entity) { return true; };
     return getFromMapStore<EntityStore<L>, RelationshipStore<L, R>, R, L, Entity>(store, getter, key, matcher);
 }
 
-std::unordered_set<Entity> ManagerUtils::getLeftEntitiesFromRightKeyNoMatch(ConditionPatternStore &store,
-                                                                            Variable &key) {
+EntitySet ManagerUtils::getLeftEntitiesFromRightKeyNoMatch(ConditionPatternStore &store, Variable &key) {
     auto getter = [](ConditionPatternStore &store, Variable &key) {
         return store.getLeftEntitiesOf(std::make_shared<Variable>(key));
     };
-    auto matcher = [](Statement &entity) { return true; };
+    auto matcher = [](std::shared_ptr<Statement> entity) { return true; };
     return getFromMapStore<EntityStore<Statement>, ConditionPatternStore, Variable, Statement, Entity>(store, getter,
                                                                                                        key, matcher);
 }
 
 template<typename R>
-std::unordered_set<Entity> ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch(RelationshipStore<Statement, R> &store,
-                                                                              R &key, StatementType type) {
+EntitySet ManagerUtils::getLeftEntitiesFromRightKeyStmtMatch(RelationshipStore<Statement, R> &store, R &key,
+                                                             StatementType type) {
     auto getter = [](RelationshipStore<Statement, R> &store, R &key) {
         return store.getLeftEntitiesOf(std::make_shared<R>(key));
     };
-    auto matcher = [type](Statement &stmt) { return stmt.isStatementType(type); };
+    auto matcher = [type](std::shared_ptr<Statement> stmt) { return stmt->isStatementType(type); };
     return getFromMapStore<EntityStore<Statement>, RelationshipStore<Statement, R>, R, Statement, Entity>(store, getter,
                                                                                                           key, matcher);
 }
 
 template<typename L>
-std::unordered_set<Entity> ManagerUtils::getRightEntitiesFromLeftKeyStmtMatch(RelationshipStore<L, Statement> &store,
-                                                                              L &key, StatementType type) {
+EntitySet ManagerUtils::getRightEntitiesFromLeftKeyStmtMatch(RelationshipStore<L, Statement> &store, L &key,
+                                                             StatementType type) {
     auto getter = [](RelationshipStore<L, Statement> &store, L &key) {
         return store.getRightEntitiesOf(std::make_shared<L>(key));
     };
-    auto matcher = [type](Statement &stmt) { return stmt.isStatementType(type); };
+    auto matcher = [type](std::shared_ptr<Statement> stmt) { return stmt->isStatementType(type); };
     return getFromMapStore<EntityStore<Statement>, RelationshipStore<L, Statement>, L, Statement, Entity>(store, getter,
                                                                                                           key, matcher);
 }
@@ -141,71 +141,70 @@ bool ManagerUtils::mapContains(RelationshipStore<L, R> &store, L &key, R &value)
 }
 
 template<typename K, typename V, typename R>
-std::unordered_set<R> ManagerUtils::getKeys(
+std::unordered_set<std::shared_ptr<R>> ManagerUtils::getKeys(
         typename std::unordered_map<std::shared_ptr<K>, std::shared_ptr<EntityStore<V>>>::iterator beginItr,
         typename std::unordered_map<std::shared_ptr<K>, std::shared_ptr<EntityStore<V>>>::iterator endItr,
-        std::function<bool(K &)> matcher) {
-    auto result = std::unordered_set<R>();
+        std::function<bool(std::shared_ptr<K>)> matcher) {
+    auto result = std::unordered_set<std::shared_ptr<R>>();
     for (auto it = beginItr; it != endItr; it++) {
-        if (matcher(*(it->first))) { result.insert(*(it->first)); }
+        if (matcher(it->first)) { result.insert(it->first); }
     }
     return result;
 }
 
 template<typename K, typename V>
-std::unordered_set<Entity> ManagerUtils::getKeysNoMatch(
+EntitySet ManagerUtils::getKeysNoMatch(
         typename std::unordered_map<std::shared_ptr<K>, std::shared_ptr<EntityStore<V>>>::iterator beginItr,
         typename std::unordered_map<std::shared_ptr<K>, std::shared_ptr<EntityStore<V>>>::iterator endItr) {
-    auto matcher = [](K &entity) { return true; };
+    auto matcher = [](std::shared_ptr<K> entity) { return true; };
     return getKeys<K, V, Entity>(beginItr, endItr, matcher);
 }
 
 template<typename K, typename V>
-std::unordered_set<Entity> ManagerUtils::getLeftKeysNoMatch(RelationshipStore<K, V> &store) {
+EntitySet ManagerUtils::getLeftKeysNoMatch(RelationshipStore<K, V> &store) {
     return getKeysNoMatch<K, V>(store.getLeftToRightBeginIterator(), store.getLeftToRightEndIterator());
 }
 
-std::unordered_set<Entity> ManagerUtils::getLeftKeysNoMatch(ConditionPatternStore &store) {
+EntitySet ManagerUtils::getLeftKeysNoMatch(ConditionPatternStore &store) {
     return getKeysNoMatch<Statement, Variable>(store.getLeftToRightBeginIterator(), store.getLeftToRightEndIterator());
 }
 
 template<typename K, typename V>
-std::unordered_set<Entity> ManagerUtils::getRightKeysNoMatch(RelationshipStore<K, V> &store) {
+EntitySet ManagerUtils::getRightKeysNoMatch(RelationshipStore<K, V> &store) {
     return getKeysNoMatch<K, V>(store.getRightToLeftBeginIterator(), store.getRightToLeftEndIterator());
 }
 
 template<typename V>
-std::unordered_set<Entity> ManagerUtils::getKeysStmtMatch(
+EntitySet ManagerUtils::getKeysStmtMatch(
         typename std::unordered_map<std::shared_ptr<Statement>, std::shared_ptr<EntityStore<V>>>::iterator beginItr,
         typename std::unordered_map<std::shared_ptr<Statement>, std::shared_ptr<EntityStore<V>>>::iterator endItr,
         StatementType type) {
-    auto matcher = [type](Statement &stmt) { return stmt.isStatementType(type); };
+    auto matcher = [type](std::shared_ptr<Statement> stmt) { return stmt->isStatementType(type); };
     return getKeys<Statement, V, Entity>(beginItr, endItr, matcher);
 }
 
 template<typename V>
-std::unordered_set<Entity> ManagerUtils::getLeftKeysStmtMatch(RelationshipStore<Statement, V> &store,
-                                                              StatementType type) {
+EntitySet ManagerUtils::getLeftKeysStmtMatch(RelationshipStore<Statement, V> &store, StatementType type) {
     return getKeysStmtMatch<V>(store.getLeftToRightBeginIterator(), store.getLeftToRightEndIterator(), type);
 }
 
 template<typename K>
-std::unordered_set<Entity> ManagerUtils::getRightKeysStmtMatch(RelationshipStore<K, Statement> &store,
-                                                               StatementType type) {
+EntitySet ManagerUtils::getRightKeysStmtMatch(RelationshipStore<K, Statement> &store, StatementType type) {
     return getKeysStmtMatch<K>(store.getRightToLeftBeginIterator(), store.getRightToLeftEndIterator(), type);
 }
 
 template<typename R, typename S, typename K, typename V>
-std::unordered_set<std::vector<R>> ManagerUtils::getPairs(S &store, std::function<bool(K &)> leftMatcher,
-                                                          std::function<bool(V &)> rightMatcher) {
-    std::unordered_set<std::vector<R>> result;
+std::unordered_set<std::vector<std::shared_ptr<R>>>
+ManagerUtils::getPairs(S &store, std::function<bool(std::shared_ptr<K>)> leftMatcher,
+                       std::function<bool(std::shared_ptr<V>)> rightMatcher) {
+    std::unordered_set<std::vector<std::shared_ptr<R>>> result;
     for (auto it = store.getLeftToRightBeginIterator(); it != store.getLeftToRightEndIterator(); ++it) {
         auto former = it->first;
         auto latterSet = it->second;
-        if (leftMatcher(*former)) {
+        if (leftMatcher(former)) {
             for (auto it2 = latterSet->getBeginIterator(); it2 != latterSet->getEndIterator(); ++it2) {
                 auto latter = *it2;
-                if (rightMatcher(*latter)) { result.insert(std::vector<R>{*former, *latter}); }
+                if (rightMatcher(latter)) { result.insert(std::vector<std::shared_ptr<R>>{former, latter}); }
             }
         }
     }
@@ -213,14 +212,14 @@ std::unordered_set<std::vector<R>> ManagerUtils::getPairs(S &store, std::functio
 }
 
 template<typename K>
-std::unordered_set<Entity> ManagerUtils::getLeftKeysMatchRight(RelationshipStore<K, K> &store,
-                                                               std::function<bool(K &)> leftMatcher) {
-    std::unordered_set<Entity> result;
+EntitySet ManagerUtils::getLeftKeysMatchRight(RelationshipStore<K, K> &store,
+                                              std::function<bool(std::shared_ptr<K>)> leftMatcher) {
+    EntitySet result;
     for (auto it = store.getLeftToRightBeginIterator(); it != store.getLeftToRightEndIterator(); ++it) {
         auto former = it->first;
         auto latterSet = it->second;
-        if (leftMatcher(*former)) {
-            if (latterSet->getEntity(former) != nullptr) { result.insert(*former); }
+        if (leftMatcher(former)) {
+            if (latterSet->getEntity(former) != nullptr) { result.insert(former); }
         }
     }
     return result;

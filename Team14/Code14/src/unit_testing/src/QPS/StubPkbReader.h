@@ -9,39 +9,39 @@ private:
 public:
     StubPkbReader();
 
-    std::unordered_set<Entity> getAllVariables() const override;
+    EntitySet getAllVariables() const override;
 
-    std::unordered_set<Entity> getAllConstants() const override;
+    EntitySet getAllConstants() const override;
 
-    std::unordered_set<Entity> getAllProcedures() const override;
+    EntitySet getAllProcedures() const override;
 
-    std::unordered_set<Entity> getAllStatements() const override;
+    EntitySet getAllStatements() const override;
 
-    std::unordered_set<Entity> getAllRead() const override;
+    EntitySet getAllRead() const override;
 
-    std::unordered_set<Entity> getAllPrint() const override;
+    EntitySet getAllPrint() const override;
 
-    std::unordered_set<Entity> getAllWhile() const override;
+    EntitySet getAllWhile() const override;
 
-    std::unordered_set<Entity> getAllIf() const override;
+    EntitySet getAllIf() const override;
 
-    std::unordered_set<Entity> getAllCall() const override;
+    EntitySet getAllCall() const override;
 
-    std::unordered_set<std::vector<Entity>> getUsesStmtPair(StatementType type) const override;
+    EntityPairSet getUsesStmtPair(StatementType type) const override;
 
-    std::unordered_set<std::vector<Entity>> getUsesProcPair() const override;
+    EntityPairSet getUsesProcPair() const override;
 
-    std::unordered_set<Entity> getUsesTypeIdent(StatementType type, Variable &var) const override;
+    EntitySet getUsesTypeIdent(StatementType type, Variable &var) const override;
 
-    std::unordered_set<Entity> getUsesProcIdent(Variable &var) const override;
+    EntitySet getUsesProcIdent(Variable &var) const override;
 
-    std::unordered_set<Entity> getUsesStmt(StatementType type) const override;
+    EntitySet getUsesStmt(StatementType type) const override;
 
-    std::unordered_set<Entity> getUsesProc() const override;
+    EntitySet getUsesProc() const override;
 
-    std::unordered_set<Entity> getUsesVar(Statement &stmt) const override;
+    EntitySet getUsesVar(Statement &stmt) const override;
 
-    std::unordered_set<Entity> getUsesVar(Procedure &proc) const override;
+    EntitySet getUsesVar(Procedure &proc) const override;
 
     bool isStmtUsesVar(Statement &stmt, Variable &var) const override;
 
@@ -51,27 +51,25 @@ public:
 
     bool hasUses(Procedure &proc) const override;
 
-    std::unordered_set<std::vector<Entity>> getFollowsPair(StatementType formerType,
-                                                           StatementType latterType) const override;
+    EntityPairSet getFollowsPair(StatementType formerType, StatementType latterType) const override;
 
-    std::unordered_set<std::vector<Entity>> getFollowsStarPair(StatementType formerType,
-                                                               StatementType latterType) const override;
+    EntityPairSet getFollowsStarPair(StatementType formerType, StatementType latterType) const override;
 
-    std::unordered_set<Entity> getFollowsTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getFollowsTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::unordered_set<Entity> getFollowsStarTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getFollowsStarTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::unordered_set<Entity> getFollowsTypeWildcard(StatementType type) const override;
+    EntitySet getFollowsTypeWildcard(StatementType type) const override;
 
-    std::unordered_set<Entity> getFollowsStarTypeWildcard(StatementType type) const override;
+    EntitySet getFollowsStarTypeWildcard(StatementType type) const override;
 
-    std::unordered_set<Entity> getFollowsStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getFollowsStmtType(Statement &statement, StatementType type) const override;
 
-    std::unordered_set<Entity> getFollowsStarStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getFollowsStarStmtType(Statement &statement, StatementType type) const override;
 
-    std::unordered_set<Entity> getFollowsWildcardType(StatementType type) const override;
+    EntitySet getFollowsWildcardType(StatementType type) const override;
 
-    std::unordered_set<Entity> getFollowsStarWildcardType(StatementType type) const override;
+    EntitySet getFollowsStarWildcardType(StatementType type) const override;
 
     bool isFollows(Statement &statement1, Statement &statement2) const override;
 
@@ -89,21 +87,21 @@ public:
 
     bool hasFormerStarStmt(Statement &statement) const override;
 
-    std::unordered_set<std::vector<Entity>> getModifiesStmtPair(StatementType type) const override;
+    EntityPairSet getModifiesStmtPair(StatementType type) const override;
 
-    std::unordered_set<std::vector<Entity>> getModifiesProcPair() const override;
+    EntityPairSet getModifiesProcPair() const override;
 
-    std::unordered_set<Entity> getModifiesTypeIdent(StatementType type, Variable &var) const override;
+    EntitySet getModifiesTypeIdent(StatementType type, Variable &var) const override;
 
-    std::unordered_set<Entity> getModifiesProcIdent(Variable &var) const override;
+    EntitySet getModifiesProcIdent(Variable &var) const override;
 
-    std::unordered_set<Entity> getModifiesStmt(StatementType type) const override;
+    EntitySet getModifiesStmt(StatementType type) const override;
 
-    std::unordered_set<Entity> getModifiesProc() const override;
+    EntitySet getModifiesProc() const override;
 
-    std::unordered_set<Entity> getModifiesVar(Statement &stmt) const override;
+    EntitySet getModifiesVar(Statement &stmt) const override;
 
-    std::unordered_set<Entity> getModifiesVar(Procedure &proc) const override;
+    EntitySet getModifiesVar(Procedure &proc) const override;
 
     bool isStmtModifiesVar(Statement &stmt, Variable &var) const override;
 
@@ -114,46 +112,42 @@ public:
     bool hasModifies(Procedure &proc) const override;
 
     // pattern a (_,_)
-    std::unordered_set<Entity> getAllAssign() const override;
+    EntitySet getAllAssign() const override;
 
     // pattern a (_, "x")
-    std::unordered_set<Entity> getAssignStmtsByRhs(std::string &rhs, bool hasRhsWildCard) const override;
+    EntitySet getAssignStmtsByRhs(std::string &rhs, bool hasRhsWildCard) const override;
 
     // pattern a (v, _)
-    std::unordered_set<std::vector<Entity>> getAllAssignStmtVarPair() const override;
+    EntityPairSet getAllAssignStmtVarPair() const override;
 
     // pattern a (v, "x")
-    std::unordered_set<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string &rhs,
-                                                                       bool hasWildCard) const override;
+    EntityPairSet getAssignStmtsVarPairByRhs(std::string &rhs, bool hasWildCard) const override;
 
     // pattern a ("x", _)
-    std::unordered_set<Entity> getAssignStmtsByLhs(Variable &lhs) const override;
+    EntitySet getAssignStmtsByLhs(Variable &lhs) const override;
 
     // pattern a ("x", "x")
-    std::unordered_set<Entity> getAssignStmtsByLhsRhs(Variable &lhs, std::string &rhs,
-                                                      bool hasRhsWildCard) const override;
+    EntitySet getAssignStmtsByLhsRhs(Variable &lhs, std::string &rhs, bool hasRhsWildCard) const override;
 
-    std::unordered_set<std::vector<Entity>> getParentPair(StatementType formerType,
-                                                          StatementType latterType) const override;
+    EntityPairSet getParentPair(StatementType formerType, StatementType latterType) const override;
 
-    std::unordered_set<std::vector<Entity>> getParentStarPair(StatementType formerType,
-                                                              StatementType latterType) const override;
+    EntityPairSet getParentStarPair(StatementType formerType, StatementType latterType) const override;
 
-    std::unordered_set<Entity> getParentTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getParentTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::unordered_set<Entity> getParentStarTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getParentStarTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::unordered_set<Entity> getParentTypeWildcard(StatementType type) const override;
+    EntitySet getParentTypeWildcard(StatementType type) const override;
 
-    std::unordered_set<Entity> getParentStarTypeWildcard(StatementType type) const override;
+    EntitySet getParentStarTypeWildcard(StatementType type) const override;
 
-    std::unordered_set<Entity> getParentStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getParentStmtType(Statement &statement, StatementType type) const override;
 
-    std::unordered_set<Entity> getParentStarStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getParentStarStmtType(Statement &statement, StatementType type) const override;
 
-    std::unordered_set<Entity> getParentWildcardType(StatementType type) const override;
+    EntitySet getParentWildcardType(StatementType type) const override;
 
-    std::unordered_set<Entity> getParentStarWildcardType(StatementType type) const override;
+    EntitySet getParentStarWildcardType(StatementType type) const override;
 
     bool isParent(Statement &statement1, Statement &statement2) const override;
 
@@ -187,49 +181,47 @@ public:
 
     bool isCallsStar(Procedure &caller, Procedure &callee) const override;
 
-    std::unordered_set<Entity> getCallees() const override;
+    EntitySet getCallees() const override;
 
-    std::unordered_set<Entity> getCalleesStar() const override;
+    EntitySet getCalleesStar() const override;
 
-    std::unordered_set<Entity> getCallers() const override;
+    EntitySet getCallers() const override;
 
-    std::unordered_set<Entity> getCallersStar() const override;
+    EntitySet getCallersStar() const override;
 
-    std::unordered_set<std::vector<Entity>> getCallsPair() const override;
+    EntityPairSet getCallsPair() const override;
 
-    std::unordered_set<std::vector<Entity>> getCallsStarPair() const override;
+    EntityPairSet getCallsStarPair() const override;
 
-    std::unordered_set<Entity> getCallers(Procedure &callee) const override;
+    EntitySet getCallers(Procedure &callee) const override;
 
-    std::unordered_set<Entity> getCallersStar(Procedure &callee) const override;
+    EntitySet getCallersStar(Procedure &callee) const override;
 
-    std::unordered_set<Entity> getCallees(Procedure &caller) const override;
+    EntitySet getCallees(Procedure &caller) const override;
 
-    std::unordered_set<Entity> getCalleesStar(Procedure &caller) const override;
+    EntitySet getCalleesStar(Procedure &caller) const override;
 
-    std::unordered_set<std::vector<Entity>> getNextPair(StatementType formerType,
-                                                        StatementType latterType) const override;
+    EntityPairSet getNextPair(StatementType formerType, StatementType latterType) const override;
 
-    std::unordered_set<std::vector<Entity>> getNextStarPair(StatementType formerType,
-                                                            StatementType latterType) const override;
+    EntityPairSet getNextStarPair(StatementType formerType, StatementType latterType) const override;
 
-    std::unordered_set<Entity> getNextStarSameStmt(StatementType stmtType) const override;
+    EntitySet getNextStarSameStmt(StatementType stmtType) const override;
 
-    std::unordered_set<Entity> getNextTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getNextTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::unordered_set<Entity> getNextStarTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getNextStarTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::unordered_set<Entity> getNextTypeWildcard(StatementType type) const override;
+    EntitySet getNextTypeWildcard(StatementType type) const override;
 
-    std::unordered_set<Entity> getNextStarTypeWildcard(StatementType type) const override;
+    EntitySet getNextStarTypeWildcard(StatementType type) const override;
 
-    std::unordered_set<Entity> getNextStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getNextStmtType(Statement &statement, StatementType type) const override;
 
-    std::unordered_set<Entity> getNextStarStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getNextStarStmtType(Statement &statement, StatementType type) const override;
 
-    std::unordered_set<Entity> getNextWildcardType(StatementType type) const override;
+    EntitySet getNextWildcardType(StatementType type) const override;
 
-    std::unordered_set<Entity> getNextStarWildcardType(StatementType type) const override;
+    EntitySet getNextStarWildcardType(StatementType type) const override;
 
     bool isNext(Statement &statement1, Statement &statement2) const override;
 
@@ -247,30 +239,29 @@ public:
 
     bool hasAfterStarStmt(Statement &statement) const override;
 
-    std::unordered_set<Entity> getAllIfPatternStmts() const override;
+    EntitySet getAllIfPatternStmts() const override;
 
-    std::unordered_set<Entity> getIfStmtsByVar(Variable &var) const override;
+    EntitySet getIfStmtsByVar(Variable &var) const override;
 
-    std::unordered_set<std::vector<Entity>> getAllIfStmtVarPair() const override;
+    EntityPairSet getAllIfStmtVarPair() const override;
 
-    std::unordered_set<Entity> getAllWhilePatternStmts() const override;
+    EntitySet getAllWhilePatternStmts() const override;
 
-    std::unordered_set<Entity> getWhileStmtsByVar(Variable &var) const override;
+    EntitySet getWhileStmtsByVar(Variable &var) const override;
 
-    std::unordered_set<std::vector<Entity>> getAllWhileStmtVarPair() const override;
+    EntityPairSet getAllWhileStmtVarPair() const override;
 
-    std::unordered_set<std::vector<Entity>> getAffectsPair(StatementType formerType,
-                                                           StatementType latterType) const override;
+    EntityPairSet getAffectsPair(StatementType formerType, StatementType latterType) const override;
 
-    std::unordered_set<Entity> getAffectsTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getAffectsTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::unordered_set<Entity> getAffectsSameStmt(StatementType stmtType) const override;
+    EntitySet getAffectsSameStmt(StatementType stmtType) const override;
 
-    std::unordered_set<Entity> getAffectsTypeWildcard(StatementType type) const override;
+    EntitySet getAffectsTypeWildcard(StatementType type) const override;
 
-    std::unordered_set<Entity> getAffectsStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getAffectsStmtType(Statement &statement, StatementType type) const override;
 
-    std::unordered_set<Entity> getAffectsWildcardType(StatementType type) const override;
+    EntitySet getAffectsWildcardType(StatementType type) const override;
 
     bool isAffects(Statement &statement1, Statement &statement2) const override;
 
