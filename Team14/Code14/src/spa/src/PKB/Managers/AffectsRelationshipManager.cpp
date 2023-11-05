@@ -66,3 +66,5 @@ void AffectsRelationshipManager::clearStore() {
 EntitySet AffectsRelationshipManager::getAffectsSameStmt(StatementType stmtType) const {
     return this->getSameStmt(stmtType, true);
 }
+
+EntityPairSet AffectsRelationshipManager::getAffectsPair() const { return this->relationshipStore->getPairs(); }

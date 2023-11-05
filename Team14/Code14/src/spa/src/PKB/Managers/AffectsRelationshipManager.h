@@ -50,4 +50,11 @@ public:
      * @return An unordered_set of statements
      */
     EntitySet getAffectsSameStmt(StatementType stmtType) const;
+
+    /**
+     * Returns an unordered_set of Statement, Statement pair where the first statement affects the second
+     * statement.
+     * @return An unordered_set of Statement, Statement pair stored in a vector
+     */
+    EntityPairSet getAffectsPair() const;
 };
