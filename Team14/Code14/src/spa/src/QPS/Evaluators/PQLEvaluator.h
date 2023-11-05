@@ -73,13 +73,6 @@ private:
     std::shared_ptr<Result> evaluateNegation(std::shared_ptr<Result> curr, std::shared_ptr<Result> clauseRes);
 
     /**
-     * @brief Evaluates a select clause with the given entity as the result clause without any constraint clauses
-     * @param entity the selected entity to be evaluated
-     * @return shared pointer to result object
-     */
-    std::shared_ptr<Result> evaluateSelect(std::shared_ptr<QueryEntity> entity);
-
-    /**
      * @brief Evaluates a subset of the result clause of a query
      * @param query the query object whose result clause is being evaluated
      * @param resultSyns the vector of synonyms representing the subset of result clause to be evaluated

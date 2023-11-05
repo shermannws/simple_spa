@@ -165,17 +165,9 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> c
     return resultHandler->getCombined(curr, clauseRes);
 }
 
-
-std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const std::shared_ptr<QueryEntity> entity) {
-    std::shared_ptr<Result> result = std::make_shared<Result>();
-    result->setType({entity->getSynonym()});
-    result->setTuples(getAll(entity));
-    return result;
-}
-
 std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(const Query &query, std::vector<Synonym> resultSyns) {
     std::vector<std::shared_ptr<Result>> results;
-    for (auto &syn: resultSyns) { results.push_back(evaluateSelect(query.getEntity(syn))); }
+    for (auto &syn: resultSyns) { results.push_back(evaluateAll({syn})); }
     auto tupleResult = std::make_shared<Result>(true);// Initialize with TRUE
     for (auto const &res: results) {                  // Combine until end of list
         tupleResult = resultHandler->getCombined(tupleResult, res);
@@ -193,22 +185,22 @@ std::unordered_set<std::shared_ptr<Entity>> PQLEvaluator::getAll(const std::shar
 
 std::shared_ptr<Result> PQLEvaluator::evaluateAll(const std::vector<Synonym> &entitySyns) {
     auto tupleSize = entitySyns.size();
-    std::vector<QueryEntityType> types(tupleSize);
-    for (int i = 0; i < tupleSize; i++) { types[i] = declarationMap[entitySyns[i]]->getType(); }
+    std::vector<EntityPtr> queryEntities(tupleSize);
+    for (int i = 0; i < tupleSize; i++) { queryEntities[i] = declarationMap[entitySyns[i]]; }
 
     auto res = std::make_shared<Result>(entitySyns);
-    std::unordered_set<ResultTuple> tuples;
     if (tupleSize == 1) {// tuples are single entity
-        auto set = QPSUtil::entityGetterMap[types[0]](pkbReader);
-        for (const auto &entity: set) { tuples.insert({entity}); }
-    } else {// tuples are pair of entities
-        auto sets = std::make_pair(QPSUtil::entityGetterMap[types[0]](pkbReader),
-                                   QPSUtil::entityGetterMap[types[1]](pkbReader));
-        for (auto &first: sets.first) {
-            for (auto &second: sets.second) { tuples.insert({first, second}); }
-        }
+        auto entities = getAll(queryEntities[0]);
+        res->setTuples(entities);
+        return res;
     }
 
+    // tuples are pair of entities
+    std::unordered_set<ResultTuple> tuples;
+    auto sets = std::make_pair(getAll(queryEntities[0]), getAll(queryEntities[1]));
+    for (auto &first: sets.first) {
+        for (auto &second: sets.second) { tuples.insert({first, second}); }
+    }
     res->setTuples(tuples);
     return res;
 }
