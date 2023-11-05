@@ -1779,7 +1779,6 @@ TEST_CASE_METHOD(UnitTestFixture, "processWithClause") {
         rightRef.setEntityType(rightEntityType);
 
 
-
         expectedClause.setFirstParam(leftRef);
         expectedClause.setSecondParam(rightRef);
         REQUIRE(*clausePtr == expectedClause);

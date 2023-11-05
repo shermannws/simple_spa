@@ -89,8 +89,22 @@ public:
      */
     SynonymMap &getSynIndices();
 
+    /**
+     * @brief Gets the column names of the Result table in order
+     * @return vector of synonyms representing the result table header
+     */
+    std::vector<Synonym> getHeader();
+
+    /**
+     * @brief sets the tuples for a single-column result object
+     * @param resultEntities set of entities to convert to set of ResultTuples
+     */
     void setTuples(const std::unordered_set<std::shared_ptr<Entity>> &resultEntities);
 
+    /**
+     * @brief sets the tuples for a result object
+     * @param resultEntities set of ResultTuples
+     */
     void setTuples(const std::unordered_set<ResultTuple> &resultTuples);
 
     /**
