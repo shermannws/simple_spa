@@ -129,6 +129,54 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid syntax") {
         SyntacticValidator validator(tokens);
         REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected TokenType CloseRoundParenthesis");
     }
+
+    SECTION("Invalid term in expr") {
+        std::string input = "procedure testProcedure {x = !5}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Term");
+    }
+
+    SECTION("Invalid TokenType for stmt") {
+        std::string input = "procedure testProcedure {!}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected TokenType Name for statement");
+    }
+
+    SECTION("Invalid Name") {
+        std::string input = "procedure 1nvalidName {!}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected TokenType Name");
+    }
+
+    SECTION("Invalid Integer") {
+        std::string input = "procedure testInteger {x = 0 + 01;}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Integer cannot start with 0");
+    }
+
+    SECTION("Invalid - missing CloseCurlyParen") {
+        std::string input = "procedure testInteger {x = 0; ";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected TokenType CloseCurlyParenthesis");
+    }
+
+    SECTION("Invalid - missing semicolon") {
+        std::string input = "procedure testInteger {x = 0 }";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected TokenType Semicolon");
+    }
 }
 
 TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Valid IF syntax") {
@@ -147,6 +195,24 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Valid IF syntax") {
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
         REQUIRE_NOTHROW(validator.validate());
+    }
+}
+
+TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid IF syntax") {
+    SECTION("missing then") {
+        std::string input = "procedure testWhile {if (0 == 1) do { count = count + 1; } else { call readx ;}}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected 'then' in if statement");
+    }
+
+    SECTION("missing else") {
+        std::string input = "procedure testWhile {if (0 == 1) then { count = count + 1; } next { call readx ;}}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected 'else' in if statement");
     }
 }
 
@@ -317,5 +383,61 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid WHILE syntax CON
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
         REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid nesting in conditional expression");
+    }
+
+    SECTION("invalid - missing Open Round Parenthesis") {
+        std::string input = "procedure testWhile {while A > B) { a = r; }}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+    }
+
+    SECTION("invalid - missing Close Round Parenthesis") {
+        std::string input = "procedure testWhile {while (A > B { a = r; }}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+    }
+
+    SECTION("invalid - Unmatched Open Round Parenthesis") {
+        std::string input = "procedure testWhile {while ((A > B) { a = r; }}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Unmatched opening parenthesis");
+    }
+
+    SECTION("invalid - Unexpected token in cond expr") {
+        std::string input = "procedure testWhile {while ((A > B) && = (C < D)) { a = r; }}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Unexpected token in conditional expr");
+    }
+
+    SECTION("invalid - Invalid expr with wrong arithmetic operator") {
+        std::string input = "procedure testWhile {while ( (A ! B) > (C) ) { a = b; }; } ";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected arithmetic operator while checking relational expr");
+    }
+
+    SECTION("invalid - Invalid term in expr") {
+        std::string input = "procedure testWhile {while ( (A + B) > !c ) { a = b; }; } ";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Term");
+    }
+
+    SECTION("invalid - invalid Name") {
+        std::string input = "procedure testWhile {while ( (01 + B) > !c ) { a = b; }; } ";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: INTEGER cannot start with 0");
     }
 }
