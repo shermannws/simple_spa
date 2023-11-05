@@ -152,50 +152,38 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
 
 std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> curr,
                                                        std::shared_ptr<Result> clauseRes) {
-    auto clauseSyns = clauseRes->getHeader();
+    auto synGroups = groupSynByEvaluated(curr, clauseRes);// <overlapSyns, unevaluatedSyns>
+    auto evaluatedSyns = synGroups.first;
+    auto unevaluatedSyns = synGroups.second;
 
-    std::pair<std::vector<Synonym>, std::vector<Synonym>> synGroups;//<overlapSyns, unevaluatedSyns>
-    auto currSynMap = curr->getSynIndices();
-    auto clauseSynMap = clauseRes->getSynIndices();
-    for (auto &elem: clauseSynMap) {
-        auto syn = QPSUtil::getSyn(elem.first);
-        if (currSynMap.count(syn)) {
-            synGroups.first.push_back(syn);
-        } else {
-            synGroups.second.push_back(syn);
-        }
-    }
-
-    if (synGroups.second.empty()) {// all syns present
+    if (unevaluatedSyns.empty()) {// all syns present
         return resultHandler->getDiff(curr, clauseRes);
     }
 
-    if (synGroups.first.empty()) {// all syns unevaluated, take naive approach
-        auto lhs = getTuplesBySyn(clauseSyns);
-        auto rhs = clauseRes->getTuples();
-        for (const auto &tuple: rhs) { lhs.erase(tuple); }
-        clauseRes->setTuples(lhs);
-        return resultHandler->getCombined(curr, clauseRes);
+    if (evaluatedSyns.empty()) {// all syns unevaluated, take naive approach
+        auto lhs = evaluateAll(unevaluatedSyns);
+        auto negatedRes = resultHandler->getDiff(lhs, clauseRes);
+        return resultHandler->getCombined(curr, negatedRes);
     }
 
-    // syns partially evaluated
-    auto appendSet = getAll(declarationMap[synGroups.second[0]]);// get column to append
-    idx commonInRhs = clauseSynMap[synGroups.first[0]];
-    idx commonInCurr = currSynMap[synGroups.first[0]];
+    // syns partially evaluated, evaluate result of negated clause
+    auto appendSet = getAll(declarationMap[unevaluatedSyns[0]]);// get column to append
     auto currTuples = curr->getTuples();
-
-    // get all allowed pairs i.e. after negation
     auto filter = clauseRes->getTuples();
+
+    // get negation result //TODO for loop syn in unevaluated, use for first case too
     std::unordered_set<EntityPointer> found;// track which entities has been added to filtered
     ResultTuples filtered;
+    std::pair<idx, idx> commonIdx =
+            std::make_pair(curr->getSynIndices()[evaluatedSyns[0]], clauseRes->getSynIndices()[evaluatedSyns[0]]);
     for (const auto &row: currTuples) {
-        auto connector = row[commonInCurr];
-        if (!found.count(connector)) {// new common column value encountered
-            found.insert(connector);
-            for (const auto &value: appendSet) {
+        auto commonEntity = row[commonIdx.first];
+        if (!found.count(commonEntity)) {// new common column value encountered
+            found.insert(commonEntity);
+            for (const auto &newEntity: appendSet) {
                 ResultTuple newRow(2);
-                newRow[commonInRhs] = connector;
-                newRow[!commonInRhs] = value;
+                newRow[commonIdx.second] = commonEntity;
+                newRow[!commonIdx.second] = newEntity;
                 if (!filter.count(newRow)) { filtered.insert(newRow); }// if row not in rhsRes, add to filteredSet
             }
         }
@@ -203,7 +191,6 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> c
     clauseRes->setTuples(filtered);
     return resultHandler->getCombined(curr, clauseRes);
 }
-
 
 std::shared_ptr<Result> PQLEvaluator::evaluateSelect(const std::shared_ptr<QueryEntity> entity) {
     std::shared_ptr<Result> result = std::make_shared<Result>();
@@ -230,25 +217,42 @@ std::unordered_set<std::shared_ptr<Entity>> PQLEvaluator::getAll(const std::shar
     return QPSUtil::entityGetterMap[entityType](pkbReader);
 }
 
-std::unordered_set<ResultTuple> PQLEvaluator::getTuplesBySyn(const std::vector<Synonym> &entitySyns) {
+std::shared_ptr<Result> PQLEvaluator::evaluateAll(const std::vector<Synonym> &entitySyns) {
     auto tupleSize = entitySyns.size();
     std::vector<QueryEntityType> types(tupleSize);
     for (int i = 0; i < tupleSize; i++) { types[i] = declarationMap[entitySyns[i]]->getType(); }
 
+    auto res = std::make_shared<Result>(entitySyns);
     std::unordered_set<ResultTuple> tuples;
     if (tupleSize == 1) {// tuples are single entity
         auto set = QPSUtil::entityGetterMap[types[0]](pkbReader);
         for (const auto &entity: set) { tuples.insert({entity}); }
-        return tuples;
+    } else {// tuples are pair of entities
+        auto sets = std::make_pair(QPSUtil::entityGetterMap[types[0]](pkbReader),
+                                   QPSUtil::entityGetterMap[types[1]](pkbReader));
+        for (auto &first: sets.first) {
+            for (auto &second: sets.second) { tuples.insert({first, second}); }
+        }
     }
 
-    // tuples are pair of entities
-    auto sets = std::make_pair(QPSUtil::entityGetterMap[types[0]](pkbReader),
-                               QPSUtil::entityGetterMap[types[1]](pkbReader));
-    for (auto &first: sets.first) {
-        for (auto &second: sets.second) { tuples.insert({first, second}); }
-    }
-    return tuples;
+    res->setTuples(tuples);
+    return res;
 }
 
 void PQLEvaluator::setDeclarationMap(Query &query) { declarationMap = query.getDeclarations(); }
+
+std::pair<std::vector<Synonym>, std::vector<Synonym>>
+PQLEvaluator::groupSynByEvaluated(std::shared_ptr<Result> curr, std::shared_ptr<Result> clauseRes) {
+    std::pair<std::vector<Synonym>, std::vector<Synonym>> synGroups;
+    auto currSynMap = curr->getSynIndices();
+    auto clauseSynMap = clauseRes->getSynIndices();
+    for (auto &elem: clauseSynMap) {
+        auto syn = QPSUtil::getSyn(elem.first);
+        if (currSynMap.count(syn)) {
+            synGroups.first.push_back(syn);
+        } else {
+            synGroups.second.push_back(syn);
+        }
+    }
+    return synGroups;
+}
