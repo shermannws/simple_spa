@@ -67,6 +67,4 @@ EntitySet AffectsRelationshipManager::getAffectsSameStmt(StatementType stmtType)
     return this->getSameStmt(stmtType, true);
 }
 
-EntityPairSet AffectsRelationshipManager::getAffectsPair(StatementType formerType, StatementType latterType) const {
-    return this->relationshipStore->getPairs();
-}
+EntityPairSet AffectsRelationshipManager::getAffectsPair() const { return this->relationshipStore->getPairs(); }
