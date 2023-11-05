@@ -109,12 +109,18 @@ public:
     explicit ResultHandler();
 
     /**
-     * Evaluates the final result form combining 2 results
+     * Evaluates the final result from combining 2 results
      * @param r1 first result table
      * @param r2 second result table
      * @return the resultant table
      */
     std::shared_ptr<Result> getCombined(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 
+    /**
+     * Eliminates tuples in first result that is found in second result
+     * @param r1 first result table to remove tuples from (minuend)
+     * @param r2 second result table (subtrahend)
+     * @return first result table with the tuples found in 2 removed
+     */
     std::shared_ptr<Result> getDiff(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
 };
