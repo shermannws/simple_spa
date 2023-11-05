@@ -1748,7 +1748,7 @@ TEST_CASE_METHOD(UnitTestFixture, "not queries, optimisation paths executed") {
         REQUIRE(find(results.begin(), results.end(), "3 var14") != results.end());
         REQUIRE(find(results.begin(), results.end(), "3 var5") != results.end());
         REQUIRE(find(results.begin(), results.end(), "3 var2") != results.end());
-        REQUIRE(find(results.begin(), results.end(), "7 var1") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var1") != results.end());
         REQUIRE(find(results.begin(), results.end(), "7 var88") != results.end());
         REQUIRE(find(results.begin(), results.end(), "7 var38") != results.end());
         REQUIRE(find(results.begin(), results.end(), "7 var36") != results.end());

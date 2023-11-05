@@ -127,7 +127,7 @@ Result PQLEvaluator::evaluate(Query &query) {
     if (unevaluatedSyn.empty()) { return *res; }
 
     // CASE SOME RESULT-CLAUSE NOT IN clauses
-    auto synResult = evaluateResultClause(query, unevaluatedSyn);
+    auto synResult = evaluateResultClause(unevaluatedSyn);
     auto finalResult = resultHandler->getCombined(res, synResult);
     return *finalResult;
 }
@@ -152,9 +152,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
 
 std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> curr,
                                                        std::shared_ptr<Result> clauseRes) {
-    auto synGroups = groupSynByEvaluated(curr, clauseRes);// <overlapSyns, unevaluatedSyns>
-    auto evaluatedSyns = synGroups.first;
-    auto unevaluatedSyns = synGroups.second;
+    auto [evaluatedSyns, unevaluatedSyns] = groupSynByEvaluated(curr, clauseRes);
 
     if (unevaluatedSyns.empty()) {// all syns present
         return resultHandler->getDiff(curr, clauseRes);
@@ -193,7 +191,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> c
     return resultHandler->getCombined(curr, clauseRes);
 }
 
-std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(const Query &query, std::vector<Synonym> resultSyns) {
+std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(std::vector<Synonym> resultSyns) {
     std::vector<std::shared_ptr<Result>> results;
     for (auto &syn: resultSyns) { results.push_back(evaluateAll({syn})); }
     auto tupleResult = std::make_shared<Result>(true);// Initialize with TRUE

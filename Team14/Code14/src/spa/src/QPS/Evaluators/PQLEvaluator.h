@@ -74,11 +74,10 @@ private:
 
     /**
      * @brief Evaluates a subset of the result clause of a query
-     * @param query the query object whose result clause is being evaluated
      * @param resultSyns the vector of synonyms representing the subset of result clause to be evaluated
      * @return shared pointer to result object
      */
-    std::shared_ptr<Result> evaluateResultClause(const Query &query, std::vector<Synonym> resultSyns);
+    std::shared_ptr<Result> evaluateResultClause(std::vector<Synonym> resultSyns);
 
     /**
      * @brief returns the vector of synonyms in the result clause that is not present in the result object
@@ -133,6 +132,12 @@ private:
      */
     void setDeclarationMap(Query &query);
 
+    /**
+     * @brief groups the synonyms in the clause result based on whether it is found in current result
+     * @param curr current result
+     * @param clauseRes clause result
+     * @return pair of vector of synonyms representing evaluated synonyms and unevaluated synonyms respectively
+     */
     std::pair<std::vector<Synonym>, std::vector<Synonym>> groupSynByEvaluated(std::shared_ptr<Result> curr,
                                                                               std::shared_ptr<Result> clauseRes);
 
