@@ -448,11 +448,11 @@ void PkbReaderManager::triggerAffectsCalculation() const {
 }
 
 EntityPairSet PkbReaderManager::getAffectsPair(StatementType formerType, StatementType latterType) const {
-    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, latterType)) {
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, formerType) || !ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, latterType)) {
         return EntityPairSet();
     }
     this->triggerAffectsCalculation();
-    return this->affectsRelationshipManager->getRelationshipPair(formerType, latterType, true);
+    return this->affectsRelationshipManager->getAffectsPair(formerType, latterType);
 }
 
 EntitySet PkbReaderManager::getAffectsSameStmt(StatementType stmtType) const {
