@@ -171,7 +171,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> c
     auto currTuples = curr->getTuples();
     auto filter = clauseRes->getTuples();
 
-    // get negation result //TODO for loop syn in unevaluated, use for first case too
+    // get negation result
     std::unordered_set<EntityPointer> found;// track which entities has been added to filtered
     ResultTuples filtered;
     std::pair<idx, idx> commonIdx =
@@ -189,6 +189,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> c
         }
     }
     clauseRes->setTuples(filtered);
+
     return resultHandler->getCombined(curr, clauseRes);
 }
 
