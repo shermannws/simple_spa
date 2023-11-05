@@ -49,7 +49,7 @@ public:
      * @param type The type of the statement
      * @return An unordered_set of Statement, Variable pair stored in a vector
      */
-    std::unordered_set<std::vector<Entity>> getRelationshipStmtPair(StatementType type) const;
+    EntityPairSet getRelationshipStmtPair(StatementType type) const;
 
     /**
      * Returns an unordered_set of statements of StatementType type which is related to the given variable
@@ -57,21 +57,21 @@ public:
      * @param var The variable that is related to the statements
      * @return An unordered_set of statements
      */
-    std::unordered_set<Entity> getRelationshipTypeIdent(StatementType type, Variable &var) const;
+    EntitySet getRelationshipTypeIdent(StatementType type, Variable &var) const;
 
     /**
      * Returns an unordered_set of statements of the given statement type which is related to any variable
      * @param type The type of the statement to be retrieved
      * @return An unordered_set of statements
      */
-    std::unordered_set<Entity> getRelationshipStmt(StatementType type) const;
+    EntitySet getRelationshipStmt(StatementType type) const;
 
     /**
      * Returns an unordered_set of variables which is related to the given statement
      * @param stmt The statement that is related to the variables
      * @return An unordered_set of variables
      */
-    std::unordered_set<Entity> getRelationshipVar(Statement &stmt) const;
+    EntitySet getRelationshipVar(Statement &stmt) const;
 
     /**
      * Returns a boolean value indicating if the given statement is related to the given variable

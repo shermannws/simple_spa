@@ -26,11 +26,11 @@ void Result::setBoolResult(bool result) { boolResult = result; }
 
 bool Result::getBoolResult() { return boolResult; }
 
-void Result::setTuples(const std::unordered_set<std::vector<Entity>> &resultTuples) { tuples = resultTuples; }
+void Result::setTuples(const std::unordered_set<ResultTuple> &resultTuples) { tuples = resultTuples; }
 
 
-void Result::setTuples(const std::unordered_set<Entity> &resultEntities) {
-    for (const Entity &entity: resultEntities) { tuples.insert(std::vector<Entity>{entity}); }
+void Result::setTuples(const std::unordered_set<std::shared_ptr<Entity>> &resultEntities) {
+    for (const auto &entity: resultEntities) { tuples.insert(ResultTuple{entity}); }
 }
 
 ResultTuples &Result::getTuples() { return tuples; }
