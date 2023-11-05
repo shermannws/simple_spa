@@ -453,7 +453,7 @@ EntityPairSet PkbReaderManager::getAffectsPair(StatementType formerType, Stateme
         return EntityPairSet();
     }
     this->triggerAffectsCalculation();
-    return this->affectsRelationshipManager->getAffectsPair(formerType, latterType);
+    return this->affectsRelationshipManager->getAffectsPair();
 }
 
 EntitySet PkbReaderManager::getAffectsSameStmt(StatementType stmtType) const {
