@@ -1662,7 +1662,7 @@ TEST_CASE_METHOD(UnitTestFixture, "attrRef result-clause query") {
     }
 }
 
-TEST_CASE_METHOD(UnitTestFixture, "not queries") {
+TEST_CASE_METHOD(UnitTestFixture, "not queries") {// all naive approach
     SECTION("single not pattern - 2 syns in not clause") {
         PQLParser parser("assign a; variable v; Select <a,v> pattern not a(v,_)");
         Query queryObj = parser.parse();
@@ -1720,5 +1720,49 @@ TEST_CASE_METHOD(UnitTestFixture, "not queries") {
         auto results = evaluator.formatResult(queryObj, resultObj);
         REQUIRE(resultObj.getTuples().size() == 0);
         REQUIRE(find(results.begin(), results.end(), "FALSE") != results.end());
+    }
+}
+
+TEST_CASE_METHOD(UnitTestFixture, "not queries, optimisation paths executed") {
+    SECTION("one syn overlap") {
+        PQLParser parser(
+                "assign a; variable v; read re; Select <a,v> such that Follows*(a, re) pattern not a(v,_)");//[a,re] and
+                                                                                                            //[a,v]
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 14);
+        REQUIRE(find(results.begin(), results.end(), "1 var88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var38") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "1 var5") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var88") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var38") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var36") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var24") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var14") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var5") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var1") != results.end());
+    }
+
+    SECTION("all syns overlap") {// both syn present
+        PQLParser parser(
+                "assign a; variable v; Select <a,v> pattern a(v,_\"1+multiclauseTest\"_) such that not Modifies(a,v)");
+        Query queryObj = parser.parse();
+
+        auto stubReader = make_shared<StubPkbReader>();
+        PQLEvaluator evaluator = PQLEvaluator(stubReader);
+        auto resultObj = evaluator.evaluate(queryObj);
+        auto results = evaluator.formatResult(queryObj, resultObj);
+        REQUIRE(results.size() == 3);
+        REQUIRE(find(results.begin(), results.end(), "1 var2") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "2 var3") != results.end());
+        REQUIRE(find(results.begin(), results.end(), "3 var4") != results.end());
     }
 }
