@@ -167,7 +167,7 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected TokenType CloseCurlyParenthesis");
+        REQUIRE_THROWS_WITH(validator.validate(), "Error: attempted to access out-of-range char in input file");
     }
 
     SECTION("Invalid - missing semicolon") {

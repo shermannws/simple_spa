@@ -229,7 +229,14 @@ void SyntacticValidator::validateArithmeticOperator() {
     }
 }
 
-SPToken SyntacticValidator::peekToken() { return tokens[curr]; }
+SPToken SyntacticValidator::peekToken() {
+    if (isCurrValid()) {
+        return tokens[curr];
+    } else {
+        throw std::out_of_range("Error: attempted to access out-of-range char in input file");
+    }
+
+}
 
 SPToken SyntacticValidator::peekNextToken() { return tokens[curr + 1]; }
 
