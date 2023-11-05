@@ -179,7 +179,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> c
         if (!found.count(commonEntity)) {// new common column value encountered
             found.insert(commonEntity);
             for (const auto &newEntity: appendSet) {
-                ResultTuple newRow(2);
+                ResultTuple newRow(AppConstants::PAIR_TUPLE_SIZE);
                 newRow[commonIdx.second] = commonEntity;
                 newRow[!commonIdx.second] = newEntity;
                 if (!filter.count(newRow)) { filtered.insert(newRow); }// if row not in rhsRes, add to filteredSet
@@ -216,7 +216,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateAll(const std::vector<Synonym> &en
 
     auto res = std::make_shared<Result>(entitySyns);
 
-    if (tupleSize == 1) {// tuples are single entity
+    if (tupleSize == AppConstants::SINGLES_TUPLE_SIZE) {// tuples are single entity
         auto entities = getAll(queryEntities[0]);
         res->setTuples(entities);
         return res;
