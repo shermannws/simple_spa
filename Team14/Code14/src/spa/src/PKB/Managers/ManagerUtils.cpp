@@ -109,12 +109,6 @@ EntitySet ManagerUtils::getRightEntitiesFromLeftKeyStmtMatch(RelationshipStore<L
                                                                                                           key, matcher);
 }
 
-template<typename E>
-void ManagerUtils::unique(std::vector<E> &v) {
-    std::unordered_set<E> s(v.begin(), v.end());
-    v.assign(s.begin(), s.end());
-}
-
 template<typename S, typename P>
 void ManagerUtils::addStmtVarFromProcVar(std::shared_ptr<S> stmtVarManager,
                                          std::shared_ptr<RelationshipStore<Procedure, Statement>> procStmtStore,

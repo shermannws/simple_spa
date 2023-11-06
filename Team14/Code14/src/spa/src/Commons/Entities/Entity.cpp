@@ -21,12 +21,8 @@ AttrValue Entity::getAttrValue() const {
 
 bool Entity::operator==(const Entity &other) const { return this->getEntityValue() == other.getEntityValue(); }
 
-std::size_t std::hash<Entity>::operator()(const Entity &entity) const {
-    return std::hash<std::string>()(entity.getEntityValue());
-}
-
 std::size_t std::hash<std::shared_ptr<Entity>>::operator()(const std::shared_ptr<Entity> entityPtr) const {
-    return std::hash<Entity>()(*entityPtr);
+    return std::hash<std::string>()(entityPtr->getEntityValue());
 }
 
 bool std::equal_to<std::shared_ptr<Entity>>::operator()(std::shared_ptr<Entity> const &lhs,

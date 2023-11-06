@@ -5,14 +5,13 @@
 
 #include "../../Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
-#include "Commons/HashableKey.h"
 #include "PKB/PkbTypes.h"
 
 /**
  * @brief A class that represents an assignment statement
  * @details A class that represents an assignment statement
  */
-class Assignment : public HashableKey {
+class Assignment {
 private:
     /**
      * @brief The statement that is an assignment statement
@@ -81,11 +80,13 @@ public:
      * @return The Expression that represents the expression being assigned to the variable
      */
     std::shared_ptr<Expression> getExpression() const;
-};
 
-template<>
-struct std::hash<Assignment> {
-    std::size_t operator()(const Assignment &assignment) const;
+    /**
+     * @brief Returns true if the Assignment object is equal to the other Assignment object, false otherwise
+     * @param other The other Assignment object to compare with
+     * @return True if the Assignment object is equal to the other Assignment object, false otherwise
+     */
+    bool operator==(const Assignment &other) const;
 };
 
 template<>
