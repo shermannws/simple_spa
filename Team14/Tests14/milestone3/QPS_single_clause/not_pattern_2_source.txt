@@ -1,34 +1,5 @@
 procedure proc {
-    while (1 == 2) {
-        while (3 >= 4) {
-            read x;
-        }
-
-        if (100 <= 200) then {
-            read x;
-        } else {
-            read y;
-        }
-    }
-
-    if (2 != 2) then {
-        if (2 != 2) then {
-            read y;
-        } else {
-            read z;
-        }
-        while (3 >= 4) {
-            read x;
-        }
-    } else {
-        if (2 != 2) then {
-            read y;
-        } else {
-            read z;
-        }
-        while (3 >= 4) {
-            read x;
-        }
-    }
+    print x;
+    read x;
 }
 
