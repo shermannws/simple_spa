@@ -235,7 +235,6 @@ SPToken SyntacticValidator::peekToken() {
     } else {
         throw SyntaxError("Syntax error: attempted to access out-of-range char in input file");
     }
-
 }
 
 SPToken SyntacticValidator::peekNextToken() {
