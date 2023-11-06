@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <string>
 #include <vector>
@@ -286,14 +287,6 @@ public:
     static std::unordered_set<std::vector<std::shared_ptr<R>>>
     getPairs(S &store, std::function<bool(std::shared_ptr<K>)> leftMatcher,
              std::function<bool(std::shared_ptr<V>)> rightMatcher);
-
-    /**
-     * @brief A function that removes duplicates in a vector of object of type E
-     * @tparam E The type stored in the vector to make unique
-     * @param v The vector to be modified
-     */
-    template<typename E>
-    static void unique(std::vector<E> &v);
 
     /**
      * @brief A function that adds to stmtVarManager (s,v) given the the (s,p) pairs in procStmtStore such that (p,v) is

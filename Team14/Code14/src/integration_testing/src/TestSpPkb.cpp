@@ -567,7 +567,7 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and
             a = 1; \
 		    call p2; \
 	        if (b == c) then { \
-                while (2 == 3) { \
+                while (2 == z) { \
 			        read d; \
 			    } \
             } else { \
@@ -605,8 +605,8 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and
     auto varF = Variable("f");
 
     // Check each PkbReader Method
-    CHECK(pkbReader->getAllVariables().size() == 6);
-    CHECK(pkbReader->getAllConstants().size() == 3);
+    CHECK(pkbReader->getAllVariables().size() == 7);
+    CHECK(pkbReader->getAllConstants().size() == 2);
     CHECK(pkbReader->getAllProcedures().size() == 2);
     CHECK(pkbReader->getAllStatements().size() == 7);
     CHECK(pkbReader->getAllRead().size() == 2);
@@ -616,13 +616,13 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and
     CHECK(pkbReader->getAllCall().size() == 1);
     CHECK(pkbReader->getAllAssign().size() == 1);
 
-    CHECK(pkbReader->getUsesStmtPair(StatementType::Stmt).size() == 4);
-    CHECK(pkbReader->getUsesProcPair().size() == 3);
+    CHECK(pkbReader->getUsesStmtPair(StatementType::Stmt).size() == 6);
+    CHECK(pkbReader->getUsesProcPair().size() == 4);
     CHECK(pkbReader->getUsesTypeIdent(StatementType::Read, varE).empty());
     CHECK(pkbReader->getUsesTypeIdent(StatementType::If, varB).size() == 1);
     CHECK(pkbReader->getUsesProcIdent(varE).size() == 1);
-    CHECK(pkbReader->getUsesStmt(StatementType::While).empty());
-    CHECK(pkbReader->getUsesVar(stmt3).size() == 3);
+    CHECK(pkbReader->getUsesStmt(StatementType::While).size() == 1);
+    CHECK(pkbReader->getUsesVar(stmt3).size() == 4);
     CHECK(pkbReader->getUsesVar(proc2).empty());
     CHECK(pkbReader->getUsesProc().size() == 1);
     CHECK(pkbReader->isStmtUsesVar(stmt3, varC));
@@ -712,33 +712,43 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and
     CHECK(pkbReader->getCallees(proc1).size() == 1);
     CHECK(pkbReader->getCalleesStar(proc1).size() == 1);
 
+    pkbWriter->clearCache();
     CHECK(pkbReader->getNextPair(StatementType::If, StatementType::While).size() == 1);
     CHECK(pkbReader->getNextStarPair(StatementType::If, StatementType::While).size() == 1);
     CHECK(pkbReader->getNextStarSameStmt(StatementType::While).size() == 1);
+    pkbWriter->clearCache();
     CHECK(pkbReader->getNextTypeStmt(StatementType::If, stmt4).size() == 1);
     CHECK(pkbReader->getNextStarTypeStmt(StatementType::If, stmt4).size() == 1);
+    pkbWriter->clearCache();
     CHECK(pkbReader->getNextTypeWildcard(StatementType::Call).size() == 1);
     CHECK(pkbReader->getNextStarTypeWildcard(StatementType::Call).size() == 1);
+    pkbWriter->clearCache();
     CHECK(pkbReader->getNextStmtType(stmt1, StatementType::Call).size() == 1);
     CHECK(pkbReader->getNextStarStmtType(stmt1, StatementType::While).size() == 1);
+    pkbWriter->clearCache();
     CHECK(pkbReader->getNextWildcardType(StatementType::Call).size() == 1);
     CHECK(pkbReader->getNextStarWildcardType(StatementType::Call).size() == 1);
+    pkbWriter->clearCache();
     CHECK(pkbReader->isNext(stmt1, stmt2));
     CHECK(pkbReader->isNextStar(stmt1, stmt6));
+    pkbWriter->clearCache();
     CHECK(pkbReader->hasNext());
     CHECK(pkbReader->hasNextStar());
+    pkbWriter->clearCache();
     CHECK(pkbReader->hasBeforeStmt(stmt2));
     CHECK(pkbReader->hasBeforeStarStmt(stmt3));
+    pkbWriter->clearCache();
     CHECK(pkbReader->hasAfterStmt(stmt1));
     CHECK(pkbReader->hasAfterStarStmt(stmt1));
+    pkbWriter->clearCache();
 
     CHECK(pkbReader->getAllIfPatternStmts().size() == 1);
     CHECK(pkbReader->getIfStmtsByVar(varB).size() == 1);
     CHECK(pkbReader->getAllIfStmtVarPair().size() == 2);
 
-    CHECK(pkbReader->getAllWhilePatternStmts().empty());
+    CHECK(pkbReader->getAllWhilePatternStmts().size() == 1);
     CHECK(pkbReader->getWhileStmtsByVar(varB).empty());
-    CHECK(pkbReader->getAllWhileStmtVarPair().empty());
+    CHECK(pkbReader->getAllWhileStmtVarPair().size() == 1);
 
     CHECK(pkbReader->getAffectsPair(StatementType::Assign, StatementType::Assign).empty());
     CHECK(pkbReader->getAffectsTypeStmt(StatementType::Assign, stmt2).empty());
@@ -749,4 +759,5 @@ TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and
     CHECK(!pkbReader->hasAffects());
     CHECK(!pkbReader->hasAffectedStmt(stmt1));
     CHECK(!pkbReader->hasAffectsStmt(stmt1));
+    CHECK(pkbReader->getAffectsSameStmt(StatementType::Assign).empty());
 }

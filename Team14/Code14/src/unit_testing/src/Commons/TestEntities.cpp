@@ -69,10 +69,10 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Hash Function of Entities") {
     Constant c2 = Constant("1");
     Constant c3 = Constant("2");
 
-    std::hash<Entity> entityHasher;
-    std::size_t hashValue1 = entityHasher(c1);
-    std::size_t hashValue2 = entityHasher(c2);
-    std::size_t hashValue3 = entityHasher(c3);
+    std::hash<std::shared_ptr<Entity>> entityHasher;
+    std::size_t hashValue1 = entityHasher(std::make_shared<Entity>(c1));
+    std::size_t hashValue2 = entityHasher(std::make_shared<Entity>(c2));
+    std::size_t hashValue3 = entityHasher(std::make_shared<Entity>(c3));
 
     REQUIRE(hashValue1 == hashValue2);
     REQUIRE(hashValue1 != hashValue3);

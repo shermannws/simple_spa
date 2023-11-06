@@ -816,4 +816,6 @@ TEST_CASE_METHOD(UnitTestFixture, "Affects Relationship") {
     REQUIRE(reader->hasAffectedStmt(*stmt1));
     REQUIRE(reader->hasAffectedStmt(*stmt2));
     REQUIRE_FALSE(reader->hasAffectedStmt(*stmt3));
+
+    REQUIRE(reader->getAffectsSameStmt(StatementType::Assign).empty());
 }

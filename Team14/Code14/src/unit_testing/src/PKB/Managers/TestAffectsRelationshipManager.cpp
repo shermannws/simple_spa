@@ -264,6 +264,8 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
         REQUIRE(pkbReaderManager->hasAffectedStmt(*stmt3));
         REQUIRE(pkbReaderManager->hasAffectedStmt(*stmt4));
         REQUIRE_FALSE(pkbReaderManager->hasAffectedStmt(*stmt5));
+
+        REQUIRE(pkbReaderManager->getAffectsSameStmt(StatementType::Assign).empty());
     }
 
     SECTION("Test Affects Retrieval Loop") {
@@ -327,5 +329,7 @@ TEST_CASE("Test Affects Relationship Calculation & Retrieval") {
 
         REQUIRE_FALSE(pkbReaderManager->hasAffectedStmt(*stmt1));
         REQUIRE(pkbReaderManager->hasAffectedStmt(*stmt2));
+
+        REQUIRE(pkbReaderManager->getAffectsSameStmt(StatementType::Assign).size() == 1);
     }
 }

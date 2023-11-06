@@ -5,14 +5,13 @@
 #include <vector>
 
 #include "../AppConstants.h"
-#include "../HashableKey.h"
 #include "EntityType.h"
 
 /**
  * @brief An Entity is an entity in the SIMPLE programming language
  * @details An Entity is an entity in the SIMPLE programming language
  */
-class Entity : public HashableKey {
+class Entity {
 private:
     /**
      * @brief The Entity Type of the Entity of enum type `EntityType`
@@ -84,17 +83,7 @@ public:
      * @param other The other Entity object to compare with
      * @return True if the Entity object is equal to the other Entity object, false otherwise
      */
-    bool operator==(const HashableKey &other) const override;
-};
-
-/**
- * @brief A hash function for Entity objects
- * @details A hash function for Entity objects
- * @note This hash function is used by the EntityStore class
- */
-template<>
-struct std::hash<Entity> {
-    std::size_t operator()(const Entity &entity) const;
+    bool operator==(const Entity &other) const;
 };
 
 /**

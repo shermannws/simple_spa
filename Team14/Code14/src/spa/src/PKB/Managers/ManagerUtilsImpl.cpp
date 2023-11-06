@@ -112,8 +112,6 @@ template EntityPairSet ManagerUtils::getPairs<Entity, RelationshipStore<Statemen
         RelationshipStore<Statement, Variable> &store, std::function<bool(std::shared_ptr<Statement>)> leftMatcher,
         std::function<bool(std::shared_ptr<Variable>)> rightMatcher);
 
-template void ManagerUtils::unique<Entity>(std::vector<Entity> &vec);
-
 template void
 ManagerUtils::addStmtVarFromProcVar(std::shared_ptr<ModifiesRelationshipManager> stmtVarManager,
                                     std::shared_ptr<RelationshipStore<Procedure, Statement>> procStmtStore,
