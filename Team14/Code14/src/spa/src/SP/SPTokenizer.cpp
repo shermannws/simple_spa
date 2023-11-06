@@ -91,7 +91,7 @@ int SPTokenizer::peekNextChar() {
     if (curr + 1 < input.size()) {
         return input[curr + 1];
     } else {
-        throw std::out_of_range("Error: attempted to access out-of-range char in input file");
+        throw SyntaxError("Error: attempted to access out-of-range char in input file");
     }
 }
 

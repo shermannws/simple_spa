@@ -233,7 +233,7 @@ SPToken SyntacticValidator::peekToken() {
     if (isCurrValid()) {
         return tokens[curr];
     } else {
-        throw std::out_of_range("Error: attempted to access out-of-range char in input file");
+        throw SyntaxError("Syntax error: attempted to access out-of-range char in input file");
     }
 
 }
@@ -242,7 +242,7 @@ SPToken SyntacticValidator::peekNextToken() {
     if (isNextValid()) {
         return tokens[curr + 1];
     } else {
-        throw std::out_of_range("Error: attempted to access out-of-range char in input file");
+        throw SyntaxError("Syntax error: attempted to access out-of-range char in input file");
     }
 }
 
