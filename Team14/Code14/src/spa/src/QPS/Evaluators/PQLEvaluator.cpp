@@ -177,9 +177,6 @@ std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(const Query &query, s
 
 std::unordered_set<std::shared_ptr<Entity>> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity> &queryEntity) {
     QueryEntityType entityType = queryEntity->getType();
-    if (QPSUtil::entityGetterMap.find(entityType) == QPSUtil::entityGetterMap.end()) {
-        throw std::runtime_error("Not supported entity type in query select clause");
-    }
     return QPSUtil::entityGetterMap[entityType](pkbReader);
 }
 
