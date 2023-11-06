@@ -46,3 +46,10 @@ procedure SecondLast {
 procedure Last {
     d = b;
 }
+
+procedure allAffects {
+    while (1 == 2) {
+        a = a + 1;
+        a = a + 1;
+    }
+}
