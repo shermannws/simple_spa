@@ -414,7 +414,8 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid WHILE syntax CON
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+        REQUIRE_THROWS_WITH(validator.validate(),
+                            "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
     }
 
     SECTION("invalid - missing Close Round Parenthesis") {
@@ -422,7 +423,8 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid WHILE syntax CON
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+        REQUIRE_THROWS_WITH(validator.validate(),
+                            "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
     }
 
     SECTION("invalid - Unmatched Open Round Parenthesis") {
@@ -446,7 +448,8 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid WHILE syntax CON
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected arithmetic operator while checking relational expr");
+        REQUIRE_THROWS_WITH(validator.validate(),
+                            "Syntax error: Expected arithmetic operator while checking relational expr");
     }
 
     SECTION("invalid - Invalid term in expr") {
