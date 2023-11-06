@@ -18,13 +18,6 @@ std::vector<EntityPointer> Assignment::getStmtVarPairFromAssign(const std::share
     return {assignment->getStatement(), assignment->getVariable()};
 }
 
-bool Assignment::operator==(const HashableKey &other) const {
-    if (const Assignment *otherKey = dynamic_cast<const Assignment *>(&other)) {
-        return *this->getStatement() == *otherKey->getStatement();
-    }
-    return false;
-}
-
 std::size_t std::hash<Assignment>::operator()(const Assignment &assignment) const {
     return std::hash<Entity>()(*assignment.getStatement());
 }
@@ -35,5 +28,5 @@ std::size_t std::hash<std::shared_ptr<Assignment>>::operator()(const std::shared
 
 bool std::equal_to<std::shared_ptr<Assignment>>::operator()(std::shared_ptr<Assignment> const &lhs,
                                                             std::shared_ptr<Assignment> const &rhs) const {
-    return *lhs == *rhs;
+    return lhs->getStatement()->getEntityValue() == rhs->getStatement()->getEntityValue();
 }

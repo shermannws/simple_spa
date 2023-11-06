@@ -81,13 +81,6 @@ public:
      * @return The Expression that represents the expression being assigned to the variable
      */
     std::shared_ptr<Expression> getExpression() const;
-
-    /**
-     * @brief Returns true if the Assignment object is equal to the other Assignment object, false otherwise
-     * @param other The other Assignment object to compare against
-     * @return True if the Assignment object is equal to the other Assignment object, false otherwise
-     */
-    bool operator==(const HashableKey &other) const override;
 };
 
 template<>

@@ -84,7 +84,7 @@ public:
      * @param other The other Entity object to compare with
      * @return True if the Entity object is equal to the other Entity object, false otherwise
      */
-    bool operator==(const HashableKey &other) const override;
+    bool operator==(const Entity &other) const;
 };
 
 /**
