@@ -1,0 +1,60 @@
+1 - Not While pattern - syn-while(syn, wildcard) - select w
+while w; variable v;
+Select w pattern not w(v,_)
+none
+5000
+2 - Not While pattern - syn-while(syn, wildcard) - select v
+while w; variable v;
+Select v pattern not w(v,_)
+none
+5000
+3 - Not While pattern - syn-while(syn, wildcard) - select both
+while w; variable v;
+Select <w,v> pattern not w(v,_)
+none
+5000
+4 - Not While pattern - syn-while(wildcard, wildcard)
+while w;
+Select w pattern not w(_,_)
+none
+5000
+5 - Not While pattern - syn-while(ident, wildcard) - constant ident
+while w;
+Select w pattern not w("100",_)
+SyntaxError
+5000
+6 - Not While pattern - syn-while(ident, wildcard) - used by none
+while not;
+Select not pattern not not("A",_)
+none
+5000
+7 - Not If pattern - syn-if(syn, wildcard, wildcard) - select if
+if i; variable v;
+Select i pattern not i(v,_,_)
+none
+5000
+8 - Not If pattern - syn-if(syn, wildcard, wildcard) - select v
+if i; variable v;
+Select v pattern not i(v,_,_)
+none
+5000
+9 - Not If pattern - syn-if(syn, wildcard, wildcard) - select both
+if i; variable v;
+Select <i,v> pattern not i(v,_,_)
+none
+5000
+10 - Not If pattern - syn-if(wildcard, wildcard, wildcard)
+if i;
+Select i pattern not i(_,_,_)
+none
+5000
+11 - Not If pattern - syn-if(ident, wildcard, wildcard) - constant ident
+if i;
+Select i pattern not i("100",_,_)
+SyntaxError
+5000
+12 - Not If pattern - syn-if(ident, wildcard, wildcard) - used by none
+if not;
+Select not pattern not not("a",_,_)
+none
+5000
