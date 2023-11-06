@@ -147,6 +147,16 @@ EntityPairSet StubPkbReader::getFollowsPair(StatementType formerType, StatementT
 }
 
 EntityPairSet StubPkbReader::getFollowsStarPair(StatementType formerType, StatementType latterType) const {
+    if (formerType == StatementType::Assign && latterType == StatementType::Read) {
+        auto a1 = std::make_shared<Entity>(Statement(1, StatementType::Assign));
+        auto a3 = std::make_shared<Entity>(Statement(3, StatementType::Assign));
+        auto a7 = std::make_shared<Entity>(Statement(7, StatementType::Assign));
+
+        auto r5 = std::make_shared<Entity>(Statement(5, StatementType::Read));
+        auto r6 = std::make_shared<Entity>(Statement(6, StatementType::Read));
+        auto r8 = std::make_shared<Entity>(Statement(8, StatementType::Read));
+        return EntityPairSet({{a1, r5}, {a1, r6}, {a1, r8}, {a3, r5}, {a3, r6}, {a3, r8}, {a7, r8}});
+    }
     return EntityPairSet();
 }
 
@@ -194,6 +204,13 @@ EntityPairSet StubPkbReader::getModifiesStmtPair(StatementType type) const {
                                         std::make_shared<Variable>("var2")};
     std::vector<EntityPointer> pair3 = {std::make_shared<Statement>(2, StatementType::While),
                                         std::make_shared<Variable>("var3")};
+    if (type == StatementType::Assign) {
+        std::vector<EntityPointer> pair4 = {std::make_shared<Statement>(4, StatementType::Assign),
+                                            std::make_shared<Variable>("var3")};
+        std::vector<EntityPointer> pair5 = {std::make_shared<Statement>(6, StatementType::Assign),
+                                            std::make_shared<Variable>("var4")};
+        return EntityPairSet({pair1, pair4, pair5});
+    }
     return EntityPairSet({pair1, pair2, pair3});
 }
 

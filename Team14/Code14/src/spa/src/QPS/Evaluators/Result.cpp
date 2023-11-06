@@ -37,6 +37,13 @@ ResultTuples &Result::getTuples() { return tuples; }
 
 SynonymMap &Result::getSynIndices() { return synIndices; }
 
+std::vector<Synonym> Result::getHeader() {
+    std::vector<Synonym> synonyms(synIndices.size());
+    for (const auto &pair: synIndices) { synonyms[pair.second] = pair.first; }
+    return synonyms;
+}
+
+
 bool Result::isTrue() { return (type == ResultType::Boolean && boolResult); }
 
 bool Result::isFalse() { return (type == ResultType::Boolean && !boolResult); }
