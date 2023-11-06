@@ -70,7 +70,7 @@ void SyntacticValidator::validateExpr() {
 
     // Recursively check for the next valid term or arithmetic operator til reach end of exp
     validateTerm();
-    if (peekNextToken().getType() != TokenType::Semicolon && peekToken().getType() == TokenType::ArithmeticOperator) {
+    if (peekToken().getType() == TokenType::ArithmeticOperator) {
         validateArithmeticOperator();
         validateExpr();
     }
@@ -238,7 +238,13 @@ SPToken SyntacticValidator::peekToken() {
 
 }
 
-SPToken SyntacticValidator::peekNextToken() { return tokens[curr + 1]; }
+SPToken SyntacticValidator::peekNextToken() {
+    if (isNextValid()) {
+        return tokens[curr + 1];
+    } else {
+        throw std::out_of_range("Error: attempted to access out-of-range char in input file");
+    }
+}
 
 SPToken SyntacticValidator::popToken() {
     SPToken res = peekToken();
@@ -247,3 +253,5 @@ SPToken SyntacticValidator::popToken() {
 }
 
 bool SyntacticValidator::isCurrValid() { return curr >= 0 && curr < (int) tokens.size(); }
+
+bool SyntacticValidator::isNextValid() { return curr + 1 >= 0 && curr + 1 < (int) tokens.size(); }

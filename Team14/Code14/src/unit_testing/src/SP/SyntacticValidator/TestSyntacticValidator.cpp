@@ -170,6 +170,30 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid syntax") {
         REQUIRE_THROWS_WITH(validator.validate(), "Error: attempted to access out-of-range char in input file");
     }
 
+    SECTION("Invalid - missing OpenCurlyParen") {
+        std::string input = "procedure testInteger x = 0; ";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected TokenType OpenCurlyParenthesis");
+    }
+
+    SECTION("Invalid - nothing after OpenCurlyParen") {
+        std::string input = "procedure testInteger { ";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Error: attempted to access out-of-range char in input file");
+    }
+
+    SECTION("Invalid - nothing after first term") {
+        std::string input = "procedure testInteger { x ";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Error: attempted to access out-of-range char in input file");
+    }
+
     SECTION("Invalid - missing semicolon") {
         std::string input = "procedure testInteger {x = 0 }";
         SPTokenizer tokenizer(input);
