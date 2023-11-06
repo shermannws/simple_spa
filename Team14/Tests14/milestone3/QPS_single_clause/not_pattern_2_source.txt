@@ -1,5 +1,18 @@
 procedure proc {
-    print x;
-    read x;
+    while (1 == 2) {
+        while (x == 2) {
+            print x;
+        }
+    }
+
+    if (2 == 3) then {
+        if (x != y) then {
+            print x;
+        } else {
+            print y;
+        }
+    } else {
+        print x;
+    }
 }
 

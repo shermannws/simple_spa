@@ -1,22 +1,22 @@
 1 - Not While pattern - syn-while(syn, wildcard) - select w
 while w; variable v;
 Select w pattern not w(v,_)
-none
+1, 2
 5000
 2 - Not While pattern - syn-while(syn, wildcard) - select v
 while w; variable v;
 Select v pattern not w(v,_)
-none
+x, y
 5000
 3 - Not While pattern - syn-while(syn, wildcard) - select both
 while w; variable v;
 Select <w,v> pattern not w(v,_)
-none
+1 x, 1 y, 2 y
 5000
 4 - Not While pattern - syn-while(wildcard, wildcard)
 while w;
 Select w pattern not w(_,_)
-none
+1
 5000
 5 - Not While pattern - syn-while(ident, wildcard) - constant ident
 while w;
@@ -26,27 +26,27 @@ SyntaxError
 6 - Not While pattern - syn-while(ident, wildcard) - used by none
 while not;
 Select not pattern not not("A",_)
-none
+1, 2
 5000
 7 - Not If pattern - syn-if(syn, wildcard, wildcard) - select if
 if i; variable v;
 Select i pattern not i(v,_,_)
-none
+4
 5000
 8 - Not If pattern - syn-if(syn, wildcard, wildcard) - select v
 if i; variable v;
 Select v pattern not i(v,_,_)
-none
+x, y
 5000
 9 - Not If pattern - syn-if(syn, wildcard, wildcard) - select both
 if i; variable v;
 Select <i,v> pattern not i(v,_,_)
-none
+4 x, 4 y
 5000
 10 - Not If pattern - syn-if(wildcard, wildcard, wildcard)
 if i;
 Select i pattern not i(_,_,_)
-none
+4
 5000
 11 - Not If pattern - syn-if(ident, wildcard, wildcard) - constant ident
 if i;
@@ -56,105 +56,5 @@ SyntaxError
 12 - Not If pattern - syn-if(ident, wildcard, wildcard) - used by none
 if not;
 Select not pattern not not("a",_,_)
-none
-5000
-13 - Not Assign pattern - syn-assign(syn, expr)
-assign a; variable v;
-Select a pattern not a(v,"b+c")
-none
-5000
-14 - Not Assign pattern - syn-assign(syn, expr)
-assign a; variable v;
-Select a pattern not a(v,"b")
-none
-5000
-15 - Not Assign pattern - syn-assign(syn, expr)
-assign a; variable v;
-Select a pattern not a(v,"i/(j+l)")
-none
-5000
-16 - Not Assign pattern - syn-assign(syn, _expr_)
-assign not; variable v;
-Select not pattern not not(v,_"j+l"_)
-none
-5000
-17 - Not Assign pattern - syn-assign(syn, _expr_)
-assign a; variable v;
-Select a pattern not a(v,_"i/(j+l)"_)
-none
-5000
-18 - Not Assign pattern - syn-assign(syn, _expr_)
-assign a; variable v;
-Select a pattern not a(v,_"i"_)
-none
-5000
-19 - Not Assign pattern - syn-assign(syn, wildcard)
-assign a; variable v;
-Select a pattern not a(v,_)
-none
-5000
-20 - Not Assign pattern - syn-assign(wildcard, expr)
-assign a;
-Select a pattern not a(_,"first")
-none
-5000
-21 - Not Assign pattern - syn-assign(wildcard, expr)
-assign a;
-Select a pattern not a(_,"first-second")
-none
-5000
-22 - Not Assign pattern - syn-assign(wildcard, expr)
-assign a;
-Select a pattern not a(_,"1 + 2 - 3 * 4 / 5 % 6")
-none
-5000
-23 - Not Assign pattern - syn-assign(wildcard, _expr_)
-assign a;
-Select a pattern not a(_,_"i"_)
-none
-5000
-24 - Not Assign pattern - syn-assign(wildcard, _expr_)
-assign a;
-Select a pattern not a(_,_"second"_)
-none
-5000
-25 - Not Assign pattern - syn-assign(wildcard, wildcard)
-assign a;
-Select a pattern not a(_,_)
-none
-5000
-26 - Not Assign pattern - syn-assign(ident, expr)
-assign a;
-Select a pattern not a("a","b+c")
-none
-5000
-27 - Not Assign pattern - syn-assign(ident, expr)
-assign a;
-Select a pattern not a("a","b")
-none
-5000
-28 - Not Assign pattern - syn-assign(ident, _expr_)
-assign a;
-Select a pattern not a("k",_"i"_)
-none
-5000
-29 - Not Assign pattern - syn-assign(ident, _expr_)
-assign a;
-Select a pattern not a("k",_"jjjjjjj"_)
-none
-5000
-30 - Not Assign pattern - syn-assign(ident, _expr_)
-assign a;
-Select a pattern not a("jjjjjj",_"i"_)
-none
-5000
-31 - Not Assign pattern - syn-assign(ident, wildcard)
-assign a;
-Select a pattern not a("first",_)
-none
-5000
-32 - Not Assign pattern - syn-assign(ident, wildcard)
-assign a;
-Select a pattern not a("k",_)
-none
+4, 5
 5000
