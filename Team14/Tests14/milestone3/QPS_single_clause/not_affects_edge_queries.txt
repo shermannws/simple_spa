@@ -1,5 +1,10 @@
 1 - Not Affects(a1, a2) when all assign stmts in a proc affect one another, select line 30
 assign a1, a2;
 Select <a1, a2> such that not Affects(a1, a2)
-2 2, 3 3
+none
+5000
+2 - Not Affects(a, a) when all assign stmts in a proc affect one another, select line 30
+assign a;
+Select a such that not Affects(a, a)
+none
 5000
