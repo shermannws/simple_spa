@@ -1,6 +1,6 @@
 1 - Not and non-not overlap entirely - equal no. of synonyms on both sides
 variable v; stmt s1,s2,s3;
-Select <v,s1,s2,s3> such that Modifies(s1,v) and Parent(s2,s3) and not Uses(s2, v) and not Follows(s1,s3)
+Select <v,s1,s2,s3> such that Modifies(s1,v) and Parent(s2,s3) and not Follows(s1,s3) and not Uses(s2, v)
 x 1 4 5, x 1 4 6, x 1 6 7, x 1 6 8, a 2 4 5, a 2 4 6, a 2 6 7, a 2 6 8, k 3 4 5, k 3 4 6, k 3 6 7, k 3 6 8, b 4 6 7, b 4 6 8, c 4 4 5, c 4 4 6, c 4 6 7, c 4 6 8, d 4 4 5, d 4 4 6, d 4 6 7, d 4 6 8, b 5 6 7, b 5 6 8, c 7 4 5, c 7 4 6, c 7 6 7, d 8 4 5, d 8 4 6, d 8 6 7, d 8 6 8, c 6 4 5, c 6 4 6, c 6 6 7, c 6 6 8, d 6 4 5, d 6 4 6, d 6 6 7, d 6 6 8
 5000
 2 - Not and non-not overlap entirely - more synonyms on non-not side
