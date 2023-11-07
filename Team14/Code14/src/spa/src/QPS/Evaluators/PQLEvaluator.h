@@ -73,13 +73,6 @@ private:
     std::shared_ptr<Result> evaluateNegation(std::shared_ptr<Result> curr, std::shared_ptr<Result> clauseRes);
 
     /**
-     * @brief Evaluates a subset of the result clause of a query
-     * @param resultSyns the vector of synonyms representing the subset of result clause to be evaluated
-     * @return shared pointer to result object
-     */
-    std::shared_ptr<Result> evaluateResultClause(std::vector<Synonym> resultSyns);
-
-    /**
      * @brief returns the vector of synonyms in the result clause that is not present in the result object
      * @param resultClause vector of synonyms
      * @param result result object
