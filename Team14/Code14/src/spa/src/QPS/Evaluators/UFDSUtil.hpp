@@ -23,7 +23,7 @@ void UFDSUtil<T>::makeSet(const T &element) {
 
 template<typename T>
 T UFDSUtil<T>::findSet(const T &element) {
-    if (parent.find(element) == parent.end()) { throw std::out_of_range("Element does not exist in UFDS."); }
+    if (parent.find(element) == parent.end()) { makeSet(element); }
 
     if (parent[element] == element) { return element; }
 

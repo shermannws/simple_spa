@@ -12,21 +12,18 @@ std::unordered_map<ClauseType, IntScore> QPSOptimizer::clauseTypeScore = {
 std::vector<std::unordered_set<Synonym>>
 QPSOptimizer::getSynGroups(std::unordered_map<Synonym, std::shared_ptr<QueryEntity>> &declarations,
                            const std::vector<std::shared_ptr<Clause>> &clauses) {
-    // initialize UFDS
     UFDSUtil<Synonym> ufds;
-    for (auto &[syn, _]: declarations) { ufds.makeSet(syn); }
 
     // process all clauses representing relationships between synonyms
-    for (auto &clause: clauses) {
+    for (const auto &clause: clauses) {
         std::vector<Synonym> syns = clause->getSynonyms();
-        for (Synonym &syn1: syns) {
-            for (Synonym &syn2: syns) { ufds.unionSet(syn1, syn2); }
-        }
+        assert(syns.size() <= 2);
+        if (syns.size() == 2) { ufds.unionSet(syns[0], syns[1]); }
     }
 
     // extract syn groups from UFDS
     std::unordered_map<Synonym, std::unordered_set<Synonym>> parentToSynGroupsMap;
-    for (auto &[syn, _]: declarations) {
+    for (const auto &[syn, _]: declarations) {
         auto parent = ufds.findSet(syn);
         if (parentToSynGroupsMap.find(parent) == parentToSynGroupsMap.end()) {
             parentToSynGroupsMap[parent] = std::unordered_set<Synonym>();
