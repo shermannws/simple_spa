@@ -127,7 +127,7 @@ Result PQLEvaluator::evaluate(Query &query) {
     if (unevaluatedSyn.empty()) { return *res; }
 
     // CASE SOME RESULT-CLAUSE NOT IN clauses
-    auto synResult = evaluateResultClause(query, unevaluatedSyn);
+    auto synResult = evaluateResultClause(unevaluatedSyn);
     auto finalResult = resultHandler->getCombined(res, synResult);
     return *finalResult;
 }
@@ -152,20 +152,46 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
 
 std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> curr,
                                                        std::shared_ptr<Result> clauseRes) {
-    std::vector<Synonym> clauseSyns = clauseRes->getHeader();
-    std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(clauseSyns, curr);
+    auto [evaluatedSyns, unevaluatedSyns] = groupSynByEvaluated(curr, clauseRes);
 
-    if (unevaluatedSyn.empty()) {// all syns present
+    if (unevaluatedSyns.empty()) {// all syns present
         return resultHandler->getDiff(curr, clauseRes);
     }
 
-    // not all syns in current result, execute naive approach
-    std::shared_ptr<Result> lhs = evaluateAll(clauseSyns);
-    clauseRes = resultHandler->getDiff(lhs, clauseRes);
+    if (evaluatedSyns.empty()) {// all syns unevaluated, take naive approach
+        auto lhs = evaluateAll(unevaluatedSyns);
+        auto negatedRes = resultHandler->getDiff(lhs, clauseRes);
+        return resultHandler->getCombined(curr, negatedRes);
+    }
+
+    // syns partially evaluated, evaluate result of negated clause
+    auto appendSet = getAll(declarationMap[unevaluatedSyns[0]]);// get column to append
+    auto currTuples = curr->getTuples();
+    auto filter = clauseRes->getTuples();
+
+    // get negation result
+    std::unordered_set<EntityPointer> found;// track which entities has been added to filtered
+    ResultTuples filtered;
+    std::pair<idx, idx> commonIdx =
+            std::make_pair(curr->getSynIndices()[evaluatedSyns[0]], clauseRes->getSynIndices()[evaluatedSyns[0]]);
+    for (const auto &row: currTuples) {
+        auto commonEntity = row[commonIdx.first];
+        if (!found.count(commonEntity)) {// new common column value encountered
+            found.insert(commonEntity);
+            for (const auto &newEntity: appendSet) {
+                ResultTuple newRow(AppConstants::PAIR_TUPLE_SIZE);
+                newRow[commonIdx.second] = commonEntity;
+                newRow[!commonIdx.second] = newEntity;
+                if (!filter.count(newRow)) { filtered.insert(newRow); }// if row not in rhsRes, add to filteredSet
+            }
+        }
+    }
+    clauseRes->setTuples(filtered);
+
     return resultHandler->getCombined(curr, clauseRes);
 }
 
-std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(const Query &query, std::vector<Synonym> resultSyns) {
+std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(std::vector<Synonym> resultSyns) {
     std::vector<std::shared_ptr<Result>> results;
     for (auto &syn: resultSyns) { results.push_back(evaluateAll({syn})); }
     auto tupleResult = std::make_shared<Result>(true);// Initialize with TRUE
@@ -186,7 +212,8 @@ std::shared_ptr<Result> PQLEvaluator::evaluateAll(const std::vector<Synonym> &en
     for (int i = 0; i < tupleSize; i++) { queryEntities[i] = declarationMap[entitySyns[i]]; }
 
     auto res = std::make_shared<Result>(entitySyns);
-    if (tupleSize == 1) {// tuples are single entity
+
+    if (tupleSize == AppConstants::SINGLES_TUPLE_SIZE) {// tuples are single entity
         auto entities = getAll(queryEntities[0]);
         res->setTuples(entities);
         return res;
@@ -203,3 +230,19 @@ std::shared_ptr<Result> PQLEvaluator::evaluateAll(const std::vector<Synonym> &en
 }
 
 void PQLEvaluator::setDeclarationMap(Query &query) { declarationMap = query.getDeclarations(); }
+
+std::pair<std::vector<Synonym>, std::vector<Synonym>>
+PQLEvaluator::groupSynByEvaluated(std::shared_ptr<Result> curr, std::shared_ptr<Result> clauseRes) {
+    std::pair<std::vector<Synonym>, std::vector<Synonym>> synGroups;
+    auto currSynMap = curr->getSynIndices();
+    auto clauseSynMap = clauseRes->getSynIndices();
+    for (auto &elem: clauseSynMap) {
+        auto syn = QPSUtil::getSyn(elem.first);
+        if (currSynMap.count(syn)) {
+            synGroups.first.push_back(syn);
+        } else {
+            synGroups.second.push_back(syn);
+        }
+    }
+    return synGroups;
+}
