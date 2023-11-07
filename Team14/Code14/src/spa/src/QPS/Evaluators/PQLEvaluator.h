@@ -119,6 +119,9 @@ private:
      */
     std::shared_ptr<Result> evaluateTupleGroup(std::vector<std::shared_ptr<Clause>> &clauses);
 
+    std::shared_ptr<Result> evaluateTupleGroupOpt(std::vector<std::shared_ptr<Clause>> &clauses,
+                                                  std::unordered_set<Synonym> selects);
+
     /**
      * sets the PQLEvaluator's declaration map
      * @param query current query being evaluated

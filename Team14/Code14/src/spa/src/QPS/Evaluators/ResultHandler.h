@@ -123,4 +123,6 @@ public:
      * @return first result table with the tuples found in 2 removed
      */
     std::shared_ptr<Result> getDiff(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
+
+    std::shared_ptr<Result> project(std::shared_ptr<Result> result, std::vector<Synonym> projection);
 };

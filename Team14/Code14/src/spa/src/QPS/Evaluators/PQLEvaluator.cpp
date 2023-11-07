@@ -92,8 +92,45 @@ std::shared_ptr<Result> PQLEvaluator::evaluateTupleGroup(std::vector<std::shared
     return groupRes;
 }
 
+std::shared_ptr<Result> PQLEvaluator::evaluateTupleGroupOpt(std::vector<std::shared_ptr<Clause>> &clauses,
+                                                            std::unordered_set<Synonym> selects) {
+    auto pair = QPSOptimizer::sortClausesAndGetSynCount(clauses);
+    auto sortedClauses = pair.first;
+    auto synCount = pair.second;
+    auto groupRes = std::make_shared<Result>(true);
+    for (auto &clause: sortedClauses) {
+        auto clauseRes = evaluateClause(clause);
+        auto clauseSyns = clause->getSynonyms();
+        for (auto &syn: clauseSyns) { synCount[syn]--; }
+
+        if (clause->isNegation()) {
+            groupRes = evaluateNegation(groupRes, clauseRes);
+        } else {
+
+            groupRes = resultHandler->getCombined(groupRes, clauseRes);
+        }
+        if (groupRes->isFalse()) { return groupRes; }// terminate early if intermediate result is empty
+        if (groupRes->getType() == ResultType::Tuples) {
+            auto syns = groupRes->getSynIndices();
+            std::vector<Synonym> projection;
+            for (auto syn: syns) {
+                if (selects.find(syn.first) != selects.end() || synCount[syn.first] > 0) {
+                    projection.push_back(syn.first);
+                }
+            }
+            if (projection.size() < syns.size()) { groupRes = resultHandler->project(groupRes, projection); }
+        }
+    }
+    return groupRes;
+}
+
 Result PQLEvaluator::evaluate(Query &query) {
     setDeclarationMap(query);
+
+    auto selects = query.getSelect();
+    std::unordered_set<Synonym> selectSyns;
+    for (auto &elem: selects) { selectSyns.insert(QPSUtil::getSyn(elem)); }
+
     auto pairs = QPSOptimizer::getGroupScorePairs(query);
     std::priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::compareGroupByScore);
 
@@ -108,14 +145,13 @@ Result PQLEvaluator::evaluate(Query &query) {
             auto groupRes = evaluateTupleGroup(group);
             if (groupRes->isFalse()) { return *groupRes; }
         } else {// those with selectSyns (and if select has synonym(s)
-            auto groupRes = evaluateTupleGroup(group);
+            auto groupRes = evaluateTupleGroupOpt(group, selectSyns);
             if (groupRes->isFalse()) { return *groupRes; }
             res = resultHandler->getCombined(res, groupRes);
         }
     }
 
     //  CASE RESULT-CLAUSE IN RESULT TABLE, check if ALL synonym in select is in result table
-    auto selects = query.getSelect();
     std::vector<Synonym> unevaluatedSyn = getUnevaluatedSyn(selects, res);
     if (unevaluatedSyn.empty()) { return *res; }
 
