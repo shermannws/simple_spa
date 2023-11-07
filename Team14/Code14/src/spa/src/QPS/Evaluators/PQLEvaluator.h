@@ -113,11 +113,11 @@ private:
     bool evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause>> &clauses);
 
     /**
-     * Evaluates a group of clauses with no synonyms in the select clause
+     * Evaluates a group of clauses which returns tuples
      * @param clauses The group of clauses to evaluate
-     * @return true if all of the clauses are true or non-empty, otherwise false
+     * @return the Tuple Result object if it is non-empty, otherwise false Result object
      */
-    bool evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Clause>> &clauses);
+    std::shared_ptr<Result> evaluateTupleGroup(std::vector<std::shared_ptr<Clause>> &clauses);
 
     /**
      * sets the PQLEvaluator's declaration map

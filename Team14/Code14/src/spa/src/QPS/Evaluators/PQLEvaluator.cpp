@@ -1,6 +1,5 @@
 #include <numeric>
 #include <queue>
-#include <stdexcept>
 
 #include "PQLEvaluator.h"
 #include "QPS/QPSTypes.h"
@@ -78,18 +77,19 @@ bool PQLEvaluator::evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause
     return true;
 }
 
-bool PQLEvaluator::evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Clause>> &clauses) {
-    auto tmp = std::make_shared<Result>(true);
+std::shared_ptr<Result> PQLEvaluator::evaluateTupleGroup(std::vector<std::shared_ptr<Clause>> &clauses) {
+    clauses = QPSOptimizer::sortClauses(clauses);
+    auto groupRes = std::make_shared<Result>(true);
     for (auto &clause: clauses) {
         auto clauseRes = evaluateClause(clause);
         if (clause->isNegation()) {
-            tmp = evaluateNegation(tmp, clauseRes);
+            groupRes = evaluateNegation(groupRes, clauseRes);
         } else {
-            tmp = resultHandler->getCombined(tmp, clauseRes);
+            groupRes = resultHandler->getCombined(groupRes, clauseRes);
         }
-        if (tmp->isFalse()) { return false; }
+        if (groupRes->isFalse()) { return groupRes; }// terminate early if intermediate result is empty
     }
-    return true;
+    return groupRes;
 }
 
 Result PQLEvaluator::evaluate(Query &query) {
@@ -105,19 +105,12 @@ Result PQLEvaluator::evaluate(Query &query) {
         if (!std::get<1>(pair.second)) {// no synonyms
             if (!evaluateBooleanGroup(group)) { return Result(false); }
         } else if (!std::get<0>(pair.second)) {// group with irrelevant synonyms
-            group = QPSOptimizer::sortClauses(group);
-            if (!evaluateIrrelevantGroup(group)) { return Result(false); }
+            auto groupRes = evaluateTupleGroup(group);
+            if (groupRes->isFalse()) { return *groupRes; }
         } else {// those with selectSyns (and if select has synonym(s)
-            group = QPSOptimizer::sortClauses(group);
-            for (auto &clause: group) {
-                auto clauseRes = evaluateClause(clause);
-                if (clause->isNegation()) {
-                    res = evaluateNegation(res, clauseRes);
-                } else {
-                    res = resultHandler->getCombined(res, clauseRes);
-                }
-                if (res->isFalse()) { return Result(false); }
-            }
+            auto groupRes = evaluateTupleGroup(group);
+            if (groupRes->isFalse()) { return *groupRes; }
+            res = resultHandler->getCombined(res, groupRes);
         }
     }
 
