@@ -109,8 +109,8 @@ Result PQLEvaluator::evaluate(Query &query) {
             if (groupRes->isFalse()) { return *groupRes; }
         } else {// those with selectSyns (and if select has synonym(s)
             auto groupRes = evaluateTupleGroup(group);
+            if (groupRes->isFalse()) { return *groupRes; }
             res = resultHandler->getCombined(res, groupRes);
-            if (res->isFalse()) { return *res; }
         }
     }
 
