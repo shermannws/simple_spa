@@ -127,7 +127,7 @@ Result PQLEvaluator::evaluate(Query &query) {
     if (unevaluatedSyn.empty()) { return *res; }
 
     // CASE SOME RESULT-CLAUSE NOT IN clauses
-    auto synResult = evaluateResultClause(unevaluatedSyn);
+    auto synResult = evaluateAll(unevaluatedSyn);
     auto finalResult = resultHandler->getCombined(res, synResult);
     return *finalResult;
 }
@@ -191,42 +191,49 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> c
     return resultHandler->getCombined(curr, clauseRes);
 }
 
-std::shared_ptr<Result> PQLEvaluator::evaluateResultClause(std::vector<Synonym> resultSyns) {
-    std::vector<std::shared_ptr<Result>> results;
-    for (auto &syn: resultSyns) { results.push_back(evaluateAll({syn})); }
-    auto tupleResult = std::make_shared<Result>(true);// Initialize with TRUE
-    for (auto const &res: results) {                  // Combine until end of list
-        tupleResult = resultHandler->getCombined(tupleResult, res);
-    }
-    return tupleResult;
-}
-
 std::unordered_set<std::shared_ptr<Entity>> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity> &queryEntity) {
     QueryEntityType entityType = queryEntity->getType();
     return QPSUtil::entityGetterMap[entityType](pkbReader);
 }
 
 std::shared_ptr<Result> PQLEvaluator::evaluateAll(const std::vector<Synonym> &entitySyns) {
+    auto result = std::make_shared<Result>(entitySyns);
     auto tupleSize = entitySyns.size();
-    std::vector<EntityPtr> queryEntities(tupleSize);
-    for (int i = 0; i < tupleSize; i++) { queryEntities[i] = declarationMap[entitySyns[i]]; }
 
-    auto res = std::make_shared<Result>(entitySyns);
-
-    if (tupleSize == AppConstants::SINGLES_TUPLE_SIZE) {// tuples are single entity
-        auto entities = getAll(queryEntities[0]);
-        res->setTuples(entities);
-        return res;
+    // retrieve the sets of entities and convert to vector
+    std::vector<std::vector<EntityPointer>> input(tupleSize);
+    for (int i = 0; i < tupleSize; i++) {
+        auto set = getAll(declarationMap[entitySyns[i]]);
+        if (set.empty()) { return result; }
+        for (const auto entity: set) { input[i].push_back(entity); }
     }
 
-    // tuples are pair of entities
-    std::unordered_set<ResultTuple> tuples;
-    auto sets = std::make_pair(getAll(queryEntities[0]), getAll(queryEntities[1]));
-    for (auto &first: sets.first) {
-        for (auto &second: sets.second) { tuples.insert({first, second}); }
+    // permute all combinations
+    std::vector<int> indices(tupleSize, 0);
+    std::unordered_set<ResultTuple> resultTuples;
+    while (true) {
+        // add current combination of indices to result
+        ResultTuple combination;
+        for (int i = 0; i < tupleSize; ++i) { combination.push_back(input[i][indices[i]]); }
+        resultTuples.insert(combination);
+
+        // update indices for next combination
+        int synToUpdate = tupleSize - 1;
+        while (synToUpdate >= 0) {
+            indices[synToUpdate]++;
+            if (indices[synToUpdate] < input[synToUpdate].size()) {
+                break;
+            } else {
+                indices[synToUpdate] = 0;
+                synToUpdate--;
+            }
+        }
+
+        if (synToUpdate < 0) { break; }
     }
-    res->setTuples(tuples);
-    return res;
+
+    result->setTuples(resultTuples);
+    return result;
 }
 
 void PQLEvaluator::setDeclarationMap(Query &query) { declarationMap = query.getDeclarations(); }
