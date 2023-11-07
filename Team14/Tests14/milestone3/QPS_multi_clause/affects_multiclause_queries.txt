@@ -1,0 +1,75 @@
+1a - no common syn, 0 synonyms - second clause is true
+
+Select BOOLEAN such that Affects(5, 16) and Follows (13, 14)
+TRUE
+5000
+1b - no common syn, 0 synonyms - second clause is false
+
+Select BOOLEAN such that Affects(5, 16) and Follows (14, 15)
+FALSE
+5000
+2a - no common syn, 1 syn in pattern
+assign a;
+Select a such that Affects(21, 22) pattern a (_,_"z"_)
+12, 18, 19, 20, 22
+5000
+2b - no common syn, 1 syn in pattern - return none
+assign a;
+Select a such that Affects(18, 22) pattern a (_,_)
+none
+5000
+3 - no common syn, 1 syn in Affects
+assign a;
+Select a such that Affects(a, 20) and Uses (16, "x")
+5, 10, 16, 18, 19
+5000
+4a - no common syn, 2 syn
+assign a; stmt s;
+Select <a, s> such that Affects(s, 10) and Modifies (a, "i")
+4 5, 4 10, 14 5, 14 10
+5000
+4b - no common syn, 2 syn
+assign a; stmt s;
+Select <a,s> such that Affects(s, 20) and Uses (a, "i")
+18 5, 18 10, 18 16, 18 18, 18 19, 14 5, 14 10, 14 16, 14 18, 14 19
+5000
+5 - no common syn, 3 syn
+assign a1, a2, a3;
+Select <a1, a2, a3> such that Affects(a1, a2) pattern a3("d", "b")
+4 14 27, 4 18 27, 5 10 27, 5 16 27, 5 18 27, 5 20 27, 6 18 27, 10 10 27, 10 16 27, 10 18 27, 10 20 27, 14 14 27, 14 18 27, 16 18 27, 16 20 27, 17 18 27, 18 19 27, 18 20 27, 19 20 27, 21 22 27
+5000
+6 - 1 common syn, 1 syn
+assign a;
+Select a such that Affects(a, 20) pattern a(_, _"x"_)
+10, 16, 18
+5000
+7a - 1 common syn, 2 syn using pattern
+assign a1, a2;
+Select a1 such that Affects(a1, a2) pattern a1(_, _"2"_)
+10, 19
+5000
+7b - 1 common syn, 2 syn using pattern
+assign a1, a2;
+Select <a1, a2> such that Affects(a1, a2) pattern a2(_, _"z"_)
+4 18, 5 18, 6 18, 10 18, 14 18, 16 18, 17 18, 18 19, 5 20, 10 20, 16 20, 18 20, 19 20, 21 22
+5000
+8a - 1 common syn, 2 syn using Modifies
+assign a1, a2;
+Select a1 such that Affects(a1, a2) and Modifies(a1, "y")
+19
+5000
+8b - 1 common syn, 2 syn using Modifies
+assign a1, a2;
+Select a2 such that Affects(a1, a2) and Uses(a2, "z")
+18, 19, 20, 22
+5000
+9a - 2 common syn, 2 syn using Next
+assign a1, a2;
+Select <a1,a2> such that Affects(a1, a2) and Next(a1,a2)
+16 18, 17 18, 18 19, 19 20, 21 22
+5000
+9b - 2 common syn, 2 syn using Next
+assign a1, a2;
+Select <a1,a2> such that Affects(a1, a2) and Next*(a1,a2)
+4 14, 4 18, 5 10, 5 16, 5 18, 5 20, 6 18, 10 10, 10 16, 10 18, 10 20, 14 14, 14 18, 16 18, 16 20, 17 18, 18 19, 18 20, 19 20, 21 22
+5000
