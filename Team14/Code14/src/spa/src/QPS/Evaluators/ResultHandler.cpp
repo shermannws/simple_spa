@@ -34,10 +34,14 @@ std::shared_ptr<Result> ResultHandler::getDiff(std::shared_ptr<Result> r1, std::
 }
 
 std::shared_ptr<Result> ResultHandler::project(std::shared_ptr<Result> result, std::vector<Synonym> projection) {
+    if (projection.empty()) { return cast(result); }
+
     auto res = std::make_shared<Result>(projection);
+
     std::vector<idx> indices;
     indices.reserve(projection.size());
     for (auto &syn: projection) { indices.push_back(result->getSynIndices()[syn]); }
+
     std::unordered_set<ResultTuple> projectedTuples;
     auto tuples = result->getTuples();
     for (const auto tuple: tuples) {
