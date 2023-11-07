@@ -203,6 +203,48 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid syntax") {
     }
 }
 
+TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid syntax relating to assign") {
+    SECTION("Missing term after equals in assign statement") {
+        std::string input = "procedure testInteger { x = ; }";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Term");
+    }
+
+    SECTION("Single variable/term in statement") {
+        std::string input = "procedure testInteger { x ; }";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Stmt");
+    }
+
+    SECTION("Expresison without assign statement") {
+        std::string input = "procedure testInteger { x + 1 ; }";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Stmt");
+    }
+
+    SECTION("Term missing on LHS of assign stmt") {
+        std::string input = "procedure testInteger { = 1 + 2; }";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected TokenType Name for statement");
+    }
+
+    SECTION("Const used on LHS of assign stmt") {
+        std::string input = "procedure testInteger { 1 = 1 + 2; }";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected TokenType Name");
+    }
+}
+
 TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Valid IF syntax") {
     SECTION("basic if syntax") {
         std::string input = "procedure testWhile {if (0 == 1) then { count = count + 1; } else { call readx ;}}";
@@ -224,7 +266,7 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Valid IF syntax") {
 
 TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid IF syntax") {
     SECTION("missing then") {
-        std::string input = "procedure testWhile {if (0 == 1) do { count = count + 1; } else { call readx ;}}";
+        std::string input = "procedure testIf {if (0 == 1) do { count = count + 1; } else { call readx ;}}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
@@ -232,11 +274,91 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid IF syntax") {
     }
 
     SECTION("missing else") {
-        std::string input = "procedure testWhile {if (0 == 1) then { count = count + 1; } next { call readx ;}}";
+        std::string input = "procedure testIf {if (0 == 1) then { count = count + 1; } next { call readx ;}}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
         REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected 'else' in if statement");
+    }
+
+    SECTION("wrong relational operator") {
+        std::string input = "procedure testIf {if (0 = 1) then { count = count + 1; } else { call readx ;}}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected rel_expr in Relation Expression");
+    }
+
+    SECTION("missing opening round parenthesis") {
+        std::string input = "procedure testIf { if 0 == 1) then { count = count + 1; } else { call readx ;}}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+    }
+
+    SECTION("missing closing round parenthesis") {
+        std::string input = "procedure testIf { if (0 == 1 then { count = count + 1; } else { call readx ;}}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+    }
+
+    SECTION("missing opening curly parenthesis after 'then'") {
+        std::string input = "procedure testIf { if (0 == 1) then  count = count + 1; } else { call readx ;}}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+    }
+
+    SECTION("missing closing curly parenthesis after 'then'") {
+        std::string input = "procedure testIf { if (0 == 1) then { count = count + 1;  else { call readx ;}}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Stmt");
+    }
+
+    SECTION("missing opening curly parenthesis after 'else'") {
+        std::string input = "procedure testIf { if (0 == 1) then { count = count + 1; } else  call readx ;}}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected TokenType OpenCurlyParenthesis");
+    }
+
+    SECTION("missing closing curly parenthesis after 'else'") {
+        std::string input = "procedure testIf { if (0 == 1) then { count = count + 1; } else  { call readx ;}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: attempted to access out-of-range char in input file");
+    }
+
+    SECTION("missing tokens after 'if'") {
+        std::string input = "procedure testIf { if }";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: attempted to access out-of-range char in input file");
+    }
+
+    SECTION("missing tokens after 'then'") {
+        std::string input = "procedure testIf { if (0 == 1) then";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: attempted to access out-of-range char in input file");
+    }
+
+    SECTION("missing tokens after 'else'") {
+        std::string input = "procedure testIf { if (0 == 1) then { count = count + 1; } else";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: attempted to access out-of-range char in input file");
     }
 }
 
@@ -398,7 +520,7 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid WHILE syntax CON
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax Error: Expected rel_expr in Relation Expression");
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected rel_expr in Relation Expression");
     }
 
     SECTION("invalid expression") {

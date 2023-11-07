@@ -83,7 +83,7 @@ void ConditionalValidator::validateRelationalExpression(std::deque<SPToken> &exp
     std::string operatorAsString;
     std::tie(LHS, RHS, operatorAsString) = splitExpression(expression, TokenType::RelationalOperator);
 
-    if (LHS.empty() || RHS.empty()) { throw SyntaxError("Syntax Error: Expected rel_expr in Relation Expression"); }
+    if (LHS.empty() || RHS.empty()) { throw SyntaxError("Syntax error: Expected rel_expr in Relation Expression"); }
     validateExpr(LHS);
     validateExpr(RHS);
 }
