@@ -77,26 +77,11 @@ bool PQLEvaluator::evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause
     return true;
 }
 
-std::shared_ptr<Result> PQLEvaluator::evaluateTupleGroup(std::vector<std::shared_ptr<Clause>> &clauses) {
-    clauses = QPSOptimizer::sortClauses(clauses);
-    auto groupRes = std::make_shared<Result>(true);
-    for (auto &clause: clauses) {
-        auto clauseRes = evaluateClause(clause);
-        if (clause->isNegation()) {
-            groupRes = evaluateNegation(groupRes, clauseRes);
-        } else {
-            groupRes = resultHandler->getCombined(groupRes, clauseRes);
-        }
-        if (groupRes->isFalse()) { return groupRes; }// terminate early if intermediate result is empty
-    }
-    return groupRes;
-}
-
-std::shared_ptr<Result> PQLEvaluator::evaluateTupleGroupOpt(std::vector<std::shared_ptr<Clause>> &clauses,
-                                                            std::unordered_set<Synonym> selects) {
+std::shared_ptr<Result> PQLEvaluator::evaluateTupleGroup(std::vector<std::shared_ptr<Clause>> &clauses,
+                                                         std::unordered_set<Synonym> selects) {
     auto pair = QPSOptimizer::sortClausesAndGetSynCount(clauses);
-    auto sortedClauses = pair.first;
-    auto synCount = pair.second;
+    auto &[sortedClauses, synCount] = pair;
+
     auto groupRes = std::make_shared<Result>(true);
     for (auto &clause: sortedClauses) {
         auto clauseRes = evaluateClause(clause);
@@ -106,10 +91,11 @@ std::shared_ptr<Result> PQLEvaluator::evaluateTupleGroupOpt(std::vector<std::sha
         if (clause->isNegation()) {
             groupRes = evaluateNegation(groupRes, clauseRes);
         } else {
-
             groupRes = resultHandler->getCombined(groupRes, clauseRes);
         }
+
         if (groupRes->isFalse()) { return groupRes; }// terminate early if intermediate result is empty
+
         if (groupRes->getType() == ResultType::Tuples) {
             auto syns = groupRes->getSynIndices();
             std::vector<Synonym> projection;
@@ -142,10 +128,10 @@ Result PQLEvaluator::evaluate(Query &query) {
         if (!std::get<1>(pair.second)) {// no synonyms
             if (!evaluateBooleanGroup(group)) { return Result(false); }
         } else if (!std::get<0>(pair.second)) {// group with irrelevant synonyms
-            auto groupRes = evaluateTupleGroup(group);
+            auto groupRes = evaluateTupleGroup(group, selectSyns);
             if (groupRes->isFalse()) { return *groupRes; }
         } else {// those with selectSyns (and if select has synonym(s)
-            auto groupRes = evaluateTupleGroupOpt(group, selectSyns);
+            auto groupRes = evaluateTupleGroup(group, selectSyns);
             if (groupRes->isFalse()) { return *groupRes; }
             res = resultHandler->getCombined(res, groupRes);
         }
@@ -181,7 +167,8 @@ std::shared_ptr<Result> PQLEvaluator::evaluateClause(const std::shared_ptr<Claus
 
 std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> curr,
                                                        std::shared_ptr<Result> clauseRes) {
-    auto [evaluatedSyns, unevaluatedSyns] = groupSynByEvaluated(curr, clauseRes);
+    auto synGroups = groupSynByEvaluated(curr, clauseRes);
+    auto &[evaluatedSyns, unevaluatedSyns] = synGroups;
 
     if (unevaluatedSyns.empty()) {// all syns present
         return resultHandler->getDiff(curr, clauseRes);

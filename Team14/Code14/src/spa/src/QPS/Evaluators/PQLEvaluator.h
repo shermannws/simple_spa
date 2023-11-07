@@ -113,14 +113,14 @@ private:
     bool evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause>> &clauses);
 
     /**
-     * Evaluates a group of clauses which returns tuples
+     * Evaluates a group of clauses which returns tuples and returns the minimal result table required for result-clause
+     * evaluation
      * @param clauses The group of clauses to evaluate
-     * @return the Tuple Result object if it is non-empty, otherwise false Result object
+     * @param selects set of synonyms in result-clause
+     * @return the minimal Tuple Result object if it is non-empty, otherwise false Result object
      */
-    std::shared_ptr<Result> evaluateTupleGroup(std::vector<std::shared_ptr<Clause>> &clauses);
-
-    std::shared_ptr<Result> evaluateTupleGroupOpt(std::vector<std::shared_ptr<Clause>> &clauses,
-                                                  std::unordered_set<Synonym> selects);
+    std::shared_ptr<Result> evaluateTupleGroup(std::vector<std::shared_ptr<Clause>> &clauses,
+                                               std::unordered_set<Synonym> selects);
 
     /**
      * sets the PQLEvaluator's declaration map
