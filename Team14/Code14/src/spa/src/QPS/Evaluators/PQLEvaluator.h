@@ -23,6 +23,11 @@ using transformFunc = std::function<std::string(std::shared_ptr<Entity>)>;
 class PQLEvaluator {
 private:
     /**
+     * map of synonyms to shared pointer to QueryEntity of the current query being evaluated
+     */
+    DeclarationMap declarationMap;
+
+    /**
      * Shared pointer to the PKB reader which retrieves the required information for query evaluation
      */
     std::shared_ptr<PkbReader> pkbReader;
@@ -43,14 +48,14 @@ private:
      * @param queryEntity A pointer to the query entity to retrieve instances for.
      * @return A set of entities representing all instances of the query entity.
      */
-    std::unordered_set<std::shared_ptr<Entity>> getAll(const EntityPtr &queryEntity);
+    std::unordered_set<EntityPointer> getAll(const EntityPtr &queryEntity);
 
     /**
-     * @brief retrieves all combinations of the query entities from the PKB
-     * @param queryEntities vector of QueryEntityTypes representing the combination of Entities to retrieve
-     * @return A set of entities representing all instances of the query entity combination
+     * @brief retrieves all combinations of the entities in the order specified by entitySyns from the PKB
+     * @param entitySyns vector of Synonyms representing the combination of Entities to retrieve
+     * @return shared pointer to Result containing all combinations of entities
      */
-    std::unordered_set<ResultTuple> getAllByTypes(const std::vector<QueryEntityType> &queryEntities);
+    std::shared_ptr<Result> evaluateAll(const std::vector<Synonym> &entitySyns);
 
     /**
      * @brief Evaluates a clause and updates the result accordingly.
@@ -60,19 +65,19 @@ private:
     std::shared_ptr<Result> evaluateClause(std::shared_ptr<Clause> clause);
 
     /**
-     * @brief Evaluates a select clause with the given entity as the result clause without any constraint clauses
-     * @param entity the selected entity to be evaluated
+     * @brief Evaluates the result of current and negating the specified clause result
+     * @param curr current Result
+     * @param clauseRes Result of the clause to be negated
      * @return shared pointer to result object
      */
-    std::shared_ptr<Result> evaluateSelect(std::shared_ptr<QueryEntity> entity);
+    std::shared_ptr<Result> evaluateNegation(std::shared_ptr<Result> curr, std::shared_ptr<Result> clauseRes);
 
     /**
      * @brief Evaluates a subset of the result clause of a query
-     * @param query the query object whose result clause is being evaluated
      * @param resultSyns the vector of synonyms representing the subset of result clause to be evaluated
      * @return shared pointer to result object
      */
-    std::shared_ptr<Result> evaluateResultClause(const Query &query, std::vector<Synonym> resultSyns);
+    std::shared_ptr<Result> evaluateResultClause(std::vector<Synonym> resultSyns);
 
     /**
      * @brief returns the vector of synonyms in the result clause that is not present in the result object
@@ -120,6 +125,21 @@ private:
      * @return true if all of the clauses are true or non-empty, otherwise false
      */
     bool evaluateIrrelevantGroup(const std::vector<std::shared_ptr<Clause>> &clauses);
+
+    /**
+     * sets the PQLEvaluator's declaration map
+     * @param query current query being evaluated
+     */
+    void setDeclarationMap(Query &query);
+
+    /**
+     * @brief groups the synonyms in the clause result based on whether it is found in current result
+     * @param curr current result
+     * @param clauseRes clause result
+     * @return pair of vector of synonyms representing evaluated synonyms and unevaluated synonyms respectively
+     */
+    std::pair<std::vector<Synonym>, std::vector<Synonym>> groupSynByEvaluated(std::shared_ptr<Result> curr,
+                                                                              std::shared_ptr<Result> clauseRes);
 
 public:
     /**

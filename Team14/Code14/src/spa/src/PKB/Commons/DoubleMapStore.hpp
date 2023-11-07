@@ -61,6 +61,7 @@ template<typename K1, typename K2, typename V1, typename V2, typename H1, typena
 void DoubleMapStore<K1, K2, V1, V2, H1, H2>::clear() {
     this->leftToRightStore.clear();
     this->rightToLeftStore.clear();
+    this->pairs.clear();
 }
 
 template<typename K1, typename K2, typename V1, typename V2, typename H1, typename H2>

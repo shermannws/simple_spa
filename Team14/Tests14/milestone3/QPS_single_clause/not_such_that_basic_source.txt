@@ -1,0 +1,58 @@
+procedure Proc1 {
+    x = 1;
+    y = x;
+    z = x + y;
+
+    if (one >= two) then {
+        read one;
+        print one;
+    } else {
+        read two;
+        print two;
+    }
+
+    while (three + five < four) {
+        one = two + (three + four) / five;
+        call Proc2;
+    }
+
+    print ten;
+    read eleven;
+}
+
+procedure Proc2 {
+    i = 1;
+    i = plus + plus;
+    while (1 == 1) {
+        print x;
+        read y;
+        z = 1;
+    }
+    call Proc3;
+}
+
+procedure Proc3 {
+    mod = mod % mod;
+    if (3 != 5) then {
+        print p;
+    } else {
+        print c;
+    }
+    while (v == x) {
+        print x;
+    }
+    call Proc4;
+    while (1 == 1) {
+          while (2 == 2) {
+              ww = 1;
+          }
+      }
+}
+
+procedure Proc4 {
+    print print;
+}
+
+procedure Proc5 {
+    read read;
+}

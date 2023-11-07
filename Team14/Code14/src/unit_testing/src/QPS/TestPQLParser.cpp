@@ -1750,6 +1750,39 @@ TEST_CASE_METHOD(UnitTestFixture, "processWithClause") {
         REQUIRE(rightRef.getRep() == "c2");
         REQUIRE(rightRef.getAttrName() == AttrName::Value);
     }
+
+    SECTION("Operator ==") {
+        PQLParser parser("assign a; constant c; Select BOOLEAN with a.stmt# = c.value");
+        Query query = parser.parse();
+        std::shared_ptr<WithClause> clausePtr = query.getWith()[0];
+        auto expectedClause = WithClause();
+
+        RefType type = RefType::WithRef;
+        RootType rootType = RootType::AttrRef;
+
+        Ref leftRef = Ref();
+        StringRep leftRep = "a";
+        QueryEntityType leftEntityType = QueryEntityType::Assign;
+        leftRef.setType(type);
+        leftRef.setRep(leftRep);
+        leftRef.setRootType(rootType);
+        leftRef.setAttrName("stmt#");
+        leftRef.setEntityType(leftEntityType);
+
+        Ref rightRef = Ref();
+        StringRep rightRep = "c";
+        QueryEntityType rightEntityType = QueryEntityType::Constant;
+        rightRef.setType(type);
+        rightRef.setRep(rightRep);
+        rightRef.setRootType(rootType);
+        rightRef.setAttrName("value");
+        rightRef.setEntityType(rightEntityType);
+
+
+        expectedClause.setFirstParam(leftRef);
+        expectedClause.setSecondParam(rightRef);
+        REQUIRE(*clausePtr == expectedClause);
+    }
 }
 
 TEST_CASE_METHOD(UnitTestFixture, "Invalid processWithClause SyntaxError") {

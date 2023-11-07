@@ -1,0 +1,190 @@
+1 - Not Calls - syn syn - first syn
+procedure p1, p2;
+Select p1 such that not Calls(p1, p2)
+Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+2 - Not Calls - syn syn - second syn
+procedure p1, p2;
+Select p2 such that not Calls(p1, p2)
+Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+3 - Not Calls - syn syn - both syn
+procedure p1, p2;
+Select <p1,p2> such that not Calls(p1, p2)
+Proc1 Proc1, Proc1 Proc2, Proc1 Proc4, Proc1 Proc5, Proc1 Proc6, Proc1 Proc7, Proc1 Proc8, Proc1 Proc9, Proc2 Proc1, Proc2 Proc2, Proc2 Proc4, Proc2 Proc5, Proc2 Proc6, Proc2 Proc7, Proc2 Proc8, Proc2 Proc9, Proc3 Proc1, Proc3 Proc2, Proc3 Proc3, Proc3 Proc7, Proc3 Proc8, Proc3 Proc9, Proc4 Proc1, Proc4 Proc2, Proc4 Proc3, Proc4 Proc4, Proc4 Proc5, Proc4 Proc6, Proc4 Proc7, Proc4 Proc8, Proc4 Proc9, Proc5 Proc1, Proc5 Proc2, Proc5 Proc3, Proc5 Proc4, Proc5 Proc5, Proc5 Proc6, Proc5 Proc7, Proc5 Proc8, Proc5 Proc9, Proc6 Proc1, Proc6 Proc2, Proc6 Proc3, Proc6 Proc4, Proc6 Proc5, Proc6 Proc6, Proc6 Proc7, Proc6 Proc8, Proc6 Proc9, Proc7 Proc1, Proc7 Proc2, Proc7 Proc3, Proc7 Proc4, Proc7 Proc5, Proc7 Proc6, Proc7 Proc7, Proc7 Proc9, Proc8 Proc1, Proc8 Proc2, Proc8 Proc3, Proc8 Proc4, Proc8 Proc5, Proc8 Proc6, Proc8 Proc7, Proc8 Proc8, Proc9 Proc1, Proc9 Proc2, Proc9 Proc3, Proc9 Proc4, Proc9 Proc5, Proc9 Proc6, Proc9 Proc7, Proc9 Proc8, Proc9 Proc9
+5000
+4 - Not Calls - syn wildcard
+procedure p1;
+Select p1 such that not Calls(p1,_)
+Proc4, Proc5, Proc6, Proc9
+5000
+5 - Not Calls - syn ident - called by another proc
+procedure p1;
+Select p1 such that not Calls(p1, "Proc3")
+Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+6 - Not Calls - syn ident - not called by another proc
+procedure p1;
+Select p1 such that not Calls(p1, "Proc7")
+Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+7 - Not Calls - wildcard syn
+procedure p1;
+Select p1 such that not Calls(_,p1)
+Proc1, Proc2, Proc7
+5000
+8 - Not Calls - wildcard wildcard
+
+Select BOOLEAN such that not Calls(_,_)
+FALSE
+5000
+9 - Not Calls - wildcard ident - called by another proc
+
+Select BOOLEAN such that not Calls(_, "Proc9")
+FALSE
+5000
+10 - Not Calls - wildcard ident - not called by another proc
+
+Select BOOLEAN such that not Calls(_, "Proc1")
+TRUE
+5000
+11 - Not Calls - ident syn - calls another proc
+procedure p1;
+Select p1 such that not Calls("Proc2", p1)
+Proc1, Proc2, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+12 - Not Calls - ident syn - doesnt call another proc
+procedure p1;
+Select p1 such that not Calls("Proc6", p1)
+Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+13 - Not Calls - ident wildcard - calls another proc
+
+Select BOOLEAN such that not Calls("Proc2",_)
+FALSE
+5000
+14 - Not Calls - ident wildcard - doesnt call another proc
+
+Select BOOLEAN such that not Calls("Proc9",_)
+TRUE
+5000
+15 - Not Calls - ident ident - combination is valid
+
+Select BOOLEAN such that not Calls("Proc7", "Proc8")
+FALSE
+5000
+16 - Not Calls - ident ident - combination is invalid
+
+Select BOOLEAN such that not Calls("Proc1", "Proc2")
+TRUE
+5000
+17 - Not Calls - ident ident - combination is invalid
+
+Select BOOLEAN such that not Calls("Proc1", "Proc4")
+TRUE
+5000
+18 - Not Calls* - syn syn - first syn
+procedure p1, p2;
+Select p1 such that not Calls*(p1, p2)
+Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+19 - Not Calls* - syn syn - second syn
+procedure p1, p2;
+Select p2 such that not Calls*(p1, p2)
+Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+20 - Not Calls* - syn syn - both syn
+procedure p1, p2;
+Select <p1,p2> such that not Calls*(p1, p2)
+Proc1 Proc1, Proc1 Proc2, Proc1 Proc7, Proc1 Proc8, Proc1 Proc9, Proc2 Proc1, Proc2 Proc2, Proc2 Proc7, Proc2 Proc8, Proc2 Proc9, Proc3 Proc1, Proc3 Proc2, Proc3 Proc3, Proc3 Proc7, Proc3 Proc8, Proc3 Proc9, Proc4 Proc1, Proc4 Proc2, Proc4 Proc3, Proc4 Proc4, Proc4 Proc5, Proc4 Proc6, Proc4 Proc7, Proc4 Proc8, Proc4 Proc9, Proc5 Proc1, Proc5 Proc2, Proc5 Proc3, Proc5 Proc4, Proc5 Proc5, Proc5 Proc6, Proc5 Proc7, Proc5 Proc8, Proc5 Proc9, Proc6 Proc1, Proc6 Proc2, Proc6 Proc3, Proc6 Proc4, Proc6 Proc5, Proc6 Proc6, Proc6 Proc7, Proc6 Proc8, Proc6 Proc9, Proc7 Proc1, Proc7 Proc2, Proc7 Proc3, Proc7 Proc4, Proc7 Proc5, Proc7 Proc6, Proc7 Proc7, Proc8 Proc1, Proc8 Proc2, Proc8 Proc3, Proc8 Proc4, Proc8 Proc5, Proc8 Proc6, Proc8 Proc7, Proc8 Proc8, Proc9 Proc1, Proc9 Proc2, Proc9 Proc3, Proc9 Proc4, Proc9 Proc5, Proc9 Proc6, Proc9 Proc7, Proc9 Proc8, Proc9 Proc9
+5000
+21 - Not Calls* - syn wildcard
+procedure p1;
+Select p1 such that not Calls*(p1,_)
+Proc4, Proc5, Proc6, Proc9
+5000
+22 - Not Calls* - syn ident - called directly by another proc
+procedure p1;
+Select p1 such that not Calls*(p1, "Proc3")
+Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+23 - Not Calls* - syn ident - called directly and transitively by another proc
+procedure p1;
+Select p1 such that not Calls*(p1, "Proc4")
+Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+24 - Not Calls* - syn ident - not called by another proc
+procedure p1;
+Select p1 such that not Calls*(p1, "Proc7")
+Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+25 - Not Calls* - wildcard syn
+procedure p1;
+Select p1 such that not Calls*(_,p1)
+Proc1, Proc2, Proc7
+5000
+26 - Not Calls* - wildcard wildcard
+
+Select BOOLEAN such that not Calls*(_,_)
+FALSE
+5000
+27 - Not Calls* - wildcard ident - called directly by another proc
+
+Select BOOLEAN such that not Calls*(_, "Proc8")
+FALSE
+5000
+28 - Not Calls* - wildcard ident - called directly and transitively by another proc
+
+Select BOOLEAN such that not Calls*(_, "Proc9")
+FALSE
+5000
+29 - Not Calls* - wildcard ident - not called by another proc
+
+Select BOOLEAN such that not Calls*(_, "Proc1")
+TRUE
+5000
+30 - Not Calls* - ident syn - calls another proc directly
+procedure p1;
+Select p1 such that not Calls*("Proc3", p1)
+Proc1, Proc2, Proc3, Proc7, Proc8, Proc9
+5000
+31 - Not Calls* - ident syn - calls another proc directly and transitively
+procedure p1;
+Select p1 such that not Calls*("Proc2", p1)
+Proc1, Proc2, Proc7, Proc8, Proc9
+5000
+32 - Not Calls* - ident syn - doesnt call another proc
+procedure p1;
+Select p1 such that not Calls*("Proc6", p1)
+Proc1, Proc2, Proc3, Proc4, Proc5, Proc6, Proc7, Proc8, Proc9
+5000
+33 - Not Calls* - ident wildcard - calls another proc directly
+
+Select BOOLEAN such that not Calls*("Proc8",_)
+FALSE
+5000
+34 - Not Calls* - ident wildcard - calls another proc directly and transitively
+
+Select BOOLEAN such that not Calls*("Proc7",_)
+FALSE
+5000
+35 - Not Calls* - ident wildcard - doesnt call another proc
+
+Select BOOLEAN such that not Calls*("Proc9",_)
+TRUE
+5000
+36 - Not Calls* - ident ident - combination is valid, direct
+
+Select BOOLEAN such that not Calls*("Proc7", "Proc8")
+FALSE
+5000
+37 - Not Calls* - ident ident - combination is valid, transitive
+
+Select BOOLEAN such that not Calls*("Proc1", "Proc6")
+FALSE
+5000
+38 - Not Calls* - ident ident - combination is invalid
+
+Select BOOLEAN such that not Calls*("Proc1", "Proc2")
+TRUE
+5000

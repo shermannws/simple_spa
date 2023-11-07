@@ -1,0 +1,27 @@
+procedure p {
+	a = b + c % 7;
+	while (a == 0) {
+		if (b == k) then {
+			call p2;
+		} else {
+			a = a + 1;
+		}
+		print abc;
+		read cba;
+	}
+	call p3;
+}
+
+procedure p2 {
+	while (0 == 1) {
+		d = f;
+		f = d;
+	}
+	Merry = Christmas;
+}
+
+procedure p3 {
+	read Happy;
+	read New;
+	read Year;
+}

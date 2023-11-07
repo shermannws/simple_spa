@@ -7,9 +7,6 @@ QueryEntity::QueryEntity(QueryEntityType type, const Synonym &synonym) : type(ty
 
 QueryEntity::QueryEntity(const std::shared_ptr<Token> &designEntity, const std::string &synonym) : synonym(synonym) {
     StringRep rep = designEntity->getRep();
-    if (QPSUtil::designEntities.find(rep) == QPSUtil::designEntities.end()) {
-        throw std::runtime_error("Invalid design entity");
-    }
     this->type = QPSUtil::designEntities[rep];
 }
 
