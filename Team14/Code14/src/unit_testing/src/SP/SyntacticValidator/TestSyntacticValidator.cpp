@@ -167,7 +167,9 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: attempted to access out-of-range char in input file");
+        REQUIRE_THROWS_WITH(
+                validator.validate(),
+                "Syntax error: SIMPLE program resulted in: Error: attempted to access out-of-range char in input file");
     }
 
     SECTION("Invalid - missing OpenCurlyParen") {
@@ -183,7 +185,9 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: attempted to access out-of-range char in input file");
+        REQUIRE_THROWS_WITH(
+                validator.validate(),
+                "Syntax error: SIMPLE program resulted in: Error: attempted to access out-of-range char in input file");
     }
 
     SECTION("Invalid - nothing after first term") {
@@ -191,7 +195,9 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: attempted to access out-of-range char in input file");
+        REQUIRE_THROWS_WITH(
+                validator.validate(),
+                "Syntax error: SIMPLE program resulted in: Error: attempted to access out-of-range char in input file");
     }
 
     SECTION("Invalid - missing semicolon") {
@@ -294,7 +300,8 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid IF syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+        REQUIRE_THROWS_WITH(validator.validate(),
+                            "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
     }
 
     SECTION("missing closing round parenthesis") {
@@ -302,7 +309,8 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid IF syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+        REQUIRE_THROWS_WITH(validator.validate(),
+                            "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
     }
 
     SECTION("missing opening curly parenthesis after 'then'") {
@@ -310,7 +318,8 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid IF syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+        REQUIRE_THROWS_WITH(validator.validate(),
+                            "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
     }
 
     SECTION("missing closing curly parenthesis after 'then'") {
@@ -334,7 +343,9 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid IF syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: attempted to access out-of-range char in input file");
+        REQUIRE_THROWS_WITH(
+                validator.validate(),
+                "Syntax error: SIMPLE program resulted in: Error: attempted to access out-of-range char in input file");
     }
 
     SECTION("missing tokens after 'if'") {
@@ -342,7 +353,9 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid IF syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: attempted to access out-of-range char in input file");
+        REQUIRE_THROWS_WITH(
+                validator.validate(),
+                "Syntax error: SIMPLE program resulted in: Error: attempted to access out-of-range char in input file");
     }
 
     SECTION("missing tokens after 'then'") {
@@ -350,7 +363,9 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid IF syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: attempted to access out-of-range char in input file");
+        REQUIRE_THROWS_WITH(
+                validator.validate(),
+                "Syntax error: SIMPLE program resulted in: Error: attempted to access out-of-range char in input file");
     }
 
     SECTION("missing tokens after 'else'") {
@@ -358,7 +373,9 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid IF syntax") {
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
-        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: attempted to access out-of-range char in input file");
+        REQUIRE_THROWS_WITH(
+                validator.validate(),
+                "Syntax error: SIMPLE program resulted in: Error: attempted to access out-of-range char in input file");
     }
 }
 

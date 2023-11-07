@@ -4,8 +4,12 @@
 SyntacticValidator::SyntacticValidator(const std::vector<SPToken> &tokens) : tokens(tokens), curr(0) {}
 
 std::vector<SPToken> SyntacticValidator::validate() {
-    while (isCurrValid()) { validateProcedure(); }
-    return tokens;
+    try {
+        while (isCurrValid()) { validateProcedure(); }
+        return tokens;
+    } catch (const std::out_of_range &e) {
+        throw SyntaxError("Syntax error: SIMPLE program resulted in: " + std::string(e.what()));
+    }
 }
 
 void SyntacticValidator::validateProcedure() {
@@ -233,7 +237,7 @@ SPToken SyntacticValidator::peekToken() {
     if (isCurrValid()) {
         return tokens[curr];
     } else {
-        throw SyntaxError("Syntax error: attempted to access out-of-range char in input file");
+        throw std::out_of_range("Error: attempted to access out-of-range char in input file");
     }
 }
 
@@ -241,7 +245,7 @@ SPToken SyntacticValidator::peekNextToken() {
     if (isNextValid()) {
         return tokens[curr + 1];
     } else {
-        throw SyntaxError("Syntax error: attempted to access out-of-range char in input file");
+        throw std::out_of_range("Error: attempted to access out-of-range char in input file");
     }
 }
 
