@@ -14,7 +14,7 @@ UFDSUtil<T>::UFDSUtil(const std::vector<T> &elements) {
 
 template<typename T>
 void UFDSUtil<T>::makeSet(const T &element) {
-    assert(parent.find(element) != parent.end());
+    assert(parent.find(element) == parent.end());
     parent[element] = element;
     rank[element] = DEFAULT_RANK;
 }

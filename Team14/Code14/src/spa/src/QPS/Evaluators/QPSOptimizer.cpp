@@ -72,7 +72,6 @@ QPSOptimizer::getGroupScorePairs(Query &query) {
     std::unordered_map<Synonym, std::unordered_set<std::shared_ptr<Clause>>> synToClauseMap;
     std::unordered_set<std::shared_ptr<Clause>> noSynClauses;
 
-    auto declarations = query.getDeclarations();
     auto clauses = query.getAllClause();
 
     auto synGroups = getSynGroups(clauses);
