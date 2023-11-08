@@ -45,6 +45,13 @@ private:
      */
     std::unordered_map<T, int> rank;
 
+    /**
+     * Adds a new set to the UFDS instance with an initial element.
+     * Element should not already exist in the UFDS.
+     * @param element The initial element of the set
+     */
+    void makeSet(const T &element);
+
 public:
     /**
      * Creates an empty UFDS.
@@ -58,15 +65,8 @@ public:
     explicit UFDSUtil(const std::vector<T> &elements);
 
     /**
-     * Adds a new set to the UFDS instance with an initial element.
-     * Ignores if the element already exists.
-     * @param element The initial element of the set
-     */
-    void makeSet(const T &element);
-
-    /**
      * Returns the representative (root) element of the set that this element is in.
-     * Employs path compression. Adds the element to the UFDS if it doesnt already exist.
+     * Employs path compression. The element should already exist in the UFDS.
      * @param element The element whose set is to be found
      * @return The representative element of the set that the given element is in
      */
@@ -74,7 +74,7 @@ public:
 
     /**
      * Returns whether two elements are in the same set.
-     * Triggers path compression. Adds any element to the UFDS if it doesnt already exist.
+     * Triggers path compression. The elements should already exist in the UFDS.
      * @param element1 The first element for comparison
      * @param element2 The second element for comparison
      * @return True if both elements are in the same set, else false
@@ -85,11 +85,18 @@ public:
      * Merges the sets that hold 2 elements.
      * Ignores if both elements are already in the same set.
      * Adds any element to the UFDS if it doesnt already exist.
+     * Creates any non-existing elements in the UFDS.
      * Triggers path compression.
      * @param element1
      * @param element2
      */
     void unionSet(const T &element1, const T &element2);
+
+    /**
+     * Returns a reference to the underlying unordered map of each element to its parent.
+     * @return The unordered map of each element to its parent
+     */
+    const std::unordered_map<T, T> &getParent() const;
 };
 
 #include "UFDSUtil.hpp"

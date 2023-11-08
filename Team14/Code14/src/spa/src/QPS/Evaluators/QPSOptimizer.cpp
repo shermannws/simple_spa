@@ -10,8 +10,7 @@ std::unordered_map<ClauseType, IntScore> QPSOptimizer::clauseTypeScore = {
 };
 
 std::vector<std::unordered_set<Synonym>>
-QPSOptimizer::getSynGroups(std::unordered_map<Synonym, std::shared_ptr<QueryEntity>> &declarations,
-                           const std::vector<std::shared_ptr<Clause>> &clauses) {
+QPSOptimizer::getSynGroups(const std::vector<std::shared_ptr<Clause>> &clauses) {
     UFDSUtil<Synonym> ufds;
 
     // process all clauses representing relationships between synonyms
@@ -19,21 +18,23 @@ QPSOptimizer::getSynGroups(std::unordered_map<Synonym, std::shared_ptr<QueryEnti
         std::vector<Synonym> syns = clause->getSynonyms();
         assert(syns.size() <= 2);
         if (syns.size() == 2) { ufds.unionSet(syns[0], syns[1]); }
+        if (syns.size() == 1) { ufds.unionSet(syns[0], syns[0]); }
     }
 
     // extract syn groups from UFDS
-    std::unordered_map<Synonym, std::unordered_set<Synonym>> parentToSynGroupsMap;
-    for (const auto &[syn, _]: declarations) {
-        auto parent = ufds.findSet(syn);
-        if (parentToSynGroupsMap.find(parent) == parentToSynGroupsMap.end()) {
-            parentToSynGroupsMap[parent] = std::unordered_set<Synonym>();
+    std::unordered_map<Synonym, std::unordered_set<Synonym>> rootToSynGroupsMap;
+    auto &parents = ufds.getParent();
+    for (const auto &[child, _]: parents) {
+        auto root = ufds.findSet(child);
+        if (rootToSynGroupsMap.find(root) == rootToSynGroupsMap.end()) {
+            rootToSynGroupsMap[root] = std::unordered_set<Synonym>();
         }
-        parentToSynGroupsMap[parent].insert(syn);
+        rootToSynGroupsMap[root].insert(child);
     }
 
     std::vector<std::unordered_set<Synonym>> synGroups;
-    synGroups.reserve(parentToSynGroupsMap.size());
-    for (auto &[syn, synGroup]: parentToSynGroupsMap) { synGroups.push_back(synGroup); }
+    synGroups.reserve(rootToSynGroupsMap.size());
+    for (auto &[syn, synGroup]: rootToSynGroupsMap) { synGroups.push_back(synGroup); }
     return synGroups;
 }
 
@@ -74,7 +75,7 @@ QPSOptimizer::getGroupScorePairs(Query &query) {
     auto declarations = query.getDeclarations();
     auto clauses = query.getAllClause();
 
-    auto synGroups = getSynGroups(declarations, clauses);
+    auto synGroups = getSynGroups(clauses);
 
     // add clause to noSynClauses if boolean, else add clause to synToClauseMap
     for (const auto &clause: clauses) {

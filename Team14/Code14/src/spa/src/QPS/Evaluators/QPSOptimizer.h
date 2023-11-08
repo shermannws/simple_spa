@@ -38,9 +38,7 @@ private:
      * @param clauses The vector of clauses
      * @return A vector of sets of Synonyms
      */
-    static std::vector<std::unordered_set<Synonym>>
-    getSynGroups(std::unordered_map<Synonym, std::shared_ptr<QueryEntity>> &declarations,
-                 const std::vector<std::shared_ptr<Clause>> &clauses);
+    static std::vector<std::unordered_set<Synonym>> getSynGroups(const std::vector<std::shared_ptr<Clause>> &clauses);
 
     /**
      * Calculates the score of the clause group based on the number of select synonyms, the number of synonyms
