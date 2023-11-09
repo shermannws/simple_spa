@@ -33,33 +33,11 @@ private:
     static std::unordered_map<ClauseType, IntScore> clauseTypeScore;
 
     /**
-     * builds a graph with synonyms as nodes and edges representing synonyms that are connected by clause(s)
-     * @declarations the map of declared synonyms in the query
-     * @param clauses vector of clauses that defines the edges in the graph
-     * @return an unordered map representing a adjacency list
-     */
-    static std::unordered_map<Synonym, std::unordered_set<Synonym>>
-    buildSynGraph(std::unordered_map<Synonym, std::shared_ptr<QueryEntity>> &declarations,
-                  const std::vector<std::shared_ptr<Clause>> &clauses);
-
-    /**
-     * performs depth first search on a adjacency graph of synonyms from current as the starting node
-     * @param adjacency_list An unordered map representing the adjacency list of synonym graph
-     * @param current The current synonym being explored in the graph
-     * @param visited A set of visited synonyms
-     * @param connected A set of synonyms that are reachable from current
-     */
-    static void DFS(const std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list,
-                    const std::string &current, std::unordered_set<std::string> &visited,
-                    std::unordered_set<Synonym> &connected);
-
-    /**
-     * Groups connected synonyms based on the adjacency list given
-     * @param adjacency_list The adjacency list on which the synonym groups depend
+     * Groups connected synonyms based on the clauses given.
+     * @param clauses The vector of clauses
      * @return A vector of sets of Synonyms
      */
-    static std::vector<std::unordered_set<Synonym>>
-    getSynGroups(std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list);
+    static std::vector<std::unordered_set<Synonym>> getSynGroups(const std::vector<std::shared_ptr<Clause>> &clauses);
 
     /**
      * Calculates the score of the clause group based on the number of select synonyms, the number of synonyms

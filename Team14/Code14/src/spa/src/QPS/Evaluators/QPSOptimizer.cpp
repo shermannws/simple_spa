@@ -1,4 +1,5 @@
 #include "QPSOptimizer.h"
+#include "UFDSUtil.h"
 
 std::unordered_map<ClauseType, IntScore> QPSOptimizer::clauseTypeScore = {
         {ClauseType::With, 0},     {ClauseType::If, 1},           {ClauseType::While, 1},
@@ -8,45 +9,32 @@ std::unordered_map<ClauseType, IntScore> QPSOptimizer::clauseTypeScore = {
         {ClauseType::Affects, 11}, {ClauseType::FollowsStar, 12}, {ClauseType::NextStar, 13},
 };
 
-std::unordered_map<Synonym, std::unordered_set<Synonym>>
-QPSOptimizer::buildSynGraph(std::unordered_map<std::string, std::shared_ptr<QueryEntity>> &declarations,
-                            const std::vector<std::shared_ptr<Clause>> &clauses) {
-    std::unordered_map<Synonym, std::unordered_set<Synonym>> graph;// add all syns into graph as nodes
-    for (const auto &node: declarations) { graph[node.first] = {}; }
-
-    for (const auto &clause: clauses) {
-        auto group = clause->getSynonyms();
-        for (size_t i = 0; i < group.size(); ++i) {
-            for (size_t j = 0; j < group.size(); ++j) {
-                if (i != j) { graph[group[i]].insert(group[j]); }
-            }
-        }
-    }
-    return graph;
-}
-
-void QPSOptimizer::DFS(const std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacency_list,
-                       const std::string &current, std::unordered_set<std::string> &visited,
-                       std::unordered_set<Synonym> &connected) {
-    visited.insert(current);
-    connected.insert(current);
-    for (const std::string &neighbor: adjacency_list.at(current)) {
-        if (visited.find(neighbor) == visited.end()) { DFS(adjacency_list, neighbor, visited, connected); }
-    }
-}
-
 std::vector<std::unordered_set<Synonym>>
-QPSOptimizer::getSynGroups(std::unordered_map<Synonym, std::unordered_set<Synonym>> &adjacencyList) {
-    std::unordered_set<Synonym> visited;
-    std::vector<std::unordered_set<Synonym>> synGroups;
-    for (const auto &node: adjacencyList) {// get synonym groups
-        Synonym syn = node.first;
-        if (visited.find(syn) == visited.end()) {// unvisited Synonym
-            std::unordered_set<Synonym> currGroup;
-            DFS(adjacencyList, syn, visited, currGroup);
-            synGroups.push_back(currGroup);
-        }
+QPSOptimizer::getSynGroups(const std::vector<std::shared_ptr<Clause>> &clauses) {
+    UFDSUtil<Synonym> ufds;
+
+    // process all clauses representing relationships between synonyms
+    for (const auto &clause: clauses) {
+        std::vector<Synonym> syns = clause->getSynonyms();
+        assert(syns.size() <= 2);
+        if (syns.size() == 2) { ufds.unionSet(syns[0], syns[1]); }
+        if (syns.size() == 1) { ufds.unionSet(syns[0], syns[0]); }
     }
+
+    // extract syn groups from UFDS
+    std::unordered_map<Synonym, std::unordered_set<Synonym>> rootToSynGroupsMap;
+    auto &parents = ufds.getParent();
+    for (const auto &[child, _]: parents) {
+        auto root = ufds.findSet(child);
+        if (rootToSynGroupsMap.find(root) == rootToSynGroupsMap.end()) {
+            rootToSynGroupsMap[root] = std::unordered_set<Synonym>();
+        }
+        rootToSynGroupsMap[root].insert(child);
+    }
+
+    std::vector<std::unordered_set<Synonym>> synGroups;
+    synGroups.reserve(rootToSynGroupsMap.size());
+    for (auto &[syn, synGroup]: rootToSynGroupsMap) { synGroups.push_back(synGroup); }
     return synGroups;
 }
 
@@ -84,11 +72,9 @@ QPSOptimizer::getGroupScorePairs(Query &query) {
     std::unordered_map<Synonym, std::unordered_set<std::shared_ptr<Clause>>> synToClauseMap;
     std::unordered_set<std::shared_ptr<Clause>> noSynClauses;
 
-    auto declarations = query.getDeclarations();
     auto clauses = query.getAllClause();
 
-    auto adjacencyList = buildSynGraph(declarations, clauses);
-    auto synGroups = getSynGroups(adjacencyList);
+    auto synGroups = getSynGroups(clauses);
 
     // add clause to noSynClauses if boolean, else add clause to synToClauseMap
     for (const auto &clause: clauses) {
