@@ -27,6 +27,7 @@ public:
      * @param leftRef The first parameter of the SuchThatClause to evaluate
      * @param rightRef The second parameter of the SuchThatClause to evaluate
      * @return The shared pointer to result of the SuchThatClause evaluation
+     */
     std::shared_ptr<Result> evaluateSynAny(Ref &leftRef, Ref &rightRef) const override;
 
     /**
