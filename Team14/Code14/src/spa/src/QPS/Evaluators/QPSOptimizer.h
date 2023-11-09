@@ -33,8 +33,7 @@ private:
     static std::unordered_map<ClauseType, IntScore> clauseTypeScore;
 
     /**
-     * Groups connected synonyms based on the declarations and clauses given
-     * @param declarations The map of declared synonyms in the query
+     * Groups connected synonyms based on the clauses given.
      * @param clauses The vector of clauses
      * @return A vector of sets of Synonyms
      */
