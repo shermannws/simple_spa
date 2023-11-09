@@ -159,60 +159,6 @@ std::vector<std::shared_ptr<Clause>> QPSOptimizer::sortClauses(std::vector<std::
     return finalClauses;
 }
 
-
-std::pair<std::vector<std::shared_ptr<Clause>>, std::unordered_map<Synonym, int>>
-QPSOptimizer::sortClausesAndGetSynCount(std::vector<std::shared_ptr<Clause>> &clauses) {
-    std::vector<std::shared_ptr<Clause>> finalClauses;
-    std::unordered_map<Synonym, int> synCount;
-
-    finalClauses.reserve(clauses.size());// preallocate memory to reduce reallocation
-    auto pairs = getClauseScorePairs(clauses);
-    std::priority_queue pq(pairs.begin(), pairs.end(), QPSOptimizer::compareClauseByScore);
-
-    std::vector<std::pair<std::shared_ptr<Clause>, ClauseScore>> tempGroup;
-    std::unordered_set<Synonym> currSynGroup;
-
-    auto pair = pq.top();
-    auto clause = pair.first;
-    pq.pop();
-    finalClauses.push_back(clause);
-    auto clauseSynonyms = clause->getSynonyms();
-    currSynGroup.insert(clauseSynonyms.begin(), clauseSynonyms.end());
-    for (auto &syn: clauseSynonyms) {
-        if (synCount.find(syn) != synCount.end()) {
-            synCount[syn]++;
-        } else {
-            synCount[syn] = 1;
-        }
-    }
-
-    while (!pq.empty()) {
-        pair = pq.top();
-        clause = pair.first;
-        pq.pop();
-        clauseSynonyms = clause->getSynonyms();
-        while (!intersect(currSynGroup, clauseSynonyms) && !pq.empty()) {
-            tempGroup.push_back(pair);
-            pair = pq.top();
-            clause = pair.first;
-            pq.pop();
-            clauseSynonyms = clause->getSynonyms();
-        }
-        finalClauses.push_back(clause);
-        currSynGroup.insert(clauseSynonyms.begin(), clauseSynonyms.end());
-        for (auto &syn: clauseSynonyms) {
-            if (synCount.find(syn) != synCount.end()) {
-                synCount[syn]++;
-            } else {
-                synCount[syn] = 1;
-            }
-        }
-        for (const auto &tempPair: tempGroup) { pq.push(tempPair); }
-        tempGroup.clear();
-    }
-    return std::make_pair(finalClauses, synCount);
-}
-
 bool QPSOptimizer::compareGroupByScore(const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p1,
                                        const std::pair<std::unordered_set<std::shared_ptr<Clause>>, GroupScore> &p2) {
     return p1.second > p2.second;

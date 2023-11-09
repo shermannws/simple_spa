@@ -112,9 +112,6 @@ public:
      */
     static std::vector<std::shared_ptr<Clause>> sortClauses(std::vector<std::shared_ptr<Clause>> &clauses);
 
-    static std::pair<std::vector<std::shared_ptr<Clause>>, std::unordered_map<Synonym, int>>
-    sortClausesAndGetSynCount(std::vector<std::shared_ptr<Clause>> &clauses);
-
     /**
      * Compares two pairs by the GroupScore of the clause group for a min-heap priority queue
      * @param p1 The first pair of (clause group, score) to compare
