@@ -42,7 +42,7 @@ private:
      * Performs a natural join on two result tables using nested loop join algorithm
      * @param r1 first result table
      * @param r2 second result table
-     * @param header  the synonyms in the resultant table
+     * @param header the synonyms in the resultant table
      * @return the resultant table from the join
      */
     std::shared_ptr<Result> nestedLoopJoin(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
