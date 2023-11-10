@@ -2229,7 +2229,6 @@ TEST_CASE_METHOD(UnitTestFixture, "tuple result-clause query") {
     }
 }
 
-
 TEST_CASE_METHOD(UnitTestFixture, "attrRef result-clause query") {
     SECTION("single attrRef,no constraint clauses") {
         PQLParser parser("read re; Select re.varName");

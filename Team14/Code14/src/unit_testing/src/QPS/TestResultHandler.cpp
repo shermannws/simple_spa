@@ -201,3 +201,19 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
         REQUIRE(i->getType() == ResultType::Invalid);
     }
 }
+
+TEST_CASE_METHOD(UnitTestFixture, "Test Result::getHeader") {
+    SECTION("boolean result") {
+        auto results = std::make_shared<Result>(false);
+        std::vector<Synonym> header = results->getHeader();
+        REQUIRE(header.empty());
+    }
+
+    SECTION("tuple result") {
+        vector<Synonym> synonyms = {"a", "s", "c"};
+        auto results = std::make_shared<Result>(synonyms);
+        std::vector<Synonym> header = results->getHeader();
+        REQUIRE(header.size() == 3);
+        for (const auto &syn: synonyms) { REQUIRE(find(header.begin(), header.end(), syn) != header.end()); }
+    }
+}
