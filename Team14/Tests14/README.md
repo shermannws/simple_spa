@@ -37,10 +37,10 @@ The following are the subdirectories for `/milestone2`.
 ## milestone3 test cases
 The following are the subdirectories for `/milestone3`.
 - Benchmark
-  - Contains test cass for benchmarking and stress tests.
+  - Contains test cases for benchmarking and stress tests.
   - Tests mainly the optimization work done in milestone3.
 - QPS_multi_clause
-  - Tests the combination of multiple clauses together mainly involving "Affects" and "not".
+  - Tests the combination of multiple clauses together (mainly involving "Affects" and "not").
 - QPS_single_clause
   - Tests each such that clause individually (Affects).
   - Tests each "not" clause individually (permutation with each of the clauses tested exhaustively).
