@@ -532,6 +532,15 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Valid WHILE syntax CONDI
 }
 
 TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid WHILE syntax CONDITIONAL expr") {
+    SECTION("invalid - conditional expr outside of brackets") {
+        std::string input = "procedure testWhile {while !(a > b) { a = r; }}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(),
+                            "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+    }
+
     SECTION("invalid not expression") {
         std::string input = "procedure testWhile {while (!a) { a = r; }}";
         SPTokenizer tokenizer(input);
@@ -540,12 +549,21 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid WHILE syntax CON
         REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Expected rel_expr in Relation Expression");
     }
 
-    SECTION("invalid expression") {
+    SECTION("invalid - invalid nesting in conditional expression") {
         std::string input = "procedure testWhile {while ( ((A > B)) && (C < D) )  { a = r; }}";
         SPTokenizer tokenizer(input);
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
         REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Invalid nesting in conditional expression");
+    }
+
+    SECTION("invalid - missing Round Parenthesis") {
+        std::string input = "procedure testWhile {while A > B { a = r; }}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(),
+                            "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
     }
 
     SECTION("invalid - missing Open Round Parenthesis") {
@@ -605,5 +623,32 @@ TEST_CASE_METHOD(UnitTestFixture, "SyntacticValidator - Invalid WHILE syntax CON
         std::vector<SPToken> tokens = tokenizer.tokenize();
         SyntacticValidator validator(tokens);
         REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: INTEGER cannot start with 0");
+    }
+
+    SECTION("Token between conditional expr and statement list") {
+        std::string input = "procedure testWhile {while !(a > b) do { a = r; }}";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(),
+                            "Syntax error: Invalid Condition - Wrap Conditional Expression in \"( )\" ");
+    }
+
+    SECTION("invalid - while as last token") {
+        std::string input = "procedure testWhile {while ";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(
+                validator.validate(),
+                "Syntax error: SIMPLE program resulted in: Error: attempted to access out-of-range char in input file");
+    }
+
+    SECTION("invalid - missing conditional expr") {
+        std::string input = "procedure testWhile {while {";
+        SPTokenizer tokenizer(input);
+        std::vector<SPToken> tokens = tokenizer.tokenize();
+        SyntacticValidator validator(tokens);
+        REQUIRE_THROWS_WITH(validator.validate(), "Syntax error: Missing conditional expression after while statement");
     }
 }

@@ -102,6 +102,8 @@ void SyntacticValidator::validateWhile() {
     std::vector<SPToken> expression;
     while (peekToken().getType() != TokenType::OpenCurlyParenthesis) { expression.push_back(popToken()); }
 
+    if (expression.empty()) { throw SyntaxError("Syntax error: Missing conditional expression after while statement"); }
+
     // Pass expression '(' conditional expr ')' into validator
     ConditionalValidator conditionalValidator(expression);
     conditionalValidator.validate();
