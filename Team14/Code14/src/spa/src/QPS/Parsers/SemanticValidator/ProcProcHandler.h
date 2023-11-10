@@ -20,7 +20,7 @@ private:
 
 public:
     /**
-     * @brief Handles (proc-entRef,proc-entRef) semantic validation of the Clause
+     * @brief Handles (proc,proc) semantic validation of the Clause in the Query
      * @param query The Query object
      * @param clause The shared pointer to the Clause
      */

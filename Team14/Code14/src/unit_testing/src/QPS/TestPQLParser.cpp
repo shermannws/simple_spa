@@ -63,7 +63,7 @@ TEST_CASE_METHOD(UnitTestFixture, "processDeclarations multiple declaration") {
 TEST_CASE_METHOD(UnitTestFixture, "processDeclarations Errors") {
     SECTION("SyntaxExceptions") {
         std::vector<std::pair<std::string, std::string>> testcases;
-        testcases.emplace_back("assignment a; Select a", "Expected a declaration but found none");
+        testcases.emplace_back("assignment a; Select a", "Expected Select clause but found 'assignment'");
         testcases.emplace_back("assign a Select s", "Expected ; but found 'Select'");
         testcases.emplace_back("assign a a1; Select a1", "Expected ; but found 'a1'");
         testcases.emplace_back("assign a;", "Expected Select clause but found ''");
@@ -82,11 +82,16 @@ TEST_CASE_METHOD(UnitTestFixture, "processDeclarations Errors") {
         std::vector<std::pair<std::string, std::string>> testcases;
         testcases.emplace_back("Select s ", "Undeclared synonym in Select clause");
         testcases.emplace_back("stmt s; assign s; Select s ", "Trying to redeclare a synonym");
-        testcases.emplace_back("Select s ", "undeclared synonym");
+        testcases.emplace_back("Select s ", "Undeclared synonym in Select clause");
 
         for (const auto &testcase: testcases) {
             PQLParser parser(testcase.first);
             REQUIRE_THROWS_AS(parser.parse(), SemanticException);
+        }
+
+        for (const auto &testcase: testcases) {
+            PQLParser parser(testcase.first);
+            REQUIRE_THROWS_WITH(parser.parse(), testcase.second);
         }
     }
 }

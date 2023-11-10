@@ -4,7 +4,6 @@
 #include <utility>
 
 #include "ExprSpecParser.h"
-#include "QPS/QPSTypes.h"
 #include "QPS/Query.h"
 #include "QPS/QueryEntity.h"
 #include "Tokenizer.h"
@@ -26,41 +25,50 @@ private:
 
     /**
      * @brief parses declarations and adds the declared entities to the query object
+     * @param query The query with declarations to parse
+     * @return a vector of Synonyms declared
      */
     std::vector<Synonym> parseDeclarations(Query &query);
 
     /**
      * @brief parses result clause and adds the selected synonyms to the query object
+     * @param query The query with result clause to parse
      */
     void parseResultClause(Query &query);
 
     /**
      * @brief parses a tuple result clause and adds the tuple elements to the query
+     * @param query The query with tuple in result clause to process
      */
     void processTuple(Query &query);
 
     /**
      * @brief parses a single element of result clause and adds the element to the query
+     * @query The query with element in result clause to process
      */
     void processElem(Query &query);
 
     /**
      * @brief parses the chain of constraint clause and adds the clauses to the query object
+     * @query The query with clauses to parse
      */
     void parseClauses(Query &query);
 
     /**
      * @brief parses a chain of such that clause and adds the clauses to the query
+     * @query The query with SuchThatClause to parse
      */
     void processSuchThatClause(Query &query);
 
     /**
      * @brief parses a chain of pattern clause and adds the clauses to the query
+     * @query The query with PatternClause to parse
      */
     void processPatternClause(Query &query);
 
     /**
      * @brief parses a chain of with clause and adds the clauses to the query
+     * @query The query with WithClause to parse
      */
     void processWithClause(Query &query);
 
@@ -90,7 +98,8 @@ private:
 
     /**
      * @brief Validates WithClauseRefType LHS & RHS according to ClauseType
-     * @param clause the shared pointer of WithClause to validate
+     * @param leftRef The leftRef of the WithClause to validate
+     * @param rightRef The rightRef of the WithClause to validate
      */
     void validateWithRefType(Ref &leftRef, Ref &rightRef);
 
