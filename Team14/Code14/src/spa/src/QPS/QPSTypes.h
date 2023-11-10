@@ -13,6 +13,9 @@ typedef std::string Synonym;
 /* Type alias for an int representing an index */
 typedef int idx;
 
+/* Type alias for an int representing a count */
+typedef int count;
+
 // Query typedefs
 class QueryEntity;
 

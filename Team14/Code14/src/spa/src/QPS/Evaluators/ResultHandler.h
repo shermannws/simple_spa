@@ -42,7 +42,7 @@ private:
      * Performs a natural join on two result tables using nested loop join algorithm
      * @param r1 first result table
      * @param r2 second result table
-     * @param header  the synonyms in the resultant table
+     * @param header the synonyms in the resultant table
      * @return the resultant table from the join
      */
     std::shared_ptr<Result> nestedLoopJoin(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2,
@@ -123,4 +123,13 @@ public:
      * @return first result table with the tuples found in 2 removed
      */
     std::shared_ptr<Result> getDiff(std::shared_ptr<Result> r1, std::shared_ptr<Result> r2);
+
+    /**
+     * Projects a result object according to the given synonyms
+     * @param result result object to project
+     * @param projection table header of projected result table
+     * @return result table with the header according to projection if projection is non-empty, otherwise returns
+     * boolean Result of the table
+     */
+    std::shared_ptr<Result> project(std::shared_ptr<Result> result, std::vector<Synonym> projection);
 };

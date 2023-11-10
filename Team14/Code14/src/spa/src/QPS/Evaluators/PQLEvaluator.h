@@ -43,14 +43,6 @@ private:
     std::shared_ptr<ResultHandler> resultHandler;
 
     /**
-     * @brief Retrieves all instances of a query entity from the PKB, the method
-     * is responsible for choosing which PKB API to call
-     * @param queryEntity A pointer to the query entity to retrieve instances for.
-     * @return A set of entities representing all instances of the query entity.
-     */
-    std::unordered_set<EntityPointer> getAll(const EntityPtr &queryEntity);
-
-    /**
      * @brief retrieves all combinations of the entities in the order specified by entitySyns from the PKB
      * @param entitySyns vector of Synonyms representing the combination of Entities to retrieve
      * @return shared pointer to Result containing all combinations of entities
@@ -58,14 +50,14 @@ private:
     std::shared_ptr<Result> evaluateAll(const std::vector<Synonym> &entitySyns);
 
     /**
-     * @brief Evaluates a clause and updates the result accordingly.
+     * @brief Evaluates a clause and returns the result.
      * @param clause A shared pointer to the Clause to evaluate.
      * @return shared pointer to result object
      */
     std::shared_ptr<Result> evaluateClause(std::shared_ptr<Clause> clause);
 
     /**
-     * @brief Evaluates the result of current and negating the specified clause result
+     * @brief Evaluates the combined result of current and negating the specified clause result
      * @param curr current Result
      * @param clauseRes Result of the clause to be negated
      * @return shared pointer to result object
@@ -73,37 +65,14 @@ private:
     std::shared_ptr<Result> evaluateNegation(std::shared_ptr<Result> curr, std::shared_ptr<Result> clauseRes);
 
     /**
-     * @brief returns the vector of synonyms in the result clause that is not present in the result object
-     * @param resultClause vector of synonyms
-     * @param result result object
-     * @return vector of unevaluated synonyms
+     * Evaluates a group of clauses which returns tuples and returns the minimal result table required for result-clause
+     * evaluation
+     * @param clauses The group of clauses to evaluate
+     * @param selects set of synonyms in result-clause
+     * @return the minimal Tuple Result object if it is non-empty, otherwise false Result object
      */
-    std::vector<Synonym> getUnevaluatedSyn(std::vector<Synonym> resultClause, std::shared_ptr<Result> result);
-
-    /**
-     * applies the transformFunc to the entity at index equal to the int and stores the result in the returned vector
-     * @param row vector of entities to transform
-     * @param transformations pair of index of entity to transform and toString function to apply
-     * @return the vector of transformation results
-     */
-    std::vector<std::string> project(ResultTuple row, std::vector<std::pair<int, transformFunc>> &transformations);
-
-    /**
-     * creates a vector of transformations to convert a row from a result table into the format specified by
-     * resultClause a transformation is a pair of int, transformFunc where int represents index of entity
-     * @param inputMap synonym indices of input tuples
-     * @param resultClause vector of synonyms we want to build
-     * @return
-     */
-    std::vector<std::pair<int, transformFunc>> getTransformations(SynonymMap inputMap,
-                                                                  std::vector<Synonym> resultClause);
-
-    /**
-     * concatenates a vector of strings with a whitespace as the connector
-     * @param strings vector of strings to join
-     * @return resultant string
-     */
-    std::string concat(std::vector<std::string> strings);
+    std::shared_ptr<Result> evaluateTupleGroup(std::vector<std::shared_ptr<Clause>> &clauses,
+                                               std::unordered_set<Synonym> selects);
 
     /**
      * Evaluates all clauses in the group as boolean clauses
@@ -113,17 +82,19 @@ private:
     bool evaluateBooleanGroup(const std::vector<std::shared_ptr<Clause>> &clauses);
 
     /**
-     * Evaluates a group of clauses which returns tuples
-     * @param clauses The group of clauses to evaluate
-     * @return the Tuple Result object if it is non-empty, otherwise false Result object
+     * @brief Retrieves all instances of a query entity from the PKB, the method
+     * is responsible for choosing which PKB API to call
+     * @param queryEntity A pointer to the query entity to retrieve instances for.
+     * @return A set of entities representing all instances of the query entity.
      */
-    std::shared_ptr<Result> evaluateTupleGroup(std::vector<std::shared_ptr<Clause>> &clauses);
+    std::unordered_set<EntityPointer> getAll(const EntityPtr &queryEntity);
 
     /**
-     * sets the PQLEvaluator's declaration map
-     * @param query current query being evaluated
+     * returns map of synonym to the number of times synonym is used in the clauses given
+     * @param clauses clauses to count synonyms from
+     * @return unordered map of synonym to count
      */
-    void setDeclarationMap(Query &query);
+    std::unordered_map<Synonym, count> getSynCount(std::vector<std::shared_ptr<Clause>> &clauses);
 
     /**
      * @brief groups the synonyms in the clause result based on whether it is found in current result
@@ -133,6 +104,36 @@ private:
      */
     std::pair<std::vector<Synonym>, std::vector<Synonym>> groupSynByEvaluated(std::shared_ptr<Result> curr,
                                                                               std::shared_ptr<Result> clauseRes);
+    /**
+     * creates a vector of transformations to convert a ResultTuple from a result table into the format specified by
+     * resultClause. A transformation is a pair of <idx, transformFunc> where idx represents index of entity
+     * @param inputMap synonym indices of input tuples
+     * @param resultClause vector of synonyms we want to build
+     * @return
+     */
+    std::vector<std::pair<idx, transformFunc>> getTransformations(SynonymMap inputMap,
+                                                                  std::vector<Synonym> resultClause);
+
+    /**
+     * applies the transformFunc to the entity at specified index and stores the result in the returned vector
+     * @param row vector of entities to transform
+     * @param transformations pair of index of entity to transform and toString function to apply
+     * @return the vector of transformation results
+     */
+    std::vector<std::string> transform(ResultTuple row, std::vector<std::pair<idx, transformFunc>> &transformations);
+
+    /**
+     * concatenates a vector of strings with a whitespace as the connector
+     * @param strings vector of strings to join
+     * @return resultant string
+     */
+    std::string concat(std::vector<std::string> strings);
+
+    /**
+     * sets the PQLEvaluator's declaration map
+     * @param query current query being evaluated
+     */
+    void setDeclarationMap(Query &query);
 
 public:
     /**

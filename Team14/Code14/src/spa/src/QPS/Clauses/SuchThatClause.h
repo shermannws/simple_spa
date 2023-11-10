@@ -24,7 +24,7 @@ public:
     SuchThatClause();
 
     /*
-     * @brief The constructor of SuchThatClause that takes in a Token shared pointer
+     * @brief The constructor of SuchThatClause that takes in a Token shared pointer representing the design abstraction
      */
     SuchThatClause(const std::shared_ptr<Token> &token);
 
