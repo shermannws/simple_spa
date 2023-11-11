@@ -8,8 +8,7 @@
 #include "QPSOptimizer.h"
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader)
-    : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
-      resultHandler(std::make_shared<ResultHandler>()) {}
+    : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)) {}
 
 
 ResultList PQLEvaluator::formatResult(Query &query, Result &result) {
@@ -85,7 +84,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateTupleGroup(std::vector<std::shared
         if (clause->isNegation()) {
             groupRes = evaluateNegation(groupRes, clauseRes);
         } else {
-            groupRes = resultHandler->getCombined(groupRes, clauseRes);
+            groupRes = ResultHandler::getCombined(groupRes, clauseRes);
         }
         if (groupRes->isFalse()) { return groupRes; }// terminate early if intermediate result is empty
     }
@@ -110,7 +109,7 @@ Result PQLEvaluator::evaluate(Query &query) {
         } else {// those with selectSyns (and if select has synonym(s)
             auto groupRes = evaluateTupleGroup(group);
             if (groupRes->isFalse()) { return *groupRes; }
-            res = resultHandler->getCombined(res, groupRes);
+            res = ResultHandler::getCombined(res, groupRes);
         }
     }
 
@@ -121,7 +120,7 @@ Result PQLEvaluator::evaluate(Query &query) {
 
     // CASE SOME RESULT-CLAUSE NOT IN clauses
     auto synResult = evaluateAll(unevaluatedSyn);
-    auto finalResult = resultHandler->getCombined(res, synResult);
+    auto finalResult = ResultHandler::getCombined(res, synResult);
     return *finalResult;
 }
 
@@ -148,13 +147,13 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> c
     auto [evaluatedSyns, unevaluatedSyns] = groupSynByEvaluated(curr, clauseRes);
 
     if (unevaluatedSyns.empty()) {// all syns present
-        return resultHandler->getDiff(curr, clauseRes);
+        return ResultHandler::getDiff(curr, clauseRes);
     }
 
     if (evaluatedSyns.empty()) {// all syns unevaluated, take naive approach
         auto lhs = evaluateAll(unevaluatedSyns);
-        auto negatedRes = resultHandler->getDiff(lhs, clauseRes);
-        return resultHandler->getCombined(curr, negatedRes);
+        auto negatedRes = ResultHandler::getDiff(lhs, clauseRes);
+        return ResultHandler::getCombined(curr, negatedRes);
     }
 
     // syns partially evaluated, evaluate result of negated clause
@@ -181,7 +180,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> c
     }
     clauseRes->setTuples(filtered);
 
-    return resultHandler->getCombined(curr, clauseRes);
+    return ResultHandler::getCombined(curr, clauseRes);
 }
 
 std::unordered_set<std::shared_ptr<Entity>> PQLEvaluator::getAll(const std::shared_ptr<QueryEntity> &queryEntity) {

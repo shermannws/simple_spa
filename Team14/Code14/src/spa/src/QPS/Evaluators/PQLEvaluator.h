@@ -38,11 +38,6 @@ private:
     std::shared_ptr<ClauseHandler> clauseHandler;
 
     /**
-     * Shared pointer to the result handler which is responsible for combining results
-     */
-    std::shared_ptr<ResultHandler> resultHandler;
-
-    /**
      * @brief Retrieves all instances of a query entity from the PKB, the method
      * is responsible for choosing which PKB API to call
      * @param queryEntity A pointer to the query entity to retrieve instances for.
