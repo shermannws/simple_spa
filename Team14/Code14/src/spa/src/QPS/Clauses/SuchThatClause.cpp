@@ -26,10 +26,7 @@ std::vector<Synonym> SuchThatClause::getSynonyms() const {
     return synonyms;
 }
 
-bool SuchThatClause::operator==(const Clause &other) const {
-    try {
-        const auto &otherST = dynamic_cast<const SuchThatClause &>(other);
-        return (type == otherST.type) && (negation == otherST.negation) && (firstParam == otherST.firstParam) &&
-               (secondParam == otherST.secondParam);
-    } catch (std::bad_cast &e) { return false; }
+bool SuchThatClause::isEqual(const Clause &other) const {
+    const auto &otherST = dynamic_cast<const SuchThatClause &>(other);
+    return (secondParam == otherST.secondParam);
 }

@@ -25,6 +25,13 @@ private:
      */
     bool thirdParam;
 
+    /**
+     * @brief Returns true if the PatternClause object is equal to the other PatternClause object, false otherwise
+     * @param other The other PatternClause object to compare against
+     * @return True if the PatternClause object is equal to the other PatternClause object
+     */
+    bool isEqual(const Clause &other) const override;
+
 public:
     /**
      * @brief The constructor of PatternClause
@@ -73,11 +80,4 @@ public:
      * @return vector of Synonyms
      */
     std::vector<Synonym> getSynonyms() const override;
-
-    /**
-     * @brief Returns true if the Clause object is equal to the other Clause object, false otherwise
-     * @param other The other Clause object to compare against
-     * @return True if the Clause object is equal to the other Clause object
-     */
-    bool operator==(const Clause &other) const override;
 };
