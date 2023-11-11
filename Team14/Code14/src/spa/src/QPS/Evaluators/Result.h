@@ -25,7 +25,7 @@ private:
 
     /**
      * the result for a Result of a boolean type, by default
-     * false for non-boolean REsult objects
+     * false for non-boolean Result objects
      */
     bool boolResult;
 
@@ -103,7 +103,7 @@ public:
 
     /**
      * @brief sets the tuples for a result object
-     * @param resultEntities set of ResultTuples
+     * @param resultTuples set of ResultTuples
      */
     void setTuples(const std::unordered_set<ResultTuple> &resultTuples);
 

@@ -1,5 +1,6 @@
 #include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "QPS/Evaluators/PQLEvaluator.h"
+#include "QPS/Evaluators/ResultHandler.h"
 
 #include <unordered_map>
 
@@ -57,8 +58,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
         std::shared_ptr<Result> r1 = std::make_shared<Result>();
         r1->setType(std::vector<Synonym>{"v"});
 
-        ResultHandler evaluator = ResultHandler();
-        std::shared_ptr<Result> final = evaluator.getCombined(r, r1);
+        std::shared_ptr<Result> final = ResultHandler::getCombined(r, r1);
         auto finalTuples = final->getTuples();
 
         REQUIRE(final->getType() == ResultType::Boolean);
@@ -79,15 +79,14 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
         std::unordered_set<ResultTuple> tuples1{{a1}, {a2}, {a3}};
         r1->setTuples(tuples1);
 
-        ResultHandler evaluator = ResultHandler();
-        std::shared_ptr<Result> final = evaluator.getCombined(r, r1);
+        std::shared_ptr<Result> final = ResultHandler::getCombined(r, r1);
         auto finalTuples = final->getTuples();
 
         REQUIRE(final->getTuples().size() == 0);
         REQUIRE(final->getBoolResult() == false);
         REQUIRE(final->getType() == ResultType::Boolean);
 
-        std::shared_ptr<Result> finalAssociative = evaluator.getCombined(r1, r);
+        std::shared_ptr<Result> finalAssociative = ResultHandler::getCombined(r1, r);
         REQUIRE(finalAssociative->getBoolResult() == false);
         REQUIRE(finalAssociative->getType() == ResultType::Boolean);
     }
@@ -104,15 +103,14 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
         std::unordered_set<ResultTuple> tuples1{{a1}};
         r1->setTuples(tuples1);
 
-        ResultHandler evaluator = ResultHandler();
-        std::shared_ptr<Result> final = evaluator.getCombined(r, r1);
+        std::shared_ptr<Result> final = ResultHandler::getCombined(r, r1);
         auto finalTuples = final->getTuples();
 
         REQUIRE(final->getTuples().size() == 1);
         REQUIRE(final->getType() == ResultType::Tuples);
         REQUIRE(find(finalTuples.begin(), finalTuples.end(), ResultTuple{a1}) != finalTuples.end());
 
-        std::shared_ptr<Result> finalAssociative = evaluator.getCombined(r1, r);
+        std::shared_ptr<Result> finalAssociative = ResultHandler::getCombined(r1, r);
         auto finalAssociativeTuples = final->getTuples();
 
         REQUIRE(finalAssociative->getTuples().size() == 1);
@@ -130,25 +128,23 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
         rFalse->setType(std::vector<Synonym>{});
         rFalse->setBoolResult(false);
 
-        ResultHandler evaluator = ResultHandler();
-
         // TRUE X TRUE
-        auto tt = evaluator.getCombined(rTrue, rTrue);
+        auto tt = ResultHandler::getCombined(rTrue, rTrue);
         REQUIRE(tt->getBoolResult() == true);
         REQUIRE(tt->getType() == ResultType::Boolean);
 
         // T x F
-        auto tf = evaluator.getCombined(rTrue, rFalse);
+        auto tf = ResultHandler::getCombined(rTrue, rFalse);
         REQUIRE(tf->getBoolResult() == false);
         REQUIRE(tf->getType() == ResultType::Boolean);
 
         // F x F
-        auto ff = evaluator.getCombined(rFalse, rFalse);
+        auto ff = ResultHandler::getCombined(rFalse, rFalse);
         REQUIRE(ff->getBoolResult() == false);
         REQUIRE(ff->getType() == ResultType::Boolean);
 
         // F x T
-        auto ft = evaluator.getCombined(rFalse, rTrue);
+        auto ft = ResultHandler::getCombined(rFalse, rTrue);
         REQUIRE(ft->getBoolResult() == false);
         REQUIRE(ft->getType() == ResultType::Boolean);
     }
@@ -175,20 +171,18 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
 
         std::shared_ptr<Result> rInvalid = std::make_shared<Result>();
 
-        ResultHandler evaluator = ResultHandler();
-
         // TRUE X INVALID
-        auto t = evaluator.getCombined(rTrue, rInvalid);
+        auto t = ResultHandler::getCombined(rTrue, rInvalid);
         REQUIRE(t->getBoolResult() == true);
         REQUIRE(t->getType() == ResultType::Boolean);
 
         // FALSE x INVALID
-        auto f = evaluator.getCombined(rInvalid, rFalse);
+        auto f = ResultHandler::getCombined(rInvalid, rFalse);
         REQUIRE(f->getBoolResult() == false);
         REQUIRE(f->getType() == ResultType::Boolean);
 
         // Tuple x INVALID
-        auto tup = evaluator.getCombined(rInvalid, rTuple);
+        auto tup = ResultHandler::getCombined(rInvalid, rTuple);
         REQUIRE(tup->getType() == ResultType::Tuples);
         REQUIRE(tup->getTuples().size() == 2);
         auto finalTuples = tup->getTuples();
@@ -196,7 +190,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test Result combiner") {
         REQUIRE(find(finalTuples.begin(), finalTuples.end(), v2) != finalTuples.end());
 
         // INVALID x INVALID
-        auto i = evaluator.getCombined(rInvalid, rInvalid);
+        auto i = ResultHandler::getCombined(rInvalid, rInvalid);
         REQUIRE(i->getBoolResult() == false);
         REQUIRE(i->getType() == ResultType::Invalid);
     }
