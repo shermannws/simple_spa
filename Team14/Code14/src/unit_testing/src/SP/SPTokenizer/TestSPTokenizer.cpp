@@ -255,3 +255,12 @@ TEST_CASE_METHOD(UnitTestFixture, "Relational operator test") {
         REQUIRE(tokens.at(2).getValue() == AppConstants::STRING_NOT_EQUAL);
     }
 }
+
+TEST_CASE_METHOD(UnitTestFixture, "Test invalid cases") {
+
+    SECTION("Unexpected char") {
+        std::string input = "~";
+        SPTokenizer tokenizer(input);
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(), "Unexpected character found: ~");
+    }
+}

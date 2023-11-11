@@ -143,6 +143,12 @@ private:
      */
     bool isCurrValid();
 
+    /**
+     * Checks if the next curr counter is indexed at a valid token.
+     * @return boolean if true or false
+     */
+    bool isNextValid();
+
 public:
     /**
      * Creates and initialises a SyntacticValidator.
