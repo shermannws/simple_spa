@@ -5,7 +5,10 @@
 #include "QueryEntity.h"
 #include "Ref.h"
 
+/* Represents a function type that retrieves entities from a PkbReader*/
 using entityGetterFunc = std::function<std::unordered_set<std::shared_ptr<Entity>>(std::shared_ptr<PkbReader>)>;
+
+/* Represents a function type that creates a Strategy that uses a PkbReader */
 using strategyCreatorFunc = std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>;
 
 /**

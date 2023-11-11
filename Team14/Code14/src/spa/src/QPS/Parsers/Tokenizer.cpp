@@ -32,7 +32,6 @@ Tokenizer::Tokenizer(const std::string &input) : curr(0) { this->input = input; 
 
 int Tokenizer::peekChar() {
     if (!isCurrValid()) { throw SyntaxException("No more char"); }
-
     return input[curr];
 }
 
@@ -109,6 +108,7 @@ std::shared_ptr<Token> Tokenizer::peekToken() {
 
 std::vector<std::shared_ptr<Token>> Tokenizer::peekFollowingToken(int n) {
     std::vector<std::shared_ptr<Token>> tokens;
+    tokens.reserve(n);
     int tmp = curr;
     for (int i = 0; i < n; i++) { tokens.push_back(popToken()); }
     curr = tmp;

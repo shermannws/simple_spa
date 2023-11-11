@@ -13,7 +13,7 @@ typedef size_t SizeTScore;
 /** Type alias for the score of a clause group, defined as follows:
  * (number of select synonyms, num of synonyms, num of clauses)
  */
-typedef std::tuple<IntScore, SizeTScore, IntScore> GroupScore;
+typedef std::tuple<IntScore, SizeTScore, SizeTScore> GroupScore;
 
 /** Type alias for the score of a Clause, defined as follows:
  * (whether it's a negated clause, no of synonyms, score of ClauseType)

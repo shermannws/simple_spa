@@ -17,7 +17,6 @@ using namespace std;
 std::shared_ptr<StubPkbReader> stubPkbReader = std::make_shared<StubPkbReader>();
 
 TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
-    // TODO  test BOOLEAN, attrRef, tuplle with attrRef elem
     SECTION("Uses query multiple synonym tuple") {
         PQLParser parser("assign a; variable x; Select <x, a> such that Uses(a, x)");
         Query query = parser.parse();
@@ -2228,7 +2227,6 @@ TEST_CASE_METHOD(UnitTestFixture, "tuple result-clause query") {
         REQUIRE(find(results.begin(), results.end(), "14 14") != results.end());
     }
 }
-
 
 TEST_CASE_METHOD(UnitTestFixture, "attrRef result-clause query") {
     SECTION("single attrRef,no constraint clauses") {

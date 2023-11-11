@@ -58,7 +58,7 @@ public:
     std::shared_ptr<Token> peekToken();
 
     /**
-     * Peeks the next n token and returns it in a vector
+     * Peeks the next n tokens and returns them in a vector
      * @param n number of tokens to peek
      * @return vector of n tokens
      */

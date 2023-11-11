@@ -8,7 +8,6 @@ void WithHandler::handle(const Query &query, std::shared_ptr<Clause> clause) {
 
     handleRefType(leftRef, rightRef);
 
-
     return SemanticValHandler::handle(query, clause);
 }
 

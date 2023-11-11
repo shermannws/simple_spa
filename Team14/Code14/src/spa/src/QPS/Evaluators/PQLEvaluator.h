@@ -10,7 +10,6 @@
 #include "QPS/Query.h"
 #include "QPSOptimizer.h"
 #include "Result.h"
-#include "ResultHandler.h"
 
 using transformFunc = std::function<std::string(std::shared_ptr<Entity>)>;
 
@@ -36,11 +35,6 @@ private:
      * Shared pointer to the clause handler which evaluates each clause in the PQL query
      */
     std::shared_ptr<ClauseHandler> clauseHandler;
-
-    /**
-     * Shared pointer to the result handler which is responsible for combining results
-     */
-    std::shared_ptr<ResultHandler> resultHandler;
 
     /**
      * @brief retrieves all combinations of the entities in the order specified by entitySyns from the PKB

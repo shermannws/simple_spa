@@ -6,10 +6,10 @@
 #include "QPS/QPSUtil.h"
 #include "QPS/QueryEntity.h"
 #include "QPSOptimizer.h"
+#include "ResultHandler.h"
 
 PQLEvaluator::PQLEvaluator(std::shared_ptr<PkbReader> pkbReader)
-    : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)),
-      resultHandler(std::make_shared<ResultHandler>()) {}
+    : pkbReader(pkbReader), clauseHandler(std::make_shared<ClauseHandler>(pkbReader)) {}
 
 Result PQLEvaluator::evaluate(Query &query) {
     setDeclarationMap(query);
@@ -34,7 +34,7 @@ Result PQLEvaluator::evaluate(Query &query) {
         } else {// those with selectSyns (and if select has synonym(s)
             auto groupRes = evaluateTupleGroup(group, selectSyns);
             if (groupRes->isFalse()) { return *groupRes; }
-            res = resultHandler->getCombined(res, groupRes);
+            res = ResultHandler::getCombined(res, groupRes);
         }
     }
 
@@ -45,7 +45,7 @@ Result PQLEvaluator::evaluate(Query &query) {
 
     // CASE SOME RESULT-CLAUSE NOT IN clauses
     auto synResult = evaluateAll(unevaluatedSyns);
-    auto finalResult = resultHandler->getCombined(res, synResult);
+    auto finalResult = ResultHandler::getCombined(res, synResult);
     return *finalResult;
 }
 
@@ -123,13 +123,13 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> c
     auto &[evaluatedSyns, unevaluatedSyns] = synGroups;
 
     if (unevaluatedSyns.empty()) {// all syns present
-        return resultHandler->getDiff(curr, clauseRes);
+        return ResultHandler::getDiff(curr, clauseRes);
     }
 
     if (evaluatedSyns.empty()) {// all syns unevaluated, take naive approach
         auto lhs = evaluateAll(unevaluatedSyns);
-        auto negatedRes = resultHandler->getDiff(lhs, clauseRes);
-        return resultHandler->getCombined(curr, negatedRes);
+        auto negatedRes = ResultHandler::getDiff(lhs, clauseRes);
+        return ResultHandler::getCombined(curr, negatedRes);
     }
 
     // syns partially evaluated, evaluate result of negated clause
@@ -156,7 +156,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateNegation(std::shared_ptr<Result> c
     }
     clauseRes->setTuples(filtered);
 
-    return resultHandler->getCombined(curr, clauseRes);
+    return ResultHandler::getCombined(curr, clauseRes);
 }
 
 std::shared_ptr<Result> PQLEvaluator::evaluateTupleGroup(std::vector<std::shared_ptr<Clause>> &clauses,
@@ -172,7 +172,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateTupleGroup(std::vector<std::shared
         if (clause->isNegation()) {
             groupRes = evaluateNegation(groupRes, clauseRes);
         } else {
-            groupRes = resultHandler->getCombined(groupRes, clauseRes);
+            groupRes = ResultHandler::getCombined(groupRes, clauseRes);
         }
 
         if (groupRes->isFalse()) { return groupRes; }// terminate early if intermediate result is empty
@@ -185,7 +185,7 @@ std::shared_ptr<Result> PQLEvaluator::evaluateTupleGroup(std::vector<std::shared
                     projection.push_back(syn.first);
                 }
             }
-            if (projection.size() < syns.size()) { groupRes = resultHandler->project(groupRes, projection); }
+            if (projection.size() < syns.size()) { groupRes = ResultHandler::project(groupRes, projection); }
         }
     }
     return groupRes;

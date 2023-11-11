@@ -7,7 +7,7 @@
 #include <unordered_set>
 #include <vector>
 
-/* Type alias for a string representing a synonym of an entity*/
+/* Type alias for a string representing a synonym of an entity */
 typedef std::string Synonym;
 
 /* Type alias for an int representing an index */
@@ -21,9 +21,9 @@ class QueryEntity;
 
 /* Type alias for a shared pointer to QueryEntity */
 typedef std::shared_ptr<QueryEntity> EntityPtr;
+
 /* Type alias for an unordered map of string to shared pointer to QueryEntity */
 typedef std::unordered_map<std::string, std::shared_ptr<QueryEntity>> DeclarationMap;
-
 
 /* Type alias for a string representation of a stmtRef or entRef */
 typedef std::string StringRep;

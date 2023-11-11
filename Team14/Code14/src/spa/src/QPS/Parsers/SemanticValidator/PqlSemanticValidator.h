@@ -10,29 +10,6 @@
 
 
 class PqlSemanticValidator {
-public:
-    explicit PqlSemanticValidator();
-
-    /**
-     * @brief Validates the declarations in the query, throws a Semantic exception in case of
-     * a synonym redeclaration
-     * @param query the query object
-     * @param synonyms the vector of declared synonyms
-     */
-    void validateDeclarations(const std::vector<Synonym> &synonyms);
-
-    /**
-     * @brief Validates the result clause semantically, throws a Semantic exception if synonym is undeclared
-     * @param query the query object
-     */
-    void validateResultClause(Query &query);
-
-    /**
-     * @brief Validates all the clauses in the given query
-     * @param query the query object
-     */
-    void validateConstraintClauses(const Query &query);
-
 private:
     /**
      * @brief Validates SuchThatClause semantically, throws a SemanticException if semantically invalid
@@ -56,14 +33,16 @@ private:
     void validateClauseSemantics(const Query &query, std::shared_ptr<WithClause> clause);
 
     /**
-     * @brief validates a synonym in the result-clause, throws semantic error if synonym is semantically invalid
+     * @brief validates a synonym in the result-clause, throws a SemanticException
+     * if synonym is semantically invalid
      * @param query query that contains the result-clause
      * @param elem synonym element to validate
      **/
     void validateResultSynonym(const Query &query, Synonym elem);
 
     /**
-     * @brief validates a attrRef in the result-clause,throws semantic error if attrRef is semantically invalid
+     * @brief validates a attrRef in the result-clause, throws a SemanticException
+     * if attrRef is semantically invalid
      * @param query query that contains the result-clause
      * @param elem attrRef element to validate
      * @param dotPos index of '.' in the attrRef
@@ -84,4 +63,29 @@ private:
      * @return true if result-clause is boolean, otherwise false
      */
     bool isBooleanResult(const Query &query);
+
+public:
+    /**
+     * The constructor of PqlSemanticValidator
+     */
+    explicit PqlSemanticValidator();
+
+    /**
+     * @brief Validates the declarations in the query, throws a SemanticException in case of
+     * a synonym redeclaration
+     * @param synonyms the vector of declared synonyms
+     */
+    void validateDeclarations(const std::vector<Synonym> &synonyms);
+
+    /**
+     * @brief Validates the result clause semantically, throws a SemanticException if synonym is undeclared
+     * @param query the query object
+     */
+    void validateResultClause(Query &query);
+
+    /**
+     * @brief Validates all the clauses in the given query
+     * @param query the query object
+     */
+    void validateConstraintClauses(const Query &query);
 };
