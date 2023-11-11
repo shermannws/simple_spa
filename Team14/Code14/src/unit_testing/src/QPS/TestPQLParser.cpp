@@ -2031,7 +2031,7 @@ TEST_CASE_METHOD(UnitTestFixture, "tuple and boolean result clause") {
     auto query5 = parser.parse();
     REQUIRE(query5.getSelect().size() == 7);
 
-    parser = PQLParser("Select BOOLEAN");// TODO validate boolean by removing from Select
+    parser = PQLParser("Select BOOLEAN");
     auto query6 = parser.parse();
     REQUIRE(query6.getSelect().size() == 0);
 
