@@ -29,6 +29,6 @@ bool PatternClause::operator==(const Clause &other) const {
         const auto &otherPattern = dynamic_cast<const PatternClause &>(other);
         return (type == otherPattern.type) && (negation == otherPattern.negation) &&
                (firstParam == otherPattern.firstParam) && (secondParam == otherPattern.secondParam) &&
-               (syn == otherPattern.syn);
+               (syn == otherPattern.syn) && (thirdParam == otherPattern.thirdParam);
     } catch (std::bad_cast &e) { return false; }
 }

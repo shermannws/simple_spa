@@ -107,3 +107,11 @@ public:
      */
     virtual bool operator==(const Clause &other) const = 0;
 };
+
+/**
+ * @brief An equal function for shared_ptr of Clause objects
+ */
+template<>
+struct std::equal_to<std::shared_ptr<Clause>> {
+    bool operator()(std::shared_ptr<Clause> const &lhs, std::shared_ptr<Clause> const &rhs) const;
+};

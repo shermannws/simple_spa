@@ -17,7 +17,6 @@ using namespace std;
 std::shared_ptr<StubPkbReader> stubPkbReader = std::make_shared<StubPkbReader>();
 
 TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
-    // TODO  test BOOLEAN, attrRef, tuplle with attrRef elem
     SECTION("Uses query multiple synonym tuple") {
         PQLParser parser("assign a; variable x; Select <x, a> such that Uses(a, x)");
         Query query = parser.parse();
@@ -95,7 +94,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
 TEST_CASE_METHOD(UnitTestFixture, "Test UsesSuchThatStrategy") {
     // USES(STMTREF, ENTREF)
     SECTION("getUsesStmtPair") {
-        PQLParser parser("assign a; variable v; Select a such that Uses(a, v)");
+        PQLParser parser("assign a; variable v; Select a such that Uses(a, v) and Uses(a, v)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
