@@ -17,6 +17,13 @@ private:
      */
     Ref secondParam;
 
+    /**
+     * @brief Returns true if the SuchThatClause object is equal to the other SuchThatClause object, false otherwise
+     * @param other The other SuchThatClause object to compare against
+     * @return True if the SuchThatClause object is equal to the other SuchThatClause object
+     */
+    bool isEqual(const Clause &other) const override;
+
 public:
     /**
      * @brief The constructor of SuchThatClause
@@ -46,11 +53,4 @@ public:
      * @return vector of Synonyms
      */
     std::vector<Synonym> getSynonyms() const override;
-
-    /**
-     * @brief Returns true if the Clause object is equal to the other Clause object, false otherwise
-     * @param other The other Clause object to compare against
-     * @return True if the Clause object is equal to the other Clause object
-     */
-    bool operator==(const Clause &other) const override;
 };

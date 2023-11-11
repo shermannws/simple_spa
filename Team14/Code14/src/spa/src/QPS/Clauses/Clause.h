@@ -46,6 +46,13 @@ protected:
      */
     Ref firstParam;
 
+    /**
+     * @brief A virtual function to implement in subclasses, returns true if all the fields are equal
+     * @param other The other Clause to compare
+     * @return true if the two Clauses are equal
+     */
+    virtual bool isEqual(const Clause &other) const = 0;
+
 public:
     /**
      * @brief The constructor of Clause
@@ -105,5 +112,13 @@ public:
      * @param other The other Clause object to compare against
      * @return True if the Clause object is equal to the other Clause object
      */
-    virtual bool operator==(const Clause &other) const = 0;
+    bool operator==(const Clause &other) const;
+};
+
+/**
+ * @brief An equal function for shared_ptr of Clause objects
+ */
+template<>
+struct std::equal_to<std::shared_ptr<Clause>> {
+    bool operator()(std::shared_ptr<Clause> const &lhs, std::shared_ptr<Clause> const &rhs) const;
 };

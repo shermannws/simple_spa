@@ -24,11 +24,8 @@ std::vector<Synonym> PatternClause::getSynonyms() const {
     return synonyms;
 }
 
-bool PatternClause::operator==(const Clause &other) const {
-    try {
-        const auto &otherPattern = dynamic_cast<const PatternClause &>(other);
-        return (type == otherPattern.type) && (negation == otherPattern.negation) &&
-               (firstParam == otherPattern.firstParam) && (secondParam == otherPattern.secondParam) &&
-               (syn == otherPattern.syn);
-    } catch (std::bad_cast &e) { return false; }
+bool PatternClause::isEqual(const Clause &other) const {
+    const auto &otherPattern = dynamic_cast<const PatternClause &>(other);
+    return (secondParam == otherPattern.secondParam) && (syn == otherPattern.syn) &&
+           (thirdParam == otherPattern.thirdParam);
 }

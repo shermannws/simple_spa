@@ -94,7 +94,7 @@ TEST_CASE_METHOD(UnitTestFixture, "Test formatResult") {
 TEST_CASE_METHOD(UnitTestFixture, "Test UsesSuchThatStrategy") {
     // USES(STMTREF, ENTREF)
     SECTION("getUsesStmtPair") {
-        PQLParser parser("assign a; variable v; Select a such that Uses(a, v)");
+        PQLParser parser("assign a; variable v; Select a such that Uses(a, v) and Uses(a, v)");
         Query queryObj = parser.parse();
 
         auto stubReader = make_shared<StubPkbReader>();
