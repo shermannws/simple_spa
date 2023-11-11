@@ -1,14 +1,15 @@
 #include <vector>
 
-#include "../TestingUtilities/ASTComparer/ASTComparer.h"
-#include "../TestingUtilities/ASTPrinter/ASTPrinter.h"
+#include "../../TestingUtilities/ASTComparer/ASTComparer.h"
+#include "../../TestingUtilities/ASTPrinter/ASTPrinter.h"
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "SP/AST/Nodes/ProgramNode.h"
 #include "SP/SPParser.h"
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
 #include "catch.hpp"
 
-TEST_CASE("Test parse with one procedure, one read statement") {
+TEST_CASE_METHOD(UnitTestFixture, "Test parse with one procedure, one read statement") {
     SPParser parser;
     VariableName varName = "num1";
     ProcedureName procName = "doMath";
@@ -36,7 +37,7 @@ TEST_CASE("Test parse with one procedure, one read statement") {
     REQUIRE(ASTComparer::isSameAST(parsedRootNode, programNode));
 }
 
-TEST_CASE("Test parse with one procedure, one print statement") {
+TEST_CASE_METHOD(UnitTestFixture, "Test parse with one procedure, one print statement") {
     SPParser parser;
     VariableName varName = "num1";
     ProcedureName procName = "doMath";
@@ -64,7 +65,7 @@ TEST_CASE("Test parse with one procedure, one print statement") {
     REQUIRE(ASTComparer::isSameAST(parsedRootNode, programNode));
 }
 
-TEST_CASE("Test parse with one procedure, one assign statement") {
+TEST_CASE_METHOD(UnitTestFixture, "Test parse with one procedure, one assign statement") {
     SPParser parser;
     VariableName varName = "sum";
     ProcedureName procName = "doMath123";
@@ -99,7 +100,7 @@ TEST_CASE("Test parse with one procedure, one assign statement") {
     printerTraverser.traverseAndPrint(programNode);
 }
 
-TEST_CASE("Test parse with one procedure, one assign statement, different RHS") {
+TEST_CASE_METHOD(UnitTestFixture, "Test parse with one procedure, one assign statement, different RHS") {
     SPParser parser;
 
     SECTION("assign statement, RHS constant") {
@@ -245,7 +246,7 @@ TEST_CASE("Test parse with one procedure, one assign statement, different RHS") 
     }
 }
 
-TEST_CASE("Test parse with one procedure, all statement types") {
+TEST_CASE_METHOD(UnitTestFixture, "Test parse with one procedure, all statement types") {
     SPParser parser;
     VariableName varName = "num1";
 
@@ -275,7 +276,8 @@ TEST_CASE("Test parse with one procedure, all statement types") {
     std::shared_ptr<ProgramNode> rootNode = parser.parse(tokens);
 }
 
-TEST_CASE("Tests parse with one procedure, one if statement with one assign statement for each statementlist") {
+TEST_CASE_METHOD(UnitTestFixture,
+                 "Tests parse with one procedure, one if statement with one assign statement for each statementlist") {
     SPParser parser;
 
     /*
@@ -326,7 +328,7 @@ TEST_CASE("Tests parse with one procedure, one if statement with one assign stat
     }
 }
 
-TEST_CASE("Tests parse with one procedure, one while statement with one assign statement") {
+TEST_CASE_METHOD(UnitTestFixture, "Tests parse with one procedure, one while statement with one assign statement") {
     SPParser parser;
 
     /*
@@ -357,7 +359,7 @@ TEST_CASE("Tests parse with one procedure, one while statement with one assign s
     }
 }
 
-TEST_CASE("Test ASTPrinter") {
+TEST_CASE_METHOD(UnitTestFixture, "Test ASTPrinter") {
     SPParser parser;
     VariableName varName = "num1";
     std::vector<SPToken> tokens = {

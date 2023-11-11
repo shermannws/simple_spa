@@ -25,7 +25,7 @@ private:
 
     /**
      * the result for a Result of a boolean type, by default
-     * false for non-boolean REsult objects
+     * false for non-boolean Result objects
      */
     bool boolResult;
 
@@ -51,6 +51,13 @@ public:
      * @param value boolean value of the result
      */
     Result(bool value);
+
+    /**
+     * @brief Constructor for a Result instance, returns a Result object with Type Tuple and synonyms as Result columns
+     * if synonyms is non empty, else returns a Boolean Result object
+     * @param synonyms vector of synonyms representing the table header
+     */
+    Result(std::vector<Synonym> synonyms);
 
     /**
      * @brief Gets the type of the result.
@@ -82,9 +89,23 @@ public:
      */
     SynonymMap &getSynIndices();
 
-    void setTuples(const std::vector<Entity> &resultEntities);
+    /**
+     * @brief Gets the column names of the Result table in order
+     * @return vector of synonyms representing the result table header
+     */
+    std::vector<Synonym> getHeader();
 
-    void setTuples(const std::vector<std::vector<Entity>> &resultTuples);
+    /**
+     * @brief sets the tuples for a single-column result object
+     * @param resultEntities set of entities to convert to set of ResultTuples
+     */
+    void setTuples(const std::unordered_set<std::shared_ptr<Entity>> &resultEntities);
+
+    /**
+     * @brief sets the tuples for a result object
+     * @param resultTuples set of ResultTuples
+     */
+    void setTuples(const std::unordered_set<ResultTuple> &resultTuples);
 
     /**
      * @brief Gets the tuples in the result of the clause evaluation

@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "PKB/Commons/SetStore.h"
+#include "PKB/PkbTypes.h"
 
 /**
  * @brief A class that stores objects using two Hashmaps as the underlying data structure
@@ -16,7 +17,7 @@
  */
 template<typename K1, typename K2, typename V1, typename V2, typename H1, typename H2>
 class DoubleMapStore {
-private:
+protected:
     /**
      * @brief The unordered_map that stores K1 to K2 pairs using V1 as the underlying data structure
      */
@@ -30,6 +31,11 @@ private:
     std::unordered_map<std::shared_ptr<K2>, std::shared_ptr<V2>, std::hash<std::shared_ptr<H2>>,
                        std::equal_to<std::shared_ptr<H2>>>
             rightToLeftStore;
+
+    /**
+     * @brief A set of all entity pairs in this DoubleMapStore
+     */
+    EntityPairSet pairs;
 
 public:
     /**
@@ -95,6 +101,12 @@ public:
      * @return None
      */
     void clear();
+
+    /**
+     * @brief Gets all the entity pairs in this DoubleMapStore
+     * @return A set of all entity pairs in this DoubleMapStore
+     */
+    EntityPairSet getPairs() const;
 };
 
 #include "DoubleMapStore.hpp"

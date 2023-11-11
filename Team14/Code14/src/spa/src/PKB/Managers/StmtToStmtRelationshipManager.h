@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 
+#include "PKB/Commons/ClauseGroup.h"
 #include "PKB/Managers/ManagerUtils.h"
 
 /**
@@ -22,6 +23,11 @@ protected:
 
 public:
     /**
+     * @brief The clause group of the relationship
+     */
+    ClauseGroup clauseGroup;
+
+    /**
      * @brief Constructs a StmtToStmtRelationshipManager object
      * @return A StmtToStmtRelationshipManager object
      */
@@ -36,71 +42,69 @@ public:
     void storeRelationship(std::shared_ptr<Statement> statement1, std::shared_ptr<Statement> statement2, bool isDirect);
 
     /**
-     * Returns a vector of Statement, Statement pair where the first statement is related to the second statement.
-     * Retrieves the relationship where the first and second statement are both of the given type
+     * Returns an unordered_set of Statement, Statement pair where the first statement is related to the second
+     * statement. Retrieves the relationship where the first and second statement are both of the given type
      * @param formerType The type of the former statement
      * @param latterType The type of the latter statement
      * @param requireDirect A boolean value indicating if a direct relationship is required
-     * @return A vector of Statement, Statement pair stored in a vector
+     * @return An unordered_set of Statement, Statement pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getRelationshipPair(StatementType formerType, StatementType latterType,
-                                                                 bool requireDirect) const;
+    virtual EntityPairSet getRelationshipPair(StatementType formerType, StatementType latterType,
+                                              bool requireDirect) const;
 
     /**
-     * Returns a vector of statements of the given statement type which is related to the given statement. The statement
-     * given is the latter statement
+     * Returns an unordered_set of statements of the given statement type which is related to the given statement. The
+     * statement given is the latter statement
      * @param type The type of the statement to be retrieved
      * @param statement The statement that is related to the statements to be retrieved
      * @param requireDirect A boolean value indicating if a direct relationship is required
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getRelationshipTypeStmt(StatementType type, Statement &statement,
-                                                        bool requireDirect) const;
+    virtual EntitySet getRelationshipTypeStmt(StatementType type, Statement &statement, bool requireDirect) const;
 
     /**
-     * Returns a vector of statements of the given statement type which is related to any statement. The statements
-     * retrieved are the former statements
+     * Returns an unordered_set of statements of the given statement type which is related to any statement. The
+     * statements retrieved are the former statements
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    std::vector<Entity> getRelationshipTypeWildcard(StatementType type) const;
+    EntitySet getRelationshipTypeWildcard(StatementType type) const;
 
     /**
-     * Returns a vector of statements of the given statement type which is related to any statement. The statements
-     * retrieved are the former statements
+     * Returns an unordered_set of statements of the given statement type which is related to any statement. The
+     * statements retrieved are the former statements
      * @param type The type of the statement to be retrieved
      * @param requireDirect A boolean value indicating if a direct relationship is required
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getRelationshipTypeWildcard(StatementType type, bool requireDirect) const;
+    virtual EntitySet getRelationshipTypeWildcard(StatementType type, bool requireDirect) const;
 
     /**
-     * Returns a vector of statements of the given statement type which is related to the given statement. The statement
-     * given is the former statement
+     * Returns an unordered_set of statements of the given statement type which is related to the given statement. The
+     * statement given is the former statement
      * @param statement The statement that is related to the statements to be retrieved
      * @param type The type of the statement to be retrieved
      * @param requireDirect A boolean value indicating if a direct relationship is required
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getRelationshipStmtType(Statement &statement, StatementType type,
-                                                        bool requireDirect) const;
+    virtual EntitySet getRelationshipStmtType(Statement &statement, StatementType type, bool requireDirect) const;
 
     /**
-     * Returns a vector of statements of the given statement type which is related to any statement. The statements
-     * retrieved are the latter statements
+     * Returns an unordered_set of statements of the given statement type which is related to any statement. The
+     * statements retrieved are the latter statements
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    std::vector<Entity> getRelationshipWildcardType(StatementType type) const;
+    EntitySet getRelationshipWildcardType(StatementType type) const;
 
     /**
-     * Returns a vector of statements of the given statement type which is related to any statement. The statements
-     * retrieved are the latter statements
+     * Returns an unordered_set of statements of the given statement type which is related to any statement. The
+     * statements retrieved are the latter statements
      * @param type The type of the statement to be retrieved
      * @param requireDirect A boolean value indicating if a direct relationship is required
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getRelationshipWildcardType(StatementType type, bool requireDirect) const;
+    virtual EntitySet getRelationshipWildcardType(StatementType type, bool requireDirect) const;
 
     /**
      * Returns true if statement1 is related to statement2, false otherwise
@@ -130,6 +134,13 @@ public:
      * @return True if there exists a relationship where the given statement is the latter statement, false otherwise
      */
     bool isLatter(Statement &statement) const;
+
+    /**
+     * @brief Get all the statements of the given stmtType that is related to itself
+     * @param stmtType The type of statement to retrieve
+     * @return An unordered_set of statements that is related to itself
+     */
+    EntitySet getSameStmt(StatementType stmtType, bool requireDirect) const;
 };
 
 #include "StmtToStmtRelationshipManager.hpp"

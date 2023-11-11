@@ -8,16 +8,16 @@ void ConditionPatternManager<S>::storePattern(std::shared_ptr<Statement> stateme
 }
 
 template<typename S>
-std::vector<Entity> ConditionPatternManager<S>::getAllStmts() const {
+EntitySet ConditionPatternManager<S>::getAllStmts() const {
     return ManagerUtils::getLeftKeysNoMatch(*patternStore);
 }
 
 template<typename S>
-std::vector<Entity> ConditionPatternManager<S>::getStmtsByVar(Variable &var) const {
+EntitySet ConditionPatternManager<S>::getStmtsByVar(Variable &var) const {
     return ManagerUtils::getLeftEntitiesFromRightKeyNoMatch(*patternStore, var);
 }
 
 template<typename S>
-std::vector<std::vector<Entity>> ConditionPatternManager<S>::getAllStmtVarPair() const {
-    return ManagerUtils::getPairsNoMatch(*patternStore);
+EntityPairSet ConditionPatternManager<S>::getAllStmtVarPair() const {
+    return patternStore->getPairs();
 }

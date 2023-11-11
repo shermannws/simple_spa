@@ -30,21 +30,20 @@ bool AssignPatternManager::matchExpression(Expression &expression, std::regex &p
 
 // Pattern queries i.e. pattern a (...,...)
 // pattern a (_,_)
-std::vector<Entity> AssignPatternManager::getAllAssignStmts() const {
-    std::vector<Entity> statements = std::vector<Entity>();
-    std::for_each(assignmentStore->getBeginIterator(), assignmentStore->getEndIterator(),
-                  [&statements](std::shared_ptr<Assignment> assignment) {
-                      statements.push_back(*(assignment->getStatement()));
-                  });
+EntitySet AssignPatternManager::getAllAssignStmts() const {
+    EntitySet statements = EntitySet();
+    std::for_each(
+            assignmentStore->getBeginIterator(), assignmentStore->getEndIterator(),
+            [&statements](std::shared_ptr<Assignment> assignment) { statements.insert(assignment->getStatement()); });
     return statements;
 }
 
 // pattern a (_, "x")
-std::vector<Entity> AssignPatternManager::getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const {
+EntitySet AssignPatternManager::getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const {
     std::regex regexPattern = AssignPatternManager::parsePattern(rhs);
 
-    auto matcher = [&regexPattern, &hasRhsWildCard, this](Assignment &assignment) {
-        return AssignPatternManager::matchExpression(*(assignment.getExpression()), regexPattern, hasRhsWildCard);
+    auto matcher = [&regexPattern, &hasRhsWildCard, this](std::shared_ptr<Assignment> assignment) {
+        return AssignPatternManager::matchExpression(*(assignment->getExpression()), regexPattern, hasRhsWildCard);
     };
 
     return ManagerUtils::getEntitiesFromStore<AssignPatternStore, Assignment>(assignmentStore, matcher,
@@ -52,38 +51,44 @@ std::vector<Entity> AssignPatternManager::getAssignStmtsByRhs(Expression &rhs, b
 }
 
 // pattern a (v, _)
-std::vector<std::vector<Entity>> AssignPatternManager::getAllAssignStmtVarPair() const {
-    auto matcher = [](Assignment &assignment) { return true; };
+EntityPairSet AssignPatternManager::getAllAssignStmtVarPair() const {
+    auto matcher = [](std::shared_ptr<Assignment> assignment) { return true; };
     return ManagerUtils::getEntityPairsFromStore<AssignPatternStore, Assignment>(assignmentStore, matcher,
                                                                                  Assignment::getStmtVarPairFromAssign);
 }
 
 // pattern a (v, "x")
-std::vector<std::vector<Entity>> AssignPatternManager::getAssignStmtsVarPairByRhs(Expression &rhs,
-                                                                                  bool hasRhsWildCard) const {
+EntityPairSet AssignPatternManager::getAssignStmtsVarPairByRhs(Expression &rhs, bool hasRhsWildCard) const {
     std::regex regexPattern = AssignPatternManager::parsePattern(rhs);
-    auto matcher = [&regexPattern, &hasRhsWildCard, this](Assignment &assignment) {
-        return AssignPatternManager::matchExpression(*(assignment.getExpression()), regexPattern, hasRhsWildCard);
+    auto matcher = [&regexPattern, &hasRhsWildCard, this](std::shared_ptr<Assignment> assignment) {
+        return AssignPatternManager::matchExpression(*(assignment->getExpression()), regexPattern, hasRhsWildCard);
     };
     return ManagerUtils::getEntityPairsFromStore<AssignPatternStore, Assignment>(assignmentStore, matcher,
                                                                                  Assignment::getStmtVarPairFromAssign);
 }
 
 // pattern a ("x", _)
-std::vector<Entity> AssignPatternManager::getAssignStmtsByLhs(Variable &lhs) const {
-    auto matcher = [&lhs](Assignment &assignment) { return *(assignment.getVariable()) == lhs; };
+EntitySet AssignPatternManager::getAssignStmtsByLhs(Variable &lhs) const {
+    auto matcher = [&lhs](std::shared_ptr<Assignment> assignment) { return *(assignment->getVariable()) == lhs; };
     return ManagerUtils::getEntitiesFromStore<AssignPatternStore, Assignment>(assignmentStore, matcher,
                                                                               Assignment::getStmtFromAssign);
 }
 
 // pattern a ("x", "x")
-std::vector<Entity> AssignPatternManager::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
-                                                                 bool hasRhsWildCard) const {
+EntitySet AssignPatternManager::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const {
     std::regex regexPattern = AssignPatternManager::parsePattern(rhs);
-    auto matcher = [&regexPattern, &lhs, &hasRhsWildCard, this](Assignment &assignment) {
-        return *(assignment.getVariable()) == lhs &&
-               AssignPatternManager::matchExpression(*(assignment.getExpression()), regexPattern, hasRhsWildCard);
+    auto matcher = [&regexPattern, &lhs, &hasRhsWildCard, this](std::shared_ptr<Assignment> assignment) {
+        return *(assignment->getVariable()) == lhs &&
+               AssignPatternManager::matchExpression(*(assignment->getExpression()), regexPattern, hasRhsWildCard);
     };
     return ManagerUtils::getEntitiesFromStore<AssignPatternStore, Assignment>(assignmentStore, matcher,
                                                                               Assignment::getStmtFromAssign);
+}
+
+std::unordered_set<std::shared_ptr<Statement>> AssignPatternManager::getAllAssignStmtsAsStmts() const {
+    std::unordered_set<std::shared_ptr<Statement>> statements = std::unordered_set<std::shared_ptr<Statement>>();
+    for (auto it = assignmentStore->getBeginIterator(); it != assignmentStore->getEndIterator(); it++) {
+        statements.insert((*it)->getStatement());
+    }
+    return statements;
 }

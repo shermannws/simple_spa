@@ -6,42 +6,56 @@
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
 #include "Commons/Entities/WhileStatement.h"
-#include "VisitorUtility.h"
+#include "Commons/EntityFactory.h"
 
 UsesExtractorVisitor::UsesExtractorVisitor(std::shared_ptr<PkbWriter> writer) {
-    this->pkbWriter = writer;
-    this->funcStmt = [this](std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) -> void {
+    StmtVarFunc funcStmt = [this](std::shared_ptr<Statement> s, std::shared_ptr<Variable> v) -> void {
         this->pkbWriter->addUsesRelationship(s, v);
     };
-    this->funcProc = [this](std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) -> void {
+    ProcVarFunc funcProc = [this](std::shared_ptr<Procedure> p, std::shared_ptr<Variable> v) -> void {
         this->pkbWriter->addUsesProcRelationship(p, v);
     };
+
+    this->pkbWriter = writer;
+    this->visitorUtils = VisitorUtility(funcStmt, funcProc);
 }
 
-void UsesExtractorVisitor::visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void UsesExtractorVisitor::visitAssignNode(const std::shared_ptr<AssignNode> &node,
+                                           std::vector<std::shared_ptr<Statement>> parents,
                                            std::shared_ptr<Procedure> proc) const {
-    return VisitorUtility::addAllVariableRelationshipFrom(node->getExpression(),
-                                                          std::make_shared<AssignStatement>(node->getStatementNumber()),
-                                                          parents, this->funcStmt, proc, this->funcProc);
+    VisitorUtilsParams params = VisitorUtilsParams(node->getExpression());
+    params.setStatement(EntityFactory::createStatementFromStatementNode(node));
+    params.setParents(parents);
+    params.setProcedure(proc);
+    return this->visitorUtils.addAllVariableRelationship(params);
 }
 
-void UsesExtractorVisitor::visitPrintNode(PrintNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void UsesExtractorVisitor::visitPrintNode(const std::shared_ptr<PrintNode> &node,
+                                          std::vector<std::shared_ptr<Statement>> parents,
                                           std::shared_ptr<Procedure> proc) const {
-    return VisitorUtility::addAllVariableRelationshipFrom(
-            node->getVar(), std::make_shared<PrintStatement>(node->getStatementNumber(), node->getVar()->getVarName()),
-            parents, this->funcStmt, proc, this->funcProc);
+    VisitorUtilsParams params = VisitorUtilsParams(node->getVar());
+    params.setStatement(EntityFactory::createStatementFromStatementNode(node));
+    params.setParents(parents);
+    params.setProcedure(proc);
+    return this->visitorUtils.addAllVariableRelationship(params);
 }
 
-void UsesExtractorVisitor::visitIfNode(IfNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void UsesExtractorVisitor::visitIfNode(const std::shared_ptr<IfNode> &node,
+                                       std::vector<std::shared_ptr<Statement>> parents,
                                        std::shared_ptr<Procedure> proc) const {
-    return VisitorUtility::addAllVariableRelationshipFrom(node->getConditionalExpression(),
-                                                          std::make_shared<IfStatement>(node->getStatementNumber()),
-                                                          parents, this->funcStmt, proc, this->funcProc);
+    VisitorUtilsParams params = VisitorUtilsParams(node->getConditionalExpression());
+    params.setStatement(EntityFactory::createStatementFromStatementNode(node));
+    params.setParents(parents);
+    params.setProcedure(proc);
+    return this->visitorUtils.addAllVariableRelationship(params);
 }
 
-void UsesExtractorVisitor::visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void UsesExtractorVisitor::visitWhileNode(const std::shared_ptr<WhileNode> &node,
+                                          std::vector<std::shared_ptr<Statement>> parents,
                                           std::shared_ptr<Procedure> proc) const {
-    return VisitorUtility::addAllVariableRelationshipFrom(node->getConditionalExpression(),
-                                                          std::make_shared<WhileStatement>(node->getStatementNumber()),
-                                                          parents, this->funcStmt, proc, this->funcProc);
+    VisitorUtilsParams params = VisitorUtilsParams(node->getConditionalExpression());
+    params.setStatement(EntityFactory::createStatementFromStatementNode(node));
+    params.setParents(parents);
+    params.setProcedure(proc);
+    return this->visitorUtils.addAllVariableRelationship(params);
 }

@@ -9,39 +9,39 @@ private:
 public:
     StubPkbReader();
 
-    std::vector<Entity> getAllVariables() const override;
+    EntitySet getAllVariables() const override;
 
-    std::vector<Entity> getAllConstants() const override;
+    EntitySet getAllConstants() const override;
 
-    std::vector<Entity> getAllProcedures() const override;
+    EntitySet getAllProcedures() const override;
 
-    std::vector<Entity> getAllStatements() const override;
+    EntitySet getAllStatements() const override;
 
-    std::vector<Entity> getAllRead() const override;
+    EntitySet getAllRead() const override;
 
-    std::vector<Entity> getAllPrint() const override;
+    EntitySet getAllPrint() const override;
 
-    std::vector<Entity> getAllWhile() const override;
+    EntitySet getAllWhile() const override;
 
-    std::vector<Entity> getAllIf() const override;
+    EntitySet getAllIf() const override;
 
-    std::vector<Entity> getAllCall() const override;
+    EntitySet getAllCall() const override;
 
-    std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const override;
+    EntityPairSet getUsesStmtPair(StatementType type) const override;
 
-    std::vector<std::vector<Entity>> getUsesProcPair() const override;
+    EntityPairSet getUsesProcPair() const override;
 
-    std::vector<Entity> getUsesTypeIdent(StatementType type, Variable &var) const override;
+    EntitySet getUsesTypeIdent(StatementType type, Variable &var) const override;
 
-    std::vector<Entity> getUsesProcIdent(Variable &var) const override;
+    EntitySet getUsesProcIdent(Variable &var) const override;
 
-    std::vector<Entity> getUsesStmt(StatementType type) const override;
+    EntitySet getUsesStmt(StatementType type) const override;
 
-    std::vector<Entity> getUsesProc() const override;
+    EntitySet getUsesProc() const override;
 
-    std::vector<Entity> getUsesVar(Statement &stmt) const override;
+    EntitySet getUsesVar(Statement &stmt) const override;
 
-    std::vector<Entity> getUsesVar(Procedure &proc) const override;
+    EntitySet getUsesVar(Procedure &proc) const override;
 
     bool isStmtUsesVar(Statement &stmt, Variable &var) const override;
 
@@ -51,26 +51,25 @@ public:
 
     bool hasUses(Procedure &proc) const override;
 
-    std::vector<std::vector<Entity>> getFollowsPair(StatementType formerType, StatementType latterType) const override;
+    EntityPairSet getFollowsPair(StatementType formerType, StatementType latterType) const override;
 
-    std::vector<std::vector<Entity>> getFollowsStarPair(StatementType formerType,
-                                                        StatementType latterType) const override;
+    EntityPairSet getFollowsStarPair(StatementType formerType, StatementType latterType) const override;
 
-    std::vector<Entity> getFollowsTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getFollowsTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::vector<Entity> getFollowsStarTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getFollowsStarTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::vector<Entity> getFollowsTypeWildcard(StatementType type) const override;
+    EntitySet getFollowsTypeWildcard(StatementType type) const override;
 
-    std::vector<Entity> getFollowsStarTypeWildcard(StatementType type) const override;
+    EntitySet getFollowsStarTypeWildcard(StatementType type) const override;
 
-    std::vector<Entity> getFollowsStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getFollowsStmtType(Statement &statement, StatementType type) const override;
 
-    std::vector<Entity> getFollowsStarStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getFollowsStarStmtType(Statement &statement, StatementType type) const override;
 
-    std::vector<Entity> getFollowsWildcardType(StatementType type) const override;
+    EntitySet getFollowsWildcardType(StatementType type) const override;
 
-    std::vector<Entity> getFollowsStarWildcardType(StatementType type) const override;
+    EntitySet getFollowsStarWildcardType(StatementType type) const override;
 
     bool isFollows(Statement &statement1, Statement &statement2) const override;
 
@@ -88,21 +87,21 @@ public:
 
     bool hasFormerStarStmt(Statement &statement) const override;
 
-    std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const override;
+    EntityPairSet getModifiesStmtPair(StatementType type) const override;
 
-    std::vector<std::vector<Entity>> getModifiesProcPair() const override;
+    EntityPairSet getModifiesProcPair() const override;
 
-    std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable &var) const override;
+    EntitySet getModifiesTypeIdent(StatementType type, Variable &var) const override;
 
-    std::vector<Entity> getModifiesProcIdent(Variable &var) const override;
+    EntitySet getModifiesProcIdent(Variable &var) const override;
 
-    std::vector<Entity> getModifiesStmt(StatementType type) const override;
+    EntitySet getModifiesStmt(StatementType type) const override;
 
-    std::vector<Entity> getModifiesProc() const override;
+    EntitySet getModifiesProc() const override;
 
-    std::vector<Entity> getModifiesVar(Statement &stmt) const override;
+    EntitySet getModifiesVar(Statement &stmt) const override;
 
-    std::vector<Entity> getModifiesVar(Procedure &proc) const override;
+    EntitySet getModifiesVar(Procedure &proc) const override;
 
     bool isStmtModifiesVar(Statement &stmt, Variable &var) const override;
 
@@ -113,43 +112,42 @@ public:
     bool hasModifies(Procedure &proc) const override;
 
     // pattern a (_,_)
-    std::vector<Entity> getAllAssign() const override;
+    EntitySet getAllAssign() const override;
 
     // pattern a (_, "x")
-    std::vector<Entity> getAssignStmtsByRhs(std::string &rhs, bool hasRhsWildCard) const override;
+    EntitySet getAssignStmtsByRhs(std::string &rhs, bool hasRhsWildCard) const override;
 
     // pattern a (v, _)
-    std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const override;
+    EntityPairSet getAllAssignStmtVarPair() const override;
 
     // pattern a (v, "x")
-    std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(std::string &rhs, bool hasWildCard) const override;
+    EntityPairSet getAssignStmtsVarPairByRhs(std::string &rhs, bool hasWildCard) const override;
 
     // pattern a ("x", _)
-    std::vector<Entity> getAssignStmtsByLhs(Variable &lhs) const override;
+    EntitySet getAssignStmtsByLhs(Variable &lhs) const override;
 
     // pattern a ("x", "x")
-    std::vector<Entity> getAssignStmtsByLhsRhs(Variable &lhs, std::string &rhs, bool hasRhsWildCard) const override;
+    EntitySet getAssignStmtsByLhsRhs(Variable &lhs, std::string &rhs, bool hasRhsWildCard) const override;
 
-    std::vector<std::vector<Entity>> getParentPair(StatementType formerType, StatementType latterType) const override;
+    EntityPairSet getParentPair(StatementType formerType, StatementType latterType) const override;
 
-    std::vector<std::vector<Entity>> getParentStarPair(StatementType formerType,
-                                                       StatementType latterType) const override;
+    EntityPairSet getParentStarPair(StatementType formerType, StatementType latterType) const override;
 
-    std::vector<Entity> getParentTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getParentTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::vector<Entity> getParentStarTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getParentStarTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::vector<Entity> getParentTypeWildcard(StatementType type) const override;
+    EntitySet getParentTypeWildcard(StatementType type) const override;
 
-    std::vector<Entity> getParentStarTypeWildcard(StatementType type) const override;
+    EntitySet getParentStarTypeWildcard(StatementType type) const override;
 
-    std::vector<Entity> getParentStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getParentStmtType(Statement &statement, StatementType type) const override;
 
-    std::vector<Entity> getParentStarStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getParentStarStmtType(Statement &statement, StatementType type) const override;
 
-    std::vector<Entity> getParentWildcardType(StatementType type) const override;
+    EntitySet getParentWildcardType(StatementType type) const override;
 
-    std::vector<Entity> getParentStarWildcardType(StatementType type) const override;
+    EntitySet getParentStarWildcardType(StatementType type) const override;
 
     bool isParent(Statement &statement1, Statement &statement2) const override;
 
@@ -183,47 +181,47 @@ public:
 
     bool isCallsStar(Procedure &caller, Procedure &callee) const override;
 
-    std::vector<Entity> getCallees() const override;
+    EntitySet getCallees() const override;
 
-    std::vector<Entity> getCalleesStar() const override;
+    EntitySet getCalleesStar() const override;
 
-    std::vector<Entity> getCallers() const override;
+    EntitySet getCallers() const override;
 
-    std::vector<Entity> getCallersStar() const override;
+    EntitySet getCallersStar() const override;
 
-    std::vector<std::vector<Entity>> getCallsPair() const override;
+    EntityPairSet getCallsPair() const override;
 
-    std::vector<std::vector<Entity>> getCallsStarPair() const override;
+    EntityPairSet getCallsStarPair() const override;
 
-    std::vector<Entity> getCallers(Procedure &callee) const override;
+    EntitySet getCallers(Procedure &callee) const override;
 
-    std::vector<Entity> getCallersStar(Procedure &callee) const override;
+    EntitySet getCallersStar(Procedure &callee) const override;
 
-    std::vector<Entity> getCallees(Procedure &caller) const override;
+    EntitySet getCallees(Procedure &caller) const override;
 
-    std::vector<Entity> getCalleesStar(Procedure &caller) const override;
+    EntitySet getCalleesStar(Procedure &caller) const override;
 
-    std::vector<std::vector<Entity>> getNextPair(StatementType formerType, StatementType latterType) const override;
+    EntityPairSet getNextPair(StatementType formerType, StatementType latterType) const override;
 
-    std::vector<std::vector<Entity>> getNextStarPair(StatementType formerType, StatementType latterType) const override;
+    EntityPairSet getNextStarPair(StatementType formerType, StatementType latterType) const override;
 
-    std::vector<Entity> getNextStarSameStmt(StatementType stmtType) const override;
+    EntitySet getNextStarSameStmt(StatementType stmtType) const override;
 
-    std::vector<Entity> getNextTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getNextTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::vector<Entity> getNextStarTypeStmt(StatementType type, Statement &statement) const override;
+    EntitySet getNextStarTypeStmt(StatementType type, Statement &statement) const override;
 
-    std::vector<Entity> getNextTypeWildcard(StatementType type) const override;
+    EntitySet getNextTypeWildcard(StatementType type) const override;
 
-    std::vector<Entity> getNextStarTypeWildcard(StatementType type) const override;
+    EntitySet getNextStarTypeWildcard(StatementType type) const override;
 
-    std::vector<Entity> getNextStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getNextStmtType(Statement &statement, StatementType type) const override;
 
-    std::vector<Entity> getNextStarStmtType(Statement &statement, StatementType type) const override;
+    EntitySet getNextStarStmtType(Statement &statement, StatementType type) const override;
 
-    std::vector<Entity> getNextWildcardType(StatementType type) const override;
+    EntitySet getNextWildcardType(StatementType type) const override;
 
-    std::vector<Entity> getNextStarWildcardType(StatementType type) const override;
+    EntitySet getNextStarWildcardType(StatementType type) const override;
 
     bool isNext(Statement &statement1, Statement &statement2) const override;
 
@@ -241,15 +239,35 @@ public:
 
     bool hasAfterStarStmt(Statement &statement) const override;
 
-    std::vector<Entity> getAllIfPatternStmts() const override;
+    EntitySet getAllIfPatternStmts() const override;
 
-    std::vector<Entity> getIfStmtsByVar(Variable &var) const override;
+    EntitySet getIfStmtsByVar(Variable &var) const override;
 
-    std::vector<std::vector<Entity>> getAllIfStmtVarPair() const override;
+    EntityPairSet getAllIfStmtVarPair() const override;
 
-    std::vector<Entity> getAllWhilePatternStmts() const override;
+    EntitySet getAllWhilePatternStmts() const override;
 
-    std::vector<Entity> getWhileStmtsByVar(Variable &var) const override;
+    EntitySet getWhileStmtsByVar(Variable &var) const override;
 
-    std::vector<std::vector<Entity>> getAllWhileStmtVarPair() const override;
+    EntityPairSet getAllWhileStmtVarPair() const override;
+
+    EntityPairSet getAffectsPair(StatementType formerType, StatementType latterType) const override;
+
+    EntitySet getAffectsTypeStmt(StatementType type, Statement &statement) const override;
+
+    EntitySet getAffectsSameStmt(StatementType stmtType) const override;
+
+    EntitySet getAffectsTypeWildcard(StatementType type) const override;
+
+    EntitySet getAffectsStmtType(Statement &statement, StatementType type) const override;
+
+    EntitySet getAffectsWildcardType(StatementType type) const override;
+
+    bool isAffects(Statement &statement1, Statement &statement2) const override;
+
+    bool hasAffects() const override;
+
+    bool hasAffectedStmt(Statement &statement) const override;
+
+    bool hasAffectsStmt(Statement &statement) const override;
 };

@@ -55,6 +55,8 @@ public:
      * @return True if the SetStore is empty, false otherwise
      */
     bool isEmpty() const;
+
+    std::shared_ptr<T> first() const;
 };
 
 #include "SetStore.hpp"

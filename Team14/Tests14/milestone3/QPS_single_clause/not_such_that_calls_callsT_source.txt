@@ -1,0 +1,37 @@
+procedure Proc1 {
+    call Proc3;
+}
+
+procedure Proc2 {
+    call Proc3;
+}
+
+procedure Proc3 {
+    call Proc4;
+    call Proc5;
+    call Proc6;
+}
+
+procedure Proc4 {
+    x = 1;
+}
+
+procedure Proc5 {
+    x = 1;
+}
+
+procedure Proc6 {
+    x = 1;
+}
+
+procedure Proc7 {
+    call Proc8;
+}
+
+procedure Proc8 {
+    call Proc9;
+}
+
+procedure Proc9 {
+    x = 1;
+}

@@ -5,14 +5,13 @@
 
 #include "../../Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
-#include "Commons/HashableKey.h"
 #include "PKB/PkbTypes.h"
 
 /**
  * @brief A class that represents an assignment statement
  * @details A class that represents an assignment statement
  */
-class Assignment : public HashableKey {
+class Assignment {
 private:
     /**
      * @brief The statement that is an assignment statement
@@ -52,7 +51,7 @@ public:
      * @param assignment The Assignment object
      * @return The Statement object that represents the assignment statement
      */
-    static Entity getStmtFromAssign(const Assignment &assignment);
+    static EntityPointer getStmtFromAssign(const std::shared_ptr<Assignment> assignment);
 
     /**
      * @brief Returns the Statement and Variable Pair as a vector from the Assignment object
@@ -60,7 +59,7 @@ public:
      * @return A vector containing the Statement and Variable objects of the Assignment object
      * @note The Statement object is at index 0 and the Variable object is at index 1
      */
-    static std::vector<Entity> getStmtVarPairFromAssign(const Assignment &assignment);
+    static std::vector<EntityPointer> getStmtVarPairFromAssign(const std::shared_ptr<Assignment> assignment);
 
     /**
      * @brief Returns the Statement object from the Assignment object
@@ -84,15 +83,10 @@ public:
 
     /**
      * @brief Returns true if the Assignment object is equal to the other Assignment object, false otherwise
-     * @param other The other Assignment object to compare against
+     * @param other The other Assignment object to compare with
      * @return True if the Assignment object is equal to the other Assignment object, false otherwise
      */
-    bool operator==(const HashableKey &other) const override;
-};
-
-template<>
-struct std::hash<Assignment> {
-    std::size_t operator()(const Assignment &assignment) const;
+    bool operator==(const Assignment &other) const;
 };
 
 template<>

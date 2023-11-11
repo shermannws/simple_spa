@@ -9,56 +9,63 @@
 #include "Commons/Entities/ReadStatement.h"
 #include "Commons/Entities/Variable.h"
 #include "Commons/Entities/WhileStatement.h"
+#include "Commons/EntityFactory.h"
 #include "EntityExtractorVisitor.h"
 
 EntityExtractorVisitor::EntityExtractorVisitor(std::shared_ptr<PkbWriter> writer) { this->pkbWriter = writer; }
 
-void EntityExtractorVisitor::visitProcedureNode(ProcedureNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void EntityExtractorVisitor::visitProcedureNode(const std::shared_ptr<ProcedureNode> &node,
+                                                std::vector<std::shared_ptr<Statement>> parents,
                                                 std::shared_ptr<Procedure> proc) const {
-    this->pkbWriter->addProcedure(std::make_shared<Procedure>(node->getProcedureName()));
+    this->pkbWriter->addProcedure(EntityFactory::createProcedure(node->getProcedureName()));
 }
 
-void EntityExtractorVisitor::visitAssignNode(AssignNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void EntityExtractorVisitor::visitAssignNode(const std::shared_ptr<AssignNode> &node,
+                                             std::vector<std::shared_ptr<Statement>> parents,
                                              std::shared_ptr<Procedure> proc) const {
-    auto currentStmt = std::make_shared<AssignStatement>(node->getStatementNumber());
+    auto currentStmt = EntityFactory::createStatementFromStatementNode(node);
 
     this->pkbWriter->addAssignStatement(currentStmt);
 }
 
-void EntityExtractorVisitor::visitReadNode(ReadNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void EntityExtractorVisitor::visitReadNode(const std::shared_ptr<ReadNode> &node,
+                                           std::vector<std::shared_ptr<Statement>> parents,
                                            std::shared_ptr<Procedure> proc) const {
-    this->pkbWriter->addReadStatement(
-            std::make_shared<ReadStatement>(node->getStatementNumber(), node->getVar()->getVarName()));
+    this->pkbWriter->addReadStatement(EntityFactory::createStatementFromStatementNode(node));
 }
 
-void EntityExtractorVisitor::visitPrintNode(PrintNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void EntityExtractorVisitor::visitPrintNode(const std::shared_ptr<PrintNode> &node,
+                                            std::vector<std::shared_ptr<Statement>> parents,
                                             std::shared_ptr<Procedure> proc) const {
-    this->pkbWriter->addPrintStatement(
-            std::make_shared<PrintStatement>(node->getStatementNumber(), node->getVar()->getVarName()));
+    this->pkbWriter->addPrintStatement(EntityFactory::createStatementFromStatementNode(node));
 }
 
-void EntityExtractorVisitor::visitVariableNode(VariableNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void EntityExtractorVisitor::visitVariableNode(const std::shared_ptr<VariableNode> &node,
+                                               std::vector<std::shared_ptr<Statement>> parents,
                                                std::shared_ptr<Procedure> proc) const {
-    this->pkbWriter->addVariable(std::make_shared<Variable>(node->getVarName()));
+    this->pkbWriter->addVariable(EntityFactory::createVariable(node->getVarName()));
 }
 
-void EntityExtractorVisitor::visitConstantNode(ConstantNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void EntityExtractorVisitor::visitConstantNode(const std::shared_ptr<ConstantNode> &node,
+                                               std::vector<std::shared_ptr<Statement>> parents,
                                                std::shared_ptr<Procedure> proc) const {
-    this->pkbWriter->addConstant(std::make_shared<Constant>(node->getValue()));
+    this->pkbWriter->addConstant(EntityFactory::createConstant(node->getValue()));
 }
 
-void EntityExtractorVisitor::visitCallNode(CallNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void EntityExtractorVisitor::visitCallNode(const std::shared_ptr<CallNode> &node,
+                                           std::vector<std::shared_ptr<Statement>> parents,
                                            std::shared_ptr<Procedure> proc) const {
-    this->pkbWriter->addCallStatement(
-            std::make_shared<CallStatement>(node->getStatementNumber(), node->getProcedureName()));
+    this->pkbWriter->addCallStatement(EntityFactory::createStatementFromStatementNode(node));
 }
 
-void EntityExtractorVisitor::visitIfNode(IfNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void EntityExtractorVisitor::visitIfNode(const std::shared_ptr<IfNode> &node,
+                                         std::vector<std::shared_ptr<Statement>> parents,
                                          std::shared_ptr<Procedure> proc) const {
-    this->pkbWriter->addIfStatement(std::make_shared<IfStatement>(node->getStatementNumber()));
+    this->pkbWriter->addIfStatement(EntityFactory::createStatementFromStatementNode(node));
 }
 
-void EntityExtractorVisitor::visitWhileNode(WhileNode *node, std::vector<std::shared_ptr<Statement>> parents,
+void EntityExtractorVisitor::visitWhileNode(const std::shared_ptr<WhileNode> &node,
+                                            std::vector<std::shared_ptr<Statement>> parents,
                                             std::shared_ptr<Procedure> proc) const {
-    this->pkbWriter->addWhileStatement(std::make_shared<WhileStatement>(node->getStatementNumber()));
+    this->pkbWriter->addWhileStatement(EntityFactory::createStatementFromStatementNode(node));
 }

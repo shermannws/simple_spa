@@ -1,0 +1,11 @@
+procedure proc {
+    while (y != y) {
+        y = 1;
+    }
+
+    if (1 == 1) then {
+        print y;
+    } else {
+        read y;
+    }
+}

@@ -16,7 +16,7 @@ private:
 
 public:
     /**
-     * @brief Handles (stmtRef,stmtRef) semantic validation of the Clause in the Clause
+     * @brief Handles (stmtRef,stmtRef) semantic validation of the Clause in the Query
      * @param query The Query object
      * @param clause The shared pointer of the Clause
      */

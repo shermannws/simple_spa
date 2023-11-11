@@ -33,3 +33,17 @@ The following are the subdirectories for `/milestone2`.
 - SIMPLE_bad_syntax
   - Tests SIMPLE program with Syntax or Semantic Error.
   - Note: The `_queries.txt` files in this subdirectory is empty as program would have terminated due to Error while parsing SIMPLE program.
+
+## milestone3 test cases
+The following are the subdirectories for `/milestone3`.
+- Benchmark
+  - Contains test cases for benchmarking and stress tests.
+  - Tests mainly the optimization work done in milestone3.
+- QPS_multi_clause
+  - Tests the combination of multiple clauses together (mainly involving "Affects" and "not").
+- QPS_single_clause
+  - Tests each such that clause individually (Affects).
+  - Tests each "not" clause individually (permutation with each of the clauses tested exhaustively).
+- Trivial
+  - Tests queries which should return no values.
+  - Example: Modifies(pn, v) should return none sinch pn is print synonym and print statements do not modify variables.

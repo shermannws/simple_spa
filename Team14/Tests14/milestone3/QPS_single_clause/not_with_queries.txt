@@ -1,0 +1,390 @@
+1 - procedure.procName = procedure.procName
+procedure p, p1;
+Select p with not p.procName = p1.procName
+call, print
+5000
+2 - procedure.procName = call.procName
+procedure p; call c;
+Select c.procName with not c.procName = p.procName
+print
+5000
+3 - procedure.procName = variable.varName
+procedure p; variable v;
+Select v with not v.varName = p.procName
+print, read, x, y, a, b, call, k
+5000
+4 - procedure.procName = read.varName
+procedure p; read r;
+Select r with not p.procName = r.varName
+2, 9, 10
+5000
+5 - procedure.procName = print.varName
+procedure p; print pn; variable v;
+Select v with not p.procName = pn.varName
+print, read, x, y, a, b, call, k
+5000
+6 - procedure.procName = IDENT
+procedure p;
+Select p with not p.procName = "CALL"
+call, print
+5000
+7 - call.procName = call.procName
+call c, c1;
+Select c with not c.procName = c1.procName
+none
+5000
+8 - call.procName = variable.varName
+call c; variable v;
+Select v.varName with not v.varName = c.procName
+read, x, y, a, b, call, k
+5000
+9 - call.procName = read.varName
+call c; read r;
+Select r.varName with not c.procName = r.varName
+read, k
+5000
+10 - call.procName = print.varName
+call c; print pn, pn2;
+Select pn2 with not c.procName = pn.varName
+4, 5, 6
+5000
+11 - call.procName = IDENT
+call c;
+Select c with not c.procName = "print"
+none
+5000
+12 - variable.varName = variable.varName
+variable v, v1;
+Select v with not v.varName = v1.varName
+read, x, y, a, b, call, k, print
+5000
+13 - variable.varName = read.varName
+variable v; read r;
+Select r with not v.varName = r.varName
+2, 9, 10
+5000
+14 - variable.varName = print.varName
+variable v; print pn, pn2;
+Select pn2 with not v.varName = pn.varName
+4, 5, 6
+5000
+15 - variable.varName = IDENT
+variable v;
+Select v with not v.varName = "a"
+print, read, x, y, b, call, k
+5000
+16 - read.varName = read.varName
+read r;
+Select r with not r.varName = r.varName
+none
+5000
+16a - read.varName = read1.varname
+read r, r1;
+Select r with not r.varName = r1.varName
+2, 9 ,10
+5000
+17 - read.varName = print.varName
+read r; print pn;
+Select r with not r.varName = pn.varName
+2, 9, 10
+5000
+18 - read.varName = IDENT
+read r;
+Select r with not r.varName = "k"
+2, 10
+5000
+19 - print.varName = print.varName
+print pn; print pn1;
+Select <pn1.varName, pn.varName> with not pn.varName = pn1.varName
+a b, a call, b call, b a, call a, call b
+5000
+20 - print.varName = IDENT
+print pn;
+Select pn with not pn.varName = "call"
+4, 5
+5000
+21 - IDENT = IDENT
+procedure with;
+Select with.procName with not "x" = "x"
+none
+5000
+22 - IDENT = IDENT
+procedure with;
+Select with with not "x" = "x"
+none
+5000
+23 - constant.value = constant.value
+constant c, c1;
+Select c.value with not c.value = c1.value
+1, 2, 3, 4, 7, 8, 100
+5000
+24 - constant.value = stmt.stmt#
+constant c; stmt s;
+Select s.stmt# with not c.value = s.stmt#
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+25 - constant.value = read.stmt#
+constant c; read r;
+Select r.varName with not c.value = r.stmt#
+read, k, print
+5000
+26 - constant.value = read.stmt#
+constant c; read r;
+Select r.stmt# with not c.value = r.stmt#
+2, 9, 10
+5000
+27 - constant.value = print.stmt#
+constant c; print pn;
+Select pn.varName with not c.value = pn.stmt#
+a, b, call
+5000
+28 - constant.value = print.stmt#
+constant c; print pn;
+Select pn.stmt# with not c.value = pn.stmt#
+4, 5, 6
+5000
+29 - constant.value = call.stmt#
+constant c; call c1;
+Select c1.procName with not c.value = c1.stmt#
+print
+5000
+30 - constant.value = call.stmt#
+constant c; call c1;
+Select c1.stmt# with not c.value = c1.stmt#
+1
+5000
+31 - constant.value = while.stmt#
+constant c; while w;
+Select w.stmt# with not c.value = w.stmt#
+8
+5000
+31a -  constant.value = while.stmt#
+constant c; while w;
+Select c.value with not c.value = w.stmt#
+1, 2, 3, 4, 7, 100
+5000
+32 - constant.value = if.stmt#
+constant c; if ifs;
+Select ifs.stmt# with not c.value = ifs.stmt#
+3
+5000
+33 - constant.value = assign.stmt#
+constant c; assign a;
+Select a.stmt# with not c.value = a.stmt#
+7
+5000
+34 - constant.value = INTEGER
+constant c;
+Select c.value with not c.value = 1
+2, 3, 4, 7, 8, 100
+5000
+35 - constant.value = INTEGER
+constant c;
+Select c with not c.value = 100
+1, 2, 3, 4, 7, 8
+5000
+36 - stmt.stmt# = stmt.stmt#
+stmt s, s1;
+Select <s,s1> with not s.stmt# = s1.stmt#
+1 2, 1 3, 1 4, 1 5, 1 6, 1 7, 1 8, 1 9, 1 10, 2 1, 2 3, 2 4, 2 5, 2 6, 2 7, 2 8, 2 9, 2 10, 3 1, 3 2, 3 4, 3 5, 3 6, 3 7, 3 8, 3 9, 3 10, 4 1, 4 2, 4 3, 4 5, 4 6, 4 7, 4 8, 4 9, 4 10, 5 1, 5 2, 5 3, 5 4, 5 6, 5 7, 5 8, 5 9, 5 10, 6 1, 6 2, 6 3, 6 4, 6 5, 6 7, 6 8, 6 9, 6 10, 7 1, 7 2, 7 3, 7 4, 7 5, 7 6, 7 8, 7 9, 7 10, 8 1, 8 2, 8 3, 8 4, 8 5, 8 6, 8 7, 8 9, 8 10, 9 1, 9 2, 9 3, 9 4, 9 5, 9 6, 9 7, 9 8, 9 10, 10 1, 10 2, 10 3, 10 4, 10 5, 10 6, 10 7, 10 8, 10 9
+5000
+37 - stmt.stmt# = read.stmt#
+stmt s; read r;
+Select <r,s> with not s.stmt# = r.stmt#
+2 1, 2 3, 2 4, 2 5, 2 6, 2 7, 2 8, 2 9, 2 10, 9 1, 9 2, 9 3, 9 4, 9 5, 9 6, 9 7, 9 8, 9 10, 10 1, 10 2, 10 3, 10 4, 10 5, 10 6, 10 7, 10 8, 10 9
+5000
+38 - stmt.stmt# = print.stmt#
+stmt s; print pn;
+Select <pn,s> with not s.stmt# = pn.stmt#
+4 1, 4 2, 4 3, 4 5, 4 6, 4 7, 4 8, 4 9, 4 10, 5 1, 5 2, 5 3, 5 4, 5 6, 5 7, 5 8, 5 9, 5 10, 6 1, 6 2, 6 3, 6 4, 6 5, 6 7, 6 8, 6 9, 6 10
+5000
+39 - stmt.stmt# = call.stmt#
+stmt s; call c;
+Select s with not s.stmt# = c.stmt#
+2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+40 - stmt.stmt# = while.stmt#
+stmt s; while w;
+Select w with not s.stmt# = w.stmt#
+8
+5000
+41 - stmt.stmt# = if.stmt#
+stmt s; if ifs;
+Select ifs with not s.stmt# = ifs.stmt#
+3
+5000
+42 - stmt.stmt# = assign.stmt#
+stmt s; assign a;
+Select a with not s.stmt# = a.stmt#
+7
+5000
+43 - stmt.stmt# = INTEGER
+stmt s, s1;
+Select s1 with not s.stmt# = 1
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000
+44 - read.stmt# = read.stmt#
+read r, r1;
+Select r with not r.stmt# = r1.stmt#
+2, 9, 10
+5000
+45 - read.stmt# = read.stmt#
+read r;
+Select r.varName with not r.stmt# = r.stmt#
+none
+5000
+46 - read.stmt# = print.stmt#
+read r; print pn;
+Select pn with not r.stmt# = pn.stmt#
+4, 5, 6
+5000
+47 - read.stmt# = call.stmt#
+read r; call c;
+Select c with not r.stmt# = c.stmt#
+1
+5000
+48 - read.stmt# = while.stmt#
+read r; while w;
+Select w with not r.stmt# = w.stmt#
+8
+5000
+49 - read.stmt# = if.stmt#
+read r; if ifs;
+Select ifs with not r.stmt# = ifs.stmt#
+3
+5000
+50 - read.stmt# = assign.stmt#
+read r; assign a;
+Select a with not r.stmt# = a.stmt#
+7
+5000
+51 - read.stmt# = INTEGER
+read r;
+Select r.varName with not r.stmt# = 10
+read, k
+5000
+52 - print.stmt# = print.stmt#
+print pn;
+Select pn with not pn.stmt# = pn.stmt#
+none
+5000
+53 - print.stmt# = print.stmt#
+print pn, pn1;
+Select pn with not pn.stmt# = pn1.stmt#
+4, 5, 6
+5000
+54 - print.stmt# = call.stmt#
+print pn; call c;
+Select c with not pn.stmt# = c.stmt#
+1
+5000
+55 - print.stmt# = while.stmt#
+print pn; while w;
+Select w with not pn.stmt# = w.stmt#
+8
+5000
+56 - print.stmt# = if.stmt#
+print pn; if ifs;
+Select ifs with not pn.stmt# = ifs.stmt#
+3
+5000
+57 - print.stmt# = assign.stmt#
+print pn; assign a;
+Select a with not pn.stmt# = a.stmt#
+7
+5000
+58 - print.stmt# = INTEGER
+print pn;
+Select pn with not pn.stmt# = 10
+4, 5, 6
+5000
+59 - call.stmt# = call.stmt#
+call c, c1;
+Select c with not c.stmt# = c1.stmt#
+none
+5000
+60 - call.stmt# = while.stmt#
+call c; while w;
+Select w with not c.stmt# = w.stmt#
+8
+5000
+61 - call.stmt# = if.stmt#
+call c; if ifs;
+Select ifs with not c.stmt# = ifs.stmt#
+3
+5000
+62 - call.stmt# = assign.stmt#
+call c; assign a;
+Select c with not c.stmt# = a.stmt#
+1
+5000
+63 - call.stmt# = INTEGER
+call BOOLEAN;
+Select BOOLEAN with not BOOLEAN.stmt# = 1
+none
+5000
+64 - while.stmt# = while.stmt#
+while w, w1;
+Select w with not w.stmt# = w1.stmt#
+none
+5000
+65 - while.stmt# = if.stmt#
+while w; if ifs;
+Select ifs with not ifs.stmt# = w.stmt#
+3
+5000
+66 - while.stmt# = assign.stmt#
+while w; assign a;
+Select w with not a.stmt# = w.stmt#
+8
+5000
+67 - while.stmt# = INTEGER
+while w;
+Select w with not w.stmt# = 8
+none
+5000
+68 - if.stmt# = if.stmt#
+if ifs, ifs1;
+Select ifs with not ifs.stmt# = ifs1.stmt#
+none
+5000
+69 - if.stmt# = assign.stmt#
+if ifs; assign a;
+Select ifs with not ifs.stmt# = a.stmt#
+3
+5000
+70 - if.stmt# = INTEGER
+if ifs;
+Select ifs.stmt# with not ifs.stmt# = 3
+none
+5000
+71 - assign.stmt# = assign.stmt#
+assign a, a1;
+Select a with not a.stmt# = a1.stmt#
+none
+5000
+72 - assign.stmt# = assign.stmt#
+assign a;
+Select a with not a.stmt# = a.stmt#
+none
+5000
+73 - assign.stmt# = INTEGER
+assign a;
+Select a with not a.stmt# = 7
+none
+5000
+74 - assign.stmt# = INTEGER
+assign a;
+Select a with not a.stmt# = 1
+7
+5000
+75 - INTEGER = INTEGER
+stmt s;
+Select s with not 1 = 1
+none
+5000
+76 - INTEGER = INTEGER
+stmt s;
+Select s with not 1 = 2
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+5000

@@ -1,9 +1,9 @@
-
+#include "../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "QPS/Parsers/Tokenizer.h"
 
 #include "catch.hpp"
 
-TEST_CASE("Tokenizer Test") {
+TEST_CASE_METHOD(UnitTestFixture, "Tokenizer Test") {
 
     SECTION("Valid query") {
         Tokenizer tokenizer("stmt s;\nSelect s such that Follows*(2,3)");
@@ -127,9 +127,19 @@ TEST_CASE("Tokenizer Test") {
         REQUIRE(tokenizer.popToken()->getRep() == "\"");
         REQUIRE(tokenizer.popToken()->getType() == TokenType::Empty);
     }
+
+    SECTION("test peekFollowingToken") {
+        Tokenizer tokenizer("first second third    ");
+        auto next2 = tokenizer.peekFollowingToken(2);
+        auto next3 = tokenizer.peekFollowingToken(3);
+        auto next4 = tokenizer.peekFollowingToken(4);
+        REQUIRE(next2.size() == 2);
+        REQUIRE(next3.size() == 3);
+        REQUIRE(next4.size() == 4);
+    }
 }
 
-TEST_CASE("attrName") {
+TEST_CASE_METHOD(UnitTestFixture, "attrName") {
     std::string input = "procedure p; Select p.procName <> stmt#  ";
 
     Tokenizer tokenizer(input);

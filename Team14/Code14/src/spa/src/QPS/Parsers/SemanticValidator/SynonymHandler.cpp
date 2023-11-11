@@ -13,6 +13,7 @@ void SynonymHandler::handle(const Query &query, std::shared_ptr<Clause> clause) 
         Ref &rightRef = suchThat->getSecondParam();
         RootType rightRootType = rightRef.getRootType();
         if (rightRootType == RootType::Synonym) { handleRefSyn(query, rightRef); }
+        return SemanticValHandler::handle(query, clause);
     }
 
     auto pattern = std::dynamic_pointer_cast<PatternClause>(clause);
@@ -26,6 +27,7 @@ void SynonymHandler::handle(const Query &query, std::shared_ptr<Clause> clause) 
         }
         ClauseType clauseType = QPSUtil::entityToClauseMap[entityType];
         pattern->setType(clauseType);
+        return SemanticValHandler::handle(query, clause);
     }
 
     auto with = std::dynamic_pointer_cast<WithClause>(clause);

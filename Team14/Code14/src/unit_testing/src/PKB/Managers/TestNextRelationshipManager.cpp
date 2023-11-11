@@ -1,11 +1,12 @@
 #include <memory>
 
+#include "../../TestingUtilities/TestFixture/UnitTestFixture.h"
 #include "PKB/Managers/NextRelationshipManager.h"
 #include "catch.hpp"
 
 using namespace std;
 
-TEST_CASE("Test Next/Next* Relationship Retrieval") {
+TEST_CASE_METHOD(UnitTestFixture, "Test Next/Next* Relationship Retrieval") {
     SECTION("Simple Test 1") {
         NextRelationshipManager nextRelationshipManager = NextRelationshipManager();
 
@@ -232,7 +233,7 @@ TEST_CASE("Test Next/Next* Relationship Retrieval") {
         nextRelationshipManager.clearNextStarStore();
     }
 
-    SECTION("Intermeidate Test 2 - If at node 3") {
+    SECTION("Intermediate Test 2 - If at node 3") {
         NextRelationshipManager nextRelationshipManager = NextRelationshipManager();
 
         REQUIRE(nextRelationshipManager.hasRelationship() == false);

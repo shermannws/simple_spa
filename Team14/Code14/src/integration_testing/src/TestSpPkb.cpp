@@ -1,13 +1,8 @@
-#include <iostream>
 #include <vector>
 
-#include "ASTGenerator.h"
 #include "Commons/Entities/AssignStatement.h"
-#include "Commons/Entities/CallStatement.h"
-#include "Commons/Entities/IfStatement.h"
 #include "Commons/Entities/PrintStatement.h"
 #include "Commons/Entities/ReadStatement.h"
-#include "Commons/Entities/WhileStatement.h"
 #include "PKB/Pkb.h"
 #include "PKB/PkbConcreteWriter.h"
 #include "SP/AST/Nodes/ProgramNode.h"
@@ -20,15 +15,20 @@
 #include "SP/AST/Visitors/UsesExtractorVisitor.h"
 #include "SP/CFG/CFGBuilder.h"
 #include "SP/CFG/CFGExtractor.h"
+#include "SP/SP.h"
 #include "SP/SPParser.h"
 #include "SP/SPToken.h"
 #include "SP/SPTokenType.h"
+#include "TestingUtilities/ASTGenerator/ASTGenerator.h"
+#include "TestingUtilities/TestFixture/IntegrationTestFixture.h"
 #include "catch.hpp"
+
+using namespace std;
 
 /*
 Test the e2e addition through from SPTraverser to PKB stores
 */
-TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - e2e for Follows and Uses") {
     SPParser parser;
     VariableName varName = "num1";
     std::vector<SPToken> tokens = {SPToken(TokenType::Name, "procedure"),
@@ -68,13 +68,13 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
     auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
-    auto cfgManager = std::make_shared<CFGManager>();
+    auto affectsRelationshipManager = std::make_shared<AffectsRelationshipManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
             modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
             modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
-            nextRelationshipManager, cfgManager);
+            nextRelationshipManager, affectsRelationshipManager);
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
     std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
@@ -118,36 +118,38 @@ TEST_CASE("Test AST Traverser - e2e for Follows and Uses") {
     auto VarV = Variable("v");
     auto usesV = usesRelationshipManager->getRelationshipTypeIdent(StatementType::Assign, VarV);
     REQUIRE(usesV.size() == 1);
-    REQUIRE(usesV.at(0) == AssignStatement(1));
-    REQUIRE(usesV.at(0) == Statement(1, StatementType::Assign));
+    REQUIRE(usesV.find(make_shared<AssignStatement>(1)) != usesV.end());
+    REQUIRE(usesV.find(make_shared<Statement>(1, StatementType::Assign)) != usesV.end());
 
     auto VarY = Variable("y");
     auto usesY = usesRelationshipManager->getRelationshipTypeIdent(StatementType::Assign, VarY);
     REQUIRE(usesY.size() == 1);
-    REQUIRE(usesY.at(0) == AssignStatement(1));
-    REQUIRE(usesY.at(0) == Statement(1, StatementType::Assign));
+    REQUIRE(usesY.find(make_shared<AssignStatement>(1)) != usesY.end());
+    REQUIRE(usesY.find(make_shared<Statement>(1, StatementType::Assign)) != usesY.end());
 
     auto Stmt1Stmt = Statement(1, StatementType::Assign);
     auto followsRSStmt = followsRelationshipManager->getRelationshipStmtType(Stmt1Stmt, StatementType::Stmt, true);
     REQUIRE(followsRSStmt.size() == 1);
-    REQUIRE(followsRSStmt.at(0) == ReadStatement(2, varName));
+    REQUIRE(followsRSStmt.find(make_shared<ReadStatement>(2, varName)) != followsRSStmt.end());
+
     auto Stmt1Assign = AssignStatement(1);
     auto followsRSAssign = followsRelationshipManager->getRelationshipStmtType(Stmt1Assign, StatementType::Stmt, true);
     REQUIRE(followsRSAssign.size() == 1);
-    REQUIRE(followsRSAssign.at(0) == Statement(2, StatementType::Read, varName));
+    REQUIRE(followsRSAssign.find(make_shared<ReadStatement>(2, varName)) != followsRSAssign.end());
 
     auto Stmt2Stmt = Statement(2, StatementType::Read, varName);
     auto followsRS2Stmt = followsRelationshipManager->getRelationshipStmtType(Stmt2Stmt, StatementType::Stmt, true);
     REQUIRE(followsRS2Stmt.size() == 1);
-    REQUIRE(followsRS2Stmt.at(0) == PrintStatement(3, varName));
+    REQUIRE(followsRS2Stmt.find(make_shared<PrintStatement>(3, varName)) != followsRS2Stmt.end());
+
     auto Stmt2Read = ReadStatement(2, varName);
     auto followsRS2Read = followsRelationshipManager->getRelationshipStmtType(Stmt2Read, StatementType::Stmt, true);
     REQUIRE(followsRS2Read.size() == 1);
-    REQUIRE(followsRS2Read.at(0) == Statement(3, StatementType::Print, varName));
+    REQUIRE(followsRS2Read.find(make_shared<Statement>(3, StatementType::Print, varName)) != followsRS2Read.end());
 }
 
 
-TEST_CASE("Test AST Traverser - e2e with nested structure") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - e2e with nested structure") {
     std::string sourceCode = "\
         procedure kk { \
         if (a < b) then { \
@@ -181,13 +183,13 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
     auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
-    auto cfgManager = std::make_shared<CFGManager>();
+    auto affectsRelationshipManager = std::make_shared<AffectsRelationshipManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
             modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
             modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
-            nextRelationshipManager, cfgManager);
+            nextRelationshipManager, affectsRelationshipManager);
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
     std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
@@ -236,17 +238,16 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
     // Check Follows
     auto follows1 = followsRelationshipManager->getRelationshipStmtType(stmt1, StatementType::Stmt, true);
     CHECK(follows1.size() == 1);
-    CHECK(follows1.at(0) == stmt9);
+    CHECK(follows1.find(make_shared<Statement>(stmt9)) != follows1.end());
     auto follows3 = followsRelationshipManager->getRelationshipStmtType(stmt3, StatementType::Stmt, true);
     CHECK(follows3.size() == 1);
-    CHECK(follows3.at(0) == Statement(4, StatementType::Assign));
-
+    CHECK(follows3.find(make_shared<Statement>(stmt4)) != follows3.end());
 
     // Check Follows*
     auto follows1star = followsRelationshipManager->getRelationshipStmtType(stmt1, StatementType::Stmt, false);
     CHECK(follows1star.size() == 2);
-    CHECK(std::find(follows1star.begin(), follows1star.end(), stmt9) != follows1star.end());
-    CHECK(std::find(follows1star.begin(), follows1star.end(), stmt10) != follows1star.end());
+    CHECK(follows1star.find(make_shared<Statement>(stmt9)) != follows1star.end());
+    CHECK(follows1star.find(make_shared<Statement>(stmt10)) != follows1star.end());
 
     // Check Uses exhaustively
     CHECK(usesRelationshipManager->getRelationshipStmtPair(StatementType::Stmt).size() == 17);
@@ -313,7 +314,7 @@ TEST_CASE("Test AST Traverser - e2e with nested structure") {
 }
 
 
-TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - test modifies and uses with procedure") {
     std::string sourceCode = "\
         procedure kk { \
         if (a < b) then { \
@@ -341,13 +342,13 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
     auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
     auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
-    auto cfgManager = std::make_shared<CFGManager>();
+    auto affectsRelationshipManager = std::make_shared<AffectsRelationshipManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
             modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
             modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
-            nextRelationshipManager, cfgManager);
+            nextRelationshipManager, affectsRelationshipManager);
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
     std::shared_ptr<EntityExtractorVisitor> entityExtractor = std::make_shared<EntityExtractorVisitor>(pkbWriter);
@@ -420,7 +421,7 @@ TEST_CASE("Test AST Traverser - test modifies and uses with procedure") {
 }
 
 
-TEST_CASE("Test CFG Extractor - test Next extraction") {
+TEST_CASE_METHOD(IntegrationTestFixture, "Test CFG Extractor - test Next extraction") {
     std::string sourceProgram = "procedure Proc1 {"
                                 "   x = 1 + 2 * y - (1 / var) % 5;"// stmt 1
                                 "   read x;"                       // stmt 2
@@ -472,13 +473,13 @@ TEST_CASE("Test CFG Extractor - test Next extraction") {
     auto ifPatternManager = std::make_shared<IfPatternManager>(IfPatternManager());
     auto whilePatternManager = std::make_shared<WhilePatternManager>(WhilePatternManager());
     auto nextRelationshipManager = std::make_shared<NextRelationshipManager>();
-    auto cfgManager = std::make_shared<CFGManager>();
+    auto affectsRelationshipManager = std::make_shared<AffectsRelationshipManager>();
 
     auto pkbWriterManager = std::make_shared<PkbWriterManager>(
             assignmentManager, entitiesManager, followsRelationshipManager, usesRelationshipManager,
             modifiesRelationshipManager, parentRelationshipManager, callsRelationshipManager,
             modifiesProcRelationshipManager, usesProcRelationshipManager, ifPatternManager, whilePatternManager,
-            nextRelationshipManager, cfgManager);
+            nextRelationshipManager, affectsRelationshipManager);
     std::shared_ptr<PkbConcreteWriter> pkbWriter = std::make_shared<PkbConcreteWriter>(pkbWriterManager);
 
     auto cfgs = CFGBuilder::buildAllCFG(rootNode);
@@ -545,13 +546,218 @@ TEST_CASE("Test CFG Extractor - test Next extraction") {
     // Check correct Statement subclass saved
     auto statements1 = nextRelationshipManager->getRelationshipStmtType(statement15, StatementType::Call, true);
     CHECK(statements1.size() == 1);
-    CHECK(statements1.at(0).getAttrValue() == "Proc1");
+    CHECK(statements1.find(make_shared<Statement>(statement17)) != statements1.end());
+    CHECK((*statements1.find(make_shared<Statement>(statement17)))->getAttrValue() == "Proc1");
 
     auto statements2 = nextRelationshipManager->getRelationshipStmtType(statement12, StatementType::Print, true);
     CHECK(statements2.size() == 1);
-    CHECK(statements2.at(0).getAttrValue() == "p");
+    CHECK(statements2.find(make_shared<Statement>(statement13)) != statements2.end());
+    CHECK((*statements2.find(make_shared<Statement>(statement13)))->getAttrValue() == "p");
 
     auto statements3 = nextRelationshipManager->getRelationshipStmtType(statement1, StatementType::Read, true);
     CHECK(statements3.size() == 1);
-    CHECK(statements3.at(0).getAttrValue() == "x");
+    CHECK(statements3.find(make_shared<Statement>(statement2)) != statements3.end());
+    CHECK((*statements3.find(make_shared<Statement>(statement2)))->getAttrValue() == "x");
+}
+
+
+TEST_CASE_METHOD(IntegrationTestFixture, "Test AST Traverser - simple SIMPLE and exhaustive methods test") {
+    std::string sourceCode = "\
+        procedure p1 { \
+            a = 1; \
+		    call p2; \
+	        if (b == c) then { \
+                while (2 == z) { \
+			        read d; \
+			    } \
+            } else { \
+			    print e; \
+		    } \
+		}\
+        procedure p2 { \
+			read f; \
+		}";
+
+    auto pkb = Pkb();
+    auto pkbWriter = pkb.createPkbWriter();
+    auto pkbReader = pkb.createPkbReader();
+
+    auto sp = SP(pkbWriter);
+    sp.startSPProcessing(sourceCode);
+
+    // Declare Entities for testing
+    auto proc1 = Procedure("p1");
+    auto proc2 = Procedure("p2");
+
+    auto stmt1 = Statement(1, StatementType::Assign);
+    auto stmt2 = Statement(2, StatementType::Call);
+    auto stmt3 = Statement(3, StatementType::If);
+    auto stmt4 = Statement(4, StatementType::While);
+    auto stmt5 = Statement(5, StatementType::Read);
+    auto stmt6 = Statement(6, StatementType::Print);
+    auto stmt7 = Statement(7, StatementType::Read);
+
+    auto varA = Variable("a");
+    auto varB = Variable("b");
+    auto varC = Variable("c");
+    auto varD = Variable("d");
+    auto varE = Variable("e");
+    auto varF = Variable("f");
+
+    // Check each PkbReader Method
+    CHECK(pkbReader->getAllVariables().size() == 7);
+    CHECK(pkbReader->getAllConstants().size() == 2);
+    CHECK(pkbReader->getAllProcedures().size() == 2);
+    CHECK(pkbReader->getAllStatements().size() == 7);
+    CHECK(pkbReader->getAllRead().size() == 2);
+    CHECK(pkbReader->getAllPrint().size() == 1);
+    CHECK(pkbReader->getAllWhile().size() == 1);
+    CHECK(pkbReader->getAllIf().size() == 1);
+    CHECK(pkbReader->getAllCall().size() == 1);
+    CHECK(pkbReader->getAllAssign().size() == 1);
+
+    CHECK(pkbReader->getUsesStmtPair(StatementType::Stmt).size() == 6);
+    CHECK(pkbReader->getUsesProcPair().size() == 4);
+    CHECK(pkbReader->getUsesTypeIdent(StatementType::Read, varE).empty());
+    CHECK(pkbReader->getUsesTypeIdent(StatementType::If, varB).size() == 1);
+    CHECK(pkbReader->getUsesProcIdent(varE).size() == 1);
+    CHECK(pkbReader->getUsesStmt(StatementType::While).size() == 1);
+    CHECK(pkbReader->getUsesVar(stmt3).size() == 4);
+    CHECK(pkbReader->getUsesVar(proc2).empty());
+    CHECK(pkbReader->getUsesProc().size() == 1);
+    CHECK(pkbReader->isStmtUsesVar(stmt3, varC));
+    CHECK(pkbReader->isProcUsesVar(proc1, varC));
+    CHECK(!pkbReader->hasUses(stmt1));
+    CHECK(!pkbReader->hasUses(proc2));
+
+    CHECK(pkbReader->getFollowsPair(StatementType::Stmt, StatementType::Stmt).size() == 2);
+    CHECK(pkbReader->getFollowsStarPair(StatementType::Assign, StatementType::If).size() == 1);
+    CHECK(pkbReader->getFollowsTypeStmt(StatementType::Call, stmt3).size() == 1);
+    CHECK(pkbReader->getFollowsStarTypeStmt(StatementType::Call, stmt3).size() == 1);
+    CHECK(pkbReader->getFollowsTypeWildcard(StatementType::If).empty());
+    CHECK(pkbReader->getFollowsStarTypeWildcard(StatementType::If).empty());
+    CHECK(pkbReader->getFollowsStmtType(stmt2, StatementType::Stmt).size() == 1);
+    CHECK(pkbReader->getFollowsStarStmtType(stmt1, StatementType::Stmt).size() == 2);
+    CHECK(pkbReader->getFollowsWildcardType(StatementType::While).empty());
+    CHECK(pkbReader->getFollowsStarWildcardType(StatementType::Call).size() == 1);
+    CHECK(pkbReader->isFollows(stmt1, stmt2));
+    CHECK(pkbReader->isFollowsStar(stmt1, stmt3));
+    CHECK(pkbReader->hasFollows());
+    CHECK(pkbReader->hasFollowsStar());
+    CHECK(pkbReader->hasLatterStmt(stmt1));
+    CHECK(pkbReader->hasFormerStmt(stmt3));
+    CHECK(pkbReader->hasLatterStarStmt(stmt2));
+    CHECK(pkbReader->hasFormerStarStmt(stmt2));
+
+    CHECK(pkbReader->getModifiesStmtPair(StatementType::Assign).size() == 1);
+    CHECK(pkbReader->getModifiesProcPair().size() == 4);
+    CHECK(pkbReader->getModifiesTypeIdent(StatementType::Stmt, varF).size() == 2);
+    CHECK(pkbReader->getModifiesProcIdent(varF).size() == 2);
+    CHECK(pkbReader->getModifiesStmt(StatementType::Stmt).size() == 6);
+    CHECK(pkbReader->getModifiesProc().size() == 2);
+    CHECK(pkbReader->getModifiesVar(proc2).size() == 1);
+    CHECK(pkbReader->getModifiesVar(stmt7).size() == 1);
+    CHECK(pkbReader->isStmtModifiesVar(stmt2, varF));
+    CHECK(pkbReader->isProcModifiesVar(proc1, varF));
+    CHECK(pkbReader->hasModifies(proc1));
+    CHECK(pkbReader->hasModifies(stmt3));
+
+    auto expr = Expression("(1)");
+    auto wrongExpr = Expression("(2)");
+    CHECK(pkbReader->getAllAssign().size() == 1);
+    CHECK(pkbReader->getAssignStmtsByRhs(expr, false).size() == 1);
+    CHECK(pkbReader->getAssignStmtsByRhs(expr, true).size() == 1);
+    CHECK(pkbReader->getAllAssignStmtVarPair().size() == 1);
+    CHECK(pkbReader->getAssignStmtsVarPairByRhs(wrongExpr, true).empty());
+    CHECK(pkbReader->getAssignStmtsByLhs(varA).size() == 1);
+    CHECK(pkbReader->getAssignStmtsByLhsRhs(varA, expr, false).size() == 1);
+    CHECK(pkbReader->getAssignStmtsByLhsRhs(varA, wrongExpr, true).empty());
+
+    CHECK(pkbReader->getParentPair(StatementType::Stmt, StatementType::Stmt).size() == 3);
+    CHECK(pkbReader->getParentPair(StatementType::Read, StatementType::Stmt).empty());
+    CHECK(pkbReader->getParentStarPair(StatementType::Stmt, StatementType::Stmt).size() == 4);
+    CHECK(pkbReader->getParentTypeStmt(StatementType::Stmt, stmt4).size() == 1);
+    CHECK(pkbReader->getParentStarTypeStmt(StatementType::Stmt, stmt5).size() == 2);
+    CHECK(pkbReader->getParentTypeWildcard(StatementType::Stmt).size() == 2);
+    CHECK(pkbReader->getParentStarTypeWildcard(StatementType::Stmt).size() == 2);
+    CHECK(pkbReader->getParentStmtType(stmt3, StatementType::While).size() == 1);
+    CHECK(pkbReader->getParentStarStmtType(stmt3, StatementType::Stmt).size() == 3);
+    CHECK(pkbReader->getParentWildcardType(StatementType::Stmt).size() == 3);
+    CHECK(pkbReader->getParentStarWildcardType(StatementType::Stmt).size() == 3);
+    CHECK(!pkbReader->isParent(stmt1, stmt3));
+    CHECK(pkbReader->isParentStar(stmt3, stmt4));
+    CHECK(pkbReader->hasParent());
+    CHECK(pkbReader->hasParentStar());
+    CHECK(pkbReader->hasParentStmt(stmt4));
+    CHECK(pkbReader->hasParentStarStmt(stmt6));
+    CHECK(pkbReader->hasChildStmt(stmt3));
+    CHECK(!pkbReader->hasChildStarStmt(stmt2));
+
+    CHECK(pkbReader->hasCalls());
+    CHECK(pkbReader->hasCallsStar());
+    CHECK(pkbReader->isCallee(proc2));
+    CHECK(pkbReader->isCalleeStar(proc2));
+    CHECK(pkbReader->isCaller(proc1));
+    CHECK(pkbReader->isCallerStar(proc1));
+    CHECK(pkbReader->isCalls(proc1, proc2));
+    CHECK(pkbReader->isCallsStar(proc1, proc2));
+    CHECK(pkbReader->getCallees().size() == 1);
+    CHECK(pkbReader->getCalleesStar().size() == 1);
+    CHECK(pkbReader->getCallers().size() == 1);
+    CHECK(pkbReader->getCallersStar().size() == 1);
+    CHECK(pkbReader->getCallsPair().size() == 1);
+    CHECK(pkbReader->getCallsStarPair().size() == 1);
+    CHECK(pkbReader->getCallers(proc2).size() == 1);
+    CHECK(pkbReader->getCallersStar(proc2).size() == 1);
+    CHECK(pkbReader->getCallees(proc1).size() == 1);
+    CHECK(pkbReader->getCalleesStar(proc1).size() == 1);
+
+    pkbWriter->clearCache();
+    CHECK(pkbReader->getNextPair(StatementType::If, StatementType::While).size() == 1);
+    CHECK(pkbReader->getNextStarPair(StatementType::If, StatementType::While).size() == 1);
+    CHECK(pkbReader->getNextStarSameStmt(StatementType::While).size() == 1);
+    pkbWriter->clearCache();
+    CHECK(pkbReader->getNextTypeStmt(StatementType::If, stmt4).size() == 1);
+    CHECK(pkbReader->getNextStarTypeStmt(StatementType::If, stmt4).size() == 1);
+    pkbWriter->clearCache();
+    CHECK(pkbReader->getNextTypeWildcard(StatementType::Call).size() == 1);
+    CHECK(pkbReader->getNextStarTypeWildcard(StatementType::Call).size() == 1);
+    pkbWriter->clearCache();
+    CHECK(pkbReader->getNextStmtType(stmt1, StatementType::Call).size() == 1);
+    CHECK(pkbReader->getNextStarStmtType(stmt1, StatementType::While).size() == 1);
+    pkbWriter->clearCache();
+    CHECK(pkbReader->getNextWildcardType(StatementType::Call).size() == 1);
+    CHECK(pkbReader->getNextStarWildcardType(StatementType::Call).size() == 1);
+    pkbWriter->clearCache();
+    CHECK(pkbReader->isNext(stmt1, stmt2));
+    CHECK(pkbReader->isNextStar(stmt1, stmt6));
+    pkbWriter->clearCache();
+    CHECK(pkbReader->hasNext());
+    CHECK(pkbReader->hasNextStar());
+    pkbWriter->clearCache();
+    CHECK(pkbReader->hasBeforeStmt(stmt2));
+    CHECK(pkbReader->hasBeforeStarStmt(stmt3));
+    pkbWriter->clearCache();
+    CHECK(pkbReader->hasAfterStmt(stmt1));
+    CHECK(pkbReader->hasAfterStarStmt(stmt1));
+    pkbWriter->clearCache();
+
+    CHECK(pkbReader->getAllIfPatternStmts().size() == 1);
+    CHECK(pkbReader->getIfStmtsByVar(varB).size() == 1);
+    CHECK(pkbReader->getAllIfStmtVarPair().size() == 2);
+
+    CHECK(pkbReader->getAllWhilePatternStmts().size() == 1);
+    CHECK(pkbReader->getWhileStmtsByVar(varB).empty());
+    CHECK(pkbReader->getAllWhileStmtVarPair().size() == 1);
+
+    CHECK(pkbReader->getAffectsPair(StatementType::Assign, StatementType::Assign).empty());
+    CHECK(pkbReader->getAffectsTypeStmt(StatementType::Assign, stmt2).empty());
+    CHECK(pkbReader->getAffectsTypeWildcard(StatementType::Stmt).empty());
+    CHECK(pkbReader->getAffectsStmtType(stmt1, StatementType::Assign).empty());
+    CHECK(pkbReader->getAffectsWildcardType(StatementType::Assign).empty());
+    CHECK(!pkbReader->isAffects(stmt1, stmt2));
+    CHECK(!pkbReader->hasAffects());
+    CHECK(!pkbReader->hasAffectedStmt(stmt1));
+    CHECK(!pkbReader->hasAffectsStmt(stmt1));
+    CHECK(pkbReader->getAffectsSameStmt(StatementType::Assign).empty());
 }

@@ -1,6 +1,6 @@
 #include "CFGBuilder.h"
 #include "Commons/CFG/DummyCFGNode.h"
-#include "Commons/StatementFactory.h"
+#include "Commons/EntityFactory.h"
 #include "SP/AST/Nodes/StatementNode.h"
 
 std::unordered_map<ProcedureName, std::pair<std::shared_ptr<CFGNode>, std::vector<std::shared_ptr<CFGNode>>>>
@@ -77,7 +77,7 @@ CFGBuilder::buildStatementListSubgraph(std::vector<std::shared_ptr<CFGNode>> &cf
 std::pair<std::shared_ptr<CFGNode>, std::shared_ptr<CFGNode>>
 CFGBuilder::buildStatementSubgraph(std::vector<std::shared_ptr<CFGNode>> &cfgNodes,
                                    const std::shared_ptr<StatementNode> &statementNode) {
-    auto statement = StatementFactory::createStatementFromStatementNode(statementNode);
+    auto statement = EntityFactory::createStatementFromStatementNode(statementNode);
     auto cfgNode = std::make_shared<CFGNode>(statementNode->getStatementNumber(), statement->getStatementType(),
                                              statement->getAttrValue());
     cfgNodes.push_back(cfgNode);

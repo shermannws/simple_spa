@@ -22,7 +22,7 @@ public:
     /**
      * @brief Evaluates WithClause and returns a Result
      * @param clause The WithClause to evaluate
-     * @return The result of the WithClause evaluation as a Result object
+     * @return The shared pointer to result of the WithClause evaluation
      */
     std::shared_ptr<Result> evaluateClause(std::shared_ptr<Clause> clause) const override;
 
@@ -30,7 +30,7 @@ public:
      * Evaluates WithClause that has synonyms in both parameters
      * @param leftRef The first parameter of the WithClause to evaluate
      * @param rightRef The second parameter of the WithClause to evaluate
-     * @return The result of the WithClause evaluation as a Result object
+     * @return The shared pointer to result of the WithClause evaluation
      */
     std::shared_ptr<Result> evaluateSynSyn(Ref &leftRef, Ref &rightRef) const;
 
@@ -38,7 +38,7 @@ public:
      * Evaluates WithClause that has a synonym in one of the parameters
      * @param leftRef The first parameter of the WithClause to evaluate
      * @param rightRef The second parameter of the WithClause to evaluate
-     * @return The result of the WithClause evaluation as a Result object
+     * @return The shared pointer to result of the WithClause evaluation
      */
     std::shared_ptr<Result> evaluateSynAny(Ref &leftRef, Ref &rightRef) const;
 
@@ -46,27 +46,28 @@ public:
      * Evaluates WithClause that results in boolean
      * @param leftRef The first parameter of the WithClause to evaluate
      * @param rightRef The second parameter of the WithClause to evaluate
-     * @return The result of the WithClause evaluation as a Result object
+     * @return The shared pointer to result of the WithClause evaluation
      */
     std::shared_ptr<Result> evaluateBoolean(Ref &leftRef, Ref &rightRef) const;
 
     /**
-     * Joins two vectors of Entities based on the AttrName
-     * @param v1 The first vector of Entities to join
+     * Joins two unordered set of Entities based on the AttrName
+     * @param v1 The first unordered set of Entities to join
      * @param a1 The AttrName of the first attrRef to join
-     * @param v2 The second vector of Entities to join
+     * @param v2 The second unordered set of Entities to join
      * @param a2 The AttrName of the second attrRef to join
-     * @return The vector of vectors of Entity as a result of the join
+     * @return The unordered_set of vectors of Entity as a result of the join
      */
-    std::vector<std::vector<Entity>> join(std::vector<Entity> v1, AttrName a1, std::vector<Entity> v2,
-                                          AttrName a2) const;
+    std::unordered_set<ResultTuple> join(std::unordered_set<EntityPointer> v1, AttrName a1,
+                                         std::unordered_set<EntityPointer> v2, AttrName a2) const;
 
     /**
-     * Filters a vector of Entities based on a StringRep
-     * @param v The vector of Entities to filter
+     * Filters a unordered set of Entities based on a StringRep
+     * @param v The unordered set of Entities to filter
      * @param a The AttrName of the attrRef to filter
      * @param rep The string representation of the value to filter with
-     * @return The vector of Entities as a result of the join
+     * @return The unordered set of Entities as a result of the join
      */
-    std::vector<Entity> filter(std::vector<Entity> v, AttrName a, StringRep rep) const;
+    std::unordered_set<std::shared_ptr<Entity>> filter(std::unordered_set<EntityPointer> v, AttrName a,
+                                                       StringRep rep) const;
 };

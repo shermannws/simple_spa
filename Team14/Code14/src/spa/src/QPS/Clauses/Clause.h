@@ -18,6 +18,7 @@ enum class ClauseType {
     NextStar,
     Calls,
     CallsStar,
+    Affects,
     Assign,
     While,
     If,
@@ -36,9 +37,21 @@ protected:
     ClauseType type;
 
     /**
+     * @brief true if clause is negated
+     */
+    bool negation;
+
+    /**
      * @brief The first parameter of the Clause in Ref
      */
     Ref firstParam;
+
+    /**
+     * @brief A virtual function to implement in subclasses, returns true if all the fields are equal
+     * @param other The other Clause to compare
+     * @return true if the two Clauses are equal
+     */
+    virtual bool isEqual(const Clause &other) const = 0;
 
 public:
     /**
@@ -64,6 +77,18 @@ public:
     ClauseType getType();
 
     /**
+     * @brief The setter of the clause negation
+     * @param isNegated value of the negation of the clause
+     */
+    void setNegation(bool isNegated);
+
+    /**
+     * @brief returns true if clause contains 'not' otherwise false
+     * @return true if clause is a negation clause
+     */
+    bool isNegation();
+
+    /**
      * @brief The setter of the first parameter of the Clause
      * @param ref The Ref reference of the first parameter
      */
@@ -87,5 +112,13 @@ public:
      * @param other The other Clause object to compare against
      * @return True if the Clause object is equal to the other Clause object
      */
-    virtual bool operator==(const Clause &other) const = 0;
+    bool operator==(const Clause &other) const;
+};
+
+/**
+ * @brief An equal function for shared_ptr of Clause objects
+ */
+template<>
+struct std::equal_to<std::shared_ptr<Clause>> {
+    bool operator()(std::shared_ptr<Clause> const &lhs, std::shared_ptr<Clause> const &rhs) const;
 };

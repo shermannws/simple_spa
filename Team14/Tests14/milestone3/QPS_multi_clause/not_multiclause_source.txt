@@ -1,0 +1,13 @@
+procedure proc {
+    x = x;
+    a = 1;
+    k = l;
+
+    while (w == 1) {
+        b = b;
+        while (w == 2) {
+            c = 1;
+            d = e;
+        }
+    }
+}

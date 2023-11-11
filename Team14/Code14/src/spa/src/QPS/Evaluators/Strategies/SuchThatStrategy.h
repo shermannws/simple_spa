@@ -23,38 +23,38 @@ public:
      * @brief Evaluates SuchThatClause that has synonyms in both parameters
      * @param leftRef The first parameter of the SuchThatClause to evaluate
      * @param rightRef The second parameter of the SuchThatClause to evaluate
-     * @return The result of the SuchThatClause evaluation as a Result object
+     * @return The shared pointer to result of the SuchThatClause evaluation
      */
     virtual std::shared_ptr<Result> evaluateSynSyn(Ref &leftRef, Ref &rightRef) const = 0;
 
     /**
-     * @brief Evaluates SuchThatClause that has a synonym in the first parameter
+     * @brief Evaluates SuchThatClause that has a synonym as the first parameter
      * @param leftRef The first parameter of the SuchThatClause to evaluate
      * @param rightRef The second parameter of the SuchThatClause to evaluate
-     * @return The result of the SuchThatClause evaluation as a Result object
+     * @return The shared pointer to result of the SuchThatClause evaluation
      */
     virtual std::shared_ptr<Result> evaluateSynAny(Ref &leftRef, Ref &rightRef) const = 0;
 
     /**
-     * @brief Evaluates SuchThatClause that has a synonym in the second parameters
+     * @brief Evaluates SuchThatClause that has a synonym as the second parameter
      * @param leftRef The first parameter of the SuchThatClause to evaluate
      * @param rightRef The second parameter of the SuchThatClause to evaluate
-     * @return The result of the SuchThatClause evaluation as a Result object
+     * @return The shared pointer to result of the SuchThatClause evaluation
      */
     virtual std::shared_ptr<Result> evaluateAnySyn(Ref &leftRef, Ref &rightRef) const = 0;
 
     /**
-     * @brief Evaluates SuchThatClause that results in boolean
+     * @brief Evaluates SuchThatClause that evaluates to a boolean value
      * @param leftRef The first parameter of the SuchThatClause to evaluate
      * @param rightRef The second parameter of the SuchThatClause to evaluate
-     * @return The result of the SuchThatClause evaluation as a Result object
+     * @return The shared pointer to result of the SuchThatClause evaluation
      */
     virtual std::shared_ptr<Result> evaluateBoolean(Ref &leftRef, Ref &rightRef) const = 0;
 
     /**
      * @brief Evaluates SuchThatClause and returns a Result
      * @param clause The SuchThatClause to evaluate
-     * @return The result of the SuchThatClause evaluation as a Result object
+     * @return The shared pointer to result of the SuchThatClause evaluation
      */
     std::shared_ptr<Result> evaluateClause(std::shared_ptr<Clause> clause) const override;
 };

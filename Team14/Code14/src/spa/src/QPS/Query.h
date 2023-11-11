@@ -21,7 +21,7 @@ private:
     /**
      * Map of entity declarations
      */
-    std::unordered_map<std::string, std::shared_ptr<QueryEntity>> declarations;
+    std::unordered_map<Synonym, std::shared_ptr<QueryEntity>> declarations;
 
     /**
      * Vector of selected entities
@@ -62,7 +62,7 @@ public:
 
     /**
      * @brief Adds a selected entity to the query.
-     * @param entity A shared pointer to the QueryEntity to be added as a selected entity.
+     * @param Synonym A shared pointer to the QueryEntity to be added as a selected entity.
      */
     void addSelect(const Synonym);
 

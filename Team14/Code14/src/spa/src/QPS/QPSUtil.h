@@ -5,6 +5,12 @@
 #include "QueryEntity.h"
 #include "Ref.h"
 
+/* Represents a function type that retrieves entities from a PkbReader*/
+using entityGetterFunc = std::function<std::unordered_set<std::shared_ptr<Entity>>(std::shared_ptr<PkbReader>)>;
+
+/* Represents a function type that creates a Strategy that uses a PkbReader */
+using strategyCreatorFunc = std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>;
+
 /**
  * @brief QPSUtil class
  */
@@ -24,6 +30,11 @@ public:
      * @brief An unordered map that maps QueryEntityType to the corresponding ClauseType
      */
     static std::unordered_map<QueryEntityType, ClauseType> entityToClauseMap;
+
+    /**
+     * @brief An unordered map that maps a pattern clause's ClauseType to the corresponding QueryEntityType
+     */
+    static std::unordered_map<ClauseType, QueryEntityType> patternClauseToEntityMap;
 
     /**
      * @brief An unordered map that maps a string to TokenType
@@ -53,14 +64,12 @@ public:
     /**
      * @brief An unordered map of ClauseType and its corresponding strategy creator function
      */
-    static std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shared_ptr<PkbReader>)>>
-            strategyCreatorMap;
+    static std::unordered_map<ClauseType, strategyCreatorFunc> strategyCreatorMap;
 
     /**
      * @brief An unordered map of query entity type to the corresponding pkb getAll func
      */
-    static std::unordered_map<QueryEntityType, std::function<std::vector<Entity>(std::shared_ptr<PkbReader>)>>
-            entityGetterMap;
+    static std::unordered_map<QueryEntityType, entityGetterFunc> entityGetterMap;
 
     /**
      * @brief An unordered map that maps QueryEntityType to the corresponding StatementType
@@ -75,7 +84,7 @@ public:
     /**
      * @brief An unordered map of attrName strings to the entity's getValue func based on attrName
      */
-    static std::unordered_map<AttrName, std::function<std::string(Entity)>> getValueFunc;
+    static std::unordered_map<AttrName, std::function<std::string(std::shared_ptr<Entity>)>> getValueFunc;
 
     /**
      * @brief returns the synonym of an element

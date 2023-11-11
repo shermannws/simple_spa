@@ -1,42 +1,42 @@
 #include "NextRelationshipManager.h"
 
+#include <utility>
+
 NextRelationshipManager::NextRelationshipManager() : StmtToStmtRelationshipManager() {
+    this->clauseGroup = ClauseGroup::Next;
     this->isNextStarCalculated = false;
 };
 
-std::vector<Entity> NextRelationshipManager::getNextStarSameStmt(StatementType stmtType) const {
+EntitySet NextRelationshipManager::getNextStarSameStmt(StatementType stmtType) const {
     if (!this->isNextStarCalculated) { this->calculateNextStar(); }
 
-    auto leftMatcher = [stmtType](Statement &stmt) { return stmt.isStatementType(stmtType); };
-
-    return ManagerUtils::getLeftKeysMatchRight<Statement>(*starRelationshipStore, leftMatcher);
+    return getSameStmt(stmtType, false);
 }
 
-std::vector<std::vector<Entity>> NextRelationshipManager::getRelationshipPair(StatementType formerType,
-                                                                              StatementType latterType,
-                                                                              bool requireDirect) const {
+EntityPairSet NextRelationshipManager::getRelationshipPair(StatementType formerType, StatementType latterType,
+                                                           bool requireDirect) const {
     if (!requireDirect && !this->isNextStarCalculated) { this->calculateNextStar(); }
     return StmtToStmtRelationshipManager::getRelationshipPair(formerType, latterType, requireDirect);
 }
 
-std::vector<Entity> NextRelationshipManager::getRelationshipTypeStmt(StatementType type, Statement &statement,
-                                                                     bool requireDirect) const {
+EntitySet NextRelationshipManager::getRelationshipTypeStmt(StatementType type, Statement &statement,
+                                                           bool requireDirect) const {
     if (!requireDirect && !this->isNextStarCalculated) { this->calculateNextStar(); }
     return StmtToStmtRelationshipManager::getRelationshipTypeStmt(type, statement, requireDirect);
 }
 
-std::vector<Entity> NextRelationshipManager::getRelationshipTypeWildcard(StatementType type, bool requireDirect) const {
+EntitySet NextRelationshipManager::getRelationshipTypeWildcard(StatementType type, bool requireDirect) const {
     if (!requireDirect && !this->isNextStarCalculated) { this->calculateNextStar(); }
     return StmtToStmtRelationshipManager::getRelationshipTypeWildcard(type, requireDirect);
 }
 
-std::vector<Entity> NextRelationshipManager::getRelationshipStmtType(Statement &statement, StatementType type,
-                                                                     bool requireDirect) const {
+EntitySet NextRelationshipManager::getRelationshipStmtType(Statement &statement, StatementType type,
+                                                           bool requireDirect) const {
     if (!requireDirect && !this->isNextStarCalculated) { this->calculateNextStar(); }
     return StmtToStmtRelationshipManager::getRelationshipStmtType(statement, type, requireDirect);
 }
 
-std::vector<Entity> NextRelationshipManager::getRelationshipWildcardType(StatementType type, bool requireDirect) const {
+EntitySet NextRelationshipManager::getRelationshipWildcardType(StatementType type, bool requireDirect) const {
     if (!requireDirect && !this->isNextStarCalculated) { this->calculateNextStar(); }
     return StmtToStmtRelationshipManager::getRelationshipWildcardType(type, requireDirect);
 }
@@ -55,4 +55,9 @@ void NextRelationshipManager::calculateNextStar() const {
     ManagerUtils::calculateTransitivity<NextRelationshipStore, Statement>(this->relationshipStore,
                                                                           this->starRelationshipStore);
     this->isNextStarCalculated = true;
+}
+
+std::shared_ptr<EntityStore<Statement>>
+NextRelationshipManager::getAllNextOfStmt(std::shared_ptr<Statement> stmt) const {
+    return this->relationshipStore->getRightEntitiesOf(std::move(stmt));
 }

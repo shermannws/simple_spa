@@ -2,16 +2,16 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "../AppConstants.h"
-#include "../HashableKey.h"
 #include "EntityType.h"
 
 /**
  * @brief An Entity is an entity in the SIMPLE programming language
  * @details An Entity is an entity in the SIMPLE programming language
  */
-class Entity : public HashableKey {
+class Entity {
 private:
     /**
      * @brief The Entity Type of the Entity of enum type `EntityType`
@@ -83,17 +83,7 @@ public:
      * @param other The other Entity object to compare with
      * @return True if the Entity object is equal to the other Entity object, false otherwise
      */
-    bool operator==(const HashableKey &other) const override;
-};
-
-/**
- * @brief A hash function for Entity objects
- * @details A hash function for Entity objects
- * @note This hash function is used by the EntityStore class
- */
-template<>
-struct std::hash<Entity> {
-    std::size_t operator()(const Entity &entity) const;
+    bool operator==(const Entity &other) const;
 };
 
 /**
@@ -114,4 +104,23 @@ struct std::hash<std::shared_ptr<Entity>> {
 template<>
 struct std::equal_to<std::shared_ptr<Entity>> {
     bool operator()(std::shared_ptr<Entity> const &lhs, std::shared_ptr<Entity> const &rhs) const;
+};
+
+/**
+ * @brief A hash function for vector of Entity shared pointers
+ * @details A hash function for vector of Entity shares pointers
+ */
+template<>
+struct std::hash<std::vector<std::shared_ptr<Entity>>> {
+    std::size_t operator()(const std::vector<std::shared_ptr<Entity>> &entities) const;
+};
+
+/**
+ * @brief An equal function for a vector of Entity shared pointers
+ * @details An equal function for a vector of Entity shared pointers
+ */
+template<>
+struct std::equal_to<std::vector<std::shared_ptr<Entity>>> {
+    bool operator()(std::vector<std::shared_ptr<Entity>> const &lhs,
+                    std::vector<std::shared_ptr<Entity>> const &rhs) const;
 };

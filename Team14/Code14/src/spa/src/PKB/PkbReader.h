@@ -12,113 +12,113 @@ class PkbReader {
 public:
     /**
      * @brief Returns all the variables in the SIMPLE program.
-     * @return A vector of variables.
+     * @return An unordered_set of variables.
      */
-    virtual std::vector<Entity> getAllVariables() const = 0;
+    virtual EntitySet getAllVariables() const = 0;
 
     /**
      * @brief Returns all the constants in the SIMPLE program.
-     * @return A vector of constants.
+     * @return An unordered_set of constants.
      */
-    virtual std::vector<Entity> getAllConstants() const = 0;
+    virtual EntitySet getAllConstants() const = 0;
 
     /**
      * @brief Returns all the procedures in the SIMPLE program.
-     * @return A vector of procedures.
+     * @return An unordered_set of procedures.
      */
-    virtual std::vector<Entity> getAllProcedures() const = 0;
+    virtual EntitySet getAllProcedures() const = 0;
 
     /**
      * @brief Returns all the statements in the SIMPLE program.
-     * @return A vector of statements.
+     * @return An unordered_set of statements.
      */
-    virtual std::vector<Entity> getAllStatements() const = 0;
+    virtual EntitySet getAllStatements() const = 0;
 
     /**
      * @brief Returns all the read statements in the SIMPLE program.
-     * @return A vector of read statements.
+     * @return An unordered_set of read statements.
      */
-    virtual std::vector<Entity> getAllRead() const = 0;
+    virtual EntitySet getAllRead() const = 0;
 
     /**
      * @brief Returns all the print statements in the SIMPLE program.
-     * @return A vector of print statements.
+     * @return An unordered_set of print statements.
      */
-    virtual std::vector<Entity> getAllPrint() const = 0;
+    virtual EntitySet getAllPrint() const = 0;
 
     /**
      * @brief Returns all the while statements in the SIMPLE program.
-     * @return A vector of while statements.
+     * @return An unordered_set of while statements.
      */
-    virtual std::vector<Entity> getAllWhile() const = 0;
+    virtual EntitySet getAllWhile() const = 0;
 
     /**
      * @brief Returns all the if statements in the SIMPLE program.
-     * @return A vector of if statements.
+     * @return An unordered_set of if statements.
      */
-    virtual std::vector<Entity> getAllIf() const = 0;
+    virtual EntitySet getAllIf() const = 0;
 
     /**
      * @brief Returns all the call statements in the SIMPLE program.
-     * @return A vector of call statements.
+     * @return An unordered_set of call statements.
      */
-    virtual std::vector<Entity> getAllCall() const = 0;
+    virtual EntitySet getAllCall() const = 0;
 
     /**
-     * Returns a vector of Statement, Variable pair where the statement uses the variable. Retrieves the relationship
-     * where the statement is of the given type
+     * Returns an unordered_set of Statement, Variable pair where the statement uses the variable. Retrieves the
+     * relationship where the statement is of the given type
      * @param type The type of the statement
-     * @return A vector of Statement, Variable pair stored in a vector
+     * @return An unordered_set of Statement, Variable pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getUsesStmtPair(StatementType type) const = 0;
+    virtual EntityPairSet getUsesStmtPair(StatementType type) const = 0;
 
     /**
-     * Returns a vector of Procedure, Variable pair where the procedure uses the variable.
-     * @return A vector of Procedure, Variable pair stored in a vector
+     * Returns an unordered_set of Procedure, Variable pair where the procedure uses the variable.
+     * @return An unordered_set of Procedure, Variable pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getUsesProcPair() const = 0;
+    virtual EntityPairSet getUsesProcPair() const = 0;
 
     /**
-     * Returns a vector of statements of StatementType type which uses the given variable
+     * Returns an unordered_set of statements of StatementType type which uses the given variable
      * @param type The type of the statement to be retrieved
      * @param var The variable that is used by the statements
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getUsesTypeIdent(StatementType type, Variable &var) const = 0;
+    virtual EntitySet getUsesTypeIdent(StatementType type, Variable &var) const = 0;
 
     /**
-     * Returns a vector of procedures which uses the given variable
+     * Returns an unordered_set of procedures which uses the given variable
      * @param var The variable that is used by the statements
-     * @return A vector of procedures
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getUsesProcIdent(Variable &var) const = 0;
+    virtual EntitySet getUsesProcIdent(Variable &var) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which uses any variable
+     * Returns an unordered_set of statements of the given statement type which uses any variable
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getUsesStmt(StatementType type) const = 0;
+    virtual EntitySet getUsesStmt(StatementType type) const = 0;
 
     /**
-     * Returns a vector of variables which is used by the given statement
+     * Returns an unordered_set of variables which is used by the given statement
      * @param stmt The statement that uses the variables
-     * @return A vector of variables
+     * @return An unordered_set of variables
      */
-    virtual std::vector<Entity> getUsesVar(Statement &stmt) const = 0;
+    virtual EntitySet getUsesVar(Statement &stmt) const = 0;
 
     /**
-     * Returns a vector of variables which is used by the given procedure
+     * Returns an unordered_set of variables which is used by the given procedure
      * @param proc The procedure that uses the variables
-     * @return A vector of variables
+     * @return An unordered_set of variables
      */
-    virtual std::vector<Entity> getUsesVar(Procedure &proc) const = 0;
+    virtual EntitySet getUsesVar(Procedure &proc) const = 0;
 
     /**
-     * Returns a vector of procedures which uses any variable
-     * @return A vector of procedures
+     * Returns an unordered_set of procedures which uses any variable
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getUsesProc() const = 0;
+    virtual EntitySet getUsesProc() const = 0;
 
     /**
      * Returns a boolean value indicating if the given statement uses the given variable
@@ -151,92 +151,91 @@ public:
     virtual bool hasUses(Procedure &proc) const = 0;
 
     /**
-     * Returns a vector of Statement, Statement pair where the first statement follows the second statement DIRECTLY.
-     * Retrieves the relationship where the first and second statement are both of the given type
+     * Returns an unordered_set of Statement, Statement pair where the first statement follows the second statement
+     * DIRECTLY. Retrieves the relationship where the first and second statement are both of the given type
      * @param formerType The type of the former statement
      * @param latterType The type of the latter statement
-     * @return A vector of Statement, Statement pair stored in a vector
+     * @return An unordered_set of Statement, Statement pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getFollowsPair(StatementType formerType,
-                                                            StatementType latterType) const = 0;
+    virtual EntityPairSet getFollowsPair(StatementType formerType, StatementType latterType) const = 0;
 
     /**
-     * Returns a vector of Statement, Statement pair where the first statement follows the second statement DIRECTLY or
-     * INDIRECTLY. Retrieves the relationship where the first and second statement are both of the given type
+     * Returns an unordered_set of Statement, Statement pair where the first statement follows the second statement
+     * DIRECTLY or INDIRECTLY. Retrieves the relationship where the first and second statement are both of the given
+     * type
      * @param formerType The type of the former statement
      * @param latterType The type of the latter statement
-     * @return A vector of Statement, Statement pair stored in a vector
+     * @return An unordered_set of Statement, Statement pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getFollowsStarPair(StatementType formerType,
-                                                                StatementType latterType) const = 0;
+    virtual EntityPairSet getFollowsStarPair(StatementType formerType, StatementType latterType) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is followed by the given statement DIRECTLY i.e.
-     * the given statement is directly after the statement in the vector
+     * Returns an unordered_set of statements of the given statement type which is followed by the given statement
+     * DIRECTLY i.e. the given statement is directly after the statement in the set
      * @param type The type of the statement to be retrieved
      * @param statement The statement that succeeds the statements to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getFollowsTypeStmt(StatementType type, Statement &statement) const = 0;
+    virtual EntitySet getFollowsTypeStmt(StatementType type, Statement &statement) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is followed by the given statement DIRECTLY or
-     * INDIRECTLY i.e. the given statement is directly or indirectly after the statement in the vector
+     * Returns an unordered_set of statements of the given statement type which is followed by the given statement
+     * DIRECTLY or INDIRECTLY i.e. the given statement is directly or indirectly after the statement in the set
      * @param type The type of the statement to be retrieved
      * @param statement The statement that succeeds the statements to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getFollowsStarTypeStmt(StatementType type, Statement &statement) const = 0;
+    virtual EntitySet getFollowsStarTypeStmt(StatementType type, Statement &statement) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is followed by any statement i.e. there exist a
-     * statement after the statement in the vector
+     * Returns an unordered_set of statements of the given statement type which is followed by any statement i.e. there
+     * exist a statement after the statement in the set
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getFollowsTypeWildcard(StatementType type) const = 0;
+    virtual EntitySet getFollowsTypeWildcard(StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is followed by any statement i.e. there exist a
-     * statement after the statement in the vector
+     * Returns an unordered_set of statements of the given statement type which is followed by any statement i.e. there
+     * exist a statement after the statement in the set
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getFollowsStarTypeWildcard(StatementType type) const = 0;
+    virtual EntitySet getFollowsStarTypeWildcard(StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which follows the given statement DIRECTLY i.e. the
-     * given statement is directly before the statement in the vector
+     * Returns an unordered_set of statements of the given statement type which follows the given statement DIRECTLY
+     * i.e. the given statement is directly before the statement in the set
      * @param statement The statement that precedes the statements to be retrieved
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getFollowsStmtType(Statement &statement, StatementType type) const = 0;
+    virtual EntitySet getFollowsStmtType(Statement &statement, StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which follows the given statement DIRECTLY or
-     * INDIRECTLY i.e. the given statement is directly or indirectly before the statement in the vector
+     * Returns an unordered_set of statements of the given statement type which follows the given statement DIRECTLY or
+     * INDIRECTLY i.e. the given statement is directly or indirectly before the statement in the set
      * @param statement The statement that precedes the statements to be retrieved
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getFollowsStarStmtType(Statement &statement, StatementType type) const = 0;
+    virtual EntitySet getFollowsStarStmtType(Statement &statement, StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which follows any statement i.e. there exist a
-     * statement before the statement in the vector
+     * Returns an unordered_set of statements of the given statement type which follows any statement i.e. there exist a
+     * statement before the statement in the set
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getFollowsWildcardType(StatementType type) const = 0;
+    virtual EntitySet getFollowsWildcardType(StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which follows any statement i.e. there exist a
-     * statement before the statement in the vector
+     * Returns an unordered_set of statements of the given statement type which follows any statement i.e. there exist a
+     * statement before the statement in the set
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getFollowsStarWildcardType(StatementType type) const = 0;
+    virtual EntitySet getFollowsStarWildcardType(StatementType type) const = 0;
 
     /**
      * Returns true if statement1 DIRECTLY precedes statement2, false otherwise
@@ -299,61 +298,60 @@ public:
     virtual bool hasFormerStarStmt(Statement &statement) const = 0;
 
     /**
-     * Returns a vector of Statement, Variable pair where the statement modifies the variable. Retrieves the
+     * Returns an unordered_set of Statement, Variable pair where the statement modifies the variable. Retrieves the
      * relationship where the statement is of the given type
      * @param type The type of the statement
-     * @return A vector of Statement, Variable pair stored in a vector
+     * @return An unordered_set of Statement, Variable pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getModifiesStmtPair(StatementType type) const = 0;
+    virtual EntityPairSet getModifiesStmtPair(StatementType type) const = 0;
 
     /**
-     * Returns a vector of Procedure, Variable pair where the procedure modifies the variable.
-     * @return A vector of Procedure, Variable pair stored in a vector
+     * Returns an unordered_set of Procedure, Variable pair where the procedure modifies the variable.
+     * @return An unordered_set of Procedure, Variable pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getModifiesProcPair() const = 0;
+    virtual EntityPairSet getModifiesProcPair() const = 0;
 
     /**
-     * Returns a vector of statements of StatementType type which modifies the given variable
+     * Returns an unordered_set of statements of StatementType type which modifies the given variable
      * @param type The type of the statement to be retrieved
      * @param var The variable that is modified by the statements
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getModifiesTypeIdent(StatementType type, Variable &var) const = 0;
+    virtual EntitySet getModifiesTypeIdent(StatementType type, Variable &var) const = 0;
 
     /**
-     * Returns a vector of procedures which modifies the given variable
+     * Returns an unordered_set of procedures which modifies the given variable
      * @param var The variable that is modified by the procedure
-     * @return A vector of procedures
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getModifiesProcIdent(Variable &var) const = 0;
+    virtual EntitySet getModifiesProcIdent(Variable &var) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which modifies any variable
+     * Returns an unordered_set of statements of the given statement type which modifies any variable
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getModifiesStmt(StatementType type) const = 0;
+    virtual EntitySet getModifiesStmt(StatementType type) const = 0;
 
     /**
-     * Returns a vector of procedures which modifies any variable
-     * @return A vector of procedures
+     * Returns an unordered_set of procedures which modifies any variable
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getModifiesProc() const = 0;
+    virtual EntitySet getModifiesProc() const = 0;
 
     /**
-     * Returns a vector of variables which is modified by the given statement
+     * Returns an unordered_set of variables which is modified by the given statement
      * @param stmt The statement that modifies the variables
-     * @return A vector of variables
-     * @note The vector will only contain one variable
+     * @return An unordered_set of variables
      */
-    virtual std::vector<Entity> getModifiesVar(Statement &stmt) const = 0;
+    virtual EntitySet getModifiesVar(Statement &stmt) const = 0;
 
     /**
-     * Returns a vector of variables which is modified by the given procedure
+     * Returns an unordered_set of variables which is modified by the given procedure
      * @param proc The procedure that modifies the variables
-     * @return A vector of variables
+     * @return An unordered_set of variables
      */
-    virtual std::vector<Entity> getModifiesVar(Procedure &proc) const = 0;
+    virtual EntitySet getModifiesVar(Procedure &proc) const = 0;
 
     /**
      * Returns a boolean value indicating if the given statement modifies the given variable
@@ -386,142 +384,146 @@ public:
     virtual bool hasModifies(Procedure &proc) const = 0;
 
     /**
-     * Returns a vector of Statements from all the Assignment objects in the store. Represents all the Statements that
-     * are assignments
-     * @return A vector of all the Statement objects
+     * Returns an unordered_set of Statements from all the Assignment objects in the store. Represents all the
+     * Statements that are assignments
+     * @return An unordered_set of all the Statement objects
      * @note Used for `pattern a (_,_)`
      */
-    virtual std::vector<Entity> getAllAssign() const = 0;
+    virtual EntitySet getAllAssign() const = 0;
 
     /**
-     * Returns a vector of Statement objects from Assignment objects in the store with Expressions that match the given
-     * pattern. Represents all the statements that are assignments with Expressions that match the given pattern
+     * Returns an unordered_set of Statement objects from Assignment objects in the store with Expressions that match
+     * the given pattern. Represents all the statements that are assignments with Expressions that match the given
+     * pattern
      * @param rhs The pattern to be matched against the Expressions
      * @param hasRhsWildCard A boolean value indicating if the pattern has a wildcard
-     * @return A vector of Statement objects
+     * @return An unordered_set of Statement objects
      * @note Used for `pattern a (_, "x")`
      */
-    virtual std::vector<Entity> getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const = 0;
+    virtual EntitySet getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const = 0;
 
     /**
-     * Returns a vector of vectors containing Statement and Variable pairs from all the Assignment objects in the store
-     * @return A vector of vectors containing Statement and Variable pairs
+     * Returns an unordered_set of vectors containing Statement and Variable pairs from all the Assignment objects in
+     * the store
+     * @return An unordered_set of vectors containing Statement and Variable pairs
      * @note Used for `pattern a (v, _)`
      */
-    virtual std::vector<std::vector<Entity>> getAllAssignStmtVarPair() const = 0;
+    virtual EntityPairSet getAllAssignStmtVarPair() const = 0;
 
     /**
-     * Returns a vector of vectors containing Statement and Variable pairs from the Assignment objects in the store with
-     * the Expression matching the given pattern
+     * Returns an unordered_set of vectors containing Statement and Variable pairs from the Assignment objects in the
+     * store with the Expression matching the given pattern
      * @param rhs The pattern to be matched against the Expressions
      * @param hasWildCard A boolean value indicating if the pattern has a wildcard
-     * @return A vector of vectors containing Statement and Variable pairs
+     * @return An unordered_set of vectors containing Statement and Variable pairs
      * @note Used for `pattern a (v, "x")`
      */
-    virtual std::vector<std::vector<Entity>> getAssignStmtsVarPairByRhs(Expression &rhs, bool hasWildCard) const = 0;
+    virtual EntityPairSet getAssignStmtsVarPairByRhs(Expression &rhs, bool hasWildCard) const = 0;
 
     /**
-     * Returns a vector of Statement objects from Assignment objects in the store where the Variable that is assigned
-     * matches the given Variable.
+     * Returns an unordered_set of Statement objects from Assignment objects in the store where the Variable that is
+     * assigned matches the given Variable.
      * @param lhs The Variable to be matched against
-     * @return A vector of Statement objects
+     * @return An unordered_set of Statement objects
      * @note Used for `pattern a ("x", _)`
      */
-    virtual std::vector<Entity> getAssignStmtsByLhs(Variable &lhs) const = 0;
+    virtual EntitySet getAssignStmtsByLhs(Variable &lhs) const = 0;
 
     /**
-     * Returns a vector of Statement objects from Assignment objects in the store where the Variable that is assigned
-     * matches the given Variable and the Expression matches the given pattern.
+     * Returns an unordered_set of Statement objects from Assignment objects in the store where the Variable that is
+     * assigned matches the given Variable and the Expression matches the given pattern.
      * @param lhs The Variable to be matched against
      * @param rhs The pattern to be matched against the Expressions
      * @param hasRhsWildCard A boolean value indicating if the pattern has a wildcard
-     * @return A vector of Statement objects
+     * @return An unordered_set of Statement objects
      * @note Used for `pattern a ("x", "x")`
      */
-    virtual std::vector<Entity> getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const = 0;
+    virtual EntitySet getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const = 0;
 
     /**
-     * Returns a vector of Statement, Statement pair where the first statement is the DIRECT parent of the second
-     * statement. Retrieves the relationship where the first and second statement are both of the given type
-     * @param formerType The type of the former statement
-     * @param latterType The type of the latter statement
-     * @return A vector of Statement, Statement pair stored in a vector
-     */
-    virtual std::vector<std::vector<Entity>> getParentPair(StatementType formerType,
-                                                           StatementType latterType) const = 0;
-
-    /**
-     * Returns a vector of Statement, Statement pair where the first statement is the DIRECT or INDIRECT parent of the
+     * Returns an unordered_set of Statement, Statement pair where the first statement is the DIRECT parent of the
      * second statement. Retrieves the relationship where the first and second statement are both of the given type
      * @param formerType The type of the former statement
      * @param latterType The type of the latter statement
-     * @return A vector of Statement, Statement pair stored in a vector
+     * @return An unordered_set of Statement, Statement pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getParentStarPair(StatementType formerType,
-                                                               StatementType latterType) const = 0;
+    virtual EntityPairSet getParentPair(StatementType formerType, StatementType latterType) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is the DIRECT parent of the given statement
+     * Returns an unordered_set of Statement, Statement pair where the first statement is the DIRECT or INDIRECT parent
+     * of the second statement. Retrieves the relationship where the first and second statement are both of the given
+     * type
+     * @param formerType The type of the former statement
+     * @param latterType The type of the latter statement
+     * @return An unordered_set of Statement, Statement pair stored in a vector
+     */
+    virtual EntityPairSet getParentStarPair(StatementType formerType, StatementType latterType) const = 0;
+
+    /**
+     * Returns an unordered_set of statements of the given statement type which is the DIRECT parent of the given
+     * statement
      * @param type The type of the statement to be retrieved
      * @param statement The statement that is the direct child of the statements to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getParentTypeStmt(StatementType type, Statement &statement) const = 0;
+    virtual EntitySet getParentTypeStmt(StatementType type, Statement &statement) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is the DIRECT or INDIRECT parent of the given
-     * statement
+     * Returns an unordered_set of statements of the given statement type which is the DIRECT or INDIRECT parent of the
+     * given statement
      * @param type The type of the statement to be retrieved
      * @param statement The statement that is the direct or indirect child of the statements to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getParentStarTypeStmt(StatementType type, Statement &statement) const = 0;
+    virtual EntitySet getParentStarTypeStmt(StatementType type, Statement &statement) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is the direct parent of any statement
+     * Returns an unordered_set of statements of the given statement type which is the direct parent of any statement
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getParentTypeWildcard(StatementType type) const = 0;
+    virtual EntitySet getParentTypeWildcard(StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is the direct or indirect parent of any
+     * Returns an unordered_set of statements of the given statement type which is the direct or indirect parent of any
      * statement
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getParentStarTypeWildcard(StatementType type) const = 0;
+    virtual EntitySet getParentStarTypeWildcard(StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is the DIRECT child of the given statement
+     * Returns an unordered_set of statements of the given statement type which is the DIRECT child of the given
+     * statement
      * @param statement The statement that is the direct parent of the statements to be retrieved
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getParentStmtType(Statement &statement, StatementType type) const = 0;
+    virtual EntitySet getParentStmtType(Statement &statement, StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is the DIRECT or INDIRECT child of the given
-     * statement
+     * Returns an unordered_set of statements of the given statement type which is the DIRECT or INDIRECT child of the
+     * given statement
      * @param statement The statement that is the direct or indirect parent of the statements to be retrieved
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getParentStarStmtType(Statement &statement, StatementType type) const = 0;
+    virtual EntitySet getParentStarStmtType(Statement &statement, StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is the direct child of any statement
+     * Returns an unordered_set of statements of the given statement type which is the direct child of any statement
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getParentWildcardType(StatementType type) const = 0;
+    virtual EntitySet getParentWildcardType(StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is the direct or indirect child of any statement
+     * Returns an unordered_set of statements of the given statement type which is the direct or indirect child of any
+     * statement
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getParentStarWildcardType(StatementType type) const = 0;
+    virtual EntitySet getParentStarWildcardType(StatementType type) const = 0;
 
     /**
      * Returns a boolean value indicating if the first statement is the DIRECT parent of the second statement
@@ -637,162 +639,165 @@ public:
     virtual bool isCallsStar(Procedure &caller, Procedure &callee) const = 0;
 
     /**
-     * Returns a vector of procedures which is called directly by any other procedure
-     * @return A vector of procedures
+     * Returns an unordered_set of procedures which is called directly by any other procedure
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getCallees() const = 0;
+    virtual EntitySet getCallees() const = 0;
 
     /**
-     * Returns a vector of procedures which is called directly or indirectly by any other procedure
-     * @return A vector of procedures
+     * Returns an unordered_set of procedures which is called directly or indirectly by any other procedure
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getCalleesStar() const = 0;
+    virtual EntitySet getCalleesStar() const = 0;
 
     /**
-     * Returns a vector of procedures which calls any other procedure directly
-     * @return A vector of procedures
+     * Returns an unordered_set of procedures which calls any other procedure directly
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getCallers() const = 0;
+    virtual EntitySet getCallers() const = 0;
 
     /**
-     * Returns a vector of procedures which calls any other procedure directly or indirectly
-     * @return A vector of procedures
+     * Returns an unordered_set of procedures which calls any other procedure directly or indirectly
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getCallersStar() const = 0;
+    virtual EntitySet getCallersStar() const = 0;
 
     /**
-     * Returns a vector of Procedure, Procedure pair where the first procedure calls the second procedure DIRECTLY
-     * @return A vector of Procedure, Procedure pair stored in a vector
+     * Returns an unordered_set of Procedure, Procedure pair where the first procedure calls the second procedure
+     * DIRECTLY
+     * @return An unordered_set of Procedure, Procedure pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getCallsPair() const = 0;
+    virtual EntityPairSet getCallsPair() const = 0;
 
     /**
-     * Returns a vector of Procedure, Procedure pair where the first procedure calls the second procedure DIRECTLY or
-     * INDIRECTLY
-     * @return A vector of Procedure, Procedure pair stored in a vector
+     * Returns an unordered_set of Procedure, Procedure pair where the first procedure calls the second procedure
+     * DIRECTLY or INDIRECTLY
+     * @return An unordered_set of Procedure, Procedure pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getCallsStarPair() const = 0;
+    virtual EntityPairSet getCallsStarPair() const = 0;
 
     /**
-     * Returns a vector of procedures which calls the given procedure DIRECTLY
+     * Returns an unordered_set of procedures which calls the given procedure DIRECTLY
      * @param callee The procedure that is called by the procedures to be retrieved
-     * @return A vector of procedures
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getCallers(Procedure &callee) const = 0;
+    virtual EntitySet getCallers(Procedure &callee) const = 0;
 
     /**
-     * Returns a vector of procedures which calls the given procedure DIRECTLY or INDIRECTLY
+     * Returns an unordered_set of procedures which calls the given procedure DIRECTLY or INDIRECTLY
      * @param callee The procedure that is called by the procedures to be retrieved
-     * @return A vector of procedures
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getCallersStar(Procedure &callee) const = 0;
+    virtual EntitySet getCallersStar(Procedure &callee) const = 0;
 
     /**
-     * Returns a vector of procedures which is called DIRECTLY by the given procedure
+     * Returns an unordered_set of procedures which is called DIRECTLY by the given procedure
      * @param caller The procedure that calls the procedures to be retrieved
-     * @return A vector of procedures
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getCallees(Procedure &caller) const = 0;
+    virtual EntitySet getCallees(Procedure &caller) const = 0;
 
     /**
-     * Returns a vector of procedures which is called DIRECTLY or INDIRECTLY by the given procedure
+     * Returns an unordered_set of procedures which is called DIRECTLY or INDIRECTLY by the given procedure
      * @param caller The procedure that calls the procedures to be retrieved
-     * @return A vector of procedures
+     * @return An unordered_set of procedures
      */
-    virtual std::vector<Entity> getCalleesStar(Procedure &caller) const = 0;
+    virtual EntitySet getCalleesStar(Procedure &caller) const = 0;
 
     /**
-     * Returns a vector of Statement, Statement pair where the first statement is is executed IMMEDIATELY before second
-     * statement. Retrieves the relationship where the first and second statement are both of the given type
+     * Returns an unordered_set of Statement, Statement pair where the first statement is is executed IMMEDIATELY before
+     * second statement. Retrieves the relationship where the first and second statement are both of the given type
      * @param formerType The type of the former statement
      * @param latterType The type of the latter statement
-     * @return A vector of Statement, Statement pair stored in a vector
+     * @return An unordered_set of Statement, Statement pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getNextPair(StatementType formerType, StatementType latterType) const = 0;
+    virtual EntityPairSet getNextPair(StatementType formerType, StatementType latterType) const = 0;
 
     /**
-     * Returns a vector of Statement, Statement pair where the first statement is executed before of the second
+     * Returns an unordered_set of Statement, Statement pair where the first statement is executed before of the second
      * statement, either immediately or after some execution sequence. Retrieves the relationship where the first and
      * second statement are both of the given type
      * @param formerType The type of the former statement
      * @param latterType The type of the latter statement
-     * @return A vector of Statement, Statement pair stored in a vector
+     * @return An unordered_set of Statement, Statement pair stored in a vector
      */
-    virtual std::vector<std::vector<Entity>> getNextStarPair(StatementType formerType,
-                                                             StatementType latterType) const = 0;
+    virtual EntityPairSet getNextStarPair(StatementType formerType, StatementType latterType) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is executed again after it has been executed
+     * Returns an unordered_set of statements of the given statement type which is executed again after it has been
+     * executed
      * @param stmtType The type of statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getNextStarSameStmt(StatementType stmtType) const = 0;
+    virtual EntitySet getNextStarSameStmt(StatementType stmtType) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is executed IMMEDIATELY before the given
+     * Returns an unordered_set of statements of the given statement type which is executed IMMEDIATELY before the given
      * statement
      * @param type The type of the statement to be retrieved
      * @param statement The statement that executed IMMEDIATELY after the statements to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getNextTypeStmt(StatementType type, Statement &statement) const = 0;
+    virtual EntitySet getNextTypeStmt(StatementType type, Statement &statement) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is executed before the given statement, either
-     * immediately or after some execution sequence
+     * Returns an unordered_set of statements of the given statement type which is executed before the given statement,
+     * either immediately or after some execution sequence
      * @param type The type of the statement to be retrieved
      * @param statement The statement that is executed after the statements to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getNextStarTypeStmt(StatementType type, Statement &statement) const = 0;
+    virtual EntitySet getNextStarTypeStmt(StatementType type, Statement &statement) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type that is executed IMMEDIATELY before any statement
+     * Returns an unordered_set of statements of the given statement type that is executed IMMEDIATELY before any
+     * statement
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getNextTypeWildcard(StatementType type) const = 0;
+    virtual EntitySet getNextTypeWildcard(StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is executed before any statement, either
+     * Returns an unordered_set of statements of the given statement type which is executed before any statement, either
      * immediately or after some execution sequence
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getNextStarTypeWildcard(StatementType type) const = 0;
+    virtual EntitySet getNextStarTypeWildcard(StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is executed IMMEDIATELY after the given
+     * Returns an unordered_set of statements of the given statement type which is executed IMMEDIATELY after the given
      * statement
      * @param statement The statement that is executed IMMEDIATELY before the statements to be retrieved
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getNextStmtType(Statement &statement, StatementType type) const = 0;
+    virtual EntitySet getNextStmtType(Statement &statement, StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is executed after the given statement, either
-     * immediately or after some execution sequence
+     * Returns an unordered_set of statements of the given statement type which is executed after the given statement,
+     * either immediately or after some execution sequence
      * @param statement The statement that is executed after the statements to be retrieved
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getNextStarStmtType(Statement &statement, StatementType type) const = 0;
+    virtual EntitySet getNextStarStmtType(Statement &statement, StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is executed IMMEDIATELY after any statement
+     * Returns an unordered_set of statements of the given statement type which is executed IMMEDIATELY after any
+     * statement
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getNextWildcardType(StatementType type) const = 0;
+    virtual EntitySet getNextWildcardType(StatementType type) const = 0;
 
     /**
-     * Returns a vector of statements of the given statement type which is executed after any statement, either
+     * Returns an unordered_set of statements of the given statement type which is executed after any statement, either
      * immediately or after some execution sequence
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    virtual std::vector<Entity> getNextStarWildcardType(StatementType type) const = 0;
+    virtual EntitySet getNextStarWildcardType(StatementType type) const = 0;
 
     /**
      * Returns a boolean value indicating if the first statement is executed IMMEDIATELY before the second statement
@@ -854,42 +859,119 @@ public:
     virtual bool hasAfterStarStmt(Statement &statement) const = 0;
 
     /**
-     * Returns a vector of If Statements that has variables as control variables
-     * @return A vector of Statements
+     * Returns an unordered_set of If Statements that has variables as control variables
+     * @return An unordered_set of Statements
      */
-    virtual std::vector<Entity> getAllIfPatternStmts() const = 0;
+    virtual EntitySet getAllIfPatternStmts() const = 0;
 
     /**
-     * Returns a vector of If Statements with the given variable as a control variable
+     * Returns an unordered_set of If Statements with the given variable as a control variable
      * @param var The variable to be checked
-     * @return A vector of If Statements
+     * @return An unordered_set of If Statements
      */
-    virtual std::vector<Entity> getIfStmtsByVar(Variable &var) const = 0;
+    virtual EntitySet getIfStmtsByVar(Variable &var) const = 0;
 
     /**
-     * Returns a vector of vectors containing If Statement and Variable pairs where the variable is the control variable
-     * of the If Statement
-     * @return A vector of vectors containing If Statement and Variable pairs
+     * Returns an unordered_set of vectors containing If Statement and Variable pairs where the variable is the control
+     * variable of the If Statement
+     * @return An unordered_set of vectors containing If Statement and Variable pairs
      */
-    virtual std::vector<std::vector<Entity>> getAllIfStmtVarPair() const = 0;
+    virtual EntityPairSet getAllIfStmtVarPair() const = 0;
 
     /**
-     * Returns a vector of While Statements that has variables as control variables
-     * @return A vector of Statements
+     * Returns an unordered_set of While Statements that has variables as control variables
+     * @return An unordered_set of Statements
      */
-    virtual std::vector<Entity> getAllWhilePatternStmts() const = 0;
+    virtual EntitySet getAllWhilePatternStmts() const = 0;
 
     /**
-     * Returns a vector of While Statements with the given variable as a control variable
+     * Returns an unordered_set of While Statements with the given variable as a control variable
      * @param var The variable to be checked
-     * @return A vector of While Statements
+     * @return An unordered_set of While Statements
      */
-    virtual std::vector<Entity> getWhileStmtsByVar(Variable &var) const = 0;
+    virtual EntitySet getWhileStmtsByVar(Variable &var) const = 0;
 
     /**
-     * Returns a vector of vectors containing While Statement and Variable pairs where the variable is the control
-     * variable of the While Statement
-     * @return A vector of vectors containing While Statement and Variable pairs
+     * Returns an unordered_set of vectors containing While Statement and Variable pairs where the variable is the
+     * control variable of the While Statement
+     * @return An unordered_set of vectors containing While Statement and Variable pairs
      */
-    virtual std::vector<std::vector<Entity>> getAllWhileStmtVarPair() const = 0;
+    virtual EntityPairSet getAllWhileStmtVarPair() const = 0;
+
+    /**
+     * Returns an unordered_set of Statement, Statement pair where the first statement affects the second statement
+     * DIRECTLY. Retrieves the relationship where the first and second statement are both of the given type
+     * @param formerType The type of the former statement
+     * @param latterType The type of the latter statement
+     * @return An unordered_set of Statement, Statement pair stored in a vector
+     */
+    virtual EntityPairSet getAffectsPair(StatementType formerType, StatementType latterType) const = 0;
+
+    /**
+     * Returns an unordered_set of statements of the given statement type which affects itself
+     * @param stmtType The type of statement to be retrieved
+     * @return An unordered_set of statements
+     */
+    virtual EntitySet getAffectsSameStmt(StatementType stmtType) const = 0;
+
+    /**
+     * Returns an unordered_set of statements of the given statement type which affects the given statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @param statement The statement that succeeds the statements to be retrieved
+     * @return An unordered_set of statements
+     */
+    virtual EntitySet getAffectsTypeStmt(StatementType type, Statement &statement) const = 0;
+
+    /**
+     * Returns an unordered_set of statements of the given statement type which is affects any statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @return An unordered_set of statements
+     */
+    virtual EntitySet getAffectsTypeWildcard(StatementType type) const = 0;
+
+    /**
+     * Returns an unordered_set of statements of the given statement type which is affected by the given statement
+     * DIRECTLY
+     * @param statement The statement that precedes the statements to be retrieved
+     * @param type The type of the statement to be retrieved
+     * @return An unordered_set of statements
+     */
+    virtual EntitySet getAffectsStmtType(Statement &statement, StatementType type) const = 0;
+
+    /**
+     * Returns an unordered_set of statements of the given statement type which is affected by any statement DIRECTLY
+     * @param type The type of the statement to be retrieved
+     * @return An unordered_set of statements
+     */
+    virtual EntitySet getAffectsWildcardType(StatementType type) const = 0;
+
+    /**
+     * Returns true if statement1 DIRECTLY affects statement2, false otherwise
+     * @param statement1 The preceding statement
+     * @param statement2 The succeeding statement
+     * @return True if statement1 directly affects statement2, false otherwise
+     */
+    virtual bool isAffects(Statement &statement1, Statement &statement2) const = 0;
+
+    /**
+     * Returns true if there exists a affects relationship in the PKB, false otherwise
+     * @return True if there exists a affects relationship in the PKB, false otherwise
+     */
+    virtual bool hasAffects() const = 0;
+
+    /**
+     * Returns true if there exists a statement that is affected by the given statement, false otherwise i.e. there is a
+     * statement in behind of the given statement that is affected by the given statement
+     * @param statement The statement to be checked
+     * @return True if there exists a statement that is affected by the given statement, false otherwise
+     */
+    virtual bool hasAffectedStmt(Statement &statement) const = 0;
+
+    /**
+     * Returns true if there exists a statement that affects the given statement, false otherwise i.e. there is a
+     * statement in front of the given statement that affects the given statement
+     * @param statement The statement to be checked
+     * @return True if there exists a statement that affects the given statement, false otherwise
+     */
+    virtual bool hasAffectsStmt(Statement &statement) const = 0;
 };

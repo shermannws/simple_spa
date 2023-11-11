@@ -11,62 +11,62 @@ PkbReaderManager::PkbReaderManager(std::shared_ptr<AssignPatternManager> assignm
                                    std::shared_ptr<UsesProcRelationshipManager> usesProcRelationshipManager,
                                    std::shared_ptr<IfPatternManager> ifPatternManager,
                                    std::shared_ptr<WhilePatternManager> whilePatternManager,
-                                   std::shared_ptr<NextRelationshipManager> nextRelationshipManager)
+                                   std::shared_ptr<NextRelationshipManager> nextRelationshipManager,
+                                   std::shared_ptr<AffectsRelationshipManager> affectsRelationshipManager)
     : assignmentManager(assignmentManager), entityManager(entityManager),
       followsRelationshipManager(followsRelationshipManager), usesRelationshipManager(usesRelationshipManager),
       modifiesRelationshipManager(modifiesRelationshipManager), parentRelationshipManager(parentRelationshipManager),
       callsRelationshipManager(callsRelationshipManager),
       modifiesProcRelationshipManager(modifiesProcRelationshipManager),
       usesProcRelationshipManager(usesProcRelationshipManager), ifPatternManager(ifPatternManager),
-      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager){};
+      whilePatternManager(whilePatternManager), nextRelationshipManager(nextRelationshipManager),
+      affectsRelationshipManager(affectsRelationshipManager){};
 
-std::vector<Entity> PkbReaderManager::getAllVariables() const { return this->entityManager->getAllVariables(); }
+EntitySet PkbReaderManager::getAllVariables() const { return this->entityManager->getAllVariables(); }
 
-std::vector<Entity> PkbReaderManager::getAllConstants() const { return this->entityManager->getAllConstants(); }
+EntitySet PkbReaderManager::getAllConstants() const { return this->entityManager->getAllConstants(); }
 
-std::vector<Entity> PkbReaderManager::getAllProcedures() const { return this->entityManager->getAllProcedures(); }
+EntitySet PkbReaderManager::getAllProcedures() const { return this->entityManager->getAllProcedures(); }
 
-std::vector<Entity> PkbReaderManager::getAllStatements() const { return this->entityManager->getAllStatements(); }
+EntitySet PkbReaderManager::getAllStatements() const { return this->entityManager->getAllStatements(); }
 
-std::vector<Entity> PkbReaderManager::getAllRead() const { return this->entityManager->getAllRead(); }
+EntitySet PkbReaderManager::getAllRead() const { return this->entityManager->getAllRead(); }
 
-std::vector<Entity> PkbReaderManager::getAllPrint() const { return this->entityManager->getAllPrint(); }
+EntitySet PkbReaderManager::getAllPrint() const { return this->entityManager->getAllPrint(); }
 
-std::vector<Entity> PkbReaderManager::getAllWhile() const { return this->entityManager->getAllWhile(); }
+EntitySet PkbReaderManager::getAllWhile() const { return this->entityManager->getAllWhile(); }
 
-std::vector<Entity> PkbReaderManager::getAllIf() const { return this->entityManager->getAllIf(); }
+EntitySet PkbReaderManager::getAllIf() const { return this->entityManager->getAllIf(); }
 
-std::vector<Entity> PkbReaderManager::getAllCall() const { return this->entityManager->getAllCall(); }
+EntitySet PkbReaderManager::getAllCall() const { return this->entityManager->getAllCall(); }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getUsesStmtPair(StatementType type) const {
+EntityPairSet PkbReaderManager::getUsesStmtPair(StatementType type) const {
     return this->usesRelationshipManager->getRelationshipStmtPair(type);
 }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getUsesProcPair() const {
+EntityPairSet PkbReaderManager::getUsesProcPair() const {
     return this->usesProcRelationshipManager->getRelationshipProcPair();
 }
 
-std::vector<Entity> PkbReaderManager::getUsesTypeIdent(StatementType type, Variable &var) const {
+EntitySet PkbReaderManager::getUsesTypeIdent(StatementType type, Variable &var) const {
     return this->usesRelationshipManager->getRelationshipTypeIdent(type, var);
 }
 
-std::vector<Entity> PkbReaderManager::getUsesProcIdent(Variable &var) const {
+EntitySet PkbReaderManager::getUsesProcIdent(Variable &var) const {
     return this->usesProcRelationshipManager->getRelationshipIdent(var);
 }
 
-std::vector<Entity> PkbReaderManager::getUsesStmt(StatementType type) const {
+EntitySet PkbReaderManager::getUsesStmt(StatementType type) const {
     return this->usesRelationshipManager->getRelationshipStmt(type);
 }
 
-std::vector<Entity> PkbReaderManager::getUsesProc() const {
-    return this->usesProcRelationshipManager->getRelationshipProc();
-}
+EntitySet PkbReaderManager::getUsesProc() const { return this->usesProcRelationshipManager->getRelationshipProc(); }
 
-std::vector<Entity> PkbReaderManager::getUsesVar(Statement &stmt) const {
+EntitySet PkbReaderManager::getUsesVar(Statement &stmt) const {
     return this->usesRelationshipManager->getRelationshipVar(stmt);
 }
 
-std::vector<Entity> PkbReaderManager::getUsesVar(Procedure &proc) const {
+EntitySet PkbReaderManager::getUsesVar(Procedure &proc) const {
     return this->usesProcRelationshipManager->getRelationshipVar(proc);
 }
 
@@ -84,45 +84,43 @@ bool PkbReaderManager::hasUses(Procedure &proc) const {
     return this->usesProcRelationshipManager->hasRelationship(proc);
 }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getFollowsPair(StatementType formerType,
-                                                                  StatementType latterType) const {
+EntityPairSet PkbReaderManager::getFollowsPair(StatementType formerType, StatementType latterType) const {
     return this->followsRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getFollowsStarPair(StatementType formerType,
-                                                                      StatementType latterType) const {
+EntityPairSet PkbReaderManager::getFollowsStarPair(StatementType formerType, StatementType latterType) const {
     return this->followsRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
-std::vector<Entity> PkbReaderManager::getFollowsTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getFollowsTypeStmt(StatementType type, Statement &statement) const {
     return this->followsRelationshipManager->getRelationshipTypeStmt(type, statement, true);
 }
 
-std::vector<Entity> PkbReaderManager::getFollowsStarTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getFollowsStarTypeStmt(StatementType type, Statement &statement) const {
     return this->followsRelationshipManager->getRelationshipTypeStmt(type, statement, false);
 }
 
-std::vector<Entity> PkbReaderManager::getFollowsTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getFollowsTypeWildcard(StatementType type) const {
     return this->followsRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
-std::vector<Entity> PkbReaderManager::getFollowsStarTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getFollowsStarTypeWildcard(StatementType type) const {
     return this->followsRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
-std::vector<Entity> PkbReaderManager::getFollowsStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getFollowsStmtType(Statement &statement, StatementType type) const {
     return this->followsRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
-std::vector<Entity> PkbReaderManager::getFollowsStarStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getFollowsStarStmtType(Statement &statement, StatementType type) const {
     return this->followsRelationshipManager->getRelationshipStmtType(statement, type, false);
 }
 
-std::vector<Entity> PkbReaderManager::getFollowsWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getFollowsWildcardType(StatementType type) const {
     return this->followsRelationshipManager->getRelationshipWildcardType(type);
 }
 
-std::vector<Entity> PkbReaderManager::getFollowsStarWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getFollowsStarWildcardType(StatementType type) const {
     return this->followsRelationshipManager->getRelationshipWildcardType(type);
 }
 
@@ -154,35 +152,35 @@ bool PkbReaderManager::hasFormerStarStmt(Statement &statement) const {
     return this->followsRelationshipManager->isLatter(statement);
 }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getModifiesStmtPair(StatementType type) const {
+EntityPairSet PkbReaderManager::getModifiesStmtPair(StatementType type) const {
     return this->modifiesRelationshipManager->getRelationshipStmtPair(type);
 }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getModifiesProcPair() const {
+EntityPairSet PkbReaderManager::getModifiesProcPair() const {
     return this->modifiesProcRelationshipManager->getRelationshipProcPair();
 }
 
-std::vector<Entity> PkbReaderManager::getModifiesTypeIdent(StatementType type, Variable &var) const {
+EntitySet PkbReaderManager::getModifiesTypeIdent(StatementType type, Variable &var) const {
     return this->modifiesRelationshipManager->getRelationshipTypeIdent(type, var);
 }
 
-std::vector<Entity> PkbReaderManager::getModifiesProcIdent(Variable &var) const {
+EntitySet PkbReaderManager::getModifiesProcIdent(Variable &var) const {
     return this->modifiesProcRelationshipManager->getRelationshipIdent(var);
 }
 
-std::vector<Entity> PkbReaderManager::getModifiesStmt(StatementType type) const {
+EntitySet PkbReaderManager::getModifiesStmt(StatementType type) const {
     return this->modifiesRelationshipManager->getRelationshipStmt(type);
 }
 
-std::vector<Entity> PkbReaderManager::getModifiesProc() const {
+EntitySet PkbReaderManager::getModifiesProc() const {
     return this->modifiesProcRelationshipManager->getRelationshipProc();
 }
 
-std::vector<Entity> PkbReaderManager::getModifiesVar(Statement &stmt) const {
+EntitySet PkbReaderManager::getModifiesVar(Statement &stmt) const {
     return this->modifiesRelationshipManager->getRelationshipVar(stmt);
 }
 
-std::vector<Entity> PkbReaderManager::getModifiesVar(Procedure &proc) const {
+EntitySet PkbReaderManager::getModifiesVar(Procedure &proc) const {
     return this->modifiesProcRelationshipManager->getRelationshipVar(proc);
 }
 
@@ -204,73 +202,70 @@ bool PkbReaderManager::hasModifies(Procedure &proc) const {
 
 // Pattern queries i.e. pattern a (...,...)
 // pattern a (_,_)
-std::vector<Entity> PkbReaderManager::getAllAssign() const { return this->assignmentManager->getAllAssignStmts(); }
+EntitySet PkbReaderManager::getAllAssign() const { return this->assignmentManager->getAllAssignStmts(); }
 
 // pattern a (_, "x")
-std::vector<Entity> PkbReaderManager::getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const {
+EntitySet PkbReaderManager::getAssignStmtsByRhs(Expression &rhs, bool hasRhsWildCard) const {
     return this->assignmentManager->getAssignStmtsByRhs(rhs, hasRhsWildCard);
 }
 
 // pattern a (v, _)
-std::vector<std::vector<Entity>> PkbReaderManager::getAllAssignStmtVarPair() const {
+EntityPairSet PkbReaderManager::getAllAssignStmtVarPair() const {
     return this->assignmentManager->getAllAssignStmtVarPair();
 }
 
 // pattern a (v, "x")
-std::vector<std::vector<Entity>> PkbReaderManager::getAssignStmtsVarPairByRhs(Expression &rhs, bool hasWildCard) const {
+EntityPairSet PkbReaderManager::getAssignStmtsVarPairByRhs(Expression &rhs, bool hasWildCard) const {
     return this->assignmentManager->getAssignStmtsVarPairByRhs(rhs, hasWildCard);
 }
 
 // pattern a ("x", _)
-std::vector<Entity> PkbReaderManager::getAssignStmtsByLhs(Variable &lhs) const {
+EntitySet PkbReaderManager::getAssignStmtsByLhs(Variable &lhs) const {
     return this->assignmentManager->getAssignStmtsByLhs(lhs);
 }
 
 // pattern a ("x", "x")
-std::vector<Entity> PkbReaderManager::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs,
-                                                             bool hasRhsWildCard) const {
+EntitySet PkbReaderManager::getAssignStmtsByLhsRhs(Variable &lhs, Expression &rhs, bool hasRhsWildCard) const {
     return this->assignmentManager->getAssignStmtsByLhsRhs(lhs, rhs, hasRhsWildCard);
 }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getParentPair(StatementType formerType,
-                                                                 StatementType latterType) const {
+EntityPairSet PkbReaderManager::getParentPair(StatementType formerType, StatementType latterType) const {
     return this->parentRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getParentStarPair(StatementType formerType,
-                                                                     StatementType latterType) const {
+EntityPairSet PkbReaderManager::getParentStarPair(StatementType formerType, StatementType latterType) const {
     return this->parentRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
-std::vector<Entity> PkbReaderManager::getParentTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getParentTypeStmt(StatementType type, Statement &statement) const {
     return this->parentRelationshipManager->getRelationshipTypeStmt(type, statement, true);
 }
 
-std::vector<Entity> PkbReaderManager::getParentStarTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getParentStarTypeStmt(StatementType type, Statement &statement) const {
     return this->parentRelationshipManager->getRelationshipTypeStmt(type, statement, false);
 }
 
-std::vector<Entity> PkbReaderManager::getParentTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getParentTypeWildcard(StatementType type) const {
     return this->parentRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
-std::vector<Entity> PkbReaderManager::getParentStarTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getParentStarTypeWildcard(StatementType type) const {
     return this->parentRelationshipManager->getRelationshipTypeWildcard(type);
 }
 
-std::vector<Entity> PkbReaderManager::getParentStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getParentStmtType(Statement &statement, StatementType type) const {
     return this->parentRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
-std::vector<Entity> PkbReaderManager::getParentStarStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getParentStarStmtType(Statement &statement, StatementType type) const {
     return this->parentRelationshipManager->getRelationshipStmtType(statement, type, false);
 }
 
-std::vector<Entity> PkbReaderManager::getParentWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getParentWildcardType(StatementType type) const {
     return this->parentRelationshipManager->getRelationshipWildcardType(type);
 }
 
-std::vector<Entity> PkbReaderManager::getParentStarWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getParentStarWildcardType(StatementType type) const {
     return this->parentRelationshipManager->getRelationshipWildcardType(type);
 }
 
@@ -322,89 +317,79 @@ bool PkbReaderManager::isCallsStar(Procedure &caller, Procedure &callee) const {
     return this->callsRelationshipManager->isRelationship(caller, callee, false);
 }
 
-std::vector<Entity> PkbReaderManager::getCallees() const {
-    return this->callsRelationshipManager->getRelationshipLatter();
-}
+EntitySet PkbReaderManager::getCallees() const { return this->callsRelationshipManager->getRelationshipLatter(); }
 
-std::vector<Entity> PkbReaderManager::getCalleesStar() const {
-    return this->callsRelationshipManager->getRelationshipLatter();
-}
+EntitySet PkbReaderManager::getCalleesStar() const { return this->callsRelationshipManager->getRelationshipLatter(); }
 
-std::vector<Entity> PkbReaderManager::getCallers() const {
-    return this->callsRelationshipManager->getRelationshipFormer();
-}
+EntitySet PkbReaderManager::getCallers() const { return this->callsRelationshipManager->getRelationshipFormer(); }
 
-std::vector<Entity> PkbReaderManager::getCallersStar() const {
-    return this->callsRelationshipManager->getRelationshipFormer();
-}
+EntitySet PkbReaderManager::getCallersStar() const { return this->callsRelationshipManager->getRelationshipFormer(); }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getCallsPair() const {
+EntityPairSet PkbReaderManager::getCallsPair() const {
     return this->callsRelationshipManager->getRelationshipPair(true);
 }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getCallsStarPair() const {
+EntityPairSet PkbReaderManager::getCallsStarPair() const {
     return this->callsRelationshipManager->getRelationshipPair(false);
 }
 
-std::vector<Entity> PkbReaderManager::getCallers(Procedure &callee) const {
+EntitySet PkbReaderManager::getCallers(Procedure &callee) const {
     return this->callsRelationshipManager->getRelationshipFormer(callee, true);
 }
 
-std::vector<Entity> PkbReaderManager::getCallersStar(Procedure &callee) const {
+EntitySet PkbReaderManager::getCallersStar(Procedure &callee) const {
     return this->callsRelationshipManager->getRelationshipFormer(callee, false);
 }
 
-std::vector<Entity> PkbReaderManager::getCallees(Procedure &caller) const {
+EntitySet PkbReaderManager::getCallees(Procedure &caller) const {
     return this->callsRelationshipManager->getRelationshipLatter(caller, true);
 }
 
-std::vector<Entity> PkbReaderManager::getCalleesStar(Procedure &caller) const {
+EntitySet PkbReaderManager::getCalleesStar(Procedure &caller) const {
     return this->callsRelationshipManager->getRelationshipLatter(caller, false);
 }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getNextPair(StatementType formerType,
-                                                               StatementType latterType) const {
+EntityPairSet PkbReaderManager::getNextPair(StatementType formerType, StatementType latterType) const {
     return this->nextRelationshipManager->getRelationshipPair(formerType, latterType, true);
 }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getNextStarPair(StatementType formerType,
-                                                                   StatementType latterType) const {
+EntityPairSet PkbReaderManager::getNextStarPair(StatementType formerType, StatementType latterType) const {
     return this->nextRelationshipManager->getRelationshipPair(formerType, latterType, false);
 }
 
-std::vector<Entity> PkbReaderManager::getNextStarSameStmt(StatementType stmtType) const {
+EntitySet PkbReaderManager::getNextStarSameStmt(StatementType stmtType) const {
     return this->nextRelationshipManager->getNextStarSameStmt(stmtType);
 }
 
-std::vector<Entity> PkbReaderManager::getNextTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getNextTypeStmt(StatementType type, Statement &statement) const {
     return this->nextRelationshipManager->getRelationshipTypeStmt(type, statement, true);
 }
 
-std::vector<Entity> PkbReaderManager::getNextStarTypeStmt(StatementType type, Statement &statement) const {
+EntitySet PkbReaderManager::getNextStarTypeStmt(StatementType type, Statement &statement) const {
     return this->nextRelationshipManager->getRelationshipTypeStmt(type, statement, false);
 }
 
-std::vector<Entity> PkbReaderManager::getNextTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getNextTypeWildcard(StatementType type) const {
     return this->nextRelationshipManager->getRelationshipTypeWildcard(type, true);
 }
 
-std::vector<Entity> PkbReaderManager::getNextStarTypeWildcard(StatementType type) const {
+EntitySet PkbReaderManager::getNextStarTypeWildcard(StatementType type) const {
     return this->nextRelationshipManager->getRelationshipTypeWildcard(type, false);
 }
 
-std::vector<Entity> PkbReaderManager::getNextStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getNextStmtType(Statement &statement, StatementType type) const {
     return this->nextRelationshipManager->getRelationshipStmtType(statement, type, true);
 }
 
-std::vector<Entity> PkbReaderManager::getNextStarStmtType(Statement &statement, StatementType type) const {
+EntitySet PkbReaderManager::getNextStarStmtType(Statement &statement, StatementType type) const {
     return this->nextRelationshipManager->getRelationshipStmtType(statement, type, false);
 }
 
-std::vector<Entity> PkbReaderManager::getNextWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getNextWildcardType(StatementType type) const {
     return this->nextRelationshipManager->getRelationshipWildcardType(type, true);
 }
 
-std::vector<Entity> PkbReaderManager::getNextStarWildcardType(StatementType type) const {
+EntitySet PkbReaderManager::getNextStarWildcardType(StatementType type) const {
     return this->nextRelationshipManager->getRelationshipWildcardType(type, false);
 }
 
@@ -436,24 +421,85 @@ bool PkbReaderManager::hasAfterStarStmt(Statement &statement) const {
     return this->nextRelationshipManager->isFormer(statement);
 }
 
-std::vector<Entity> PkbReaderManager::getAllIfPatternStmts() const { return this->ifPatternManager->getAllStmts(); }
+EntitySet PkbReaderManager::getAllIfPatternStmts() const { return this->ifPatternManager->getAllStmts(); }
 
-std::vector<Entity> PkbReaderManager::getIfStmtsByVar(Variable &var) const {
-    return this->ifPatternManager->getStmtsByVar(var);
-};
+EntitySet PkbReaderManager::getIfStmtsByVar(Variable &var) const { return this->ifPatternManager->getStmtsByVar(var); };
 
-std::vector<std::vector<Entity>> PkbReaderManager::getAllIfStmtVarPair() const {
-    return this->ifPatternManager->getAllStmtVarPair();
-}
+EntityPairSet PkbReaderManager::getAllIfStmtVarPair() const { return this->ifPatternManager->getAllStmtVarPair(); }
 
-std::vector<Entity> PkbReaderManager::getAllWhilePatternStmts() const {
-    return this->whilePatternManager->getAllStmts();
-}
+EntitySet PkbReaderManager::getAllWhilePatternStmts() const { return this->whilePatternManager->getAllStmts(); }
 
-std::vector<Entity> PkbReaderManager::getWhileStmtsByVar(Variable &var) const {
+EntitySet PkbReaderManager::getWhileStmtsByVar(Variable &var) const {
     return this->whilePatternManager->getStmtsByVar(var);
 }
 
-std::vector<std::vector<Entity>> PkbReaderManager::getAllWhileStmtVarPair() const {
+EntityPairSet PkbReaderManager::getAllWhileStmtVarPair() const {
     return this->whilePatternManager->getAllStmtVarPair();
+}
+
+void PkbReaderManager::triggerAffectsCalculation() const {
+    if (this->affectsRelationshipManager->hasAffectsBeenCalculated()) { return; }
+    this->affectsRelationshipManager->calculateAffects(
+            assignmentManager->getAllAssignStmtsAsStmts(),
+            [this](std::shared_ptr<Statement> stmt) { return modifiesRelationshipManager->getModifiedVar(stmt); },
+            [this](Statement &stmt, Variable &var) { return usesRelationshipManager->isRelationship(stmt, var); },
+            [this](Statement &stmt, Variable &var) { return modifiesRelationshipManager->isRelationship(stmt, var); },
+            [this](std::shared_ptr<Statement> stmt) { return nextRelationshipManager->getAllNextOfStmt(stmt); });
+}
+
+EntityPairSet PkbReaderManager::getAffectsPair(StatementType formerType, StatementType latterType) const {
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, formerType) ||
+        !ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, latterType)) {
+        return EntityPairSet();
+    }
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getAffectsPair();
+}
+
+EntitySet PkbReaderManager::getAffectsSameStmt(StatementType stmtType) const {
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, stmtType)) { return EntitySet(); }
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getAffectsSameStmt(stmtType);
+}
+
+EntitySet PkbReaderManager::getAffectsTypeStmt(StatementType type, Statement &statement) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipTypeStmt(type, statement, true);
+}
+
+EntitySet PkbReaderManager::getAffectsTypeWildcard(StatementType type) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipTypeWildcard(type);
+}
+
+EntitySet PkbReaderManager::getAffectsStmtType(Statement &statement, StatementType type) const {
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) { return EntitySet(); }
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipStmtType(statement, type, true);
+}
+
+EntitySet PkbReaderManager::getAffectsWildcardType(StatementType type) const {
+    if (!ManagerUtils::isStmtTypeAllowed(affectsRelationshipManager->clauseGroup, type)) { return EntitySet(); }
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->getRelationshipWildcardType(type);
+}
+
+bool PkbReaderManager::isAffects(Statement &statement1, Statement &statement2) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->isRelationship(statement1, statement2, true);
+}
+
+bool PkbReaderManager::hasAffects() const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->hasRelationship();
+}
+
+bool PkbReaderManager::hasAffectedStmt(Statement &statement) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->isFormer(statement);
+}
+
+bool PkbReaderManager::hasAffectsStmt(Statement &statement) const {
+    this->triggerAffectsCalculation();
+    return this->affectsRelationshipManager->isLatter(statement);
 }

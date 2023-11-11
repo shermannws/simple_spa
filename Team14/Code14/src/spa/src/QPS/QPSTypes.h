@@ -7,17 +7,23 @@
 #include <unordered_set>
 #include <vector>
 
-/* Type alias for a string representing a synonym of an entity*/
+/* Type alias for a string representing a synonym of an entity */
 typedef std::string Synonym;
+
+/* Type alias for an int representing an index */
+typedef int idx;
+
+/* Type alias for an int representing a count */
+typedef int count;
 
 // Query typedefs
 class QueryEntity;
 
 /* Type alias for a shared pointer to QueryEntity */
 typedef std::shared_ptr<QueryEntity> EntityPtr;
+
 /* Type alias for an unordered map of string to shared pointer to QueryEntity */
 typedef std::unordered_map<std::string, std::shared_ptr<QueryEntity>> DeclarationMap;
-
 
 /* Type alias for a string representation of a stmtRef or entRef */
 typedef std::string StringRep;
@@ -44,5 +50,7 @@ typedef std::list<std::string> ResultList;
 typedef std::unordered_set<std::string> ResultSet;
 /* Type alias for a string representing a formatted result */
 typedef std::string FormattedResult;
-/* Type alias for a vector of vectors of Entities, representing rows of tuples in a result table */
-typedef std::vector<std::vector<Entity>> ResultTuples;
+/* Type alias for a set of vectors of shared ptr to Entities, representing rows of tuples in a result table */
+typedef std::unordered_set<std::vector<std::shared_ptr<Entity>>> ResultTuples;
+/* Type alias for a vector of shared ptr to Entities, representing a rows/tuple in a result table */
+typedef std::vector<std::shared_ptr<Entity>> ResultTuple;

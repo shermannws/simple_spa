@@ -1,0 +1,40 @@
+procedure a {
+	a1 = 2+3;
+	a3 = a2 / a4;
+	while (a2 != 0) {
+		read a5;
+		a7 = a6 * 120;
+		if (a6 == a6) then {
+			print a8;
+			read a7;
+		} else {
+			a9 = a10;
+		}
+	}
+
+	a1 = 2+3;
+	a3 = a2 / a4;
+	while (a2 != 0) {
+		read a5;
+		a7 = a6 * 120;
+		if (a6 == a6) then {
+			print a8;
+			read a7;
+		} else {
+			a9 = a10;
+		}
+	}
+
+	a1 = 2+3;
+	a3 = a2 / a4;
+	while (a2 != 0) {
+		read a5;
+		a7 = a6 * 120;
+		if (a6 == a6) then {
+			print a8;
+			read a7;
+		} else {
+			a9 = a10;
+		}
+	}
+}

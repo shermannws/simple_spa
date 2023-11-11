@@ -94,7 +94,7 @@ public:
 
     /**
      * @brief The getter of the AttrName of the Ref
-     * @return The StringRep of the Ref
+     * @return The AttrName of the Ref if any
      */
     AttrName getAttrName() const;
 
@@ -153,12 +153,20 @@ public:
      */
     bool isOfWithRef();
 
+    /**
+     * Checks if the rootType is of Ident or attrName is ProcName or VarName
+     * @return Returns true if any of the condition is correct
+     */
     bool isOfName();
 
+    /**
+     * Checks if the rootType is of Integer or attrName is Value or StmtNo
+     * @return Returns true if any of the condition is correct
+     */
     bool isOfInteger();
 
     /**
-     * @brief Checks if this Ref is equal to other by comparing their rep, type, rootType and entityType
+     * @brief Checks if this Ref is equal to other by comparing their rep, type, rootType, entityType and attrName
      * @param other query entity object
      * @return Returns true if this == other, otherwise false
      */

@@ -50,7 +50,7 @@ private:
 
     /**
      * Processes the next operator's subexpression and pushes the subexpression to the expression stack
-     * @param operators stack
+     * @param operators stack of tokens of operation
      * @param expression stack of strings of expression
      */
     void processSubExpr(std::stack<std::shared_ptr<Token>> &operators, std::stack<std::string> &expression);
@@ -62,6 +62,10 @@ private:
     Expression extractExpression();
 
 public:
+    /**
+     * The constructor of ExprSpecParser
+     * @param tokenizer The tokenizer used to produce tokens of expr-spec
+     */
     explicit ExprSpecParser(std::shared_ptr<Tokenizer> tokenizer);
 
     /**

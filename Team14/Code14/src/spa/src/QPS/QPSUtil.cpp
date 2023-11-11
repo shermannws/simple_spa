@@ -1,4 +1,5 @@
 #include "QPSUtil.h"
+#include "QPS/Evaluators/Strategies/AffectsSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/AssignPatternStrategy.h"
 #include "QPS/Evaluators/Strategies/CallsStarSuchThatStrategy.h"
 #include "QPS/Evaluators/Strategies/CallsSuchThatStrategy.h"
@@ -62,12 +63,18 @@ std::unordered_map<StringRep, ClauseType> QPSUtil::repClauseTypeMap = {
         {AppConstants::STRING_CALLSSTAR, ClauseType::CallsStar},
         {AppConstants::STRING_NEXT, ClauseType::Next},
         {AppConstants::STRING_NEXTSTAR, ClauseType::NextStar},
-};
+        {AppConstants::STRING_AFFECTS, ClauseType::Affects}};
 
 std::unordered_map<QueryEntityType, ClauseType> QPSUtil::entityToClauseMap = {
         {QueryEntityType::Assign, ClauseType::Assign},
         {QueryEntityType::While, ClauseType::While},
         {QueryEntityType::If, ClauseType::If},
+};
+
+std::unordered_map<ClauseType, QueryEntityType> QPSUtil::patternClauseToEntityMap = {
+        {ClauseType::Assign, QueryEntityType::Assign},
+        {ClauseType::While, QueryEntityType::While},
+        {ClauseType::If, QueryEntityType::If},
 };
 
 std::unordered_map<ClauseType, ClauseArgType> QPSUtil::typeToArgTypeMap = {
@@ -76,7 +83,7 @@ std::unordered_map<ClauseType, ClauseArgType> QPSUtil::typeToArgTypeMap = {
         {ClauseType::Parent, StmtrefStmtref},  {ClauseType::ParentStar, StmtrefStmtref},
         {ClauseType::Next, StmtrefStmtref},    {ClauseType::NextStar, StmtrefStmtref},
         {ClauseType::Calls, ProcProc},         {ClauseType::CallsStar, ProcProc},
-};
+        {ClauseType::Affects, StmtrefStmtref}};
 
 std::unordered_map<QueryEntityType, RefType> QPSUtil::entityRefMap = {
         {QueryEntityType::Stmt, RefType::StmtRef},  {QueryEntityType::Assign, RefType::StmtRef},
@@ -147,30 +154,53 @@ std::unordered_map<ClauseType, std::function<std::shared_ptr<Strategy>(std::shar
                  [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
                      return std::make_shared<WithStrategy>(pkbReader);
                  }},
+                {ClauseType::Affects,
+                 [](std::shared_ptr<PkbReader> pkbReader) -> std::shared_ptr<Strategy> {
+                     return std::make_shared<AffectsSuchThatStrategy>(pkbReader);
+                 }},
 };
 
-std::unordered_map<QueryEntityType, std::function<std::vector<Entity>(std::shared_ptr<PkbReader>)>>
-        QPSUtil::entityGetterMap = {
-                {QueryEntityType::Procedure,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllProcedures(); }},
-                {QueryEntityType::Stmt,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllStatements(); }},
-                {QueryEntityType::Assign,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllAssign(); }},
-                {QueryEntityType::Variable,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllVariables(); }},
-                {QueryEntityType::Constant,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllConstants(); }},
-                {QueryEntityType::While,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllWhile(); }},
-                {QueryEntityType::If,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllIf(); }},
-                {QueryEntityType::Read,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllRead(); }},
-                {QueryEntityType::Print,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllPrint(); }},
-                {QueryEntityType::Call,
-                 [](std::shared_ptr<PkbReader> pkb) -> std::vector<Entity> { return pkb->getAllCall(); }}};
+std::unordered_map<QueryEntityType, entityGetterFunc>
+        QPSUtil::entityGetterMap = {{QueryEntityType::Procedure,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllProcedures();
+                                     }},
+                                    {QueryEntityType::Stmt,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllStatements();
+                                     }},
+                                    {QueryEntityType::Assign,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllAssign();
+                                     }},
+                                    {QueryEntityType::Variable,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllVariables();
+                                     }},
+                                    {QueryEntityType::Constant,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllConstants();
+                                     }},
+                                    {QueryEntityType::While,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllWhile();
+                                     }},
+                                    {QueryEntityType::If,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllIf();
+                                     }},
+                                    {QueryEntityType::Read,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllRead();
+                                     }},
+                                    {QueryEntityType::Print,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllPrint();
+                                     }},
+                                    {QueryEntityType::Call,
+                                     [](std::shared_ptr<PkbReader> pkb) -> std::unordered_set<std::shared_ptr<Entity>> {
+                                         return pkb->getAllCall();
+                                     }}};
 
 std::unordered_map<QueryEntityType, StatementType> QPSUtil::entityToStmtMap = {
         {QueryEntityType::Assign, StatementType::Assign}, {QueryEntityType::Print, StatementType::Print},
@@ -202,22 +232,22 @@ std::string QPSUtil::getAttrName(std::string elem) {
     return "";
 }
 
-std::unordered_map<AttrName, std::function<std::string(Entity)>> QPSUtil::getValueFunc = {
+std::unordered_map<AttrName, std::function<std::string(std::shared_ptr<Entity>)>> QPSUtil::getValueFunc = {
         {AttrName::ProcName,
-         [](const Entity &e) -> std::string {
-             if (e.getEntityType() == EntityType::Procedure) {
-                 return e.getEntityValue();
+         [](const std::shared_ptr<Entity> e) -> std::string {
+             if (e->getEntityType() == EntityType::Procedure) {
+                 return e->getEntityValue();
              } else {// call.procName
-                 return e.getAttrValue();
+                 return e->getAttrValue();
              }
          }},
         {AttrName::VarName,
-         [](const Entity &e) -> std::string {
-             if (e.getEntityType() == EntityType::Variable) {
-                 return e.getEntityValue();
+         [](const std::shared_ptr<Entity> e) -> std::string {
+             if (e->getEntityType() == EntityType::Variable) {
+                 return e->getEntityValue();
              } else {// read.varName & printVarName
-                 return e.getAttrValue();
+                 return e->getAttrValue();
              }
          }},
-        {AttrName::Value, [](const Entity &e) -> std::string { return e.getEntityValue(); }},
-        {AttrName::StmtNo, [](const Entity &e) -> std::string { return e.getEntityValue(); }}};
+        {AttrName::Value, [](const std::shared_ptr<Entity> e) -> std::string { return e->getEntityValue(); }},
+        {AttrName::StmtNo, [](const std::shared_ptr<Entity> e) -> std::string { return e->getEntityValue(); }}};

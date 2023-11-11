@@ -6,6 +6,7 @@
 
 #include "Commons/Entities/Statement.h"
 #include "Commons/Entities/Variable.h"
+#include "PKB/Commons/ClauseGroup.h"
 #include "PKB/Managers/ManagerUtils.h"
 
 /**
@@ -17,11 +18,16 @@
  */
 template<typename S>
 class StmtToVarRelationshipManager {
-private:
+protected:
     /**
      * @brief The relationship store
      */
     std::shared_ptr<S> relationshipStore;
+
+    /**
+     * @brief The clause group of the relationship
+     */
+    ClauseGroup clauseGroup;
 
 public:
     /**
@@ -38,34 +44,34 @@ public:
     void storeRelationship(std::shared_ptr<Statement> statement, std::shared_ptr<Variable> variable);
 
     /**
-     * Returns a vector of Statement, Variable pair where the statement is related to the variable. Retrieves the
-     * relationship where the statement is of the given type
+     * Returns an unordered_set of Statement, Variable pair where the statement is related to the variable. Retrieves
+     * the relationship where the statement is of the given type
      * @param type The type of the statement
-     * @return A vector of Statement, Variable pair stored in a vector
+     * @return An unordered_set of Statement, Variable pair stored in a vector
      */
-    std::vector<std::vector<Entity>> getRelationshipStmtPair(StatementType type) const;
+    EntityPairSet getRelationshipStmtPair(StatementType type) const;
 
     /**
-     * Returns a vector of statements of StatementType type which is related to the given variable
+     * Returns an unordered_set of statements of StatementType type which is related to the given variable
      * @param type The type of the statement to be retrieved
      * @param var The variable that is related to the statements
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    std::vector<Entity> getRelationshipTypeIdent(StatementType type, Variable &var) const;
+    EntitySet getRelationshipTypeIdent(StatementType type, Variable &var) const;
 
     /**
-     * Returns a vector of statements of the given statement type which is related to any variable
+     * Returns an unordered_set of statements of the given statement type which is related to any variable
      * @param type The type of the statement to be retrieved
-     * @return A vector of statements
+     * @return An unordered_set of statements
      */
-    std::vector<Entity> getRelationshipStmt(StatementType type) const;
+    EntitySet getRelationshipStmt(StatementType type) const;
 
     /**
-     * Returns a vector of variables which is related to the given statement
+     * Returns an unordered_set of variables which is related to the given statement
      * @param stmt The statement that is related to the variables
-     * @return A vector of variables
+     * @return An unordered_set of variables
      */
-    std::vector<Entity> getRelationshipVar(Statement &stmt) const;
+    EntitySet getRelationshipVar(Statement &stmt) const;
 
     /**
      * Returns a boolean value indicating if the given statement is related to the given variable

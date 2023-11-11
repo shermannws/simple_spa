@@ -39,43 +39,44 @@ public:
     void storeRelationship(std::shared_ptr<Procedure> procedure1, std::shared_ptr<Procedure> procedure2, bool isDirect);
 
     /**
-     * Returns a vector of Procedure, Procedure pair where the first procedure is related to the second procedure.
+     * Returns an unordered_set of Procedure, Procedure pair where the first procedure is related to the second
+     * procedure.
      * @param requireDirect A boolean value indicating if a direct relationship is required
-     * @return A vector of Procedure, Procedure pair stored in a vector
+     * @return An unordered_set of Procedure, Procedure pair stored in a vector
      */
-    std::vector<std::vector<Entity>> getRelationshipPair(bool requireDirect) const;
+    EntityPairSet getRelationshipPair(bool requireDirect) const;
 
     /**
-     * Returns a vector of procedure which is related to the given procedure. The procedure given is the latter
+     * Returns an unordered_set of procedure which is related to the given procedure. The procedure given is the latter
      * procedure
      * @param latterProcedure The procedure that is related to the procedure to be retrieved
      * @param requireDirect A boolean value indicating if a direct relationship is required
-     * @return A vector of procedures
+     * @return An unordered_set of procedures
      */
-    std::vector<Entity> getRelationshipFormer(Procedure &latterProcedure, bool requireDirect) const;
+    EntitySet getRelationshipFormer(Procedure &latterProcedure, bool requireDirect) const;
 
     /**
-     * Returns a vector of procedures which is related to any procedures. The procedures retrieved are the former
-     * procedures
-     * @return A vector of procedures
+     * Returns an unordered_set of procedures which is related to any procedures. The procedures retrieved are the
+     * former procedures
+     * @return An unordered_set of procedures
      */
-    std::vector<Entity> getRelationshipFormer() const;
+    EntitySet getRelationshipFormer() const;
 
     /**
-     * Returns a vector of procedures which is related to the given procedure. The procedure given is the former
+     * Returns an unordered_set of procedures which is related to the given procedure. The procedure given is the former
      * procedure
      * @param formerProcedure The procedure that is related to the procedures to be retrieved
      * @param requireDirect A boolean value indicating if a direct relationship is required
-     * @return A vector of procedures
+     * @return An unordered_set of procedures
      */
-    std::vector<Entity> getRelationshipLatter(Procedure &formerProcedure, bool requireDirect) const;
+    EntitySet getRelationshipLatter(Procedure &formerProcedure, bool requireDirect) const;
 
     /**
-     * Returns a vector of procedures which is related to any procedure. The procedures retrieved are the latter
+     * Returns an unordered_set of procedures which is related to any procedure. The procedures retrieved are the latter
      * procedure
-     * @return A vector of procedures
+     * @return An unordered_set of procedures
      */
-    std::vector<Entity> getRelationshipLatter() const;
+    EntitySet getRelationshipLatter() const;
 
     /**
      * Returns true if procedure1 is related to procedure2, false otherwise
